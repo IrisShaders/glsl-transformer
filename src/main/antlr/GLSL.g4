@@ -41,7 +41,8 @@ extension_statement_list:
 	| extension_statement_list extension_statement;
 
 extension_statement:
-	EXTENSION extension_name = IDENTIFIER COLON extension_status = IDENTIFIER EOL;
+	EXTENSION extension_name = IDENTIFIER COLON extension_status = IDENTIFIER
+		EOL;
 
 external_declaration_list:
 	single = external_declaration
@@ -109,7 +110,11 @@ unary_expression:
 	| DEC_OP unary_expression
 	| unary_operator unary_expression;
 
-unary_operator: PLUS_OP | MINUS_OP | NOT_OP | BNEG_OP;
+unary_operator:
+	PLUS_OP
+	| MINUS_OP
+	| NOT_OP
+	| BNEG_OP;
 
 multiplicative_expression:
 	operands += unary_expression (
@@ -122,12 +127,18 @@ multiplicative_expression:
 
 additive_expression:
 	operands += multiplicative_expression (
-		(operators += PLUS_OP | operators += MINUS_OP) operands += multiplicative_expression
+		(
+			operators += PLUS_OP
+			| operators += MINUS_OP
+		) operands += multiplicative_expression
 	)*;
 
 shift_expression:
 	operands += additive_expression (
-		(operators += LEFT_OP | operators += RIGHT_OP) operands += additive_expression
+		(
+			operators += LEFT_OP
+			| operators += RIGHT_OP
+		) operands += additive_expression
 	)*;
 
 relational_expression:
@@ -142,7 +153,8 @@ relational_expression:
 
 equality_expression:
 	operands += relational_expression (
-		(operators += EQ_OP | operators += NE_OP) operands += relational_expression
+		(operators += EQ_OP | operators += NE_OP) operands +=
+			relational_expression
 	)*;
 
 and_expression:
@@ -238,7 +250,10 @@ parameter_qualifier:
 	| parameter_direction_qualifier parameter_qualifier
 	| precision_qualifier parameter_qualifier;
 
-parameter_direction_qualifier: IN_TOK | OUT_TOK | INOUT_TOK;
+parameter_direction_qualifier:
+	IN_TOK
+	| OUT_TOK
+	| INOUT_TOK;
 
 parameter_type_specifier: type_specifier;
 
@@ -246,7 +261,8 @@ init_declarator_list:
 	single_declaration
 	| init_declarator_list COMMA IDENTIFIER
 	| init_declarator_list COMMA IDENTIFIER array_specifier
-	| init_declarator_list COMMA IDENTIFIER array_specifier ASSIGN_OP initializer
+	| init_declarator_list COMMA IDENTIFIER array_specifier ASSIGN_OP
+		initializer
 	| init_declarator_list COMMA IDENTIFIER ASSIGN_OP initializer;
 
 // Grammar Note: No 'enum', or 'typedef'.
@@ -286,9 +302,14 @@ layout_qualifier_id:
 // GLSL, all of these qualifiers need to be handled as identifiers as
 // well.
 //
-interface_block_layout_qualifier: ROW_MAJOR | PACKED_TOK;
+interface_block_layout_qualifier:
+	ROW_MAJOR
+	| PACKED_TOK;
 
-interpolation_qualifier: SMOOTH | FLAT | NOPERSPECTIVE;
+interpolation_qualifier:
+	SMOOTH
+	| FLAT
+	| NOPERSPECTIVE;
 
 type_qualifier:
 	// Single qualifiers
@@ -456,7 +477,8 @@ builtin_type_specifier_nonarray:
 
 precision_qualifier: HIGHP | MEDIUMP | LOWP;
 
-struct_specifier: STRUCT IDENTIFIER? LBRACE member_list RBRACE;
+struct_specifier:
+	STRUCT IDENTIFIER? LBRACE member_list RBRACE;
 
 member_list:
 	member_declaration
@@ -469,7 +491,9 @@ struct_declarator_list:
 	struct_declarator
 	| struct_declarator_list COMMA struct_declarator;
 
-struct_declarator: IDENTIFIER | IDENTIFIER array_specifier;
+struct_declarator:
+	IDENTIFIER
+	| IDENTIFIER array_specifier;
 
 initializer:
 	assignment_expression
@@ -512,25 +536,32 @@ expression_statement: expression SEMICOLON;
 
 empty_statement: SEMICOLON;
 
-if_then_statement: IF LPAREN expression RPAREN statement;
+if_then_statement:
+	IF LPAREN expression RPAREN statement;
 
 if_then_else_statement:
 	IF LPAREN expression RPAREN statement_no_short_if ELSE statement;
 
 if_then_else_statement_no_short_if:
-	IF LPAREN expression RPAREN statement_no_short_if ELSE statement_no_short_if;
+	IF LPAREN expression RPAREN statement_no_short_if ELSE statement_no_short_if
+		;
 
 condition:
 	expression
 	| fully_specified_type IDENTIFIER ASSIGN_OP initializer;
 
-switch_statement: SWITCH LPAREN expression RPAREN switch_body;
+switch_statement:
+	SWITCH LPAREN expression RPAREN switch_body;
 
-switch_body: LBRACE RBRACE | LBRACE case_statement_list RBRACE;
+switch_body:
+	LBRACE RBRACE
+	| LBRACE case_statement_list RBRACE;
 
 case_label: CASE expression COLON | DEFAULT COLON;
 
-case_label_list: case_label | case_label_list case_label;
+case_label_list:
+	case_label
+	| case_label_list case_label;
 
 case_statement:
 	case_label_list statement
@@ -544,12 +575,15 @@ do_statement:
 	DO statement WHILE LPAREN expression RPAREN SEMICOLON;
 
 for_statement:
-	FOR LPAREN for_init_statement condition? SEMICOLON expression? RPAREN statement;
+	FOR LPAREN for_init_statement condition? SEMICOLON expression? RPAREN
+		statement;
 
 for_statement_no_short_if:
-	FOR LPAREN for_init_statement condition? SEMICOLON expression? RPAREN statement_no_short_if;
+	FOR LPAREN for_init_statement condition? SEMICOLON expression? RPAREN
+		statement_no_short_if;
 
-while_statement: WHILE LPAREN condition RPAREN statement;
+while_statement:
+	WHILE LPAREN condition RPAREN statement;
 
 while_statement_no_short_if:
 	WHILE LPAREN condition RPAREN statement_no_short_if;
@@ -572,14 +606,16 @@ external_declaration:
 	| pragma_statement
 	| layout_defaults;
 
-function_definition: function_prototype block_statement;
+function_definition:
+	function_prototype block_statement;
 
 interface_block:
 	basic_interface_block
 	| layout_qualifier basic_interface_block;
 
 basic_interface_block:
-	interface_qualifier+ IDENTIFIER LBRACE member_list RBRACE instance_name? SEMICOLON;
+	interface_qualifier+ IDENTIFIER LBRACE member_list RBRACE instance_name?
+		SEMICOLON;
 
 interface_qualifier:
 	IN_TOK
@@ -601,20 +637,20 @@ layout_defaults:
 	| layout_qualifier BUFFER SEMICOLON;
 
 PRAGMA_DEBUG_ON:
-	{ ignoreNewLine = false; } [ \t]* '#' [ \t]* 'pragma' [ \t]+ 'debug' [ \t]* '(' [ \t]* 'on'
-		[ \t]* ')';
+	{ ignoreNewLine = false; } [ \t]* '#' [ \t]* 'pragma' [ \t]+ 'debug' [ \t]*
+		'(' [ \t]* 'on' [ \t]* ')';
 PRAGMA_DEBUG_OFF:
-	{ ignoreNewLine = false; } [ \t]* '#' [ \t]* 'pragma' [ \t]+ 'debug' [ \t]* '(' [ \t]* 'off'
-		[ \t]* ')';
+	{ ignoreNewLine = false; } [ \t]* '#' [ \t]* 'pragma' [ \t]+ 'debug' [ \t]*
+		'(' [ \t]* 'off' [ \t]* ')';
 PRAGMA_OPTIMIZE_ON:
-	{ ignoreNewLine = false; } [ \t]* '#' [ \t]* 'pragma' [ \t]+ 'optimize' [ \t]* '(' [ \t]* 'on'
-		[ \t]* ')';
+	{ ignoreNewLine = false; } [ \t]* '#' [ \t]* 'pragma' [ \t]+ 'optimize'
+		[ \t]* '(' [ \t]* 'on' [ \t]* ')';
 PRAGMA_OPTIMIZE_OFF:
-	{ ignoreNewLine = false; } [ \t]* '#' [ \t]* 'pragma' [ \t]+ 'optimize' [ \t]* '(' [ \t]* 'off'
-		[ \t]* ')';
+	{ ignoreNewLine = false; } [ \t]* '#' [ \t]* 'pragma' [ \t]+ 'optimize'
+		[ \t]* '(' [ \t]* 'off' [ \t]* ')';
 PRAGMA_INVARIANT_ALL:
-	{ ignoreNewLine = false; } [ \t]* '#' [ \t]* 'pragma' [ \t]+ 'invariant' [ \t]* '(' [ \t]* 'all'
-		[ \t]* ')';
+	{ ignoreNewLine = false; } [ \t]* '#' [ \t]* 'pragma' [ \t]+ 'invariant'
+		[ \t]* '(' [ \t]* 'all' [ \t]* ')';
 EXTENSION:
 	{ ignoreNewLine = false; } [ \t]* '#' [ \t]* 'extension';
 COLON: ':';
@@ -627,8 +663,12 @@ HIGHP: 'highp';
 MEDIUMP: 'mediump';
 LOWP: 'lowp';
 PRECISION: 'precision';
-VERSION: { ignoreNewLine = false; } [ \t]* '#' [ \t]* 'version';
-INTCONSTANT: DECIMAL_DIGITS | OCTAL_DIGITS | HEX_DIGITS;
+VERSION:
+	{ ignoreNewLine = false; } [ \t]* '#' [ \t]* 'version';
+INTCONSTANT:
+	DECIMAL_DIGITS
+	| OCTAL_DIGITS
+	| HEX_DIGITS;
 CONST_TOK: 'const';
 PRECISE: 'precise';
 INVARIANT: 'invariant';
@@ -646,12 +686,17 @@ READONLY: 'readonly';
 WRITEONLY: 'writeonly';
 SHARED: 'shared';
 LAYOUT_TOK: 'layout';
-UINTCONSTANT: (DECIMAL_DIGITS | OCTAL_DIGITS | HEX_DIGITS) 'u';
+UINTCONSTANT: (
+		DECIMAL_DIGITS
+		| OCTAL_DIGITS
+		| HEX_DIGITS
+	) 'u';
 ROW_MAJOR: 'row_major';
 PACKED_TOK: 'packed';
-FLOATCONSTANT: ((DIGIT+ ('.' DIGIT*)?) | ('.' DIGIT+)) (
-		('e' | 'E') ('+' | '-')? DIGIT*
-	)? 'f'?;
+FLOATCONSTANT: (
+		(DIGIT+ ('.' DIGIT*)?)
+		| ('.' DIGIT+)
+	) (('e' | 'E') ('+' | '-')? DIGIT*)? 'f'?;
 BOOLCONSTANT: 'true' | 'false';
 INC_OP: '++';
 DEC_OP: '--';
@@ -823,10 +868,14 @@ IDENTIFIER: ('a' ..'z' | 'A' ..'Z' | '_') (
 
 fragment DECIMAL_DIGITS: '0' | ('1' ..'9' DIGIT*);
 fragment OCTAL_DIGITS: '0' '0' ..'7'+;
-fragment HEX_DIGITS: '0x' (DIGIT | 'a' ..'f' | 'A' ..'F')+;
+fragment HEX_DIGITS:
+	'0x' (DIGIT | 'a' ..'f' | 'A' ..'F')+;
 fragment DIGIT: '0' ..'9';
 
-COMMENT: ('//' ~('\n' | '\r')* '\r'? '\n' | '/*' (.)*? '*/') -> skip;
+COMMENT: (
+		'//' ~('\n' | '\r')* '\r'? '\n'
+		| '/*' (.)*? '*/'
+	) -> skip;
 
 WS: [\t\r\u000C ]+ { skip(); };
 
