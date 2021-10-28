@@ -1,16 +1,17 @@
 /*
  * Copyright 2018 The GraphicsFuzz Project Authors
- * 
- * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except
- * in compliance with the License. You may obtain a copy of the License at
- * 
  *
- * https://www.apache.org/licenses/LICENSE-2.0
- * 
- * Unless required by applicable law or agreed to in writing, software distributed under the License
- * is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express
- * or implied. See the License for the specific language governing permissions and limitations under
- * the License.
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     https://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
 
 grammar GLSL;
@@ -81,8 +82,8 @@ function_call_header_with_parameters:
 	| function_call_header_with_parameters COMMA assignment_expression;
 
 function_call_header:
-	function_identifier array_specifier? LPAREN
-		; // The array_specifier is there to allow for vector type constructors, e.g. int[2](1, 2)
+	function_identifier array_specifier? LPAREN;
+// The array_specifier is there to allow for vector type constructors, e.g. int[2](1, 2)
 
 function_identifier:
 	builtin_type_specifier_nonarray // type constructor
@@ -276,13 +277,14 @@ layout_qualifier_id:
 	| IDENTIFIER ASSIGN_OP integer_constant
 	| interface_block_layout_qualifier;
 
-// This is a separate language rule because we parse these as tokens (due to them being reserved
-// keywords) instead of identifiers like most qualifiers. See the IDENTIFIER path of
+// This is a separate language rule because we parse these as tokens
+// (due to them being reserved keywords) instead of identifiers like
+// most qualifiers.  See the IDENTIFIER path of
 // layout_qualifier_id for the others.
-// 
-// Note that since layout qualifiers are case-insensitive in desktop GLSL, all of these qualifiers
-// need to be handled as identifiers as well.
-// 
+//
+// Note that since layout qualifiers are case-insensitive in desktop
+// GLSL, all of these qualifiers need to be handled as identifiers as
+// well.
 //
 interface_block_layout_qualifier: ROW_MAJOR | PACKED_TOK;
 
@@ -298,15 +300,18 @@ type_qualifier:
 	| layout_qualifier
 	| precision_qualifier
 
-	// Multiple qualifiers: In GLSL 4.20, these can be specified in any order. In earlier versions,
+	// Multiple qualifiers:
+	// In GLSL 4.20, these can be specified in any order.  In earlier versions,
 	// they appear in this order (see GLSL 1.50 section 4.7 & comments below):
-	// 
-	// invariant interpolation auxiliary storage precision ...or... layout storage precision
-	// 
-	// Each qualifier's rule ensures that the accumulated qualifiers on the right side don't contain
-	// any that must appear on the left hand side. For example, when processing a storage qualifier,
-	// we check that there are no auxiliary, interpolation, layout, invariant, or precise qualifiers
-	// to the right. /
+	//
+	//    invariant interpolation auxiliary storage precision  ...or...
+	//    layout storage precision
+	//
+	// Each qualifier's rule ensures that the accumulated qualifiers on the right
+	// side don't contain any that must appear on the left hand side.
+	// For example, when processing a storage qualifier, we check that there are
+	// no auxiliary, interpolation, layout, invariant, or precise qualifiers to the right.
+	///
 	| PRECISE type_qualifier
 	| INVARIANT type_qualifier
 	| interpolation_qualifier type_qualifier
