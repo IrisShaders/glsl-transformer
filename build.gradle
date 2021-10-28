@@ -1,0 +1,64 @@
+// plugins {
+//     id 'java'
+//     id 'antlr'
+//     id 'idea'
+//     id 'application'
+// }
+
+apply plugin: 'java'
+apply plugin: 'antlr'
+apply plugin: 'idea'
+apply plugin: 'application'
+
+repositories {
+    mavenCentral()
+}
+
+def antlrVersion = '4.9.2'
+dependencies {
+    antlr group: 'org.antlr', name: 'antlr4', version: antlrVersion
+    implementation group: 'org.antlr', name: 'antlr4-runtime', version: antlrVersion
+    implementation fileTree("build/classes/java/main")
+    testImplementation(platform('org.junit:junit-bom:5.7.0'))
+    testImplementation('org.junit.jupiter:junit-jupiter')
+}
+
+generateGrammarSource {
+    maxHeapSize = "128m"
+    arguments += ['-package', 'me.douira.antlr_experiments', '-visitor', '-no-listener']
+    outputDirectory = new File(buildDir.toString() + "/generated-src/antlr/main/me/douira/antlr_experiments/")
+}
+compileJava.dependsOn generateGrammarSource
+
+clean {
+    delete "generated-src"
+}
+
+idea {
+    module {
+        sourceDirs += file("generated-src/antlr/main/")
+    }
+}
+
+application {
+    mainClass = 'me.douira.antlr_experiments.App'
+}
+
+test {
+    useJUnitPlatform()
+    testLogging {
+        events "passed", "skipped", "failed"
+    }
+}
+
+// this is not stricly necessary but it is useful if you are not using an IDE
+// it will create a JAR with all dependencies included
+task fatJar(type: Jar) {
+    manifest {
+        attributes 'Main-Class': 'me.douira.antlr_experiments.App'
+    }
+    archiveBaseName = project.name + '-all'
+    from { configurations.compile.collect { it.isDirectory() ? it : zipTree(it) } }
+    with jar
+}
+
