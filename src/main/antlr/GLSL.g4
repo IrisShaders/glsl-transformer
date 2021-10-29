@@ -20,7 +20,7 @@ grammar GLSL;
    boolean ignoreNewLine = true;
 }
 
-program: translation_unit* statement_list;
+program: translation_unit statement_list;
 
 translation_unit:
 	version_statement extension_statement_list external_declaration_list;
@@ -875,9 +875,9 @@ fragment DIGIT: '0' ..'9';
 COMMENT: (
 		'//' ~('\n' | '\r')* '\r'? '\n'
 		| '/*' (.)*? '*/'
-	) -> skip;
+	) -> channel(HIDDEN);
 
-WS: [\t\r\u000C ]+ { skip(); };
+WS: [\t\r\u000C ]+ -> channel(HIDDEN);
 
 EOL:
 	'\n' { if(ignoreNewLine) { skip(); } ignoreNewLine = true; };

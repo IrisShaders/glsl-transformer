@@ -4,7 +4,6 @@ import java.io.IOException;
 import java.net.URISyntaxException;
 
 import org.antlr.v4.runtime.*;
-import org.antlr.v4.runtime.misc.Interval;
 
 public class App {
   private static enum Input {
@@ -31,8 +30,7 @@ public class App {
 
     var programContext = parser.program();
     var visitor = new GLSLTreeVisitor(System.out);
-    visitor.visit(programContext);
-    System.out
-        .println(input.getText(new Interval(programContext.start.getStartIndex(), programContext.stop.getStopIndex())));
+    var transformed = visitor.visit(programContext);
+    System.out.println(transformed);
   }
 }
