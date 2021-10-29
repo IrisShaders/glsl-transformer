@@ -1,4 +1,4 @@
-#version version_number
+#version 543
 uniform sampler2D Sampler;
 in type variable_name1;
 in type variable_name2;
