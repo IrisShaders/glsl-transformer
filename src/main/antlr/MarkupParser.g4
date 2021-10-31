@@ -1,13 +1,15 @@
 parser grammar MarkupParser;
 
-options { tokenVocab=MarkupLexer; }
+options {
+	tokenVocab = MarkupLexer;
+}
 
-file        : element* ;
+file: element*;
 
-attribute   : ID '=' STRING ; 
+attribute: ID '=' STRING;
 
-content     : TEXT ;
+content: TEXT;
 
-element     : (content | tag) ;
+element: content | tag;
 
-tag         : '[' ID attribute? ']' element* '[' '/' ID ']' ;
+tag: '[' ID attribute? ']' element* '[' '/' ID ']';
