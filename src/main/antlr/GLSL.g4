@@ -27,6 +27,16 @@ version_statement:
 	| VERSION INTCONSTANT EOL
 	| VERSION INTCONSTANT IDENTIFIER EOL;
 
+external_declaration_list: external_declaration+;
+
+external_declaration:
+	function_definition
+	| declaration
+	| pragma_statement
+  | extension_statement
+	| layout_defaults
+	| SEMICOLON;
+
 pragma_statement:
 	PRAGMA_DEBUG_ON EOL
 	| PRAGMA_DEBUG_OFF EOL
@@ -37,14 +47,8 @@ pragma_statement:
 extension_statement:
 	EXTENSION IDENTIFIER COLON IDENTIFIER EOL;
 
-external_declaration_list: external_declaration+;
-
-external_declaration:
-	function_definition
-	| declaration
-	| pragma_statement
-	| layout_defaults
-	| SEMICOLON;
+layout_defaults:
+	layout_qualifier (UNIFORM | IN | OUT | BUFFER) SEMICOLON;
 
 function_definition:
 	function_prototype compound_statement;
@@ -254,9 +258,6 @@ layout_qualifier_id:
 	IDENTIFIER
 	| IDENTIFIER ASSIGN_OP constant_expression
 	| SHARED;
-
-layout_defaults:
-	layout_qualifier (UNIFORM | IN | OUT | BUFFER) SEMICOLON;
 
 precision_qualifier: HIGHP | MEDIUMP | LOWP;
 
