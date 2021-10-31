@@ -45,10 +45,14 @@ pragma_statement:
 	| PRAGMA_INVARIANT_ALL EOL;
 
 extension_statement:
-	EXTENSION IDENTIFIER COLON IDENTIFIER EOL;
+	EXTENSION IDENTIFIER COLON extension_state EOL;
+
+extension_state: REQUIRE | ENABLE | WARN | DISABLE;
 
 layout_defaults:
-	layout_qualifier (UNIFORM | IN | OUT | BUFFER) SEMICOLON;
+	layout_qualifier layout_modes SEMICOLON;
+
+layout_modes: UNIFORM | IN | OUT | BUFFER;
 
 function_definition:
 	function_prototype compound_statement;
@@ -253,8 +257,7 @@ layout_qualifier:
 	)* RPAREN;
 
 layout_qualifier_id:
-	IDENTIFIER
-	| IDENTIFIER ASSIGN_OP constant_expression
+	IDENTIFIER (ASSIGN_OP constant_expression)?
 	| SHARED;
 
 precision_qualifier: HIGHP | MEDIUMP | LOWP;
@@ -510,6 +513,10 @@ PRAGMA_INVARIANT_ALL:
 	PRAGMA_PREFIX 'invariant' PRAGMA_SUFFIX_ALL;
 EXTENSION: PREFIX_NR 'extension';
 VERSION: PREFIX_NR 'version';
+REQUIRE: 'require';
+ENABLE: 'enable';
+WARN: 'warn';
+DISABLE: 'disable';
 
 //GLSL tokens
 COLON: ':';
