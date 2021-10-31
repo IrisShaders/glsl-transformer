@@ -33,7 +33,7 @@ external_declaration:
 	function_definition
 	| declaration
 	| pragma_statement
-  | extension_statement
+	| extension_statement
 	| layout_defaults
 	| SEMICOLON;
 
@@ -490,21 +490,25 @@ jump_statement: (
 		| DISCARD //fragment shader only
 	) SEMICOLON;
 
+//utility tokens
+fragment WSS: [ \t]+; //"white space some"
+fragment WSM: [ \t]*; //"white space maybe"
+
+//preprocessor/pragma tokens
 PRAGMA_DEBUG_ON:
-	[ \t]* '#' [ \t]* 'pragma' [ \t]+ 'debug' [ \t]* '(' [ \t]* 'on' [ \t]* ')';
+	[ \t]* '#' WSM 'pragma' WSS 'debug' WSM '(' WSM 'on' WSM ')';
 PRAGMA_DEBUG_OFF:
-	[ \t]* '#' [ \t]* 'pragma' [ \t]+ 'debug' [ \t]* '(' [ \t]* 'off' [ \t]* ')'
-		;
+	[ \t]* '#' WSM 'pragma' WSS 'debug' WSM '(' WSM 'off' WSM ')';
 PRAGMA_OPTIMIZE_ON:
-	[ \t]* '#' [ \t]* 'pragma' [ \t]+ 'optimize' [ \t]* '(' [ \t]* 'on' [ \t]*
-		')';
+	[ \t]* '#' WSM 'pragma' WSS 'optimize' WSM '(' WSM 'on' WSM ')';
 PRAGMA_OPTIMIZE_OFF:
-	[ \t]* '#' [ \t]* 'pragma' [ \t]+ 'optimize' [ \t]* '(' [ \t]* 'off' [ \t]*
-		')';
+	[ \t]* '#' WSM 'pragma' WSS 'optimize' WSM '(' WSM 'off' WSM ')';
 PRAGMA_INVARIANT_ALL:
-	[ \t]* '#' [ \t]* 'pragma' [ \t]+ 'invariant' [ \t]* '(' [ \t]* 'all' [ \t]*
-		')';
-EXTENSION: [ \t]* '#' [ \t]* 'extension';
+	[ \t]* '#' WSM 'pragma' WSS 'invariant' WSM '(' WSM 'all' WSM ')';
+EXTENSION: WSM '#' WSM 'extension';
+VERSION: WSM '#' WSM 'version';
+
+//GLSL tokens
 COLON: ':';
 UNIFORM: 'uniform';
 BUFFER: 'buffer';
@@ -515,7 +519,6 @@ HIGHP: 'highp';
 MEDIUMP: 'mediump';
 LOWP: 'lowp';
 PRECISION: 'precision';
-VERSION: [ \t]* '#' [ \t]* 'version';
 INTCONSTANT:
 	DECIMAL_DIGITS
 	| OCTAL_DIGITS
@@ -544,8 +547,8 @@ UINTCONSTANT: (
 		| OCTAL_DIGITS
 		| HEX_DIGITS
 	) 'u';
-ROW_MAJOR: 'row_major';
-PACKED: 'packed';
+// ROW_MAJOR: 'row_major';
+// PACKED: 'packed';
 fragment FLOAT_DIGITS: (
 		(DIGIT+ ('.' DIGIT*)?)
 		| ('.' DIGIT+)
