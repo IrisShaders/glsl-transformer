@@ -82,8 +82,8 @@ function_call_parameter_list:
 	)*;
 
 function_identifier:
-	type_specifier
-	| postfix_expression;
+	builtin_type_specifier_nonarray
+	| variable_identifier;
 
 unary_expression:
 	postfix_expression
@@ -284,8 +284,10 @@ type_name_list: IDENTIFIER (COMMA IDENTIFIER)*;
 type_specifier:
 	type_specifier_nonarray array_specifier?;
 
+//needs duplicated rule parts like this or it becomes mutually left-recursive
 array_specifier:
-	array_specifier? LBRACKET constant_expression? RBRACKET;
+	array_specifier LBRACKET constant_expression? RBRACKET
+	| LBRACKET constant_expression? RBRACKET;
 
 //TYPE_NAME instead of IDENTIFIER in the spec
 type_specifier_nonarray:
