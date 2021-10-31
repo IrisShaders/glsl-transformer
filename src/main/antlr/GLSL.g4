@@ -81,8 +81,8 @@ function_call:
 	);
 
 function_call_parameter_list:
-	non_constant_expression (
-		COMMA non_constant_expression
+	assignment_expression (
+		COMMA assignment_expression
 	)*;
 
 function_identifier:
@@ -101,7 +101,7 @@ unary_operator:
 	| NOT_OP
 	| BNEG_OP;
 
-//this weird nested structure is necessary to ensure correct parenthesis usage
+//this weird nested structure is necessary to ensure correct operator precendence
 multiplicative_expression:
 	unary_expression (
 		(TIMES_OP | DIV_OP | MOD_OP) unary_expression
@@ -178,11 +178,9 @@ assignment_operator:
 	| OR_ASSIGN;
 
 expression:
-	non_constant_expression (
-		COMMA non_constant_expression
+	assignment_expression (
+		COMMA assignment_expression
 	)*;
-
-non_constant_expression: assignment_expression;
 
 constant_expression: conditional_expression;
 
@@ -425,11 +423,8 @@ struct_declarator_list:
 struct_declarator: IDENTIFIER array_specifier?;
 
 initializer:
-	non_constant_expression
-	| LBRACE initializer_list RBRACE
-	| LBRACE initializer_list COMMA RBRACE;
-
-initializer_list: initializer (COMMA initializer)*;
+	assignment_expression
+	| LBRACE initializer (COMMA initializer)* COMMA? RBRACE;
 
 statement: compound_statement | simple_statement;
 
@@ -485,28 +480,36 @@ for_statement:
 jump_statement: (
 		CONTINUE
 		| BREAK
-		| RETURN
-		| RETURN expression
+		| RETURN expression?
 		| DISCARD //fragment shader only
 	) SEMICOLON;
 
 //utility tokens
 fragment WSS: [ \t]+; //"white space some"
 fragment WSM: [ \t]*; //"white space maybe"
+fragment NR: '#'; //number sign
+fragment PREFIX_NR: WSM NR WSM;
+fragment PRAGMA_PREFIX: PREFIX_NR 'pragma' WSS;
+fragment PRAGMA_SUFFIX_ON:
+	WSM '(' WSM 'on' WSM ')';
+fragment PRAGMA_SUFFIX_OFF:
+	WSM '(' WSM 'off' WSM ')';
+fragment PRAGMA_SUFFIX_ALL:
+	WSM '(' WSM 'all' WSM ')';
 
 //preprocessor/pragma tokens
 PRAGMA_DEBUG_ON:
-	[ \t]* '#' WSM 'pragma' WSS 'debug' WSM '(' WSM 'on' WSM ')';
+	PRAGMA_PREFIX 'debug' PRAGMA_SUFFIX_ON;
 PRAGMA_DEBUG_OFF:
-	[ \t]* '#' WSM 'pragma' WSS 'debug' WSM '(' WSM 'off' WSM ')';
+	PRAGMA_PREFIX 'debug' PRAGMA_SUFFIX_OFF;
 PRAGMA_OPTIMIZE_ON:
-	[ \t]* '#' WSM 'pragma' WSS 'optimize' WSM '(' WSM 'on' WSM ')';
+	PRAGMA_PREFIX 'optimize' PRAGMA_SUFFIX_ON;
 PRAGMA_OPTIMIZE_OFF:
-	[ \t]* '#' WSM 'pragma' WSS 'optimize' WSM '(' WSM 'off' WSM ')';
+	PRAGMA_PREFIX 'optimize' PRAGMA_SUFFIX_OFF;
 PRAGMA_INVARIANT_ALL:
-	[ \t]* '#' WSM 'pragma' WSS 'invariant' WSM '(' WSM 'all' WSM ')';
-EXTENSION: WSM '#' WSM 'extension';
-VERSION: WSM '#' WSM 'version';
+	PRAGMA_PREFIX 'invariant' PRAGMA_SUFFIX_ALL;
+EXTENSION: PREFIX_NR 'extension';
+VERSION: PREFIX_NR 'version';
 
 //GLSL tokens
 COLON: ':';
@@ -553,7 +556,7 @@ fragment FLOAT_DIGITS: (
 		(DIGIT+ ('.' DIGIT*)?)
 		| ('.' DIGIT+)
 	) (('e' | 'E') ('+' | '-')? DIGIT*)?;
-FLOATCONSTANT: FLOAT_DIGITS 'f'?;
+FLOATCONSTANT: FLOAT_DIGITS ('f' | 'F')?;
 BOOLCONSTANT: 'true' | 'false';
 DOUBLECONSTANT: FLOAT_DIGITS ('LF' | 'lf');
 INC_OP: '++';
