@@ -1,3 +1,6 @@
+/* GLSL grammar that extends the graphicsfuzz grammar
+but is specifically built for this project*/
+
 /*
  * Copyright 2018 The GraphicsFuzz Project Authors
  *
@@ -16,17 +19,11 @@
 
 grammar GLSL;
 
-@lexer::members {
-   boolean ignoreNewLine = true;
-}
-
-program: translation_unit statement_list;
-
+//the root rule
 translation_unit:
-	version_statement extension_statement_list external_declaration_list;
+	version_statement external_declaration_list;
 
 version_statement:
-	/* blank - no #version specified: defaults are already set */
 	| VERSION INTCONSTANT EOL
 	| VERSION INTCONSTANT IDENTIFIER EOL;
 
@@ -37,17 +34,20 @@ pragma_statement:
 	| PRAGMA_OPTIMIZE_OFF EOL
 	| PRAGMA_INVARIANT_ALL EOL;
 
-extension_statement_list:
-	| extension_statement_list extension_statement;
-
 extension_statement:
-	EXTENSION extension_name = IDENTIFIER COLON extension_status = IDENTIFIER
-		EOL;
+	EXTENSION IDENTIFIER COLON IDENTIFIER EOL;
 
-external_declaration_list:
-	single = external_declaration
-	| prefix = external_declaration_list lastDecl = external_declaration
-	| prefix = external_declaration_list lastExtension = extension_statement;
+external_declaration_list: external_declaration+;
+
+external_declaration:
+	function_definition
+	| declaration
+	| pragma_statement
+	| layout_defaults
+	| SEMICOLON;
+
+function_definition:
+	function_prototype compound_statement;
 
 variable_identifier: IDENTIFIER;
 
@@ -57,134 +57,98 @@ primary_expression:
 	| UINTCONSTANT
 	| FLOATCONSTANT
 	| BOOLCONSTANT
+	| DOUBLECONSTANT
 	| LPAREN expression RPAREN;
 
 postfix_expression:
 	primary_expression
-	| postfix_expression LBRACKET integer_expression RBRACKET
-	| postfix_expression DOT method_call_generic
-	| postfix_expression DOT IDENTIFIER
-	| postfix_expression INC_OP
-	| postfix_expression DEC_OP
-	| function_call_generic;
+	| postfix_expression (
+		LBRACKET expression RBRACKET
+		| DOT IDENTIFIER
+		| INC_OP
+		| DEC_OP
+	)
+	| function_call;
 
-integer_expression: expression;
+function_call:
+	function_identifier (
+		VOID? LPAREN RPAREN
+		| LPAREN function_call_parameter_list RPAREN
+	);
 
-function_call_generic:
-	function_call_header_with_parameters RPAREN
-	| function_call_header_no_parameters RPAREN;
-
-function_call_header_no_parameters:
-	function_call_header VOID_TOK
-	| function_call_header;
-
-function_call_header_with_parameters:
-	function_call_header assignment_expression
-	| function_call_header_with_parameters COMMA assignment_expression;
-
-function_call_header:
-	function_identifier array_specifier? LPAREN;
-// The array_specifier is there to allow for vector type constructors, e.g. int[2](1, 2)
+function_call_parameter_list:
+	non_constant_expression (
+		COMMA non_constant_expression
+	)*;
 
 function_identifier:
-	builtin_type_specifier_nonarray // type constructor
-	| variable_identifier;
-
-method_call_generic:
-	method_call_header_with_parameters RPAREN
-	| method_call_header_no_parameters RPAREN;
-
-method_call_header_no_parameters:
-	method_call_header VOID_TOK
-	| method_call_header;
-
-method_call_header_with_parameters:
-	method_call_header assignment_expression
-	| method_call_header_with_parameters COMMA assignment_expression;
-
-method_call_header: variable_identifier LPAREN;
+	type_specifier
+	| postfix_expression;
 
 unary_expression:
 	postfix_expression
-	| INC_OP unary_expression
-	| DEC_OP unary_expression
 	| unary_operator unary_expression;
 
 unary_operator:
-	PLUS_OP
+	INC_OP
+	| DEC_OP
+	| PLUS_OP
 	| MINUS_OP
 	| NOT_OP
 	| BNEG_OP;
 
+//this weird nested structure is necessary to ensure correct parenthesis usage
 multiplicative_expression:
-	operands += unary_expression (
-		(
-			operators += TIMES_OP
-			| operators += DIV_OP
-			| operators += MOD_OP
-		) operands += unary_expression
+	unary_expression (
+		(TIMES_OP | DIV_OP | MOD_OP) unary_expression
 	)*;
 
 additive_expression:
-	operands += multiplicative_expression (
-		(
-			operators += PLUS_OP
-			| operators += MINUS_OP
-		) operands += multiplicative_expression
+	multiplicative_expression (
+		(PLUS_OP | MINUS_OP) multiplicative_expression
 	)*;
 
 shift_expression:
-	operands += additive_expression (
-		(
-			operators += LEFT_OP
-			| operators += RIGHT_OP
-		) operands += additive_expression
+	additive_expression (
+		(LEFT_OP | RIGHT_OP) additive_expression
 	)*;
 
 relational_expression:
-	operands += shift_expression (
-		(
-			operators += LT_OP
-			| operators += GT_OP
-			| operators += LE_OP
-			| operators += GE_OP
-		) operands += shift_expression
+	shift_expression (
+		(LT_OP | GT_OP | LE_OP | GE_OP) shift_expression
 	)*;
 
 equality_expression:
-	operands += relational_expression (
-		(operators += EQ_OP | operators += NE_OP) operands +=
-			relational_expression
+	relational_expression (
+		(EQ_OP | NE_OP) relational_expression
 	)*;
 
 and_expression:
-	operands += equality_expression (
-		operators += BAND_OP operands += equality_expression
+	equality_expression (
+		BAND_OP equality_expression
 	)*;
 
 exclusive_or_expression:
-	operands += and_expression (
-		operators += BXOR_OP operands += and_expression
-	)*;
+	and_expression (BXOR_OP and_expression)*;
 
 inclusive_or_expression:
-	operands += exclusive_or_expression (
-		operators += BOR_OP operands += exclusive_or_expression
+	exclusive_or_expression (
+		BOR_OP exclusive_or_expression
 	)*;
 
 logical_and_expression:
-	operands += inclusive_or_expression (
-		operators += AND_OP operands += inclusive_or_expression
+	inclusive_or_expression (
+		AND_OP inclusive_or_expression
 	)*;
 
 logical_xor_expression:
-	operands += logical_and_expression (
-		operators += XOR_OP operands += logical_and_expression
+	logical_and_expression (
+		XOR_OP logical_and_expression
 	)*;
 
 logical_or_expression:
-	operands += logical_xor_expression (
-		operators += OR_OP operands += logical_xor_expression
+	logical_xor_expression (
+		OR_OP logical_xor_expression
 	)*;
 
 conditional_expression:
@@ -210,9 +174,11 @@ assignment_operator:
 	| OR_ASSIGN;
 
 expression:
-	operands += assignment_expression (
-		operators += COMMA operands += assignment_expression
+	non_constant_expression (
+		COMMA non_constant_expression
 	)*;
+
+non_constant_expression: assignment_expression;
 
 constant_expression: conditional_expression;
 
@@ -220,167 +186,126 @@ declaration:
 	function_prototype SEMICOLON
 	| init_declarator_list SEMICOLON
 	| PRECISION precision_qualifier type_specifier SEMICOLON
-	| interface_block;
+	| type_qualifier IDENTIFIER LBRACE struct_declaration_list LBRACE (
+		IDENTIFIER array_specifier?
+	)? SEMICOLON
+	| type_qualifier (
+		IDENTIFIER (COMMA IDENTIFIER)*
+	)? SEMICOLON;
 
-function_prototype: function_declarator RPAREN;
+function_prototype:
+	function_header LPAREN function_parameter_list RPAREN;
 
-function_declarator:
-	function_header
-	| function_header_with_parameters;
-
-function_header_with_parameters:
-	function_header parameter_declaration
-	| function_header_with_parameters COMMA parameter_declaration;
+function_parameter_list:
+	parameter_declaration (
+		COMMA parameter_declaration
+	)*;
 
 function_header:
-	fully_specified_type variable_identifier LPAREN;
+	fully_specified_type variable_identifier;
 
 parameter_declarator:
 	type_specifier IDENTIFIER
 	| type_specifier IDENTIFIER array_specifier;
 
 parameter_declaration:
-	parameter_qualifier parameter_declarator
-	| parameter_qualifier parameter_type_specifier;
+	type_qualifier? parameter_declarator
+	| fully_specified_type;
 
-parameter_qualifier:
-	// empty
-	| CONST_TOK parameter_qualifier
-	| PRECISE parameter_qualifier
-	| parameter_direction_qualifier parameter_qualifier
-	| precision_qualifier parameter_qualifier;
-
-parameter_direction_qualifier:
-	IN_TOK
-	| OUT_TOK
-	| INOUT_TOK;
-
-parameter_type_specifier: type_specifier;
-
+//TODO: is this correct? According to the spec it is but something like "int, foo;" doesn't make any sense.
+//if not, then declaration_member should be put into an optional block together with the comma list
 init_declarator_list:
-	single_declaration
-	| init_declarator_list COMMA IDENTIFIER
-	| init_declarator_list COMMA IDENTIFIER array_specifier
-	| init_declarator_list COMMA IDENTIFIER array_specifier ASSIGN_OP
-		initializer
-	| init_declarator_list COMMA IDENTIFIER ASSIGN_OP initializer;
+	fully_specified_type declaration_member? (
+		COMMA declaration_member
+	)*;
 
-// Grammar Note: No 'enum', or 'typedef'.
-single_declaration:
-	fully_specified_type
-	| fully_specified_type IDENTIFIER
-	| fully_specified_type IDENTIFIER array_specifier
-	| fully_specified_type IDENTIFIER array_specifier ASSIGN_OP initializer
-	| fully_specified_type IDENTIFIER ASSIGN_OP initializer
-	| INVARIANT variable_identifier
-	| PRECISE variable_identifier;
+declaration_member:
+	IDENTIFIER array_specifier? (
+		ASSIGN_OP initializer
+	)?;
 
 fully_specified_type:
-	type_specifier
-	| type_qualifier type_specifier;
+	type_qualifier? type_specifier;
+
+storage_qualifier:
+	CONST
+	| IN
+	| OUT
+	| INOUT
+	| CENTROID
+	| PATCH
+	| SAMPLE
+	| UNIFORM
+	| BUFFER
+	| SHARED
+	| COHERENT
+	| VOLATILE
+	| RESTRICT
+	| READONLY
+	| WRITEONLY
+	| SUBROUTINE (LPAREN type_name_list RPAREN)?;
 
 layout_qualifier:
-	LAYOUT_TOK LPAREN layout_qualifier_id_list RPAREN;
-
-layout_qualifier_id_list:
-	layout_qualifier_id
-	| layout_qualifier_id_list COMMA layout_qualifier_id;
-
-integer_constant: INTCONSTANT | UINTCONSTANT;
+	LAYOUT LPAREN layout_qualifier_id (
+		COMMA layout_qualifier_id
+	)* RPAREN;
 
 layout_qualifier_id:
 	IDENTIFIER
-	| IDENTIFIER ASSIGN_OP integer_constant
-	| interface_block_layout_qualifier;
+	| IDENTIFIER ASSIGN_OP constant_expression
+	| SHARED;
 
-// This is a separate language rule because we parse these as tokens
-// (due to them being reserved keywords) instead of identifiers like
-// most qualifiers.  See the IDENTIFIER path of
-// layout_qualifier_id for the others.
-//
-// Note that since layout qualifiers are case-insensitive in desktop
-// GLSL, all of these qualifiers need to be handled as identifiers as
-// well.
-//
-interface_block_layout_qualifier:
-	ROW_MAJOR
-	| PACKED_TOK;
+layout_defaults:
+	layout_qualifier (UNIFORM | IN | OUT | BUFFER) SEMICOLON;
+
+precision_qualifier: HIGHP | MEDIUMP | LOWP;
 
 interpolation_qualifier:
 	SMOOTH
 	| FLAT
 	| NOPERSPECTIVE;
 
-type_qualifier:
-	// Single qualifiers
-	INVARIANT
-	| PRECISE
-	| auxiliary_storage_qualifier
-	| storage_qualifier
-	| interpolation_qualifier
-	| layout_qualifier
-	| precision_qualifier
+invariant_qualifier: INVARIANT;
 
-	// Multiple qualifiers:
-	// In GLSL 4.20, these can be specified in any order.  In earlier versions,
-	// they appear in this order (see GLSL 1.50 section 4.7 & comments below):
-	//
-	//    invariant interpolation auxiliary storage precision  ...or...
-	//    layout storage precision
-	//
-	// Each qualifier's rule ensures that the accumulated qualifiers on the right
-	// side don't contain any that must appear on the left hand side.
-	// For example, when processing a storage qualifier, we check that there are
-	// no auxiliary, interpolation, layout, invariant, or precise qualifiers to the right.
-	///
-	| PRECISE type_qualifier
-	| INVARIANT type_qualifier
-	| interpolation_qualifier type_qualifier
-	| layout_qualifier type_qualifier
-	| auxiliary_storage_qualifier type_qualifier
-	| storage_qualifier type_qualifier
-	| precision_qualifier type_qualifier;
+precise_qualifier: PRECISE;
 
-auxiliary_storage_qualifier: CENTROID | SAMPLE;
+type_qualifier: (
+		storage_qualifier
+		| layout_qualifier
+		| precision_qualifier
+		| interpolation_qualifier
+		| invariant_qualifier
+		| precise_qualifier
+	)+;
 
-storage_qualifier:
-	CONST_TOK
-	| ATTRIBUTE
-	| VARYING
-	| IN_TOK
-	| OUT_TOK
-	| UNIFORM
-	| COHERENT
-	| VOLATILE
-	| RESTRICT
-	| READONLY
-	| WRITEONLY
-	| SHARED;
-
-array_specifier:
-	LBRACKET RBRACKET
-	| LBRACKET constant_expression RBRACKET
-	| array_specifier LBRACKET RBRACKET
-	| array_specifier LBRACKET constant_expression RBRACKET;
+//TYPE_NAME instead of IDENTIFIER in the spec
+type_name_list: IDENTIFIER (COMMA IDENTIFIER)*;
 
 type_specifier:
-	type_specifier_nonarray
-	| type_specifier_nonarray array_specifier;
+	type_specifier_nonarray array_specifier?;
 
+array_specifier:
+	array_specifier? LBRACKET constant_expression? RBRACKET;
+
+//TYPE_NAME instead of IDENTIFIER in the spec
 type_specifier_nonarray:
 	builtin_type_specifier_nonarray
 	| struct_specifier
 	| IDENTIFIER;
 
 builtin_type_specifier_nonarray:
-	VOID_TOK
-	| FLOAT_TOK
-	| INT_TOK
-	| UINT_TOK
-	| BOOL_TOK
+	VOID
+	| FLOAT
+	| DOUBLE
+	| INT
+	| UINT
+	| BOOL
 	| VEC2
 	| VEC3
 	| VEC4
+	| DVEC2
+	| DVEC3
+	| DVEC4
 	| BVEC2
 	| BVEC3
 	| BVEC4
@@ -390,7 +315,7 @@ builtin_type_specifier_nonarray:
 	| UVEC2
 	| UVEC3
 	| UVEC4
-	| MAT2X2
+	| MAT2X2 //mat2, mat3, mat4 handled as the same token
 	| MAT2X3
 	| MAT2X4
 	| MAT3X2
@@ -399,277 +324,200 @@ builtin_type_specifier_nonarray:
 	| MAT4X2
 	| MAT4X3
 	| MAT4X4
-	| SAMPLER1D
+	| DMAT2X2 //dmat2, dmat3, dmat4 handled as the same token
+	| DMAT2X3
+	| DMAT2X4
+	| DMAT3X2
+	| DMAT3X3
+	| DMAT3X4
+	| DMAT4X2
+	| DMAT4X3
+	| DMAT4X4
+	| ATOMIC_UINT
 	| SAMPLER2D
-	| SAMPLER2DRECT
 	| SAMPLER3D
 	| SAMPLERCUBE
-	| SAMPLEREXTERNALOES
-	| SAMPLER1DSHADOW
 	| SAMPLER2DSHADOW
-	| SAMPLER2DRECTSHADOW
 	| SAMPLERCUBESHADOW
-	| SAMPLER1DARRAY
 	| SAMPLER2DARRAY
-	| SAMPLER1DARRAYSHADOW
 	| SAMPLER2DARRAYSHADOW
-	| SAMPLERBUFFER
 	| SAMPLERCUBEARRAY
 	| SAMPLERCUBEARRAYSHADOW
-	| ISAMPLER1D
 	| ISAMPLER2D
-	| ISAMPLER2DRECT
 	| ISAMPLER3D
 	| ISAMPLERCUBE
-	| ISAMPLER1DARRAY
 	| ISAMPLER2DARRAY
-	| ISAMPLERBUFFER
 	| ISAMPLERCUBEARRAY
-	| USAMPLER1D
 	| USAMPLER2D
-	| USAMPLER2DRECT
 	| USAMPLER3D
 	| USAMPLERCUBE
-	| USAMPLER1DARRAY
 	| USAMPLER2DARRAY
-	| USAMPLERBUFFER
 	| USAMPLERCUBEARRAY
+	| SAMPLER1D
+	| SAMPLER1DSHADOW
+	| SAMPLER1DARRAY
+	| SAMPLER1DARRAYSHADOW
+	| ISAMPLER1D
+	| ISAMPLER1DARRAY
+	| USAMPLER1D
+	| USAMPLER1DARRAY
+	| SAMPLER2DRECT
+	| SAMPLER2DRECTSHADOW
+	| ISAMPLER2DRECT
+	| USAMPLER2DRECT
+	| SAMPLERBUFFER
+	| ISAMPLERBUFFER
+	| USAMPLERBUFFER
 	| SAMPLER2DMS
 	| ISAMPLER2DMS
 	| USAMPLER2DMS
 	| SAMPLER2DMSARRAY
 	| ISAMPLER2DMSARRAY
 	| USAMPLER2DMSARRAY
-	| IMAGE1D
 	| IMAGE2D
-	| IMAGE3D
-	| IMAGE2DRECT
-	| IMAGECUBE
-	| IMAGEBUFFER
-	| IMAGE1DARRAY
-	| IMAGE2DARRAY
-	| IMAGECUBEARRAY
-	| IMAGE2DMS
-	| IMAGE2DMSARRAY
-	| IIMAGE1D
 	| IIMAGE2D
-	| IIMAGE3D
-	| IIMAGE2DRECT
-	| IIMAGECUBE
-	| IIMAGEBUFFER
-	| IIMAGE1DARRAY
-	| IIMAGE2DARRAY
-	| IIMAGECUBEARRAY
-	| IIMAGE2DMS
-	| IIMAGE2DMSARRAY
-	| UIMAGE1D
 	| UIMAGE2D
+	| IMAGE3D
+	| IIMAGE3D
 	| UIMAGE3D
-	| UIMAGE2DRECT
+	| IMAGECUBE
+	| IIMAGECUBE
 	| UIMAGECUBE
+	| IMAGEBUFFER
+	| IIMAGEBUFFER
 	| UIMAGEBUFFER
+	| IMAGE1D
+	| IIMAGE1D
+	| UIMAGE1D
+	| IMAGE1DARRAY
+	| IIMAGE1DARRAY
 	| UIMAGE1DARRAY
+	| IMAGE2DRECT
+	| IIMAGE2DRECT
+	| UIMAGE2DRECT
+	| IMAGE2DARRAY
+	| IIMAGE2DARRAY
 	| UIMAGE2DARRAY
+	| IMAGECUBEARRAY
+	| IIMAGECUBEARRAY
 	| UIMAGECUBEARRAY
+	| IMAGE2DMS
+	| IIMAGE2DMS
 	| UIMAGE2DMS
-	| UIMAGE2DMSARRAY
-	| ATOMIC_UINT;
-
-precision_qualifier: HIGHP | MEDIUMP | LOWP;
+	| IMAGE2DMSARRAY
+	| IIMAGE2DMSARRAY
+	| UIMAGE2DMSARRAY;
 
 struct_specifier:
-	STRUCT IDENTIFIER? LBRACE member_list RBRACE;
+	STRUCT IDENTIFIER? LBRACE struct_declaration_list RBRACE;
 
-member_list:
-	member_declaration
-	| member_list member_declaration;
+struct_declaration_list: struct_declaration+;
 
-member_declaration:
+struct_declaration:
 	fully_specified_type struct_declarator_list SEMICOLON;
 
 struct_declarator_list:
-	struct_declarator
-	| struct_declarator_list COMMA struct_declarator;
+	struct_declarator (COMMA struct_declarator)*;
 
-struct_declarator:
-	IDENTIFIER
-	| IDENTIFIER array_specifier;
+struct_declarator: IDENTIFIER array_specifier?;
 
 initializer:
-	assignment_expression
+	non_constant_expression
 	| LBRACE initializer_list RBRACE
 	| LBRACE initializer_list COMMA RBRACE;
 
-initializer_list:
-	initializer
-	| initializer_list COMMA initializer;
+initializer_list: initializer (COMMA initializer)*;
 
-declaration_statement: declaration;
+statement: compound_statement | simple_statement;
 
-statement:
-	if_then_statement
-	| if_then_else_statement
-	| for_statement
-	| while_statement
-	| statement_no_trailing_substatement;
-
-statement_no_short_if:
-	if_then_else_statement_no_short_if
-	| for_statement_no_short_if
-	| while_statement_no_short_if
-	| statement_no_trailing_substatement;
-
-statement_no_trailing_substatement:
-	block_statement
+simple_statement:
+	declaration_statement
 	| expression_statement
 	| empty_statement
-	| declaration_statement
+	| selection_statement
 	| switch_statement
-	| do_statement
+	| case_label
+	| for_statement
+	| while_statement
+	| do_while_statement
 	| jump_statement;
 
-block_statement: LBRACE statement_list? RBRACE;
+compound_statement: LBRACE statement_list* RBRACE;
 
 statement_list: statement+;
+
+declaration_statement: declaration;
 
 expression_statement: expression SEMICOLON;
 
 empty_statement: SEMICOLON;
 
-if_then_statement:
-	IF LPAREN expression RPAREN statement;
-
-if_then_else_statement:
-	IF LPAREN expression RPAREN statement_no_short_if ELSE statement;
-
-if_then_else_statement_no_short_if:
-	IF LPAREN expression RPAREN statement_no_short_if ELSE statement_no_short_if
-		;
+selection_statement:
+	IF LPAREN expression RPAREN statement (
+		ELSE statement
+	)?;
 
 condition:
 	expression
 	| fully_specified_type IDENTIFIER ASSIGN_OP initializer;
 
 switch_statement:
-	SWITCH LPAREN expression RPAREN switch_body;
+	SWITCH LPAREN expression RPAREN LBRACE statement_list? RBRACE;
 
-switch_body:
-	LBRACE RBRACE
-	| LBRACE case_statement_list RBRACE;
-
-case_label: CASE expression COLON | DEFAULT COLON;
-
-case_label_list:
-	case_label
-	| case_label_list case_label;
-
-case_statement:
-	case_label_list statement
-	| case_statement statement;
-
-case_statement_list:
-	case_statement
-	| case_statement_list case_statement;
-
-do_statement:
-	DO statement WHILE LPAREN expression RPAREN SEMICOLON;
-
-for_statement:
-	FOR LPAREN for_init_statement condition? SEMICOLON expression? RPAREN
-		statement;
-
-for_statement_no_short_if:
-	FOR LPAREN for_init_statement condition? SEMICOLON expression? RPAREN
-		statement_no_short_if;
+case_label: (CASE expression | DEFAULT) COLON;
 
 while_statement:
 	WHILE LPAREN condition RPAREN statement;
 
-while_statement_no_short_if:
-	WHILE LPAREN condition RPAREN statement_no_short_if;
+do_while_statement:
+	DO statement WHILE LPAREN expression RPAREN SEMICOLON;
 
-for_init_statement:
-	empty_statement
-	| expression_statement
-	| declaration_statement;
+for_statement:
+	FOR LPAREN (
+		empty_statement
+		| expression_statement
+		| declaration_statement
+	) condition? SEMICOLON expression? RPAREN statement;
 
-jump_statement:
-	CONTINUE SEMICOLON
-	| BREAK SEMICOLON
-	| RETURN SEMICOLON
-	| RETURN expression SEMICOLON
-	| DISCARD SEMICOLON;
-
-external_declaration:
-	function_definition
-	| declaration
-	| pragma_statement
-	| layout_defaults;
-
-function_definition:
-	function_prototype block_statement;
-
-interface_block:
-	basic_interface_block
-	| layout_qualifier basic_interface_block;
-
-basic_interface_block:
-	interface_qualifier+ IDENTIFIER LBRACE member_list RBRACE instance_name?
-		SEMICOLON;
-
-interface_qualifier:
-	IN_TOK
-	| OUT_TOK
-	| UNIFORM
-	| BUFFER
-	| COHERENT
-	| VOLATILE
-	| RESTRICT
-	| READONLY
-	| WRITEONLY;
-
-instance_name: IDENTIFIER array_specifier?;
-
-layout_defaults:
-	layout_qualifier UNIFORM SEMICOLON
-	| layout_qualifier IN_TOK SEMICOLON
-	| layout_qualifier OUT_TOK SEMICOLON
-	| layout_qualifier BUFFER SEMICOLON;
+jump_statement: (
+		CONTINUE
+		| BREAK
+		| RETURN
+		| RETURN expression
+		| DISCARD //fragment shader only
+	) SEMICOLON;
 
 PRAGMA_DEBUG_ON:
-	{ ignoreNewLine = false; } [ \t]* '#' [ \t]* 'pragma' [ \t]+ 'debug' [ \t]*
-		'(' [ \t]* 'on' [ \t]* ')';
+	[ \t]* '#' [ \t]* 'pragma' [ \t]+ 'debug' [ \t]* '(' [ \t]* 'on' [ \t]* ')';
 PRAGMA_DEBUG_OFF:
-	{ ignoreNewLine = false; } [ \t]* '#' [ \t]* 'pragma' [ \t]+ 'debug' [ \t]*
-		'(' [ \t]* 'off' [ \t]* ')';
+	[ \t]* '#' [ \t]* 'pragma' [ \t]+ 'debug' [ \t]* '(' [ \t]* 'off' [ \t]* ')'
+		;
 PRAGMA_OPTIMIZE_ON:
-	{ ignoreNewLine = false; } [ \t]* '#' [ \t]* 'pragma' [ \t]+ 'optimize'
-		[ \t]* '(' [ \t]* 'on' [ \t]* ')';
+	[ \t]* '#' [ \t]* 'pragma' [ \t]+ 'optimize' [ \t]* '(' [ \t]* 'on' [ \t]*
+		')';
 PRAGMA_OPTIMIZE_OFF:
-	{ ignoreNewLine = false; } [ \t]* '#' [ \t]* 'pragma' [ \t]+ 'optimize'
-		[ \t]* '(' [ \t]* 'off' [ \t]* ')';
+	[ \t]* '#' [ \t]* 'pragma' [ \t]+ 'optimize' [ \t]* '(' [ \t]* 'off' [ \t]*
+		')';
 PRAGMA_INVARIANT_ALL:
-	{ ignoreNewLine = false; } [ \t]* '#' [ \t]* 'pragma' [ \t]+ 'invariant'
-		[ \t]* '(' [ \t]* 'all' [ \t]* ')';
-EXTENSION:
-	{ ignoreNewLine = false; } [ \t]* '#' [ \t]* 'extension';
+	[ \t]* '#' [ \t]* 'pragma' [ \t]+ 'invariant' [ \t]* '(' [ \t]* 'all' [ \t]*
+		')';
+EXTENSION: [ \t]* '#' [ \t]* 'extension';
 COLON: ':';
 UNIFORM: 'uniform';
 BUFFER: 'buffer';
-IN_TOK: 'in';
-OUT_TOK: 'out';
-INOUT_TOK: 'inout';
+IN: 'in';
+OUT: 'out';
+INOUT: 'inout';
 HIGHP: 'highp';
 MEDIUMP: 'mediump';
 LOWP: 'lowp';
 PRECISION: 'precision';
-VERSION:
-	{ ignoreNewLine = false; } [ \t]* '#' [ \t]* 'version';
+VERSION: [ \t]* '#' [ \t]* 'version';
 INTCONSTANT:
 	DECIMAL_DIGITS
 	| OCTAL_DIGITS
 	| HEX_DIGITS;
-CONST_TOK: 'const';
+CONST: 'const';
 PRECISE: 'precise';
 INVARIANT: 'invariant';
 SMOOTH: 'smooth';
@@ -677,6 +525,7 @@ FLAT: 'flat';
 NOPERSPECTIVE: 'noperspective';
 CENTROID: 'centroid';
 SAMPLE: 'sample';
+PATCH: 'patch';
 ATTRIBUTE: 'attribute';
 COHERENT: 'coherent';
 VOLATILE: 'volatile';
@@ -685,22 +534,25 @@ VARYING: 'varying';
 READONLY: 'readonly';
 WRITEONLY: 'writeonly';
 SHARED: 'shared';
-LAYOUT_TOK: 'layout';
+SUBROUTINE: 'subroutine';
+LAYOUT: 'layout';
 UINTCONSTANT: (
 		DECIMAL_DIGITS
 		| OCTAL_DIGITS
 		| HEX_DIGITS
 	) 'u';
 ROW_MAJOR: 'row_major';
-PACKED_TOK: 'packed';
-FLOATCONSTANT: (
+PACKED: 'packed';
+fragment FLOAT_DIGITS: (
 		(DIGIT+ ('.' DIGIT*)?)
 		| ('.' DIGIT+)
-	) (('e' | 'E') ('+' | '-')? DIGIT*)? 'f'?;
+	) (('e' | 'E') ('+' | '-')? DIGIT*)?;
+FLOATCONSTANT: FLOAT_DIGITS 'f'?;
 BOOLCONSTANT: 'true' | 'false';
+DOUBLECONSTANT: FLOAT_DIGITS ('LF' | 'lf');
 INC_OP: '++';
 DEC_OP: '--';
-VOID_TOK: 'void';
+VOID: 'void';
 LEFT_OP: '<<';
 RIGHT_OP: '>>';
 LE_OP: '<=';
@@ -720,10 +572,11 @@ RIGHT_ASSIGN: '>>=';
 AND_ASSIGN: '&=';
 XOR_ASSIGN: '^=';
 OR_ASSIGN: '|=';
-FLOAT_TOK: 'float';
-INT_TOK: 'int';
-UINT_TOK: 'uint';
-BOOL_TOK: 'bool';
+FLOAT: 'float';
+DOUBLE: 'double';
+INT: 'int';
+UINT: 'uint';
+BOOL: 'bool';
 SAMPLERCUBE: 'samplerCube';
 SAMPLERCUBESHADOW: 'samplerCubeShadow';
 SAMPLERBUFFER: 'samplerBuffer';
@@ -761,6 +614,9 @@ DISCARD: 'discard';
 VEC2: 'vec2';
 VEC3: 'vec3';
 VEC4: 'vec4';
+DVEC2: 'dvec2';
+DVEC3: 'dvec3';
+DVEC4: 'dvec4';
 BVEC2: 'bvec2';
 BVEC3: 'bvec3';
 BVEC4: 'bvec4';
@@ -779,6 +635,15 @@ MAT3X4: 'mat3x4';
 MAT4X2: 'mat4x2';
 MAT4X3: 'mat4x3';
 MAT4X4: 'mat4' | 'mat4x4';
+DMAT2X2: 'dmat2' | 'dmat2x2';
+DMAT2X3: 'dmat2x3';
+DMAT2X4: 'dmat2x4';
+DMAT3X2: 'dmat3x2';
+DMAT3X3: 'dmat3' | 'dmat3x3';
+DMAT3X4: 'dmat3x4';
+DMAT4X2: 'dmat4x2';
+DMAT4X3: 'dmat4x3';
+DMAT4X4: 'dmat4' | 'dmat4x4';
 IMAGE1D: 'image1D';
 IMAGE2D: 'image2D';
 IMAGE3D: 'image3D';
@@ -879,5 +744,4 @@ COMMENT: (
 
 WS: [\t\r\u000C ]+ -> channel(HIDDEN);
 
-EOL:
-	'\n' { if(ignoreNewLine) { skip(); } ignoreNewLine = true; };
+EOL: '\n';
