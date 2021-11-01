@@ -17,7 +17,7 @@ but is specifically built for this project*/
  * limitations under the License.
  */
 
-parser grammar GLSL;
+parser grammar GLSLParser;
 
 options {
 	tokenVocab = GLSLLexer;
@@ -27,6 +27,7 @@ options {
 translation_unit:
 	version_statement external_declaration_list;
 
+//TODO: why does the error change when this is transformed into a ?-optional?
 version_statement:
 	| VERSION INTCONSTANT EOL
 	| VERSION INTCONSTANT IDENTIFIER EOL;
@@ -207,9 +208,11 @@ function_prototype:
 	function_header LPAREN function_parameter_list RPAREN;
 
 function_parameter_list:
-	parameter_declaration (
-		COMMA parameter_declaration
-	)*;
+	(
+		parameter_declaration (
+			COMMA parameter_declaration
+		)*
+	)?;
 
 function_header:
 	fully_specified_type variable_identifier;
