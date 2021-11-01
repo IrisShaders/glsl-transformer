@@ -20,8 +20,6 @@ grammar GLSL;
    boolean ignoreNewLine = true;
 }
 
-program: translation_unit statement_list;
-
 translation_unit:
 	version_statement extension_statement_list external_declaration_list;
 

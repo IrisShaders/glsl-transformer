@@ -8,7 +8,7 @@ import org.antlr.v4.runtime.tree.RuleNode;
 import org.antlr.v4.runtime.tree.TerminalNode;
 import org.antlr.v4.runtime.misc.Interval;
 
-public class GLSLTreeVisitor extends GLSLBaseVisitor<String> {
+public class GLSLTreeVisitor extends GLSLParserBaseVisitor<String> {
   private PrintStream stream;
   private int maxDepth;
 

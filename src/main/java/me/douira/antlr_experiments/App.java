@@ -7,7 +7,7 @@ import org.antlr.v4.runtime.*;
 
 public class App {
   private static enum Input {
-    SIMPLE("/input1.glsl"), SHADER("/input2.fsh"), KAPPA("/unlicensed/composite3.fsh");
+    TINY("/tiny.glsl"), SIMPLE("/simple.glsl"), SHADER("/shader.glsl"), KAPPA("/unlicensed/composite3.glsl");
 
     String path;
 
@@ -17,8 +17,9 @@ public class App {
   }
 
   public static void main(String[] args) throws IOException, URISyntaxException {
-    var selection = Input.KAPPA;
+    var selection = Input.TINY;
     CharStream input;
+
     try {
       input = CharStreams.fromStream(App.class.getResourceAsStream(selection.path));
     } catch (Exception e) {
@@ -26,11 +27,17 @@ public class App {
     }
     var lexer = new GLSLLexer(input);
     var commonTokenStream = new CommonTokenStream(lexer);
+
     var parser = new GLSLParser(commonTokenStream);
 
-    var programContext = parser.program();
-    var visitor = new GLSLTreeVisitor(System.out, 3);
-    var transformed = visitor.visit(programContext);
+    var TUContext = parser.translation_unit();
+    var visitor = new GLSLTreeVisitor(System.out);
+    var transformed = visitor.visit(TUContext);
     System.out.println(transformed);
+
+    var tokens = commonTokenStream.getTokens();
+    for (var token : tokens) {
+      System.out.println(token.getChannel() + token.getType() + token.getText());
+    }
   }
 }
