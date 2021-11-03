@@ -24,48 +24,48 @@ options {
 }
 
 //the root rule
-translation_unit:
-	version_statement external_declaration_list;
+translationUnit:
+	versionStatement externalDeclarationList;
 
 //TODO: why does the error change when this is transformed into a ?-optional?
-version_statement:
+versionStatement:
 	| VERSION INTCONSTANT EOL
 	| VERSION INTCONSTANT IDENTIFIER EOL;
 
-external_declaration_list: external_declaration+;
+externalDeclarationList: externalDeclaration+;
 
-external_declaration:
-	function_definition
+externalDeclaration:
+	functionDefinition
 	| declaration
-	| pragma_statement
-	| extension_statement
-	| layout_defaults
+	| pragmaStatement
+	| extensionStatement
+	| layoutDefaults
 	| SEMICOLON;
 
-pragma_statement:
+pragmaStatement:
 	PRAGMA_DEBUG_ON EOL
 	| PRAGMA_DEBUG_OFF EOL
 	| PRAGMA_OPTIMIZE_ON EOL
 	| PRAGMA_OPTIMIZE_OFF EOL
 	| PRAGMA_INVARIANT_ALL EOL;
 
-extension_statement:
-	EXTENSION IDENTIFIER COLON extension_state EOL;
+extensionStatement:
+	EXTENSION IDENTIFIER COLON extensionState EOL;
 
-extension_state: REQUIRE | ENABLE | WARN | DISABLE;
+extensionState: REQUIRE | ENABLE | WARN | DISABLE;
 
-layout_defaults:
-	layout_qualifier layout_modes SEMICOLON;
+layoutDefaults:
+	layoutQualifier layoutModes SEMICOLON;
 
-layout_modes: UNIFORM | IN | OUT | BUFFER;
+layoutModes: UNIFORM | IN | OUT | BUFFER;
 
-function_definition:
-	function_prototype compound_statement;
+functionDefinition:
+	functionPrototype compoundStatement;
 
-variable_identifier: IDENTIFIER;
+variableIdentifier: IDENTIFIER;
 
-primary_expression:
-	variable_identifier
+primaryExpression:
+	variableIdentifier
 	| INTCONSTANT
 	| UINTCONSTANT
 	| FLOATCONSTANT
@@ -73,36 +73,36 @@ primary_expression:
 	| DOUBLECONSTANT
 	| LPAREN expression RPAREN;
 
-postfix_expression:
-	primary_expression
-	| postfix_expression (
+postfixExpression:
+	primaryExpression
+	| postfixExpression (
 		LBRACKET expression RBRACKET
 		| DOT IDENTIFIER
 		| INC_OP
 		| DEC_OP
 	)
-	| function_call;
+	| functionCall;
 
-function_call:
-	function_identifier (
+functionCall:
+	functionIdentifier (
 		VOID? LPAREN RPAREN
-		| LPAREN function_call_parameter_list RPAREN
+		| LPAREN functionCallParameterList RPAREN
 	);
 
-function_call_parameter_list:
-	assignment_expression (
-		COMMA assignment_expression
+functionCallParameterList:
+	assignmentExpression (
+		COMMA assignmentExpression
 	)*;
 
-function_identifier:
-	builtin_type_specifier_nonarray
-	| variable_identifier;
+functionIdentifier:
+	builtinTypeSpecifierNonarray
+	| variableIdentifier;
 
-unary_expression:
-	postfix_expression
-	| unary_operator unary_expression;
+unaryExpression:
+	postfixExpression
+	| unaryOperator unaryExpression;
 
-unary_operator:
+unaryOperator:
 	INC_OP
 	| DEC_OP
 	| PLUS_OP
@@ -111,69 +111,69 @@ unary_operator:
 	| BNEG_OP;
 
 //this weird nested structure is necessary to ensure correct operator precendence
-multiplicative_expression:
-	unary_expression (
-		(TIMES_OP | DIV_OP | MOD_OP) unary_expression
+multiplicativeExpression:
+	unaryExpression (
+		(TIMES_OP | DIV_OP | MOD_OP) unaryExpression
 	)*;
 
-additive_expression:
-	multiplicative_expression (
-		(PLUS_OP | MINUS_OP) multiplicative_expression
+additiveExpression:
+	multiplicativeExpression (
+		(PLUS_OP | MINUS_OP) multiplicativeExpression
 	)*;
 
-shift_expression:
-	additive_expression (
-		(LEFT_OP | RIGHT_OP) additive_expression
+shiftExpression:
+	additiveExpression (
+		(LEFT_OP | RIGHT_OP) additiveExpression
 	)*;
 
-relational_expression:
-	shift_expression (
-		(LT_OP | GT_OP | LE_OP | GE_OP) shift_expression
+relationalExpression:
+	shiftExpression (
+		(LT_OP | GT_OP | LE_OP | GE_OP) shiftExpression
 	)*;
 
-equality_expression:
-	relational_expression (
-		(EQ_OP | NE_OP) relational_expression
+equalityExpression:
+	relationalExpression (
+		(EQ_OP | NE_OP) relationalExpression
 	)*;
 
-and_expression:
-	equality_expression (
-		BAND_OP equality_expression
+andExpression:
+	equalityExpression (
+		BAND_OP equalityExpression
 	)*;
 
-exclusive_or_expression:
-	and_expression (BXOR_OP and_expression)*;
+exclusiveOrExpression:
+	andExpression (BXOR_OP andExpression)*;
 
-inclusive_or_expression:
-	exclusive_or_expression (
-		BOR_OP exclusive_or_expression
+inclusiveOrExpression:
+	exclusiveOrExpression (
+		BOR_OP exclusiveOrExpression
 	)*;
 
-logical_and_expression:
-	inclusive_or_expression (
-		AND_OP inclusive_or_expression
+logicalAndExpression:
+	inclusiveOrExpression (
+		AND_OP inclusiveOrExpression
 	)*;
 
-logical_xor_expression:
-	logical_and_expression (
-		XOR_OP logical_and_expression
+logicalXorExpression:
+	logicalAndExpression (
+		XOR_OP logicalAndExpression
 	)*;
 
-logical_or_expression:
-	logical_xor_expression (
-		OR_OP logical_xor_expression
+logicalOrExpression:
+	logicalXorExpression (
+		OR_OP logicalXorExpression
 	)*;
 
-conditional_expression:
-	logical_or_expression (
-		QUERY_OP expression COLON assignment_expression
+conditionalExpression:
+	logicalOrExpression (
+		QUERY_OP expression COLON assignmentExpression
 	)*;
 
-assignment_expression:
-	conditional_expression
-	| unary_expression assignment_operator assignment_expression;
+assignmentExpression:
+	conditionalExpression
+	| unaryExpression assignmentOperator assignmentExpression;
 
-assignment_operator:
+assignmentOperator:
 	ASSIGN_OP
 	| MUL_ASSIGN
 	| DIV_ASSIGN
@@ -187,60 +187,60 @@ assignment_operator:
 	| OR_ASSIGN;
 
 expression:
-	assignment_expression (
-		COMMA assignment_expression
+	assignmentExpression (
+		COMMA assignmentExpression
 	)*;
 
-constant_expression: conditional_expression;
+constantExpression: conditionalExpression;
 
 declaration:
-	function_prototype SEMICOLON
-	| init_declarator_list SEMICOLON
-	| PRECISION precision_qualifier type_specifier SEMICOLON
-	| type_qualifier IDENTIFIER LBRACE struct_declaration_list LBRACE (
-		IDENTIFIER array_specifier?
+	functionPrototype SEMICOLON
+	| initDeclaratorList SEMICOLON
+	| PRECISION precisionQualifier typeSpecifier SEMICOLON
+	| typeQualifier IDENTIFIER LBRACE structDeclarationList LBRACE (
+		IDENTIFIER arraySpecifier?
 	)? SEMICOLON
-	| type_qualifier (
+	| typeQualifier (
 		IDENTIFIER (COMMA IDENTIFIER)*
 	)? SEMICOLON;
 
-function_prototype:
-	function_header LPAREN function_parameter_list RPAREN;
+functionPrototype:
+	functionHeader LPAREN functionParameterList RPAREN;
 
-function_parameter_list:
+functionParameterList:
 	(
-		parameter_declaration (
-			COMMA parameter_declaration
+		parameterDeclaration (
+			COMMA parameterDeclaration
 		)*
 	)?;
 
-function_header:
-	fully_specified_type variable_identifier;
+functionHeader:
+	fullySpecifiedType variableIdentifier;
 
-parameter_declarator:
-	type_specifier IDENTIFIER
-	| type_specifier IDENTIFIER array_specifier;
+parameterDeclarator:
+	typeSpecifier IDENTIFIER
+	| typeSpecifier IDENTIFIER arraySpecifier;
 
-parameter_declaration:
-	type_qualifier? parameter_declarator
-	| fully_specified_type;
+parameterDeclaration:
+	typeQualifier? parameterDeclarator
+	| fullySpecifiedType;
 
 //TODO: is this correct? According to the spec it is but something like "int, foo;" doesn't make any sense.
-//if not, then declaration_member should be put into an optional block together with the comma list
-init_declarator_list:
-	fully_specified_type declaration_member? (
-		COMMA declaration_member
+//if not, then declarationMember should be put into an optional block together with the comma list
+initDeclaratorList:
+	fullySpecifiedType declarationMember? (
+		COMMA declarationMember
 	)*;
 
-declaration_member:
-	IDENTIFIER array_specifier? (
+declarationMember:
+	IDENTIFIER arraySpecifier? (
 		ASSIGN_OP initializer
 	)?;
 
-fully_specified_type:
-	type_qualifier? type_specifier;
+fullySpecifiedType:
+	typeQualifier? typeSpecifier;
 
-storage_qualifier:
+storageQualifier:
 	CONST
 	| IN
 	| OUT
@@ -256,55 +256,55 @@ storage_qualifier:
 	| RESTRICT
 	| READONLY
 	| WRITEONLY
-	| SUBROUTINE (LPAREN type_name_list RPAREN)?;
+	| SUBROUTINE (LPAREN typeNameList RPAREN)?;
 
-layout_qualifier:
-	LAYOUT LPAREN layout_qualifier_id (
-		COMMA layout_qualifier_id
+layoutQualifier:
+	LAYOUT LPAREN layoutQualifierId (
+		COMMA layoutQualifierId
 	)* RPAREN;
 
-layout_qualifier_id:
-	IDENTIFIER (ASSIGN_OP constant_expression)?
+layoutQualifierId:
+	IDENTIFIER (ASSIGN_OP constantExpression)?
 	| SHARED;
 
-precision_qualifier: HIGHP | MEDIUMP | LOWP;
+precisionQualifier: HIGHP | MEDIUMP | LOWP;
 
-interpolation_qualifier:
+interpolationQualifier:
 	SMOOTH
 	| FLAT
 	| NOPERSPECTIVE;
 
-invariant_qualifier: INVARIANT;
+invariantQualifier: INVARIANT;
 
-precise_qualifier: PRECISE;
+preciseQualifier: PRECISE;
 
-type_qualifier: (
-		storage_qualifier
-		| layout_qualifier
-		| precision_qualifier
-		| interpolation_qualifier
-		| invariant_qualifier
-		| precise_qualifier
+typeQualifier: (
+		storageQualifier
+		| layoutQualifier
+		| precisionQualifier
+		| interpolationQualifier
+		| invariantQualifier
+		| preciseQualifier
 	)+;
 
 //TYPE_NAME instead of IDENTIFIER in the spec
-type_name_list: IDENTIFIER (COMMA IDENTIFIER)*;
+typeNameList: IDENTIFIER (COMMA IDENTIFIER)*;
 
-type_specifier:
-	type_specifier_nonarray array_specifier?;
+typeSpecifier:
+	typeSpecifierNonarray arraySpecifier?;
 
 //needs duplicated rule parts like this or it becomes mutually left-recursive
-array_specifier:
-	array_specifier LBRACKET constant_expression? RBRACKET
-	| LBRACKET constant_expression? RBRACKET;
+arraySpecifier:
+	arraySpecifier LBRACKET constantExpression? RBRACKET
+	| LBRACKET constantExpression? RBRACKET;
 
 //TYPE_NAME instead of IDENTIFIER in the spec
-type_specifier_nonarray:
-	builtin_type_specifier_nonarray
-	| struct_specifier
+typeSpecifierNonarray:
+	builtinTypeSpecifierNonarray
+	| structSpecifier
 	| IDENTIFIER;
 
-builtin_type_specifier_nonarray:
+builtinTypeSpecifierNonarray:
 	VOID
 	| FLOAT
 	| DOUBLE
@@ -419,75 +419,75 @@ builtin_type_specifier_nonarray:
 	| IIMAGE2DMSARRAY
 	| UIMAGE2DMSARRAY;
 
-struct_specifier:
-	STRUCT IDENTIFIER? LBRACE struct_declaration_list RBRACE;
+structSpecifier:
+	STRUCT IDENTIFIER? LBRACE structDeclarationList RBRACE;
 
-struct_declaration_list: struct_declaration+;
+structDeclarationList: structDeclaration+;
 
-struct_declaration:
-	fully_specified_type struct_declarator_list SEMICOLON;
+structDeclaration:
+	fullySpecifiedType structDeclaratorList SEMICOLON;
 
-struct_declarator_list:
-	struct_declarator (COMMA struct_declarator)*;
+structDeclaratorList:
+	structDeclarator (COMMA structDeclarator)*;
 
-struct_declarator: IDENTIFIER array_specifier?;
+structDeclarator: IDENTIFIER arraySpecifier?;
 
 initializer:
-	assignment_expression
+	assignmentExpression
 	| LBRACE initializer (COMMA initializer)* COMMA? RBRACE;
 
-statement: compound_statement | simple_statement;
+statement: compoundStatement | simpleStatement;
 
-simple_statement:
-	declaration_statement
-	| expression_statement
-	| empty_statement
-	| selection_statement
-	| switch_statement
-	| case_label
-	| for_statement
-	| while_statement
-	| do_while_statement
-	| jump_statement;
+simpleStatement:
+	declarationStatement
+	| expressionStatement
+	| emptyStatement
+	| selectionStatement
+	| switchStatement
+	| caseLabel
+	| forStatement
+	| whileStatement
+	| doWhileStatement
+	| jumpStatement;
 
-compound_statement: LBRACE statement_list* RBRACE;
+compoundStatement: LBRACE statementList* RBRACE;
 
-statement_list: statement+;
+statementList: statement+;
 
-declaration_statement: declaration;
+declarationStatement: declaration;
 
-expression_statement: expression SEMICOLON;
+expressionStatement: expression SEMICOLON;
 
-empty_statement: SEMICOLON;
+emptyStatement: SEMICOLON;
 
-selection_statement:
+selectionStatement:
 	IF LPAREN expression RPAREN statement (
 		ELSE statement
 	)?;
 
 condition:
 	expression
-	| fully_specified_type IDENTIFIER ASSIGN_OP initializer;
+	| fullySpecifiedType IDENTIFIER ASSIGN_OP initializer;
 
-switch_statement:
-	SWITCH LPAREN expression RPAREN LBRACE statement_list? RBRACE;
+switchStatement:
+	SWITCH LPAREN expression RPAREN LBRACE statementList? RBRACE;
 
-case_label: (CASE expression | DEFAULT) COLON;
+caseLabel: (CASE expression | DEFAULT) COLON;
 
-while_statement:
+whileStatement:
 	WHILE LPAREN condition RPAREN statement;
 
-do_while_statement:
+doWhileStatement:
 	DO statement WHILE LPAREN expression RPAREN SEMICOLON;
 
-for_statement:
+forStatement:
 	FOR LPAREN (
-		empty_statement
-		| expression_statement
-		| declaration_statement
+		emptyStatement
+		| expressionStatement
+		| declarationStatement
 	) condition? SEMICOLON expression? RPAREN statement;
 
-jump_statement: (
+jumpStatement: (
 		CONTINUE
 		| BREAK
 		| RETURN expression?

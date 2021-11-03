@@ -30,7 +30,7 @@ public class App {
 
     var parser = new GLSLParser(commonTokenStream);
 
-    var TUContext = parser.translation_unit();
+    var TUContext = parser.translationUnit();
     var visitor = new GLSLTreeVisitor(System.out);
     var transformed = visitor.visit(TUContext);
     System.out.println(transformed);
