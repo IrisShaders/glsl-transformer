@@ -25,7 +25,7 @@ dependencies {
 
 generateGrammarSource {
     maxHeapSize = "128m"
-    arguments += ['-package', 'me.douira.antlr_experiments', '-visitor', '-no-listener']
+    arguments += ['-package', 'me.douira.antlr_experiments', '-visitor']
     outputDirectory = new File(buildDir.toString() + "/generated-src/antlr/main/me/douira/antlr_experiments/")
 }
 compileJava.dependsOn generateGrammarSource
