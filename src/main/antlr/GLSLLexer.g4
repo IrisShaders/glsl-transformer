@@ -6,6 +6,27 @@ channels {
 	PREPROCESSOR
 }
 
+//GLSL token utilities
+fragment DECIMAL_DIGITS: '0' | ('1' ..'9' DIGIT*);
+fragment OCTAL_DIGITS: '0' '0' ..'7'+;
+fragment HEX_DIGITS:
+	'0x' (DIGIT | 'a' ..'f' | 'A' ..'F')+;
+fragment DIGIT: '0' ..'9';
+fragment FLOAT_DIGITS: (
+		(DIGIT+ ('.' DIGIT*)?)
+		| ('.' DIGIT+)
+	) (('e' | 'E') ('+' | '-')? DIGIT*)?;
+fragment INTCONSTANT_frag:
+	DECIMAL_DIGITS
+	| OCTAL_DIGITS
+	| HEX_DIGITS;
+fragment IDENTIFIER_frag: (
+		'a' ..'z'
+		| 'A' ..'Z'
+		| '_'
+	) (DIGIT | 'a' ..'z' | 'A' ..'Z' | '_')*;
+fragment WS_frag: [\t\r\u000C ]+;
+
 //GLSL tokens
 COLON: ':';
 UNIFORM: 'uniform';
@@ -17,10 +38,7 @@ HIGHP: 'highp';
 MEDIUMP: 'mediump';
 LOWP: 'lowp';
 PRECISION: 'precision';
-INTCONSTANT:
-	DECIMAL_DIGITS
-	| OCTAL_DIGITS
-	| HEX_DIGITS;
+INTCONSTANT: INTCONSTANT_frag;
 CONST: 'const';
 PRECISE: 'precise';
 INVARIANT: 'invariant';
@@ -47,10 +65,6 @@ UINTCONSTANT: (
 	) 'u';
 // ROW_MAJOR: 'row_major';
 // PACKED: 'packed';
-fragment FLOAT_DIGITS: (
-		(DIGIT+ ('.' DIGIT*)?)
-		| ('.' DIGIT+)
-	) (('e' | 'E') ('+' | '-')? DIGIT*)?;
 FLOATCONSTANT: FLOAT_DIGITS ('f' | 'F')?;
 BOOLCONSTANT: 'true' | 'false';
 DOUBLECONSTANT: FLOAT_DIGITS ('LF' | 'lf');
@@ -228,59 +242,42 @@ BXOR_OP: '^';
 QUERY_OP: '?';
 ASSIGN_OP: '=';
 
-IDENTIFIER: ('a' ..'z' | 'A' ..'Z' | '_') (
-		DIGIT
-		| 'a' ..'z'
-		| 'A' ..'Z'
-		| '_'
-	)*;
-
-//GLSL token utilities
-fragment DECIMAL_DIGITS: '0' | ('1' ..'9' DIGIT*);
-fragment OCTAL_DIGITS: '0' '0' ..'7'+;
-fragment HEX_DIGITS:
-	'0x' (DIGIT | 'a' ..'f' | 'A' ..'F')+;
-fragment DIGIT: '0' ..'9';
+//preprocessor-related tokens
+NR: '#' -> pushMode(Preprocessor);
+IDENTIFIER: IDENTIFIER_frag;
 
 //hidden comment and whitespace tokens
 COMMENT: (
 		'//' ~('\n' | '\r')* '\r'? '\n'
 		| '/*' (.)*? '*/'
 	) -> channel(HIDDEN);
-WS: [\t\r\u000C ]+ -> channel(WHITESPACE);
+WS: WS_frag -> channel(WHITESPACE);
 EOL: '\n' -> channel(WHITESPACE);
 
-//utility preprocessor tokens
-fragment NR: '#'; //number sign
-fragment WSS: [ \t]+; //"white space some"
-fragment WSM: [ \t]*; //"white space maybe"
-fragment PREFIX_NR: WSM NR WSM;
-fragment PRAGMA_PREFIX: PREFIX_NR 'pragma' WSS;
-fragment PRAGMA_SUFFIX_ON:
-	WSM '(' WSM 'on' WSM ')';
-fragment PRAGMA_SUFFIX_OFF:
-	WSM '(' WSM 'off' WSM ')';
-fragment PRAGMA_SUFFIX_ALL:
-	WSM '(' WSM 'all' WSM ')';
+//preprocessor parsing mode
+mode Preprocessor;
 
-//preprocessor-related tokens that are not hidden
-PRAGMA_DEBUG_ON:
-	PRAGMA_PREFIX 'debug' PRAGMA_SUFFIX_ON;
-PRAGMA_DEBUG_OFF:
-	PRAGMA_PREFIX 'debug' PRAGMA_SUFFIX_OFF;
-PRAGMA_OPTIMIZE_ON:
-	PRAGMA_PREFIX 'optimize' PRAGMA_SUFFIX_ON;
-PRAGMA_OPTIMIZE_OFF:
-	PRAGMA_PREFIX 'optimize' PRAGMA_SUFFIX_OFF;
-PRAGMA_INVARIANT_ALL:
-	PRAGMA_PREFIX 'invariant' PRAGMA_SUFFIX_ALL;
-
-EXTENSION: '#extension';
-VERSION: '#version';
+EXTENSION: 'extension';
+VERSION: 'version';
+PRAGMA: 'pragma';
+PRAGMA_DEBUG: 'debug';
+PRAGMA_OPTIMIZE: 'optimize';
+PRAGMA_INVARIANT: 'invariant';
+ON: 'on';
+OFF: 'off';
+ALL: 'all';
 REQUIRE: 'require';
 ENABLE: 'enable';
 WARN: 'warn';
 DISABLE: 'disable';
+PP_COLON: ':';
+
+PP_INTCONSTANT: INTCONSTANT_frag;
+PP_IDENTIFIER: IDENTIFIER_frag;
+PP_WS: WS_frag -> channel(WHITESPACE);
+PP_EOL: '\n' -> popMode;
+
+
 
 // //preprocessor tokens that are hidden
 // PP_START:

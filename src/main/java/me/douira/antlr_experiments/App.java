@@ -17,7 +17,7 @@ public class App {
   }
 
   public static void main(String[] args) throws IOException, URISyntaxException {
-    var selection = Input.TINY;
+    var selection = Input.SIMPLE;
     CharStream input;
 
     try {
@@ -37,7 +37,7 @@ public class App {
 
     var tokens = commonTokenStream.getTokens();
     for (var token : tokens) {
-      System.out.println(token.getChannel() + token.getType() + token.getText());
+      System.out.println(token.getChannel() + " " + token.getType() + "\t" + token.getText());
     }
   }
 }
