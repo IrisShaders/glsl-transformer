@@ -25,14 +25,11 @@ options {
 
 //the root rule
 translationUnit:
-	versionStatement externalDeclarationList;
+	versionStatement externalDeclaration*;
 
-//TODO: why does the error change when this is transformed into a ?-optional?
+//parsing of #-commands is only slightly more relaxed than in the spec
 versionStatement:
-	| VERSION INTCONSTANT EOL
-	| VERSION INTCONSTANT IDENTIFIER EOL;
-
-externalDeclarationList: externalDeclaration+;
+	(NR VERSION PP_INTCONSTANT PP_IDENTIFIER? PP_EOL)?;
 
 externalDeclaration:
 	functionDefinition
@@ -43,14 +40,13 @@ externalDeclaration:
 	| SEMICOLON;
 
 pragmaStatement:
-	PRAGMA_DEBUG_ON EOL
-	| PRAGMA_DEBUG_OFF EOL
-	| PRAGMA_OPTIMIZE_ON EOL
-	| PRAGMA_OPTIMIZE_OFF EOL
-	| PRAGMA_INVARIANT_ALL EOL;
+	NR PRAGMA (
+		(PRAGMA_DEBUG | PRAGMA_OPTIMIZE) (ON | OFF)
+		| PRAGMA_INVARIANT ALL
+	) PP_EOL;
 
 extensionStatement:
-	EXTENSION IDENTIFIER COLON extensionState EOL;
+	NR EXTENSION PP_IDENTIFIER PP_COLON extensionState PP_EOL;
 
 extensionState: REQUIRE | ENABLE | WARN | DISABLE;
 
@@ -137,9 +133,7 @@ equalityExpression:
 	)*;
 
 andExpression:
-	equalityExpression (
-		BAND_OP equalityExpression
-	)*;
+	equalityExpression (BAND_OP equalityExpression)*;
 
 exclusiveOrExpression:
 	andExpression (BXOR_OP andExpression)*;
@@ -200,9 +194,7 @@ declaration:
 	| typeQualifier IDENTIFIER LBRACE structDeclarationList LBRACE (
 		IDENTIFIER arraySpecifier?
 	)? SEMICOLON
-	| typeQualifier (
-		IDENTIFIER (COMMA IDENTIFIER)*
-	)? SEMICOLON;
+	| typeQualifier (IDENTIFIER (COMMA IDENTIFIER)*)? SEMICOLON;
 
 functionPrototype:
 	functionHeader LPAREN functionParameterList RPAREN;
@@ -237,8 +229,7 @@ declarationMember:
 		ASSIGN_OP initializer
 	)?;
 
-fullySpecifiedType:
-	typeQualifier? typeSpecifier;
+fullySpecifiedType: typeQualifier? typeSpecifier;
 
 storageQualifier:
 	CONST
@@ -450,9 +441,7 @@ simpleStatement:
 	| doWhileStatement
 	| jumpStatement;
 
-compoundStatement: LBRACE statementList* RBRACE;
-
-statementList: statement+;
+compoundStatement: LBRACE statement* RBRACE;
 
 declarationStatement: declaration;
 
@@ -470,7 +459,7 @@ condition:
 	| fullySpecifiedType IDENTIFIER ASSIGN_OP initializer;
 
 switchStatement:
-	SWITCH LPAREN expression RPAREN LBRACE statementList? RBRACE;
+	SWITCH LPAREN expression RPAREN LBRACE statement* RBRACE;
 
 caseLabel: (CASE expression | DEFAULT) COLON;
 
