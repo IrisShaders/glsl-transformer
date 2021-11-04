@@ -21,7 +21,7 @@ One program transformation job that this project wants to achieve is the followi
 
 Match all declarations of the form:
 
-`layout(location = 0) in vec4 Name;` or `layout (location = 0) attribute vec4 NAME;`
+`layout (location = 0) in vec4 Name;` or `layout (location = 0) attribute vec4 Name;`
 
 Then:
 
