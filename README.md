@@ -8,6 +8,14 @@ This repo is based on https://github.com/gabriele-tomassetti/antlr-mega-tutorial
 
 ## Goals
 
+All of these should be fulfilled at the same time.
+
+- Print out the entire original input and preserve line numbers.
+- Find certain syntax structures, delete them and replace them with others
+- Print out the modified input and also preserve line numbers.
+
+### An example
+
 One program transformation job that this project wants to achieve is the following. (from coderbot on Discord)
 
 Match all declarations of the form:
