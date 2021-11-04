@@ -10,9 +10,10 @@ This repo is based on https://github.com/gabriele-tomassetti/antlr-mega-tutorial
 
 All of these should be fulfilled at the same time.
 
-- Print out the entire original input and preserve line numbers.
-- Find certain syntax structures, delete them and replace them with others
-- Print out the modified input and also preserve line numbers.
+- Print out the entire original input and preserve line numbers
+- Find certain syntax structures
+- Delete, replace or modify certain syntax structures
+- Print out the modified input and also preserve line numbers
 
 ### An example
 
@@ -27,6 +28,5 @@ Then:
 1. delete that declaration
 2. replace all references to that attribute / input with a function call to iris_getModelSpaceVertexPosition()
 3. Add the function iris_getModelSpaceVertexPosition() with a specified payload
-4. Add a different vertex attribute declaration called iris_Position
-   Assuming:
+4. Add a different vertex attribute declaration called iris_Position, Assuming:
 5. there are no functions already called iris_getModelSpaceVertexPosition and there are no vertex attributes with the name iris_Position - if any are found, flag an error
