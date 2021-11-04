@@ -7,7 +7,8 @@ import org.antlr.v4.runtime.*;
 
 public class App {
   private static enum Input {
-    TINY("/tiny.glsl"), SIMPLE("/simple.glsl"), SHADER("/shader.glsl"), KAPPA("/unlicensed/composite3.glsl");
+    TINY("/tiny.glsl"), DIRECTIVE_TEST("/directiveTest.glsl"), SHADER("/shader.glsl"),
+    KAPPA("/unlicensed/composite3.glsl");
 
     String path;
 
@@ -17,7 +18,7 @@ public class App {
   }
 
   public static void main(String[] args) throws IOException, URISyntaxException {
-    var selection = Input.SIMPLE;
+    var selection = Input.DIRECTIVE_TEST;
     CharStream input;
 
     try {

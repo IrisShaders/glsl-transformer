@@ -10,13 +10,16 @@
 
 
 uniform sampler2D Sampler;
-in type variable_name1;
-in type variable_name2;
 
-out type out_variable;
+# if fdsaj 4t43lj( (U)UGSgfd)
+
+in type variable_name1;
+
+  # extension extension_name : require
+// out type out_variable;
+  # 
+// uniform type a_uniform;
   
-uniform type a_uniform;
-  
-void main() {
+ void main() {
   out_variable = result_of_things + 5;
-}
+      }
