@@ -8,16 +8,14 @@ import org.antlr.v4.runtime.tree.RuleNode;
 import org.antlr.v4.runtime.tree.TerminalNode;
 import org.antlr.v4.runtime.misc.Interval;
 
-public class GLSLTreeVisitor extends GLSLParserBaseVisitor<String> {
-  private PrintStream stream;
+public class DebugVisitor extends GLSLParserBaseVisitor<String> {
   private int maxDepth;
 
-  public GLSLTreeVisitor(PrintStream stream) {
-    this(stream, Integer.MAX_VALUE);
+  public DebugVisitor() {
+    this(Integer.MAX_VALUE);
   }
 
-  public GLSLTreeVisitor(PrintStream stream, int maxDepth) {
-    this.stream = stream;
+  public DebugVisitor(int maxDepth) {
     this.maxDepth = maxDepth;
   }
 
@@ -36,14 +34,14 @@ public class GLSLTreeVisitor extends GLSLParserBaseVisitor<String> {
 
     // print the name of the node
     var name = node.getPayload().getClass().getSimpleName();
-    stream.println(prefix + "---" + name);
+    System.out.println(prefix + "---" + name);
 
-    // stream.println(prefix + node.getText());
+    // System.out.println(prefix + node.getText());
 
     /*
      * Print the text that includes the tokens for this node. This does not print
      * modified parsed nodes but rather looks up where the current node came from
-     * and then prints that part of the input stream.
+     * and then prints that part of the input System.out.
      */
     var startToken = context.start;
     var stopToken = context.stop;
@@ -53,19 +51,19 @@ public class GLSLTreeVisitor extends GLSLParserBaseVisitor<String> {
     int startIndex = startToken.getStartIndex();
     int stopIndex = stopToken.getStopIndex();
     if (startIndex <= stopIndex) {
-      stream.println(prefix + startToken.getInputStream().getText(new Interval(startIndex, stopIndex)));
+      System.out.println(prefix + startToken.getInputStream().getText(Interval.of(startIndex, stopIndex)));
     } else {
-      stream.println(prefix + "[Empty]");
+      System.out.println(prefix + "[Empty]");
     }
 
-    stream.println();
+    System.out.println();
 
     StringBuilder builder = new StringBuilder();
     int n = node.getChildCount();
     for (int i = 0; i < n; i++) {
-      stream.println(prefix + i + " of " + n + " " + name);
+      System.out.println(prefix + i + " of " + n + " " + name);
       ParseTree c = node.getChild(i);
-      stream.println(prefix + "|||" + c.getText());
+      System.out.println(prefix + "|||" + c.getText());
       builder.append(c.accept(this));
     }
 

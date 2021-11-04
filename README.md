@@ -14,6 +14,8 @@ All of these should be fulfilled at the same time.
 - Find certain syntax structures
 - Delete, replace or modify certain syntax structures
 - Print out the modified input and also preserve line numbers
+- Return parsing error if something is wrong
+- Return a parsing error if PREPROCESSOR-channel items are detected
 
 ### An example
 
@@ -30,3 +32,7 @@ Then:
 3. Add the function iris_getModelSpaceVertexPosition() with a specified payload
 4. Add a different vertex attribute declaration called iris_Position, Assuming:
 5. there are no functions already called iris_getModelSpaceVertexPosition and there are no vertex attributes with the name iris_Position - if any are found, flag an error
+
+## TODO
+- Add a node wrapper for "deleting" nodes. It intercepts the visitor chain and only returns tokens from the non-default channels. (or just whitespace) This ensured the lines stay the same but none of the deleted code is re-printed. This could also filter the list and remove spaces but keep newlines.
+- Find a list-like datastructure that's compatible with LinkedList but only needs constant time to append a list. Otherwise re-printing the tree could have O(n^2) complexity in the worst case.
