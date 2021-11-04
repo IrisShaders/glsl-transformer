@@ -37,7 +37,7 @@ public class App {
     // var transformed = debugVisitor.visit(translationUnitContext);
     // System.out.println(transformed);
 
-    translationUnitContext.children.add(new ReplacementNode("foo"));
+    translationUnitContext.children.add(2, new ReplacementNode("\nexample declaration;"));
 
     System.out.println(PrintVisitor.printTree(commonTokenStream, translationUnitContext));
 
