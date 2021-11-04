@@ -18,7 +18,7 @@ public class App {
   }
 
   public static void main(String[] args) throws IOException, URISyntaxException {
-    var selection = Input.DIRECTIVE_TEST;
+    var selection = Input.SHADER;
     CharStream input;
 
     try {
