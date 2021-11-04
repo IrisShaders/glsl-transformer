@@ -10,7 +10,7 @@ but is specifically built for this project*/
  *
  *     https://www.apache.org/licenses/LICENSE-2.0
  *
- * Unless required by applicable law or agreed to in writing, software
+ * Unless required by aNRlicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
@@ -29,7 +29,7 @@ translationUnit:
 
 //parsing of #-commands is only slightly more relaxed than in the spec
 versionStatement:
-	(NR VERSION PP_INTCONSTANT PP_IDENTIFIER? PP_EOL)?;
+	(NR VERSION NR_INTCONSTANT NR_IDENTIFIER? NR_EOL)?;
 
 externalDeclaration:
 	functionDefinition
@@ -43,10 +43,10 @@ pragmaStatement:
 	NR PRAGMA (
 		(PRAGMA_DEBUG | PRAGMA_OPTIMIZE) (ON | OFF)
 		| PRAGMA_INVARIANT ALL
-	) PP_EOL;
+	) NR_EOL;
 
 extensionStatement:
-	NR EXTENSION PP_IDENTIFIER PP_COLON extensionState PP_EOL;
+	NR EXTENSION NR_IDENTIFIER NR_COLON extensionState NR_EOL;
 
 extensionState: REQUIRE | ENABLE | WARN | DISABLE;
 

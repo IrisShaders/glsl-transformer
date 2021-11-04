@@ -242,8 +242,32 @@ BXOR_OP: '^';
 QUERY_OP: '?';
 ASSIGN_OP: '=';
 
+//actual preprocessor parsing mode (is not parsed and hidden into a channel)
+PP_DEFINE:
+	'#' [\t ]* 'define' -> channel(PREPROCESSOR), pushMode(Preprocessor);
+PP_UNDEF:
+	'#' [\t ]* 'undef' -> channel(PREPROCESSOR), pushMode(Preprocessor);
+PP_IF:
+	'#' [\t ]* 'if' -> channel(PREPROCESSOR), pushMode(Preprocessor);
+PP_IFDEF:
+	'#' [\t ]* 'ifdef' -> channel(PREPROCESSOR), pushMode(Preprocessor);
+PP_IFNDEF:
+	'#' [\t ]* 'ifndef' -> channel(PREPROCESSOR), pushMode(Preprocessor);
+PP_ELSE:
+	'#' [\t ]* 'else' -> channel(PREPROCESSOR), pushMode(Preprocessor);
+PP_ELIF:
+	'#' [\t ]* 'elif' -> channel(PREPROCESSOR), pushMode(Preprocessor);
+PP_ENDIF:
+	'#' [\t ]* 'endif' -> channel(PREPROCESSOR), pushMode(Preprocessor);
+PP_ERROR:
+	'#' [\t ]* 'error' -> channel(PREPROCESSOR), pushMode(Preprocessor);
+PP_LINE:
+	'#' [\t ]* 'line' -> channel(PREPROCESSOR), pushMode(Preprocessor);
+PP_EMPTY:
+	'#' [\t ]* '\n' -> channel(PREPROCESSOR);
+
 //preprocessor-related tokens
-NR: '#' -> pushMode(Preprocessor);
+NR: '#' -> pushMode(NR_Mode);
 IDENTIFIER: IDENTIFIER_frag;
 
 //hidden comment and whitespace tokens
@@ -254,8 +278,8 @@ COMMENT: (
 WS: WS_frag -> channel(WHITESPACE);
 EOL: '\n' -> channel(WHITESPACE);
 
-//preprocessor parsing mode
-mode Preprocessor;
+//nr-sign parsing mode
+mode NR_Mode;
 
 EXTENSION: 'extension';
 VERSION: 'version';
@@ -270,54 +294,14 @@ REQUIRE: 'require';
 ENABLE: 'enable';
 WARN: 'warn';
 DISABLE: 'disable';
-PP_COLON: ':';
+NR_COLON: ':';
 
-PP_INTCONSTANT: INTCONSTANT_frag;
-PP_IDENTIFIER: IDENTIFIER_frag;
-PP_WS: WS_frag -> channel(WHITESPACE);
-PP_EOL: '\n' -> popMode;
+NR_INTCONSTANT: INTCONSTANT_frag;
+NR_IDENTIFIER: IDENTIFIER_frag;
+NR_WS: WS_frag -> channel(WHITESPACE);
+NR_EOL: '\n' -> popMode;
 
-
-
-// //preprocessor tokens that are hidden
-// PP_START:
-// 	(
-// 		PP_DEFINE
-// 		| PP_UNDEF
-// 		| PP_IF
-// 		| PP_IFDEF
-// 		| PP_IFNDEF
-// 		| PP_ELSE
-// 		| PP_ELIF
-// 		| PP_ENDIF
-// 		| PP_ERROR
-// 		| PP_LINE
-// 	) -> channel(PREPROCESSOR), pushMode(Preprocessor);
-
-// PP_DEFINE:
-// 	PREFIX_NR 'define' -> channel(PREPROCESSOR);
-// PP_UNDEF:
-// 	PREFIX_NR 'define' -> channel(PREPROCESSOR);
-// PP_IF: PREFIX_NR 'if' -> channel(PREPROCESSOR);
-// PP_IFDEF:
-// 	PREFIX_NR 'ifdef' -> channel(PREPROCESSOR);
-// PP_IFNDEF:
-// 	PREFIX_NR 'ifndef' -> channel(PREPROCESSOR);
-// PP_ELSE:
-// 	PREFIX_NR 'else' -> channel(PREPROCESSOR);
-// PP_ELIF:
-// 	PREFIX_NR 'elif' -> channel(PREPROCESSOR);
-// PP_ENDIF:
-// 	PREFIX_NR 'endif' -> channel(PREPROCESSOR);
-// PP_ERROR:
-// 	PREFIX_NR 'error' -> channel(PREPROCESSOR);
-// PP_LINE:
-// 	PREFIX_NR 'line' -> channel(PREPROCESSOR);
-
-// PP_EMPTY_DIRECTIVE:
-// 	PREFIX_NR WSM EOL -> channel(PREPROCESSOR);
-
-// //gobble the preprocessor content only if started a preprocessor directive
-// mode Preprocessor;
-// PP_EOL: EOL -> channel(PREPROCESSOR), popMode;
-// PP_CONTENT: ~('\n')+ -> channel(PREPROCESSOR);
+//gobble the preprocessor content only if started a preprocessor directive
+mode Preprocessor;
+PP_EOL: '\n' -> channel(PREPROCESSOR), popMode;
+PP_CONTENT: ~('\n')+ -> channel(PREPROCESSOR);
