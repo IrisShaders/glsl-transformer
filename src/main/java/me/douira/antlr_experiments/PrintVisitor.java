@@ -109,7 +109,7 @@ public class PrintVisitor extends AbstractParseTreeVisitor<Void> {
 
   @Override
   public Void visitTerminal(TerminalNode node) {
-    if (node instanceof ReplacementNode) {
+    if (node instanceof StringNode) {
       tokenIntervals.add(new TokenOrInterval(node.getSymbol()));
     } else {
       addInterval(node.getSourceInterval());
