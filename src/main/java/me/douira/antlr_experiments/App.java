@@ -32,7 +32,7 @@ public class App {
     var parser = new GLSLParser(commonTokenStream);
 
     var translationUnitContext = parser.translationUnit();
-    
+
     // var debugVisitor = new DebugVisitor();
     // var transformed = debugVisitor.visit(translationUnitContext);
     // System.out.println(transformed);
@@ -40,15 +40,7 @@ public class App {
     translationUnitContext.children.add(new ReplacementNode("foo"));
 
     var printVisitor = new PrintVisitor(commonTokenStream);
-    var newTokens = printVisitor.visit(translationUnitContext);
-    var builder = new StringBuilder(newTokens.size());
-    for (var token : newTokens) {
-      if (token.getType() != GLSLLexer.EOF) {
-        builder.append(token.getText());
-        builder.append(',');
-      }
-    }
-    System.out.println(builder.toString());
+    System.out.println(printVisitor.visitAndJoin(translationUnitContext));
 
     var tokens = commonTokenStream.getTokens();
     for (var token : tokens) {

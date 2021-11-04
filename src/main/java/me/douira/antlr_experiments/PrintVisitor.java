@@ -17,7 +17,6 @@ import org.antlr.v4.runtime.tree.TerminalNode;
  */
 public class PrintVisitor extends GLSLParserBaseVisitor<List<Token>> {
   private BufferedTokenStream tokenStream;
-  private List<Token> foundTokens;
 
   /**
    * Constructs a print visitor with a given token stream. The stream is used to
@@ -31,9 +30,16 @@ public class PrintVisitor extends GLSLParserBaseVisitor<List<Token>> {
     this.tokenStream = tokenStream;
   }
 
-  @Override
-  public List<Token> visit(ParseTree tree) {
-    return super.visit(tree);
+  public String visitAndJoin(ParseTree tree) {
+    var tokens = visit(tree);
+    var builder = new StringBuilder(tokens.size());
+    for (var token : tokens) {
+      if (token.getType() != GLSLLexer.EOF) {
+        builder.append(token.getText());
+        builder.append(',');
+      }
+    }
+    return builder.toString();
   }
 
   @Override
