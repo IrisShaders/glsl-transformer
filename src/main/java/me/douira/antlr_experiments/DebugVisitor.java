@@ -1,7 +1,5 @@
 package me.douira.antlr_experiments;
 
-import java.io.PrintStream;
-
 import org.antlr.v4.runtime.ParserRuleContext;
 import org.antlr.v4.runtime.tree.ParseTree;
 import org.antlr.v4.runtime.tree.RuleNode;
