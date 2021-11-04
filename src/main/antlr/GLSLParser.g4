@@ -25,7 +25,7 @@ options {
 
 //the root rule
 translationUnit:
-	versionStatement externalDeclaration*;
+	versionStatement externalDeclaration* EOF;
 
 versionStatement:
 	(NR VERSION NR_INTCONSTANT NR_IDENTIFIER? NR_EOL)?;
@@ -239,6 +239,8 @@ storageQualifier:
 	| PATCH
 	| SAMPLE
 	| UNIFORM
+	| VARYING
+	| ATTRIBUTE
 	| BUFFER
 	| SHARED
 	| COHERENT
