@@ -243,28 +243,29 @@ QUERY_OP: '?';
 ASSIGN_OP: '=';
 
 //actual preprocessor parsing mode (is not parsed and hidden into a channel)
+fragment NR_PP_PREFIX: '#' [\t ]*;
 PP_DEFINE:
-	'#' [\t ]* 'define' -> channel(PREPROCESSOR), pushMode(Preprocessor);
+	NR_PP_PREFIX 'define' -> channel(PREPROCESSOR), pushMode(Preprocessor);
 PP_UNDEF:
-	'#' [\t ]* 'undef' -> channel(PREPROCESSOR), pushMode(Preprocessor);
+	NR_PP_PREFIX 'undef' -> channel(PREPROCESSOR), pushMode(Preprocessor);
 PP_IF:
-	'#' [\t ]* 'if' -> channel(PREPROCESSOR), pushMode(Preprocessor);
+	NR_PP_PREFIX 'if' -> channel(PREPROCESSOR), pushMode(Preprocessor);
 PP_IFDEF:
-	'#' [\t ]* 'ifdef' -> channel(PREPROCESSOR), pushMode(Preprocessor);
+	NR_PP_PREFIX 'ifdef' -> channel(PREPROCESSOR), pushMode(Preprocessor);
 PP_IFNDEF:
-	'#' [\t ]* 'ifndef' -> channel(PREPROCESSOR), pushMode(Preprocessor);
+	NR_PP_PREFIX 'ifndef' -> channel(PREPROCESSOR), pushMode(Preprocessor);
 PP_ELSE:
-	'#' [\t ]* 'else' -> channel(PREPROCESSOR), pushMode(Preprocessor);
+	NR_PP_PREFIX 'else' -> channel(PREPROCESSOR), pushMode(Preprocessor);
 PP_ELIF:
-	'#' [\t ]* 'elif' -> channel(PREPROCESSOR), pushMode(Preprocessor);
+	NR_PP_PREFIX 'elif' -> channel(PREPROCESSOR), pushMode(Preprocessor);
 PP_ENDIF:
-	'#' [\t ]* 'endif' -> channel(PREPROCESSOR), pushMode(Preprocessor);
+	NR_PP_PREFIX 'endif' -> channel(PREPROCESSOR), pushMode(Preprocessor);
 PP_ERROR:
-	'#' [\t ]* 'error' -> channel(PREPROCESSOR), pushMode(Preprocessor);
+	NR_PP_PREFIX 'error' -> channel(PREPROCESSOR), pushMode(Preprocessor);
 PP_LINE:
-	'#' [\t ]* 'line' -> channel(PREPROCESSOR), pushMode(Preprocessor);
+	NR_PP_PREFIX 'line' -> channel(PREPROCESSOR), pushMode(Preprocessor);
 PP_EMPTY:
-	'#' [\t ]* '\n' -> channel(PREPROCESSOR);
+	NR_PP_PREFIX '\n' -> channel(PREPROCESSOR);
 
 //preprocessor-related tokens
 NR: '#' -> pushMode(NR_Mode);
