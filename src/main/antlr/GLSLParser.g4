@@ -190,7 +190,7 @@ declaration:
 	functionPrototype SEMICOLON
 	| initDeclaratorList SEMICOLON
 	| PRECISION precisionQualifier typeSpecifier SEMICOLON
-	| typeQualifier IDENTIFIER LBRACE structDeclarationList LBRACE (
+	| typeQualifier IDENTIFIER LBRACE structDeclarationList RBRACE (
 		IDENTIFIER arraySpecifier?
 	)? SEMICOLON
 	| typeQualifier (IDENTIFIER (COMMA IDENTIFIER)*)? SEMICOLON;
