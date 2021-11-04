@@ -18,7 +18,7 @@ public class App {
   }
 
   public static void main(String[] args) throws IOException, URISyntaxException {
-    var selection = Input.SHADER;
+    var selection = Input.TINY;
     CharStream input;
 
     try {
@@ -31,14 +31,28 @@ public class App {
 
     var parser = new GLSLParser(commonTokenStream);
 
-    var TUContext = parser.translationUnit();
-    var visitor = new GLSLTreeVisitor(System.out);
-    var transformed = visitor.visit(TUContext);
-    System.out.println(transformed);
+    var translationUnitContext = parser.translationUnit();
+    
+    // var debugVisitor = new DebugVisitor();
+    // var transformed = debugVisitor.visit(translationUnitContext);
+    // System.out.println(transformed);
+
+    translationUnitContext.children.add(new ReplacementNode("foo"));
+
+    var printVisitor = new PrintVisitor(commonTokenStream);
+    var newTokens = printVisitor.visit(translationUnitContext);
+    var builder = new StringBuilder(newTokens.size());
+    for (var token : newTokens) {
+      if (token.getType() != GLSLLexer.EOF) {
+        builder.append(token.getText());
+        builder.append(',');
+      }
+    }
+    System.out.println(builder.toString());
 
     var tokens = commonTokenStream.getTokens();
     for (var token : tokens) {
-      System.out.println(token.getChannel() + " " + token.getType() + "\t" + token.getText());
+      System.out.println(token);
     }
   }
 }
