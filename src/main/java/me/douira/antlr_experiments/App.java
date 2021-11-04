@@ -39,8 +39,7 @@ public class App {
 
     translationUnitContext.children.add(new ReplacementNode("foo"));
 
-    var printVisitor = new PrintVisitor(commonTokenStream);
-    System.out.println(printVisitor.visitAndJoin(translationUnitContext));
+    System.out.println(PrintVisitor.printTree(commonTokenStream, translationUnitContext));
 
     var tokens = commonTokenStream.getTokens();
     for (var token : tokens) {
