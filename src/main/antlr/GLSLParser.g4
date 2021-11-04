@@ -27,7 +27,6 @@ options {
 translationUnit:
 	versionStatement externalDeclaration*;
 
-//parsing of #-commands is only slightly more relaxed than in the spec
 versionStatement:
 	(NR VERSION NR_INTCONSTANT NR_IDENTIFIER? NR_EOL)?;
 
