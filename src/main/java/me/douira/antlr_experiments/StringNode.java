@@ -6,9 +6,13 @@ import org.antlr.v4.runtime.tree.TerminalNodeImpl;
 public class StringNode extends TerminalNodeImpl {
   static private class ReplacementToken extends CommonToken {
     public ReplacementToken(String text) {
-      //type 0 because -1 makes it count as EOF and never be printed
+      // type 0 because -1 makes it count as EOF and never be printed
       super(0, text);
     }
+  }
+
+  public StringNode() {
+    this(null);
   }
 
   public StringNode(String text) {

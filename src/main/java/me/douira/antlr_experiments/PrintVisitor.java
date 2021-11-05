@@ -1,14 +1,15 @@
 package me.douira.antlr_experiments;
 
+import java.util.Collections;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 
 import org.antlr.v4.runtime.ParserRuleContext;
 import org.antlr.v4.runtime.Token;
-import org.antlr.v4.runtime.misc.Interval;
 import org.antlr.v4.runtime.BufferedTokenStream;
 import org.antlr.v4.runtime.Lexer;
+import org.antlr.v4.runtime.misc.Interval;
 import org.antlr.v4.runtime.tree.AbstractParseTreeVisitor;
 import org.antlr.v4.runtime.tree.ParseTree;
 import org.antlr.v4.runtime.tree.RuleNode;
@@ -29,27 +30,39 @@ public class PrintVisitor extends AbstractParseTreeVisitor<Void> {
     this.tokenStream = tokenStream;
   }
 
-  public static String printTree(BufferedTokenStream tokenStream, ParseTree tree) {
-    return new PrintVisitor(tokenStream).visitAndJoin(tree);
+  private static boolean inInterval(Interval interval, int el) {
+    return interval.a <= el && interval.b >= el;
   }
 
-  public String visitAndJoin(ParseTree rootNode) {
+  public static String printTree(BufferedTokenStream tokenStream, ParseTree tree) {
+    return printTree(tokenStream, tree, null);
+  }
+
+  public static String printTree(BufferedTokenStream tokenStream, ParseTree tree, EditContext editContext) {
+    return new PrintVisitor(tokenStream).visitAndJoin(tree, Interval.of(0, tokenStream.size() - 1), editContext);
+  }
+
+  public String visitAndJoin(ParseTree rootNode, Interval bounds, EditContext editContext) {
     // add the tokens before the root node too
     var rootInterval = rootNode.getSourceInterval();
-    addInterval(0, rootInterval.a - 1);
+    addInterval(bounds.a, rootInterval.a - 1);
 
     // visit the whole tree and accumulate tokens and intervals
     visit(rootNode);
 
     // and also the tokens after the root node
-    addInterval(rootInterval.b + 1, tokenStream.size() - 1);
+    addInterval(rootInterval.b + 1, bounds.b);
 
     // convert the list of tokens and intervals into just tokens,
     // and then into their strings
     var builder = new StringBuilder(512); // guessing
     for (var tokenOrInterval : tokenIntervals) {
       for (var token : tokenOrInterval) {
-        if (token.getType() != Lexer.EOF) {
+        // don't print EOF, only print those in bounds but always allow inserted nodes,
+        // if an edit context is given, only print if allowed by it
+        var tokenIndex = token.getTokenIndex();
+        if (token.getType() != Lexer.EOF && (tokenIndex == -1
+            || inInterval(bounds, tokenIndex) && (editContext == null || editContext.allowToken(token)))) {
           builder.append(token.getText());
           // builder.append(',');
         }
@@ -59,6 +72,8 @@ public class PrintVisitor extends AbstractParseTreeVisitor<Void> {
   }
 
   private void addInterval(int a, int b) {
+    // doing this check here saves an object construction if the interval is invalid
+    // (and it often is invalid)
     if (a > b || a < 0 || b < 0) {
       return;
     }
@@ -71,6 +86,7 @@ public class PrintVisitor extends AbstractParseTreeVisitor<Void> {
     if (interval.length() == 0) {
       return;
     }
+
     if (tokenIntervals.isEmpty() || !tokenIntervals.getLast().tryAddInterval(interval)) {
       tokenIntervals.add(new TokenOrInterval(interval));
     }
@@ -80,7 +96,7 @@ public class PrintVisitor extends AbstractParseTreeVisitor<Void> {
   public Void visitChildren(RuleNode node) {
     final var context = (ParserRuleContext) node.getRuleContext();
 
-    // get the token interval for this node (token indexes)
+    // the source interval is always an interval of token indexes
     final var superInterval = context.getSourceInterval();
 
     // the index of the token that needs to be fetched next,
@@ -142,8 +158,10 @@ public class PrintVisitor extends AbstractParseTreeVisitor<Void> {
     public Iterator<Token> iterator() {
       if (interval != null) {
         return tokenStream.getTokens(interval.a, interval.b).iterator();
-      } else {
+      } else if (token.getText() != null) {
         return List.of(token).iterator();
+      } else {
+        return Collections.emptyIterator();
       }
     }
   }

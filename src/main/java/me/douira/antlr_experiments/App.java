@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.net.URISyntaxException;
 
 import org.antlr.v4.runtime.*;
+import org.antlr.v4.runtime.tree.ParseTreeWalker;
 
 public class App {
   private static enum Input {
@@ -37,9 +38,13 @@ public class App {
     // var transformed = debugVisitor.visit(translationUnitContext);
     // System.out.println(transformed);
 
+    var editContext = new EditContext();
     translationUnitContext.children.add(2, new StringNode("\nexample declaration;"));
-
     System.out.println(PrintVisitor.printTree(commonTokenStream, translationUnitContext));
+    ParseTreeWalker.DEFAULT.walk(new TransformationVisitor(editContext), translationUnitContext);
+    editContext.finishEditing();
+
+    System.out.println(PrintVisitor.printTree(commonTokenStream, translationUnitContext, editContext));
 
     var tokens = commonTokenStream.getTokens();
     for (var token : tokens) {
