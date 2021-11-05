@@ -19,11 +19,17 @@ public class TransformationVisitor extends GLSLParserBaseListener {
 
     //the node needs to be replaced with something to preserve the length or there's NPEs in the walker
     children.set(children.indexOf(node), new StringNode(null));
+
+    registerRemoval(node);
   }
 
   @Override
   public void enterLayoutQualifier(GLSLParser.LayoutQualifierContext context) {
     removeNode(context);
-    registerRemoval(context);
+  }
+
+  @Override
+  public void enterFunctionDefinition(GLSLParser.FunctionDefinitionContext context) {
+    removeNode(context);
   }
 }
