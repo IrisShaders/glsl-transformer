@@ -27,8 +27,11 @@ options {
 translationUnit:
 	versionStatement externalDeclaration* EOF;
 
+//allows for EXT_null_initializer
 versionStatement:
-	(NR VERSION NR_INTCONSTANT NR_IDENTIFIER? NR_EOL)?;
+	(
+		NR VERSION NR_INTCONSTANT NR_IDENTIFIER? NR_EOL
+	)?;
 
 externalDeclaration:
 	functionDefinition
@@ -195,8 +198,9 @@ declaration:
 	)? SEMICOLON
 	| typeQualifier (IDENTIFIER (COMMA IDENTIFIER)*)? SEMICOLON;
 
+//allows for EXT_subgroup_uniform_control_flow
 functionPrototype:
-	functionHeader LPAREN functionParameterList RPAREN;
+	attribute? functionHeader LPAREN functionParameterList RPAREN attribute?;
 
 functionParameterList:
 	(
@@ -215,6 +219,15 @@ parameterDeclarator:
 parameterDeclaration:
 	typeQualifier? parameterDeclarator
 	| fullySpecifiedType;
+
+//part of EXT_subgroup_uniform_control_flow
+attribute:
+	LBRACKET LBRACKET singleAttribute (
+		COMMA singleAttribute
+	)* RBRACKET RBRACKET;
+
+singleAttribute:
+	IDENTIFIER (LPAREN constantExpression RPAREN)?;
 
 //TODO: is this correct? According to the spec it is but something like "int, foo;" doesn't make any sense.
 //if not, then declarationMember should be put into an optional block together with the comma list
@@ -318,7 +331,7 @@ builtinTypeSpecifierNonarray:
 	| UVEC2
 	| UVEC3
 	| UVEC4
-	| MAT2X2 //mat2, mat3, mat4 handled as the same token
+	| MAT2X2 //mat2, mat3, mat4 handled in the lexer
 	| MAT2X3
 	| MAT2X4
 	| MAT3X2
@@ -327,7 +340,7 @@ builtinTypeSpecifierNonarray:
 	| MAT4X2
 	| MAT4X3
 	| MAT4X4
-	| DMAT2X2 //dmat2, dmat3, dmat4 handled as the same token
+	| DMAT2X2 //dmat2, dmat3, dmat4 handled in the lexer
 	| DMAT2X3
 	| DMAT2X4
 	| DMAT3X2
@@ -426,7 +439,9 @@ structDeclarator: IDENTIFIER arraySpecifier?;
 
 initializer:
 	assignmentExpression
-	| LBRACE initializer (COMMA initializer)* COMMA? RBRACE;
+	| LBRACE (
+		initializer (COMMA initializer)* COMMA?
+	)? RBRACE;
 
 statement: compoundStatement | simpleStatement;
 
@@ -440,7 +455,8 @@ simpleStatement:
 	| forStatement
 	| whileStatement
 	| doWhileStatement
-	| jumpStatement;
+	| jumpStatement
+	| demoteStatement;
 
 compoundStatement: LBRACE statement* RBRACE;
 
@@ -483,3 +499,5 @@ jumpStatement: (
 		| RETURN expression?
 		| DISCARD //fragment shader only
 	) SEMICOLON;
+
+demoteStatement: DEMOTE SEMICOLON;

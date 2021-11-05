@@ -129,6 +129,7 @@ CONTINUE: 'continue';
 BREAK: 'break';
 RETURN: 'return';
 DISCARD: 'discard';
+DEMOTE: 'demote';
 VEC2: 'vec2';
 VEC3: 'vec3';
 VEC4: 'vec4';
