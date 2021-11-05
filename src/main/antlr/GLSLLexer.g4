@@ -244,26 +244,20 @@ ASSIGN_OP: '=';
 
 //actual preprocessor parsing mode (is not parsed and hidden into a channel)
 fragment NR_PP_PREFIX: '#' [\t ]*;
-PP_DEFINE:
-	NR_PP_PREFIX 'define' -> channel(PREPROCESSOR), pushMode(Preprocessor);
-PP_UNDEF:
-	NR_PP_PREFIX 'undef' -> channel(PREPROCESSOR), pushMode(Preprocessor);
-PP_IF:
-	NR_PP_PREFIX 'if' -> channel(PREPROCESSOR), pushMode(Preprocessor);
-PP_IFDEF:
-	NR_PP_PREFIX 'ifdef' -> channel(PREPROCESSOR), pushMode(Preprocessor);
-PP_IFNDEF:
-	NR_PP_PREFIX 'ifndef' -> channel(PREPROCESSOR), pushMode(Preprocessor);
-PP_ELSE:
-	NR_PP_PREFIX 'else' -> channel(PREPROCESSOR), pushMode(Preprocessor);
-PP_ELIF:
-	NR_PP_PREFIX 'elif' -> channel(PREPROCESSOR), pushMode(Preprocessor);
-PP_ENDIF:
-	NR_PP_PREFIX 'endif' -> channel(PREPROCESSOR), pushMode(Preprocessor);
-PP_ERROR:
-	NR_PP_PREFIX 'error' -> channel(PREPROCESSOR), pushMode(Preprocessor);
-PP_LINE:
-	NR_PP_PREFIX 'line' -> channel(PREPROCESSOR), pushMode(Preprocessor);
+PP_ENTER_MODE:
+	NR_PP_PREFIX (
+		'define'
+		| 'include'
+		| 'undef'
+		| 'if'
+		| 'ifdef'
+		| 'ifndef'
+		| 'else'
+		| 'elif'
+		| 'endif'
+		| 'error'
+		| 'line'
+	) -> channel(PREPROCESSOR), pushMode(Preprocessor);
 PP_EMPTY:
 	NR_PP_PREFIX '\n' -> channel(PREPROCESSOR);
 
