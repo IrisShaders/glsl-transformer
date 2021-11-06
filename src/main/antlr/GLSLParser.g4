@@ -83,17 +83,17 @@ postfixExpression:
 
 functionCall:
 	functionIdentifier (
-		VOID? LPAREN RPAREN
-		| LPAREN functionCallParameterList RPAREN
+		LPAREN (
+			| VOID
+			| assignmentExpression (
+				COMMA assignmentExpression
+			)*) RPAREN
 	);
 
-functionCallParameterList:
-	assignmentExpression (
-		COMMA assignmentExpression
-	)*;
-
+//Note: diverges from the spec by not allowing a prefixExpression as an identifier
+//array-type function identfiers are handled by typeSpecifier
 functionIdentifier:
-	builtinTypeSpecifierNonarray
+	typeSpecifier
 	| variableIdentifier;
 
 unaryExpression:
@@ -229,8 +229,6 @@ attribute:
 singleAttribute:
 	IDENTIFIER (LPAREN constantExpression RPAREN)?;
 
-//TODO: is this correct? According to the spec it is but something like "int, foo;" doesn't make any sense.
-//if not, then declarationMember should be put into an optional block together with the comma list
 initDeclaratorList:
 	fullySpecifiedType declarationMember? (
 		COMMA declarationMember
