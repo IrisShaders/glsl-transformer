@@ -67,6 +67,7 @@ primaryExpression:
 	| INTCONSTANT
 	| UINTCONSTANT
 	| FLOATCONSTANT
+	| FLOAT16CONSTANT
 	| BOOLCONSTANT
 	| DOUBLECONSTANT
 	| LPAREN expression RPAREN;
@@ -87,7 +88,8 @@ functionCall:
 			| VOID
 			| assignmentExpression (
 				COMMA assignmentExpression
-			)*) RPAREN
+			)*
+		) RPAREN
 	);
 
 //Note: diverges from the spec by not allowing a prefixExpression as an identifier
@@ -220,7 +222,7 @@ parameterDeclaration:
 	typeQualifier? parameterDeclarator
 	| fullySpecifiedType;
 
-//part of EXT_subgroup_uniform_control_flow
+//part of GL_EXT_control_flow_attributes
 attribute:
 	LBRACKET LBRACKET singleAttribute (
 		COMMA singleAttribute
@@ -420,7 +422,23 @@ builtinTypeSpecifierNonarray:
 	| UIMAGE2DMS
 	| IMAGE2DMSARRAY
 	| IIMAGE2DMSARRAY
-	| UIMAGE2DMSARRAY;
+	| UIMAGE2DMSARRAY
+	| FLOAT16
+	| F16VEC2
+	| F16VEC3
+	| F16VEC4
+	| F16MAT2
+	| F16MAT3
+	| F16MAT4
+	| F16MAT2X2
+	| FL6MAT2X3
+	| F16MAT2X4
+	| F16MAT3X2
+	| F16MAT3X3
+	| F16MAT3X4
+	| F16MAT4X2
+	| F16MAT4X3
+	| F16MAT4X4;
 
 structSpecifier:
 	STRUCT IDENTIFIER? LBRACE structDeclarationList RBRACE;
@@ -465,7 +483,7 @@ expressionStatement: expression SEMICOLON;
 emptyStatement: SEMICOLON;
 
 selectionStatement:
-	IF LPAREN expression RPAREN statement (
+	attribute? IF LPAREN expression RPAREN statement (
 		ELSE statement
 	)?;
 
@@ -474,18 +492,18 @@ condition:
 	| fullySpecifiedType IDENTIFIER ASSIGN_OP initializer;
 
 switchStatement:
-	SWITCH LPAREN expression RPAREN LBRACE statement* RBRACE;
+	attribute? SWITCH LPAREN expression RPAREN LBRACE statement* RBRACE;
 
 caseLabel: (CASE expression | DEFAULT) COLON;
 
 whileStatement:
-	WHILE LPAREN condition RPAREN statement;
+	attribute? WHILE LPAREN condition RPAREN statement;
 
 doWhileStatement:
-	DO statement WHILE LPAREN expression RPAREN SEMICOLON;
+	attribute? DO statement WHILE LPAREN expression RPAREN SEMICOLON;
 
 forStatement:
-	FOR LPAREN (
+	attribute? FOR LPAREN (
 		emptyStatement
 		| expressionStatement
 		| declarationStatement
