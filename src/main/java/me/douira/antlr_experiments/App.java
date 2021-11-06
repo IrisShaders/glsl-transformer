@@ -9,7 +9,8 @@ import org.antlr.v4.runtime.tree.ParseTreeWalker;
 public class App {
   private static enum Input {
     TINY("/tiny.glsl"), DIRECTIVE_TEST("/directiveTest.glsl"), SHADER("/shader.glsl"),
-    KAPPA("/unlicensed/composite3.glsl");
+    KAPPA("/unlicensed/composite3.glsl"), BENCHMARK1("/unlicensed/benchmark1.glsl"), BENCHMARK2("/unlicensed/benchmark2.glsl"), TEST(
+        "/unlicensed/test.glsl");
 
     String path;
 
@@ -19,7 +20,7 @@ public class App {
   }
 
   public static void main(String[] args) throws IOException, URISyntaxException {
-    var selection = Input.TINY;
+    var selection = Input.TEST;
     CharStream input;
 
     try {
@@ -30,13 +31,14 @@ public class App {
     var lexer = new GLSLLexer(input);
     var commonTokenStream = new CommonTokenStream(lexer);
 
+    var startNanos = System.nanoTime();
     var parser = new GLSLParser(commonTokenStream);
-
     var translationUnitContext = parser.translationUnit();
+    System.out.println("parsing took " + (System.nanoTime() - startNanos) / 1e6 + " ms.");
 
-    // var debugVisitor = new DebugVisitor();
-    // var transformed = debugVisitor.visit(translationUnitContext);
-    // System.out.println(transformed);
+    new DebugVisitor().visit(translationUnitContext);
+    
+    System.out.println(translationUnitContext.toInfoString(parser));
 
     var editContext = new EditContext();
     translationUnitContext.children.add(2, new StringNode("\nexample declaration;"));
@@ -44,7 +46,10 @@ public class App {
     ParseTreeWalker.DEFAULT.walk(new TransformationVisitor(editContext), translationUnitContext);
     editContext.finishEditing();
 
-    System.out.println(PrintVisitor.printTree(commonTokenStream, translationUnitContext, editContext));
+    startNanos = System.nanoTime();
+    var printResult = PrintVisitor.printTree(commonTokenStream, translationUnitContext, editContext);
+    System.out.println("printing took " + (System.nanoTime() - startNanos) / 1e6 + " ms.");
+    System.out.println(printResult);
 
     var tokens = commonTokenStream.getTokens();
     for (var token : tokens) {
