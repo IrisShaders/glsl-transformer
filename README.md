@@ -39,6 +39,7 @@ Then:
 
 - Refactor the printe to not use intervals but rather just gather the added tokens and insert them during iteration of the whole token stream.
 - Make a more elegant system for transforming the trees. Some kind of tree matching with actions. (lambdas?)
+- low priority: implement more extensions, like `GL_EXT_shader_explicit_arithmetic_types`
 
 ## Notes
 
