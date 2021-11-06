@@ -77,20 +77,23 @@ postfixExpression:
 	| postfixExpression (
 		LBRACKET expression RBRACKET
 		| DOT IDENTIFIER
+		| DOT methodCall
 		| INC_OP
 		| DEC_OP
 	)
 	| functionCall;
 
-functionCall:
-	functionIdentifier (
-		LPAREN (
-			| VOID
-			| assignmentExpression (
-				COMMA assignmentExpression
-			)*
-		) RPAREN
-	);
+functionCall: functionIdentifier callParameterList;
+
+methodCall: variableIdentifier callParameterList;
+
+callParameterList:
+	LPAREN (
+		| VOID
+		| assignmentExpression (
+			COMMA assignmentExpression
+		)*
+	) RPAREN;
 
 //Note: diverges from the spec by not allowing a prefixExpression as an identifier
 //array-type function identfiers are handled by typeSpecifier
