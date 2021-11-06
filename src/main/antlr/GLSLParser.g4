@@ -52,7 +52,9 @@ pragmaStatement:
 	) NR_EOL;
 
 extensionStatement:
-	NR EXTENSION NR_IDENTIFIER (NR_COLON extensionState)? NR_EOL;
+	NR EXTENSION NR_IDENTIFIER (
+		NR_COLON extensionState
+	)? NR_EOL;
 
 extensionState:
 	NR_REQUIRE
@@ -241,7 +243,9 @@ attribute:
 	)* RBRACKET RBRACKET;
 
 singleAttribute:
-	IDENTIFIER (LPAREN constantExpression RPAREN)?;
+	(IDENTIFIER COLON COLON)? IDENTIFIER (
+		LPAREN constantExpression RPAREN
+	)?;
 
 initDeclaratorList:
 	fullySpecifiedType declarationMember? (
