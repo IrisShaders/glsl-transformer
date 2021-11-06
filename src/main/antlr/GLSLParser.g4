@@ -42,19 +42,23 @@ externalDeclaration:
 	| SEMICOLON;
 
 pragmaStatement:
-	NR PRAGMA (
-		(PRAGMA_DEBUG | PRAGMA_OPTIMIZE) LPAREN (
-			ON
-			| OFF
+	NR PRAGMA NR_STDGL? (
+		(PRAGMA_DEBUG | PRAGMA_OPTIMIZE) NR_LPAREN (
+			NR_ON
+			| NR_OFF
 		) RPAREN
-		| INVARIANT LPAREN ALL RPAREN
+		| PRAGMA_INVARIANT NR_LPAREN NR_ALL NR_RPAREN
 		| NR_IDENTIFIER
 	) NR_EOL;
 
 extensionStatement:
 	NR EXTENSION NR_IDENTIFIER NR_COLON extensionState NR_EOL;
 
-extensionState: REQUIRE | ENABLE | WARN | DISABLE;
+extensionState:
+	NR_REQUIRE
+	| NR_ENABLE
+	| NR_WARN
+	| NR_DISABLE;
 
 layoutDefaults:
 	layoutQualifier layoutModes SEMICOLON;
