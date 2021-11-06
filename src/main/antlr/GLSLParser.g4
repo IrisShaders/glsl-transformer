@@ -43,8 +43,12 @@ externalDeclaration:
 
 pragmaStatement:
 	NR PRAGMA (
-		(PRAGMA_DEBUG | PRAGMA_OPTIMIZE) (ON | OFF)
-		| (PRAGMA_INVARIANT | PRAGMA_STDGL) ALL
+		(PRAGMA_DEBUG | PRAGMA_OPTIMIZE) LPAREN (
+			ON
+			| OFF
+		) RPAREN
+		| INVARIANT LPAREN ALL RPAREN
+		| NR_IDENTIFIER
 	) NR_EOL;
 
 extensionStatement:

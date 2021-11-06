@@ -300,7 +300,6 @@ PRAGMA: 'pragma';
 PRAGMA_DEBUG: 'debug';
 PRAGMA_OPTIMIZE: 'optimize';
 PRAGMA_INVARIANT: 'invariant';
-PRAGMA_STDGL: 'STDGL';
 ON: 'on';
 OFF: 'off';
 ALL: 'all';
