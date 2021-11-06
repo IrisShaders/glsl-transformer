@@ -299,5 +299,6 @@ NR_EOL: '\n' -> popMode;
 
 //gobble the preprocessor content only if started a preprocessor directive
 mode Preprocessor;
+PP_CONTINUE: '\\\n' -> channel(PREPROCESSOR);
 PP_EOL: '\n' -> channel(PREPROCESSOR), popMode;
-PP_CONTENT: ~('\n')+ -> channel(PREPROCESSOR);
+PP_CONTENT: ~('\n' | '\\')+ -> channel(PREPROCESSOR);
