@@ -29,8 +29,8 @@ public class App {
   private static Set<String> bannedFilenameFragments = Set.of("ray", "preprocessor");
 
   public static void main(String[] args) throws IOException, URISyntaxException {
-    processInput(Input.TEST);
-    // processDirectory("/glslang-test");
+    // processInput(Input.TEST);
+    processDirectory("/glslang-test");
   }
 
   private static void processDirectory(String path) throws IOException, URISyntaxException {
