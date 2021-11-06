@@ -44,7 +44,7 @@ externalDeclaration:
 pragmaStatement:
 	NR PRAGMA (
 		(PRAGMA_DEBUG | PRAGMA_OPTIMIZE) (ON | OFF)
-		| PRAGMA_INVARIANT ALL
+		| (PRAGMA_INVARIANT | PRAGMA_STDGL) ALL
 	) NR_EOL;
 
 extensionStatement:
