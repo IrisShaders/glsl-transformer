@@ -52,7 +52,7 @@ pragmaStatement:
 	) NR_EOL;
 
 extensionStatement:
-	NR EXTENSION NR_IDENTIFIER NR_COLON extensionState NR_EOL;
+	NR EXTENSION NR_IDENTIFIER (NR_COLON extensionState)? NR_EOL;
 
 extensionState:
 	NR_REQUIRE
