@@ -57,6 +57,11 @@ READONLY: 'readonly';
 WRITEONLY: 'writeonly';
 SHARED: 'shared';
 SUBROUTINE: 'subroutine';
+DEVICECOHERENT: 'devicecoherent';
+QUEUEFAMILYCOHERENT: 'queuefamilycoherent';
+WORKGROUPCOHERENT: 'workgroupcoherent';
+SUBGROUPCOHERENT: 'subgroupcoherent';
+NONPRIVATE: 'nonprivate';
 LAYOUT: 'layout';
 UINTCONSTANT: (
 		DECIMAL_DIGITS
