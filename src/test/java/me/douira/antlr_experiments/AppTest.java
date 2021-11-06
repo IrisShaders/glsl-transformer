@@ -12,7 +12,7 @@ import org.junit.jupiter.api.Test;
  * Unit tests for parser.
  */
 public class AppTest {
-    private MarkupParser setup(String input) {
+    /* private MarkupParser setup(String input) {
         CharStream inputStream = CharStreams.fromString(input);
         this.markupLexer = new MarkupLexer(inputStream);
         CommonTokenStream commonTokenStream = new CommonTokenStream(markupLexer);
@@ -90,5 +90,5 @@ public class AppTest {
         parser.attribute();
 
         assertEquals("/", this.errorListener.getSymbol());
-    }
+    } */
 }
