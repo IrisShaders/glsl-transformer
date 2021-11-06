@@ -289,6 +289,7 @@ NR: '#' -> pushMode(NR_Mode);
 IDENTIFIER: IDENTIFIER_frag;
 
 //hidden comment and whitespace tokens
+LINE_CONTINUE: '\\\n' -> channel(WHITESPACE);
 COMMENT: (
 		'//' ~('\n' | '\r')* '\r'? '\n'
 		| '/*' (.)*? '*/'
@@ -320,11 +321,12 @@ NR_STDGL: 'STDGL';
 NR_INTCONSTANT: INTCONSTANT_frag;
 NR_IDENTIFIER: IDENTIFIER_frag;
 NR_WS: WS_frag -> channel(WHITESPACE);
+NR_LINE_CONTINUE: '\\\n' -> channel(WHITESPACE);
 NR_EOL: '\n' -> popMode;
 
 //gobble the preprocessor content only if started a preprocessor directive
 mode Preprocessor;
-PP_CONTINUE: '\\\n' -> channel(PREPROCESSOR);
+PP_LINE_CONTINUE: '\\\n' -> channel(PREPROCESSOR);
 PP_EOL: '\n' -> channel(PREPROCESSOR), popMode;
 PP_CONTENT:
-	~('\n' | '\\')+ -> channel(PREPROCESSOR);
+	~('\n')* ~('\n' | '\\') -> channel(PREPROCESSOR);
