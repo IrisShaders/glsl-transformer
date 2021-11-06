@@ -255,6 +255,7 @@ declarationMember:
 
 fullySpecifiedType: typeQualifier? typeSpecifier;
 
+//allows for KHR_memory_scope_semantics
 storageQualifier:
 	CONST
 	| IN
@@ -273,7 +274,12 @@ storageQualifier:
 	| RESTRICT
 	| READONLY
 	| WRITEONLY
-	| SUBROUTINE (LPAREN typeNameList RPAREN)?;
+	| SUBROUTINE (LPAREN typeNameList RPAREN)?
+	| DEVICECOHERENT
+	| QUEUEFAMILYCOHERENT
+	| WORKGROUPCOHERENT
+	| SUBGROUPCOHERENT
+	| NONPRIVATE;
 
 layoutQualifier:
 	LAYOUT LPAREN layoutQualifierId (
