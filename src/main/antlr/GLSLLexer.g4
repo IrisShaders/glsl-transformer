@@ -66,6 +66,7 @@ UINTCONSTANT: (
 // ROW_MAJOR: 'row_major';
 // PACKED: 'packed';
 FLOATCONSTANT: FLOAT_DIGITS ('f' | 'F')?;
+FLOAT16CONSTANT: FLOAT_DIGITS ('hf' | 'HF')?;
 BOOLCONSTANT: 'true' | 'false';
 DOUBLECONSTANT: FLOAT_DIGITS ('LF' | 'lf');
 INC_OP: '++';
@@ -217,6 +218,22 @@ UIMAGE1DARRAY: 'uimage1DArray';
 UIMAGE2DARRAY: 'uimage2DArray';
 UIMAGE2DMS: 'uimage2DMS';
 UIMAGE2DMSARRAY: 'uimage2DMSArray';
+FLOAT16: 'float16_t';
+F16VEC2: 'f16vec2';
+F16VEC3: 'f16vec3';
+F16VEC4: 'f16vec4';
+F16MAT2: 'f16mat2';
+F16MAT3: 'f16mat3';
+F16MAT4: 'f16mat4';
+F16MAT2X2: 'f16mat2x2';
+FL6MAT2X3: 'fl6mat2x3';
+F16MAT2X4: 'f16mat2x4';
+F16MAT3X2: 'f16mat3x2';
+F16MAT3X3: 'f16mat3x3';
+F16MAT3X4: 'f16mat3x4';
+F16MAT4X2: 'f16mat4x2';
+F16MAT4X3: 'f16mat4x3';
+F16MAT4X4: 'f16mat4x4';
 
 LPAREN: '(';
 RPAREN: ')';
@@ -301,4 +318,5 @@ NR_EOL: '\n' -> popMode;
 mode Preprocessor;
 PP_CONTINUE: '\\\n' -> channel(PREPROCESSOR);
 PP_EOL: '\n' -> channel(PREPROCESSOR), popMode;
-PP_CONTENT: ~('\n' | '\\')+ -> channel(PREPROCESSOR);
+PP_CONTENT:
+	~('\n' | '\\')+ -> channel(PREPROCESSOR);
