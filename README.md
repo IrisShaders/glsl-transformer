@@ -37,7 +37,6 @@ Then:
 
 ## TODO
 
-- Refactor the printe to not use intervals but rather just gather the added tokens and insert them during iteration of the whole token stream.
 - Make a more elegant system for transforming the trees. Some kind of tree matching with actions. (lambdas?)
 - low priority: implement more extensions, like `GL_EXT_shader_explicit_arithmetic_types`
 
@@ -45,7 +44,7 @@ Then:
 
 All files in a directory can be joined using `find . -type f -exec cat {} \; `. The output is printed to the terminal. Some cleanup maybe required.
 
-### better tree printing idea
+### Tree printing idea
 
 1. only record added tokens during print visitation. keep a counter of how many tokens have been encountered. record the added tokens to a list that also stored the index of each new token in the final printing list. (without deleted tokens having been removed)
 2. then go through all tokens, filtering out deleted ones and adding in added ones. the added ones are taken from a queue as their index in the token list appears and inserted before the next regular token. they are added according to the counter of tokens that doesn't exclude deleted tokens. this means no intervals have to be merged, just a list of indexes and tokens. interval set of the deleted ones still needs to be created.
