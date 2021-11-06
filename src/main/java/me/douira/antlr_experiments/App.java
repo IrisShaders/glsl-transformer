@@ -2,7 +2,6 @@ package me.douira.antlr_experiments;
 
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URISyntaxException;
@@ -31,7 +30,7 @@ public class App {
 
   public static void main(String[] args) throws IOException, URISyntaxException {
     processInput(Input.TEST);
-    // processDirectory("/glsllang-test");
+    // processDirectory("/glslang-test");
   }
 
   private static void processDirectory(String path) throws IOException, URISyntaxException {
