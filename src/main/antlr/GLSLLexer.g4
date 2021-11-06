@@ -67,7 +67,7 @@ UINTCONSTANT: (
 		DECIMAL_DIGITS
 		| OCTAL_DIGITS
 		| HEX_DIGITS
-	) 'u';
+	) ('u' | 'U');
 // ROW_MAJOR: 'row_major';
 // PACKED: 'packed';
 FLOATCONSTANT: FLOAT_DIGITS ('f' | 'F')?;
