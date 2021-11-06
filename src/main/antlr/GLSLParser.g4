@@ -72,6 +72,7 @@ primaryExpression:
 	| DOUBLECONSTANT
 	| LPAREN expression RPAREN;
 
+//Note: diverges from the spec by explicity adding a method call instead of handling it through postfixExpression in functionIdentifier
 postfixExpression:
 	primaryExpression
 	| postfixExpression (
