@@ -1,6 +1,6 @@
-# GLSL Parsing with ANTLR4
+# GLSL Parsing and Program Transformation with ANTLR4
 
-This is a work in progress experiment on parsing, transforming and re-printing GLSL code using ANTLR4. Try it out with `gradle run`. It will parse a GLSL file from `resources` and print the corresponding parse tree.
+This is a work in progress library that parses GLSL using an ANTLR4 grammar and provides the facilities for transforming and re-printing the resulting parse tree.
 
 ## Credit
 
@@ -18,6 +18,10 @@ All of these should be fulfilled at the same time.
 - Print out the modified input and also preserve line numbers
 - Return parsing error if something is wrong
 - Return a parsing error if PREPROCESSOR-channel items are detected
+
+## Demonstration
+
+Try it out with `gradle run`. It will parse a GLSL file from `resources` and print the corresponding parse tree. WIP: The tests will be a demonstration of this too.
 
 ### An example
 
@@ -37,7 +41,9 @@ Then:
 
 ## TODO
 
+- Cache a single token interval during tree traversal and check if the node is has no other tokens than a single child
 - Make a more elegant system for transforming the trees. Some kind of tree matching with actions. (lambdas?)
+- AST structures for generating GLSL Code. In particular structs and types. (construction of vector types from lengths)
 - low priority: implement more extensions, like `GL_EXT_shader_explicit_arithmetic_types`
 
 ## Notes
