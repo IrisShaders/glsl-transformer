@@ -15,9 +15,9 @@ All of these should be fulfilled at the same time.
 - Print out the entire original input and preserve line numbers
 - Find certain syntax structures
 - Delete, replace or modify certain syntax structures
-- Print out the modified input and also preserve line numbers
-- Return parsing error if something is wrong
-- Return a parsing error if PREPROCESSOR-channel items are detected
+- Print out the modified input and also preserve line numbers. (each unmodified token should be printed on the line it was parsed at)
+- Return lexing/parsing errors if something is wrong
+- Optionally return a parsing error if PREPROCESSOR-channel items are detected
 
 ## Demonstration
 
