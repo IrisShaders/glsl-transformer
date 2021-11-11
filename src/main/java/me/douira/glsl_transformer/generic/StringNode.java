@@ -1,4 +1,4 @@
-package me.douira.glsl_transformer;
+package me.douira.glsl_transformer.generic;
 
 import org.antlr.v4.runtime.CommonToken;
 import org.antlr.v4.runtime.tree.TerminalNodeImpl;

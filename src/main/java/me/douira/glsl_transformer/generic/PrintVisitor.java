@@ -1,4 +1,4 @@
-package me.douira.glsl_transformer;
+package me.douira.glsl_transformer.generic;
 
 import java.util.Collections;
 import java.util.Iterator;
@@ -63,7 +63,7 @@ public class PrintVisitor extends AbstractParseTreeVisitor<Void> {
         // if an edit context is given, only print if allowed by it
         var tokenIndex = token.getTokenIndex();
         if (token.getType() != Lexer.EOF && (tokenIndex == -1
-            || inInterval(bounds, tokenIndex) && (editContext == null || editContext.allowToken(token)))) {
+            || inInterval(bounds, tokenIndex) && (editContext == null || editContext.checkTokenAllowed(token)))) {
           builder.append(token.getText());
           // builder.append(',');
         }
