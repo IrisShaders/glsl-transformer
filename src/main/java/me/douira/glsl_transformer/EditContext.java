@@ -1,4 +1,4 @@
-package me.douira.antlr_experiments;
+package me.douira.glsl_transformer;
 
 import org.antlr.v4.runtime.Token;
 import org.antlr.v4.runtime.misc.Interval;

@@ -25,8 +25,8 @@ dependencies {
 
 generateGrammarSource {
     maxHeapSize = "128m"
-    arguments += ['-package', 'me.douira.antlr_experiments', '-visitor']
-    outputDirectory = new File(buildDir.toString() + "/generated-src/antlr/main/me/douira/antlr_experiments/")
+    arguments += ['-package', 'me.douira.glsl_transformer', '-visitor']
+    outputDirectory = new File(buildDir.toString() + "/generated-src/antlr/main/me/douira/glsl_transformer/")
 }
 compileJava.dependsOn generateGrammarSource
 
@@ -41,7 +41,7 @@ idea {
 }
 
 application {
-    mainClass = 'me.douira.antlr_experiments.App'
+    mainClass = 'me.douira.glsl_transformer.App'
 }
 
 test {
@@ -55,7 +55,7 @@ test {
 // it will create a JAR with all dependencies included
 task fatJar(type: Jar) {
     manifest {
-        attributes 'Main-Class': 'me.douira.antlr_experiments.App'
+        attributes 'Main-Class': 'me.douira.glsl_transformer.App'
     }
     archiveBaseName = project.name + '-all'
     from { configurations.compile.collect { it.isDirectory() ? it : zipTree(it) } }

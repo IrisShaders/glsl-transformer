@@ -1,4 +1,4 @@
-package me.douira.antlr_experiments;
+package me.douira.glsl_transformer;
 
 import org.antlr.v4.runtime.ParserRuleContext;
 import org.antlr.v4.runtime.tree.SyntaxTree;
@@ -17,7 +17,8 @@ public class TransformationVisitor extends GLSLParserBaseListener {
   private void removeNode(ParserRuleContext node) {
     var children = node.getParent().children;
 
-    //the node needs to be replaced with something to preserve the length or there's NPEs in the walker
+    // the node needs to be replaced with something to preserve the length or
+    // there's NPEs in the walker
     children.set(children.indexOf(node), new StringNode(null));
 
     registerRemoval(node);
