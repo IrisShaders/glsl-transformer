@@ -23,8 +23,9 @@ import org.antlr.v4.runtime.tree.TerminalNode;
  */
 public class PrintVisitor extends AbstractParseTreeVisitor<Void> {
 
-  private BufferedTokenStream tokenStream;
-  private LinkedList<TokenOrInterval> tokenIntervals = new LinkedList<>();
+  private final BufferedTokenStream tokenStream;
+  private final LinkedList<TokenOrInterval> tokenIntervals = new LinkedList<>();
+  private Interval cachedInterval; 
 
   private PrintVisitor(BufferedTokenStream tokenStream) {
     this.tokenStream = tokenStream;
@@ -78,7 +79,15 @@ public class PrintVisitor extends AbstractParseTreeVisitor<Void> {
       return;
     }
 
-    Interval interval = Interval.of(a, b);
+    //cache a single interval since often the same interval is added repeatedly
+    Interval interval;
+    if (cachedInterval != null && a == cachedInterval.a && b == cachedInterval.b) {
+      interval = cachedInterval;
+    } else {
+      interval = Interval.of(a, b);
+      cachedInterval = interval;
+    }
+
     addInterval(interval);
   }
 
