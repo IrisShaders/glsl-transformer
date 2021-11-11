@@ -13,6 +13,12 @@ import java.util.Set;
 import org.antlr.v4.runtime.*;
 import org.antlr.v4.runtime.tree.ParseTreeWalker;
 
+import me.douira.glsl_transformer.generic.EditContext;
+import me.douira.glsl_transformer.generic.PrintVisitor;
+import me.douira.glsl_transformer.generic.StringNode;
+import me.douira.glsl_transformer.iris.ComplexTransformations;
+import me.douira.glsl_transformer.transform.PhaseCollector;
+
 public class App {
   private static enum Input {
     TINY("/tiny.glsl"), DIRECTIVE_TEST("/directiveTest.glsl"), SHADER("/shader.glsl"),
@@ -29,8 +35,8 @@ public class App {
   private static Set<String> bannedFilenameFragments = Set.of("ray", "preprocessor");
 
   public static void main(String[] args) throws IOException, URISyntaxException {
-    // processInput(Input.TEST);
-    processDirectory("/glslang-test");
+    processInput(Input.TINY);
+    // processDirectory("/glslang-test");
   }
 
   private static void processDirectory(String path) throws IOException, URISyntaxException {
@@ -70,27 +76,24 @@ public class App {
 
     var startNanos = System.nanoTime();
     var parser = new GLSLParser(commonTokenStream);
-    var translationUnitContext = parser.translationUnit();
+    var TUContext = parser.translationUnit();
     System.out.println("parsing took " + (System.nanoTime() - startNanos) / 1e6 + " ms.");
 
     // new DebugVisitor().visit(translationUnitContext);
     // System.out.println(translationUnitContext.toInfoString(parser));
 
     // before any edits
-    // System.out.println(PrintVisitor.printTree(commonTokenStream,
-    // translationUnitContext));
+    System.out.println(PrintVisitor.printTree(commonTokenStream, TUContext));
 
-    var editContext = new EditContext();
-    translationUnitContext.children.add(2, new StringNode("\nexample declaration;"));
-    ParseTreeWalker.DEFAULT.walk(new TransformationVisitor(editContext), translationUnitContext);
-    editContext.finishEditing();
-
+    var editContext = PhaseCollector.transformTree(TUContext, collector -> {
+      collector.registerTransformationMultiple(ComplexTransformations::registerAll);
+    });
     startNanos = System.nanoTime();
-    var printResult = PrintVisitor.printTree(commonTokenStream, translationUnitContext, editContext);
+    var printResult = PrintVisitor.printTree(commonTokenStream, TUContext, editContext);
     System.out.println("printing took " + (System.nanoTime() - startNanos) / 1e6 + " ms.");
 
     // after edits
-    // System.out.println(printResult);
+    System.out.println(printResult);
 
     // var tokens = commonTokenStream.getTokens();
     // for (var token : tokens) {
