@@ -7,7 +7,7 @@ import java.util.function.Consumer;
 
 import org.antlr.v4.runtime.tree.ParseTreeWalker;
 
-import me.douira.glsl_transformer.GLSLParser;
+import me.douira.glsl_transformer.GLSLParser.TranslationUnitContext;
 import me.douira.glsl_transformer.generic.EditContext;
 import me.douira.glsl_transformer.generic.ProxyParseTreeListener;
 
@@ -35,29 +35,28 @@ public class PhaseCollector {
     phase.setEditContext(editContext);
   }
 
-  private void execute(GLSLParser.TranslationUnitContext TUContext) {
+  private void execute(TranslationUnitContext ctx) {
     for (var level : phases) {
       // for some reason passing level directly gives a type error
       var proxyListener = new ProxyParseTreeListener(new LinkedList<>());
 
       for (var phase : level) {
         proxyListener.add(phase);
-        phase.beforeWalk(TUContext);
+        phase.beforeWalk(ctx);
       }
 
-      ParseTreeWalker.DEFAULT.walk(proxyListener, TUContext);
+      ParseTreeWalker.DEFAULT.walk(proxyListener, ctx);
 
       for (var phase : level) {
-        phase.afterWalk(TUContext);
+        phase.afterWalk(ctx);
       }
     }
   }
 
-  public static EditContext transformTree(GLSLParser.TranslationUnitContext TUContext,
-      Consumer<PhaseCollector> register) {
+  public static EditContext transformTree(TranslationUnitContext ctx, Consumer<PhaseCollector> register) {
     var collector = new PhaseCollector();
     register.accept(collector);
-    collector.execute(TUContext);
+    collector.execute(ctx);
     collector.editContext.finishEditing();
     return collector.editContext;
   }
