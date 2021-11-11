@@ -10,12 +10,11 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Set;
 
-import org.antlr.v4.runtime.*;
-import org.antlr.v4.runtime.tree.ParseTreeWalker;
+import org.antlr.v4.runtime.CommonTokenStream;
+import org.antlr.v4.runtime.CharStream;
+import org.antlr.v4.runtime.CharStreams;
 
-import me.douira.glsl_transformer.generic.EditContext;
 import me.douira.glsl_transformer.generic.PrintVisitor;
-import me.douira.glsl_transformer.generic.StringNode;
 import me.douira.glsl_transformer.iris.ComplexTransformations;
 import me.douira.glsl_transformer.transform.PhaseCollector;
 
@@ -76,20 +75,21 @@ public class App {
 
     var startNanos = System.nanoTime();
     var parser = new GLSLParser(commonTokenStream);
-    var TUContext = parser.translationUnit();
+    var ctx = parser.translationUnit();
     System.out.println("parsing took " + (System.nanoTime() - startNanos) / 1e6 + " ms.");
 
     // new DebugVisitor().visit(translationUnitContext);
     // System.out.println(translationUnitContext.toInfoString(parser));
 
     // before any edits
-    System.out.println(PrintVisitor.printTree(commonTokenStream, TUContext));
+    System.out.println(PrintVisitor.printTree(commonTokenStream, ctx));
 
-    var editContext = PhaseCollector.transformTree(TUContext, collector -> {
+    var editContext = PhaseCollector.transformTree(ctx, collector -> {
       collector.registerTransformationMultiple(ComplexTransformations::registerAll);
     });
+    
     startNanos = System.nanoTime();
-    var printResult = PrintVisitor.printTree(commonTokenStream, TUContext, editContext);
+    var printResult = PrintVisitor.printTree(commonTokenStream, ctx, editContext);
     System.out.println("printing took " + (System.nanoTime() - startNanos) / 1e6 + " ms.");
 
     // after edits
