@@ -3,7 +3,7 @@ package me.douira.glsl_transformer.iris;
 import me.douira.glsl_transformer.transform.PhaseCollector;
 
 public class ComplexTransformations {
-  public static void registerAll(PhaseCollector collector) {
+  public static void registerWith(PhaseCollector collector) {
     collector.registerTransformation(new DeclarationReplacement());
 
     // ... etc, also maybe define them in here?

@@ -78,16 +78,16 @@ public class App {
     var ctx = parser.translationUnit();
     System.out.println("parsing took " + (System.nanoTime() - startNanos) / 1e6 + " ms.");
 
-    // new DebugVisitor().visit(translationUnitContext);
-    // System.out.println(translationUnitContext.toInfoString(parser));
+    new DebugVisitor().visit(ctx);
+    System.out.println(ctx.toInfoString(parser));
 
     // before any edits
     System.out.println(PrintVisitor.printTree(commonTokenStream, ctx));
 
     var editContext = PhaseCollector.transformTree(ctx, collector -> {
-      collector.registerTransformationMultiple(ComplexTransformations::registerAll);
+      collector.registerTransformationMultiple(ComplexTransformations::registerWith);
     });
-    
+
     startNanos = System.nanoTime();
     var printResult = PrintVisitor.printTree(commonTokenStream, ctx, editContext);
     System.out.println("printing took " + (System.nanoTime() - startNanos) / 1e6 + " ms.");

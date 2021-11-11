@@ -1,5 +1,8 @@
 package me.douira.glsl_transformer.iris;
 
+import java.util.LinkedList;
+import java.util.List;
+
 import me.douira.glsl_transformer.GLSLParser.DeclarationContext;
 import me.douira.glsl_transformer.GLSLParser.TranslationUnitContext;
 import me.douira.glsl_transformer.generic.StringNode;
@@ -7,9 +10,13 @@ import me.douira.glsl_transformer.transform.Phase;
 import me.douira.glsl_transformer.transform.Transformation;
 
 public class DeclarationReplacement extends Transformation {
-  private String declarationName;
+  private List<String> declarationNames = new LinkedList<>();
 
   protected void init() {
+    addPhase(new Phase() {
+      private boolean inDeclaration = false;
+    });
+
     addPhase(new Phase() {
       @Override
       public void beforeWalk(TranslationUnitContext ctx) {
