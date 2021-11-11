@@ -1,4 +1,5 @@
 {
   "java.configuration.updateBuildConfiguration": "automatic",
-  "java.project.sourcePaths": ["build/generated-src/antlr/main/"]
+  "java.project.sourcePaths": ["build/generated-src/antlr/main/"],
+  "cSpell.words": ["GLSL"]
 }
