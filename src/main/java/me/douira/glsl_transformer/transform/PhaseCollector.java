@@ -55,8 +55,10 @@ public class PhaseCollector {
 
   public static EditContext transformTree(TranslationUnitContext ctx, Consumer<PhaseCollector> register) {
     var collector = new PhaseCollector();
+    
     register.accept(collector);
     collector.execute(ctx);
+
     collector.editContext.finishEditing();
     return collector.editContext;
   }

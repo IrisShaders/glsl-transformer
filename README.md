@@ -41,8 +41,7 @@ Then:
 
 ## TODO
 
-- Cache a single token interval during tree traversal and check if the node is has no other tokens than a single child
-- Make a more elegant system for transforming the trees. Some kind of tree matching with actions. (lambdas?)
+- Add matching system that can trigger a callback method in a phase at the right moment.
 - AST structures for generating GLSL Code. In particular structs and types. (construction of vector types from lengths)
 - low priority: implement more extensions, like `GL_EXT_shader_explicit_arithmetic_types`
 
@@ -64,3 +63,18 @@ difficulty:
 This is probably not necessary because of the aforementioned difficulties and the fact that the current interval-joining printer is already very fast. The parsing takes 5 to 20 times longer than printing. Parsing speed is largely determined by ANTLR's performance and how the grammar is constructed.
 
 Caching transformed shaders should be considered. Maybe even on a per-file basis.
+
+### Code
+```java
+ new MatchPhase(
+  new AnyDepthMatch(
+    GLSLParser.ExternalDeclarationContext.class,
+    new ImmediateMatch(
+      GLSLParser.DeclarationContext.class,
+      new MultiMatch(
+        GLSLParser.  
+      )
+    )
+  )
+)
+```
