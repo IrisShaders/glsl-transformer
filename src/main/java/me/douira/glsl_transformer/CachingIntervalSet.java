@@ -1,4 +1,4 @@
-package me.douira.antlr_experiments;
+package me.douira.glsl_transformer;
 
 import org.antlr.v4.runtime.misc.Interval;
 import org.antlr.v4.runtime.misc.IntervalSet;
@@ -11,7 +11,7 @@ public class CachingIntervalSet extends IntervalSet {
    */
   @Override
   public boolean contains(int el) {
-    //if readonly, then allow cache hits
+    // if readonly, then allow cache hits
     if (readonly && lastIntervalHit != null && lastIntervalHit.a <= el && lastIntervalHit.b >= el) {
       return true;
     }

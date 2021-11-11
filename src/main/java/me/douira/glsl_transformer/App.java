@@ -1,4 +1,4 @@
-package me.douira.antlr_experiments;
+package me.douira.glsl_transformer;
 
 import java.io.File;
 import java.io.FileInputStream;

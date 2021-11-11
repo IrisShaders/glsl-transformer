@@ -1,4 +1,4 @@
-package me.douira.antlr_experiments;
+package me.douira.glsl_transformer;
 
 import java.util.Collections;
 import java.util.Iterator;
