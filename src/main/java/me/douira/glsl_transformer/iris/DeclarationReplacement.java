@@ -4,6 +4,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 import me.douira.glsl_transformer.GLSLParser.DeclarationContext;
+import me.douira.glsl_transformer.GLSLParser.ExternalDeclarationContext;
 import me.douira.glsl_transformer.GLSLParser.TranslationUnitContext;
 import me.douira.glsl_transformer.generic.StringNode;
 import me.douira.glsl_transformer.transform.Phase;
@@ -14,7 +15,9 @@ public class DeclarationReplacement extends Transformation {
 
   protected void init() {
     addPhase(new Phase() {
-      private boolean inDeclaration = false;
+      @Override
+      public void enterExternalDeclaration(ExternalDeclarationContext ctx) {
+      }
     });
 
     addPhase(new Phase() {
