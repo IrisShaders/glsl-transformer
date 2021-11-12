@@ -248,9 +248,10 @@ singleAttribute:
 	)?;
 
 initDeclaratorList:
-	fullySpecifiedType declarationMember? (
-		COMMA declarationMember
-	)*;
+	fullySpecifiedType declarationMemberList;
+
+declarationMemberList:
+	declarationMember? (COMMA declarationMember)*;
 
 declarationMember:
 	IDENTIFIER arraySpecifier? (
