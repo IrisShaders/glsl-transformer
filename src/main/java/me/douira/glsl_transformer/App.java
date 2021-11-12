@@ -11,6 +11,9 @@ import java.nio.file.Paths;
 import java.util.Set;
 
 import org.antlr.v4.runtime.CommonTokenStream;
+import org.antlr.v4.runtime.tree.pattern.ParseTreeMatch;
+import org.antlr.v4.runtime.tree.pattern.ParseTreePattern;
+import org.antlr.v4.runtime.tree.xpath.XPath;
 import org.antlr.v4.runtime.CharStream;
 import org.antlr.v4.runtime.CharStreams;
 
@@ -75,21 +78,33 @@ public class App {
 
     var startNanos = System.nanoTime();
     var parser = new GLSLParser(commonTokenStream);
-    var ctx = parser.translationUnit();
+    var tree = parser.translationUnit();
     System.out.println("parsing took " + (System.nanoTime() - startNanos) / 1e6 + " ms.");
 
-    new DebugVisitor().visit(ctx);
-    System.out.println(ctx.toInfoString(parser));
+    new DebugVisitor().visit(tree);
+    System.out.println(tree.toInfoString(parser));
 
     // before any edits
-    System.out.println(PrintVisitor.printTree(commonTokenStream, ctx));
+    System.out.println(PrintVisitor.printTree(commonTokenStream, tree));
 
-    var editContext = PhaseCollector.transformTree(ctx, collector -> {
-      collector.registerTransformationMultiple(ComplexTransformations::registerWith);
-    });
+    var pattern = parser.compileParseTreePattern(
+        "layout (location = 0) <type:storageQualifier> vec4 <names:declarationMemberList>;",
+        GLSLParser.RULE_externalDeclaration);
+    var matches = pattern.findAll(tree, "//externalDeclaration");
+    for (var match : matches) {
+      System.out.println("match: " + match.getLabels());
+      System.out.println(match.get("type").getText());
+      System.out.println(match.get("names").getText());
+      System.out.println(XPath.findAll(match.get("names"), "//declarationMember", parser));
+    }
+
+    var transformer = new PhaseCollector(parser);
+    transformer.registerTransformationMultiple(ComplexTransformations::registerWith);
+
+    var editContext = transformer.transformTree(tree);
 
     startNanos = System.nanoTime();
-    var printResult = PrintVisitor.printTree(commonTokenStream, ctx, editContext);
+    var printResult = PrintVisitor.printTree(commonTokenStream, tree, editContext);
     System.out.println("printing took " + (System.nanoTime() - startNanos) / 1e6 + " ms.");
 
     // after edits
