@@ -42,29 +42,39 @@ public class PhaseCollector {
     }
     phases.get(index).add(phase);
     phase.setParent(this);
+    phase.init();
   }
 
   private void execute(TranslationUnitContext ctx) {
     // refresh each transformation's state before starting the transformation
     for (var transformation : transformations) {
-      transformation.initState();
+      transformation.resetState();
     }
 
     for (var level : phases) {
-      // for some reason passing level directly gives a type error
       var proxyListener = new ProxyParseTreeListener(new ArrayList<>());
 
       for (var phase : level) {
-        if (phase.doWalk()) {
-          proxyListener.add(phase);
+        if (phase instanceof WalkPhase) {
+          var walkPhase = (WalkPhase) phase;
+          if (walkPhase.checkActive()) {
+            proxyListener.add(walkPhase);
+            walkPhase.beforeWalk(ctx);
+          }
+        } else {
+          ((RunPhase) phase).run(ctx);
         }
-        phase.beforeWalk(ctx);
       }
 
       ParseTreeWalker.DEFAULT.walk(proxyListener, ctx);
 
       for (var phase : level) {
-        phase.afterWalk(ctx);
+        if (phase instanceof WalkPhase) {
+          var walkPhase = (WalkPhase) phase;
+          if (walkPhase.isActiveCache) {
+            walkPhase.afterWalk(ctx);
+          }
+        }
       }
     }
   }

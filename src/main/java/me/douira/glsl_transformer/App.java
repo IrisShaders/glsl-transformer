@@ -87,17 +87,6 @@ public class App {
     // before any edits
     System.out.println(PrintVisitor.printTree(commonTokenStream, tree));
 
-    var pattern = parser.compileParseTreePattern(
-        "layout (location = 0) <type:storageQualifier> vec4 <names:declarationMemberList>;",
-        GLSLParser.RULE_externalDeclaration);
-    var matches = pattern.findAll(tree, "//externalDeclaration");
-    for (var match : matches) {
-      System.out.println("match: " + match.getLabels());
-      System.out.println(match.get("type").getText());
-      System.out.println(match.get("names").getText());
-      System.out.println(XPath.findAll(match.get("names"), "//declarationMember", parser));
-    }
-
     var transformer = new PhaseCollector(parser);
     transformer.registerTransformationMultiple(ComplexTransformations::registerWith);
 
