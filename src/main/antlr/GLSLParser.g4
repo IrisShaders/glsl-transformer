@@ -226,7 +226,7 @@ functionParameterList:
 	)?;
 
 functionHeader:
-	fullySpecifiedType variableIdentifier;
+	fullySpecifiedType IDENTIFIER;
 
 parameterDeclarator:
 	typeSpecifier IDENTIFIER
