@@ -86,6 +86,15 @@ abstract class Phase extends GLSLParserBaseListener {
     return matches;
   }
 
+  /**
+   * Overwrite this method to add a check of if this phase should be run at all.
+   * 
+   * @return If the phase should run. {@code true} by default.
+   */
+  protected boolean isActive() {
+    return true;
+  }
+
   protected void init() {
     // to be possibly overwritten by the implementing class
   }
