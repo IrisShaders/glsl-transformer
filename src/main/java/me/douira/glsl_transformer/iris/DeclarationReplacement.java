@@ -77,17 +77,21 @@ public class DeclarationReplacement extends Transformation {
 
       @Override
       protected void afterWalk(TranslationUnitContext ctx) {
-        // add the new things if necessary
         if (!declarations.isEmpty()) {
+          // is only run if phase is found to be active
           // TODO: the function content and the new attribute declaration
           ctx.children.add(new StringNode(
               "iris_getModelSpaceVertexPosition() { TODO }\nlayout (location = 0) attribute vec4 iris_Position;"));
-
         }
       }
     });
 
     addPhase(new WalkPhase() {
+      @Override
+      protected boolean isActive() {
+        return !declarations.isEmpty();
+      }
+
       @Override
       public void enterVariableIdentifier(VariableIdentifierContext ctx) {
         // check for one of the identifiers we're looking for
