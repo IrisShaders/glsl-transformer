@@ -1,9 +1,8 @@
 {
   "java.configuration.updateBuildConfiguration": "automatic",
   "java.project.sourcePaths": ["build/generated-src/antlr/main/"],
-  "cSpell.words": ["GLSL"],
   "[java]": {
-    "editor.suggest.snippetsPreventQuickSuggestions": false,
+    "editor.suggest.snippetsPreventQuickSuggestions": false
     //"editor.formatOnSave": false
   }
 }
