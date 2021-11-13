@@ -68,7 +68,9 @@ public class PhaseCollector {
         }
       }
 
-      ParseTreeWalker.DEFAULT.walk(proxyListener, ctx);
+      if (!proxyListener.isEmpty()) {
+        ParseTreeWalker.DEFAULT.walk(proxyListener, ctx);
+      }
 
       for (var phase : level) {
         if (phase instanceof WalkPhase) {

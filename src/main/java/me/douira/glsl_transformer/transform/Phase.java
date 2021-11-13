@@ -88,6 +88,8 @@ abstract class Phase extends GLSLParserBaseListener {
 
   /**
    * Overwrite this method to add a check of if this phase should be run at all.
+   * Especially for WalkPhase this is important since it reduces the number of
+   * listeners that need to be processed.
    * 
    * @return If the phase should run. {@code true} by default.
    */
