@@ -117,4 +117,12 @@ public class ProxyParseTreeListener implements ParseTreeListener {
 
     this.listeners = listeners;
   }
+
+  /**
+   * Checks if the list of listeners is empty.
+   * @return {@code true} if there are not listeners in the list
+   */
+  public boolean isEmpty() {
+    return this.listeners.isEmpty();
+  }
 }
