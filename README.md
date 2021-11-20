@@ -44,6 +44,7 @@ Then:
 - Error handling in phases
 - More Phase functionality (abstract declaration replacement into a separate class?)
 - AST structures for generating GLSL Code. In particular structs and types. (construction of vector types from lengths)
+- Error on any tokens in the PREPROCESSOR channel optionally
 - low priority: implement more extensions, like `GL_EXT_shader_explicit_arithmetic_types`
 
 ## Notes
