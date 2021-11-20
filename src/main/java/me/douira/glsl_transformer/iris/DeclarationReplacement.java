@@ -16,7 +16,8 @@ import me.douira.glsl_transformer.transform.WalkPhase;
 
 //TODO: do multiple declarations need to be found or can there only ever be one in a semantically valid shader?
 public class DeclarationReplacement extends Transformation {
-  private record Declaration(String type, String name) {}
+  private record Declaration(String type, String name) {
+  }
 
   private Map<String, Declaration> declarations;
 
@@ -40,16 +41,12 @@ public class DeclarationReplacement extends Transformation {
       public void enterExternalDeclaration(ExternalDeclarationContext ctx) {
         var match = declarationPattern.match(ctx);
         if (match.succeeded()) {
-          // System.out.println("match: " + match.getLabels());
-          // System.out.println(match.get("type").getText());
-          // System.out.println(match.get("name").getText());
-
           // check for valid format and add to the list if it is valid
           var type = match.get("type").getText();
           var name = match.get("name").getText();
 
           if (name == "iris_Position") {
-            // TODO: throw exception on bad name
+            throw new SemanticException(String.format("Disallowed GLSL declaration with the name \"{0}\"!", name), ctx);
           }
 
           if (type.equals("in") || type.equals("attribute")) {
@@ -62,7 +59,9 @@ public class DeclarationReplacement extends Transformation {
       @Override
       public void enterFunctionHeader(FunctionHeaderContext ctx) {
         if (ctx.IDENTIFIER().getText().equals("iris_getModelSpaceVertexPosition")) {
-          // TODO: throw error on bad name
+          throw new SemanticException(
+              String.format("Disallowed GLSL declaration with the name \"{0}\"!", "iris_getModelSpaceVertexPosition"),
+              ctx);
         }
       }
 
@@ -71,9 +70,10 @@ public class DeclarationReplacement extends Transformation {
         if (!declarations.isEmpty()) {
           // is only run if phase is found to be active
           // TODO: the function content and the new attribute declaration
-          ctx.children.add(createLocalRoot("void iris_getModelSpaceVertexPosition() { }", GLSLParser::externalDeclaration));
           ctx.children
-              .add(createLocalRoot("layout (location = 0) attribute vec4 iris_Position;", GLSLParser::externalDeclaration));
+              .add(createLocalRoot("void iris_getModelSpaceVertexPosition() { }", GLSLParser::externalDeclaration));
+          ctx.children.add(
+              createLocalRoot("layout (location = 0) attribute vec4 iris_Position;", GLSLParser::externalDeclaration));
         }
       }
     });
