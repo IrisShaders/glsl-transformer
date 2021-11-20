@@ -1,14 +1,10 @@
 package me.douira.glsl_transformer.generic;
 
-import java.util.Collections;
-import java.util.Iterator;
 import java.util.LinkedList;
-import java.util.List;
 
-import org.antlr.v4.runtime.ParserRuleContext;
-import org.antlr.v4.runtime.Token;
 import org.antlr.v4.runtime.BufferedTokenStream;
 import org.antlr.v4.runtime.Lexer;
+import org.antlr.v4.runtime.ParserRuleContext;
 import org.antlr.v4.runtime.misc.Interval;
 import org.antlr.v4.runtime.tree.AbstractParseTreeVisitor;
 import org.antlr.v4.runtime.tree.ParseTree;
@@ -22,33 +18,38 @@ import org.antlr.v4.runtime.tree.TerminalNode;
  * trigger the visits to subtrees.
  */
 public class PrintVisitor extends AbstractParseTreeVisitor<Void> {
-
-  private final BufferedTokenStream tokenStream;
-  private final LinkedList<TokenOrInterval> tokenIntervals = new LinkedList<>();
+  private final LinkedList<AttributedInterval> tokenIntervals = new LinkedList<>();
   private Interval cachedInterval;
+  private ParseTree currentRoot;
 
-  private PrintVisitor(BufferedTokenStream tokenStream) {
-    this.tokenStream = tokenStream;
+  private PrintVisitor() {
   }
 
   private static boolean inInterval(Interval interval, int el) {
     return interval.a <= el && interval.b >= el;
   }
 
-  public static String printTree(BufferedTokenStream tokenStream, ParseTree tree) {
-    return printTree(tokenStream, tree, null);
+  public static String printTree(BufferedTokenStream rootTokenStream, ParseTree tree) {
+    return printTree(rootTokenStream, tree, null);
   }
 
-  public static String printTree(BufferedTokenStream tokenStream, ParseTree tree, EditContext editContext) {
-    return new PrintVisitor(tokenStream).visitAndJoin(tree, Interval.of(0, tokenStream.size() - 1), editContext);
+  public static String printTree(BufferedTokenStream rootTokenStream, ParseTree tree, EditContext editContext) {
+    return new PrintVisitor().visitAndJoin(rootTokenStream, tree, Interval.of(0, rootTokenStream.size() - 1),
+        editContext);
   }
 
-  public String visitAndJoin(ParseTree rootNode, Interval bounds, EditContext editContext) {
+  public String visitAndJoin(BufferedTokenStream rootTokenStream, ParseTree rootNode, Interval bounds,
+      EditContext editContext) {
+    if (editContext == null) {
+      editContext = new EditContext(rootNode, rootTokenStream);
+    }
+
     // add the tokens before the root node too
     var rootInterval = rootNode.getSourceInterval();
     addInterval(bounds.a, rootInterval.a - 1);
 
     // visit the whole tree and accumulate tokens and intervals
+    currentRoot = rootNode;
     visit(rootNode);
 
     // and also the tokens after the root node
@@ -57,14 +58,18 @@ public class PrintVisitor extends AbstractParseTreeVisitor<Void> {
     // convert the list of tokens and intervals into just tokens,
     // and then into their strings
     var builder = new StringBuilder(512); // guessing
-    for (var tokenOrInterval : tokenIntervals) {
-      for (var token : tokenOrInterval) {
+    for (var attributedInterval : tokenIntervals) {
+      var interval = attributedInterval.interval();
+      var localRootData = editContext.getLocalRootData(attributedInterval.localRoot());
+      var omissionSet = localRootData.omissionSet();
+
+      for (var token : localRootData.tokenStream().getTokens(interval.a, interval.b)) {
         // don't print EOF, only print the tokens in side the printing bounds,
         // but always allow inserted nodes,
         // if an edit context is given, only print if allowed by it
         var tokenIndex = token.getTokenIndex();
         if (token.getType() != Lexer.EOF && (tokenIndex == -1
-            || inInterval(bounds, tokenIndex) && (editContext == null || editContext.checkTokenAllowed(token)))) {
+            || inInterval(bounds, tokenIndex) && (omissionSet == null || omissionSet.isTokenAllowed(token)))) {
           builder.append(token.getText());
           // builder.append(',');
         }
@@ -92,88 +97,78 @@ public class PrintVisitor extends AbstractParseTreeVisitor<Void> {
     addInterval(interval);
   }
 
-  private void addInterval(Interval interval) {
-    if (interval.length() == 0) {
+  private void addInterval(Interval newInterval) {
+    if (newInterval.length() == 0) {
       return;
     }
 
-    if (tokenIntervals.isEmpty() || !tokenIntervals.getLast().tryAddInterval(interval)) {
-      tokenIntervals.add(new TokenOrInterval(interval));
+    // join the given interval onto the last interval if possible without holes
+    if (!tokenIntervals.isEmpty()) {
+      var last = tokenIntervals.getLast();
+      var lastInterval = last.interval();
+      if (currentRoot == last.localRoot()
+          && (!lastInterval.disjoint(newInterval) || lastInterval.adjacent(newInterval))) {
+        if (lastInterval.properlyContains(newInterval)) {
+          return;
+        }
+
+        tokenIntervals.removeLast();
+        newInterval = lastInterval.union(newInterval);
+      }
     }
+
+    tokenIntervals.add(new AttributedInterval(currentRoot, newInterval));
   }
 
+  // NOTE: intervals that cover tokens that are not part of children (which are
+  // only hidden tokens like whitespace because terminal nodes are children too)
+  // are moved after inserted nodes, which are local roots, through this process.
+  // this happens because fetchNext is not updated for local roots which causes
+  // the next non-local-root child (or at the after end of the child list) to add
+  // the whole interval covering the child after the child itself has been
+  // visited.
   @Override
   public Void visitChildren(RuleNode node) {
     final var context = (ParserRuleContext) node.getRuleContext();
-
-    // the source interval is always an interval of token indexes
     final var superInterval = context.getSourceInterval();
 
-    // the index of the token that needs to be fetched next,
-    // either by looking at a child or getting the token directly
     var fetchNext = superInterval.a;
     if (context.children != null) {
       for (var child : context.children) {
-        // fetch the tokens between the last child (or the start) and this child
-        var childInterval = child.getSourceInterval();
-        addInterval(fetchNext, childInterval.a - 1);
+        var isLocalRoot = child.getParent() == null;
 
-        // add the tokens from the child's processing
+        ParseTree previousRoot = null;
+        Interval childInterval = null;
+        if (isLocalRoot) {
+          // set as new current root
+          previousRoot = currentRoot;
+          currentRoot = child;
+        } else {
+          childInterval = child.getSourceInterval();
+          addInterval(fetchNext, childInterval.a - 1);
+        }
+
         child.accept(this);
 
-        // StringNode has the interval -1,-1 which causes fetchNext not to be updated and all tokens covering the StringNode are fetched
-        //but later filtered since they were marked as omitted
-        if (childInterval.b >= 0) {
+        if (isLocalRoot) {
+          // switch root back
+          currentRoot = previousRoot;
+        } else {
           fetchNext = childInterval.b + 1;
         }
       }
     }
 
-    // fetch all remaining tokens
     addInterval(fetchNext, superInterval.b);
     return null;
   }
 
   @Override
   public Void visitTerminal(TerminalNode node) {
-    if (node instanceof StringNode) {
-      tokenIntervals.add(new TokenOrInterval(node.getSymbol()));
-    } else {
+    if (!(node instanceof EmptyTerminalNode)) {
       addInterval(node.getSourceInterval());
     }
 
     return null;
-  }
-
-  private class TokenOrInterval implements Iterable<Token> {
-    private Token token;
-    private Interval interval;
-
-    public TokenOrInterval(Token token) {
-      this.token = token;
-    }
-
-    public TokenOrInterval(Interval interval) {
-      this.interval = interval;
-    }
-
-    public boolean tryAddInterval(Interval other) {
-      if (interval == null || interval.disjoint(other) && !interval.adjacent(other)) {
-        return false;
-      }
-
-      interval = interval.union(other);
-      return true;
-    }
-
-    public Iterator<Token> iterator() {
-      if (interval != null) {
-        return tokenStream.getTokens(interval.a, interval.b).iterator();
-      } else if (token.getText() != null) {
-        return List.of(token).iterator();
-      } else {
-        return Collections.emptyIterator();
-      }
-    }
   }
 }

@@ -10,9 +10,9 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Set;
 
-import org.antlr.v4.runtime.CommonTokenStream;
 import org.antlr.v4.runtime.CharStream;
 import org.antlr.v4.runtime.CharStreams;
+import org.antlr.v4.runtime.CommonTokenStream;
 
 import me.douira.glsl_transformer.generic.PrintVisitor;
 import me.douira.glsl_transformer.iris.ComplexTransformations;
@@ -87,7 +87,7 @@ public class App {
     var transformer = new PhaseCollector(parser);
     transformer.registerTransformationMultiple(ComplexTransformations::registerWith);
 
-    var editContext = transformer.transformTree(tree);
+    var editContext = transformer.transformTree(tree, commonTokenStream);
 
     startNanos = System.nanoTime();
     var printResult = PrintVisitor.printTree(commonTokenStream, tree, editContext);
