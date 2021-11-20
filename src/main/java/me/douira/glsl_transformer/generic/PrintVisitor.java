@@ -25,7 +25,7 @@ public class PrintVisitor extends AbstractParseTreeVisitor<Void> {
 
   private final BufferedTokenStream tokenStream;
   private final LinkedList<TokenOrInterval> tokenIntervals = new LinkedList<>();
-  private Interval cachedInterval; 
+  private Interval cachedInterval;
 
   private PrintVisitor(BufferedTokenStream tokenStream) {
     this.tokenStream = tokenStream;
@@ -59,7 +59,8 @@ public class PrintVisitor extends AbstractParseTreeVisitor<Void> {
     var builder = new StringBuilder(512); // guessing
     for (var tokenOrInterval : tokenIntervals) {
       for (var token : tokenOrInterval) {
-        // don't print EOF, only print those in bounds but always allow inserted nodes,
+        // don't print EOF, only print the tokens in side the printing bounds,
+        // but always allow inserted nodes,
         // if an edit context is given, only print if allowed by it
         var tokenIndex = token.getTokenIndex();
         if (token.getType() != Lexer.EOF && (tokenIndex == -1
@@ -79,7 +80,7 @@ public class PrintVisitor extends AbstractParseTreeVisitor<Void> {
       return;
     }
 
-    //cache a single interval since often the same interval is added repeatedly
+    // cache a single interval since often the same interval is added repeatedly
     Interval interval;
     if (cachedInterval != null && a == cachedInterval.a && b == cachedInterval.b) {
       interval = cachedInterval;
@@ -120,7 +121,7 @@ public class PrintVisitor extends AbstractParseTreeVisitor<Void> {
         // add the tokens from the child's processing
         child.accept(this);
 
-        // replacement nodes have -1,-1 intervals that will mess this up
+        // StringNode has the interval -1,-1 which would mess this up
         if (childInterval.b >= 0) {
           fetchNext = childInterval.b + 1;
         }

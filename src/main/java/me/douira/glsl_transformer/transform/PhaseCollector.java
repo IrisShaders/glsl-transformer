@@ -55,8 +55,7 @@ public class PhaseCollector {
       var proxyListener = new ProxyParseTreeListener(new ArrayList<>());
 
       for (var phase : level) {
-        if (phase instanceof WalkPhase) {
-          var walkPhase = (WalkPhase) phase;
+        if (phase instanceof WalkPhase walkPhase) {
           if (walkPhase.isActiveBeforeWalk()) {
             walkPhase.beforeWalk(ctx);
           }
@@ -73,8 +72,7 @@ public class PhaseCollector {
       }
 
       for (var phase : level) {
-        if (phase instanceof WalkPhase) {
-          var walkPhase = (WalkPhase) phase;
+        if (phase instanceof WalkPhase walkPhase) {
           if (walkPhase.isActiveAfterWalk()) {
             walkPhase.afterWalk(ctx);
           }
