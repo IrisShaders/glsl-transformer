@@ -49,7 +49,7 @@ abstract class Phase extends GLSLParserBaseListener {
   }
 
   protected void removeNode(ParserRuleContext node) {
-    // the node needs to be replaced with something to preserve the containing child
+    // the node needs to be replaced with something to preserve the containing
     // array's length or there's a NullPointerException in the walker
     replaceNode(node, new StringNode(null));
   }

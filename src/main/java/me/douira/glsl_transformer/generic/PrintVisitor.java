@@ -121,7 +121,8 @@ public class PrintVisitor extends AbstractParseTreeVisitor<Void> {
         // add the tokens from the child's processing
         child.accept(this);
 
-        // StringNode has the interval -1,-1 which would mess this up
+        // StringNode has the interval -1,-1 which causes fetchNext not to be updated and all tokens covering the StringNode are fetched
+        //but later filtered since they were marked as omitted
         if (childInterval.b >= 0) {
           fetchNext = childInterval.b + 1;
         }
