@@ -5,6 +5,7 @@ import java.util.Collection;
 import java.util.List;
 import java.util.function.Consumer;
 
+import org.antlr.v4.runtime.BufferedTokenStream;
 import org.antlr.v4.runtime.Parser;
 import org.antlr.v4.runtime.tree.ParseTreeWalker;
 
@@ -81,8 +82,8 @@ public class PhaseCollector {
     }
   }
 
-  public EditContext transformTree(TranslationUnitContext ctx) {
-    transformTree(ctx, new EditContext());
+  public EditContext transformTree(TranslationUnitContext ctx, BufferedTokenStream tokenStream) {
+    transformTree(ctx, new EditContext(ctx, tokenStream));
     return editContext;
   }
 

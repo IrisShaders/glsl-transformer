@@ -11,9 +11,8 @@ import me.douira.glsl_transformer.GLSLParser.ExternalDeclarationContext;
 import me.douira.glsl_transformer.GLSLParser.FunctionHeaderContext;
 import me.douira.glsl_transformer.GLSLParser.TranslationUnitContext;
 import me.douira.glsl_transformer.GLSLParser.VariableIdentifierContext;
-import me.douira.glsl_transformer.generic.StringNode;
-import me.douira.glsl_transformer.transform.WalkPhase;
 import me.douira.glsl_transformer.transform.Transformation;
+import me.douira.glsl_transformer.transform.WalkPhase;
 
 //TODO: do multiple declarations need to be found or can there only ever be one in a semantically valid shader?
 public class DeclarationReplacement extends Transformation {
@@ -80,8 +79,9 @@ public class DeclarationReplacement extends Transformation {
         if (!declarations.isEmpty()) {
           // is only run if phase is found to be active
           // TODO: the function content and the new attribute declaration
-          ctx.children.add(new StringNode(
-              "iris_getModelSpaceVertexPosition() { TODO }\nlayout (location = 0) attribute vec4 iris_Position;"));
+          ctx.children.add(createLocalRoot("void iris_getModelSpaceVertexPosition() { }", GLSLParser::externalDeclaration));
+          ctx.children
+              .add(createLocalRoot("layout (location = 0) attribute vec4 iris_Position;", GLSLParser::externalDeclaration));
         }
       }
     });
@@ -99,7 +99,7 @@ public class DeclarationReplacement extends Transformation {
         var matchingDeclaration = declarations.get(identifier.getText());
         if (matchingDeclaration != null) {
           // perform replacement of this reference
-          replaceNode(ctx, "iris_getModelSpaceVertexPosition()");
+          replaceNode(ctx, "iris_getModelSpaceVertexPosition()", GLSLParser::expression);
         }
       }
     });

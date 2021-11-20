@@ -41,7 +41,7 @@ public class CachingIntervalSet extends IntervalSet {
     return false;
   }
 
-  public boolean allowsRegularToken(Token token) {
+  public boolean isTokenAllowed(Token token) {
     return token.getChannel() != Token.DEFAULT_CHANNEL || !contains(token.getTokenIndex());
   }
 }
