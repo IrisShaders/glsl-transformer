@@ -16,15 +16,7 @@ import me.douira.glsl_transformer.transform.WalkPhase;
 
 //TODO: do multiple declarations need to be found or can there only ever be one in a semantically valid shader?
 public class DeclarationReplacement extends Transformation {
-  private class Declaration {
-    public String type;
-    public String name;
-
-    Declaration(String type, String name) {
-      this.type = type;
-      this.name = name;
-    }
-  }
+  private record Declaration(String type, String name) {}
 
   private Map<String, Declaration> declarations;
 
