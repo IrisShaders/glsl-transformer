@@ -30,7 +30,7 @@ public class PrintVisitor extends AbstractParseTreeVisitor<Void> {
   }
 
   public static String printTree(BufferedTokenStream rootTokenStream, ParseTree tree) {
-    return printTree(rootTokenStream, tree, null);
+    return printTree(rootTokenStream, tree, new EditContext(tree, rootTokenStream));
   }
 
   public static String printTree(BufferedTokenStream rootTokenStream, ParseTree tree, EditContext editContext) {
@@ -40,10 +40,6 @@ public class PrintVisitor extends AbstractParseTreeVisitor<Void> {
 
   public String visitAndJoin(BufferedTokenStream rootTokenStream, ParseTree rootNode, Interval bounds,
       EditContext editContext) {
-    if (editContext == null) {
-      editContext = new EditContext(rootNode, rootTokenStream);
-    }
-
     // add the tokens before the root node too
     var rootInterval = rootNode.getSourceInterval();
     addInterval(bounds.a, rootInterval.a - 1);
