@@ -1,5 +1,6 @@
 package me.douira.glsl_transformer.generic;
 
+import org.antlr.v4.runtime.Token;
 import org.antlr.v4.runtime.misc.Interval;
 import org.antlr.v4.runtime.misc.IntervalSet;
 
@@ -38,5 +39,9 @@ public class CachingIntervalSet extends IntervalSet {
       }
     }
     return false;
+  }
+
+  public boolean allowsRegularToken(Token token) {
+    return token.getChannel() != Token.DEFAULT_CHANNEL || !contains(token.getTokenIndex());
   }
 }

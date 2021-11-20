@@ -11,9 +11,6 @@ import java.nio.file.Paths;
 import java.util.Set;
 
 import org.antlr.v4.runtime.CommonTokenStream;
-import org.antlr.v4.runtime.tree.pattern.ParseTreeMatch;
-import org.antlr.v4.runtime.tree.pattern.ParseTreePattern;
-import org.antlr.v4.runtime.tree.xpath.XPath;
 import org.antlr.v4.runtime.CharStream;
 import org.antlr.v4.runtime.CharStreams;
 

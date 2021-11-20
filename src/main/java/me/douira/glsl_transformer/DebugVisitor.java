@@ -44,8 +44,8 @@ public class DebugVisitor extends GLSLParserBaseVisitor<Void> {
         System.out.println(prefix + c.getText());
       }
 
-      if (c instanceof TerminalNode) {
-        System.out.println(prefix + ((TerminalNode) c).getSymbol().getText());
+      if (c instanceof TerminalNode terminal) {
+        System.out.println(prefix + terminal.getSymbol().getText());
       }
 
       c.accept(this);
