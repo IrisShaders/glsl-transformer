@@ -12,7 +12,8 @@ public abstract class Transformation {
     collector.addPhaseAt(phase, phaseCounter++);
   }
 
-  protected abstract void resetState();
+  protected void resetState() {
+  };
 
   protected abstract void createPhases();
 }
