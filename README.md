@@ -46,6 +46,13 @@ Then:
 - Unit (and integration) testing of all the parts
 - Error on any tokens in the PREPROCESSOR channel optionally
 
+## Misc TODO
+
+- Add license (LGPL3 ?)
+- Package/distribute as a library
+- GitHub Actions builds, auto run tests
+- Introduce semver when something is a little stable
+
 ## Notes
 
 All files in a directory can be joined using `find . -type f -exec cat {} \; `. The output is printed to the terminal. Some cleanup maybe required.
