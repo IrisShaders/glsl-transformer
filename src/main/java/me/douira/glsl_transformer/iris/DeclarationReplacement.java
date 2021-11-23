@@ -14,7 +14,7 @@ import me.douira.glsl_transformer.GLSLParser.VariableIdentifierContext;
 import me.douira.glsl_transformer.transform.Transformation;
 import me.douira.glsl_transformer.transform.WalkPhase;
 
-//TODO: do multiple declarations need to be found or can there only ever be one in a semantically valid shader?
+//TODO: treat each found declaration with the same location=0 as the same declaration and replace all of them identically
 public class DeclarationReplacement extends Transformation {
   private record Declaration(String type, String name) {
   }
