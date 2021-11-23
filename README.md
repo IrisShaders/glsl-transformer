@@ -41,11 +41,10 @@ Then:
 
 ## TODO
 
-- More Phase functionality (abstract declaration replacement into a separate class?)
-- AST structures for generating GLSL Code. In particular structs and types. (construction of vector types from lengths)
+- More Phase functionality (abstract declaration replacement into a separate class, phase bases for inserting at certain locations)
+- AST structures for GLSL types, requires parsing of `GL_EXT_shader_explicit_arithmetic_types`
 - Unit (and integration) testing of all the parts
 - Error on any tokens in the PREPROCESSOR channel optionally
-- low priority: implement more extensions, like `GL_EXT_shader_explicit_arithmetic_types`
 
 ## Notes
 
