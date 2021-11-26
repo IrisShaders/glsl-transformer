@@ -66,15 +66,18 @@ public class DeclarationReplacement extends Transformation {
       }
 
       @Override
+      protected boolean isActiveAfterWalk() {
+        return !declarations.isEmpty();
+      }
+
+      @Override
       protected void afterWalk(TranslationUnitContext ctx) {
-        if (!declarations.isEmpty()) {
-          // is only run if phase is found to be active
-          // TODO: the function content and the new attribute declaration
-          ctx.children
-              .add(createLocalRoot("void iris_getModelSpaceVertexPosition() { }", GLSLParser::externalDeclaration));
-          ctx.children.add(
-              createLocalRoot("layout (location = 0) attribute vec4 iris_Position;", GLSLParser::externalDeclaration));
-        }
+        // is only run if phase is found to be active
+        // TODO: the function content and the new attribute declaration
+        ctx.children
+            .add(createLocalRoot("void iris_getModelSpaceVertexPosition() { }", GLSLParser::externalDeclaration));
+        ctx.children.add(
+            createLocalRoot("layout (location = 0) attribute vec4 iris_Position;", GLSLParser::externalDeclaration));
       }
     });
 
