@@ -22,7 +22,7 @@ public class App {
   private static enum Input {
     TINY("/tiny.glsl"), DIRECTIVE_TEST("/directiveTest.glsl"), SHADER("/shader.glsl"),
     KAPPA("/unlicensed/composite3.glsl"), BENCHMARK1("/unlicensed/benchmark1.glsl"),
-    BENCHMARK2("/unlicensed/benchmark2.glsl"), TEST("/unlicensed/test.glsl");
+    BENCHMARK2("/unlicensed/benchmark2.glsl"), TEST("/unlicensed/test.glsl"), TYPE_TEST("/typeTest.glsl");
 
     String path;
 
@@ -34,7 +34,7 @@ public class App {
   private static Set<String> bannedFilenameFragments = Set.of("ray", "preprocessor");
 
   public static void main(String[] args) throws IOException, URISyntaxException {
-    processInput(Input.TINY);
+    processInput(Input.TYPE_TEST);
     // processDirectory("/glslang-test");
   }
 
@@ -79,27 +79,19 @@ public class App {
     System.out.println("parsing took " + (System.nanoTime() - startNanos) / 1e6 + " ms.");
 
     new DebugVisitor().visit(tree);
-    System.out.println(tree.toInfoString(parser));
 
     // before any edits
     System.out.println(PrintVisitor.printTree(commonTokenStream, tree));
 
-    var transformer = new PhaseCollector(parser);
-    transformer.registerTransformationMultiple(ComplexTransformations::registerWith);
+    // var transformer = new PhaseCollector(parser);
+    // transformer.registerTransformationMultiple(ComplexTransformations::registerWith);
 
-    var editContext = transformer.transformTree(tree, commonTokenStream);
+    // var editContext = transformer.transformTree(tree, commonTokenStream);
 
-    startNanos = System.nanoTime();
-    var printResult = PrintVisitor.printTree(commonTokenStream, tree, editContext);
-    System.out.println("printing took " + (System.nanoTime() - startNanos) / 1e6 + " ms.");
-
-    // after edits
-    System.out.println(printResult);
-
-    // var tokens = commonTokenStream.getTokens();
-    // for (var token : tokens) {
-    // System.out.println(token);
-    // }
-    inputStream.close();
+    // // after edits
+    // startNanos = System.nanoTime();
+    // var printResult = PrintVisitor.printTree(commonTokenStream, tree, editContext);
+    // System.out.println("printing took " + (System.nanoTime() - startNanos) / 1e6 + " ms.");
+    // System.out.println(printResult);
   }
 }
