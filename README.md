@@ -42,7 +42,7 @@ Then:
 ## TODO
 
 - More Phase functionality (abstract declaration replacement into a separate class, phase bases for inserting at certain locations)
-- AST structures for GLSL types, requires parsing of `GL_EXT_shader_explicit_arithmetic_types`
+- AST structures for GLSL types, parse the types themselves
 - Unit (and integration) testing of all the parts
 - Error on any tokens in the PREPROCESSOR channel optionally
 
@@ -51,7 +51,7 @@ Then:
 - Add license (LGPL3 ?)
 - Package/distribute as a library
 - GitHub Actions builds, auto run tests
-- Introduce semver when something is a little stable
+- Introduce semver when it's more stable
 
 ## Notes
 

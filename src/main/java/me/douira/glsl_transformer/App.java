@@ -78,10 +78,16 @@ public class App {
     var tree = parser.translationUnit();
     System.out.println("parsing took " + (System.nanoTime() - startNanos) / 1e6 + " ms.");
 
-    new DebugVisitor().visit(tree);
+    // new DebugVisitor().visit(tree);
 
     // before any edits
-    System.out.println(PrintVisitor.printTree(commonTokenStream, tree));
+    // System.out.println(PrintVisitor.printTree(commonTokenStream, tree));
+
+
+    // var tokens = commonTokenStream.getTokens();
+    // for (var token : tokens) {
+    //   System.out.println(token);
+    // }
 
     // var transformer = new PhaseCollector(parser);
     // transformer.registerTransformationMultiple(ComplexTransformations::registerWith);
