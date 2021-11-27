@@ -76,10 +76,10 @@ primaryExpression:
 	variableIdentifier
 	| INTCONSTANT
 	| UINTCONSTANT
-	| FLOATCONSTANT
 	| FLOAT16CONSTANT
-	| BOOLCONSTANT
+	| FLOAT32CONSTANT
 	| DOUBLECONSTANT
+	| BOOLCONSTANT
 	| LPAREN expression RPAREN;
 
 //Note: diverges from the spec by explicity adding a method call instead of handling it through postfixExpression in functionIdentifier
