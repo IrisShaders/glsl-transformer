@@ -102,9 +102,12 @@ FLOAT32CONSTANT: FLOAT_DIGITS SINGLE_SUFFIX?;
 FLOAT64CONSTANT:
 	FLOAT_DIGITS DOUBLE_SUFFIX SINGLE_SUFFIX;
 BOOLCONSTANT: 'true' | 'false';
-BOOL: 'bool';
 
-//all _t are for GL_EXT_shader_explicit_arithmetic_types
+BOOL: 'bool';
+BVEC2: 'bvec2';
+BVEC3: 'bvec3';
+BVEC4: 'bvec4';
+
 FLOAT16: 'float16_t';
 F16VEC2: 'f16vec2';
 F16VEC3: 'f16vec3';
@@ -120,32 +123,56 @@ F16MAT4X3: 'f16mat4x3';
 F16MAT4X4: 'f16mat4x4' | 'f16mat4';
 
 FLOAT32: 'float32_t' | 'float';
-F32VEC2: 'f32vec2';
-F32VEC3: 'f32vec3';
-F32VEC4: 'f32vec4';
-F32MAT2X2: 'f32mat2x2' | 'f32mat2';
-F32MAT2X3: 'f32mat2x3';
-F32MAT2X4: 'f32mat2x4';
-F32MAT3X2: 'f32mat3x2';
-F32MAT3X3: 'f32mat3x3' | 'f32mat3';
-F32MAT3X4: 'f32mat3x4';
-F32MAT4X2: 'f32mat4x2';
-F32MAT4X3: 'f32mat4x3';
-F32MAT4X4: 'f32mat4x4' | 'f32mat4';
+F32VEC2: 'f32vec2' | 'vec2';
+F32VEC3: 'f32vec3' | 'vec3';
+F32VEC4: 'f32vec4' | 'vec4';
+F32MAT2X2:
+	'f32mat2x2'
+	| 'f32mat2'
+	| 'mat2'
+	| 'mat2x2';
+F32MAT2X3: 'f32mat2x3' | 'mat2x3';
+F32MAT2X4: 'f32mat2x4' | 'mat2x4';
+F32MAT3X2: 'f32mat3x2' | 'mat3x2';
+F32MAT3X3:
+	'f32mat3x3'
+	| 'f32mat3'
+	| 'mat3'
+	| 'mat3x3';
+F32MAT3X4: 'f32mat3x4' | 'mat3x4';
+F32MAT4X2: 'f32mat4x2' | 'mat4x2';
+F32MAT4X3: 'f32mat4x3' | 'mat4x3';
+F32MAT4X4:
+	'f32mat4x4'
+	| 'f32mat4'
+	| 'mat4'
+	| 'mat4x4';
 
 FLOAT64: 'float64_t' | 'double';
-F64VEC2: 'f64vec2';
-F64VEC3: 'f64vec3';
-F64VEC4: 'f64vec4';
-F64MAT2X2: 'f64mat2x2' | 'f64mat2';
-F64MAT2X3: 'f64mat2x3';
-F64MAT2X4: 'f64mat2x4';
-F64MAT3X2: 'f64mat3x2';
-F64MAT3X3: 'f64mat3x3' | 'f64mat3';
-F64MAT3X4: 'f64mat3x4';
-F64MAT4X2: 'f64mat4x2';
-F64MAT4X3: 'f64mat4x3';
-F64MAT4X4: 'f64mat4x4' | 'f64mat4';
+F64VEC2: 'f64vec2' | 'dvec2';
+F64VEC3: 'f64vec3' | 'dvec3';
+F64VEC4: 'f64vec4' | 'dvec4';
+F64MAT2X2:
+	'f64mat2x2'
+	| 'f64mat2'
+	| 'dmat2'
+	| 'dmat2x2';
+F64MAT2X3: 'f64mat2x3' | 'dmat2x3';
+F64MAT2X4: 'f64mat2x4' | 'dmat2x4';
+F64MAT3X2: 'f64mat3x2' | 'dmat3x2';
+F64MAT3X3:
+	'f64mat3x3'
+	| 'f64mat3'
+	| 'dmat3'
+	| 'dmat3x3';
+F64MAT3X4: 'f64mat3x4' | 'dmat3x4';
+F64MAT4X2: 'f64mat4x2' | 'dmat4x2';
+F64MAT4X3: 'f64mat4x3' | 'dmat4x3';
+F64MAT4X4:
+	'f64mat4x4'
+	| 'f64mat4'
+	| 'dmat4'
+	| 'dmat4x4';
 
 INT8: 'int8_t';
 I8VEC2: 'i8vec2';
@@ -166,13 +193,13 @@ UI16VEC3: 'ui16vec3';
 UI16VEC4: 'ui16vec4';
 
 INT32: 'int32_t' | 'int';
-I32VEC2: 'i32vec2';
-I32VEC3: 'i32vec3';
-I32VEC4: 'i32vec4';
+I32VEC2: 'i32vec2' | 'ivec2';
+I32VEC3: 'i32vec3' | 'ivec3';
+I32VEC4: 'i32vec4' | 'ivec4';
 UINT32: 'uint32_t' | 'uint';
-UI32VEC2: 'ui32vec2';
-UI32VEC3: 'ui32vec3';
-UI32VEC4: 'ui32vec4';
+UI32VEC2: 'ui32vec2' | 'uvec2';
+UI32VEC3: 'ui32vec3' | 'uvec3';
+UI32VEC4: 'ui32vec4' | 'uvec4';
 
 INT64: 'int64_t';
 I64VEC2: 'i64vec2';
@@ -182,40 +209,6 @@ UINT64: 'uint64_t';
 UI64VEC2: 'ui64vec2';
 UI64VEC3: 'ui64vec3';
 UI64VEC4: 'ui64vec4';
-
-VEC2: 'vec2';
-VEC3: 'vec3';
-VEC4: 'vec4';
-DVEC2: 'dvec2';
-DVEC3: 'dvec3';
-DVEC4: 'dvec4';
-BVEC2: 'bvec2';
-BVEC3: 'bvec3';
-BVEC4: 'bvec4';
-IVEC2: 'ivec2';
-IVEC3: 'ivec3';
-IVEC4: 'ivec4';
-UVEC2: 'uvec2';
-UVEC3: 'uvec3';
-UVEC4: 'uvec4';
-MAT2X2: 'mat2' | 'mat2x2';
-MAT2X3: 'mat2x3';
-MAT2X4: 'mat2x4';
-MAT3X2: 'mat3x2';
-MAT3X3: 'mat3' | 'mat3x3';
-MAT3X4: 'mat3x4';
-MAT4X2: 'mat4x2';
-MAT4X3: 'mat4x3';
-MAT4X4: 'mat4' | 'mat4x4';
-DMAT2X2: 'dmat2' | 'dmat2x2';
-DMAT2X3: 'dmat2x3';
-DMAT2X4: 'dmat2x4';
-DMAT3X2: 'dmat3x2';
-DMAT3X3: 'dmat3' | 'dmat3x3';
-DMAT3X4: 'dmat3x4';
-DMAT4X2: 'dmat4x2';
-DMAT4X3: 'dmat4x3';
-DMAT4X4: 'dmat4' | 'dmat4x4';
 
 IMAGE1D: 'image1D';
 IMAGE2D: 'image2D';
