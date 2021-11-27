@@ -16,10 +16,6 @@ fragment FLOAT_DIGITS: (
 		(DIGIT+ ('.' DIGIT*)?)
 		| ('.' DIGIT+)
 	) (('e' | 'E') ('+' | '-')? DIGIT*)?;
-fragment INTCONSTANT_frag:
-	DECIMAL_DIGITS
-	| OCTAL_DIGITS
-	| HEX_DIGITS;
 fragment IDENTIFIER_frag: (
 		'a' ..'z'
 		| 'A' ..'Z'
@@ -38,7 +34,6 @@ HIGHP: 'highp';
 MEDIUMP: 'mediump';
 LOWP: 'lowp';
 PRECISION: 'precision';
-INTCONSTANT: INTCONSTANT_frag;
 CONST: 'const';
 PRECISE: 'precise';
 INVARIANT: 'invariant';
@@ -63,67 +58,7 @@ WORKGROUPCOHERENT: 'workgroupcoherent';
 SUBGROUPCOHERENT: 'subgroupcoherent';
 NONPRIVATE: 'nonprivate';
 LAYOUT: 'layout';
-UINTCONSTANT: (
-		DECIMAL_DIGITS
-		| OCTAL_DIGITS
-		| HEX_DIGITS
-	) ('u' | 'U');
-// ROW_MAJOR: 'row_major';
-// PACKED: 'packed';
-fragment SINGLE_SUFFIX: 'f' | 'F';
-FLOAT16CONSTANT:
-	FLOAT_DIGITS ('h' | 'H') SINGLE_SUFFIX;
-FLOAT32CONSTANT: FLOAT_DIGITS SINGLE_SUFFIX?;
-DOUBLECONSTANT:
-	FLOAT_DIGITS ('L' | 'l') SINGLE_SUFFIX;
-BOOLCONSTANT: 'true' | 'false';
-INC_OP: '++';
-DEC_OP: '--';
-VOID: 'void';
-LEFT_OP: '<<';
-RIGHT_OP: '>>';
-LE_OP: '<=';
-GE_OP: '>=';
-EQ_OP: '==';
-NE_OP: '!=';
-AND_OP: '&&';
-XOR_OP: '^^';
-OR_OP: '||';
-MUL_ASSIGN: '*=';
-DIV_ASSIGN: '/=';
-MOD_ASSIGN: '%=';
-ADD_ASSIGN: '+=';
-SUB_ASSIGN: '-=';
-LEFT_ASSIGN: '<<=';
-RIGHT_ASSIGN: '>>=';
-AND_ASSIGN: '&=';
-XOR_ASSIGN: '^=';
-OR_ASSIGN: '|=';
-FLOAT: 'float';
-DOUBLE: 'double';
-INT: 'int';
-UINT: 'uint';
-BOOL: 'bool';
-SAMPLERCUBE: 'samplerCube';
-SAMPLERCUBESHADOW: 'samplerCubeShadow';
-SAMPLERBUFFER: 'samplerBuffer';
-SAMPLERCUBEARRAY: 'samplerCubeArray';
-SAMPLERCUBEARRAYSHADOW: 'samplerCubeArrayShadow';
-ISAMPLERCUBE: 'isamplerCube';
-ISAMPLERBUFFER: 'isamplerBuffer';
-ISAMPLERCUBEARRAY: 'isamplerCubeArray';
-USAMPLERCUBE: 'usamplerCube';
-USAMPLERBUFFER: 'usamplerBuffer';
-USAMPLERCUBEARRAY: 'usamplerCubeArray';
-IMAGECUBE: 'imageCube';
-IMAGEBUFFER: 'imageBuffer';
-IMAGECUBEARRAY: 'imageCubeArray';
-IIMAGECUBE: 'iimageCube';
-IIMAGEBUFFER: 'iimageBuffer';
-IIMAGECUBEARRAY: 'iimageCubeArray';
-UIMAGECUBE: 'uimageCube';
-UIMAGEBUFFER: 'uimageBuffer';
-UIMAGECUBEARRAY: 'uimageCubeArray';
+
 ATOMIC_UINT: 'atomic_uint';
 STRUCT: 'struct';
 IF: 'if';
@@ -139,6 +74,115 @@ BREAK: 'break';
 RETURN: 'return';
 DISCARD: 'discard';
 DEMOTE: 'demote';
+
+fragment INTCONSTANT_frag:
+	DECIMAL_DIGITS
+	| OCTAL_DIGITS
+	| HEX_DIGITS;
+fragment SINGLE_SUFFIX: 'f' | 'F';
+fragment HALF_SUFFIX: 'h' | 'H';
+fragment DOUBLE_SUFFIX: 'l' | 'L';
+fragment UNSIGNED_SUFFIX: 'u' | 'U';
+fragment SHORT_SUFFIX: 's' | 'S';
+
+UINT16CONSTANT:
+	INTCONSTANT_frag UNSIGNED_SUFFIX SHORT_SUFFIX;
+INT16CONSTANT: INTCONSTANT_frag SHORT_SUFFIX;
+
+UINT32CONSTANT: INTCONSTANT_frag UNSIGNED_SUFFIX;
+INT32CONSTANT: INTCONSTANT_frag;
+
+UINT64CONSTANT:
+	INTCONSTANT_frag UNSIGNED_SUFFIX DOUBLE_SUFFIX;
+INT64CONSTANT: INTCONSTANT_frag DOUBLE_SUFFIX;
+
+FLOAT16CONSTANT:
+	FLOAT_DIGITS HALF_SUFFIX SINGLE_SUFFIX;
+FLOAT32CONSTANT: FLOAT_DIGITS SINGLE_SUFFIX?;
+FLOAT64CONSTANT:
+	FLOAT_DIGITS DOUBLE_SUFFIX SINGLE_SUFFIX;
+BOOLCONSTANT: 'true' | 'false';
+BOOL: 'bool';
+
+//all _t are for GL_EXT_shader_explicit_arithmetic_types
+FLOAT16: 'float16_t';
+F16VEC2: 'f16vec2';
+F16VEC3: 'f16vec3';
+F16VEC4: 'f16vec4';
+F16MAT2X2: 'f16mat2x2' | 'f16mat2';
+F16MAT2X3: 'f16mat2x3';
+F16MAT2X4: 'f16mat2x4';
+F16MAT3X2: 'f16mat3x2';
+F16MAT3X3: 'f16mat3x3' | 'f16mat3';
+F16MAT3X4: 'f16mat3x4';
+F16MAT4X2: 'f16mat4x2';
+F16MAT4X3: 'f16mat4x3';
+F16MAT4X4: 'f16mat4x4' | 'f16mat4';
+
+FLOAT32: 'float32_t' | 'float';
+F32VEC2: 'f32vec2';
+F32VEC3: 'f32vec3';
+F32VEC4: 'f32vec4';
+F32MAT2X2: 'f32mat2x2' | 'f32mat2';
+F32MAT2X3: 'f32mat2x3';
+F32MAT2X4: 'f32mat2x4';
+F32MAT3X2: 'f32mat3x2';
+F32MAT3X3: 'f32mat3x3' | 'f32mat3';
+F32MAT3X4: 'f32mat3x4';
+F32MAT4X2: 'f32mat4x2';
+F32MAT4X3: 'f32mat4x3';
+F32MAT4X4: 'f32mat4x4' | 'f32mat4';
+
+FLOAT64: 'float64_t' | 'double';
+F64VEC2: 'f64vec2';
+F64VEC3: 'f64vec3';
+F64VEC4: 'f64vec4';
+F64MAT2X2: 'f64mat2x2' | 'f64mat2';
+F64MAT2X3: 'f64mat2x3';
+F64MAT2X4: 'f64mat2x4';
+F64MAT3X2: 'f64mat3x2';
+F64MAT3X3: 'f64mat3x3' | 'f64mat3';
+F64MAT3X4: 'f64mat3x4';
+F64MAT4X2: 'f64mat4x2';
+F64MAT4X3: 'f64mat4x3';
+F64MAT4X4: 'f64mat4x4' | 'f64mat4';
+
+INT8: 'int8_t';
+I8VEC2: 'i8vec2';
+I8VEC3: 'i8vec3';
+I8VEC4: 'i8vec4';
+UINT8: 'uint8_t';
+UI8VEC2: 'ui8vec2';
+UI8VEC3: 'ui8vec3';
+UI8VEC4: 'ui8vec4';
+
+INT16: 'int16_t';
+I16VEC2: 'i16vec2';
+I16VEC3: 'i16vec3';
+I16VEC4: 'i16vec4';
+UINT16: 'uint16_t';
+UI16VEC2: 'ui16vec2';
+UI16VEC3: 'ui16vec3';
+UI16VEC4: 'ui16vec4';
+
+INT32: 'int32_t' | 'int';
+I32VEC2: 'i32vec2';
+I32VEC3: 'i32vec3';
+I32VEC4: 'i32vec4';
+UINT32: 'uint32_t' | 'uint';
+UI32VEC2: 'ui32vec2';
+UI32VEC3: 'ui32vec3';
+UI32VEC4: 'ui32vec4';
+
+INT64: 'int64_t';
+I64VEC2: 'i64vec2';
+I64VEC3: 'i64vec3';
+I64VEC4: 'i64vec4';
+UINT64: 'uint64_t';
+UI64VEC2: 'ui64vec2';
+UI64VEC3: 'ui64vec3';
+UI64VEC4: 'ui64vec4';
+
 VEC2: 'vec2';
 VEC3: 'vec3';
 VEC4: 'vec4';
@@ -172,6 +216,7 @@ DMAT3X4: 'dmat3x4';
 DMAT4X2: 'dmat4x2';
 DMAT4X3: 'dmat4x3';
 DMAT4X4: 'dmat4' | 'dmat4x4';
+
 IMAGE1D: 'image1D';
 IMAGE2D: 'image2D';
 IMAGE3D: 'image3D';
@@ -226,22 +271,50 @@ UIMAGE1DARRAY: 'uimage1DArray';
 UIMAGE2DARRAY: 'uimage2DArray';
 UIMAGE2DMS: 'uimage2DMS';
 UIMAGE2DMSARRAY: 'uimage2DMSArray';
-FLOAT16: 'float16_t';
-F16VEC2: 'f16vec2';
-F16VEC3: 'f16vec3';
-F16VEC4: 'f16vec4';
-F16MAT2: 'f16mat2';
-F16MAT3: 'f16mat3';
-F16MAT4: 'f16mat4';
-F16MAT2X2: 'f16mat2x2';
-FL6MAT2X3: 'fl6mat2x3';
-F16MAT2X4: 'f16mat2x4';
-F16MAT3X2: 'f16mat3x2';
-F16MAT3X3: 'f16mat3x3';
-F16MAT3X4: 'f16mat3x4';
-F16MAT4X2: 'f16mat4x2';
-F16MAT4X3: 'f16mat4x3';
-F16MAT4X4: 'f16mat4x4';
+
+SAMPLERCUBE: 'samplerCube';
+SAMPLERCUBESHADOW: 'samplerCubeShadow';
+SAMPLERBUFFER: 'samplerBuffer';
+SAMPLERCUBEARRAY: 'samplerCubeArray';
+SAMPLERCUBEARRAYSHADOW: 'samplerCubeArrayShadow';
+ISAMPLERCUBE: 'isamplerCube';
+ISAMPLERBUFFER: 'isamplerBuffer';
+ISAMPLERCUBEARRAY: 'isamplerCubeArray';
+USAMPLERCUBE: 'usamplerCube';
+USAMPLERBUFFER: 'usamplerBuffer';
+USAMPLERCUBEARRAY: 'usamplerCubeArray';
+IMAGECUBE: 'imageCube';
+IMAGEBUFFER: 'imageBuffer';
+IMAGECUBEARRAY: 'imageCubeArray';
+IIMAGECUBE: 'iimageCube';
+IIMAGEBUFFER: 'iimageBuffer';
+IIMAGECUBEARRAY: 'iimageCubeArray';
+UIMAGECUBE: 'uimageCube';
+UIMAGEBUFFER: 'uimageBuffer';
+UIMAGECUBEARRAY: 'uimageCubeArray';
+
+INC_OP: '++';
+DEC_OP: '--';
+VOID: 'void';
+LEFT_OP: '<<';
+RIGHT_OP: '>>';
+LE_OP: '<=';
+GE_OP: '>=';
+EQ_OP: '==';
+NE_OP: '!=';
+AND_OP: '&&';
+XOR_OP: '^^';
+OR_OP: '||';
+MUL_ASSIGN: '*=';
+DIV_ASSIGN: '/=';
+MOD_ASSIGN: '%=';
+ADD_ASSIGN: '+=';
+SUB_ASSIGN: '-=';
+LEFT_ASSIGN: '<<=';
+RIGHT_ASSIGN: '>>=';
+AND_ASSIGN: '&=';
+XOR_ASSIGN: '^=';
+OR_ASSIGN: '|=';
 
 LPAREN: '(';
 RPAREN: ')';
@@ -302,7 +375,6 @@ EOL: '\n' -> channel(WHITESPACE);
 
 //nr-sign parsing mode
 mode NR_Mode;
-
 EXTENSION: 'extension';
 VERSION: 'version';
 PRAGMA: 'pragma';
