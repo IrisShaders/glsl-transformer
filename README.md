@@ -41,8 +41,8 @@ Then:
 
 ## TODO
 
+- AST structures for GLSL types: Continue work on Tensor
 - More Phase functionality (abstract declaration replacement into a separate class, phase bases for inserting at certain locations)
-- AST structures for GLSL types, parse the types themselves
 - Unit (and integration) testing of all the parts
 - Error on any tokens in the PREPROCESSOR channel optionally
 
