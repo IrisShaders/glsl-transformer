@@ -14,7 +14,7 @@ import org.antlr.v4.runtime.CharStream;
 import org.antlr.v4.runtime.CharStreams;
 import org.antlr.v4.runtime.CommonTokenStream;
 
-import me.douira.glsl_transformer.generate.Tensor;
+import me.douira.glsl_transformer.ast.Tensor;
 import me.douira.glsl_transformer.generic.PrintVisitor;
 import me.douira.glsl_transformer.iris.ComplexTransformations;
 import me.douira.glsl_transformer.transform.PhaseCollector;
