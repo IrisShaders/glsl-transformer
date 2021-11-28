@@ -14,6 +14,7 @@ import org.antlr.v4.runtime.CharStream;
 import org.antlr.v4.runtime.CharStreams;
 import org.antlr.v4.runtime.CommonTokenStream;
 
+import me.douira.glsl_transformer.generate.Tensor;
 import me.douira.glsl_transformer.generic.PrintVisitor;
 import me.douira.glsl_transformer.iris.ComplexTransformations;
 import me.douira.glsl_transformer.transform.PhaseCollector;
@@ -34,8 +35,11 @@ public class App {
   private static Set<String> bannedFilenameFragments = Set.of("ray", "preprocessor");
 
   public static void main(String[] args) throws IOException, URISyntaxException {
-    // processInput(Input.TYPE_TEST);
-    processDirectory("/glslang-test");
+    var tensor = Tensor.parseFromTokenType(GLSLLexer.F16MAT2X2);
+    var compactName = tensor.getCompactName();
+
+    processInput(Input.TYPE_TEST);
+    // processDirectory("/glslang-test");
   }
 
   private static void processDirectory(String path) throws IOException, URISyntaxException {
