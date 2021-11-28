@@ -1,4 +1,4 @@
-package me.douira.glsl_transformer.generate;
+package me.douira.glsl_transformer.ast;
 
 import java.util.ArrayList;
 import java.util.List;
