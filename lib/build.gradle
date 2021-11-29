@@ -51,5 +51,3 @@ testing {
 clean {
     delete "generated-src"
 }
-
-compileJava.dependsOn generateGrammarSource
