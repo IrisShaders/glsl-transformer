@@ -1,6 +1,6 @@
-package douira.glsl_transformer.transform;
+package io.github.douira.glsl_transformer.transform;
 
-import douira.glsl_transformer.GLSLParser.TranslationUnitContext;
+import io.github.douira.glsl_transformer.GLSLParser.TranslationUnitContext;
 
 public abstract class WalkPhase extends Phase {
   protected boolean isActiveBeforeWalk() {

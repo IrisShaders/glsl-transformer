@@ -1,10 +1,10 @@
-package douira.glsl_transformer.transform;
+package io.github.douira.glsl_transformer.transform;
 
 import org.antlr.v4.runtime.ParserRuleContext;
 import org.antlr.v4.runtime.tree.pattern.ParseTreePattern;
 
-import douira.glsl_transformer.GLSLParser;
-import douira.glsl_transformer.GLSLParser.ExternalDeclarationContext;
+import io.github.douira.glsl_transformer.GLSLParser;
+import io.github.douira.glsl_transformer.GLSLParser.ExternalDeclarationContext;
 
 public class DebugTransformation extends Transformation {
   protected void createPhases() {

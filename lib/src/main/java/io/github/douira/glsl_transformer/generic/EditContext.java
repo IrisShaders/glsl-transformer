@@ -1,4 +1,4 @@
-package douira.glsl_transformer.generic;
+package io.github.douira.glsl_transformer.generic;
 
 import java.util.HashMap;
 import java.util.LinkedList;

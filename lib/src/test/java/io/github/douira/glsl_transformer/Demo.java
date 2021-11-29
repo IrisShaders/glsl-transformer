@@ -1,4 +1,4 @@
-package douira.glsl_transformer;
+package io.github.douira.glsl_transformer;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -14,10 +14,10 @@ import org.antlr.v4.runtime.CharStream;
 import org.antlr.v4.runtime.CharStreams;
 import org.antlr.v4.runtime.CommonTokenStream;
 
-import douira.glsl_transformer.ast.Tensor;
-import douira.glsl_transformer.generic.PrintVisitor;
-import douira.glsl_transformer.iris.ComplexTransformations;
-import douira.glsl_transformer.transform.PhaseCollector;
+import io.github.douira.glsl_transformer.ast.Tensor;
+import io.github.douira.glsl_transformer.generic.PrintVisitor;
+import io.github.douira.glsl_transformer.iris.ComplexTransformations;
+import io.github.douira.glsl_transformer.transform.PhaseCollector;
 
 public class Demo {
   private static enum Input {

@@ -1,4 +1,4 @@
-package douira.glsl_transformer.transform;
+package io.github.douira.glsl_transformer.transform;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -9,9 +9,9 @@ import org.antlr.v4.runtime.BufferedTokenStream;
 import org.antlr.v4.runtime.Parser;
 import org.antlr.v4.runtime.tree.ParseTreeWalker;
 
-import douira.glsl_transformer.GLSLParser.TranslationUnitContext;
-import douira.glsl_transformer.generic.EditContext;
-import douira.glsl_transformer.generic.ProxyParseTreeListener;
+import io.github.douira.glsl_transformer.GLSLParser.TranslationUnitContext;
+import io.github.douira.glsl_transformer.generic.EditContext;
+import io.github.douira.glsl_transformer.generic.ProxyParseTreeListener;
 
 /**
  * PhaseCollector is meant to be instantiated once and contains all the

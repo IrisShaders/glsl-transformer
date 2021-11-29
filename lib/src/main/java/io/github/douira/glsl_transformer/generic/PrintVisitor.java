@@ -1,4 +1,4 @@
-package douira.glsl_transformer.generic;
+package io.github.douira.glsl_transformer.generic;
 
 import java.util.LinkedList;
 
@@ -164,7 +164,7 @@ public class PrintVisitor extends AbstractParseTreeVisitor<Void> {
 
   @Override
   public Void visitTerminal(TerminalNode node) {
-    //empty terminal nodes have an empty source interval and have no effect
+    // empty terminal nodes have an empty source interval and have no effect
     addInterval(node.getSourceInterval());
     return null;
   }

@@ -1,7 +1,7 @@
 //from https://github.com/antlr/antlr4/issues/841#issuecomment-84450146
 //this was added to the public domain by the author DaveJarvis
 
-package douira.glsl_transformer.generic;
+package io.github.douira.glsl_transformer.generic;
 
 import java.util.ArrayList;
 import java.util.List;

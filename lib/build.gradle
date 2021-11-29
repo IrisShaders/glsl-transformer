@@ -33,8 +33,8 @@ dependencies {
 
 generateGrammarSource {
     maxHeapSize = "128m"
-    arguments += ['-package', 'douira.glsl_transformer', '-visitor']
-    outputDirectory = new File(buildDir.toString() + "/generated-src/antlr/main/douira/glsl_transformer/")
+    arguments += ['-package', 'io.github.douira.glsl_transformer', '-visitor']
+    outputDirectory = new File(buildDir.toString() + "/generated-src/antlr/main/io/github/douira/glsl_transformer/")
 }
 compileJava.dependsOn generateGrammarSource
 
