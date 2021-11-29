@@ -11,7 +11,6 @@ import me.douira.glsl_transformer.GLSLParser.BuiltinTypeSpecifierParseableContex
 
 public class Tensor {
   private static final int MAX_SPACE_DIMENSIONS = 4;
-  private static final int[] MAX_SHAPE = new int[] { 64, 4, 4 };
   private static final TypeRegistry TYPE_REGISTRY;
 
   /**
@@ -19,19 +18,30 @@ public class Tensor {
    */
   public enum NumberType {
     /**
+     * boolean bit usage
+     */
+    BOOL(1, 4),
+
+    /**
      * uint-like bit usage, non-signed
      */
-    RAW,
+    INTEGER(64, 4),
 
     /**
      * int-like bit usage, signed
      */
-    SIGNED_RAW,
+    SIGNED_INTEGER(64, 4),
 
     /**
      * floating point bit usage
      */
-    FLOATING;
+    FLOATING(64, 4, 4);
+
+    private int[] maxShape;
+
+    private NumberType(int... maxShape) {
+      this.maxShape = maxShape;
+    }
   }
 
   /**
@@ -76,24 +86,32 @@ public class Tensor {
       addType(tokenType, numberType, name, name, bitDepth, rawShape);
     }
 
-    void addTypeRaw(int tokenType, String compactName, String explicitName, int bitDepth, int... shape) {
-      addType(tokenType, NumberType.RAW, compactName, explicitName, bitDepth, shape);
+    void addTypeBool(int tokenType, String compactName, String explicitName, int bitDepth, int... shape) {
+      addType(tokenType, NumberType.BOOL, compactName, explicitName, bitDepth, shape);
     }
 
-    void addTypeSignedRaw(int tokenType, String compactName, String explicitName, int bitDepth, int... shape) {
-      addType(tokenType, NumberType.SIGNED_RAW, compactName, explicitName, bitDepth, shape);
+    void addTypeInteger(int tokenType, String compactName, String explicitName, int bitDepth, int... shape) {
+      addType(tokenType, NumberType.INTEGER, compactName, explicitName, bitDepth, shape);
+    }
+
+    void addTypeSignedInteger(int tokenType, String compactName, String explicitName, int bitDepth, int... shape) {
+      addType(tokenType, NumberType.SIGNED_INTEGER, compactName, explicitName, bitDepth, shape);
     }
 
     void addTypeFloating(int tokenType, String compactName, String explicitName, int bitDepth, int... shape) {
       addType(tokenType, NumberType.FLOATING, compactName, explicitName, bitDepth, shape);
     }
 
-    void addTypeRaw(int tokenType, String name, int bitDepth, int... shape) {
-      addType(tokenType, NumberType.RAW, name, bitDepth, shape);
+    void addTypeBool(int tokenType, String name, int bitDepth, int... shape) {
+      addType(tokenType, NumberType.BOOL, name, bitDepth, shape);
     }
 
-    void addTypeSignedRaw(int tokenType, String name, int bitDepth, int... shape) {
-      addType(tokenType, NumberType.SIGNED_RAW, name, bitDepth, shape);
+    void addTypeInteger(int tokenType, String name, int bitDepth, int... shape) {
+      addType(tokenType, NumberType.INTEGER, name, bitDepth, shape);
+    }
+
+    void addTypeSignedInteger(int tokenType, String name, int bitDepth, int... shape) {
+      addType(tokenType, NumberType.SIGNED_INTEGER, name, bitDepth, shape);
     }
 
     void addTypeFloating(int tokenType, String name, int bitDepth, int... shape) {
@@ -120,46 +138,46 @@ public class Tensor {
   static {
     TYPE_REGISTRY = new TypeRegistry();
 
-    TYPE_REGISTRY.addTypeRaw(GLSLLexer.BOOL, "bool", 1);
-    TYPE_REGISTRY.addTypeRaw(GLSLLexer.BVEC2, "bvec2", 1, 2);
-    TYPE_REGISTRY.addTypeRaw(GLSLLexer.BVEC3, "bvec3", 1, 3);
-    TYPE_REGISTRY.addTypeRaw(GLSLLexer.BVEC4, "bvec4", 1, 4);
+    TYPE_REGISTRY.addTypeBool(GLSLLexer.BOOL, "bool", 1);
+    TYPE_REGISTRY.addTypeBool(GLSLLexer.BVEC2, "bvec2", 1, 2);
+    TYPE_REGISTRY.addTypeBool(GLSLLexer.BVEC3, "bvec3", 1, 3);
+    TYPE_REGISTRY.addTypeBool(GLSLLexer.BVEC4, "bvec4", 1, 4);
 
-    TYPE_REGISTRY.addTypeSignedRaw(GLSLLexer.INT8, "int8_t", 8);
-    TYPE_REGISTRY.addTypeSignedRaw(GLSLLexer.I8VEC2, "i8vec2", 8, 2);
-    TYPE_REGISTRY.addTypeSignedRaw(GLSLLexer.I8VEC3, "i8vec3", 8, 3);
-    TYPE_REGISTRY.addTypeSignedRaw(GLSLLexer.I8VEC4, "i8vec4", 8, 4);
-    TYPE_REGISTRY.addTypeRaw(GLSLLexer.UINT8, "uint8_t", 8);
-    TYPE_REGISTRY.addTypeRaw(GLSLLexer.UI8VEC2, "ui8vec2", 8, 2);
-    TYPE_REGISTRY.addTypeRaw(GLSLLexer.UI8VEC3, "ui8vec3", 8, 3);
-    TYPE_REGISTRY.addTypeRaw(GLSLLexer.UI8VEC4, "ui8vec4", 8, 4);
+    TYPE_REGISTRY.addTypeSignedInteger(GLSLLexer.INT8, "int8_t", 8);
+    TYPE_REGISTRY.addTypeSignedInteger(GLSLLexer.I8VEC2, "i8vec2", 8, 2);
+    TYPE_REGISTRY.addTypeSignedInteger(GLSLLexer.I8VEC3, "i8vec3", 8, 3);
+    TYPE_REGISTRY.addTypeSignedInteger(GLSLLexer.I8VEC4, "i8vec4", 8, 4);
+    TYPE_REGISTRY.addTypeInteger(GLSLLexer.UINT8, "uint8_t", 8);
+    TYPE_REGISTRY.addTypeInteger(GLSLLexer.UI8VEC2, "ui8vec2", 8, 2);
+    TYPE_REGISTRY.addTypeInteger(GLSLLexer.UI8VEC3, "ui8vec3", 8, 3);
+    TYPE_REGISTRY.addTypeInteger(GLSLLexer.UI8VEC4, "ui8vec4", 8, 4);
 
-    TYPE_REGISTRY.addTypeSignedRaw(GLSLLexer.INT16, "int16_t", 16);
-    TYPE_REGISTRY.addTypeSignedRaw(GLSLLexer.I16VEC2, "i16vec2", 16, 2);
-    TYPE_REGISTRY.addTypeSignedRaw(GLSLLexer.I16VEC3, "i16vec3", 16, 3);
-    TYPE_REGISTRY.addTypeSignedRaw(GLSLLexer.I16VEC4, "i16vec4", 16, 4);
-    TYPE_REGISTRY.addTypeRaw(GLSLLexer.UINT16, "uint16_t", 16);
-    TYPE_REGISTRY.addTypeRaw(GLSLLexer.UI16VEC2, "ui16vec2", 16, 2);
-    TYPE_REGISTRY.addTypeRaw(GLSLLexer.UI16VEC3, "ui16vec3", 16, 3);
-    TYPE_REGISTRY.addTypeRaw(GLSLLexer.UI16VEC4, "ui16vec4", 16, 4);
+    TYPE_REGISTRY.addTypeSignedInteger(GLSLLexer.INT16, "int16_t", 16);
+    TYPE_REGISTRY.addTypeSignedInteger(GLSLLexer.I16VEC2, "i16vec2", 16, 2);
+    TYPE_REGISTRY.addTypeSignedInteger(GLSLLexer.I16VEC3, "i16vec3", 16, 3);
+    TYPE_REGISTRY.addTypeSignedInteger(GLSLLexer.I16VEC4, "i16vec4", 16, 4);
+    TYPE_REGISTRY.addTypeInteger(GLSLLexer.UINT16, "uint16_t", 16);
+    TYPE_REGISTRY.addTypeInteger(GLSLLexer.UI16VEC2, "ui16vec2", 16, 2);
+    TYPE_REGISTRY.addTypeInteger(GLSLLexer.UI16VEC3, "ui16vec3", 16, 3);
+    TYPE_REGISTRY.addTypeInteger(GLSLLexer.UI16VEC4, "ui16vec4", 16, 4);
 
-    TYPE_REGISTRY.addTypeSignedRaw(GLSLLexer.INT32, "int", "int32_t", 32);
-    TYPE_REGISTRY.addTypeSignedRaw(GLSLLexer.I32VEC2, "ivec2", "i32vec2", 32, 2);
-    TYPE_REGISTRY.addTypeSignedRaw(GLSLLexer.I32VEC3, "ivec3", "i32vec3", 32, 3);
-    TYPE_REGISTRY.addTypeSignedRaw(GLSLLexer.I32VEC4, "ivec4", "i32vec4", 32, 4);
-    TYPE_REGISTRY.addTypeRaw(GLSLLexer.UINT32, "uint", "uint32_t", 32);
-    TYPE_REGISTRY.addTypeRaw(GLSLLexer.UI32VEC2, "uvec2", "u32vec2", 32, 2);
-    TYPE_REGISTRY.addTypeRaw(GLSLLexer.UI32VEC3, "uvec3", "u32vec3", 32, 3);
-    TYPE_REGISTRY.addTypeRaw(GLSLLexer.UI32VEC4, "uvec4", "u32vec4", 32, 4);
+    TYPE_REGISTRY.addTypeSignedInteger(GLSLLexer.INT32, "int", "int32_t", 32);
+    TYPE_REGISTRY.addTypeSignedInteger(GLSLLexer.I32VEC2, "ivec2", "i32vec2", 32, 2);
+    TYPE_REGISTRY.addTypeSignedInteger(GLSLLexer.I32VEC3, "ivec3", "i32vec3", 32, 3);
+    TYPE_REGISTRY.addTypeSignedInteger(GLSLLexer.I32VEC4, "ivec4", "i32vec4", 32, 4);
+    TYPE_REGISTRY.addTypeInteger(GLSLLexer.UINT32, "uint", "uint32_t", 32);
+    TYPE_REGISTRY.addTypeInteger(GLSLLexer.UI32VEC2, "uvec2", "u32vec2", 32, 2);
+    TYPE_REGISTRY.addTypeInteger(GLSLLexer.UI32VEC3, "uvec3", "u32vec3", 32, 3);
+    TYPE_REGISTRY.addTypeInteger(GLSLLexer.UI32VEC4, "uvec4", "u32vec4", 32, 4);
 
-    TYPE_REGISTRY.addTypeSignedRaw(GLSLLexer.INT64, "int64_t", 64);
-    TYPE_REGISTRY.addTypeSignedRaw(GLSLLexer.I64VEC2, "i64vec2", 64, 2);
-    TYPE_REGISTRY.addTypeSignedRaw(GLSLLexer.I64VEC3, "i64vec3", 64, 3);
-    TYPE_REGISTRY.addTypeSignedRaw(GLSLLexer.I64VEC4, "i64vec4", 64, 4);
-    TYPE_REGISTRY.addTypeRaw(GLSLLexer.UINT64, "uint64_t", 64);
-    TYPE_REGISTRY.addTypeRaw(GLSLLexer.UI64VEC2, "ui64vec2", 64, 2);
-    TYPE_REGISTRY.addTypeRaw(GLSLLexer.UI64VEC3, "ui64vec3", 64, 3);
-    TYPE_REGISTRY.addTypeRaw(GLSLLexer.UI64VEC4, "ui64vec4", 64, 4);
+    TYPE_REGISTRY.addTypeSignedInteger(GLSLLexer.INT64, "int64_t", 64);
+    TYPE_REGISTRY.addTypeSignedInteger(GLSLLexer.I64VEC2, "i64vec2", 64, 2);
+    TYPE_REGISTRY.addTypeSignedInteger(GLSLLexer.I64VEC3, "i64vec3", 64, 3);
+    TYPE_REGISTRY.addTypeSignedInteger(GLSLLexer.I64VEC4, "i64vec4", 64, 4);
+    TYPE_REGISTRY.addTypeInteger(GLSLLexer.UINT64, "uint64_t", 64);
+    TYPE_REGISTRY.addTypeInteger(GLSLLexer.UI64VEC2, "ui64vec2", 64, 2);
+    TYPE_REGISTRY.addTypeInteger(GLSLLexer.UI64VEC3, "ui64vec3", 64, 3);
+    TYPE_REGISTRY.addTypeInteger(GLSLLexer.UI64VEC4, "ui64vec4", 64, 4);
 
     TYPE_REGISTRY.addTypeFloating(GLSLLexer.FLOAT16, "float16_t", 16);
     TYPE_REGISTRY.addTypeFloating(GLSLLexer.F16VEC2, "f16vec2", 16, 2);
