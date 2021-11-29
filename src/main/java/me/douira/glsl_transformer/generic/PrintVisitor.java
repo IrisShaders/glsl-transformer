@@ -18,6 +18,9 @@ import org.antlr.v4.runtime.tree.TerminalNode;
  * trigger the visits to subtrees.
  */
 public class PrintVisitor extends AbstractParseTreeVisitor<Void> {
+  private record AttributedInterval(ParseTree localRoot, Interval interval) {
+  }
+
   private final LinkedList<AttributedInterval> tokenIntervals = new LinkedList<>();
   private Interval cachedInterval;
   private ParseTree currentRoot;
