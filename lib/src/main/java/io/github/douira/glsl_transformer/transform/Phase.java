@@ -1,4 +1,4 @@
-package douira.glsl_transformer.transform;
+package io.github.douira.glsl_transformer.transform;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -13,11 +13,11 @@ import org.antlr.v4.runtime.tree.pattern.ParseTreeMatch;
 import org.antlr.v4.runtime.tree.pattern.ParseTreePattern;
 import org.antlr.v4.runtime.tree.xpath.XPath;
 
-import douira.glsl_transformer.GLSLLexer;
-import douira.glsl_transformer.GLSLParser;
-import douira.glsl_transformer.GLSLParserBaseListener;
-import douira.glsl_transformer.generic.EditContext;
-import douira.glsl_transformer.generic.EmptyTerminalNode;
+import io.github.douira.glsl_transformer.GLSLLexer;
+import io.github.douira.glsl_transformer.GLSLParser;
+import io.github.douira.glsl_transformer.GLSLParserBaseListener;
+import io.github.douira.glsl_transformer.generic.EditContext;
+import io.github.douira.glsl_transformer.generic.EmptyTerminalNode;
 
 abstract class Phase extends GLSLParserBaseListener {
   private PhaseCollector parent;

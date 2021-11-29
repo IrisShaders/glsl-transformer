@@ -1,4 +1,4 @@
-package douira.glsl_transformer.generic;
+package io.github.douira.glsl_transformer.generic;
 
 import org.antlr.v4.runtime.Token;
 import org.antlr.v4.runtime.misc.Interval;

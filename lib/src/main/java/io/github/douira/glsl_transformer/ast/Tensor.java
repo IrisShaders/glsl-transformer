@@ -1,4 +1,4 @@
-package douira.glsl_transformer.ast;
+package io.github.douira.glsl_transformer.ast;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -6,8 +6,8 @@ import java.util.List;
 import org.antlr.v4.runtime.Token;
 import org.antlr.v4.runtime.tree.TerminalNode;
 
-import douira.glsl_transformer.GLSLLexer;
-import douira.glsl_transformer.GLSLParser.BuiltinTypeSpecifierParseableContext;
+import io.github.douira.glsl_transformer.GLSLLexer;
+import io.github.douira.glsl_transformer.GLSLParser.BuiltinTypeSpecifierParseableContext;
 
 public class Tensor {
   private static final int MAX_SPACE_DIMENSIONS = 4;

@@ -1,4 +1,4 @@
-package douira.glsl_transformer.generic;
+package io.github.douira.glsl_transformer.generic;
 
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;

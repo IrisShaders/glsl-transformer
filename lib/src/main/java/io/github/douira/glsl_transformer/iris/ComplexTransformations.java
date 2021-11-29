@@ -1,7 +1,7 @@
-package douira.glsl_transformer.iris;
+package io.github.douira.glsl_transformer.iris;
 
-import douira.glsl_transformer.transform.DebugTransformation;
-import douira.glsl_transformer.transform.PhaseCollector;
+import io.github.douira.glsl_transformer.transform.DebugTransformation;
+import io.github.douira.glsl_transformer.transform.PhaseCollector;
 
 public class ComplexTransformations {
   public static void registerWith(PhaseCollector collector) {

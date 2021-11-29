@@ -1,4 +1,4 @@
-package douira.glsl_transformer.iris;
+package io.github.douira.glsl_transformer.iris;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -6,13 +6,13 @@ import java.util.Map;
 import org.antlr.v4.runtime.ParserRuleContext;
 import org.antlr.v4.runtime.tree.pattern.ParseTreePattern;
 
-import douira.glsl_transformer.GLSLParser;
-import douira.glsl_transformer.GLSLParser.ExternalDeclarationContext;
-import douira.glsl_transformer.GLSLParser.FunctionHeaderContext;
-import douira.glsl_transformer.GLSLParser.TranslationUnitContext;
-import douira.glsl_transformer.GLSLParser.VariableIdentifierContext;
-import douira.glsl_transformer.transform.Transformation;
-import douira.glsl_transformer.transform.WalkPhase;
+import io.github.douira.glsl_transformer.GLSLParser;
+import io.github.douira.glsl_transformer.GLSLParser.ExternalDeclarationContext;
+import io.github.douira.glsl_transformer.GLSLParser.FunctionHeaderContext;
+import io.github.douira.glsl_transformer.GLSLParser.TranslationUnitContext;
+import io.github.douira.glsl_transformer.GLSLParser.VariableIdentifierContext;
+import io.github.douira.glsl_transformer.transform.Transformation;
+import io.github.douira.glsl_transformer.transform.WalkPhase;
 
 //TODO: treat each found declaration with the same location=0 as the same declaration and replace all of them identically
 public class DeclarationReplacement extends Transformation {
