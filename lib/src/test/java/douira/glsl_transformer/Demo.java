@@ -19,7 +19,7 @@ import douira.glsl_transformer.generic.PrintVisitor;
 import douira.glsl_transformer.iris.ComplexTransformations;
 import douira.glsl_transformer.transform.PhaseCollector;
 
-public class App {
+public class Demo {
   private static enum Input {
     TINY("/tiny.glsl"), DIRECTIVE_TEST("/directiveTest.glsl"), SHADER("/shader.glsl"),
     KAPPA("/unlicensed/composite3.glsl"), BENCHMARK1("/unlicensed/benchmark1.glsl"),
@@ -39,11 +39,11 @@ public class App {
     var compactName = tensor.getCompactName();
 
     processInput(Input.TYPE_TEST);
-    // processDirectory("/glslang-test");
+    processDirectory("/glslang-test");
   }
 
   private static void processDirectory(String path) throws IOException, URISyntaxException {
-    Files.walk(Paths.get(App.class.getResource(path).toURI())).filter(file -> {
+    Files.walk(Paths.get(Demo.class.getResource(path).toURI())).filter(file -> {
       var fileName = file.getFileName().toString().toLowerCase();
       return !bannedFilenameFragments.stream().anyMatch(banned -> fileName.contains(banned));
     }).map(Path::toFile).forEach(file -> {
@@ -61,7 +61,7 @@ public class App {
   }
 
   private static void processInput(Input input) throws IOException {
-    processFile(App.class.getResource(input.path).openStream());
+    processFile(Demo.class.getResource(input.path).openStream());
   }
 
   private static void processFile(File file) throws IOException {
@@ -82,27 +82,25 @@ public class App {
     var tree = parser.translationUnit();
     System.out.println("parsing took " + (System.nanoTime() - startNanos) / 1e6 + " ms.");
 
-    // new DebugVisitor().visit(tree);
+    new DebugVisitor().visit(tree);
 
     // before any edits
-    // System.out.println(PrintVisitor.printTree(commonTokenStream, tree));
+    System.out.println(PrintVisitor.printTree(commonTokenStream, tree));
 
-    // var tokens = commonTokenStream.getTokens();
-    // for (var token : tokens) {
-    // System.out.println(token);
-    // }
+    var tokens = commonTokenStream.getTokens();
+    for (var token : tokens) {
+      System.out.println(token);
+    }
 
-    // var transformer = new PhaseCollector(parser);
-    // transformer.registerTransformationMultiple(ComplexTransformations::registerWith);
+    var transformer = new PhaseCollector(parser);
+    transformer.registerTransformationMultiple(ComplexTransformations::registerWith);
 
-    // var editContext = transformer.transformTree(tree, commonTokenStream);
+    var editContext = transformer.transformTree(tree, commonTokenStream);
 
-    // // after edits
-    // startNanos = System.nanoTime();
-    // var printResult = PrintVisitor.printTree(commonTokenStream, tree,
-    // editContext);
-    // System.out.println("printing took " + (System.nanoTime() - startNanos) / 1e6
-    // + " ms.");
-    // System.out.println(printResult);
+    // after edits
+    startNanos = System.nanoTime();
+    var printResult = PrintVisitor.printTree(commonTokenStream, tree, editContext);
+    System.out.println("printing took " + (System.nanoTime() - startNanos) / 1e6 + " ms.");
+    System.out.println(printResult);
   }
 }
