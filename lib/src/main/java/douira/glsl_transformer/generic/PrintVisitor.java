@@ -164,10 +164,8 @@ public class PrintVisitor extends AbstractParseTreeVisitor<Void> {
 
   @Override
   public Void visitTerminal(TerminalNode node) {
-    if (!(node instanceof EmptyTerminalNode)) {
-      addInterval(node.getSourceInterval());
-    }
-
+    //empty terminal nodes have an empty source interval and have no effect
+    addInterval(node.getSourceInterval());
     return null;
   }
 }
