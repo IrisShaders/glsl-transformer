@@ -19,9 +19,14 @@ All of these should be fulfilled at the same time.
 - Return lexing/parsing errors if something is wrong
 - Optionally return a parsing error if PREPROCESSOR-channel items are detected
 
-## Demonstration
+## Usage
 
-Try it out with `gradle run`. It will parse a GLSL file from `resources` and print the corresponding parse tree. WIP: The tests will be a demonstration of this too.
+This is WIP, but the common commands are
+```
+gradle generateGrammarSource
+gradle build
+gradle test
+```
 
 ### An example
 
@@ -41,17 +46,17 @@ Then:
 
 ## TODO
 
-- AST structures for GLSL types: Continue work on Tensor
-- More Phase functionality (abstract declaration replacement into a separate class, phase bases for inserting at certain locations)
 - Unit (and integration) testing of all the parts
+- "Snapshot" tests with the glslang tests (test that exactly the expected errors occur, no more no less)
+- Publish as a library with semver (something like 0.0.1 because it's really unstable)
+- AST structures for GLSL types: Continue work on Tensor (tensor manipulation methods and "widening" until it hits the maximum)
+- More Phase functionality (abstract declaration replacement into a separate class, phase bases for inserting at certain important locations like before directives, before declarations, before defines, before the first function, after everything)
 - Error on any tokens in the PREPROCESSOR channel optionally
 
 ## Misc TODO
 
 - Add license (LGPL3 ?)
-- Package/distribute as a library
-- GitHub Actions builds, auto run tests
-- Introduce semver when it's more stable
+- GitHub Actions builds, auto run tests, put a badge in the README
 
 ## Notes
 
