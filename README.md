@@ -31,6 +31,10 @@ gradle build
 gradle test
 ```
 
+### Documentation
+
+There is Javadoc which is being worked on. In the mean time, check out `Demo.java` in in the tests.
+
 ### An example
 
 One program transformation job that this project wants to achieve is the following. (from coderbot on Discord)
