@@ -49,6 +49,7 @@ Then:
 ## TODO
 
 - Unit (and integration) testing of all the parts
+- Lots of documentation (document all public classes)
 - "Snapshot" tests with the glslang tests (test that exactly the expected errors occur, no more no less)
 - Publish as a library with semver (something like 0.0.1 because it's really unstable)
 - AST structures for GLSL types: Continue work on Tensor (tensor manipulation methods and "widening" until it hits the maximum)
