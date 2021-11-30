@@ -52,6 +52,8 @@ Then:
 - AST structures for GLSL types: Continue work on Tensor (tensor manipulation methods and "widening" until it hits the maximum)
 - More Phase functionality (abstract declaration replacement into a separate class, phase bases for inserting at certain important locations like before directives, before declarations, before defines, before the first function, after everything)
 - Error on any tokens in the PREPROCESSOR channel optionally
+- Make the Lexer parse #define directives (and others?) better
+- Macro expansion (preprocessor) and other functions?
 
 ## Misc TODO
 
