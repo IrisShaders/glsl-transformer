@@ -9,4 +9,4 @@
  */
 
 rootProject.name = 'glsl-transformer'
-include('lib')
+include('glsl-transformer')
