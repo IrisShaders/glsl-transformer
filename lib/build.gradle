@@ -11,7 +11,13 @@ plugins {
     // Apply the java-library plugin for API and implementation separation.
     id 'java-library'
     id 'antlr'
+    id 'maven-publish'
+    id 'signing'
+    id 'org.danilopianini.publish-on-central' version '0.7.5'
 }
+
+group = 'io.github.douira'
+version = '0.0.1'
 
 repositories {
     // Use Maven Central for resolving dependencies.
@@ -50,4 +56,30 @@ testing {
 
 clean {
     delete "generated-src"
+}
+
+publishOnCentral {
+    configureMavenCentral.set(true)
+    projectDescription.set("GLSL Parsing, Program Transformation and Printing with ANTLR4")
+    projectLongName.set("glsl-transformer")
+    projectUrl.set("https://github.com/douira/glsl-transformer")
+    scmConnection.set("git@github.com:douira/glsl-transformer.git")
+    licenseName.set("GNU Lesser General Public License v3.0")
+    licenseUrl.set("https://www.gnu.org/licenses/lgpl-3.0.en.html")
+}
+
+publishing {
+    publications {
+        javaMaven(MavenPublication) {
+            pom {
+                developers {
+                    developer {
+                        name.set("douira")
+                        email.set("douira100@gmail.com")
+                        url.set("https://douira.github.io")
+                    }
+                }
+            }
+        }
+    }
 }
