@@ -24,6 +24,7 @@ All of these should be fulfilled at the same time.
 ## Usage
 
 This is WIP, but the common commands are
+
 ```
 gradle generateGrammarSource
 gradle build
@@ -66,3 +67,17 @@ Then:
 ## Notes
 
 All files in a directory can be joined using `find . -type f -exec cat {} \; `. The output is printed to the terminal. Some cleanup maybe required.
+
+Setup signing: (secrets are kept in `~/.gradle/gradle.properties`)
+
+```
+gpg --keyring secring.gpg --export-secret-keys > ~/.gnupg/secring.gpg
+gpg --list-keys --keyid-format short
+```
+
+Build process: (see [publish-on-central](https://github.com/DanySK/publish-on-central) for docs on how it works)
+
+```
+gradle build --warning-mode all
+gradle releaseJavaMavenOnMavenCentralNexus
+```
