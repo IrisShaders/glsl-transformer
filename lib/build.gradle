@@ -43,6 +43,7 @@ generateGrammarSource {
     outputDirectory = new File(buildDir.toString() + "/generated-src/antlr/main/io/github/douira/glsl_transformer/")
 }
 compileJava.dependsOn generateGrammarSource
+sourcesJar.dependsOn generateGrammarSource
 
 testing {
     suites {
