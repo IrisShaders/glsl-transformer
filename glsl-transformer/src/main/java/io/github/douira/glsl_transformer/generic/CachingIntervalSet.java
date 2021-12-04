@@ -8,7 +8,12 @@ public class CachingIntervalSet extends IntervalSet {
   protected Interval lastIntervalHit;
 
   /**
-   * Copied from ANTLR's IntervalSet.contains but with an addition of caching.
+   * Copied from ANTLR's
+   * {@link org.antlr.v4.runtime.misc.IntervalSet#contains(int)} but with an
+   * addition of caching. The cache size is 1. If the interval set has been marked
+   * as readonly, it will return the last hit if the query is the same. Repeatedly
+   * requesting the same query is a common operation and therefore caching it like
+   * this can be helpful.
    */
   @Override
   public boolean contains(int el) {

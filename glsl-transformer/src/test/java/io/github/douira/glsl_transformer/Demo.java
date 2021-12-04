@@ -10,7 +10,6 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Set;
 
-import org.antlr.v4.runtime.CharStream;
 import org.antlr.v4.runtime.CharStreams;
 import org.antlr.v4.runtime.CommonTokenStream;
 
@@ -69,9 +68,7 @@ public class Demo {
   }
 
   private static void processFile(InputStream inputStream) throws IOException {
-    CharStream input;
-
-    input = CharStreams.fromStream(inputStream);
+    var input = CharStreams.fromStream(inputStream);
     inputStream.close();
 
     var lexer = new GLSLLexer(input);
