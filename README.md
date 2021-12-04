@@ -112,6 +112,7 @@ As mentioned earlier, the JavaDoc contains detailled information on individual c
 TODO:
 
 - how does the grammar work
+- ANTLR generates code from the grammar (which makes it part of the API surface)
 - lexing (on chars) vs parsing (on tokens)
 - details of the glsl lexer and parser
 - hidden token channels
