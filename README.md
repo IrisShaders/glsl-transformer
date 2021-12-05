@@ -1,8 +1,10 @@
 # GLSL Parsing and Program Transformation with ANTLR4
 
-This is a work in progress library that parses GLSL using an ANTLR4 grammar and provides the facilities for transforming and re-printing the resulting parse tree.
+[![Maven Central](https://maven-badges.herokuapp.com/maven-central/io.github.douira/glsl-transformer/badge.svg)](https://maven-badges.herokuapp.com/maven-central/io.github.douira/glsl-transformer)
 
-See the JavaDoc, the documentation section further down and the tests. Also check ot `Demo.java` in the tests.
+This is an actively being developed library that parses GLSL using an ANTLR4 grammar and provides the facilities for transforming and re-printing the resulting parse tree.
+
+See the Javadoc, the documentation section further down and the tests. Also check ot `Demo.java` in the tests.
 
 ## Capabilities
 
