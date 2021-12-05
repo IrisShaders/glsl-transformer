@@ -7,7 +7,6 @@ import java.util.function.Consumer;
 
 import org.antlr.v4.runtime.BufferedTokenStream;
 import org.antlr.v4.runtime.Parser;
-import org.antlr.v4.runtime.tree.ParseTreeWalker;
 
 import io.github.douira.glsl_transformer.GLSLParser.TranslationUnitContext;
 import io.github.douira.glsl_transformer.generic.EditContext;
@@ -27,6 +26,7 @@ public class PhaseCollector {
   private Parser parser;
   private List<List<Phase>> phases = new ArrayList<>();
   private Collection<Transformation> transformations = new ArrayList<>();
+  private TranslationUnitContext rootNode;
 
   /**
    * Creates a new phase collector for a parser.
@@ -74,6 +74,18 @@ public class PhaseCollector {
   }
 
   /**
+   * Returns the current root node being processed. Access to this method is
+   * restricted to classes in this package on purpose. Classes extending
+   * {@link Phase} should not have access to this but rather use it through the
+   * provided injection method.
+   * 
+   * @return The current root node being processed
+   */
+  TranslationUnitContext getRootNode() {
+    return rootNode;
+  }
+
+  /**
    * Collects a phase of a transformation and inserts it at a given level index.
    * During transformations the phases of each level are executed in the order
    * they were added.
@@ -91,6 +103,8 @@ public class PhaseCollector {
   }
 
   private void execute(TranslationUnitContext ctx) {
+    rootNode = ctx;
+
     // refresh each transformation's state before starting the transformation
     for (var transformation : transformations) {
       transformation.resetState();
@@ -113,7 +127,7 @@ public class PhaseCollector {
       }
 
       if (!proxyListener.isEmpty()) {
-        ParseTreeWalker.DEFAULT.walk(proxyListener, ctx);
+        DynamicParseTreeWalker.DEFAULT.walk(proxyListener, ctx);
       }
 
       for (var phase : level) {
@@ -124,6 +138,8 @@ public class PhaseCollector {
         }
       }
     }
+
+    rootNode = null;
   }
 
   /**
