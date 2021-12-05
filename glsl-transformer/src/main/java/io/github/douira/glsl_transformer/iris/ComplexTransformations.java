@@ -1,6 +1,5 @@
 package io.github.douira.glsl_transformer.iris;
 
-import io.github.douira.glsl_transformer.transform.DebugTransformation;
 import io.github.douira.glsl_transformer.transform.PhaseCollector;
 
 /**

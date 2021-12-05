@@ -3,7 +3,6 @@ package io.github.douira.glsl_transformer.iris;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.antlr.v4.runtime.ParserRuleContext;
 import org.antlr.v4.runtime.tree.pattern.ParseTreePattern;
 
 import io.github.douira.glsl_transformer.GLSLParser;
@@ -11,6 +10,7 @@ import io.github.douira.glsl_transformer.GLSLParser.ExternalDeclarationContext;
 import io.github.douira.glsl_transformer.GLSLParser.FunctionHeaderContext;
 import io.github.douira.glsl_transformer.GLSLParser.TranslationUnitContext;
 import io.github.douira.glsl_transformer.GLSLParser.VariableIdentifierContext;
+import io.github.douira.glsl_transformer.generic.ExtendedParserRuleContext;
 import io.github.douira.glsl_transformer.transform.Transformation;
 import io.github.douira.glsl_transformer.transform.WalkPhase;
 
@@ -55,7 +55,7 @@ public class DeclarationReplacement extends Transformation {
 
           if (type.equals("in") || type.equals("attribute")) {
             declarations.put(name, new Declaration(type, name));
-            removeNode((ParserRuleContext) match.getTree());
+            removeNode((ExtendedParserRuleContext) match.getTree());
           }
         }
       }
