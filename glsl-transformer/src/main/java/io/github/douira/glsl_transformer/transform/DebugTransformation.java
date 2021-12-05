@@ -1,10 +1,9 @@
 package io.github.douira.glsl_transformer.transform;
-
-import org.antlr.v4.runtime.ParserRuleContext;
 import org.antlr.v4.runtime.tree.pattern.ParseTreePattern;
 
 import io.github.douira.glsl_transformer.GLSLParser;
 import io.github.douira.glsl_transformer.GLSLParser.ExternalDeclarationContext;
+import io.github.douira.glsl_transformer.generic.ExtendedParserRuleContext;
 
 /**
  * The debug transformation is used for testing out things.
@@ -24,7 +23,7 @@ public class DebugTransformation extends Transformation {
       public void enterExternalDeclaration(ExternalDeclarationContext ctx) {
         var match = pattern.match(ctx);
         if (match.succeeded()) {
-          removeNode((ParserRuleContext) match.getTree());
+          removeNode((ExtendedParserRuleContext) match.getTree());
         }
       }
     });

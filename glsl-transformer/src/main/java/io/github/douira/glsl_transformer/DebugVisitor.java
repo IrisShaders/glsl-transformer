@@ -1,9 +1,10 @@
 package io.github.douira.glsl_transformer;
 
-import org.antlr.v4.runtime.ParserRuleContext;
 import org.antlr.v4.runtime.tree.ParseTree;
 import org.antlr.v4.runtime.tree.RuleNode;
 import org.antlr.v4.runtime.tree.TerminalNode;
+
+import io.github.douira.glsl_transformer.generic.ExtendedParserRuleContext;
 
 /**
  * The debug visitor prints the tree and some other information to the console.
@@ -29,7 +30,7 @@ public class DebugVisitor extends GLSLParserBaseVisitor<Void> {
 
   @Override
   public Void visitChildren(RuleNode node) {
-    var context = (ParserRuleContext) node.getRuleContext();
+    var context = (ExtendedParserRuleContext) node.getRuleContext();
 
     var depth = (context.getPayload()).depth();
 

@@ -4,7 +4,6 @@ import java.util.LinkedList;
 
 import org.antlr.v4.runtime.BufferedTokenStream;
 import org.antlr.v4.runtime.Lexer;
-import org.antlr.v4.runtime.ParserRuleContext;
 import org.antlr.v4.runtime.misc.Interval;
 import org.antlr.v4.runtime.tree.AbstractParseTreeVisitor;
 import org.antlr.v4.runtime.tree.ParseTree;
@@ -207,7 +206,7 @@ public class PrintVisitor extends AbstractParseTreeVisitor<Void> {
    */
   @Override
   public Void visitChildren(RuleNode node) {
-    final var context = (ParserRuleContext) node.getRuleContext();
+    final var context = (ExtendedParserRuleContext) node.getRuleContext();
     final var superInterval = context.getSourceInterval();
 
     var fetchNext = superInterval.a;
