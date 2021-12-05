@@ -154,7 +154,6 @@ TODO:
 
 - Lots of documentation (document all public classes)
 - Unit (and integration) testing of all the parts
-- Test if there are issue with not giving local root nodes `null` parent values
 - Figure out if somehow transformations could be compiled/reused without binding them to a particular parser instance
 - "Snapshot" tests with the glslang tests (test that exactly the expected errors occur, no more no less)
 - Publish as a library with semver (something like 0.0.1 because it's really unstable)
