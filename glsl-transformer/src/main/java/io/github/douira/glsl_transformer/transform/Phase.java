@@ -17,6 +17,7 @@ import org.antlr.v4.runtime.tree.xpath.XPath;
 import io.github.douira.glsl_transformer.GLSLLexer;
 import io.github.douira.glsl_transformer.GLSLParser;
 import io.github.douira.glsl_transformer.GLSLParserBaseListener;
+import io.github.douira.glsl_transformer.GLSLParser.ExternalDeclarationContext;
 import io.github.douira.glsl_transformer.generic.EditContext;
 import io.github.douira.glsl_transformer.generic.EmptyTerminalNode;
 
@@ -163,8 +164,8 @@ abstract class Phase extends GLSLParserBaseListener {
    * @param parseMethod The parser method with which the string is parsed
    * @return The resulting parsed node
    */
-  public ParserRuleContext createLocalRoot(String str, RuleContext parent,
-      Function<GLSLParser, ParserRuleContext> parseMethod) {
+  public <RuleType extends ParserRuleContext> RuleType createLocalRoot(String str, RuleContext parent,
+      Function<GLSLParser, RuleType> parseMethod) {
     var input = CharStreams.fromString(str);
     var lexer = new GLSLLexer(input);
     var commonTokenStream = new CommonTokenStream(lexer);
@@ -172,5 +173,38 @@ abstract class Phase extends GLSLParserBaseListener {
     node.setParent(parent);
     getEditContext().registerLocalRoot(node, commonTokenStream);
     return node;
+  }
+
+  /**
+   * The code is structured as follows: version, directives (#define etc.),
+   * declarations (layout etc.), functions (void main etc.). These injection
+   * points can be used to insert nodes into the translation unit's child list.
+   * 
+   * An injection will happen before the syntax feature it describes or any that
+   * follow it in the list.
+   */
+  public enum InjectionPoint {
+    BEFORE_VERSION,
+    BEFORE_DIRECTIVES,
+    BEFORE_DECLARATIONS,
+    BEFORE_FUNCTIONS,
+    BEFORE_EOF
+  }
+
+  /**
+   * Injects the given external declaration rule context into the translation unit
+   * context root node at the given injection point.
+   * 
+   * @implNote Since ANTLR's rule context stores children in an {@link ArrayList},
+   *           this operation runs in O(n) where n is the number of external
+   *           declarations in the root node. Also make sure not to use this
+   *           method during tree walking as it will modify the child array's
+   *           length which the tree walker can't handle.
+   * 
+   * @param node
+   * @param location
+   */
+  public void injectExternalDeclaration(ExternalDeclarationContext node, InjectionPoint location) {
+    // TODO
   }
 }
