@@ -3,7 +3,7 @@ import org.antlr.v4.runtime.tree.pattern.ParseTreePattern;
 
 import io.github.douira.glsl_transformer.GLSLParser;
 import io.github.douira.glsl_transformer.GLSLParser.ExternalDeclarationContext;
-import io.github.douira.glsl_transformer.generic.ExtendedParserRuleContext;
+import io.github.douira.glsl_transformer.generic.ExtendedContext;
 
 /**
  * The debug transformation is used for testing out things.
@@ -23,7 +23,7 @@ public class DebugTransformation extends Transformation {
       public void enterExternalDeclaration(ExternalDeclarationContext ctx) {
         var match = pattern.match(ctx);
         if (match.succeeded()) {
-          removeNode((ExtendedParserRuleContext) match.getTree());
+          removeNode((ExtendedContext) match.getTree());
         }
       }
     });

@@ -1,10 +1,10 @@
 package io.github.douira.glsl_transformer.transform;
 
-import io.github.douira.glsl_transformer.generic.ExtendedParserRuleContext;
+import io.github.douira.glsl_transformer.generic.ExtendedContext;
 
 public abstract class Transformation {
   public class SemanticException extends RuntimeException {
-    public ExtendedParserRuleContext node;
+    public ExtendedContext node;
 
     public SemanticException() {
     }
@@ -13,7 +13,7 @@ public abstract class Transformation {
       super(message);
     }
 
-    public SemanticException(String message, ExtendedParserRuleContext node) {
+    public SemanticException(String message, ExtendedContext node) {
       this(message);
       this.node = node;
     }

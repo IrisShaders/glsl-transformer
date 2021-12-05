@@ -9,7 +9,7 @@ import org.antlr.v4.runtime.ParserRuleContext;
  * This class is not meant to be constructed manually but is the base class
  * which ANTLR extends in the generated parser code.
  */
-public class ExtendedParserRuleContext extends ParserRuleContext {
+public class ExtendedContext extends ParserRuleContext {
   /**
    * Creates a new extended parser rule context. This is required for the
    * generated parse code to be valid.
@@ -17,7 +17,7 @@ public class ExtendedParserRuleContext extends ParserRuleContext {
    * @param parent              The parent node
    * @param invokingStateNumber The invoking state number
    */
-  public ExtendedParserRuleContext(ParserRuleContext parent, int invokingStateNumber) {
+  public ExtendedContext(ParserRuleContext parent, int invokingStateNumber) {
     super(parent, invokingStateNumber);
   }
 }
