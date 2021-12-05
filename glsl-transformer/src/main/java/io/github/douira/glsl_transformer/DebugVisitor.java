@@ -5,13 +5,24 @@ import org.antlr.v4.runtime.tree.ParseTree;
 import org.antlr.v4.runtime.tree.RuleNode;
 import org.antlr.v4.runtime.tree.TerminalNode;
 
+/**
+ * The debug visitor prints the tree and some other information to the console.
+ */
 public class DebugVisitor extends GLSLParserBaseVisitor<Void> {
   private int maxDepth;
 
+  /**
+   * Creates a new debug visitor
+   */
   public DebugVisitor() {
     this(Integer.MAX_VALUE);
   }
 
+  /**
+   * Creates a new debug visitor but with a maximum tree printing depth.
+   * 
+   * @param maxDepth The maximum depth to which the tree will be printed
+   */
   public DebugVisitor(int maxDepth) {
     this.maxDepth = maxDepth;
   }

@@ -4,16 +4,24 @@ import org.antlr.v4.runtime.Token;
 import org.antlr.v4.runtime.misc.Interval;
 import org.antlr.v4.runtime.misc.IntervalSet;
 
+/**
+ * The caching interval set is a regular interval set
+ * {@link org.antlr.v4.runtime.misc.IntervalSet} but the @link
+ * org.antlr.v4.runtime.misc.IntervalSet#contains(int)} method also does caching
+ * of the queries if the set has been set to readonly. Repeatedly requesting the
+ * same query is a common operation and therefore caching it like this can be
+ * helpful.
+ */
 public class CachingIntervalSet extends IntervalSet {
-  protected Interval lastIntervalHit;
+  private Interval lastIntervalHit;
 
   /**
    * Copied from ANTLR's
    * {@link org.antlr.v4.runtime.misc.IntervalSet#contains(int)} but with an
    * addition of caching. The cache size is 1. If the interval set has been marked
-   * as readonly, it will return the last hit if the query is the same. Repeatedly
-   * requesting the same query is a common operation and therefore caching it like
-   * this can be helpful.
+   * as readonly, it will return the last hit if the query is the same.
+   * 
+   * {@inheritDoc}
    */
   @Override
   public boolean contains(int el) {
@@ -36,7 +44,7 @@ public class CachingIntervalSet extends IntervalSet {
         l = m + 1;
       } else if (a > el) {
         r = m - 1;
-      } else { // el >= a && el <= b
+      } else { // now: el >= a && el <= b
         if (readonly) {
           lastIntervalHit = I;
         }
@@ -46,6 +54,14 @@ public class CachingIntervalSet extends IntervalSet {
     return false;
   }
 
+  /**
+   * Checks if the given token is covered by this set if it's being used as an
+   * omission set. Tokens that are included in one of this interval set's sets and
+   * aren't hidden are not printed.
+   * 
+   * @param token The token to check
+   * @return {@code true} if the token should be printed
+   */
   public boolean isTokenAllowed(Token token) {
     return token.getChannel() != Token.DEFAULT_CHANNEL || !contains(token.getTokenIndex());
   }

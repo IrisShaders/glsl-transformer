@@ -15,6 +15,10 @@ import io.github.douira.glsl_transformer.transform.Transformation;
 import io.github.douira.glsl_transformer.transform.WalkPhase;
 
 //TODO: treat each found declaration with the same location=0 as the same declaration and replace all of them identically
+/**
+ * The declaration replacement finds layout declarations and replaces all
+ * references to them with function calls and other code.
+ */
 public class DeclarationReplacement extends Transformation {
   private record Declaration(String type, String name) {
   }
@@ -75,9 +79,10 @@ public class DeclarationReplacement extends Transformation {
         // is only run if phase is found to be active
         // TODO: the function content and the new attribute declaration
         ctx.children
-            .add(createLocalRoot("void iris_getModelSpaceVertexPosition() { }", GLSLParser::externalDeclaration));
+            .add(createLocalRoot("void iris_getModelSpaceVertexPosition() { }", ctx, GLSLParser::externalDeclaration));
         ctx.children.add(
-            createLocalRoot("layout (location = 0) attribute vec4 iris_Position;", GLSLParser::externalDeclaration));
+            createLocalRoot("layout (location = 0) attribute vec4 iris_Position;", ctx,
+                GLSLParser::externalDeclaration));
       }
     });
 

@@ -6,7 +6,11 @@ import org.antlr.v4.runtime.tree.pattern.ParseTreePattern;
 import io.github.douira.glsl_transformer.GLSLParser;
 import io.github.douira.glsl_transformer.GLSLParser.ExternalDeclarationContext;
 
+/**
+ * The debug transformation is used for testing out things.
+ */
 public class DebugTransformation extends Transformation {
+  @Override
   protected void createPhases() {
     addPhase(new WalkPhase() {
       ParseTreePattern pattern;
