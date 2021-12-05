@@ -31,7 +31,7 @@ public class PrintVisitor extends AbstractParseTreeVisitor<Void> {
   private record AttributedInterval(ParseTree localRoot, Interval interval) {
   }
 
-  private final LinkedList<AttributedInterval> tokenIntervals = new LinkedList<>();
+  private final LinkedList<AttributedInterval> printIntervals = new LinkedList<>();
   private Interval cachedInterval;
   private ParseTree currentRoot;
 
@@ -106,7 +106,7 @@ public class PrintVisitor extends AbstractParseTreeVisitor<Void> {
     // convert the list of tokens and intervals into just tokens,
     // and then into their strings
     var builder = new StringBuilder(512); // guessing
-    for (var attributedInterval : tokenIntervals) {
+    for (var attributedInterval : printIntervals) {
       var interval = attributedInterval.interval();
       var localRootData = editContext.getLocalRootData(attributedInterval.localRoot());
       var omissionSet = localRootData.omissionSet();
@@ -152,14 +152,24 @@ public class PrintVisitor extends AbstractParseTreeVisitor<Void> {
     addInterval(interval);
   }
 
+  /**
+   * Adds an interval to the current list of intervals to print. The interval is
+   * attributed to the current local root node. If possible, this will join the
+   * interval with the last added interval in order to reduce memory usage and
+   * overhead during printing. Oftentimes the intervals are adjacent and share the
+   * same local root, which makes them joinable. If an interval is empty, nothing
+   * needs to be done with it since it can't contribute any tokens for printing.
+   * 
+   * @param newInterval The interval to add to the print list
+   */
   private void addInterval(Interval newInterval) {
     if (newInterval.length() == 0) {
       return;
     }
 
     // join the given interval onto the last interval if possible without holes
-    if (!tokenIntervals.isEmpty()) {
-      var last = tokenIntervals.getLast();
+    if (!printIntervals.isEmpty()) {
+      var last = printIntervals.getLast();
       var lastInterval = last.interval();
       if (currentRoot == last.localRoot()
           && (!lastInterval.disjoint(newInterval) || lastInterval.adjacent(newInterval))) {
@@ -167,21 +177,21 @@ public class PrintVisitor extends AbstractParseTreeVisitor<Void> {
           return;
         }
 
-        tokenIntervals.removeLast();
+        printIntervals.removeLast();
         newInterval = lastInterval.union(newInterval);
       }
     }
 
-    tokenIntervals.add(new AttributedInterval(currentRoot, newInterval));
+    printIntervals.add(new AttributedInterval(currentRoot, newInterval));
   }
 
   /**
    * {@inheritDoc}
    * 
    * The visitor method that the print visitor overrides in order to collect each
-   * node's intervals. When a node is found that doesn't have a parent it must be
-   * a local root which changes the current local root that is used in attributed
-   * intervals.
+   * node's intervals. The current local root is updated when a local root node is
+   * found. Any created intervals for printing are attributed to the current local
+   * root in order to know which token stream the interval's indexes refer to.
    * 
    * @implNote intervals that cover tokens that are not part of children (which
    *           are only hidden tokens like whitespace because terminal nodes are
