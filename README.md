@@ -156,6 +156,7 @@ TODO:
 
 - use ExtendedContext in places where EditContext needs to get involved
 - Figure out if local roots can be found more efficiently this way?
+- Do some kind of change tracking on the child array so that injections can happen without confusing the tree walker (see dynamic parse tree walker)
 - Unit (and integration) testing of all the parts
 - Figure out if somehow transformations could be compiled/reused without binding them to a particular parser instance
 - "Snapshot" tests with the glslang tests (test that exactly the expected errors occur, no more no less)
