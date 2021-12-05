@@ -19,7 +19,7 @@ import io.github.douira.glsl_transformer.GLSLParserBaseListener;
 import io.github.douira.glsl_transformer.GLSLParser.ExternalDeclarationContext;
 import io.github.douira.glsl_transformer.generic.EditContext;
 import io.github.douira.glsl_transformer.generic.EmptyTerminalNode;
-import io.github.douira.glsl_transformer.generic.ExtendedParserRuleContext;
+import io.github.douira.glsl_transformer.generic.ExtendedContext;
 
 abstract class Phase extends GLSLParserBaseListener {
   private PhaseCollector collector;
@@ -44,12 +44,12 @@ abstract class Phase extends GLSLParserBaseListener {
    * @return The siblings of the given node. {@code null} if the node has no
    *         parent.
    */
-  protected static List<ParseTree> getSiblings(ExtendedParserRuleContext node) {
+  protected static List<ParseTree> getSiblings(ExtendedContext node) {
     var parent = node.getParent();
     return parent == null ? null : parent.children;
   }
 
-  private void replaceNode(ExtendedParserRuleContext removeNode, ParseTree newNode) {
+  private void replaceNode(ExtendedContext removeNode, ParseTree newNode) {
     var children = getSiblings(removeNode);
     children.set(children.indexOf(removeNode), newNode);
     getEditContext().omitNodeTokens(removeNode);
@@ -66,8 +66,8 @@ abstract class Phase extends GLSLParserBaseListener {
    * @param newContents The string from which a new node is generated
    * @param parseMethod The method with which the string will be parsed
    */
-  protected void replaceNode(ExtendedParserRuleContext node, String newContents,
-      Function<GLSLParser, ExtendedParserRuleContext> parseMethod) {
+  protected void replaceNode(ExtendedContext node, String newContents,
+      Function<GLSLParser, ExtendedContext> parseMethod) {
     replaceNode(node, createLocalRoot(newContents, node.getParent(), parseMethod));
   }
 
@@ -78,7 +78,7 @@ abstract class Phase extends GLSLParserBaseListener {
    *           to not mess up the walker's iteration.
    * @param node The node to remove
    */
-  protected void removeNode(ExtendedParserRuleContext node) {
+  protected void removeNode(ExtendedContext node) {
     // the node needs to be replaced with something to preserve the containing
     // array's length or there's a NullPointerException in the walker
     replaceNode(node, new EmptyTerminalNode());
@@ -164,7 +164,7 @@ abstract class Phase extends GLSLParserBaseListener {
    * @param parseMethod The parser method with which the string is parsed
    * @return The resulting parsed node
    */
-  public <RuleType extends ExtendedParserRuleContext> RuleType createLocalRoot(String str, RuleContext parent,
+  public <RuleType extends ExtendedContext> RuleType createLocalRoot(String str, RuleContext parent,
       Function<GLSLParser, RuleType> parseMethod) {
     var input = CharStreams.fromString(str);
     var lexer = new GLSLLexer(input);

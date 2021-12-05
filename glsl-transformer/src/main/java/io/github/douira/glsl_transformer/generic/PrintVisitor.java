@@ -206,7 +206,7 @@ public class PrintVisitor extends AbstractParseTreeVisitor<Void> {
    */
   @Override
   public Void visitChildren(RuleNode node) {
-    final var context = (ExtendedParserRuleContext) node.getRuleContext();
+    final var context = (ExtendedContext) node.getRuleContext();
     final var superInterval = context.getSourceInterval();
 
     var fetchNext = superInterval.a;
