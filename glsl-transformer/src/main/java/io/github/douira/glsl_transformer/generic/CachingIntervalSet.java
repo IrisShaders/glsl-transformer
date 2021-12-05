@@ -16,12 +16,12 @@ public class CachingIntervalSet extends IntervalSet {
   private Interval lastIntervalHit;
 
   /**
+   * {@inheritDoc}
+   * 
    * Copied from ANTLR's
    * {@link org.antlr.v4.runtime.misc.IntervalSet#contains(int)} but with an
    * addition of caching. The cache size is 1. If the interval set has been marked
    * as readonly, it will return the last hit if the query is the same.
-   * 
-   * {@inheritDoc}
    */
   @Override
   public boolean contains(int el) {
