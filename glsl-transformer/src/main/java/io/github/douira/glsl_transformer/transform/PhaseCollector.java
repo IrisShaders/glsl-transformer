@@ -3,6 +3,8 @@ package io.github.douira.glsl_transformer.transform;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.Map;
+import java.util.TreeMap;
 import java.util.function.Consumer;
 
 import org.antlr.v4.runtime.BufferedTokenStream;
@@ -24,7 +26,7 @@ import io.github.douira.glsl_transformer.generic.ProxyParseTreeListener;
 public class PhaseCollector {
   protected EditContext editContext;
   private Parser parser;
-  private List<List<Phase>> phases = new ArrayList<>();
+  private Map<Integer, List<Phase>> phases = new TreeMap<>();
   private Collection<Transformation> transformations = new ArrayList<>();
   private TranslationUnitContext rootNode;
 
@@ -94,10 +96,12 @@ public class PhaseCollector {
    * @param index The level this phase should be added to
    */
   protected void addPhaseAt(Phase phase, int index) {
-    while (phases.size() <= index) {
-      phases.add(new ArrayList<>());
+    var phasesForIndex = phases.get(index);
+    if (phasesForIndex == null) {
+      phasesForIndex = new ArrayList<>();
+      phases.put(index, phasesForIndex);
     }
-    phases.get(index).add(phase);
+    phasesForIndex.add(phase);
     phase.setParent(this);
     phase.init();
   }
@@ -110,7 +114,7 @@ public class PhaseCollector {
       transformation.resetState();
     }
 
-    for (var level : phases) {
+    for (var level : phases.values()) {
       var proxyListener = new ProxyParseTreeListener(new ArrayList<>());
 
       for (var phase : level) {
