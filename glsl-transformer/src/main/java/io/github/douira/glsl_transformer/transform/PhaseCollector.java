@@ -11,7 +11,6 @@ import org.antlr.v4.runtime.BufferedTokenStream;
 import org.antlr.v4.runtime.Parser;
 
 import io.github.douira.glsl_transformer.GLSLParser.TranslationUnitContext;
-import io.github.douira.glsl_transformer.generic.EditContext;
 import io.github.douira.glsl_transformer.generic.ProxyParseTreeListener;
 
 /**
@@ -24,7 +23,6 @@ import io.github.douira.glsl_transformer.generic.ProxyParseTreeListener;
  * transformation at the same index.
  */
 public class PhaseCollector {
-  protected EditContext editContext;
   private Parser parser;
   private Map<Integer, List<Phase>> phases = new TreeMap<>();
   private Collection<Transformation> transformations = new ArrayList<>();
@@ -147,35 +145,13 @@ public class PhaseCollector {
   }
 
   /**
-   * Transforms the given parse tree with the registered transformations. The
-   * generated edit context has to be passed along to the printer in order for the
-   * applied transformations to be printed correctly.
-   * 
-   * @see #transformTree(TranslationUnitContext, EditContext)
+   * Transforms the given parse tree with the registered transformations.
    * 
    * @param ctx         The root node of the parse tree to be transformed
    * @param tokenStream The token stream of the parse tree
-   * @return An edit context containing the changes made by the applied
-   *         transformations
    */
-  public EditContext transformTree(TranslationUnitContext ctx, BufferedTokenStream tokenStream) {
-    transformTree(ctx, new EditContext(ctx, tokenStream));
-    return editContext;
-  }
-
-  /**
-   * Transforms the given parse tree with the registered transformations recording
-   * the changes to the given edit context. The edit context is sealed after
-   * transformation and cannot be used in another transformation since all
-   * transformations should be performed using a single phase collector.
-   * 
-   * @param ctx         The root node of the parse tree to be transformed
-   * @param editContext The edit context to which the transformation's changes
-   *                    should be recorded
-   */
-  public void transformTree(TranslationUnitContext ctx, EditContext editContext) {
-    this.editContext = editContext;
+  public void transformTree(TranslationUnitContext ctx, BufferedTokenStream tokenStream) {
+    ctx.makeLocalRoot(tokenStream);
     execute(ctx);
-    editContext.finishEditing();
   }
 }

@@ -17,7 +17,6 @@ import io.github.douira.glsl_transformer.GLSLLexer;
 import io.github.douira.glsl_transformer.GLSLParser;
 import io.github.douira.glsl_transformer.GLSLParserBaseListener;
 import io.github.douira.glsl_transformer.GLSLParser.ExternalDeclarationContext;
-import io.github.douira.glsl_transformer.generic.EditContext;
 import io.github.douira.glsl_transformer.generic.EmptyTerminalNode;
 import io.github.douira.glsl_transformer.generic.ExtendedContext;
 
@@ -26,10 +25,6 @@ abstract class Phase extends GLSLParserBaseListener {
 
   void setParent(PhaseCollector parent) {
     this.collector = parent;
-  }
-
-  protected EditContext getEditContext() {
-    return collector.editContext;
   }
 
   protected Parser getParser() {
@@ -52,7 +47,7 @@ abstract class Phase extends GLSLParserBaseListener {
   private void replaceNode(ExtendedContext removeNode, ParseTree newNode) {
     var children = getSiblings(removeNode);
     children.set(children.indexOf(removeNode), newNode);
-    getEditContext().omitNodeTokens(removeNode);
+    removeNode.omitTokens();
   }
 
   /**
@@ -164,14 +159,12 @@ abstract class Phase extends GLSLParserBaseListener {
    * @param parseMethod The parser method with which the string is parsed
    * @return The resulting parsed node
    */
-  public <RuleType extends ExtendedContext> RuleType createLocalRoot(String str, RuleContext parent,
+  public <RuleType extends ExtendedContext> RuleType createLocalRoot(String str, ExtendedContext parent,
       Function<GLSLParser, RuleType> parseMethod) {
-    var input = CharStreams.fromString(str);
-    var lexer = new GLSLLexer(input);
-    var commonTokenStream = new CommonTokenStream(lexer);
+    var commonTokenStream = new CommonTokenStream(new GLSLLexer(CharStreams.fromString(str)));
     var node = parseMethod.apply(new GLSLParser(commonTokenStream));
     node.setParent(parent);
-    getEditContext().registerLocalRoot(node, commonTokenStream);
+    node.makeLocalRoot(commonTokenStream);
     return node;
   }
 
