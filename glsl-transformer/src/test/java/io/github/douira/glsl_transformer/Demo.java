@@ -12,6 +12,7 @@ import java.util.Set;
 
 import org.antlr.v4.runtime.CharStreams;
 import org.antlr.v4.runtime.CommonTokenStream;
+import org.junit.jupiter.api.Test;
 
 import io.github.douira.glsl_transformer.ast.Tensor;
 import io.github.douira.glsl_transformer.generic.PrintVisitor;
@@ -33,7 +34,8 @@ public class Demo {
 
   private static Set<String> bannedFilenameFragments = Set.of("ray", "preprocessor");
 
-  public static void main(String[] args) throws IOException, URISyntaxException {
+  @Test
+  public void main() throws IOException, URISyntaxException {
     var tensor = Tensor.parseFromTokenType(GLSLLexer.F16MAT2X2);
     var compactName = tensor.getCompactName();
 
@@ -79,25 +81,26 @@ public class Demo {
     var tree = parser.translationUnit();
     System.out.println("parsing took " + (System.nanoTime() - startNanos) / 1e6 + " ms.");
 
-    new DebugVisitor().visit(tree);
+    // new DebugVisitor().visit(tree);
 
     // before any edits
-    System.out.println(PrintVisitor.printTree(commonTokenStream, tree));
+    // System.out.println(PrintVisitor.printTree(commonTokenStream, tree));
 
-    var tokens = commonTokenStream.getTokens();
-    for (var token : tokens) {
-      System.out.println(token);
-    }
+    // var tokens = commonTokenStream.getTokens();
+    // for (var token : tokens) {
+    // System.out.println(token);
+    // }
 
     var transformer = new PhaseCollector(parser);
     transformer.registerTransformationMultiple(ComplexTransformations::registerWith);
 
-    var editContext = transformer.transformTree(tree, commonTokenStream);
+    transformer.transformTree(tree, commonTokenStream);
 
     // after edits
-    startNanos = System.nanoTime();
-    var printResult = PrintVisitor.printTree(commonTokenStream, tree, editContext);
-    System.out.println("printing took " + (System.nanoTime() - startNanos) / 1e6 + " ms.");
-    System.out.println(printResult);
+    // startNanos = System.nanoTime();
+    // var printResult = PrintVisitor.printTree(commonTokenStream, tree);
+    // System.out.println("printing took " + (System.nanoTime() - startNanos) / 1e6
+    // + " ms.");
+    // System.out.println(printResult);
   }
 }

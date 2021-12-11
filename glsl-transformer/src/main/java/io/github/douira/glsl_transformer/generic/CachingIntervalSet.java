@@ -55,6 +55,15 @@ public class CachingIntervalSet extends IntervalSet {
   }
 
   /**
+   * Adds the given interval to the set.
+   * 
+   * @param interval The interval to add to this interval set
+   */
+  public void add(Interval interval) {
+    super.add(interval);
+  }
+
+  /**
    * Checks if the given token is covered by this set if it's being used as an
    * omission set. Tokens that are included in one of this interval set's sets and
    * aren't hidden are not printed.

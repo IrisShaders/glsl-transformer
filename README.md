@@ -83,10 +83,10 @@ var transformer = new PhaseCollector(parser);
 transformer.registerTransformationMultiple(ComplexTransformations::registerWith);
 
 // perform transformations
-var editContext = transformer.transformTree(tree, commonTokenStream);
+transformer.transformTree(tree, commonTokenStream);
 
 // after transformation
-System.out.println(PrintVisitor.printTree(commonTokenStream, tree, editContext));
+System.out.println(PrintVisitor.printTree(commonTokenStream, tree));
 ```
 
 ## An example transformation
@@ -122,11 +122,11 @@ TODO:
 - parse tree vs AST (see wikipedia, the terms are not entirely disjoint)
 - how can parse nodes be used
 
-## Edit Context
+## Tree change tracking
 
 TODO:
 
-- the issue with removing nodes without replacement (concurrent modification issues, NPE)
+- the issue with removing nodes without replacement (concurrent modification issues, NPE), is being worked on
 - parsing of new nodes as local roots
 - new tokens streams for local roots
 - omission sets for removed nodes
@@ -154,8 +154,11 @@ TODO:
 
 ## Todo
 
-- use ExtendedContext in places where EditContext needs to get involved
-- Figure out if local roots can be found more efficiently this way?
+- Make things more generic (use generic types more?)
+- Add functionality that allows removing a local root and replacing it with a new local root? (is that even possible?) if the grammar rules allow it, the local root data would somehow need to be preserved
+- make independent of parser type by making parser superclass that has a method that says what the root grammar rule is. Then the grammar file implements a method `rootRule` that calls the root grammar rule
+- Can almost everything be generic?
+
 - Do some kind of change tracking on the child array so that injections can happen without confusing the tree walker (see dynamic parse tree walker)
 - Unit (and integration) testing of all the parts
 - Figure out if somehow transformations could be compiled/reused without binding them to a particular parser instance
