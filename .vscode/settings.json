@@ -1,6 +1,11 @@
 {
   "java.configuration.updateBuildConfiguration": "automatic",
   "java.project.sourcePaths": ["build/generated-src/antlr/main/"],
+  "java.project.resourceFilters": [
+    "node_modules",
+    ".git",
+    ".antlr"
+  ],
   "[java]": {
     "editor.suggest.snippetsPreventQuickSuggestions": false
     //"editor.formatOnSave": false
