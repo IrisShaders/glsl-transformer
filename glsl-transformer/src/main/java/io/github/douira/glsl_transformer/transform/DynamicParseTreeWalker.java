@@ -34,13 +34,19 @@ public class DynamicParseTreeWalker extends ParseTreeWalker {
       return;
     }
 
-    RuleNode ruleNode = (RuleNode) tree;
+    var ruleNode = (RuleNode) tree;
     enterRule(listener, ruleNode);
 
-    int n = ruleNode.getChildCount();
-    for (int i = 0; i < n; i++) {
+    for (var i = 0; i < ruleNode.getChildCount(); i++) {
       walk(listener, ruleNode.getChild(i));
     }
+
+    /*NOTES:
+    node removal never reduces the length of the array so "removal" is not an issue.
+    node addition after the current position is ok since the length is dynamically determined.
+    the only problematic thing is node addition before the current position
+    for which the current iteration index needs to be compensated for.
+    */
 
     exitRule(listener, ruleNode);
   }
