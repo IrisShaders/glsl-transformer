@@ -334,7 +334,7 @@ BXOR_OP: '^';
 QUERY_OP: '?';
 ASSIGN_OP: '=';
 
-//actual preprocessor parsing mode (is not parsed and hidden into a channel)
+//actual preprocessor parsing mode (is not parsed, hidden into a channel)
 fragment NR_PP_PREFIX: '#' [\t ]*;
 PP_ENTER_MODE:
 	NR_PP_PREFIX (

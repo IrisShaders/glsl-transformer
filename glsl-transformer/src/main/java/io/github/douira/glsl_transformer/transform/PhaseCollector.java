@@ -24,7 +24,7 @@ import io.github.douira.glsl_transformer.generic.ProxyParseTreeListener;
  */
 public class PhaseCollector {
   private Parser parser;
-  private Map<Integer, List<Phase>> phases = new TreeMap<>();
+  private Map<Integer, List<TransformationPhase>> phases = new TreeMap<>();
   private Collection<Transformation> transformations = new ArrayList<>();
   private TranslationUnitContext rootNode;
 
@@ -76,7 +76,7 @@ public class PhaseCollector {
   /**
    * Returns the current root node being processed. Access to this method is
    * restricted to classes in this package on purpose. Classes extending
-   * {@link Phase} should not have access to this but rather use it through the
+   * {@link TransformationPhase} should not have access to this but rather use it through the
    * provided injection method.
    * 
    * @return The current root node being processed
@@ -93,7 +93,7 @@ public class PhaseCollector {
    * @param phase The phase to collect into the specified level
    * @param index The level this phase should be added to
    */
-  protected void addPhaseAt(Phase phase, int index) {
+  protected void addPhaseAt(TransformationPhase phase, int index) {
     var phasesForIndex = phases.get(index);
     if (phasesForIndex == null) {
       phasesForIndex = new ArrayList<>();
