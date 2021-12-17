@@ -4,6 +4,7 @@ import java.util.LinkedList;
 
 import org.antlr.v4.runtime.BufferedTokenStream;
 import org.antlr.v4.runtime.ParserRuleContext;
+import org.antlr.v4.runtime.tree.ParseTree;
 
 /**
  * Implements custom behavior in parse rule contexts. This class is used as the
@@ -21,7 +22,7 @@ import org.antlr.v4.runtime.ParserRuleContext;
  * been removed. The printer then uses this to not print any non-hidden tokens
  * contained within any local root's omission set.
  */
-public class ExtendedContext extends ParserRuleContext {
+public class ExtendedContext extends ParserRuleContext implements MoveCheckable {
   /**
    * A reference to a node closer to the local root. For local roots or the
    * root node this is the node itself. For all other nodes it can actually be the
@@ -224,5 +225,36 @@ public class ExtendedContext extends ParserRuleContext {
    */
   public BufferedTokenStream getTokenStream() {
     return tokenStream;
+  }
+
+  @Override
+  public boolean replacesNode(ParseTree node) {
+    return this == node;
+  }
+
+  /**
+   * Finds the index of the first contained child that matches the given type.
+   * 
+   * @param ctxType The child type to look for
+   * @return The index of the first child with the given index. If no child with
+   *         that type was found, the length of the child array is returned as the
+   *         "last" index.
+   */
+  public int getChildIndexLike(Class<? extends ParseTree> ctxType) {
+    var i = 0;
+    while (i < getChildCount() && ctxType.isInstance(getChild(i))) {
+      i++;
+    }
+    return i;
+  }
+
+  /**
+   * Adds a child to the list of children with at the given index.
+   * @param index The index to add the node at
+   * @param node The node to add
+   */
+  public void addChild(int index, ParseTree node) {
+    node.setParent(this);
+    children.add(index, node);
   }
 }

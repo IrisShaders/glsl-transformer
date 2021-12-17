@@ -26,11 +26,11 @@ public abstract class Transformation {
     this.collector = collector;
   }
 
-  protected void addPhase(Phase phase) {
+  protected void addPhase(TransformationPhase phase) {
     addPhase(phase, phaseCounter++);
   }
 
-  protected void addPhase(Phase phase, int index) {
+  protected void addPhase(TransformationPhase phase, int index) {
     collector.addPhaseAt(phase, phaseCounter++);
   }
 
@@ -43,8 +43,8 @@ public abstract class Transformation {
   };
 
   /**
-   * This method should create phases and add them with {@link #addPhase(Phase)}
-   * or {@link #addPhase(Phase, int)}. Phases are typically implemented by
+   * This method should create phases and add them with {@link #addPhase(TransformationPhase)}
+   * or {@link #addPhase(TransformationPhase, int)}. Phases are typically implemented by
    * creating anonymous classes within the implementation of this method.
    */
   protected abstract void createPhases();

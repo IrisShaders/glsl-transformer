@@ -7,6 +7,8 @@ import org.antlr.v4.runtime.tree.ParseTreeWalker;
 import org.antlr.v4.runtime.tree.RuleNode;
 import org.antlr.v4.runtime.tree.TerminalNode;
 
+import io.github.douira.glsl_transformer.generic.MoveCheckable;
+
 /**
  * The dynamic parse tree walker can with structural modification of a node's
  * child array. This enables injection of new nodes without disallowing such
@@ -20,9 +22,19 @@ public class DynamicParseTreeWalker extends ParseTreeWalker {
    * 
    * Copied from ANTLR's
    * {@link org.antlr.v4.runtime.tree.ParseTreeWalker#walk(org.antlr.v4.runtime.tree.ParseTreeListener, org.antlr.v4.runtime.tree.ParseTree)}
-   * but with smart detection of structural modifications to the child array.
+   * but with compensation for items being added to the child array.
    * 
-   * TODO: Implement detection and adaptation
+   * TODO: Check if using empty terminal nodes in general messes up ANTLR's parse
+   * tree matching (with patterns or xpath)
+   * 
+   * @implNote Node removal never reduces the length of the array so "removal" is
+   *           not an issue. (since removed nodes are instead replaced with empty
+   *           terminal nodes) Node addition after the current position is ok
+   *           since the length is dynamically determined in the loop.The only
+   *           problematic thing is node addition before the current position for
+   *           which the current iteration index needs to be compensated for. This
+   *           is done by fast-forwarding the iteration index after the walk
+   *           happened until the current node is found again.
    */
   @Override
   public void walk(ParseTreeListener listener, ParseTree tree) {
@@ -38,15 +50,15 @@ public class DynamicParseTreeWalker extends ParseTreeWalker {
     enterRule(listener, ruleNode);
 
     for (var i = 0; i < ruleNode.getChildCount(); i++) {
-      walk(listener, ruleNode.getChild(i));
-    }
+      var child = ruleNode.getChild(i);
+      walk(listener, child);
 
-    /*NOTES:
-    node removal never reduces the length of the array so "removal" is not an issue.
-    node addition after the current position is ok since the length is dynamically determined.
-    the only problematic thing is node addition before the current position
-    for which the current iteration index needs to be compensated for.
-    */
+      // if the walk added items before the current index
+      // then the current item was moved forewards.
+      while (!MoveCheckable.replaces(child, ruleNode.getChild(i))) {
+        i++;
+      }
+    }
 
     exitRule(listener, ruleNode);
   }
