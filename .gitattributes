@@ -4,3 +4,5 @@
 # These are explicitly windows files and should use crlf
 *.bat           text eol=crlf
 
+# make all the glsl test files not show up by marking them as vendored
+src/test/resources/glslang-test/* linguist-vendored
