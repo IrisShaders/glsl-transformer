@@ -242,27 +242,27 @@ abstract class TransformationPhase extends GLSLParserBaseListener {
    */
   public void injectNode(ParseTree newNode, InjectionPoint location) {
     var rootNode = collector.getRootNode();
+    var injectIndex = -1;
 
     if (location == InjectionPoint.BEFORE_VERSION) {
-      rootNode.addChild(rootNode.getChildIndexLike(VersionStatementContext.class), newNode);
+      injectIndex = rootNode.getChildIndexLike(VersionStatementContext.class);
     } else if (location == InjectionPoint.BEFORE_EOF) {
-      rootNode.addChild(rootNode.getChildCount() - 1, newNode);
+      injectIndex = rootNode.getChildCount() - 1;
     } else {
       var beforeTypes = location.EDBeforeTypes;
-      var i = -1;
       do {
-        i++;
-        if (rootNode.getChild(i) instanceof ExternalDeclarationContext externalDeclaration) {
+        injectIndex++;
+        if (rootNode.getChild(injectIndex) instanceof ExternalDeclarationContext externalDeclaration) {
           var externalDeclarationChild = externalDeclaration.getChild(0);
           if (externalDeclarationChild instanceof ExtendedContext
               && beforeTypes.contains(externalDeclarationChild.getClass())) {
             break;
           }
         }
-      } while (i < rootNode.getChildCount());
-
-      rootNode.addChild(i, newNode);
+      } while (injectIndex < rootNode.getChildCount());
     }
+
+    rootNode.addChild(injectIndex, newNode);
   }
 
   /**
