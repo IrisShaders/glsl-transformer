@@ -13,7 +13,7 @@ public class EmptyTerminalNodeTest {
 
   @Test
   void testGetParent() {
-    assertEquals(emptyNode.getParent(), null, "It should not have a parent");
+    assertNull(emptyNode.getParent(), "It should not have a parent");
   }
 
   @Test
