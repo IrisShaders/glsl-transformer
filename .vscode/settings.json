@@ -1,13 +1,10 @@
 {
   "java.configuration.updateBuildConfiguration": "automatic",
   "java.project.sourcePaths": ["build/generated-src/antlr/main/"],
-  "java.project.resourceFilters": [
-    "node_modules",
-    ".git",
-    ".antlr"
-  ],
+  "java.project.resourceFilters": ["node_modules", ".git", ".antlr"],
   "[java]": {
     "editor.suggest.snippetsPreventQuickSuggestions": false
     //"editor.formatOnSave": false
-  }
+  },
+  "java.jdt.ls.vmargs": "-XX:+UseParallelGC -XX:GCTimeRatio=4 -XX:AdaptiveSizePolicyWeight=90 -Dsun.zip.disableMemoryMapping=true -Xmx2G -Xms100m"
 }
