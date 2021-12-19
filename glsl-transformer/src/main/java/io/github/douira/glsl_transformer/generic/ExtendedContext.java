@@ -22,7 +22,7 @@ import org.antlr.v4.runtime.tree.ParseTree;
  * been removed. The printer then uses this to not print any non-hidden tokens
  * contained within any local root's omission set.
  */
-public class ExtendedContext extends ParserRuleContext implements MoveCheckable {
+public class ExtendedContext extends ParserRuleContext {
   /**
    * A reference to a node closer to the local root. For local roots or the
    * root node this is the node itself. For all other nodes it can actually be the
@@ -225,11 +225,6 @@ public class ExtendedContext extends ParserRuleContext implements MoveCheckable 
    */
   public BufferedTokenStream getTokenStream() {
     return tokenStream;
-  }
-
-  @Override
-  public boolean replacesNode(ParseTree node) {
-    return this == node;
   }
 
   /**
