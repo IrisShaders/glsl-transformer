@@ -178,8 +178,8 @@ abstract class TransformationPhase extends GLSLParserBaseListener {
 
   /**
    * Shader code is expected to be roughly structured as follows:
-   * version, directives (#extension etc.), declarations (layout etc.), functions
-   * (void main etc.).
+   * version, extensions, other directives (#define, #pragma etc.), declarations
+   * (layout etc.), functions (void main etc.).
    * 
    * These injection points can be used to insert nodes into the translation
    * unit's child list. An injection will happen before the syntax feature it
@@ -195,8 +195,20 @@ abstract class TransformationPhase extends GLSLParserBaseListener {
     BEFORE_VERSION,
 
     /**
-     * Before parsed #-directives such as #pragma and #extension, before
-     * declarations and function definitions.
+     * Before the #extension statement, before other directives, declarations and
+     * function definitions
+     */
+    BEFORE_EXTENSIONS,
+
+    /**
+     * Before non-extension parsed #-directives such as #pragma, before
+     * declarations and function definitions. (after extension statements if they
+     * aren't mixed with other directives and directly follow the #version)
+     * 
+     * TODO: describe what happens to unparsed tokens that are in the stream
+     * 
+     * @apiNote This is semantically equivalent to AFTER_VERSION if unparsed tokens
+     *          are disregarded.
      */
     BEFORE_DIRECTIVES,
 
@@ -222,13 +234,21 @@ abstract class TransformationPhase extends GLSLParserBaseListener {
     public Set<Class<? extends ParseTree>> EDBeforeTypes;
 
     static {
-      BEFORE_DIRECTIVES.EDBeforeTypes = Set.of(ExtensionStatementContext.class, PragmaStatementContext.class);
+      // builds the injections points' before type sets from the weakest to the
+      // strongest (strongest having the most inject-before conditions)
+      // BEFORE_VERSION and BEFORE_EOF are handled as special cases
 
-      BEFORE_DECLARATIONS.EDBeforeTypes = new HashSet<>(BEFORE_DIRECTIVES.EDBeforeTypes);
-      BEFORE_DECLARATIONS.EDBeforeTypes.addAll(Set.of(LayoutDefaultsContext.class, DeclarationContext.class));
+      BEFORE_FUNCTIONS.EDBeforeTypes = Set.of(FunctionDefinitionContext.class);
 
-      BEFORE_FUNCTIONS.EDBeforeTypes = new HashSet<>(BEFORE_DECLARATIONS.EDBeforeTypes);
-      BEFORE_FUNCTIONS.EDBeforeTypes.add(FunctionDefinitionContext.class);
+      BEFORE_DECLARATIONS.EDBeforeTypes = new HashSet<>(BEFORE_FUNCTIONS.EDBeforeTypes);
+      BEFORE_DECLARATIONS.EDBeforeTypes.add(LayoutDefaultsContext.class);
+      BEFORE_DECLARATIONS.EDBeforeTypes.add(DeclarationContext.class);
+
+      BEFORE_DIRECTIVES.EDBeforeTypes = new HashSet<>(BEFORE_DECLARATIONS.EDBeforeTypes);
+      BEFORE_DIRECTIVES.EDBeforeTypes.add(PragmaStatementContext.class);
+
+      BEFORE_EXTENSIONS.EDBeforeTypes = new HashSet<>(BEFORE_DIRECTIVES.EDBeforeTypes);
+      BEFORE_EXTENSIONS.EDBeforeTypes.add(ExtensionStatementContext.class);
     }
   }
 
@@ -254,6 +274,9 @@ abstract class TransformationPhase extends GLSLParserBaseListener {
       injectIndex = rootNode.getChildCount() - 1;
     } else {
       var beforeTypes = location.EDBeforeTypes;
+      if (beforeTypes == null) {
+        throw new Error("A non-special injection point is missing its EDBeforeTypes!");
+      }
       do {
         injectIndex++;
         if (rootNode.getChild(injectIndex) instanceof ExternalDeclarationContext externalDeclaration) {
