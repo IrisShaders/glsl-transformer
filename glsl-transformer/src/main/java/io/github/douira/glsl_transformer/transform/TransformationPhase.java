@@ -177,27 +177,31 @@ abstract class TransformationPhase extends GLSLParserBaseListener {
   }
 
   /**
-   * The code is structured as follows: version, directives (#extension etc.),
-   * declarations (layout etc.), functions (void main etc.). These injection
-   * points can be used to insert nodes into the translation unit's child list.
+   * Shader code is expected to be roughly structured as follows:
+   * version, directives (#extension etc.), declarations (layout etc.), functions
+   * (void main etc.).
    * 
-   * An injection will happen before the syntax feature it describes and any that
-   * follow it in the list.
+   * These injection points can be used to insert nodes into the translation
+   * unit's child list. An injection will happen before the syntax feature it
+   * describes and any that follow it in the list.
+   * 
+   * @implNote AFTER versions of these points would be the same as the next BEFORE
+   *           point in the list.
    */
   public enum InjectionPoint {
     /**
-     * Before the #version statement
+     * Before the #version statement (and all other syntax features by necessity)
      */
     BEFORE_VERSION,
 
     /**
-     * Before parsed directives such as #pragma and #extension and before
-     * declarations and functions.
+     * Before parsed #-directives such as #pragma and #extension, before
+     * declarations and function definitions.
      */
     BEFORE_DIRECTIVES,
 
     /**
-     * Before declarations like layout and before function definitions
+     * Before declarations like layout and struct, before function definitions
      */
     BEFORE_DECLARATIONS,
 
