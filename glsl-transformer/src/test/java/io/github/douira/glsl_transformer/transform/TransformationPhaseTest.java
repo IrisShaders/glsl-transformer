@@ -1,46 +1,45 @@
 package io.github.douira.glsl_transformer.transform;
 
+import static org.junit.jupiter.api.Assertions.*;
+
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import io.github.douira.glsl_transformer.GLSLLexer;
 import io.github.douira.glsl_transformer.GLSLParser;
-import io.github.douira.glsl_transformer.GLSLParser.TranslationUnitContext;
+import io.github.douira.glsl_transformer.IntegratedTest;
 
-import static org.junit.jupiter.api.Assertions.*;
-
-import org.antlr.v4.runtime.CharStream;
-import org.antlr.v4.runtime.CharStreams;
-import org.antlr.v4.runtime.CommonTokenStream;
-import org.antlr.v4.runtime.TokenStream;
-
-public class TransformationPhaseTest {
+public class TransformationPhaseTest extends IntegratedTest {
   class TestPhase extends TransformationPhase {
   }
 
-  CharStream input;
-  GLSLLexer lexer;
-  GLSLParser parser;
-  TokenStream tokenStream;
-  TranslationUnitContext tree;
+  TestPhase phase;
+  PhaseCollector collector;
+
+  @BeforeAll
+  static void setupInput() {
+    readInput(TransformationPhaseTest.class);
+  }
 
   @BeforeEach
   void setup() {
-    input = CharStreams.fromString("");
-    lexer = new GLSLLexer(input);
-    tokenStream = new CommonTokenStream(lexer);
-    parser = new GLSLParser(tokenStream);
-    tree = parser.translationUnit();
+    collector = new PhaseCollector(parser);
+    phase = new TestPhase();
+    phase.setParent(collector);
   }
 
   @Test
   void testCompilePath() {
-
+    var path = phase.compilePath("/translationUnit/externalDeclaration");
+    assertEquals(path.evaluate(tree).size(), tree.getChildCount() - 2, "It should compile a functioning xpath");
   }
 
   @Test
   void testCompilePattern() {
-
+    var pattern = phase.compilePattern("varying <type:typeSpecifier> varyVec;", GLSLParser.RULE_externalDeclaration);
+    var match = pattern.match(tree.getChild(5));
+    assertTrue(match.succeeded(), "It should compile a functioning pattern");
+    assertEquals("vec2", match.get("type").getText(), "It should compile a functioning pattern");
   }
 
   @Test
@@ -54,13 +53,9 @@ public class TransformationPhaseTest {
   }
 
   @Test
-  void testGetParser() {
-
-  }
-
-  @Test
   void testGetSiblings() {
-
+    assertEquals(tree.children, TransformationPhase.getSiblings(tree.versionStatement()),
+        "It should find the siblings of a node");
   }
 
   @Test
@@ -91,10 +86,8 @@ public class TransformationPhaseTest {
 
   @Test
   void testSetParent() {
-    TestPhase phase = new TestPhase();
-    var collector = new PhaseCollector(parser);
     phase.setParent(collector);
 
-    assertEquals(phase.getParser(), parser, "It should return the previously set parser inside the phase collector");
+    assertEquals(parser, phase.getParser(), "It should return the previously set parser inside the phase collector");
   }
 }

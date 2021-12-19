@@ -1,7 +1,7 @@
 package io.github.douira.glsl_transformer.generic;
 
-import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
+import org.junit.jupiter.api.Test;
 
 public class EmptyTerminalNodeTest {
   EmptyTerminalNode emptyNode = new EmptyTerminalNode();
