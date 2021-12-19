@@ -36,7 +36,7 @@ public interface MoveCheckable {
     if (newNode instanceof MoveCheckable checkable) {
       return checkable.replacesNode(oldNode);
     } else {
-      return false;
+      return oldNode == newNode;
     }
   }
 }
