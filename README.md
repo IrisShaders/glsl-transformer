@@ -89,6 +89,18 @@ transformer.transformTree(tree, commonTokenStream);
 System.out.println(PrintVisitor.printTree(commonTokenStream, tree));
 ```
 
+## Permitted Parse Tree Operations
+- Adding a new parsed node anywhere (as a new local root)
+- Removing any node with its entire subtree
+- Replacing any node (remove, then add)
+- Moving a local root node anywhere
+- Moving a node strictly inside its local root scope (not a subscope)
+- Removing or moving a non-local-root node without touching its subtree, though this may break things that rely on grammar rules being followed
+
+### Not yet permitted
+- Moving a node out of the scope of its local root
+- Removing or moving a local root without touching its subtree even if the parsing rules allow it
+
 ## An example transformation
 
 One program transformation job that this project wants to achieve is the following. (from coderbot on Discord)
