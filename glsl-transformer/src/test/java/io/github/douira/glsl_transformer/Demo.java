@@ -12,6 +12,7 @@ import java.util.Set;
 
 import org.antlr.v4.runtime.CharStreams;
 import org.antlr.v4.runtime.CommonTokenStream;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import io.github.douira.glsl_transformer.ast.Tensor;
@@ -19,6 +20,7 @@ import io.github.douira.glsl_transformer.generic.PrintVisitor;
 import io.github.douira.glsl_transformer.iris.ComplexTransformations;
 import io.github.douira.glsl_transformer.transform.PhaseCollector;
 
+@Disabled
 public class Demo {
   private static enum Input {
     TINY("/tiny.glsl"), DIRECTIVE_TEST("/directiveTest.glsl"), SHADER("/shader.glsl"),
