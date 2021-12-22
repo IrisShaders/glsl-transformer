@@ -76,8 +76,8 @@ public class PhaseCollector {
   /**
    * Returns the current root node being processed. Access to this method is
    * restricted to classes in this package on purpose. Classes extending
-   * {@link TransformationPhase} should not have access to this but rather use it through the
-   * provided injection method.
+   * {@link TransformationPhase} should not have access to this but rather use it
+   * through the provided injection method.
    * 
    * @return The current root node being processed
    */
@@ -123,8 +123,8 @@ public class PhaseCollector {
           if (walkPhase.isActiveAtWalk()) {
             proxyListener.add(walkPhase);
           }
-        } else if (phase.isActive()) {
-          ((RunPhase) phase).run(ctx);
+        } else if (phase instanceof RunPhase runPhase && phase.isActive()) {
+          runPhase.run(ctx);
         }
       }
 
