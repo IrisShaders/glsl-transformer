@@ -74,10 +74,10 @@ public class PrintVisitor extends AbstractParseTreeVisitor<Void> {
 
     // add the tokens before the root node too
     var rootInterval = rootNode.getSourceInterval();
+    currentRoot = rootNode;
     addInterval(bounds.a, rootInterval.a - 1);
 
     // visit the whole tree and accumulate tokens and intervals
-    currentRoot = rootNode;
     visit(rootNode);
 
     // and also the tokens after the root node
