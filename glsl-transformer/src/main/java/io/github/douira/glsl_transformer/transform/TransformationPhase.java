@@ -24,11 +24,12 @@ import io.github.douira.glsl_transformer.GLSLParser.ExternalDeclarationContext;
 import io.github.douira.glsl_transformer.GLSLParser.FunctionDefinitionContext;
 import io.github.douira.glsl_transformer.GLSLParser.LayoutDefaultsContext;
 import io.github.douira.glsl_transformer.GLSLParser.PragmaStatementContext;
+import io.github.douira.glsl_transformer.GLSLParser.TranslationUnitContext;
 import io.github.douira.glsl_transformer.GLSLParser.VersionStatementContext;
 import io.github.douira.glsl_transformer.generic.EmptyTerminalNode;
 import io.github.douira.glsl_transformer.generic.ExtendedContext;
 
-abstract class TransformationPhase extends GLSLParserBaseListener {
+public abstract class TransformationPhase extends GLSLParserBaseListener {
   private PhaseCollector collector;
 
   void setParent(PhaseCollector parent) {
@@ -37,6 +38,10 @@ abstract class TransformationPhase extends GLSLParserBaseListener {
 
   protected Parser getParser() {
     return collector.getParser();
+  }
+
+  protected TranslationUnitContext getRootNode() {
+    return collector.getRootNode();
   }
 
   /**
@@ -265,7 +270,7 @@ abstract class TransformationPhase extends GLSLParserBaseListener {
    * @param location The injection point at which the new node is inserted
    */
   public void injectNode(ParseTree newNode, InjectionPoint location) {
-    var rootNode = collector.getRootNode();
+    var rootNode = getRootNode();
     var injectIndex = -1;
 
     if (location == InjectionPoint.BEFORE_VERSION) {
@@ -303,6 +308,6 @@ abstract class TransformationPhase extends GLSLParserBaseListener {
    * @param location The injection point at which the new node is inserted
    */
   public void injectExternalDeclaration(String str, InjectionPoint location) {
-    injectNode(createLocalRoot(str, collector.getRootNode(), GLSLParser::externalDeclaration), location);
+    injectNode(createLocalRoot(str, getRootNode(), GLSLParser::externalDeclaration), location);
   }
 }
