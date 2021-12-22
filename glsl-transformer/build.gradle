@@ -35,6 +35,9 @@ dependencies {
 
     antlr group: 'org.antlr', name: 'antlr4', version: antlrVersion
     api group: 'org.antlr', name: 'antlr4-runtime', version: antlrVersion
+
+    testImplementation 'io.github.origin-energy:java-snapshot-testing-junit5:3.2.+'
+    testImplementation "org.slf4j:slf4j-simple:2.0.0-alpha5"
 }
 
 generateGrammarSource {

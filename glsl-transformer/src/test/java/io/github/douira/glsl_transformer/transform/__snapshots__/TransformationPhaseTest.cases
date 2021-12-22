@@ -1,0 +1,14 @@
+testInjectNode[2]=[
+bar;
+]
+
+
+testInjectNode[empty]=[
+testInjectNode
+]
+
+
+testInjectNode[simple]=[
+#version 5432
+bar;
+]
