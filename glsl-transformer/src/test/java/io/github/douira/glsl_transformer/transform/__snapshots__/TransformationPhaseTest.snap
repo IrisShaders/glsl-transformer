@@ -1,0 +1,21 @@
+testInjectNode[2]=[
+bar;
+=====
+foo;bar;
+]
+
+
+testInjectNode[empty]=[
+testInjectNode
+=====
+foo;
+]
+
+
+testInjectNode[simple]=[
+#version 5432
+bar;
+=====
+foo;#version 5432
+bar;
+]

@@ -3,43 +3,56 @@ package io.github.douira.glsl_transformer.transform;
 import static org.junit.jupiter.api.Assertions.*;
 
 import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.ArgumentsSource;
 
+import au.com.origin.snapshots.Expect;
+import au.com.origin.snapshots.annotations.SnapshotName;
+import au.com.origin.snapshots.junit5.SnapshotExtension;
 import io.github.douira.glsl_transformer.GLSLParser;
 import io.github.douira.glsl_transformer.IntegratedTest;
+import io.github.douira.glsl_transformer.TestCaseProvider;
+import io.github.douira.glsl_transformer.GLSLParser.TranslationUnitContext;
+import io.github.douira.glsl_transformer.generic.PrintVisitor;
 
+@ExtendWith({ SnapshotExtension.class })
 public class TransformationPhaseTest extends IntegratedTest {
-  class TestPhase extends TransformationPhase {
-  }
+  private Expect expect;
 
-  TestPhase phase;
-  PhaseCollector collector;
+  class EmptyPhase extends TransformationPhase {
+  }
 
   @BeforeAll
   static void setupInput() {
     readInput(TransformationPhaseTest.class);
   }
 
-  @BeforeEach
-  void setup() {
-    collector = new PhaseCollector(parser);
-    phase = new TestPhase();
-    phase.setParent(collector);
-  }
-
   @Test
   void testCompilePath() {
-    var path = phase.compilePath("/translationUnit/externalDeclaration");
-    assertEquals(path.evaluate(tree).size(), tree.getChildCount() - 2, "It should compile a functioning xpath");
+    wrapRunTransform(new EmptyPhase() {
+      @Override
+      protected void init() {
+        var path = compilePath("/translationUnit/externalDeclaration");
+        assertEquals(path.evaluate(tree).size(), tree.getChildCount() - 2, "It should compile a functioning xpath");
+      }
+    });
   }
 
   @Test
   void testCompilePattern() {
-    var pattern = phase.compilePattern("varying <type:typeSpecifier> varyVec;", GLSLParser.RULE_externalDeclaration);
-    var match = pattern.match(tree.getChild(5));
-    assertTrue(match.succeeded(), "It should compile a functioning pattern");
-    assertEquals("vec2", match.get("type").getText(), "It should compile a functioning pattern");
+    wrapRunTransform(new EmptyPhase() {
+      @Override
+      protected void init() {
+        var pattern = compilePattern("varying <type:typeSpecifier> varyVec;",
+            GLSLParser.RULE_externalDeclaration);
+        var match = pattern.match(tree.getChild(5));
+        assertTrue(match.succeeded(), "It should compile a functioning pattern");
+        assertEquals("vec2", match.get("type").getText(), "It should compile a functioning pattern");
+      }
+    });
+
   }
 
   @Test
@@ -63,14 +76,25 @@ public class TransformationPhaseTest extends IntegratedTest {
 
   }
 
-  @Test
-  void testInjectNode() {
+  @ParameterizedTest
+  @ArgumentsSource(TestCaseProvider.class)
+  @SnapshotName("testInjectNode")
+  void testInjectNode(String scenario, String input) {
+    setupParsingWith(input);
+    wrapRunTransform(new RunPhase() {
+      @Override
+      protected void run(TranslationUnitContext ctx) {
+        injectExternalDeclaration("foo;\n", InjectionPoint.BEFORE_VERSION);
+      }
+    });
 
+    var output = PrintVisitor.printTree(tokenStream, tree);
+    expect.scenario(scenario).toMatchSnapshot(input, "=====", output);
   }
 
   @Test
   void testIsActive() {
-    TestPhase phase = new TestPhase();
+    EmptyPhase phase = new EmptyPhase();
     assertTrue(phase.isActive(), "It should always be active");
   }
 
@@ -86,8 +110,12 @@ public class TransformationPhaseTest extends IntegratedTest {
 
   @Test
   void testSetParent() {
-    phase.setParent(collector);
-
-    assertEquals(parser, phase.getParser(), "It should return the previously set parser inside the phase collector");
+    wrapRunTransform(new RunPhase() {
+      @Override
+      protected void run(TranslationUnitContext ctx) {
+        assertEquals(parser, getParser(),
+            "It should return the previously set parser inside the phase collector");
+      }
+    });
   }
 }
