@@ -6,9 +6,9 @@ foo;bar;
 
 
 testInjectNode[empty]=[
-testInjectNode
+
 =====
-foo;
+foo
 ]
 
 

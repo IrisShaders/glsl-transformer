@@ -80,6 +80,8 @@ public class TransformationPhaseTest extends IntegratedTest {
   @ArgumentsSource(TestCaseProvider.class)
   @SnapshotName("testInjectNode")
   void testInjectNode(String scenario, String input) {
+    //TODO: test case loader with snapshot name,
+    //TODO: fix missing semicolon in empty test
     setupParsingWith(input);
     wrapRunTransform(new RunPhase() {
       @Override
