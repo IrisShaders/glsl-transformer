@@ -96,12 +96,13 @@ public class ExtendedContext extends ParserRuleContext {
    */
   public void makeLocalRoot(BufferedTokenStream tokenStream) {
     // stop if already set up
-    if (omissionSet != null && this.tokenStream != null) {
+    if (omissionSet != null && this.tokenStream != null && localRoot == this) {
       return;
     }
 
     omissionSet = new CachingIntervalSet();
     this.tokenStream = tokenStream;
+    localRoot = this;
   }
 
   /**
@@ -237,7 +238,7 @@ public class ExtendedContext extends ParserRuleContext {
    */
   public int getChildIndexLike(Class<? extends ParseTree> ctxType) {
     var i = 0;
-    while (i < getChildCount() && ctxType.isInstance(getChild(i))) {
+    while (i < getChildCount() && !ctxType.isInstance(getChild(i))) {
       i++;
     }
     return i;
