@@ -1,14 +1,9 @@
-testInjectNode[2]=[
+§testInjectNode 2:
 bar;
-]
+
+§testInjectNode empty:
 
 
-testInjectNode[empty]=[
-
-]
-
-
-testInjectNode[simple]=[
+§testInjectNode simple:
 #version 5432
 bar;
-]
