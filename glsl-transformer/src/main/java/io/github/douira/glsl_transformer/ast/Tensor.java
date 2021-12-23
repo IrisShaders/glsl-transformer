@@ -75,7 +75,8 @@ public class Tensor {
           shape[i] = 1;
         }
       }
-      entries.add(new Type(tokenType, numberType, shape, spaceDimensions, highestDimension, compactName, explicitName));
+      entries.add(
+          new Type(tokenType, numberType, shape, spaceDimensions, highestDimension, compactName, explicitName));
 
       maxIndex = Math.max(maxIndex, tokenType);
       minIndex = Math.min(minIndex, tokenType);

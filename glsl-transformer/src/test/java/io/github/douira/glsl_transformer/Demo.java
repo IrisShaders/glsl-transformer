@@ -23,9 +23,14 @@ import io.github.douira.glsl_transformer.transform.PhaseCollector;
 @Disabled
 public class Demo {
   private static enum Input {
-    TINY("/tiny.glsl"), DIRECTIVE_TEST("/directiveTest.glsl"), SHADER("/shader.glsl"),
-    KAPPA("/unlicensed/composite3.glsl"), BENCHMARK1("/unlicensed/benchmark1.glsl"),
-    BENCHMARK2("/unlicensed/benchmark2.glsl"), TEST("/unlicensed/test.glsl"), TYPE_TEST("/typeTest.glsl");
+    TINY("/tiny.glsl"),
+    DIRECTIVE_TEST("/directiveTest.glsl"),
+    SHADER("/shader.glsl"),
+    KAPPA("/unlicensed/composite3.glsl"),
+    BENCHMARK1("/unlicensed/benchmark1.glsl"),
+    BENCHMARK2("/unlicensed/benchmark2.glsl"),
+    TEST("/unlicensed/test.glsl"),
+    TYPE_TEST("/typeTest.glsl");
 
     String path;
 

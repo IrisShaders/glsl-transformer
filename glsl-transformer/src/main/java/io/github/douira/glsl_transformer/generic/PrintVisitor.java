@@ -93,8 +93,10 @@ public class PrintVisitor extends AbstractParseTreeVisitor<Void> {
         // don't print EOF, only print the tokens in side the printing bounds,
         // but always allow inserted nodes, only print non-omitted tokens
         var tokenIndex = token.getTokenIndex();
-        if (token.getType() != Lexer.EOF && (tokenIndex == -1
-            || (localRoot != rootNode || inInterval(bounds, tokenIndex)) && omissionSet.isTokenAllowed(token))) {
+        if (token.getType() != Lexer.EOF
+            && (tokenIndex == -1
+                || (localRoot != rootNode || inInterval(bounds, tokenIndex))
+                    && omissionSet.isTokenAllowed(token))) {
           builder.append(token.getText());
         }
       }
@@ -148,7 +150,8 @@ public class PrintVisitor extends AbstractParseTreeVisitor<Void> {
       var last = printIntervals.getLast();
       var lastInterval = last.interval();
       if (currentRoot == last.localRoot()
-          && (!lastInterval.disjoint(newInterval) || lastInterval.adjacent(newInterval))) {
+          && (!lastInterval.disjoint(newInterval)
+              || lastInterval.adjacent(newInterval))) {
         if (lastInterval.properlyContains(newInterval)) {
           return;
         }

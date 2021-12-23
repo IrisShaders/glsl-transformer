@@ -24,6 +24,8 @@ public class EmptyTerminalNodeTest {
 
   @Test
   void sourceIntervalIsEmpty() {
-    assertEquals(emptyNode.getSourceInterval().length(), 0, "It should have an empty source token interval");
+    assertEquals(
+        emptyNode.getSourceInterval().length(), 0,
+        "It should have an empty source token interval");
   }
 }

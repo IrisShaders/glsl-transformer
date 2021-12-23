@@ -71,7 +71,8 @@ public abstract class TransformationPhase extends GLSLParserBaseListener {
   protected void replaceNode(ExtendedContext node, String newContents,
       Function<GLSLParser, ExtendedContext> parseMethod) {
     var removedIndex = removeNode(node);
-    getSiblings(node).add(removedIndex, createLocalRoot(newContents, node.getParent(), parseMethod));
+    getSiblings(node).add(
+        removedIndex, createLocalRoot(newContents, node.getParent(), parseMethod));
   }
 
   /**

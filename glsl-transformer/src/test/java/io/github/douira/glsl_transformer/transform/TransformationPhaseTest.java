@@ -35,7 +35,9 @@ public class TransformationPhaseTest extends IntegratedTest {
       @Override
       protected void init() {
         var path = compilePath("/translationUnit/externalDeclaration");
-        assertEquals(path.evaluate(tree).size(), tree.getChildCount() - 2, "It should compile a functioning xpath");
+        assertEquals(
+            path.evaluate(tree).size(), tree.getChildCount() - 2,
+            "It should compile a functioning xpath");
       }
     });
   }
@@ -49,7 +51,9 @@ public class TransformationPhaseTest extends IntegratedTest {
             GLSLParser.RULE_externalDeclaration);
         var match = pattern.match(tree.getChild(5));
         assertTrue(match.succeeded(), "It should compile a functioning pattern");
-        assertEquals("vec2", match.get("type").getText(), "It should compile a functioning pattern");
+        assertEquals(
+            "vec2", match.get("type").getText(),
+            "It should compile a functioning pattern");
       }
     });
 
@@ -80,13 +84,12 @@ public class TransformationPhaseTest extends IntegratedTest {
   @ArgumentsSource(TestCaseProvider.class)
   @SnapshotName("testInjectNode")
   void testInjectNode(String scenario, String input) {
-    //TODO: test case loader with snapshot name,
-    //TODO: fix missing semicolon in empty test
+    // TODO: test case loader with snapshot name
     setupParsingWith(input);
     wrapRunTransform(new RunPhase() {
       @Override
       protected void run(TranslationUnitContext ctx) {
-        injectExternalDeclaration("foo;\n", InjectionPoint.BEFORE_VERSION);
+        injectExternalDeclaration("foo;", InjectionPoint.BEFORE_VERSION);
       }
     });
 
