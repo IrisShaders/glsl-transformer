@@ -70,8 +70,6 @@ public class PrintVisitor extends AbstractParseTreeVisitor<Void> {
    */
   public String visitAndJoin(BufferedTokenStream rootTokenStream,
       ExtendedContext rootNode, Interval bounds) {
-    // TODO: editContext.finishEditing();
-
     // add the tokens before the root node too
     var rootInterval = rootNode.getSourceInterval();
     currentRoot = rootNode;
@@ -96,9 +94,8 @@ public class PrintVisitor extends AbstractParseTreeVisitor<Void> {
         // but always allow inserted nodes, only print non-omitted tokens
         var tokenIndex = token.getTokenIndex();
         if (token.getType() != Lexer.EOF && (tokenIndex == -1
-            || inInterval(bounds, tokenIndex) && omissionSet.isTokenAllowed(token))) {
+            || (localRoot != rootNode || inInterval(bounds, tokenIndex)) && omissionSet.isTokenAllowed(token))) {
           builder.append(token.getText());
-          // builder.append(',');
         }
       }
     }
