@@ -12,10 +12,11 @@ import au.com.origin.snapshots.Expect;
 import au.com.origin.snapshots.annotations.SnapshotName;
 import au.com.origin.snapshots.junit5.SnapshotExtension;
 import io.github.douira.glsl_transformer.GLSLParser;
+import io.github.douira.glsl_transformer.GLSLParser.TranslationUnitContext;
 import io.github.douira.glsl_transformer.IntegratedTest;
 import io.github.douira.glsl_transformer.TestCaseProvider;
-import io.github.douira.glsl_transformer.GLSLParser.TranslationUnitContext;
 import io.github.douira.glsl_transformer.generic.PrintVisitor;
+import io.github.douira.glsl_transformer.transform.TransformationPhase.InjectionPoint;
 
 @ExtendWith({ SnapshotExtension.class })
 public class TransformationPhaseTest extends IntegratedTest {
@@ -80,21 +81,40 @@ public class TransformationPhaseTest extends IntegratedTest {
 
   }
 
+  /*
+   * NOTE: #define is not a parsed directive and is disregarded
+   * TODO: add snapshot tests for unparsed tokens like comments and #defines
+   * TODO: found injection bugs in shapshot tests:
+   * full_reverse/before_eof, single_extension/*:
+   * missing newline after extension
+   * 
+   * single_pragma/*:
+   * missing newline after pragma
+   * 
+   * single_version/*:
+   * missing newline after version
+   * 
+   * full_reverse/before_directives, /before_declarations, /before_extensions:
+   * duplicated version in injected string (issue with printer?)
+   */
   @ParameterizedTest
   @ArgumentsSource(TestCaseProvider.class)
   @SnapshotName("testInjectNode")
   void testInjectNode(String scenario, String input) {
-    // TODO: test case loader with snapshot name
-    setupParsingWith(input);
-    wrapRunTransform(new RunPhase() {
-      @Override
-      protected void run(TranslationUnitContext ctx) {
-        injectExternalDeclaration("foo;", InjectionPoint.BEFORE_VERSION);
-      }
-    });
+    for (var injectionPoint : InjectionPoint.values()) {
+      setupParsingWith(input);
+      wrapRunTransform(new RunPhase() {
+        @Override
+        protected void run(TranslationUnitContext ctx) {
+          injectExternalDeclaration("injection;", injectionPoint);
+        }
+      });
 
-    var output = PrintVisitor.printTree(tokenStream, tree);
-    expect.scenario(scenario).toMatchSnapshot(input, "=====", output);
+      var output = PrintVisitor.printTree(tokenStream, tree);
+      expect
+          .scenario(scenario + "/" + injectionPoint.toString().toLowerCase())
+          .toMatchSnapshot(input, "<>".repeat(25), output);
+    }
   }
 
   @Test

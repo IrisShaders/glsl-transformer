@@ -1,21 +1,620 @@
-testInjectNode[2]=[
-bar;
-=====
-foo;bar;
+testInjectNode[empty/before_declarations]=[
+
+<><><><><><><><><><><><><><><><><><><><><><><><><>
+injection;
 ]
 
 
-testInjectNode[empty]=[
+testInjectNode[empty/before_directives]=[
 
-=====
-foo;
+<><><><><><><><><><><><><><><><><><><><><><><><><>
+injection;
 ]
 
 
-testInjectNode[simple]=[
+testInjectNode[empty/before_eof]=[
+
+<><><><><><><><><><><><><><><><><><><><><><><><><>
+injection;
+]
+
+
+testInjectNode[empty/before_extensions]=[
+
+<><><><><><><><><><><><><><><><><><><><><><><><><>
+injection;
+]
+
+
+testInjectNode[empty/before_functions]=[
+
+<><><><><><><><><><><><><><><><><><><><><><><><><>
+injection;
+]
+
+
+testInjectNode[empty/before_version]=[
+
+<><><><><><><><><><><><><><><><><><><><><><><><><>
+injection;
+]
+
+
+testInjectNode[full/before_declarations]=[
 #version 5432
-bar;
-=====
-foo;#version 5432
-bar;
+
+#extension extension_name: require
+
+#pragma foo
+
+varying vec2 varyVec;
+
+void functionDef(const in float param) {
+  functionCall();
+}
+<><><><><><><><><><><><><><><><><><><><><><><><><>
+#version 5432
+
+#extension extension_name: require
+
+#pragma foo
+injection;
+varying vec2 varyVec;
+
+void functionDef(const in float param) {
+  functionCall();
+}
+]
+
+
+testInjectNode[full/before_directives]=[
+#version 5432
+
+#extension extension_name: require
+
+#pragma foo
+
+varying vec2 varyVec;
+
+void functionDef(const in float param) {
+  functionCall();
+}
+<><><><><><><><><><><><><><><><><><><><><><><><><>
+#version 5432
+
+#extension extension_name: require
+injection;
+#pragma foo
+
+varying vec2 varyVec;
+
+void functionDef(const in float param) {
+  functionCall();
+}
+]
+
+
+testInjectNode[full/before_eof]=[
+#version 5432
+
+#extension extension_name: require
+
+#pragma foo
+
+varying vec2 varyVec;
+
+void functionDef(const in float param) {
+  functionCall();
+}
+<><><><><><><><><><><><><><><><><><><><><><><><><>
+#version 5432
+
+#extension extension_name: require
+
+#pragma foo
+
+varying vec2 varyVec;
+
+void functionDef(const in float param) {
+  functionCall();
+}injection;
+]
+
+
+testInjectNode[full/before_extensions]=[
+#version 5432
+
+#extension extension_name: require
+
+#pragma foo
+
+varying vec2 varyVec;
+
+void functionDef(const in float param) {
+  functionCall();
+}
+<><><><><><><><><><><><><><><><><><><><><><><><><>
+#version 5432
+injection;
+#extension extension_name: require
+
+#pragma foo
+
+varying vec2 varyVec;
+
+void functionDef(const in float param) {
+  functionCall();
+}
+]
+
+
+testInjectNode[full/before_functions]=[
+#version 5432
+
+#extension extension_name: require
+
+#pragma foo
+
+varying vec2 varyVec;
+
+void functionDef(const in float param) {
+  functionCall();
+}
+<><><><><><><><><><><><><><><><><><><><><><><><><>
+#version 5432
+
+#extension extension_name: require
+
+#pragma foo
+
+varying vec2 varyVec;injection;
+
+void functionDef(const in float param) {
+  functionCall();
+}
+]
+
+
+testInjectNode[full/before_version]=[
+#version 5432
+
+#extension extension_name: require
+
+#pragma foo
+
+varying vec2 varyVec;
+
+void functionDef(const in float param) {
+  functionCall();
+}
+<><><><><><><><><><><><><><><><><><><><><><><><><>
+injection;#version 5432
+
+#extension extension_name: require
+
+#pragma foo
+
+varying vec2 varyVec;
+
+void functionDef(const in float param) {
+  functionCall();
+}
+]
+
+
+testInjectNode[full_reverse/before_declarations]=[
+#version 5432
+
+void functionDef(const in float param) {
+  functionCall();
+}
+
+varying vec2 varyVec;
+
+#pragma foo
+
+#extension extension_name: require
+<><><><><><><><><><><><><><><><><><><><><><><><><>
+#version 5432
+injection;#version 5432
+
+void functionDef(const in float param) {
+  functionCall();
+}
+
+varying vec2 varyVec;
+
+#pragma foo
+
+#extension extension_name: require
+]
+
+
+testInjectNode[full_reverse/before_directives]=[
+#version 5432
+
+void functionDef(const in float param) {
+  functionCall();
+}
+
+varying vec2 varyVec;
+
+#pragma foo
+
+#extension extension_name: require
+<><><><><><><><><><><><><><><><><><><><><><><><><>
+#version 5432
+injection;#version 5432
+
+void functionDef(const in float param) {
+  functionCall();
+}
+
+varying vec2 varyVec;
+
+#pragma foo
+
+#extension extension_name: require
+]
+
+
+testInjectNode[full_reverse/before_eof]=[
+#version 5432
+
+void functionDef(const in float param) {
+  functionCall();
+}
+
+varying vec2 varyVec;
+
+#pragma foo
+
+#extension extension_name: require
+<><><><><><><><><><><><><><><><><><><><><><><><><>
+#version 5432
+
+void functionDef(const in float param) {
+  functionCall();
+}
+
+varying vec2 varyVec;
+
+#pragma foo
+
+#extension extension_name: requireinjection;
+]
+
+
+testInjectNode[full_reverse/before_extensions]=[
+#version 5432
+
+void functionDef(const in float param) {
+  functionCall();
+}
+
+varying vec2 varyVec;
+
+#pragma foo
+
+#extension extension_name: require
+<><><><><><><><><><><><><><><><><><><><><><><><><>
+#version 5432
+injection;#version 5432
+
+void functionDef(const in float param) {
+  functionCall();
+}
+
+varying vec2 varyVec;
+
+#pragma foo
+
+#extension extension_name: require
+]
+
+
+testInjectNode[full_reverse/before_functions]=[
+#version 5432
+
+void functionDef(const in float param) {
+  functionCall();
+}
+
+varying vec2 varyVec;
+
+#pragma foo
+
+#extension extension_name: require
+<><><><><><><><><><><><><><><><><><><><><><><><><>
+#version 5432
+injection;#version 5432
+
+void functionDef(const in float param) {
+  functionCall();
+}
+
+varying vec2 varyVec;
+
+#pragma foo
+
+#extension extension_name: require
+]
+
+
+testInjectNode[full_reverse/before_version]=[
+#version 5432
+
+void functionDef(const in float param) {
+  functionCall();
+}
+
+varying vec2 varyVec;
+
+#pragma foo
+
+#extension extension_name: require
+<><><><><><><><><><><><><><><><><><><><><><><><><>
+injection;#version 5432
+
+void functionDef(const in float param) {
+  functionCall();
+}
+
+varying vec2 varyVec;
+
+#pragma foo
+
+#extension extension_name: require
+]
+
+
+testInjectNode[single_declaration/before_declarations]=[
+varying vec2 varyVec;
+<><><><><><><><><><><><><><><><><><><><><><><><><>
+injection;varying vec2 varyVec;
+]
+
+
+testInjectNode[single_declaration/before_directives]=[
+varying vec2 varyVec;
+<><><><><><><><><><><><><><><><><><><><><><><><><>
+injection;varying vec2 varyVec;
+]
+
+
+testInjectNode[single_declaration/before_eof]=[
+varying vec2 varyVec;
+<><><><><><><><><><><><><><><><><><><><><><><><><>
+varying vec2 varyVec;injection;
+]
+
+
+testInjectNode[single_declaration/before_extensions]=[
+varying vec2 varyVec;
+<><><><><><><><><><><><><><><><><><><><><><><><><>
+injection;varying vec2 varyVec;
+]
+
+
+testInjectNode[single_declaration/before_functions]=[
+varying vec2 varyVec;
+<><><><><><><><><><><><><><><><><><><><><><><><><>
+varying vec2 varyVec;injection;
+]
+
+
+testInjectNode[single_declaration/before_version]=[
+varying vec2 varyVec;
+<><><><><><><><><><><><><><><><><><><><><><><><><>
+injection;varying vec2 varyVec;
+]
+
+
+testInjectNode[single_extension/before_declarations]=[
+#extension extension_name: require
+<><><><><><><><><><><><><><><><><><><><><><><><><>
+#extension extension_name: requireinjection;
+]
+
+
+testInjectNode[single_extension/before_directives]=[
+#extension extension_name: require
+<><><><><><><><><><><><><><><><><><><><><><><><><>
+#extension extension_name: requireinjection;
+]
+
+
+testInjectNode[single_extension/before_eof]=[
+#extension extension_name: require
+<><><><><><><><><><><><><><><><><><><><><><><><><>
+#extension extension_name: requireinjection;
+]
+
+
+testInjectNode[single_extension/before_extensions]=[
+#extension extension_name: require
+<><><><><><><><><><><><><><><><><><><><><><><><><>
+injection;#extension extension_name: require
+]
+
+
+testInjectNode[single_extension/before_functions]=[
+#extension extension_name: require
+<><><><><><><><><><><><><><><><><><><><><><><><><>
+#extension extension_name: requireinjection;
+]
+
+
+testInjectNode[single_extension/before_version]=[
+#extension extension_name: require
+<><><><><><><><><><><><><><><><><><><><><><><><><>
+injection;#extension extension_name: require
+]
+
+
+testInjectNode[single_function/before_declarations]=[
+void main() {}
+<><><><><><><><><><><><><><><><><><><><><><><><><>
+injection;void main() {}
+]
+
+
+testInjectNode[single_function/before_directives]=[
+void main() {}
+<><><><><><><><><><><><><><><><><><><><><><><><><>
+injection;void main() {}
+]
+
+
+testInjectNode[single_function/before_eof]=[
+void main() {}
+<><><><><><><><><><><><><><><><><><><><><><><><><>
+void main() {}injection;
+]
+
+
+testInjectNode[single_function/before_extensions]=[
+void main() {}
+<><><><><><><><><><><><><><><><><><><><><><><><><>
+injection;void main() {}
+]
+
+
+testInjectNode[single_function/before_functions]=[
+void main() {}
+<><><><><><><><><><><><><><><><><><><><><><><><><>
+injection;void main() {}
+]
+
+
+testInjectNode[single_function/before_version]=[
+void main() {}
+<><><><><><><><><><><><><><><><><><><><><><><><><>
+injection;void main() {}
+]
+
+
+testInjectNode[single_layout/before_declarations]=[
+layout(location = 0) out vec3 layoutOne;
+<><><><><><><><><><><><><><><><><><><><><><><><><>
+injection;layout(location = 0) out vec3 layoutOne;
+]
+
+
+testInjectNode[single_layout/before_directives]=[
+layout(location = 0) out vec3 layoutOne;
+<><><><><><><><><><><><><><><><><><><><><><><><><>
+injection;layout(location = 0) out vec3 layoutOne;
+]
+
+
+testInjectNode[single_layout/before_eof]=[
+layout(location = 0) out vec3 layoutOne;
+<><><><><><><><><><><><><><><><><><><><><><><><><>
+layout(location = 0) out vec3 layoutOne;injection;
+]
+
+
+testInjectNode[single_layout/before_extensions]=[
+layout(location = 0) out vec3 layoutOne;
+<><><><><><><><><><><><><><><><><><><><><><><><><>
+injection;layout(location = 0) out vec3 layoutOne;
+]
+
+
+testInjectNode[single_layout/before_functions]=[
+layout(location = 0) out vec3 layoutOne;
+<><><><><><><><><><><><><><><><><><><><><><><><><>
+layout(location = 0) out vec3 layoutOne;injection;
+]
+
+
+testInjectNode[single_layout/before_version]=[
+layout(location = 0) out vec3 layoutOne;
+<><><><><><><><><><><><><><><><><><><><><><><><><>
+injection;layout(location = 0) out vec3 layoutOne;
+]
+
+
+testInjectNode[single_pragma/before_declarations]=[
+#pragma foo
+<><><><><><><><><><><><><><><><><><><><><><><><><>
+#pragma fooinjection;
+]
+
+
+testInjectNode[single_pragma/before_directives]=[
+#pragma foo
+<><><><><><><><><><><><><><><><><><><><><><><><><>
+injection;#pragma foo
+]
+
+
+testInjectNode[single_pragma/before_eof]=[
+#pragma foo
+<><><><><><><><><><><><><><><><><><><><><><><><><>
+#pragma fooinjection;
+]
+
+
+testInjectNode[single_pragma/before_extensions]=[
+#pragma foo
+<><><><><><><><><><><><><><><><><><><><><><><><><>
+injection;#pragma foo
+]
+
+
+testInjectNode[single_pragma/before_functions]=[
+#pragma foo
+<><><><><><><><><><><><><><><><><><><><><><><><><>
+#pragma fooinjection;
+]
+
+
+testInjectNode[single_pragma/before_version]=[
+#pragma foo
+<><><><><><><><><><><><><><><><><><><><><><><><><>
+injection;#pragma foo
+]
+
+
+testInjectNode[single_version/before_declarations]=[
+#version 5432
+<><><><><><><><><><><><><><><><><><><><><><><><><>
+#version 5432injection;
+]
+
+
+testInjectNode[single_version/before_directives]=[
+#version 5432
+<><><><><><><><><><><><><><><><><><><><><><><><><>
+#version 5432injection;
+]
+
+
+testInjectNode[single_version/before_eof]=[
+#version 5432
+<><><><><><><><><><><><><><><><><><><><><><><><><>
+#version 5432injection;
+]
+
+
+testInjectNode[single_version/before_extensions]=[
+#version 5432
+<><><><><><><><><><><><><><><><><><><><><><><><><>
+#version 5432injection;
+]
+
+
+testInjectNode[single_version/before_functions]=[
+#version 5432
+<><><><><><><><><><><><><><><><><><><><><><><><><>
+#version 5432injection;
+]
+
+
+testInjectNode[single_version/before_version]=[
+#version 5432
+<><><><><><><><><><><><><><><><><><><><><><><><><>
+injection;#version 5432
 ]
