@@ -26,7 +26,8 @@ public class CachingIntervalSet extends IntervalSet {
   @Override
   public boolean contains(int el) {
     // if readonly, then allow cache hits
-    if (readonly && lastIntervalHit != null && lastIntervalHit.a <= el && lastIntervalHit.b >= el) {
+    if (readonly && lastIntervalHit != null
+        && lastIntervalHit.a <= el && lastIntervalHit.b >= el) {
       return true;
     }
 
