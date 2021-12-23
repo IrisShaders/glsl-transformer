@@ -65,12 +65,19 @@ public class ExtendedContext extends ParserRuleContext {
    */
   public ExtendedContext(ParserRuleContext parent, int invokingStateNumber) {
     super(parent, invokingStateNumber);
+    updateRoot();
   }
 
   /** Override to make type more specific */
   @Override
   public ExtendedContext getParent() {
     return (ExtendedContext) super.getParent();
+  }
+
+  private void updateRoot() {
+    if (parent != null) {
+      root = ((ExtendedContext) parent).root;
+    }
   }
 
   /**
@@ -81,9 +88,7 @@ public class ExtendedContext extends ParserRuleContext {
    */
   public void setParent(ExtendedContext parent) {
     super.setParent(parent);
-    if (parent != null) {
-      root = parent.root;
-    }
+    updateRoot();
   }
 
   /**
@@ -191,9 +196,6 @@ public class ExtendedContext extends ParserRuleContext {
   /**
    * Marks editing on the whole tree as finished. This modifies the root node's
    * readonly state. After this point no further modifications should be made.
-   * Because this sets all omission sets of the local roots to be readonly for
-   * better caching performance, making modifications after the edit context has
-   * been marked as finished can throw an exception.
    */
   public void finishEditingTree() {
     getRoot().rootAndReadonly = true;
@@ -246,8 +248,9 @@ public class ExtendedContext extends ParserRuleContext {
 
   /**
    * Adds a child to the list of children with at the given index.
+   * 
    * @param index The index to add the node at
-   * @param node The node to add
+   * @param node  The node to add
    */
   public void addChild(int index, ParseTree node) {
     node.setParent(this);
