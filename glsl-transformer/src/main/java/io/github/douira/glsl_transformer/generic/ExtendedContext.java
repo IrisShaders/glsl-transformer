@@ -1,9 +1,11 @@
 package io.github.douira.glsl_transformer.generic;
 
 import java.util.LinkedList;
+import java.util.Optional;
 
 import org.antlr.v4.runtime.BufferedTokenStream;
 import org.antlr.v4.runtime.ParserRuleContext;
+import org.antlr.v4.runtime.misc.Interval;
 import org.antlr.v4.runtime.tree.ParseTree;
 
 /**
@@ -23,13 +25,19 @@ import org.antlr.v4.runtime.tree.ParseTree;
  * contained within any local root's omission set.
  */
 public class ExtendedContext extends ParserRuleContext {
+  private record LocalRoot(CachingIntervalSet omissionSet, BufferedTokenStream tokenStream) {
+    LocalRoot(BufferedTokenStream tokenStream) {
+      this(new CachingIntervalSet(), tokenStream);
+    }
+  };
+
   /**
    * A reference to a node closer to the local root. For local roots or the
    * root node this is the node itself. For all other nodes it can actually be the
    * local root or some other node further up the tree (without skipping a local
    * root).
    */
-  private ExtendedContext localRoot;
+  private ExtendedContext localRootRef;
 
   /**
    * A reference to the tree's global root node. This is not a node closer to it,
@@ -47,14 +55,12 @@ public class ExtendedContext extends ParserRuleContext {
   private boolean rootAndReadonly = false;
 
   /**
+   * The local root data combines an omission set and a token stream.
+   * 
    * @see #getOmissionSet()
-   */
-  private CachingIntervalSet omissionSet;
-
-  /**
    * @see #getTokenStream()
    */
-  private BufferedTokenStream tokenStream;
+  private Optional<LocalRoot> localRoot = Optional.empty();
 
   /**
    * Creates a new extended parser rule context. This is required for the
@@ -101,13 +107,12 @@ public class ExtendedContext extends ParserRuleContext {
    */
   public void makeLocalRoot(BufferedTokenStream tokenStream) {
     // stop if already set up
-    if (omissionSet != null && this.tokenStream != null && localRoot == this) {
+    if (localRoot.isPresent() && localRootRef == this) {
       return;
     }
 
-    omissionSet = new CachingIntervalSet();
-    this.tokenStream = tokenStream;
-    localRoot = this;
+    localRoot = Optional.of(new LocalRoot(tokenStream));
+    localRootRef = this;
   }
 
   /**
@@ -116,7 +121,7 @@ public class ExtendedContext extends ParserRuleContext {
    * @return {@code true} if the node is a local root
    */
   public boolean isLocalRoot() {
-    return localRoot == this;
+    return localRootRef == this;
   }
 
   /**
@@ -135,7 +140,7 @@ public class ExtendedContext extends ParserRuleContext {
 
     ExtendedContext node = this;
     var traversedAncestors = new LinkedList<ExtendedContext>();
-    while (node.localRoot != node) {
+    while (node.localRootRef != node) {
       traversedAncestors.add(node);
 
       // the root node has a null parent
@@ -148,7 +153,7 @@ public class ExtendedContext extends ParserRuleContext {
     }
 
     for (var traversedNode : traversedAncestors) {
-      traversedNode.localRoot = node;
+      traversedNode.localRootRef = node;
     }
 
     return node;
@@ -186,7 +191,7 @@ public class ExtendedContext extends ParserRuleContext {
       throw new IllegalStateException("Can't add intervals to the omission set if editing is already finished!");
     }
 
-    getLocalRoot().omissionSet.add(getSourceInterval());
+    getLocalRoot().getOmissionSet().add(getSourceInterval());
   }
 
   private boolean isTreeReadonly() {
@@ -212,11 +217,15 @@ public class ExtendedContext extends ParserRuleContext {
    *         {@code null} otherwise
    */
   public CachingIntervalSet getOmissionSet() {
-    if (isTreeReadonly()) {
-      omissionSet.setReadonly(true);
+    if (localRoot.isPresent()) {
+      var omissionSet = localRoot.get().omissionSet();
+      if (isTreeReadonly()) {
+        omissionSet.setReadonly(true);
+      }
+      return omissionSet;
+    } else {
+      return null;
     }
-
-    return omissionSet;
   }
 
   /**
@@ -227,7 +236,32 @@ public class ExtendedContext extends ParserRuleContext {
    *         {@code null} otherwise
    */
   public BufferedTokenStream getTokenStream() {
-    return tokenStream;
+    return localRoot.map(LocalRoot::tokenStream).get();
+  }
+
+  /**
+   * Gets the source interval for this local root that includes the whole token
+   * stream with unparsed tokens before and after the parsed tokens that this node
+   * encompasses.
+   * 
+   * @return The full source interval of the contained token stream if this node
+   *         is a local root, {@code null} otherwise.
+   */
+  public Interval getFullSourceInterval() {
+    return localRoot.map(
+        localRoot -> Interval.of(0, localRoot.tokenStream().size() - 1)).get();
+  }
+
+  /**
+   * Gets the source interval for this node that covers the largest space. For
+   * local roots this is the full source interval covering all tokens in the token
+   * stream. For all other nodes it's the regular source interval covering only
+   * the tokens parsed for this node.
+   * 
+   * @return The largest source interval, never {@code null}.
+   */
+  public Interval getLargestSourceInterval() {
+    return localRoot.isPresent() ? getFullSourceInterval() : getSourceInterval();
   }
 
   /**

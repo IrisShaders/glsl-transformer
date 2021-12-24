@@ -51,8 +51,8 @@ public class PrintVisitor extends AbstractParseTreeVisitor<Void> {
    */
   public static String printTree(BufferedTokenStream rootTokenStream, ExtendedContext tree) {
     tree.makeLocalRoot(rootTokenStream);
-    return new PrintVisitor().visitAndJoin(rootTokenStream,
-        tree, Interval.of(0, rootTokenStream.size() - 1));
+    return new PrintVisitor()
+        .visitAndJoin(rootTokenStream, tree, tree.getFullSourceInterval());
   }
 
   /**
@@ -70,16 +70,9 @@ public class PrintVisitor extends AbstractParseTreeVisitor<Void> {
    */
   public String visitAndJoin(BufferedTokenStream rootTokenStream,
       ExtendedContext rootNode, Interval bounds) {
-    // add the tokens before the root node too
-    var rootInterval = rootNode.getSourceInterval();
-    currentRoot = rootNode;
-    addInterval(bounds.a, rootInterval.a - 1);
-
     // visit the whole tree and accumulate tokens and intervals
+    currentRoot = rootNode;
     visit(rootNode);
-
-    // and also the tokens after the root node
-    addInterval(rootInterval.b + 1, bounds.b);
 
     // convert the list of tokens and intervals into just tokens,
     // and then into their strings
@@ -187,7 +180,7 @@ public class PrintVisitor extends AbstractParseTreeVisitor<Void> {
   @Override
   public Void visitChildren(RuleNode node) {
     final var context = (ExtendedContext) node.getRuleContext();
-    final var superInterval = context.getSourceInterval();
+    final var superInterval = context.getLargestSourceInterval();
 
     // keeps track of the token index that needs to be processed next
     var fetchNext = superInterval.a;
