@@ -43,3 +43,13 @@ varying vec2 varyVec;
 #pragma foo
 
 #extension extension_name: require
+
+§testInjectNode version_with_pragma:
+#version 5432
+
+#pragma foo
+
+§testInjectNode version_with_extension:
+#version 5432
+
+#extension extension_name: require

@@ -618,3 +618,138 @@ testInjectNode[single_version/before_version]=[
 <><><><><><><><><><><><><><><><><><><><><><><><><>
 injection;#version 5432
 ]
+
+
+testInjectNode[version_with_extension/before_declarations]=[
+#version 5432
+
+#extension extension_name: require
+<><><><><><><><><><><><><><><><><><><><><><><><><>
+#version 5432
+
+#extension extension_name: requireinjection;
+]
+
+
+testInjectNode[version_with_extension/before_directives]=[
+#version 5432
+
+#extension extension_name: require
+<><><><><><><><><><><><><><><><><><><><><><><><><>
+#version 5432
+
+#extension extension_name: requireinjection;
+]
+
+
+testInjectNode[version_with_extension/before_eof]=[
+#version 5432
+
+#extension extension_name: require
+<><><><><><><><><><><><><><><><><><><><><><><><><>
+#version 5432
+
+#extension extension_name: requireinjection;
+]
+
+
+testInjectNode[version_with_extension/before_extensions]=[
+#version 5432
+
+#extension extension_name: require
+<><><><><><><><><><><><><><><><><><><><><><><><><>
+#version 5432
+injection;#version 5432
+
+#extension extension_name: require
+]
+
+
+testInjectNode[version_with_extension/before_functions]=[
+#version 5432
+
+#extension extension_name: require
+<><><><><><><><><><><><><><><><><><><><><><><><><>
+#version 5432
+
+#extension extension_name: requireinjection;
+]
+
+
+testInjectNode[version_with_extension/before_version]=[
+#version 5432
+
+#extension extension_name: require
+<><><><><><><><><><><><><><><><><><><><><><><><><>
+injection;#version 5432
+
+#extension extension_name: require
+]
+
+
+testInjectNode[version_with_pragma/before_declarations]=[
+#version 5432
+
+#pragma foo
+<><><><><><><><><><><><><><><><><><><><><><><><><>
+#version 5432
+
+#pragma fooinjection;
+]
+
+
+testInjectNode[version_with_pragma/before_directives]=[
+#version 5432
+
+#pragma foo
+<><><><><><><><><><><><><><><><><><><><><><><><><>
+#version 5432
+injection;#version 5432
+
+#pragma foo
+]
+
+
+testInjectNode[version_with_pragma/before_eof]=[
+#version 5432
+
+#pragma foo
+<><><><><><><><><><><><><><><><><><><><><><><><><>
+#version 5432
+
+#pragma fooinjection;
+]
+
+
+testInjectNode[version_with_pragma/before_extensions]=[
+#version 5432
+
+#pragma foo
+<><><><><><><><><><><><><><><><><><><><><><><><><>
+#version 5432
+injection;#version 5432
+
+#pragma foo
+]
+
+
+testInjectNode[version_with_pragma/before_functions]=[
+#version 5432
+
+#pragma foo
+<><><><><><><><><><><><><><><><><><><><><><><><><>
+#version 5432
+
+#pragma fooinjection;
+]
+
+
+testInjectNode[version_with_pragma/before_version]=[
+#version 5432
+
+#pragma foo
+<><><><><><><><><><><><><><><><><><><><><><><><><>
+injection;#version 5432
+
+#pragma foo
+]
