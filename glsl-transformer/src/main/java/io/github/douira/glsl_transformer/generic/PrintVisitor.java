@@ -189,7 +189,9 @@ public class PrintVisitor extends AbstractParseTreeVisitor<Void> {
     final var context = (ExtendedContext) node.getRuleContext();
     final var superInterval = context.getSourceInterval();
 
+    // keeps track of the token index that needs to be processed next
     var fetchNext = superInterval.a;
+
     if (context.children != null) {
       for (var child : context.children) {
         var isLocalRoot = false;
@@ -204,6 +206,7 @@ public class PrintVisitor extends AbstractParseTreeVisitor<Void> {
           previousRoot = currentRoot;
           currentRoot = (ExtendedContext) child;
         } else {
+          // interval before the current child
           childInterval = child.getSourceInterval();
           addInterval(fetchNext, childInterval.a - 1);
         }
@@ -219,6 +222,7 @@ public class PrintVisitor extends AbstractParseTreeVisitor<Void> {
       }
     }
 
+    // interval after the last child
     addInterval(fetchNext, superInterval.b);
     return null;
   }

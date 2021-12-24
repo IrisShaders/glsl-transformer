@@ -36,8 +36,10 @@ public class TestCaseProvider implements ArgumentsProvider {
       for (var i = 1; i < rawCases.length; i++) {
         var rawCase = rawCases[i];
         var segments = rawCase.split(" |:", 3);
+
+        //ensure there is a trailing newline or parsing will break
         testCases.add(new TestCase(
-            segments[0], segments[1], segments[2].trim()));
+            segments[0], segments[1], segments[2].trim() + "\n"));
       }
 
       testCaseCache.put(file, testCases);
