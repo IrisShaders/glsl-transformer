@@ -91,9 +91,9 @@ publishing {
 javadoc {
     configure( options ) {
         tags(
-            // 'apiNote:a:API Note:',
             'implSpec:a:Implementation Requirements:',
-            'implNote:a:Implementation Note:'
+            'implNote:a:Implementation Note:',
+            'apiNote:a:API Usage Note:'
         )
     }
 }
