@@ -1,6 +1,7 @@
 package io.github.douira.glsl_transformer.transform;
 
 import java.util.ArrayList;
+import java.util.Deque;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -258,19 +259,7 @@ public abstract class TransformationPhase extends GLSLParserBaseListener {
     }
   }
 
-  /**
-   * Injects the given node into the translation unit context root node at the
-   * given injection point. Note that this may break things if used improperly (if
-   * breaking the grammar's rules for example).
-   * 
-   * @implNote Since ANTLR's rule context stores children in an {@link ArrayList},
-   *           this operation runs in linear time with respect to the the number
-   *           of external declarations in the root node. TODO: improve
-   * 
-   * @param node     The new node to be inserted
-   * @param location The injection point at which the new node is inserted
-   */
-  public void injectNode(ParseTree newNode, InjectionPoint location) {
+  private int getInjectionIndex(InjectionPoint location) {
     var rootNode = getRootNode();
     var injectIndex = -1;
 
@@ -294,8 +283,40 @@ public abstract class TransformationPhase extends GLSLParserBaseListener {
         }
       } while (injectIndex < rootNode.getChildCount());
     }
+    return injectIndex;
+  }
 
-    rootNode.addChild(injectIndex, newNode);
+  /**
+   * Injects the given node into the translation unit context root node at the
+   * given injection point. Note that this may break things if used improperly (if
+   * breaking the grammar's rules for example).
+   * 
+   * TODO: improve runtime
+   * 
+   * @implNote Since ANTLR's rule context stores children in an {@link ArrayList},
+   *           this operation runs in linear time with respect to the the number
+   *           of external declarations in the root node.
+   * 
+   * @param node     The new node to be inserted
+   * @param location The injection point at which the new node is inserted
+   */
+  public void injectNode(ParseTree newNode, InjectionPoint location) {
+    getRootNode().addChild(getInjectionIndex(location), newNode);
+  }
+
+  /**
+   * Injects a list of nodes into the translation unit context node. Does the same
+   * thing as {@link #injectNode(ParseTree, InjectionPoint)} but with a list of
+   * nodes.
+   * 
+   * @param newNodes The list of nodes to be inserted
+   * @param location The injection point at which the new nodes are inserted
+   */
+  public void injectNodes(Deque<ParseTree> newNodes, InjectionPoint location) {
+    var injectIndex = getInjectionIndex(location);
+    var rootNode = getRootNode();
+    newNodes.descendingIterator()
+        .forEachRemaining(newNode -> rootNode.addChild(injectIndex, newNode));
   }
 
   /**
