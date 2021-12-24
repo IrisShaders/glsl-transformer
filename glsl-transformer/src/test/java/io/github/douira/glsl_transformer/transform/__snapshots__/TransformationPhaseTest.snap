@@ -910,6 +910,120 @@ injection; //suffix
 ]
 
 
+testInjectNode[unparsed_separators/before_declarations]=[
+//before version
+#version 5432
+//before declaration
+varying vec2 varyVec;
+//before eof
+
+<><><><><><><><><><><><><><><><><><><><><><><><><>
+//before version
+#version 5432
+//prefix
+injection; //suffix
+//before declaration
+varying vec2 varyVec;
+//before eof
+
+]
+
+
+testInjectNode[unparsed_separators/before_directives]=[
+//before version
+#version 5432
+//before declaration
+varying vec2 varyVec;
+//before eof
+
+<><><><><><><><><><><><><><><><><><><><><><><><><>
+//before version
+#version 5432
+//prefix
+injection; //suffix
+//before declaration
+varying vec2 varyVec;
+//before eof
+
+]
+
+
+testInjectNode[unparsed_separators/before_eof]=[
+//before version
+#version 5432
+//before declaration
+varying vec2 varyVec;
+//before eof
+
+<><><><><><><><><><><><><><><><><><><><><><><><><>
+//before version
+#version 5432
+//before declaration
+varying vec2 varyVec;//prefix
+injection; //suffix
+
+//before eof
+
+]
+
+
+testInjectNode[unparsed_separators/before_extensions]=[
+//before version
+#version 5432
+//before declaration
+varying vec2 varyVec;
+//before eof
+
+<><><><><><><><><><><><><><><><><><><><><><><><><>
+//before version
+#version 5432
+//prefix
+injection; //suffix
+//before declaration
+varying vec2 varyVec;
+//before eof
+
+]
+
+
+testInjectNode[unparsed_separators/before_functions]=[
+//before version
+#version 5432
+//before declaration
+varying vec2 varyVec;
+//before eof
+
+<><><><><><><><><><><><><><><><><><><><><><><><><>
+//before version
+#version 5432
+//before declaration
+varying vec2 varyVec;
+//before eof
+//prefix
+injection; //suffix
+
+]
+
+
+testInjectNode[unparsed_separators/before_version]=[
+//before version
+#version 5432
+//before declaration
+varying vec2 varyVec;
+//before eof
+
+<><><><><><><><><><><><><><><><><><><><><><><><><>
+//prefix
+injection; //suffix
+//before version
+#version 5432
+//before declaration
+varying vec2 varyVec;
+//before eof
+
+]
+
+
 testInjectNode[version_with_extension/before_declarations]=[
 #version 5432
 

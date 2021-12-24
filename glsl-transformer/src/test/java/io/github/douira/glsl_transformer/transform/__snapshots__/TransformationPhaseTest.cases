@@ -57,3 +57,10 @@ varying vec2 varyVec;
 #version 5432
 
 #extension extension_name: require
+
+§testInjectNode unparsed_separators:
+//before version
+#version 5432
+//before declaration
+varying vec2 varyVec;
+//before eof
