@@ -1,5 +1,9 @@
 §testInjectNode empty:
 
+§testInjectNode unparsed_prefix:
+//comment prefix
+#version 5432
+
 §testInjectNode single_version:
 #version 5432
 
