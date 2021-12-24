@@ -84,18 +84,6 @@ public class TransformationPhaseTest extends IntegratedTest {
   /*
    * NOTE: #define is not a parsed directive and is disregarded
    * TODO: add snapshot tests for unparsed tokens like comments and #defines
-   * TODO: found injection bugs in shapshot tests:
-   * full_reverse/before_eof, single_extension/*:
-   * missing newline after extension
-   * 
-   * single_pragma/*:
-   * missing newline after pragma
-   * 
-   * single_version/*:
-   * missing newline after version
-   * 
-   * full_reverse/before_directives, /before_declarations, /before_extensions:
-   * duplicated version in injected string (issue with printer?)
    */
   @ParameterizedTest
   @ArgumentsSource(TestCaseProvider.class)
