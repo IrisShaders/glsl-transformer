@@ -82,8 +82,9 @@ public class TransformationPhaseTest extends IntegratedTest {
   }
 
   /*
-   * NOTE: #define is not a parsed directive and is disregarded
-   * TODO: add snapshot tests for unparsed tokens like comments and #defines
+   * NOTE: #define is not a parsed directive and is disregarded,
+   * NOTE: periods in the snapshots are inserted by the snapshot framework on
+   * purpose since it uses three empty lines to separate scenarios
    */
   @ParameterizedTest
   @ArgumentsSource(TestCaseProvider.class)
@@ -101,7 +102,8 @@ public class TransformationPhaseTest extends IntegratedTest {
       var output = PrintVisitor.printTree(tokenStream, tree);
       expect
           .scenario(scenario + "/" + injectionPoint.toString().toLowerCase())
-          .toMatchSnapshot(input, "<>".repeat(25), output);
+          .toMatchSnapshot(
+              (input + "\n" + "<>".repeat(25) + "\n" + output));
     }
   }
 
