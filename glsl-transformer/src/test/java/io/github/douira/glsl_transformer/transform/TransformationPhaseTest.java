@@ -94,7 +94,7 @@ public class TransformationPhaseTest extends IntegratedTest {
       wrapRunTransform(new RunPhase() {
         @Override
         protected void run(TranslationUnitContext ctx) {
-          injectExternalDeclaration("injection;", injectionPoint);
+          injectExternalDeclaration("//prefix\ninjection; //suffix\n", injectionPoint);
         }
       });
 
