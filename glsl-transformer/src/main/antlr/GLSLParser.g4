@@ -30,13 +30,11 @@ options {
 
 //the root rule
 translationUnit:
-	versionStatement externalDeclaration* EOF;
+	versionStatement? externalDeclaration* EOF;
 
 //allows for EXT_null_initializer
 versionStatement:
-	(
-		NR VERSION NR_INTCONSTANT NR_IDENTIFIER? NR_EOL
-	)?;
+	NR VERSION NR_INTCONSTANT NR_IDENTIFIER? NR_EOL;
 
 externalDeclaration:
 	functionDefinition
