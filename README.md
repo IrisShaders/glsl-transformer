@@ -90,6 +90,7 @@ System.out.println(PrintVisitor.printTree(commonTokenStream, tree));
 ```
 
 ## Permitted Parse Tree Operations
+
 - Adding a new parsed node anywhere (as a new local root)
 - Removing any node with its entire subtree
 - Replacing any node (remove, then add)
@@ -98,6 +99,7 @@ System.out.println(PrintVisitor.printTree(commonTokenStream, tree));
 - Removing or moving a non-local-root node without touching its subtree, though this may break things that rely on grammar rules being followed
 
 ### Not yet permitted
+
 - Moving a node out of the scope of its local root
 - Removing or moving a local root without touching its subtree even if the parsing rules allow it
 
@@ -166,29 +168,28 @@ TODO:
 
 ## Todo
 
-- Write tests for injection, also with weird injection point locations
+- Make something like a TransformationManager that contains all the boilerplate for parsing setup (like what IntegratedTest does)
+- Write the remaining TransformationPhase tests
 - Write tests that matching still works even after injection
-- Write tests that tree walker doesn't break even with child array modification
+- Write tests that tree walker doesn't break even with child array modification (apart from injection, which is already being tested)
+- Handle lexing and parsing errors in an API-user friendly way (also useful for testing)
+- Snapshot tests with glslang test files where the snapshot content is the parsing errors that occurred during parsing
 
-- Make things more generic (use generic types more?)
 - Add functionality that allows removing a local root and replacing it with a new local root? (is that even possible?) if the grammar rules allow it, the local root data would somehow need to be preserved
-- make independent of parser type by making parser superclass that has a method that says what the root grammar rule is. Then the grammar file implements a method `rootRule` that calls the root grammar rule
-- Can almost everything be generic?
 
 - Unit (and integration) testing of all the parts
 - Figure out if somehow transformations could be compiled/reused without binding them to a particular parser instance
-- "Snapshot" tests with the glslang tests (test that exactly the expected errors occur, no more no less)
-- Publish as a library with semver (something like 0.0.1 because it's really unstable)
+
 - AST structures for GLSL types: Continue work on Tensor (tensor manipulation methods and "widening" until it hits the maximum)
-- More Phase functionality (abstract declaration replacement into a separate class, phase bases for inserting at certain important locations like before directives, before declarations, before defines, before the first function, after everything)
+- AST: Structs
+- More Phase functionality (abstract declaration replacement into a separate class)
 - Error on any tokens in the PREPROCESSOR channel optionally
 - Make the Lexer parse #define directives (and others?) better
 - Macro expansion (preprocessor) and other functions?
 
 ## Misc Todo
 
-- GitHub Actions builds and auto run tests
-- Put a build status badge in the README
+- GitHub Actions builds and auto run tests, Put a build status badge in the README
 
 ## Releasing Publishing Notes
 
