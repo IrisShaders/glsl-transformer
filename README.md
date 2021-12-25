@@ -169,11 +169,11 @@ TODO:
 ## Todo
 
 - Make something like a TransformationManager that contains all the boilerplate for parsing setup (like what IntegratedTest does)
+- Handle lexing and parsing errors in an API-user friendly way (also useful for testing)
+- Snapshot tests with glslang test files where the snapshot content is the parsing errors that occurred during parsing
 - Write the remaining TransformationPhase tests
 - Write tests that matching still works even after injection
 - Write tests that tree walker doesn't break even with child array modification (apart from injection, which is already being tested)
-- Handle lexing and parsing errors in an API-user friendly way (also useful for testing)
-- Snapshot tests with glslang test files where the snapshot content is the parsing errors that occurred during parsing
 
 - Add functionality that allows removing a local root and replacing it with a new local root? (is that even possible?) if the grammar rules allow it, the local root data would somehow need to be preserved
 
