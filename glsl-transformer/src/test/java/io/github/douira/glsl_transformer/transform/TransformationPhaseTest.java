@@ -13,6 +13,7 @@ import au.com.origin.snapshots.annotations.SnapshotName;
 import au.com.origin.snapshots.junit5.SnapshotExtension;
 import io.github.douira.glsl_transformer.GLSLParser;
 import io.github.douira.glsl_transformer.GLSLParser.TranslationUnitContext;
+import io.github.douira.glsl_transformer.TestResources.FileLocation;
 import io.github.douira.glsl_transformer.IntegratedTest;
 import io.github.douira.glsl_transformer.TestCaseProvider;
 import io.github.douira.glsl_transformer.generic.PrintVisitor;
@@ -27,7 +28,7 @@ public class TransformationPhaseTest extends IntegratedTest {
 
   @BeforeAll
   static void setupInput() {
-    readInput(TransformationPhaseTest.class);
+    loadResource(FileLocation.EXTERNAL_DECLARATIONS);
   }
 
   @Test

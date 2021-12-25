@@ -1,11 +1,5 @@
 package io.github.douira.glsl_transformer;
 
-import static org.junit.jupiter.api.Assertions.*;
-
-import java.nio.charset.StandardCharsets;
-import java.nio.file.Files;
-import java.nio.file.Paths;
-
 import org.antlr.v4.runtime.BufferedTokenStream;
 import org.antlr.v4.runtime.CharStream;
 import org.antlr.v4.runtime.CharStreams;
@@ -13,10 +7,14 @@ import org.antlr.v4.runtime.CommonTokenStream;
 import org.junit.jupiter.api.BeforeEach;
 
 import io.github.douira.glsl_transformer.GLSLParser.TranslationUnitContext;
+import io.github.douira.glsl_transformer.TestResources.FileLocation;
 import io.github.douira.glsl_transformer.transform.PhaseCollector;
 import io.github.douira.glsl_transformer.transform.Transformation;
 import io.github.douira.glsl_transformer.transform.TransformationPhase;
 
+/**
+ * Handles setup of all the things required to run a transformation.
+ */
 public abstract class IntegratedTest {
   public String testCode;
   public CharStream input;
@@ -26,11 +24,9 @@ public abstract class IntegratedTest {
   public TranslationUnitContext tree;
 
   public static String testResourceInput;
-  public static void readInput(Class<?> caller) {
-    testResourceInput = assertDoesNotThrow(
-        () -> Files.readString(Paths.get(caller.getResource("/"
-            + caller.getSimpleName() + ".glsl").toURI()),
-            StandardCharsets.UTF_8));
+
+  public static void loadResource(FileLocation location) {
+    testResourceInput = TestResources.getResource(location).content();
   }
 
   @BeforeEach
