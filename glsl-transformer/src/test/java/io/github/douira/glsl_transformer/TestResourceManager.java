@@ -86,14 +86,15 @@ public class TestResourceManager {
   private static Resource getPathResource(Path path) {
     var result = resourceCache.get(path);
     if (result == null) {
-      result = new Resource(path, readResourceFile(path));
+      result = new Resource(path, getFileContents(path));
     }
     return result;
   }
 
-  private static String readResourceFile(Path path) {
+  private static String getFileContents(Path path) {
     var resourcePath = getResourcePath(path);
-    return assertDoesNotThrow(() -> Files.readString(path),
+    System.out.println(resourcePath);
+    return assertDoesNotThrow(() -> Files.readString(resourcePath),
         "The file at " + resourcePath.toString() + " could not be read.");
   }
 
