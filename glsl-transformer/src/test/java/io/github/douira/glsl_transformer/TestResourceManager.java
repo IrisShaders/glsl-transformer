@@ -13,7 +13,7 @@ import java.util.stream.Stream;
 /**
  * Knows about the various code resource files and can load them.
  */
-public class TestResources {
+public class TestResourceManager {
   private static final Map<Path, Resource> resourceCache = new HashMap<>();
 
   public static enum FileLocation {
@@ -49,7 +49,7 @@ public class TestResources {
   public record Resource(Path path, String content) {
   }
 
-  private TestResources() {
+  private TestResourceManager() {
   }
 
   public static Resource getResource(FileLocation location) {
@@ -80,7 +80,7 @@ public class TestResources {
 
               return true;
             })
-            .map(TestResources::getPathResource);
+            .map(TestResourceManager::getPathResource);
   }
 
   private static Resource getPathResource(Path path) {
@@ -103,7 +103,7 @@ public class TestResources {
 
   private static Path getResourcePath(String resource) {
     return assertDoesNotThrow(
-        () -> Paths.get(TestResources.class.getResource(resource).toURI()),
+        () -> Paths.get(TestResourceManager.class.getResource(resource).toURI()),
         "The resource at " + resource + " could not be found.");
   }
 }

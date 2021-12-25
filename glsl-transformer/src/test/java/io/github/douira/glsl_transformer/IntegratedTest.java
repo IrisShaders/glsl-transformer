@@ -7,7 +7,7 @@ import org.antlr.v4.runtime.CommonTokenStream;
 import org.junit.jupiter.api.BeforeEach;
 
 import io.github.douira.glsl_transformer.GLSLParser.TranslationUnitContext;
-import io.github.douira.glsl_transformer.TestResources.FileLocation;
+import io.github.douira.glsl_transformer.TestResourceManager.FileLocation;
 import io.github.douira.glsl_transformer.transform.PhaseCollector;
 import io.github.douira.glsl_transformer.transform.Transformation;
 import io.github.douira.glsl_transformer.transform.TransformationPhase;
@@ -26,7 +26,7 @@ public abstract class IntegratedTest {
   public static String testResourceInput;
 
   public static void loadResource(FileLocation location) {
-    testResourceInput = TestResources.getResource(location).content();
+    testResourceInput = TestResourceManager.getResource(location).content();
   }
 
   @BeforeEach
