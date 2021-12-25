@@ -15,6 +15,9 @@ import io.github.douira.glsl_transformer.generic.MoveCheckable;
  * modifications to happen during tree walking.
  */
 public class DynamicParseTreeWalker extends ParseTreeWalker {
+  /**
+   * The default instance of the dynamic parse tree walker.
+   */
   public static final DynamicParseTreeWalker DEFAULT = new DynamicParseTreeWalker();
 
   /**
