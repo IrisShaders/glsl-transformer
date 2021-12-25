@@ -206,5 +206,7 @@ Build process: (see [publish-on-central](https://github.com/DanySK/publish-on-ce
 
 ```
 gradle build --warning-mode all
+git tag v0.0.x
+git push --tags
 gradle releaseJavaMavenOnMavenCentralNexus
 ```
