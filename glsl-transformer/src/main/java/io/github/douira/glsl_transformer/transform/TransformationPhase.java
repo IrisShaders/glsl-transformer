@@ -10,7 +10,6 @@ import java.util.function.Function;
 import org.antlr.v4.runtime.CharStreams;
 import org.antlr.v4.runtime.CommonTokenStream;
 import org.antlr.v4.runtime.Parser;
-import org.antlr.v4.runtime.RuleContext;
 import org.antlr.v4.runtime.tree.ParseTree;
 import org.antlr.v4.runtime.tree.pattern.ParseTreeMatch;
 import org.antlr.v4.runtime.tree.pattern.ParseTreePattern;
@@ -18,7 +17,6 @@ import org.antlr.v4.runtime.tree.xpath.XPath;
 
 import io.github.douira.glsl_transformer.GLSLLexer;
 import io.github.douira.glsl_transformer.GLSLParser;
-import io.github.douira.glsl_transformer.GLSLParserBaseListener;
 import io.github.douira.glsl_transformer.GLSLParser.DeclarationContext;
 import io.github.douira.glsl_transformer.GLSLParser.ExtensionStatementContext;
 import io.github.douira.glsl_transformer.GLSLParser.ExternalDeclarationContext;
@@ -27,6 +25,7 @@ import io.github.douira.glsl_transformer.GLSLParser.LayoutDefaultsContext;
 import io.github.douira.glsl_transformer.GLSLParser.PragmaStatementContext;
 import io.github.douira.glsl_transformer.GLSLParser.TranslationUnitContext;
 import io.github.douira.glsl_transformer.GLSLParser.VersionStatementContext;
+import io.github.douira.glsl_transformer.GLSLParserBaseListener;
 import io.github.douira.glsl_transformer.generic.EmptyTerminalNode;
 import io.github.douira.glsl_transformer.generic.ExtendedContext;
 
@@ -266,7 +265,7 @@ public abstract class TransformationPhase extends GLSLParserBaseListener {
     if (location == InjectionPoint.BEFORE_VERSION) {
       injectIndex = rootNode.getChildIndexLike(VersionStatementContext.class);
     } else if (location == InjectionPoint.BEFORE_EOF) {
-      injectIndex = rootNode.getChildCount() - 1;
+      injectIndex = rootNode.getChildCount();
     } else {
       var beforeTypes = location.EDBeforeTypes;
       if (beforeTypes == null) {
@@ -275,9 +274,8 @@ public abstract class TransformationPhase extends GLSLParserBaseListener {
       do {
         injectIndex++;
         if (rootNode.getChild(injectIndex) instanceof ExternalDeclarationContext externalDeclaration) {
-          var externalDeclarationChild = externalDeclaration.getChild(0);
-          if (externalDeclarationChild instanceof ExtendedContext
-              && beforeTypes.contains(externalDeclarationChild.getClass())) {
+          var child = externalDeclaration.getChild(0);
+          if (child instanceof ExtendedContext && beforeTypes.contains(child.getClass())) {
             break;
           }
         }
@@ -291,11 +289,9 @@ public abstract class TransformationPhase extends GLSLParserBaseListener {
    * given injection point. Note that this may break things if used improperly (if
    * breaking the grammar's rules for example).
    * 
-   * TODO: improve runtime
-   * 
    * @implNote Since ANTLR's rule context stores children in an {@link ArrayList},
-   *           this operation runs in linear time with respect to the the number
-   *           of external declarations in the root node.
+   *           this operation runs in linear time O(n) with respect to the the
+   *           number n of external declarations in the root node.
    * 
    * @param newNode  The new node to be inserted
    * @param location The injection point at which the new node is inserted
