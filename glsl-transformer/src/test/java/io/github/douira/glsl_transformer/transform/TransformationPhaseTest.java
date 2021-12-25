@@ -82,10 +82,15 @@ public class TransformationPhaseTest extends IntegratedTest {
 
   }
 
-  /*
+  /**
    * NOTE: #define is not a parsed directive and is disregarded,
    * NOTE: periods in the snapshots are inserted by the snapshot framework on
    * purpose since it uses three empty lines to separate scenarios
+   * 
+   * @implNote After transformation extra dots for newlines are inserted if there
+   *           are three in a row. At the beginning and end where the snapshot
+   *           library inserts extra newlines on its own dots are inserted even if
+   *           there are just two newlines.
    */
   @ParameterizedTest
   @ArgumentsSource(TestCaseProvider.class)
@@ -104,7 +109,10 @@ public class TransformationPhaseTest extends IntegratedTest {
       expect
           .scenario(scenario + "/" + injectionPoint.toString().toLowerCase())
           .toMatchSnapshot(
-              (input + "\n" + "<>".repeat(25) + "\n" + output));
+              (input + "\n" + "<>".repeat(25) + "\n" + output)
+                  .replace("\n\n\n", "\n.\n.\n")
+                  .replaceAll("\\n\\n$", "\n.\n.")
+                  .replaceAll("^\\n\\n", ".\n.\n"));
     }
   }
 

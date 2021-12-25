@@ -1,6 +1,6 @@
 testInjectNode[empty/before_declarations]=[
-
-
+.
+.
 <><><><><><><><><><><><><><><><><><><><><><><><><>
 
 //prefix
@@ -10,8 +10,8 @@ injection; //suffix
 
 
 testInjectNode[empty/before_directives]=[
-
-
+.
+.
 <><><><><><><><><><><><><><><><><><><><><><><><><>
 
 //prefix
@@ -21,8 +21,8 @@ injection; //suffix
 
 
 testInjectNode[empty/before_eof]=[
-
-
+.
+.
 <><><><><><><><><><><><><><><><><><><><><><><><><>
 
 //prefix
@@ -32,8 +32,8 @@ injection; //suffix
 
 
 testInjectNode[empty/before_extensions]=[
-
-
+.
+.
 <><><><><><><><><><><><><><><><><><><><><><><><><>
 
 //prefix
@@ -43,8 +43,8 @@ injection; //suffix
 
 
 testInjectNode[empty/before_functions]=[
-
-
+.
+.
 <><><><><><><><><><><><><><><><><><><><><><><><><>
 
 //prefix
@@ -54,12 +54,12 @@ injection; //suffix
 
 
 testInjectNode[empty/before_version]=[
-
-
+.
+.
 <><><><><><><><><><><><><><><><><><><><><><><><><>
+
 //prefix
 injection; //suffix
-
 
 ]
 
@@ -150,9 +150,9 @@ varying vec2 varyVec;
 
 void functionDef(const in float param) {
   functionCall();
-}//prefix
+}
+//prefix
 injection; //suffix
-
 
 ]
 
@@ -462,9 +462,9 @@ testInjectNode[single_declaration/before_eof]=[
 varying vec2 varyVec;
 
 <><><><><><><><><><><><><><><><><><><><><><><><><>
-varying vec2 varyVec;//prefix
+varying vec2 varyVec;
+//prefix
 injection; //suffix
-
 
 ]
 
@@ -495,9 +495,9 @@ testInjectNode[single_declaration/before_version]=[
 varying vec2 varyVec;
 
 <><><><><><><><><><><><><><><><><><><><><><><><><>
+varying vec2 varyVec;
 //prefix
 injection; //suffix
-varying vec2 varyVec;
 
 ]
 
@@ -561,9 +561,9 @@ testInjectNode[single_extension/before_version]=[
 #extension extension_name: require
 
 <><><><><><><><><><><><><><><><><><><><><><><><><>
+#extension extension_name: require
 //prefix
 injection; //suffix
-#extension extension_name: require
 
 ]
 
@@ -594,9 +594,9 @@ testInjectNode[single_function/before_eof]=[
 void main() {}
 
 <><><><><><><><><><><><><><><><><><><><><><><><><>
-void main() {}//prefix
+void main() {}
+//prefix
 injection; //suffix
-
 
 ]
 
@@ -627,9 +627,9 @@ testInjectNode[single_function/before_version]=[
 void main() {}
 
 <><><><><><><><><><><><><><><><><><><><><><><><><>
+void main() {}
 //prefix
 injection; //suffix
-void main() {}
 
 ]
 
@@ -660,9 +660,9 @@ testInjectNode[single_layout/before_eof]=[
 layout(location = 0) out vec3 layoutOne;
 
 <><><><><><><><><><><><><><><><><><><><><><><><><>
-layout(location = 0) out vec3 layoutOne;//prefix
+layout(location = 0) out vec3 layoutOne;
+//prefix
 injection; //suffix
-
 
 ]
 
@@ -693,9 +693,9 @@ testInjectNode[single_layout/before_version]=[
 layout(location = 0) out vec3 layoutOne;
 
 <><><><><><><><><><><><><><><><><><><><><><><><><>
+layout(location = 0) out vec3 layoutOne;
 //prefix
 injection; //suffix
-layout(location = 0) out vec3 layoutOne;
 
 ]
 
@@ -759,9 +759,9 @@ testInjectNode[single_pragma/before_version]=[
 #pragma foo
 
 <><><><><><><><><><><><><><><><><><><><><><><><><>
+#pragma foo
 //prefix
 injection; //suffix
-#pragma foo
 
 ]
 
@@ -959,10 +959,10 @@ varying vec2 varyVec;
 //before version
 #version 5432
 //before declaration
-varying vec2 varyVec;//prefix
-injection; //suffix
-
+varying vec2 varyVec;
 //before eof
+//prefix
+injection; //suffix
 
 ]
 
