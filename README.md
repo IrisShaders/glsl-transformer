@@ -204,9 +204,8 @@ gpg --list-keys --keyid-format short
 
 Build process: (see [publish-on-central](https://github.com/DanySK/publish-on-central) for docs on how it works)
 
-```
-gradle build --warning-mode all
-git tag v0.0.x
-git push --tags
-gradle releaseJavaMavenOnMavenCentralNexus
-```
+1. Test that everything builds ok `gradle build --warning-mode all`
+2. Run the tests `gradle test`
+3. Make a tag `git tag v0.0.x`
+4. Upload the tag `git push --tags`
+5. Release the build `gradle releaseJavaMavenOnMavenCentralNexus`
