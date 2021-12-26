@@ -30,7 +30,7 @@ import io.github.douira.glsl_transformer.generic.ExtendedContext;
  * TODO: unclear if sharing phases between transformation managers is
  * problematic since then the compiled paths/patterns in phases have a different
  * parser than the one being used for the transformation. Probably it doesn't
- * matter though and the parser is just used to figure out how the rules of the
+ * matter and the parser is just used to figure out how the rules of the
  * tree are.
  */
 public class Transformation {
