@@ -69,24 +69,17 @@ gradle test
 ## Example
 
 ```java
-// setup the tree
-var lexer = new GLSLLexer(input);
-var commonTokenStream = new CommonTokenStream(lexer);
-var parser = new GLSLParser(commonTokenStream);
-var tree = parser.translationUnit();
+// setup a manager
+var manager = new TransformationManager();
 
-// print before transformations
-System.out.println(PrintVisitor.printTree(commonTokenStream, tree));
+// before transformation
+System.out.println(manager.transform(string));
 
-// setup transformer
-var transformer = new PhaseCollector(parser);
-transformer.registerTransformationMultiple(ComplexTransformations::registerWith);
-
-// perform transformations
-transformer.transformTree(tree, commonTokenStream);
+// register some transformations
+manager.registerTransformationMultiple(ComplexTransformations::registerWith);
 
 // after transformation
-System.out.println(PrintVisitor.printTree(commonTokenStream, tree));
+System.out.println(manager.transform(string));
 ```
 
 ## Permitted Parse Tree Operations
