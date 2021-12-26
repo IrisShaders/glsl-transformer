@@ -14,6 +14,17 @@ import io.github.douira.glsl_transformer.generic.PrintVisitor;
 /**
  * Implements the phase collector by providing the boilerplate code for setting
  * up an input, a lexer and a parser.
+ * 
+ * The transformation manager is meant to be used to transform many strings and
+ * be re-used for many transformation jobs of the same kind. For entirely
+ * different jobs a new manager should be created. Common transformations can be
+ * shared between them.
+ * 
+ * For printing a tree without transforming it, a manager without and
+ * transformations can be used.
+ * 
+ * Creating manager instances isn't costly as ANTLR's parser and lexer
+ * instantiation is efficient.
  */
 public class TransformationManager extends PhaseCollector {
   // inited with null since they need an argument
