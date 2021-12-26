@@ -197,6 +197,6 @@ Build process: (see [publish-on-central](https://github.com/DanySK/publish-on-ce
 
 1. Test that everything builds ok `gradle build --warning-mode all`
 2. Run the tests `gradle test`
-3. Make a tag `git tag v0.0.x`
+3. Make a tag `git tag vX.Y.Z`
 4. Upload the tag `git push --tags`
 5. Release the build `gradle releaseJavaMavenOnMavenCentralNexus`
