@@ -98,7 +98,7 @@ public abstract class TransformationPhase extends GLSLParserBaseListener {
   }
 
   protected ParseTreePattern compilePattern(String pattern, int rootRule) {
-    return getParser().compileParseTreePattern(pattern, rootRule);
+    return getParser().compileParseTreePattern(pattern, rootRule, collector.getLexer());
   }
 
   /**
@@ -140,6 +140,10 @@ public abstract class TransformationPhase extends GLSLParserBaseListener {
   /**
    * This method is called right after this phase is collected by the phase
    * collector. It can be used to compile xpaths and pattern matchers.
+   * 
+   * This method should not be used to initialize state specific to a specific
+   * transformation job. That is handled by
+   * {@link io.github.douira.glsl_transformer.transform.Transformation}.
    */
   protected void init() {
   }
