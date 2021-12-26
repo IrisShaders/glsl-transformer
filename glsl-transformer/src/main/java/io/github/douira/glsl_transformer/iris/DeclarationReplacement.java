@@ -30,8 +30,11 @@ public class DeclarationReplacement extends Transformation {
     declarations = new HashMap<>();
   }
 
-  @Override
-  protected void createPhases() {
+  /**
+   * Creates a new declaration replacement transformation with a walk phase for
+   * finding declarations and one for inserting calls to the generated functions.
+   */
+  public DeclarationReplacement() {
     addPhase(new WalkPhase() {
       ParseTreePattern declarationPattern;
 

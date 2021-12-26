@@ -8,6 +8,7 @@ import java.util.TreeMap;
 import java.util.function.Consumer;
 
 import org.antlr.v4.runtime.BufferedTokenStream;
+import org.antlr.v4.runtime.Lexer;
 import org.antlr.v4.runtime.Parser;
 
 import io.github.douira.glsl_transformer.GLSLParser.TranslationUnitContext;
@@ -22,20 +23,25 @@ import io.github.douira.glsl_transformer.generic.ProxyParseTreeListener;
  * time. A level of phases consists of all phases that were added to their
  * transformation at the same index.
  */
-public class PhaseCollector {
-  private Parser parser;
-  private Map<Integer, List<TransformationPhase>> phases = new TreeMap<>();
+public abstract class PhaseCollector {
+  private Map<Integer, List<TransformationPhase>> executionLevels = new TreeMap<>();
   private Collection<Transformation> transformations = new ArrayList<>();
   private TranslationUnitContext rootNode;
 
   /**
-   * Creates a new phase collector for a parser.
+   * Returns this phase collector's parser. How the parser is stored is up to the
+   * implementing class.
    * 
-   * @param parser The parser to create this phase collector for
+   * @return The parser
    */
-  public PhaseCollector(Parser parser) {
-    this.parser = parser;
-  }
+  public abstract Parser getParser();
+
+  /**
+   * Returns the phase collector's lexer.
+   * 
+   * @return The lexer
+   */
+  public abstract Lexer getLexer();
 
   /**
    * Registers a single transformation with this phase collector. When the phase
@@ -45,8 +51,7 @@ public class PhaseCollector {
    * @param transformation The transformation to collect the phases from
    */
   public void registerTransformation(Transformation transformation) {
-    transformation.setCollector(this);
-    transformation.createPhases();
+    transformation.addPhasesTo(this);
     transformations.add(transformation);
   }
 
@@ -62,15 +67,6 @@ public class PhaseCollector {
    */
   public void registerTransformationMultiple(Consumer<PhaseCollector> groupRegisterer) {
     groupRegisterer.accept(this);
-  }
-
-  /**
-   * Returns this phase collector's parser
-   * 
-   * @return The parser
-   */
-  public Parser getParser() {
-    return parser;
   }
 
   /**
@@ -93,11 +89,11 @@ public class PhaseCollector {
    * @param phase The phase to collect into the specified level
    * @param index The level this phase should be added to
    */
-  protected void addPhaseAt(TransformationPhase phase, int index) {
-    var phasesForIndex = phases.get(index);
+  void addPhaseAt(TransformationPhase phase, int index) {
+    var phasesForIndex = executionLevels.get(index);
     if (phasesForIndex == null) {
       phasesForIndex = new ArrayList<>();
-      phases.put(index, phasesForIndex);
+      executionLevels.put(index, phasesForIndex);
     }
     phasesForIndex.add(phase);
     phase.setParent(this);
@@ -112,10 +108,12 @@ public class PhaseCollector {
       transformation.resetState();
     }
 
-    for (var level : phases.values()) {
+    for (var level : executionLevels.values()) {
       var proxyListener = new ProxyParseTreeListener(new ArrayList<>());
 
       for (var phase : level) {
+        phase.setParent(this);
+
         if (phase instanceof WalkPhase walkPhase) {
           if (walkPhase.isActiveBeforeWalk()) {
             walkPhase.beforeWalk(ctx);
@@ -150,7 +148,7 @@ public class PhaseCollector {
    * @param ctx         The root node of the parse tree to be transformed
    * @param tokenStream The token stream of the parse tree
    */
-  public void transformTree(TranslationUnitContext ctx, BufferedTokenStream tokenStream) {
+  protected void transformTree(TranslationUnitContext ctx, BufferedTokenStream tokenStream) {
     ctx.makeLocalRoot(tokenStream);
     execute(ctx);
   }

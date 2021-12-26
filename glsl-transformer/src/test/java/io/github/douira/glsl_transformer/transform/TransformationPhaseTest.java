@@ -2,6 +2,8 @@ package io.github.douira.glsl_transformer.transform;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+import org.antlr.v4.runtime.tree.pattern.ParseTreePattern;
+import org.antlr.v4.runtime.tree.xpath.XPath;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -16,15 +18,11 @@ import io.github.douira.glsl_transformer.GLSLParser.TranslationUnitContext;
 import io.github.douira.glsl_transformer.TestResourceManager.FileLocation;
 import io.github.douira.glsl_transformer.IntegratedTest;
 import io.github.douira.glsl_transformer.TestCaseProvider;
-import io.github.douira.glsl_transformer.generic.PrintVisitor;
 import io.github.douira.glsl_transformer.transform.TransformationPhase.InjectionPoint;
 
 @ExtendWith({ SnapshotExtension.class })
 public class TransformationPhaseTest extends IntegratedTest {
   private Expect expect;
-
-  class EmptyPhase extends TransformationPhase {
-  }
 
   @BeforeAll
   static void setupInput() {
@@ -33,12 +31,19 @@ public class TransformationPhaseTest extends IntegratedTest {
 
   @Test
   void testCompilePath() {
-    wrapRunTransform(new EmptyPhase() {
+    wrapRunTransform(new RunPhase() {
+      XPath path;
+
       @Override
       protected void init() {
-        var path = compilePath("/translationUnit/externalDeclaration");
+        path = compilePath("/translationUnit/externalDeclaration");
+
+      }
+
+      @Override
+      protected void run(TranslationUnitContext ctx) {
         assertEquals(
-            path.evaluate(tree).size(), tree.getChildCount() - 2,
+            path.evaluate(ctx).size(), ctx.getChildCount() - 2,
             "It should compile a functioning xpath");
       }
     });
@@ -46,19 +51,25 @@ public class TransformationPhaseTest extends IntegratedTest {
 
   @Test
   void testCompilePattern() {
-    wrapRunTransform(new EmptyPhase() {
+    wrapRunTransform(new RunPhase() {
+      ParseTreePattern pattern;
+
       @Override
       protected void init() {
-        var pattern = compilePattern("varying <type:typeSpecifier> varyVec;",
+        pattern = compilePattern("varying <type:typeSpecifier> varyVec;",
             GLSLParser.RULE_externalDeclaration);
-        var match = pattern.match(tree.getChild(5));
+
+      }
+
+      @Override
+      protected void run(TranslationUnitContext ctx) {
+        var match = pattern.match(ctx.getChild(5));
         assertTrue(match.succeeded(), "It should compile a functioning pattern");
         assertEquals(
             "vec2", match.get("type").getText(),
             "It should compile a functioning pattern");
       }
     });
-
   }
 
   @Test
@@ -73,8 +84,14 @@ public class TransformationPhaseTest extends IntegratedTest {
 
   @Test
   void testGetSiblings() {
-    assertEquals(tree.children, TransformationPhase.getSiblings(tree.versionStatement()),
-        "It should find the siblings of a node");
+    wrapRunTransform(new RunPhase() {
+      @Override
+      protected void run(TranslationUnitContext ctx) {
+        assertEquals(
+            ctx.children, TransformationPhase.getSiblings(ctx.versionStatement()),
+            "It should find the siblings of a node");
+      }
+    });
   }
 
   @Test
@@ -97,15 +114,14 @@ public class TransformationPhaseTest extends IntegratedTest {
   @SnapshotName("testInjectNode")
   void testInjectNode(String scenario, String input) {
     for (var injectionPoint : InjectionPoint.values()) {
-      setupParsingWith(input);
-      wrapRunTransform(new RunPhase() {
+      setTestCode(input);
+      var output = wrapRunTransform(new RunPhase() {
         @Override
         protected void run(TranslationUnitContext ctx) {
           injectExternalDeclaration("//prefix\ninjection; //suffix\n", injectionPoint);
         }
       });
 
-      var output = PrintVisitor.printTree(tokenStream, tree);
       expect
           .scenario(scenario + "/" + injectionPoint.toString().toLowerCase())
           .toMatchSnapshot(
@@ -118,7 +134,8 @@ public class TransformationPhaseTest extends IntegratedTest {
 
   @Test
   void testIsActive() {
-    EmptyPhase phase = new EmptyPhase();
+    var phase = new TransformationPhase() {
+    };
     assertTrue(phase.isActive(), "It should always be active");
   }
 
@@ -137,7 +154,7 @@ public class TransformationPhaseTest extends IntegratedTest {
     wrapRunTransform(new RunPhase() {
       @Override
       protected void run(TranslationUnitContext ctx) {
-        assertEquals(parser, getParser(),
+        assertEquals(manager.getParser(), getParser(),
             "It should return the previously set parser inside the phase collector");
       }
     });
