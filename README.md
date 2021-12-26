@@ -70,7 +70,7 @@ gradle test
 
 ```java
 // setup a manager
-TransformationManager manager = new TransformationManager();
+var manager = new TransformationManager();
 
 // before transformation
 System.out.println(manager.transform(string));
