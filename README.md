@@ -168,7 +168,6 @@ TODO:
 
 ## Todo
 
-- Make something like a TransformationManager that contains all the boilerplate for parsing setup (like what IntegratedTest does)
 - Handle lexing and parsing errors in an API-user friendly way (also useful for testing)
 - Snapshot tests with glslang test files where the snapshot content is the parsing errors that occurred during parsing
 - Write the remaining TransformationPhase tests
@@ -178,7 +177,6 @@ TODO:
 - Add functionality that allows removing a local root and replacing it with a new local root? (is that even possible?) if the grammar rules allow it, the local root data would somehow need to be preserved
 
 - Unit (and integration) testing of all the parts
-- Figure out if somehow transformations could be compiled/reused without binding them to a particular parser instance
 
 - AST structures for GLSL types: Continue work on Tensor (tensor manipulation methods and "widening" until it hits the maximum)
 - AST: Structs
