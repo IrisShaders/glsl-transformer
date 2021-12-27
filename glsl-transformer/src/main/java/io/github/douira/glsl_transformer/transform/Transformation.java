@@ -50,7 +50,7 @@ public class Transformation {
     }
   }
 
-  private record PhaseEntry(TransformationPhase phase, int index) {
+  public record PhaseEntry(TransformationPhase phase, int order, int group) {
   };
 
   private List<PhaseEntry> phaseRegistry = new LinkedList<>();
@@ -83,19 +83,62 @@ public class Transformation {
    * @param phase The transformation phase to append
    */
   public void addPhase(TransformationPhase phase) {
-    addPhase(phase, phaseCounter++);
+    addPhase(phaseCounter++, phase);
   }
 
   /**
-   * Adds a transformation phase to this transformation at a specific index. The
-   * index determines in which order the phases will be executed in relation to
-   * other phases within this transformation and within the phase collector.
+   * Adds a transformation phase to this transformation at a specific order but in
+   * the default group.
    * 
+   * @param order The index at which the phase should be executed
    * @param phase The transformation phase to insert
-   * @param index The index at which the phase should be executed
    */
-  public void addPhase(TransformationPhase phase, int index) {
-    phaseRegistry.add(new PhaseEntry(phase, index));
+  public void addPhase(int order, TransformationPhase phase) {
+    addPhase(order, getDefaultGroup(), phase);
+  }
+
+  /**
+   * Adds a transformation phase to this transformation in a given group and at a
+   * given position within that group. The index determines in which order the
+   * phases will be executed in relation to other phases within this
+   * transformation and within the phase collector. The group is like another
+   * index that can be used to further separate transformations from eachother.
+   * 
+   * Choose an ascending order for phases to be executed in order. To separate all
+   * phases of this transformation from those of other transformations, a
+   * different group index should be used.
+   * 
+   * @param order The index at which the phase should be executed
+   * @param group The index of the group in which this phase is executed at the
+   *              given order index
+   * @param phase The transformation phase to insert. For better formatting this
+   *              parameter is at the end.
+   */
+  public void addPhase(int order, int group, TransformationPhase phase) {
+    addPhase(new PhaseEntry(phase, order, group));
+  }
+
+  /**
+   * Adds a transformation phase entry to this transformation. The entry contains
+   * a phase and information about when it should be executed by the phase
+   * collector in relation to other phases in this and other transformations.
+   * 
+   * @param entry The phase entry to add to the registry
+   */
+  public void addPhase(PhaseEntry entry) {
+    phaseRegistry.add(entry);
+  }
+
+  /**
+   * Returns the default group for this transformation that is used for adding
+   * phases if not specified otherwise. This method is meant to be overwritten by
+   * transformation subclasses that want to use a different group for all their
+   * phases.
+   * 
+   * @return The default group index to use for adding phases
+   */
+  protected int getDefaultGroup() {
+    return PhaseCollector.DEFAULT_GROUP;
   }
 
   /**
@@ -113,7 +156,7 @@ public class Transformation {
    */
   void addPhasesTo(PhaseCollector collector) {
     for (var entry : phaseRegistry) {
-      collector.addPhaseAt(entry.phase(), entry.index());
+      collector.addPhaseAt(entry);
     }
   }
 }

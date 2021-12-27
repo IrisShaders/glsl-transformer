@@ -12,7 +12,9 @@ import org.antlr.v4.runtime.Lexer;
 import org.antlr.v4.runtime.Parser;
 
 import io.github.douira.glsl_transformer.GLSLParser.TranslationUnitContext;
+import io.github.douira.glsl_transformer.generic.ComparablePair;
 import io.github.douira.glsl_transformer.generic.ProxyParseTreeListener;
+import io.github.douira.glsl_transformer.transform.Transformation.PhaseEntry;
 
 /**
  * The phase collector holds the registered transformations and manages their
@@ -24,9 +26,11 @@ import io.github.douira.glsl_transformer.generic.ProxyParseTreeListener;
  * transformation at the same index.
  */
 public abstract class PhaseCollector {
-  private Map<Integer, List<TransformationPhase>> executionLevels = new TreeMap<>();
+  private Map<ComparablePair<Integer, Integer>, List<TransformationPhase>> executionLevels = new TreeMap<>();
   private Collection<Transformation> transformations = new ArrayList<>();
   private TranslationUnitContext rootNode;
+
+  public static final int DEFAULT_GROUP = 0;
 
   /**
    * Returns this phase collector's parser. How the parser is stored is up to the
@@ -87,13 +91,15 @@ public abstract class PhaseCollector {
    * they were added.
    * 
    * @param phase The phase to collect into the specified level
-   * @param index The level this phase should be added to
+   * @param order The level this phase should be added to
    */
-  void addPhaseAt(TransformationPhase phase, int index) {
-    var phasesForIndex = executionLevels.get(index);
+  void addPhaseAt(PhaseEntry entry) {
+    var phase = entry.phase();
+    var indexPair = new ComparablePair<>(entry.group(), entry.order());
+    var phasesForIndex = executionLevels.get(indexPair);
     if (phasesForIndex == null) {
       phasesForIndex = new ArrayList<>();
-      executionLevels.put(index, phasesForIndex);
+      executionLevels.put(indexPair, phasesForIndex);
     }
     phasesForIndex.add(phase);
     phase.setParent(this);
