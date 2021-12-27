@@ -18,7 +18,7 @@ public class TransformationManagerTest {
     manager.registerTransformation(new Transformation(new RunPhase() {
       @Override
       protected void run(TranslationUnitContext ctx) {
-        injectExternalDeclaration("//thing\n", InjectionPoint.BEFORE_VERSION);
+        injectExternalDeclaration("//thing\n;", InjectionPoint.BEFORE_VERSION);
       }
     }));
   }
@@ -35,12 +35,15 @@ public class TransformationManagerTest {
 
   @Test
   void testTransform() {
-    assertEquals("//present\n//thing\n", manager.transform("//present\n"));
+    assertEquals(
+        "//present\n//thing\n;",
+        manager.transform("//present\n"));
   }
 
   @Test
   void testTransformStream() {
-    assertEquals("//present\n//thing\n",
+    assertEquals(
+        "//present\n//thing\n;",
         manager.transformStream(CharStreams.fromString("//present\n")));
   }
 }
