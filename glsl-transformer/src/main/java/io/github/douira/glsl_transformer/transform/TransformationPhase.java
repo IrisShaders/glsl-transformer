@@ -268,6 +268,9 @@ public abstract class TransformationPhase extends GLSLParserBaseListener {
 
     if (location == InjectionPoint.BEFORE_VERSION) {
       injectIndex = rootNode.getChildIndexLike(VersionStatementContext.class);
+      if (injectIndex == rootNode.getChildCount()) {
+        injectIndex = 0;
+      }
     } else if (location == InjectionPoint.BEFORE_EOF) {
       injectIndex = rootNode.getChildCount();
     } else {
