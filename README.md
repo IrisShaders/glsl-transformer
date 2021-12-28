@@ -177,10 +177,6 @@ TODO:
 - Make the Lexer parse #define directives (and others?) better
 - Macro expansion (preprocessor) and other functions?
 
-## Misc Todo
-
-- GitHub Actions builds and auto run tests, Put a build status badge in the README
-
 ## Releasing Publishing Notes
 
 All files in a directory can be joined using `find . -type f -exec cat {} \; `. The output is printed to the terminal. Some cleanup maybe required.
