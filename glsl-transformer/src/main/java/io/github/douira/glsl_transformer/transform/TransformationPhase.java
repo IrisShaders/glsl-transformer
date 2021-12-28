@@ -179,7 +179,8 @@ public abstract class TransformationPhase extends GLSLParserBaseListener {
    */
   public <RuleType extends ExtendedContext> RuleType createLocalRoot(String str, ExtendedContext parent,
       Function<GLSLParser, RuleType> parseMethod) {
-    var commonTokenStream = new CommonTokenStream(new GLSLLexer(CharStreams.fromString(str)));
+    var commonTokenStream = new CommonTokenStream(
+        new GLSLLexer(CharStreams.fromString(str)));
     var node = parseMethod.apply(new GLSLParser(commonTokenStream));
     node.setParent(parent);
     node.makeLocalRoot(commonTokenStream);

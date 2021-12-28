@@ -6,8 +6,6 @@ import java.util.LinkedList;
 import java.util.List;
 
 import org.antlr.v4.runtime.tree.ParseTree;
-import org.antlr.v4.runtime.tree.pattern.ParseTreePattern;
-import org.antlr.v4.runtime.tree.xpath.XPath;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -25,6 +23,9 @@ import io.github.douira.glsl_transformer.TestWithTransformationManager;
 import io.github.douira.glsl_transformer.TestCaseReader;
 import io.github.douira.glsl_transformer.transform.TransformationPhase.InjectionPoint;
 
+/**
+ * TODO: test node removal, replacement and injection in local roots
+ */
 @ExtendWith({ SnapshotExtension.class })
 public class TransformationPhaseTest extends TestWithTransformationManager {
   private Expect expect;
@@ -37,18 +38,12 @@ public class TransformationPhaseTest extends TestWithTransformationManager {
   @Test
   void testCompilePath() {
     wrapRunTransform(new RunPhase() {
-      XPath path;
-
-      @Override
-      protected void init() {
-        path = compilePath("/translationUnit/externalDeclaration");
-
-      }
-
       @Override
       protected void run(TranslationUnitContext ctx) {
         assertEquals(
-            path.evaluate(ctx).size(), ctx.getChildCount() - 2,
+            compilePath("/translationUnit/externalDeclaration")
+                .evaluate(ctx).size(),
+            ctx.getChildCount() - 2,
             "It should compile a functioning xpath");
       }
     });
@@ -57,18 +52,12 @@ public class TransformationPhaseTest extends TestWithTransformationManager {
   @Test
   void testCompilePattern() {
     wrapRunTransform(new RunPhase() {
-      ParseTreePattern pattern;
-
-      @Override
-      protected void init() {
-        pattern = compilePattern("varying <type:typeSpecifier> varyVec;",
-            GLSLParser.RULE_externalDeclaration);
-
-      }
-
       @Override
       protected void run(TranslationUnitContext ctx) {
-        var match = pattern.match(ctx.getChild(5));
+        var match = compilePattern(
+            "varying <type:typeSpecifier> varyVec;",
+            GLSLParser.RULE_externalDeclaration)
+                .match(ctx.getChild(5));
         assertTrue(match.succeeded(), "It should compile a functioning pattern");
         assertEquals(
             "vec2", match.get("type").getText(),
@@ -79,12 +68,31 @@ public class TransformationPhaseTest extends TestWithTransformationManager {
 
   @Test
   void testCreateLocalRoot() {
-
+    wrapRunTransform(new RunPhase() {
+      @Override
+      protected void run(TranslationUnitContext ctx) {
+        var localRoot = createLocalRoot("f;", ctx, GLSLParser::externalDeclaration);
+        assertTrue(localRoot.isLocalRoot(), "It should produce a local root");
+        assertFalse(localRoot.isRoot(), "It should not mark the node as the global root");
+        assertEquals(ctx, localRoot.parent,
+            "It should produce a node bound to the given parent");
+      }
+    });
   }
 
   @Test
   void testFindAndMatch() {
-
+    wrapRunTransform(new RunPhase() {
+      @Override
+      protected void run(TranslationUnitContext ctx) {
+        var matches = findAndMatch(ctx,
+            compilePath("/translationUnit/externalDeclaration/declaration"),
+            compilePattern(
+                "<layout:layoutQualifier> <storage:storageQualifier> <specifier:typeSpecifier> <name:IDENTIFIER>;",
+                GLSLParser.RULE_declaration));
+        assertEquals(2, matches.size());
+      }
+    });
   }
 
   @Test
@@ -150,16 +158,18 @@ public class TransformationPhaseTest extends TestWithTransformationManager {
         wrapRunTransform("a;//present\nb;c;int foo;", new RunPhase() {
           @Override
           protected void run(TranslationUnitContext ctx) {
-            injectExternalDeclaration("e;", InjectionPoint.BEFORE_DECLARATIONS);
+            injectExternalDeclaration("e;", InjectionPoint.BEFORE_VERSION);
           }
-        }));
+        }),
+        "It should inject an external declaration at the right position");
   }
 
   @Test
   void testIsActive() {
-    var phase = new TransformationPhase() {
-    };
-    assertTrue(phase.isActive(), "It should always be active");
+    assertTrue(
+        (new TransformationPhase() {
+        }).isActive(),
+        "It should always be active");
   }
 
   @Test
@@ -172,7 +182,8 @@ public class TransformationPhaseTest extends TestWithTransformationManager {
             removeNode(ctx.externalDeclaration(1));
             removeNode(ctx.externalDeclaration(1));
           }
-        }));
+        }),
+        "It should correctly remove two nodes at the second position");
   }
 
   @Test
@@ -184,7 +195,8 @@ public class TransformationPhaseTest extends TestWithTransformationManager {
           protected void run(TranslationUnitContext ctx) {
             replaceNode(ctx.externalDeclaration(1), "new;", GLSLParser::externalDeclaration);
           }
-        }));
+        }),
+        "It should correctly replace the second node");
   }
 
   @Test
