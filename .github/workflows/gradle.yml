@@ -32,10 +32,10 @@ jobs:
     - name: Archive build
       uses: actions/upload-artifact@v2
       with:
-        name: Build result jar
+        name: Build Result
         path: glsl-transformer/build/libs/
     - name: Archive test report
       uses: actions/upload-artifact@v2
       with:
-        name: Test report
+        name: Test Report
         path: glsl-transformer/build/reports/tests/test/
