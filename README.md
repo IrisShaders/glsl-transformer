@@ -162,8 +162,8 @@ TODO:
 
 ## Todo
 
-- Write the remaining TransformationPhase tests
 - Write tests that matching still works even after injection
+- Test node removal, replacement and injection in local roots (in `TransformationPhaseTest`)
 - Write tests that tree walker doesn't break even with child array modification (apart from injection, which is already being tested)
 
 - Add functionality that allows removing a local root and replacing it with a new local root? (is that even possible?) if the grammar rules allow it, the local root data would somehow need to be preserved
