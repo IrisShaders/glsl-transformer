@@ -33,9 +33,9 @@ jobs:
       uses: actions/upload-artifact@v2
       with:
         name: Build result jar
-        path: build/libs/*
+        path: build/libs/
     - name: Archive test report
       uses: actions/upload-artifact@v2
       with:
         name: Test report
-        path: build/reports/tests/test
+        path: build/reports/tests/test/
