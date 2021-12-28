@@ -2,21 +2,35 @@ package io.github.douira.glsl_transformer.transform;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import org.antlr.v4.runtime.BaseErrorListener;
 import org.antlr.v4.runtime.CharStreams;
 import org.antlr.v4.runtime.InputMismatchException;
 import org.antlr.v4.runtime.LexerNoViableAltException;
 import org.antlr.v4.runtime.NoViableAltException;
 import org.antlr.v4.runtime.RecognitionException;
+import org.antlr.v4.runtime.Recognizer;
 import org.antlr.v4.runtime.misc.ParseCancellationException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.api.function.Executable;
 
+import au.com.origin.snapshots.Expect;
+import au.com.origin.snapshots.annotations.SnapshotName;
+import au.com.origin.snapshots.junit5.SnapshotExtension;
+import io.github.douira.glsl_transformer.SnapshotUtil;
+import io.github.douira.glsl_transformer.TestResourceManager;
+import io.github.douira.glsl_transformer.TestWithTransformationManager;
 import io.github.douira.glsl_transformer.GLSLParser.TranslationUnitContext;
+import io.github.douira.glsl_transformer.TestResourceManager.DirectoryLocation;
 
-public class TransformationManagerTest {
-  TransformationManager manager;
-  Exception storeException;
+@ExtendWith({ SnapshotExtension.class })
+public class TransformationManagerTest extends TestWithTransformationManager {
+  private Expect expect;
+  private Exception storeException;
 
   @BeforeEach
   void setup() {
@@ -79,5 +93,50 @@ public class TransformationManagerTest {
     assertEquals(
         "//present\n//thing\n;",
         manager.transformStream(CharStreams.fromString("//present\n")));
+  }
+
+  @Test
+  @SnapshotName("testGlslangErrors")
+  void testGlslangErrors() {
+    class CollectingErrorListener extends BaseErrorListener {
+      private List<String> errors = new ArrayList<>();
+
+      @Override
+      public void syntaxError(
+          Recognizer<?, ?> recognizer, Object offendingSymbol, int line, int charPositionInLine,
+          String msg, RecognitionException e) throws ParseCancellationException {
+        errors.add(
+            line + ":" + charPositionInLine + "; " +
+                (offendingSymbol == null
+                    ? "<no symbol>"
+                    : offendingSymbol.toString())
+                + "; " + msg + "; " +
+                (e == null
+                    ? "<no exception>"
+                    : e.getClass().getSimpleName() + ":" + e.getMessage()));
+      }
+    }
+
+    TestResourceManager
+        .getDirectoryResources(DirectoryLocation.GLSLANG_TESTS)
+        .forEach(resource -> {
+          manager = new TransformationManager(false);
+          var collectingListener = new CollectingErrorListener();
+          manager.getLexer().addErrorListener(collectingListener);
+          manager.getParser().addErrorListener(collectingListener);
+
+          var content = resource.content();
+          var expectScenario = expect.scenario(
+              resource.path().getFileName().toString());
+
+          if (content == null) {
+            expectScenario.toMatchSnapshot("<invalid content>");
+          } else {
+            manager.transform(resource.content());
+            expectScenario.toMatchSnapshot(
+                SnapshotUtil.inputOutputSnapshot(
+                    content, String.join("\n", collectingListener.errors)));
+          }
+        });
   }
 }
