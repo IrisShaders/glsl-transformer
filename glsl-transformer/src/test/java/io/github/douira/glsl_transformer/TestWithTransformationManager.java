@@ -29,9 +29,13 @@ public abstract class TestWithTransformationManager {
     setTestCode(testResourceInput);
   }
 
-  public String wrapRunTransform(TransformationPhase phase) {
+  public String wrapRunTransform(String code, TransformationPhase phase) {
     manager = new TransformationManager();
     manager.registerTransformation(new Transformation(phase));
-    return manager.transform(testCode);
+    return manager.transform(code);
+  }
+
+  public String wrapRunTransform(TransformationPhase phase) {
+    return wrapRunTransform(testCode, phase);
   }
 }

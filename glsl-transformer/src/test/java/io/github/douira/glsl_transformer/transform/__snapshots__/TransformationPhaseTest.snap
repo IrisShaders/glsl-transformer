@@ -57,10 +57,10 @@ testInjectNode[empty/before_version]=[
 .
 .
 <><><><><><><><><><><><><><><><><><><><><><><><><>
-
 //prefix
 injection; //suffix
-
+.
+.
 ]
 
 
@@ -495,9 +495,9 @@ testInjectNode[single_declaration/before_version]=[
 varying vec2 varyVec;
 
 <><><><><><><><><><><><><><><><><><><><><><><><><>
-varying vec2 varyVec;
 //prefix
 injection; //suffix
+varying vec2 varyVec;
 
 ]
 
@@ -561,9 +561,9 @@ testInjectNode[single_extension/before_version]=[
 #extension extension_name: require
 
 <><><><><><><><><><><><><><><><><><><><><><><><><>
-#extension extension_name: require
 //prefix
 injection; //suffix
+#extension extension_name: require
 
 ]
 
@@ -627,9 +627,9 @@ testInjectNode[single_function/before_version]=[
 void main() {}
 
 <><><><><><><><><><><><><><><><><><><><><><><><><>
-void main() {}
 //prefix
 injection; //suffix
+void main() {}
 
 ]
 
@@ -693,9 +693,9 @@ testInjectNode[single_layout/before_version]=[
 layout(location = 0) out vec3 layoutOne;
 
 <><><><><><><><><><><><><><><><><><><><><><><><><>
-layout(location = 0) out vec3 layoutOne;
 //prefix
 injection; //suffix
+layout(location = 0) out vec3 layoutOne;
 
 ]
 
@@ -759,9 +759,9 @@ testInjectNode[single_pragma/before_version]=[
 #pragma foo
 
 <><><><><><><><><><><><><><><><><><><><><><><><><>
-#pragma foo
 //prefix
 injection; //suffix
+#pragma foo
 
 ]
 

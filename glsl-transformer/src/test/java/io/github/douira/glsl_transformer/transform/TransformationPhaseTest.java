@@ -99,11 +99,6 @@ public class TransformationPhaseTest extends TestWithTransformationManager {
     });
   }
 
-  @Test
-  void testInjectExternalDeclaration() {
-
-  }
-
   /**
    * NOTE: #define is not a parsed directive and is disregarded,
    * NOTE: periods in the snapshots are inserted by the snapshot framework on
@@ -135,20 +130,29 @@ public class TransformationPhaseTest extends TestWithTransformationManager {
 
   @Test
   void testInjectNodes() {
-    manager = new TransformationManager();
-    manager.registerTransformation(new Transformation(new RunPhase() {
-      @Override
-      protected void run(TranslationUnitContext ctx) {
-        injectNodes(new LinkedList<ParseTree>(List.of(
-            createLocalRoot("//1\n;", getRootNode(), GLSLParser::externalDeclaration),
-            createLocalRoot("//2\n;", getRootNode(), GLSLParser::externalDeclaration))),
-            InjectionPoint.BEFORE_VERSION);
-      }
-    }));
-
     assertEquals(
-        "//present\n//1\n;//2\n;",
-        manager.transform("//present\n"));
+        "e;//\nf;a;//present\nb;c;d;",
+        wrapRunTransform("a;//present\nb;c;d;", new RunPhase() {
+          @Override
+          protected void run(TranslationUnitContext ctx) {
+            injectNodes(new LinkedList<ParseTree>(List.of(
+                createLocalRoot("e;", getRootNode(), GLSLParser::externalDeclaration),
+                createLocalRoot("//\nf;", getRootNode(), GLSLParser::externalDeclaration))),
+                InjectionPoint.BEFORE_VERSION);
+          }
+        }));
+  }
+
+  @Test
+  void testInjectExternalDeclaration() {
+    assertEquals(
+        "e;a;//present\nb;c;int foo;",
+        wrapRunTransform("a;//present\nb;c;int foo;", new RunPhase() {
+          @Override
+          protected void run(TranslationUnitContext ctx) {
+            injectExternalDeclaration("e;", InjectionPoint.BEFORE_DECLARATIONS);
+          }
+        }));
   }
 
   @Test
@@ -160,12 +164,27 @@ public class TransformationPhaseTest extends TestWithTransformationManager {
 
   @Test
   void testRemoveNode() {
-
+    assertEquals(
+        "a;d;",
+        wrapRunTransform("a;//present\nb;c;d;", new RunPhase() {
+          @Override
+          protected void run(TranslationUnitContext ctx) {
+            removeNode(ctx.externalDeclaration(1));
+            removeNode(ctx.externalDeclaration(1));
+          }
+        }));
   }
 
   @Test
   void testReplaceNode() {
-
+    assertEquals(
+        "a;new;c;d;",
+        wrapRunTransform("a;//present\nb;c;d;", new RunPhase() {
+          @Override
+          protected void run(TranslationUnitContext ctx) {
+            replaceNode(ctx.externalDeclaration(1), "new;", GLSLParser::externalDeclaration);
+          }
+        }));
   }
 
   @Test
