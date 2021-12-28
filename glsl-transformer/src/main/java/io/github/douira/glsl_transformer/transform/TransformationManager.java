@@ -70,7 +70,6 @@ public class TransformationManager extends PhaseCollector {
     if (throwParseErrors) {
       lexer.addErrorListener(ThrowingErrorListener.INSTANCE);
       parser.addErrorListener(ThrowingErrorListener.INSTANCE);
-
       // parser.setErrorHandler(new BailErrorStrategy());
     }
   }
