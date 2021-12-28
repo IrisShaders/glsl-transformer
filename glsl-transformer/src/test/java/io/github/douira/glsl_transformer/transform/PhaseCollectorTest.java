@@ -117,4 +117,28 @@ public class PhaseCollectorTest {
     });
     assertEquals(1, nextIndex, "It should call the function for registering transformations on it");
   }
+
+  @Test
+  void testInitsPhases() {
+    manager = new TransformationManager();
+    nextIndex = 0;
+    var transformation = new Transformation();
+    transformation.addPhase(2, new TransformationPhase() {
+      @Override
+      protected void init() {
+        nextIndex++;
+        assertSame(manager.getParser(), getParser(), "It should set the parent before initializing the phases");
+      }
+    });
+    transformation.addPhase(0, new TransformationPhase() {
+      @Override
+      protected void init() {
+        nextIndex++;
+        assertEquals(2, nextIndex, "It should initialize the second phase after the first");
+      }
+    });
+    manager.registerTransformation(transformation);
+    assertEquals(2, nextIndex,
+        "It should call the init method of the transformation phases in the order they are added");
+  }
 }
