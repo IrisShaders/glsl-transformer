@@ -8,8 +8,8 @@ import io.github.douira.glsl_transformer.GLSLParser.TranslationUnitContext;
 import io.github.douira.glsl_transformer.transform.Transformation.PhaseEntry;
 
 public class PhaseCollectorTest {
-  TransformationManager manager;
-  int nextIndex;
+  private TransformationManager manager;
+  private int nextIndex;
 
   void addOrderedPhase(int order, int group) {
     final var assertIndex = nextIndex++;

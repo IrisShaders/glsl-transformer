@@ -19,11 +19,11 @@ import org.junit.jupiter.params.provider.ArgumentsProvider;
 
 import au.com.origin.snapshots.annotations.SnapshotName;
 
-public class TestCaseProvider implements ArgumentsProvider {
+public class TestCaseReader implements ArgumentsProvider {
   private record TestCase(String snapshotName, String scenario, String content) {
   };
 
-  static final Map<Path, List<TestCase>> testCaseCache = new HashMap<>();
+  private static final Map<Path, List<TestCase>> testCaseCache = new HashMap<>();
 
   private List<TestCase> getTestCases(Path file) throws IOException {
     var testCases = testCaseCache.get(file);
