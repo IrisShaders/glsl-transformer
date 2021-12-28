@@ -16,12 +16,12 @@ import au.com.origin.snapshots.junit5.SnapshotExtension;
 import io.github.douira.glsl_transformer.GLSLParser;
 import io.github.douira.glsl_transformer.GLSLParser.TranslationUnitContext;
 import io.github.douira.glsl_transformer.TestResourceManager.FileLocation;
-import io.github.douira.glsl_transformer.IntegratedTest;
+import io.github.douira.glsl_transformer.TestWithTransformationManager;
 import io.github.douira.glsl_transformer.TestCaseProvider;
 import io.github.douira.glsl_transformer.transform.TransformationPhase.InjectionPoint;
 
 @ExtendWith({ SnapshotExtension.class })
-public class TransformationPhaseTest extends IntegratedTest {
+public class TransformationPhaseTest extends TestWithTransformationManager {
   private Expect expect;
 
   @BeforeAll
@@ -87,7 +87,7 @@ public class TransformationPhaseTest extends IntegratedTest {
     wrapRunTransform(new RunPhase() {
       @Override
       protected void run(TranslationUnitContext ctx) {
-        assertEquals(
+        assertSame(
             ctx.children, TransformationPhase.getSiblings(ctx.versionStatement()),
             "It should find the siblings of a node");
       }
@@ -154,7 +154,7 @@ public class TransformationPhaseTest extends IntegratedTest {
     wrapRunTransform(new RunPhase() {
       @Override
       protected void run(TranslationUnitContext ctx) {
-        assertEquals(manager.getParser(), getParser(),
+        assertSame(manager.getParser(), getParser(),
             "It should return the previously set parser inside the phase collector");
       }
     });
