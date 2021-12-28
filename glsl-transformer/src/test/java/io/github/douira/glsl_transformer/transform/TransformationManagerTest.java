@@ -38,7 +38,7 @@ public class TransformationManagerTest extends TestWithTransformationManager {
     manager.registerTransformation(new Transformation(new RunPhase() {
       @Override
       protected void run(TranslationUnitContext ctx) {
-        injectExternalDeclaration("//thing\n;", InjectionPoint.BEFORE_VERSION);
+        injectExternalDeclaration("f;", InjectionPoint.BEFORE_VERSION);
       }
     }));
   }
@@ -69,8 +69,8 @@ public class TransformationManagerTest extends TestWithTransformationManager {
   @Test
   void testTransform() {
     assertEquals(
-        "//present\n//thing\n;",
-        manager.transform("//present\n"));
+        "f;a;//present\nb;c;d;",
+        manager.transform("a;//present\nb;c;d;"));
 
     assertParseErrorType(
         InputMismatchException.class, () -> manager.transform(
@@ -91,8 +91,8 @@ public class TransformationManagerTest extends TestWithTransformationManager {
   @Test
   void testTransformStream() {
     assertEquals(
-        "//present\n//thing\n;",
-        manager.transformStream(CharStreams.fromString("//present\n")));
+        "f;a;//present\nb;c;d;",
+        manager.transformStream(CharStreams.fromString("a;//present\nb;c;d;")));
   }
 
   @Test
