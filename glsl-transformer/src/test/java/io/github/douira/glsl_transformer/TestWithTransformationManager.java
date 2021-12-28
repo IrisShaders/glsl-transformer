@@ -10,23 +10,23 @@ import io.github.douira.glsl_transformer.transform.TransformationPhase;
 /**
  * Handles setup of all the things required to run a transformation.
  */
-public abstract class IntegratedTest {
+public abstract class TestWithTransformationManager {
   public static String testResourceInput;
 
-  public String testCode;
+  public static String testCode;
   public TransformationManager manager;
 
   public static void loadResource(FileLocation location) {
     testResourceInput = TestResourceManager.getResource(location).content();
   }
 
+  public static void setTestCode(String code) {
+    testCode = code;
+  }
+
   @BeforeEach
   public void setupParsing() {
     setTestCode(testResourceInput);
-  }
-
-  public void setTestCode(String code) {
-    testCode = code;
   }
 
   public String wrapRunTransform(TransformationPhase phase) {
