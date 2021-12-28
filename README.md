@@ -19,11 +19,11 @@ See the Javadoc, the documentation section further down and the tests. Also chec
 
 ## What `glsl-transformer` is not
 
-Note that `glsl-transformer` is **not** a GLSL compiler or even a graphics card driver. It has no or only a very limited semantic understanding of the code. It's primarily intended as a syntactic transformation tool and as such the goal is not to parse the code into an abstract syntax tree (AST). In an AST the syntax is represented in a more abstract way and isn't bound to specific parsing rules. This representation requires a lot more work to implement and is not all of useful in this case. There are AST-like features for specific pieces of syntax though. They are optional and built on top of the parse tree.
+Note that `glsl-transformer` is **not** a GLSL compiler or even a graphics card driver. It has no or only a very limited semantic understanding of the code. It's primarily intended as a syntactic transformation tool and as such the goal is not to parse the code into an abstract syntax tree (AST). In an AST the syntax is represented in a more abstract way and isn't bound to specific parsing rules. This representation requires a lot more work to implement and is not very useful in this case. There are AST-like features for specific pieces of syntax though. They are optional and built on top of the parse tree.
 
-`glsl-transformer` does not do semantic validation of the code and will not error on code that is actually invalid for semantic reasons. It will only error on syntax errors. Note however that it supports GLSL 4.6 with some extensions (lik explicit arithmetic types and some others) and won't error when modern features are used even though your driver might not support them. Do not rely on `glsl-transformer` for shader validation, only for syntax transformation.
+`glsl-transformer` does not do semantic validation of the code and will not error on code that is actually invalid for semantic reasons. It will only error on syntax errors. Note however that it supports GLSL 4.6 with some extensions such as explicit arithmetic types and some others. It won't error on modern syntax features even if your driver doesn't support them. Do not rely on `glsl-transformer` for shader validation, only for syntax transformation.
 
-It also doesn't validate that features aren't used which may not be available in a older GLSL versions. The `#version` directive is not semantically interpreted. It may also fail to parse code that is technically legal in old GLSL version where certain tokens weren't declared as reserved words yet. Just don't use reserved words as tokens. If it's really necessary, preprocess the code by simply replacing the reserved words with some placeholder before parsing.
+It also doesn't validate that features aren't used which may not be available in a older GLSL versions. The `#version` directive is not semantically interpreted. It may also fail to parse code that is technically legal in old GLSL version where certain tokens weren't declared as reserved words yet. Just don't use reserved words as tokens in this case. If it's really necessary, preprocess the code by simply replacing the reserved words with some placeholder before parsing.
 
 ## Goals
 
@@ -43,7 +43,7 @@ All of these should be fulfilled at the same time.
 
 ## Versioning
 
-This project uses semver for versioning. Once it gets more stable it will move to `major.minor.patch` versions instead of `0.0.major`. If there are frequent breaking API changes then the major version will change frequently. That's how it has to be.
+This project uses semver for versioning. If there are frequent breaking API changes then the major version will change frequently. That's how it has to be.
 
 ## Credit
 
