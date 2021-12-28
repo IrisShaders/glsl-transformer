@@ -4,8 +4,6 @@ import org.antlr.v4.runtime.BufferedTokenStream;
 import org.antlr.v4.runtime.CharStreams;
 import org.antlr.v4.runtime.CommonTokenStream;
 import org.antlr.v4.runtime.IntStream;
-import org.antlr.v4.runtime.Lexer;
-import org.antlr.v4.runtime.Parser;
 
 import io.github.douira.glsl_transformer.GLSLLexer;
 import io.github.douira.glsl_transformer.GLSLParser;
@@ -43,12 +41,12 @@ public class TransformationManager extends PhaseCollector {
    * {@inheritDoc}
    */
   @Override
-  public Parser getParser() {
+  public GLSLParser getParser() {
     return parser;
   }
 
   @Override
-  public Lexer getLexer() {
+  public GLSLLexer getLexer() {
     return lexer;
   }
 

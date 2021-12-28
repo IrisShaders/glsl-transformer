@@ -8,9 +8,9 @@ import java.util.TreeMap;
 import java.util.function.Consumer;
 
 import org.antlr.v4.runtime.BufferedTokenStream;
-import org.antlr.v4.runtime.Lexer;
-import org.antlr.v4.runtime.Parser;
 
+import io.github.douira.glsl_transformer.GLSLLexer;
+import io.github.douira.glsl_transformer.GLSLParser;
 import io.github.douira.glsl_transformer.GLSLParser.TranslationUnitContext;
 import io.github.douira.glsl_transformer.generic.ComparablePair;
 import io.github.douira.glsl_transformer.generic.ProxyParseTreeListener;
@@ -38,14 +38,14 @@ public abstract class PhaseCollector {
    * 
    * @return The parser
    */
-  public abstract Parser getParser();
+  public abstract GLSLParser getParser();
 
   /**
    * Returns the phase collector's lexer.
    * 
    * @return The lexer
    */
-  public abstract Lexer getLexer();
+  public abstract GLSLLexer getLexer();
 
   /**
    * Registers a single transformation with this phase collector. When the phase
