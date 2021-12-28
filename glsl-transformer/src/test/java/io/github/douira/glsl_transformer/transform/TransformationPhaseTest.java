@@ -2,6 +2,10 @@ package io.github.douira.glsl_transformer.transform;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+import java.util.LinkedList;
+import java.util.List;
+
+import org.antlr.v4.runtime.tree.ParseTree;
 import org.antlr.v4.runtime.tree.pattern.ParseTreePattern;
 import org.antlr.v4.runtime.tree.xpath.XPath;
 import org.junit.jupiter.api.BeforeAll;
@@ -127,6 +131,24 @@ public class TransformationPhaseTest extends TestWithTransformationManager {
           .scenario(scenario + "/" + injectionPoint.toString().toLowerCase())
           .toMatchSnapshot(SnapshotUtil.inputOutputSnapshot(input, output));
     }
+  }
+
+  @Test
+  void testInjectNodes() {
+    manager = new TransformationManager();
+    manager.registerTransformation(new Transformation(new RunPhase() {
+      @Override
+      protected void run(TranslationUnitContext ctx) {
+        injectNodes(new LinkedList<ParseTree>(List.of(
+            createLocalRoot("//1\n;", getRootNode(), GLSLParser::externalDeclaration),
+            createLocalRoot("//2\n;", getRootNode(), GLSLParser::externalDeclaration))),
+            InjectionPoint.BEFORE_VERSION);
+      }
+    }));
+
+    assertEquals(
+        "//present\n//1\n;//2\n;",
+        manager.transform("//present\n"));
   }
 
   @Test
