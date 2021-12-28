@@ -14,10 +14,11 @@ import au.com.origin.snapshots.Expect;
 import au.com.origin.snapshots.annotations.SnapshotName;
 import au.com.origin.snapshots.junit5.SnapshotExtension;
 import io.github.douira.glsl_transformer.GLSLParser;
+import io.github.douira.glsl_transformer.SnapshotUtil;
 import io.github.douira.glsl_transformer.GLSLParser.TranslationUnitContext;
 import io.github.douira.glsl_transformer.TestResourceManager.FileLocation;
 import io.github.douira.glsl_transformer.TestWithTransformationManager;
-import io.github.douira.glsl_transformer.TestCaseProvider;
+import io.github.douira.glsl_transformer.TestCaseReader;
 import io.github.douira.glsl_transformer.transform.TransformationPhase.InjectionPoint;
 
 @ExtendWith({ SnapshotExtension.class })
@@ -110,7 +111,7 @@ public class TransformationPhaseTest extends TestWithTransformationManager {
    *           there are just two newlines.
    */
   @ParameterizedTest
-  @ArgumentsSource(TestCaseProvider.class)
+  @ArgumentsSource(TestCaseReader.class)
   @SnapshotName("testInjectNode")
   void testInjectNode(String scenario, String input) {
     for (var injectionPoint : InjectionPoint.values()) {
@@ -124,11 +125,7 @@ public class TransformationPhaseTest extends TestWithTransformationManager {
 
       expect
           .scenario(scenario + "/" + injectionPoint.toString().toLowerCase())
-          .toMatchSnapshot(
-              (input + "\n" + "<>".repeat(25) + "\n" + output)
-                  .replace("\n\n\n", "\n.\n.\n")
-                  .replaceAll("\\n\\n$", "\n.\n.")
-                  .replaceAll("^\\n\\n", ".\n.\n"));
+          .toMatchSnapshot(SnapshotUtil.inputOutputSnapshot(input, output));
     }
   }
 
