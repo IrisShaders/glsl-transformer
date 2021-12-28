@@ -161,7 +161,6 @@ TODO:
 
 ## Todo
 
-- Handle lexing and parsing errors in an API-user friendly way (also useful for testing)
 - Snapshot tests with glslang test files where the snapshot content is the parsing errors that occurred during parsing
 - Write the remaining TransformationPhase tests
 - Write tests that matching still works even after injection
