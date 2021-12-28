@@ -28,7 +28,7 @@ jobs:
         cache: gradle
     - uses: gradle/gradle-build-action@v2
       with:
-        arguments: build --info --no-deamon
+        arguments: build --info --no-daemon
     - name: Archive build
       uses: actions/upload-artifact@v2
       with:
