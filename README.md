@@ -161,7 +161,6 @@ TODO:
 
 ## Todo
 
-- Snapshot tests with glslang test files where the snapshot content is the parsing errors that occurred during parsing
 - Write the remaining TransformationPhase tests
 - Write tests that matching still works even after injection
 - Write tests that tree walker doesn't break even with child array modification (apart from injection, which is already being tested)
