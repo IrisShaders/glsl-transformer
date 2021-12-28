@@ -1,9 +1,14 @@
 package io.github.douira.glsl_transformer.transform;
 
+import org.antlr.v4.runtime.BailErrorStrategy;
+import org.antlr.v4.runtime.BaseErrorListener;
 import org.antlr.v4.runtime.BufferedTokenStream;
 import org.antlr.v4.runtime.CharStreams;
 import org.antlr.v4.runtime.CommonTokenStream;
 import org.antlr.v4.runtime.IntStream;
+import org.antlr.v4.runtime.RecognitionException;
+import org.antlr.v4.runtime.Recognizer;
+import org.antlr.v4.runtime.misc.ParseCancellationException;
 
 import io.github.douira.glsl_transformer.GLSLLexer;
 import io.github.douira.glsl_transformer.GLSLParser;
@@ -25,12 +30,35 @@ import io.github.douira.glsl_transformer.generic.PrintVisitor;
  * instantiation is efficient.
  */
 public class TransformationManager extends PhaseCollector {
+  private static class ThrowingErrorListener extends BaseErrorListener {
+    public static final ThrowingErrorListener INSTANCE = new ThrowingErrorListener();
+
+    @Override
+    public void syntaxError(
+        Recognizer<?, ?> recognizer, Object offendingSymbol, int line, int charPositionInLine,
+        String msg, RecognitionException e) throws ParseCancellationException {
+      throw new ParseCancellationException("line " + line + ":" + charPositionInLine + " " + msg, e);
+    }
+  }
+
   // inited with null since they need an argument
   private final GLSLLexer lexer = new GLSLLexer(null);
   private final GLSLParser parser = new GLSLParser(null);
 
   private IntStream input;
   private BufferedTokenStream tokenStream;
+
+  public TransformationManager() {
+    super();
+
+    lexer.removeErrorListeners();
+    lexer.addErrorListener(ThrowingErrorListener.INSTANCE);
+
+    parser.removeErrorListeners();
+    parser.addErrorListener(ThrowingErrorListener.INSTANCE);
+
+    // parser.setErrorHandler(new BailErrorStrategy());
+  }
 
   /**
    * The returned parser may contain no token stream or a wrong token stream.
@@ -57,7 +85,7 @@ public class TransformationManager extends PhaseCollector {
    * @param str The string to be transformed
    * @return The transformed string
    */
-  public String transform(String str) {
+  public String transform(String str) throws RecognitionException {
     return transformStream(CharStreams.fromString(str));
   }
 
@@ -70,7 +98,7 @@ public class TransformationManager extends PhaseCollector {
    * @param stream The input stream to be transformed
    * @return The transformed string
    */
-  public String transformStream(IntStream stream) {
+  public String transformStream(IntStream stream) throws RecognitionException {
     input = stream;
     lexer.setInputStream(input);
     lexer.reset();
