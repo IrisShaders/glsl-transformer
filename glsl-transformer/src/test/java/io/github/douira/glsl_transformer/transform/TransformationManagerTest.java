@@ -3,7 +3,6 @@ package io.github.douira.glsl_transformer.transform;
 import static org.junit.jupiter.api.Assertions.*;
 
 import org.antlr.v4.runtime.CharStreams;
-import org.antlr.v4.runtime.FailedPredicateException;
 import org.antlr.v4.runtime.InputMismatchException;
 import org.antlr.v4.runtime.LexerNoViableAltException;
 import org.antlr.v4.runtime.NoViableAltException;

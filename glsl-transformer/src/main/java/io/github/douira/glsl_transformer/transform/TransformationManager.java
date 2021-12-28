@@ -1,6 +1,5 @@
 package io.github.douira.glsl_transformer.transform;
 
-import org.antlr.v4.runtime.BailErrorStrategy;
 import org.antlr.v4.runtime.BaseErrorListener;
 import org.antlr.v4.runtime.BufferedTokenStream;
 import org.antlr.v4.runtime.CharStreams;
@@ -48,23 +47,46 @@ public class TransformationManager extends PhaseCollector {
   private IntStream input;
   private BufferedTokenStream tokenStream;
 
-  public TransformationManager() {
-    super();
-
+  /**
+   * Creates a new transformation manager and specifies if parse errors should be
+   * thrown during parsing. If they should not be thrown they will not be reported
+   * or printed to the console. ANTLR will attempt to recover from errors during
+   * parsing any construct a parse tree containing error nodes. These nodes can
+   * mess up transformation and printing. Do not expect anything to function
+   * properly if an error was encountered during parsing.
+   * 
+   * Custom error handlers can be registered on the parser and lexer manually. For
+   * example, an error handler similar to ConsoleErrorListener that allows
+   * recovery and only collects the errors instead of printing them could be
+   * created.
+   * 
+   * @param throwParseErrors If {@code true}, the transformation manager throw any
+   *                         parse errors encountered during parsing
+   */
+  public TransformationManager(boolean throwParseErrors) {
     lexer.removeErrorListeners();
-    lexer.addErrorListener(ThrowingErrorListener.INSTANCE);
-
     parser.removeErrorListeners();
-    parser.addErrorListener(ThrowingErrorListener.INSTANCE);
 
-    // parser.setErrorHandler(new BailErrorStrategy());
+    if (throwParseErrors) {
+      lexer.addErrorListener(ThrowingErrorListener.INSTANCE);
+      parser.addErrorListener(ThrowingErrorListener.INSTANCE);
+
+      // parser.setErrorHandler(new BailErrorStrategy());
+    }
   }
 
   /**
-   * The returned parser may contain no token stream or a wrong token stream.
-   * However, the parser should not be used for parsing manually anyways. The
-   * state and contents of the parser are setup correctly when the transformation
-   * is performed.
+   * Creates a new transformation manager that throws parse errors by default.
+   */
+  public TransformationManager() {
+    this(true);
+  }
+
+  /**
+   * The returned parser (and lexer) may contain no token stream or a wrong token
+   * stream. However, the parser should not be used for parsing manually anyways.
+   * The state and contents of the parser are setup correctly when the
+   * transformation is performed.
    * 
    * {@inheritDoc}
    */
