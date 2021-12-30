@@ -162,6 +162,7 @@ TODO:
 
 ## Todo
 
+- Figure out how arbitrary additional inputs can be passed to the transformation phases for each transformation pass (transformation manager subclass with state in it? kinda hacky though). In the example of Iris this is the type of the shader being transformed. Or would simply different transformation managers be generated for each type of shader?
 - Write tests that matching still works even after injection
 - Test node removal, replacement and injection in local roots (in `TransformationPhaseTest`)
 - Write tests that tree walker doesn't break even with child array modification (apart from injection, which is already being tested)
