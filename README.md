@@ -92,10 +92,10 @@ System.out.println(manager.transform(string));
 - Moving a node strictly inside its local root scope (not a subscope)
 - Removing or moving a non-local-root node without touching its subtree, though this may break things that rely on grammar rules being followed
 
-### Not yet permitted
+### Not permitted (yet)
 
-- Moving a node out of the scope of its local root
-- Removing or moving a local root without touching its subtree even if the parsing rules allow it
+- Moving a node out of the scope of its local root (it would be missing a token stream)
+- Entirely removing a local root node and replacing it with a new one, giving it the previous node's children
 
 ## An example transformation
 
@@ -165,8 +165,6 @@ TODO:
 - Write tests that matching still works even after injection
 - Test node removal, replacement and injection in local roots (in `TransformationPhaseTest`)
 - Write tests that tree walker doesn't break even with child array modification (apart from injection, which is already being tested)
-
-- Add functionality that allows removing a local root and replacing it with a new local root? (is that even possible?) if the grammar rules allow it, the local root data would somehow need to be preserved
 
 - Unit (and integration) testing of all the parts
 
