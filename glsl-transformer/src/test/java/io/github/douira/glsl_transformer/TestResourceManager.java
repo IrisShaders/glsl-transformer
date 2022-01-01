@@ -16,7 +16,7 @@ import java.util.stream.Stream;
  * Knows about the various code resource files and can load them.
  */
 public class TestResourceManager {
-  private static final Map<Path, Resource> resourceCache = new HashMap<>();
+  private static final Map<Path, Resource> RESOURCE_CACHE = new HashMap<>();
 
   public static enum FileLocation {
     TINY("/tiny.glsl"),
@@ -96,7 +96,7 @@ public class TestResourceManager {
   }
 
   private static Resource getPathResource(Path path) {
-    var result = resourceCache.get(path);
+    var result = RESOURCE_CACHE.get(path);
     if (result == null) {
       result = new Resource(path, getFileContents(path));
     }
