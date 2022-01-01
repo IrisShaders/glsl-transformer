@@ -81,12 +81,8 @@ public class DeclarationReplacement extends Transformation {
       protected void afterWalk(TranslationUnitContext ctx) {
         // is only run if phase is found to be active
         // TODO: the function content and the new attribute declaration
-        ctx.children.add(
-            createLocalRoot("void iris_getModelSpaceVertexPosition() { }",
-                ctx, GLSLParser::externalDeclaration));
-        ctx.children.add(
-            createLocalRoot("layout (location = 0) attribute vec4 iris_Position;",
-                ctx, GLSLParser::externalDeclaration));
+        injectExternalDeclaration("void iris_getModelSpaceVertexPosition() { }", InjectionPoint.BEFORE_EOF);
+        injectExternalDeclaration("layout (location = 0) attribute vec4 iris_Position;", InjectionPoint.BEFORE_FUNCTIONS);
       }
     });
 
