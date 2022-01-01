@@ -23,10 +23,10 @@ public class TestCaseReader implements ArgumentsProvider {
   private record TestCase(String snapshotName, String scenario, String content) {
   };
 
-  private static final Map<Path, List<TestCase>> testCaseCache = new HashMap<>();
+  private static final Map<Path, List<TestCase>> TEST_CASE_CACHE = new HashMap<>();
 
   private List<TestCase> getTestCases(Path file) throws IOException {
-    var testCases = testCaseCache.get(file);
+    var testCases = TEST_CASE_CACHE.get(file);
     if (testCases == null) {
       var contents = Files.readString(file);
 
@@ -42,7 +42,7 @@ public class TestCaseReader implements ArgumentsProvider {
             segments[0], segments[1], segments[2].trim() + "\n"));
       }
 
-      testCaseCache.put(file, testCases);
+      TEST_CASE_CACHE.put(file, testCases);
     }
 
     return testCases;
