@@ -200,13 +200,13 @@ public class Tensor {
     TYPE_REGISTRY.addTypeFloating(GLSLLexer.F32VEC4, "vec4", "f32vec4", 32, 4);
     TYPE_REGISTRY.addTypeFloating(GLSLLexer.F32MAT2X2, "mat2", "f32mat2x2", 32, 2, 2);
     TYPE_REGISTRY.addTypeFloating(GLSLLexer.F32MAT2X3, "mat2x3", "f32mat2x3", 32, 2, 3);
-    TYPE_REGISTRY.addTypeFloating(GLSLLexer.F32MAT2X4, "mat2x4", "f32mat2x3", 32, 2, 4);
-    TYPE_REGISTRY.addTypeFloating(GLSLLexer.F32MAT3X2, "mat3x2", "f32mat2x3", 32, 3, 2);
-    TYPE_REGISTRY.addTypeFloating(GLSLLexer.F32MAT3X3, "mat3", "f32mat2x3", 32, 3, 3);
-    TYPE_REGISTRY.addTypeFloating(GLSLLexer.F32MAT3X4, "mat3x4", "f32mat2x3", 32, 3, 4);
-    TYPE_REGISTRY.addTypeFloating(GLSLLexer.F32MAT4X2, "mat4x2", "f32mat2x3", 32, 4, 2);
-    TYPE_REGISTRY.addTypeFloating(GLSLLexer.F32MAT4X3, "mat4x2", "f32mat2x3", 32, 4, 3);
-    TYPE_REGISTRY.addTypeFloating(GLSLLexer.F32MAT4X4, "mat4", "f32mat2x3", 32, 4, 4);
+    TYPE_REGISTRY.addTypeFloating(GLSLLexer.F32MAT2X4, "mat2x4", "f32mat2x4", 32, 2, 4);
+    TYPE_REGISTRY.addTypeFloating(GLSLLexer.F32MAT3X2, "mat3x2", "f32mat3x2", 32, 3, 2);
+    TYPE_REGISTRY.addTypeFloating(GLSLLexer.F32MAT3X3, "mat3", "f32mat3x3", 32, 3, 3);
+    TYPE_REGISTRY.addTypeFloating(GLSLLexer.F32MAT3X4, "mat3x4", "f32mat3x4", 32, 3, 4);
+    TYPE_REGISTRY.addTypeFloating(GLSLLexer.F32MAT4X2, "mat4x2", "f32mat4x2", 32, 4, 2);
+    TYPE_REGISTRY.addTypeFloating(GLSLLexer.F32MAT4X3, "mat4x3", "f32mat4x3", 32, 4, 3);
+    TYPE_REGISTRY.addTypeFloating(GLSLLexer.F32MAT4X4, "mat4", "f32mat4x4", 32, 4, 4);
 
     TYPE_REGISTRY.addTypeFloating(GLSLLexer.FLOAT64, "double", "float64_t", 64);
     TYPE_REGISTRY.addTypeFloating(GLSLLexer.F64VEC2, "dvec2", "f64vec2", 64, 2);
@@ -214,13 +214,13 @@ public class Tensor {
     TYPE_REGISTRY.addTypeFloating(GLSLLexer.F64VEC4, "dvec4", "f64vec4", 64, 4);
     TYPE_REGISTRY.addTypeFloating(GLSLLexer.F64MAT2X2, "dmat2", "f64mat2x2", 64, 2, 2);
     TYPE_REGISTRY.addTypeFloating(GLSLLexer.F64MAT2X3, "dmat2x3", "f64mat2x3", 64, 2, 3);
-    TYPE_REGISTRY.addTypeFloating(GLSLLexer.F64MAT2X4, "dmat2x4", "f64mat2x3", 64, 2, 4);
-    TYPE_REGISTRY.addTypeFloating(GLSLLexer.F64MAT3X2, "dmat3x2", "f64mat2x3", 64, 3, 2);
-    TYPE_REGISTRY.addTypeFloating(GLSLLexer.F64MAT3X3, "dmat3", "f64mat2x3", 64, 3, 3);
-    TYPE_REGISTRY.addTypeFloating(GLSLLexer.F64MAT3X4, "dmat3x4", "f64mat2x3", 64, 3, 4);
-    TYPE_REGISTRY.addTypeFloating(GLSLLexer.F64MAT4X2, "dmat4x2", "f64mat2x3", 64, 4, 2);
-    TYPE_REGISTRY.addTypeFloating(GLSLLexer.F64MAT4X3, "dmat4x2", "f64mat2x3", 64, 4, 3);
-    TYPE_REGISTRY.addTypeFloating(GLSLLexer.F64MAT4X4, "dmat4", "f64mat2x3", 64, 4, 4);
+    TYPE_REGISTRY.addTypeFloating(GLSLLexer.F64MAT2X4, "dmat2x4", "f64mat2x4", 64, 2, 4);
+    TYPE_REGISTRY.addTypeFloating(GLSLLexer.F64MAT3X2, "dmat3x2", "f64mat3x2", 64, 3, 2);
+    TYPE_REGISTRY.addTypeFloating(GLSLLexer.F64MAT3X3, "dmat3", "f64mat3x3", 64, 3, 3);
+    TYPE_REGISTRY.addTypeFloating(GLSLLexer.F64MAT3X4, "dmat3x4", "f64mat3x4", 64, 3, 4);
+    TYPE_REGISTRY.addTypeFloating(GLSLLexer.F64MAT4X2, "dmat4x2", "f64mat4x2", 64, 4, 2);
+    TYPE_REGISTRY.addTypeFloating(GLSLLexer.F64MAT4X3, "dmat4x3", "f64mat4x3", 64, 4, 3);
+    TYPE_REGISTRY.addTypeFloating(GLSLLexer.F64MAT4X4, "dmat4", "f64mat4x4", 64, 4, 4);
 
     TYPE_REGISTRY.collect();
   }
