@@ -89,11 +89,13 @@ publishing {
 }
 
 javadoc {
-    configure( options ) {
+    configure(options) {
         tags(
             'implSpec:a:Implementation Requirements:',
             'implNote:a:Implementation Note:',
             'apiNote:a:API Usage Note:'
         )
     }
+    exclude '**/GLSLParser*.java'
+    exclude '**/GLSLLexer*.java'
 }
