@@ -25,7 +25,7 @@ import org.antlr.v4.runtime.tree.ParseTree;
  * contained within any local root's omission set.
  */
 public class ExtendedContext extends ParserRuleContext {
-  private record LocalRoot(CachingIntervalSet omissionSet, BufferedTokenStream tokenStream) {
+  private static record LocalRoot(CachingIntervalSet omissionSet, BufferedTokenStream tokenStream) {
     LocalRoot(BufferedTokenStream tokenStream) {
       this(new CachingIntervalSet(), tokenStream);
     }

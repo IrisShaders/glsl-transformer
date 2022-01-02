@@ -28,7 +28,7 @@ public class PrintVisitor extends AbstractParseTreeVisitor<Void> {
    * printing to read from the token stream for which the interval was
    * constructed.
    */
-  private record AttributedInterval(ExtendedContext localRoot, Interval interval) {
+  private static record AttributedInterval(ExtendedContext localRoot, Interval interval) {
   }
 
   private final LinkedList<Object> printItems = new LinkedList<>();

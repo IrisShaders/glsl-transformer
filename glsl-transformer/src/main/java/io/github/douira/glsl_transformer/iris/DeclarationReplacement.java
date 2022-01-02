@@ -21,7 +21,7 @@ import io.github.douira.glsl_transformer.transform.WalkPhase;
  * references to them with function calls and other code.
  */
 public class DeclarationReplacement extends Transformation {
-  private record Declaration(String type, String name) {
+  private static record Declaration(String type, String name) {
   }
 
   private Map<String, Declaration> declarations;

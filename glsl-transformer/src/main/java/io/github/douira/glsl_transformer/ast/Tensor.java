@@ -60,7 +60,7 @@ public class Tensor extends ParsableASTNode {
    * of each value and the following dimensions describe the actual dimensions of
    * the tensor.
    */
-  public record Type(int tokenType, NumberType numberType, int[] shape, int spaceDimensions, int highestDimension,
+  public static record Type(int tokenType, NumberType numberType, int[] shape, int spaceDimensions, int highestDimension,
       String compactName, String explicitName) {
   }
 
