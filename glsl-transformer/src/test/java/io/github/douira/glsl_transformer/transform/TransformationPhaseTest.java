@@ -10,17 +10,16 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.params.ParameterizedTest;
-import org.junit.jupiter.params.provider.ArgumentsSource;
 
 import au.com.origin.snapshots.Expect;
 import au.com.origin.snapshots.annotations.SnapshotName;
 import au.com.origin.snapshots.junit5.SnapshotExtension;
 import io.github.douira.glsl_transformer.GLSLParser;
-import io.github.douira.glsl_transformer.SnapshotUtil;
 import io.github.douira.glsl_transformer.GLSLParser.TranslationUnitContext;
+import io.github.douira.glsl_transformer.SnapshotUtil;
+import io.github.douira.glsl_transformer.TestCaseSource;
 import io.github.douira.glsl_transformer.TestResourceManager.FileLocation;
 import io.github.douira.glsl_transformer.TestWithTransformationManager;
-import io.github.douira.glsl_transformer.TestCaseReader;
 import io.github.douira.glsl_transformer.transform.TransformationPhase.InjectionPoint;
 
 /**
@@ -118,7 +117,7 @@ public class TransformationPhaseTest extends TestWithTransformationManager {
    *           there are just two newlines.
    */
   @ParameterizedTest
-  @ArgumentsSource(TestCaseReader.class)
+  @TestCaseSource
   @SnapshotName("testInjectNode")
   void testInjectNode(String scenario, String input) {
     for (var location : InjectionPoint.values()) {
@@ -127,6 +126,25 @@ public class TransformationPhaseTest extends TestWithTransformationManager {
         @Override
         protected void run(TranslationUnitContext ctx) {
           injectExternalDeclaration("//prefix\ninjection; //suffix\n", location);
+        }
+      });
+
+      expect
+          .scenario(scenario + "/" + location.toString().toLowerCase())
+          .toMatchSnapshot(SnapshotUtil.inputOutputSnapshot(input, output));
+    }
+  }
+
+  @ParameterizedTest
+  @TestCaseSource("testInjectNode")
+  @SnapshotName("testInjectDefine")
+  void testInjectDefine(String scenario, String input) {
+    for (var location : InjectionPoint.values()) {
+      setTestCode(input);
+      var output = wrapRunTransform(new RunPhase() {
+        @Override
+        protected void run(TranslationUnitContext ctx) {
+          injectDefine("foo bar + baz", location);
         }
       });
 

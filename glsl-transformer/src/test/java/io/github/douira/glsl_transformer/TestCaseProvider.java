@@ -16,37 +16,17 @@ import java.util.stream.Stream;
 import org.junit.jupiter.api.extension.ExtensionContext;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.ArgumentsProvider;
+import org.junit.jupiter.params.support.AnnotationConsumer;
 
 import au.com.origin.snapshots.annotations.SnapshotName;
 
-public class TestCaseReader implements ArgumentsProvider {
-  private record TestCase(String snapshotName, String scenario, String content) {
+public class TestCaseProvider implements ArgumentsProvider, AnnotationConsumer<TestCaseSource> {
+  private static record TestCase(String testCaseSet, String scenario, String content) {
   };
 
   private static final Map<Path, List<TestCase>> TEST_CASE_CACHE = new HashMap<>();
 
-  private List<TestCase> getTestCases(Path file) throws IOException {
-    var testCases = TEST_CASE_CACHE.get(file);
-    if (testCases == null) {
-      var contents = Files.readString(file);
-
-      // parse the testcases
-      var rawCases = contents.trim().split("§");
-      testCases = new ArrayList<>(rawCases.length - 1);
-      for (var i = 1; i < rawCases.length; i++) {
-        var rawCase = rawCases[i];
-        var segments = rawCase.split(" |:", 3);
-
-        //ensure there is a trailing newline or parsing will break
-        testCases.add(new TestCase(
-            segments[0], segments[1], segments[2].trim() + "\n"));
-      }
-
-      TEST_CASE_CACHE.put(file, testCases);
-    }
-
-    return testCases;
-  }
+  private String testCaseSet;
 
   @Override
   public Stream<? extends Arguments> provideArguments(ExtensionContext context) throws Exception {
@@ -61,17 +41,50 @@ public class TestCaseReader implements ArgumentsProvider {
     var testCases = getTestCases(testCaseFile);
 
     // get the name of the snapshot from the method or the annotation
-    var snapshotName = Optional.ofNullable(
-        context
-            .getRequiredTestMethod().getAnnotation(SnapshotName.class))
-        .map(SnapshotName::value)
+    var useSetName = Optional
+        .ofNullable(testCaseSet)
+        .or(() -> Optional
+            .ofNullable(context
+                .getRequiredTestMethod()
+                .getAnnotation(SnapshotName.class))
+            .map(SnapshotName::value))
         .orElseGet(
             () -> context.getRequiredTestMethod().getName());
 
     // filter and map the test cases into an argument stream
     return testCases
         .stream()
-        .filter(testCase -> testCase.snapshotName().equals(snapshotName))
+        .filter(testCase -> testCase.testCaseSet().equals(useSetName))
         .map(testCase -> Arguments.of(testCase.scenario(), testCase.content()));
+  }
+
+  @Override
+  public void accept(TestCaseSource t) {
+    if (!t.value().isBlank()) {
+      testCaseSet = t.value();
+    }
+  }
+
+  private List<TestCase> getTestCases(Path file) throws IOException {
+    var testCases = TEST_CASE_CACHE.get(file);
+    if (testCases == null) {
+      var contents = Files.readString(file);
+
+      // parse the testcases
+      var rawCases = contents.trim().split("§");
+      testCases = new ArrayList<>(rawCases.length - 1);
+      for (var i = 1; i < rawCases.length; i++) {
+        var rawCase = rawCases[i];
+        var segments = rawCase.split(" |:", 3);
+
+        // ensure there is a trailing newline or parsing will break
+        testCases.add(new TestCase(
+            segments[0], segments[1], segments[2].trim() + "\n"));
+      }
+
+      TEST_CASE_CACHE.put(file, testCases);
+    }
+
+    return testCases;
   }
 }
