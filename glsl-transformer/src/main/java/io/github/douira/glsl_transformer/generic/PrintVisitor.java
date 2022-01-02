@@ -208,12 +208,29 @@ public class PrintVisitor extends AbstractParseTreeVisitor<Void> {
   public Void visitChildren(RuleNode node) {
     final var context = (ExtendedContext) node.getRuleContext();
     final var superInterval = context.getLargestSourceInterval();
+    var lastWasUnparsableASTNode = false;
 
     // keeps track of the token index that needs to be processed next
     var fetchNext = superInterval.a;
 
     if (context.children != null) {
       for (var child : context.children) {
+        // handle unparsable AST nodes
+        if (child instanceof UnparsableASTNode) {
+          // insert a newline before each group of unparsable ast nodes.
+          // line preservation doesn't matter here since it's being broken anyways
+          if (!lastWasUnparsableASTNode) {
+            addLiteral("\n");
+            lastWasUnparsableASTNode = true;
+          }
+
+          // unparsable ast nodes have no source interval
+          child.accept(this);
+          continue;
+        }
+        lastWasUnparsableASTNode = false;
+
+        // handle local root nodes
         if (child instanceof ExtendedContext childNode && childNode.isLocalRoot()) {
           // set as new current root
           var previousRoot = currentRoot;
@@ -221,12 +238,18 @@ public class PrintVisitor extends AbstractParseTreeVisitor<Void> {
 
           child.accept(this);
           currentRoot = previousRoot;
-        } else {
-          // interval before the current child
-          var childInterval = child.getSourceInterval();
-          addInterval(fetchNext, childInterval.a - 1);
+          continue;
+        }
 
-          child.accept(this);
+        // handle everything else (regular non-terminal and terminal nodes)
+        // interval before the current child
+        var childInterval = child.getSourceInterval();
+        addInterval(fetchNext, childInterval.a - 1);
+
+        child.accept(this);
+
+        // prevent an empty child interval from messing up fetchNext by being negative
+        if (childInterval.length() != 0) {
           fetchNext = childInterval.b + 1;
         }
       }
