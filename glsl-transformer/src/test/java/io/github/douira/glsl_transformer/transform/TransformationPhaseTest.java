@@ -193,7 +193,7 @@ public class TransformationPhaseTest extends TestWithTransformationManager {
   @Test
   void testRemoveNode() {
     assertEquals(
-        "a;d;",
+        "a;//present\nd;",
         wrapRunTransform("a;//present\nb;c;d;", new RunPhase() {
           @Override
           protected void run(TranslationUnitContext ctx) {
@@ -207,7 +207,7 @@ public class TransformationPhaseTest extends TestWithTransformationManager {
   @Test
   void testReplaceNode() {
     assertEquals(
-        "a;new;c;d;",
+        "a;new;//present\nc;d;",
         wrapRunTransform("a;//present\nb;c;d;", new RunPhase() {
           @Override
           protected void run(TranslationUnitContext ctx) {
