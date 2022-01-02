@@ -30,8 +30,6 @@ public abstract class PhaseCollector {
   private Collection<Transformation> transformations = new ArrayList<>();
   private TranslationUnitContext rootNode;
 
-  public static final int DEFAULT_GROUP = 0;
-
   /**
    * Returns this phase collector's parser. How the parser is stored is up to the
    * implementing class.

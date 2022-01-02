@@ -41,12 +41,15 @@ public abstract class WalkPhase extends TransformationPhase {
 
   /**
    * This method is called before the tree walk is performed.
+   * 
+   * @param ctx The root translation unit node
    */
   protected void beforeWalk(TranslationUnitContext ctx) {
   }
 
   /**
    * This method is called after the tree walk was performed.
+   * @param ctx The root translation unit node
    */
   protected void afterWalk(TranslationUnitContext ctx) {
   }

@@ -29,6 +29,14 @@ import io.github.douira.glsl_transformer.GLSLParserBaseListener;
 import io.github.douira.glsl_transformer.generic.EmptyTerminalNode;
 import io.github.douira.glsl_transformer.generic.ExtendedContext;
 
+/**
+ * The transformations phase actually does a specific transformation. It can be
+ * added to a transformation which holds multiple transformation phases and
+ * their ordering. A phase can also be added to multiple transformations if they
+ * should share the functionality. The transformation phase has methods for
+ * adding and removing parse tree nodes. It can also inject nodes into the root
+ * node's child array with injection points.
+ */
 public abstract class TransformationPhase extends GLSLParserBaseListener {
   private PhaseCollector collector;
 
@@ -36,10 +44,21 @@ public abstract class TransformationPhase extends GLSLParserBaseListener {
     this.collector = parent;
   }
 
+  /**
+   * Returns the executing phase collector's parser.
+   * 
+   * @return The parser
+   */
   protected Parser getParser() {
     return collector.getParser();
   }
 
+  /**
+   * Returns the root node taken from the phase collector that is currently
+   * executing this phase.
+   * 
+   * @return The root node of the current executing phase collector
+   */
   protected TranslationUnitContext getRootNode() {
     return collector.getRootNode();
   }
@@ -93,10 +112,38 @@ public abstract class TransformationPhase extends GLSLParserBaseListener {
     return index;
   }
 
+  /**
+   * Compiles the given string as an xpath with the parser.
+   * 
+   * This method is meant to be used in {@link #init()} for initializing
+   * (effectively) final but phase-specific fields.
+   * 
+   * @param xpath The string to compile as an xpath
+   * @return The compiled xpath
+   */
   protected XPath compilePath(String xpath) {
     return new XPath(getParser(), xpath);
   }
 
+  /**
+   * Compiles the given string as a parse tree matching pattern what starts
+   * matching at the given parser rule. The pattern will not compile or function
+   * correctly if the pattern can't be compiled in the context of the given parser
+   * rule. See ANTLR's documentation on how tree matching patterns work. (there is
+   * special syntax that should be used for extracting)
+   * 
+   * The resulting pattern will need to be applied to nodes that exactly match the
+   * given root rule of the pattern. For finding nodes at any depth and then
+   * matching,
+   * {@link #findAndMatch(ParseTree, XPath, ParseTreePattern)} can be used.
+   * 
+   * This method is meant to be used in {@link #init()} for initializing
+   * (effectively) final but phase-specific fields.
+   * 
+   * @param pattern  The string to compile as a tree matching pattern.
+   * @param rootRule The parser rule to compile the pattern as
+   * @return The compiled pattern
+   */
   protected ParseTreePattern compilePattern(String pattern, int rootRule) {
     return getParser().compileParseTreePattern(pattern, rootRule, collector.getLexer());
   }
@@ -169,6 +216,7 @@ public abstract class TransformationPhase extends GLSLParserBaseListener {
    * references or looking up a node's local root won't work. Other things in
    * ANTLR may also break if non-root nodes are missing their parent references.
    * 
+   * @param <RuleType>  The type of the resulting parsed node
    * @param str         The string to be parsed
    * @param parent      The parent to be set on the node. All nodes will
    *                    eventually end up in the a main tree so some parent will
@@ -296,6 +344,8 @@ public abstract class TransformationPhase extends GLSLParserBaseListener {
    * Injects the given node into the translation unit context root node at the
    * given injection point. Note that this may break things if used improperly (if
    * breaking the grammar's rules for example).
+   * 
+   * The {@code addChild} method sets the parent on the added node.
    * 
    * @implNote Since ANTLR's rule context stores children in an {@link ArrayList},
    *           this operation runs in linear time O(n) with respect to the the
