@@ -297,10 +297,23 @@ public class Tensor extends ParsableASTNode {
     return token.getType();
   }
 
+  /**
+   * Returns the compact name of the contained type. This is the shortest
+   * available name that specifies this type.
+   * 
+   * @return The type's most compact name
+   */
   public String getCompactName() {
     return type.compactName();
   }
 
+  /**
+   * Returns the explicit name of the contained type. This name uses an explicit
+   * arithmetic type name that may not be compatible if the extension for these
+   * type names is not available.
+   * 
+   * @return The type's most explicit name
+   */
   public String getExplicitName() {
     return type.explicitName();
   }
