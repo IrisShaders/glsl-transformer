@@ -60,7 +60,8 @@ public class Tensor extends ParsableASTNode {
    * of each value and the following dimensions describe the actual dimensions of
    * the tensor.
    */
-  public static record Type(int tokenType, NumberType numberType, int[] shape, int spaceDimensions, int highestDimension,
+  public static record Type(int tokenType, NumberType numberType, int[] shape, int spaceDimensions,
+      int highestDimension,
       String compactName, String explicitName) {
   }
 
@@ -238,18 +239,42 @@ public class Tensor extends ParsableASTNode {
   // TODO: getter/setters when there are more Tensor features in general
   private Type type;
 
+  /**
+   * Creates a new tensor with the given type.
+   * 
+   * @param type The type of the new tensor
+   */
   public Tensor(Type type) {
     this.type = type;
   }
 
+  /**
+   * Creates a new tensor with the type given as a lexer token index.
+   * 
+   * @see io.github.douira.glsl_transformer.GLSLLexer
+   * 
+   * @param tokenType The token type index
+   */
   public Tensor(int tokenType) {
     this(TYPE_REGISTRY.getByTokenType(tokenType));
   }
 
+  /**
+   * Creates a new tensor from the given type specifier parse tree node.
+   * 
+   * @param ctx The parse tree node to read the type from
+   */
   public Tensor(BuiltinTypeSpecifierParseableContext ctx) {
     this(getTypeSpecifierType(ctx));
   }
 
+  /**
+   * Creates a new tensor by parsing the type specified in the given string. The
+   * string should contain a builtin type specifier. See the parser grammar for
+   * details.
+   * 
+   * @param str The string to parse as a GLSL type specifier
+   */
   public Tensor(String str) {
     this(TransformationManager.INTERNAL.parse(str, GLSLParser::builtinTypeSpecifierParseable));
   }
