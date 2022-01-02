@@ -45,7 +45,7 @@ public class Transformation {
    * group index. When this transformation is added to a phase collector the list
    * of these entries is used to add the contained phases to the collector.
    */
-  public record PhaseEntry(TransformationPhase phase, int order, int group) {
+  public static record PhaseEntry(TransformationPhase phase, int order, int group) {
   };
 
   private List<PhaseEntry> phaseRegistry = new LinkedList<>();

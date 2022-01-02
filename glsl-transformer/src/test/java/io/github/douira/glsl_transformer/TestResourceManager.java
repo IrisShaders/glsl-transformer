@@ -65,7 +65,7 @@ public class TestResourceManager {
     }
   }
 
-  public record Resource(Path path, String content) {
+  public static record Resource(Path path, String content) {
   }
 
   private TestResourceManager() {
