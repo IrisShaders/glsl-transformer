@@ -1,7 +1,5 @@
 package io.github.douira.glsl_transformer.generic;
 
-import org.antlr.v4.runtime.CommonToken;
-import org.antlr.v4.runtime.Token;
 import org.antlr.v4.runtime.tree.TerminalNodeImpl;
 
 /**
@@ -14,19 +12,12 @@ import org.antlr.v4.runtime.tree.TerminalNodeImpl;
  * not parsed.
  */
 public class StringTerminalNode extends TerminalNodeImpl {
-  static private class CompactToken extends CommonToken {
-    private CompactToken(String text) {
-      // type 0 because -1 would make it count as EOF and never get printed
-      super(Token.INVALID_TYPE, text);
-    }
-  }
-
   /**
    * Creates a new string node with the given string content.
    * 
    * @param text The string to create a token for
    */
   public StringTerminalNode(String text) {
-    super(new CompactToken(text));
+    super(new StringToken(text));
   }
 }

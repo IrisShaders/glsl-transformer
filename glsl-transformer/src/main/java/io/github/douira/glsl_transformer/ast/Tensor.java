@@ -2,21 +2,31 @@ package io.github.douira.glsl_transformer.ast;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.Function;
 
 import org.antlr.v4.runtime.Token;
 import org.antlr.v4.runtime.tree.TerminalNode;
 
 import io.github.douira.glsl_transformer.GLSLLexer;
+import io.github.douira.glsl_transformer.GLSLParser;
 import io.github.douira.glsl_transformer.GLSLParser.BuiltinTypeSpecifierParseableContext;
+import io.github.douira.glsl_transformer.generic.ExtendedContext;
+import io.github.douira.glsl_transformer.transform.TransformationManager;
 
-public class Tensor {
+/**
+ * A tensor abstractly represents the many multidimensional number types that
+ * GLSL has. It does this within a single datastructure by modelling scalars,
+ * vectors and matrices as n-dimensional and also taking the bit depth into
+ * account.
+ */
+public class Tensor extends ParsableASTNode {
   private static final int MAX_SPACE_DIMENSIONS = 4;
   private static final TypeRegistry TYPE_REGISTRY;
 
   /**
    * The different ways bits in a tensor can be interpreted.
    */
-  public enum NumberType {
+  public static enum NumberType {
     /**
      * boolean bit usage
      */
@@ -225,17 +235,26 @@ public class Tensor {
     TYPE_REGISTRY.collect();
   }
 
-  public Type type;
+  // TODO: getter/setters when there are more Tensor features in general
+  private Type type;
 
   public Tensor(Type type) {
     this.type = type;
   }
 
-  public static Type typeFromTokenType(int tokenType) {
-    return TYPE_REGISTRY.getByTokenType(tokenType);
+  public Tensor(int tokenType) {
+    this(TYPE_REGISTRY.getByTokenType(tokenType));
   }
 
-  public static Tensor parseFromContext(BuiltinTypeSpecifierParseableContext ctx) {
+  public Tensor(BuiltinTypeSpecifierParseableContext ctx) {
+    this(getTypeSpecifierType(ctx));
+  }
+
+  public Tensor(String str) {
+    this(TransformationManager.INTERNAL.parse(str, GLSLParser::builtinTypeSpecifierParseable));
+  }
+
+  private static int getTypeSpecifierType(BuiltinTypeSpecifierParseableContext ctx) {
     var children = ctx.children;
     if (children.size() != 1) {
       throw new IllegalArgumentException("Invalid type specifier context given. It must have exactly one child.");
@@ -250,11 +269,7 @@ public class Tensor {
           "Type specifier context child has the wrong structure. It should be a terminal node.");
     }
 
-    return parseFromTokenType(token.getType());
-  }
-
-  public static Tensor parseFromTokenType(int tokenType) {
-    return new Tensor(typeFromTokenType(tokenType));
+    return token.getType();
   }
 
   public String getCompactName() {
@@ -263,5 +278,15 @@ public class Tensor {
 
   public String getExplicitName() {
     return type.explicitName();
+  }
+
+  @Override
+  protected String getPrinted() {
+    return type.compactName();
+  }
+
+  @Override
+  protected Function<GLSLParser, ExtendedContext> getOutputParseMethod() {
+    return GLSLParser::builtinTypeSpecifierParseable;
   }
 }

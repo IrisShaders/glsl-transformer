@@ -9,6 +9,8 @@ import org.antlr.v4.runtime.tree.AbstractParseTreeVisitor;
 import org.antlr.v4.runtime.tree.RuleNode;
 import org.antlr.v4.runtime.tree.TerminalNode;
 
+import io.github.douira.glsl_transformer.ast.UnparsableASTNode;
+
 /**
  * The print visitor visits the parse tree and reprints it while preserving the
  * position and content of hidden tokens. This means it preserves all newlines
@@ -29,7 +31,7 @@ public class PrintVisitor extends AbstractParseTreeVisitor<Void> {
   private record AttributedInterval(ExtendedContext localRoot, Interval interval) {
   }
 
-  private final LinkedList<AttributedInterval> printIntervals = new LinkedList<>();
+  private final LinkedList<Object> printItems = new LinkedList<>();
   private Interval cachedInterval;
   private ExtendedContext currentRoot;
 
@@ -77,21 +79,28 @@ public class PrintVisitor extends AbstractParseTreeVisitor<Void> {
     // convert the list of tokens and intervals into just tokens,
     // and then into their strings
     var builder = new StringBuilder(512); // guessing
-    for (var attributedInterval : printIntervals) {
-      var interval = attributedInterval.interval();
-      var localRoot = attributedInterval.localRoot();
-      var omissionSet = localRoot.getOmissionSet();
+    for (var printItem : printItems) {
+      if (printItem instanceof String literal) {
+        builder.append(literal);
+      } else if (printItem instanceof AttributedInterval attributedInterval) {
+        var interval = attributedInterval.interval();
+        var localRoot = attributedInterval.localRoot();
+        var omissionSet = localRoot.getOmissionSet();
 
-      for (var token : localRoot.getTokenStream().getTokens(interval.a, interval.b)) {
-        // don't print EOF, only print the tokens in side the printing bounds,
-        // but always allow inserted nodes, only print non-omitted tokens
-        var tokenIndex = token.getTokenIndex();
-        if (token.getType() != Lexer.EOF
-            && (tokenIndex == -1
-                || (localRoot != rootNode || inInterval(bounds, tokenIndex))
-                    && omissionSet.isTokenAllowed(token))) {
-          builder.append(token.getText());
+        for (var token : localRoot.getTokenStream().getTokens(interval.a, interval.b)) {
+          // don't print EOF, only print the tokens in side the printing bounds,
+          // but always allow inserted nodes, only print non-omitted tokens
+          var tokenIndex = token.getTokenIndex();
+          if (token.getType() != Lexer.EOF
+              && (tokenIndex == -1
+                  || (localRoot != rootNode || inInterval(bounds, tokenIndex))
+                      && omissionSet.isTokenAllowed(token))) {
+            builder.append(token.getText());
+          }
         }
+      } else {
+        throw new Error(
+            "A wrong type of object was inserted into the printItems! Only String and AttributedInterval are allowed.");
       }
     }
     return builder.toString();
@@ -139,22 +148,40 @@ public class PrintVisitor extends AbstractParseTreeVisitor<Void> {
     }
 
     // join the given interval onto the last interval if possible without holes
-    if (!printIntervals.isEmpty()) {
-      var last = printIntervals.getLast();
-      var lastInterval = last.interval();
-      if (currentRoot == last.localRoot()
-          && (!lastInterval.disjoint(newInterval)
-              || lastInterval.adjacent(newInterval))) {
-        if (lastInterval.properlyContains(newInterval)) {
-          return;
-        }
+    if (!printItems.isEmpty()) {
+      var lastPrintItem = printItems.getLast();
 
-        printIntervals.removeLast();
-        newInterval = lastInterval.union(newInterval);
+      // only check for combining if last item is also an interval
+      if (lastPrintItem instanceof AttributedInterval lastPrintInterval) {
+        var lastInterval = lastPrintInterval.interval();
+        if (lastInterval != null
+            && currentRoot == lastPrintInterval.localRoot()
+            && (!lastInterval.disjoint(newInterval)
+                || lastInterval.adjacent(newInterval))) {
+          if (lastInterval.properlyContains(newInterval)) {
+            return;
+          }
+
+          printItems.removeLast();
+          newInterval = lastInterval.union(newInterval);
+        }
       }
     }
 
-    printIntervals.add(new AttributedInterval(currentRoot, newInterval));
+    printItems.add(new AttributedInterval(currentRoot, newInterval));
+  }
+
+  /**
+   * Adds a string as a literal to be printed to the print list
+   * 
+   * @param literal
+   */
+  private void addLiteral(String literal) {
+    if (literal == null || literal.isEmpty()) {
+      return;
+    }
+
+    printItems.add(literal);
   }
 
   /**
@@ -187,29 +214,19 @@ public class PrintVisitor extends AbstractParseTreeVisitor<Void> {
 
     if (context.children != null) {
       for (var child : context.children) {
-        var isLocalRoot = false;
         if (child instanceof ExtendedContext childNode && childNode.isLocalRoot()) {
-          isLocalRoot = true;
-        }
-
-        ExtendedContext previousRoot = null;
-        Interval childInterval = null;
-        if (isLocalRoot) {
           // set as new current root
-          previousRoot = currentRoot;
-          currentRoot = (ExtendedContext) child;
-        } else {
-          // interval before the current child
-          childInterval = child.getSourceInterval();
-          addInterval(fetchNext, childInterval.a - 1);
-        }
+          var previousRoot = currentRoot;
+          currentRoot = childNode;
 
-        child.accept(this);
-
-        if (isLocalRoot) {
-          // switch root back
+          child.accept(this);
           currentRoot = previousRoot;
         } else {
+          // interval before the current child
+          var childInterval = child.getSourceInterval();
+          addInterval(fetchNext, childInterval.a - 1);
+
+          child.accept(this);
           fetchNext = childInterval.b + 1;
         }
       }
@@ -224,6 +241,11 @@ public class PrintVisitor extends AbstractParseTreeVisitor<Void> {
   public Void visitTerminal(TerminalNode node) {
     // empty terminal nodes have an empty source interval and have no effect
     addInterval(node.getSourceInterval());
+
+    // if this is an unparsable AST node, add the literal it produces
+    if (node instanceof UnparsableASTNode astNode) {
+      addLiteral(astNode.getText());
+    }
     return null;
   }
 }
