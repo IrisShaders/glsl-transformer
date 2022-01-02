@@ -7,15 +7,12 @@ import java.util.List;
 import java.util.Set;
 import java.util.function.Function;
 
-import org.antlr.v4.runtime.CharStreams;
-import org.antlr.v4.runtime.CommonTokenStream;
 import org.antlr.v4.runtime.Parser;
 import org.antlr.v4.runtime.tree.ParseTree;
 import org.antlr.v4.runtime.tree.pattern.ParseTreeMatch;
 import org.antlr.v4.runtime.tree.pattern.ParseTreePattern;
 import org.antlr.v4.runtime.tree.xpath.XPath;
 
-import io.github.douira.glsl_transformer.GLSLLexer;
 import io.github.douira.glsl_transformer.GLSLParser;
 import io.github.douira.glsl_transformer.GLSLParser.DeclarationContext;
 import io.github.douira.glsl_transformer.GLSLParser.ExtensionStatementContext;
@@ -26,6 +23,8 @@ import io.github.douira.glsl_transformer.GLSLParser.PragmaStatementContext;
 import io.github.douira.glsl_transformer.GLSLParser.TranslationUnitContext;
 import io.github.douira.glsl_transformer.GLSLParser.VersionStatementContext;
 import io.github.douira.glsl_transformer.GLSLParserBaseListener;
+import io.github.douira.glsl_transformer.ast.Directive;
+import io.github.douira.glsl_transformer.ast.Directive.Type;
 import io.github.douira.glsl_transformer.generic.EmptyTerminalNode;
 import io.github.douira.glsl_transformer.generic.ExtendedContext;
 
@@ -225,13 +224,11 @@ public abstract class TransformationPhase extends GLSLParserBaseListener {
    * @param parseMethod The parser method with which the string is parsed
    * @return The resulting parsed node
    */
-  public <RuleType extends ExtendedContext> RuleType createLocalRoot(String str, ExtendedContext parent,
+  public <RuleType extends ExtendedContext> RuleType createLocalRoot(
+      String str, ExtendedContext parent,
       Function<GLSLParser, RuleType> parseMethod) {
-    var commonTokenStream = new CommonTokenStream(
-        new GLSLLexer(CharStreams.fromString(str)));
-    var node = parseMethod.apply(new GLSLParser(commonTokenStream));
-    node.setParent(parent);
-    node.makeLocalRoot(commonTokenStream);
+    var node = TransformationManager.INTERNAL.parse(str, parent, parseMethod);
+    node.makeLocalRoot(TransformationManager.INTERNAL.tokenStream);
     return node;
   }
 
@@ -356,6 +353,19 @@ public abstract class TransformationPhase extends GLSLParserBaseListener {
    */
   public void injectNode(ParseTree newNode, InjectionPoint location) {
     getRootNode().addChild(getInjectionIndex(location), newNode);
+  }
+
+  /**
+   * Injects a new {@code #define} statement at the specified location. This
+   * method is for convenience since injecting defines is a common operation. For
+   * other directives the {@link io.github.douira.glsl_transformer.ast.Directive }
+   * class should be used.
+   * 
+   * @param content  The content after the #define prefix
+   * @param location The injection point at which the new node is inserted
+   */
+  public void injectDefine(String content, InjectionPoint location) {
+    injectNode(new Directive(Type.DEFINE, content), location);
   }
 
   /**

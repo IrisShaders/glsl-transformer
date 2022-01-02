@@ -1,5 +1,7 @@
 package io.github.douira.glsl_transformer.transform;
 
+import java.util.function.Function;
+
 import org.antlr.v4.runtime.BaseErrorListener;
 import org.antlr.v4.runtime.BufferedTokenStream;
 import org.antlr.v4.runtime.CharStreams;
@@ -11,6 +13,7 @@ import org.antlr.v4.runtime.misc.ParseCancellationException;
 
 import io.github.douira.glsl_transformer.GLSLLexer;
 import io.github.douira.glsl_transformer.GLSLParser;
+import io.github.douira.glsl_transformer.generic.ExtendedContext;
 import io.github.douira.glsl_transformer.generic.PrintVisitor;
 
 /**
@@ -29,6 +32,12 @@ import io.github.douira.glsl_transformer.generic.PrintVisitor;
  * instantiation is efficient.
  */
 public class TransformationManager extends PhaseCollector {
+  /**
+   * An internal instance of this class that is used by other library-internal
+   * classes for parsing needs.
+   */
+  public static final TransformationManager INTERNAL = new TransformationManager();
+
   private static class ThrowingErrorListener extends BaseErrorListener {
     public static final ThrowingErrorListener INSTANCE = new ThrowingErrorListener();
 
@@ -44,8 +53,19 @@ public class TransformationManager extends PhaseCollector {
   private final GLSLLexer lexer = new GLSLLexer(null);
   private final GLSLParser parser = new GLSLParser(null);
 
-  private IntStream input;
-  private BufferedTokenStream tokenStream;
+  /**
+   * The last parsed input stream. This property can be used together with the
+   * parse methods since they don't give direct access to the internally created
+   * input stream and token stream.
+   */
+  protected IntStream input;
+
+  /**
+   * The last parsed tokens stream.
+   * 
+   * @see #input
+   */
+  protected BufferedTokenStream tokenStream;
 
   /**
    * Creates a new transformation manager and specifies if parse errors should be
@@ -100,6 +120,60 @@ public class TransformationManager extends PhaseCollector {
   }
 
   /**
+   * Parses a string using a parser method reference into a parse tree.
+   * 
+   * @param <RuleType>  The type of the resulting parsed node
+   * @param str         The string to parse
+   * @param parseMethod The parser method reference to use for parsing
+   * @return The parsed string as a parse tree that has the given type
+   */
+  public <RuleType extends ExtendedContext> RuleType parse(
+      String str, Function<GLSLParser, RuleType> parseMethod) {
+    return parse(str, null, parseMethod);
+  }
+
+  /**
+   * Parses a string using a parser method reference into a parse tree.
+   * 
+   * @param <RuleType>  The type of the resulting parsed node
+   * @param str         The string to parse
+   * @param parent      The parent to attach to the parsed node
+   * @param parseMethod The parser method reference to use for parsing
+   * @return The parsed string as a parse tree that has the given type
+   */
+  public <RuleType extends ExtendedContext> RuleType parse(
+      String str, ExtendedContext parent,
+      Function<GLSLParser, RuleType> parseMethod) {
+    return parse(CharStreams.fromString(str), parent, parseMethod);
+  }
+
+  /**
+   * Parses an int stream (which is similar to a string) using a parser method
+   * reference into a parse tree. This method exists so non-string streams can
+   * also be parsed.
+   * 
+   * @param <RuleType>  The type of the resulting parsed node
+   * @param stream      The int stream to parse
+   * @param parent      The parent to attach to the parsed node
+   * @param parseMethod The parser method reference to use for parsing
+   * @return The parsed string as a parse tree that has the given type
+   */
+  public <RuleType extends ExtendedContext> RuleType parse(
+      IntStream stream, ExtendedContext parent,
+      Function<GLSLParser, RuleType> parseMethod) {
+    input = stream;
+    lexer.setInputStream(input);
+    lexer.reset();
+    tokenStream = new CommonTokenStream(lexer);
+    parser.setTokenStream(tokenStream);
+    parser.reset();
+
+    var node = parseMethod.apply(parser);
+    node.setParent(parent);
+    return node;
+  }
+
+  /**
    * Transforms the given string by parsing, transforming it with the already
    * registered transformations and then re-printing it.
    * 
@@ -120,19 +194,8 @@ public class TransformationManager extends PhaseCollector {
    * @return The transformed string
    */
   public String transformStream(IntStream stream) throws RecognitionException {
-    input = stream;
-    lexer.setInputStream(input);
-    lexer.reset();
-    tokenStream = new CommonTokenStream(lexer);
-    parser.setTokenStream(tokenStream);
-    parser.reset();
-
-    var tree = parser.translationUnit();
+    var tree = parse(stream, null, GLSLParser::translationUnit);
     transformTree(tree, tokenStream);
-    var result = PrintVisitor.printTree(tokenStream, tree);
-
-    input = null;
-    tokenStream = null;
-    return result;
+    return PrintVisitor.printTree(tokenStream, tree);
   }
 }
