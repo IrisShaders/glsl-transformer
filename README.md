@@ -10,12 +10,13 @@ See the Javadoc, the documentation section further down and the tests. Also chec
 ## Capabilities
 
 - GLSL Parsing
-- Parse tree transformation in phases
+- Flexible parse tree transformation in phases
 - Pattern matching and tree visitation
 - Parse tree manipulation and declaration injection
 - New nodes are treated as part of the existing parse tree
 - Whitespace-preserving re-printing
 - The original input is preserved if no changes are made
+- Limited support for AST generation and re-insertion
 
 ## What `glsl-transformer` is not
 
