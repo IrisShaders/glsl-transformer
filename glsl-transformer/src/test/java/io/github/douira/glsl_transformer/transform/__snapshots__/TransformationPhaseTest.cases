@@ -64,3 +64,15 @@ varying vec2 varyVec;
 //before declaration
 varying vec2 varyVec;
 //before eof
+
+§testInjectNode unparsed_and_functions:
+varying vec2 varyVec;
+//before declaration
+varying vec2 varyVec;
+void main() {
+}
+//before functions
+void main() {}
+void main() {
+}
+//before eof
