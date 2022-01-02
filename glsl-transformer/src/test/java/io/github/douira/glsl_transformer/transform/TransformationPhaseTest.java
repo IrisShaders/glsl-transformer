@@ -121,17 +121,17 @@ public class TransformationPhaseTest extends TestWithTransformationManager {
   @ArgumentsSource(TestCaseReader.class)
   @SnapshotName("testInjectNode")
   void testInjectNode(String scenario, String input) {
-    for (var injectionPoint : InjectionPoint.values()) {
+    for (var location : InjectionPoint.values()) {
       setTestCode(input);
       var output = wrapRunTransform(new RunPhase() {
         @Override
         protected void run(TranslationUnitContext ctx) {
-          injectExternalDeclaration("//prefix\ninjection; //suffix\n", injectionPoint);
+          injectExternalDeclaration("//prefix\ninjection; //suffix\n", location);
         }
       });
 
       expect
-          .scenario(scenario + "/" + injectionPoint.toString().toLowerCase())
+          .scenario(scenario + "/" + location.toString().toLowerCase())
           .toMatchSnapshot(SnapshotUtil.inputOutputSnapshot(input, output));
     }
   }
