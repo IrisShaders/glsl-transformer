@@ -3,8 +3,6 @@ package io.github.douira.glsl_transformer.transform;
 import java.util.LinkedList;
 import java.util.List;
 
-import io.github.douira.glsl_transformer.generic.ExtendedContext;
-
 /**
  * The transformation is the vehicle through which transformation phases, which
  * do all the actual transforming work, are added to the phase collector. It
@@ -34,22 +32,19 @@ import io.github.douira.glsl_transformer.generic.ExtendedContext;
  * tree are.
  */
 public class Transformation {
-  public class SemanticException extends RuntimeException {
-    public ExtendedContext node;
+  /**
+   * The default group index. If no group index is specified, this group index is
+   * used. All phases without an explicit group index are added in this group. If
+   * all phases are added without a group index, they are effectively only ordered
+   * by their ordering index.
+   */
+  public static final int DEFAULT_GROUP = 0;
 
-    public SemanticException() {
-    }
-
-    public SemanticException(String message) {
-      super(message);
-    }
-
-    public SemanticException(String message, ExtendedContext node) {
-      this(message);
-      this.node = node;
-    }
-  }
-
+  /**
+   * The record used to store added transformation phases with their order and
+   * group index. When this transformation is added to a phase collector the list
+   * of these entries is used to add the contained phases to the collector.
+   */
   public record PhaseEntry(TransformationPhase phase, int order, int group) {
   };
 
@@ -138,7 +133,7 @@ public class Transformation {
    * @return The default group index to use for adding phases
    */
   protected int getDefaultGroup() {
-    return PhaseCollector.DEFAULT_GROUP;
+    return DEFAULT_GROUP;
   }
 
   /**
