@@ -1,6 +1,6 @@
 package io.github.douira.glsl_transformer.transform;
 
-import io.github.douira.glsl_transformer.generic.ExtendedContext;
+import org.antlr.v4.runtime.tree.ParseTree;
 
 /**
  * The semantic exception should be thrown by a transformation phase when the
@@ -12,7 +12,7 @@ public class SemanticException extends RuntimeException {
    * The contained node that may be the cause of the exception. Can be
    * {@code null}.
    */
-  private ExtendedContext node;
+  private ParseTree node;
 
   /**
    * Creates a new empty semantic exception.
@@ -37,7 +37,7 @@ public class SemanticException extends RuntimeException {
    * @param message The message of the exception
    * @param node    The parse tree node to store in the exception
    */
-  public SemanticException(String message, ExtendedContext node) {
+  public SemanticException(String message, ParseTree node) {
     this(message);
     this.node = node;
   }
@@ -47,7 +47,7 @@ public class SemanticException extends RuntimeException {
    * 
    * @return The node
    */
-  public ExtendedContext getNode() {
+  public ParseTree getNode() {
     return node;
   }
 }
