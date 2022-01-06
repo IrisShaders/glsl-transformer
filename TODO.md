@@ -1,5 +1,6 @@
 # Todo
 
+- Use Jabel to distribute with Java 8 compatability (for Iris on Minecraft 1.16.5) - Use different package name for this? like `glsl-transformer-j8`?
 - ASTNode tests
 - StringTerminalNode tests (printing did not work previously)
 - IdentifierReplacement that lets the user register replacements of identifiers with expressions and then during transformation it performs the replacements (In Iris there actually should be no remaining #define statements when glsl-transformer gets the code after preprocessing)
