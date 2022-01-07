@@ -12,6 +12,8 @@ import java.util.Map;
 import java.util.Set;
 import java.util.stream.Stream;
 
+import io.github.douira.glsl_transformer.util.CompatUtil;
+
 /**
  * Knows about the various code resource files and can load them.
  */
@@ -37,12 +39,12 @@ public class TestResourceManager {
   }
 
   public static enum DirectoryLocation {
-    GLSLANG_TESTS("/glslang-test", Set.of("ray", "preprocessor"));
+    GLSLANG_TESTS("/glslang-test", CompatUtil.setOf("ray", "preprocessor"));
 
     Path path;
     Set<String> excludeInFiles;
 
-    private static final Set<String> GLOBAL_EXCLUDE = Set.of(".ds_store", "disable_");
+    private static final Set<String> GLOBAL_EXCLUDE = CompatUtil.setOf(".ds_store", "disable_");
 
     private DirectoryLocation(String path, Set<String> excludeInFiles) {
       this.path = Paths.get(path);

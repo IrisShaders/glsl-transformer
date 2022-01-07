@@ -3,6 +3,8 @@ package io.github.douira.glsl_transformer.transform;
 import java.util.LinkedList;
 import java.util.List;
 
+import com.github.bsideup.jabel.Desugar;
+
 /**
  * The transformation is the vehicle through which transformation phases, which
  * do all the actual transforming work, are added to the phase collector. It
@@ -45,6 +47,7 @@ public class Transformation {
    * group index. When this transformation is added to a phase collector the list
    * of these entries is used to add the contained phases to the collector.
    */
+  @Desugar
   public static record PhaseEntry(TransformationPhase phase, int order, int group) {
   };
 

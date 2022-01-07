@@ -2,6 +2,8 @@ package io.github.douira.glsl_transformer.generic;
 
 import java.util.LinkedList;
 
+import com.github.bsideup.jabel.Desugar;
+
 import org.antlr.v4.runtime.BufferedTokenStream;
 import org.antlr.v4.runtime.Lexer;
 import org.antlr.v4.runtime.misc.Interval;
@@ -28,6 +30,7 @@ public class PrintVisitor extends AbstractParseTreeVisitor<Void> {
    * printing to read from the token stream for which the interval was
    * constructed.
    */
+  @Desugar
   private static record AttributedInterval(ExtendedContext localRoot, Interval interval) {
   }
 

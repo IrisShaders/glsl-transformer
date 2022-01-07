@@ -12,9 +12,9 @@ import org.antlr.v4.runtime.BufferedTokenStream;
 import io.github.douira.glsl_transformer.GLSLLexer;
 import io.github.douira.glsl_transformer.GLSLParser;
 import io.github.douira.glsl_transformer.GLSLParser.TranslationUnitContext;
-import io.github.douira.glsl_transformer.generic.ComparablePair;
 import io.github.douira.glsl_transformer.generic.ProxyParseTreeListener;
 import io.github.douira.glsl_transformer.transform.Transformation.PhaseEntry;
+import io.github.douira.glsl_transformer.util.ComparablePair;
 
 /**
  * The phase collector holds the registered transformations and manages their

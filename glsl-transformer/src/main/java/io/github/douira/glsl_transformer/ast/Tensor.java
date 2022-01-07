@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Function;
 
+import com.github.bsideup.jabel.Desugar;
+
 import org.antlr.v4.runtime.Token;
 import org.antlr.v4.runtime.tree.TerminalNode;
 
@@ -60,6 +62,7 @@ public class Tensor extends ParsableASTNode {
    * of each value and the following dimensions describe the actual dimensions of
    * the tensor.
    */
+  @Desugar
   public static record Type(int tokenType, NumberType numberType, int[] shape, int spaceDimensions,
       int highestDimension,
       String compactName, String explicitName) {
