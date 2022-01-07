@@ -46,6 +46,8 @@ All of these should be fulfilled at the same time.
 
 This project uses semver for versioning. If there are frequent breaking API changes then the major version will change frequently. That's how it has to be.
 
+This library is written in Java 16 and using [jabel](https://github.com/bsideup/jabel) compiled to Java 8 compatible classes. This means it doesn't use any newer APIs. The tests are not affected by this and will only be run on the latest Java version (because it's annoying only use Java 8 in the tests). If nobody needs Java 8 support anymore in the future, it will be dropped with a major release.
+
 ## Credit
 
 Credit for the basics goes to https://github.com/gabriele-tomassetti/antlr-mega-tutorial which is part of the nice [Java Setup section of the ANTLR Mega Tutorial](https://tomassetti.me/antlr-mega-tutorial/#java-setup).
