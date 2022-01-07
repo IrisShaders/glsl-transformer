@@ -70,20 +70,30 @@ public class Directive extends UnparsableASTNode {
 
   /**
    * Crates a new directive with the given directive type and content after the
-   * directive name.
+   * directive name. Newlines in the content are escaped with GLSL's line
+   * continuation marker "\".
    * 
    * @param type    The type of the directive.
    * @param content The content to put after the directive name
    */
   public Directive(Type type, String content) {
+    if (content == null) {
+      throw new IllegalArgumentException("Non-null content must used to construct a directive!");
+    }
+    if (type == null) {
+      throw new IllegalArgumentException("Non-null type must be used to construct a directive!");
+    }
+
+    content = content.trim().replace("\n", "\\\n");
+
     this.type = type;
     this.content = content;
   }
 
   @Override
   protected String getPrinted() {
-    return "#"
+    return ("#"
         + (type == null ? "" : type.name().toLowerCase())
-        + " " + content + "\n";
+        + " " + content).trim() + "\n";
   }
 }
