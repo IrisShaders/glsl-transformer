@@ -100,7 +100,7 @@ public abstract class PhaseCollector {
       executionLevels.put(indexPair, phasesForIndex);
     }
     phasesForIndex.add(phase);
-    phase.setParent(this);
+    phase.setCollector(this);
     phase.init();
   }
 
@@ -116,7 +116,7 @@ public abstract class PhaseCollector {
       var proxyListener = new ProxyParseTreeListener(new ArrayList<>());
 
       for (var phase : level) {
-        phase.setParent(this);
+        phase.setCollector(this);
 
         if (phase instanceof WalkPhase walkPhase) {
           if (walkPhase.isActiveBeforeWalk()) {

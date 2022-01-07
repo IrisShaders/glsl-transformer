@@ -224,6 +224,8 @@ public class TransformationPhaseTest extends TestWithTransformationManager {
       protected void run(TranslationUnitContext ctx) {
         assertSame(manager.getParser(), getParser(),
             "It should return the previously set parser inside the phase collector");
+        assertSame(manager.getLexer(), getLexer(),
+            "It should return the previously set lexer inside the phase collector");
       }
     });
   }
