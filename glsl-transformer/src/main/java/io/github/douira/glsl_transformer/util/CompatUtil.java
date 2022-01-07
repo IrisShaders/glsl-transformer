@@ -67,7 +67,7 @@ public class CompatUtil {
    * 
    * @param <T>   The type of the items
    * @param itemA The first item to add to the set
-   * @param itemA The second item to add to the set
+   * @param itemB The second item to add to the set
    * @return The set with the given items
    */
   public static <T> Set<T> setOf(T itemA, T itemB) {
