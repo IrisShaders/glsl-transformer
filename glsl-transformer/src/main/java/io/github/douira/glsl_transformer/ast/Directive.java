@@ -4,7 +4,7 @@ package io.github.douira.glsl_transformer.ast;
  * This class models unparsed directives with the # sign. Parsed directives are
  * modelled as regular parse tree nodes (for now).
  */
-public class Directive extends UnparsableASTNode {
+public class Directive extends StringNode {
   /**
    * The types of directives that can be generated.
    */
@@ -62,11 +62,15 @@ public class Directive extends UnparsableASTNode {
     /**
      * #line
      */
-    LINE
+    LINE,
+
+    /**
+     * # (without a name and without content)
+     */
+    EMPTY
   }
 
   private Type type;
-  private String content;
 
   /**
    * Crates a new directive with the given directive type and content after the
@@ -77,23 +81,36 @@ public class Directive extends UnparsableASTNode {
    * @param content The content to put after the directive name
    */
   public Directive(Type type, String content) {
-    if (content == null) {
-      throw new IllegalArgumentException("Non-null content must used to construct a directive!");
-    }
+    super(cleanContent(content));
+
     if (type == null) {
       throw new IllegalArgumentException("Non-null type must be used to construct a directive!");
     }
 
-    content = content.trim().replace("\n", "\\\n");
+    if (type == Type.EMPTY) {
+      throw new IllegalArgumentException("The EMPTY type may only be used with the corresponding constructor!");
+    }
 
     this.type = type;
-    this.content = content;
+  }
+
+  public Directive() {
+    super("");
+    this.type = Type.EMPTY;
+  }
+
+  private static String cleanContent(String content) {
+    return content == null ? null : content.trim().replace("\n", "\\\n");
   }
 
   @Override
   protected String getPrinted() {
+    if (type == Type.EMPTY) {
+      return "#\n";
+    }
+
     return ("#"
         + (type == null ? "" : type.name().toLowerCase())
-        + " " + content).trim() + "\n";
+        + " " + getContent()).trim() + "\n";
   }
 }
