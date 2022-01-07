@@ -22,7 +22,7 @@ import io.github.douira.glsl_transformer.transform.WalkPhase;
  * The declaration replacement finds layout declarations and replaces all
  * references to them with function calls and other code.
  */
-public class DeclarationReplacement extends Transformation {
+public class ReplaceDeclarations extends Transformation {
   @Desugar
   private static record Declaration(String type, String name) {
   }
@@ -38,7 +38,7 @@ public class DeclarationReplacement extends Transformation {
    * Creates a new declaration replacement transformation with a walk phase for
    * finding declarations and one for inserting calls to the generated functions.
    */
-  public DeclarationReplacement() {
+  public ReplaceDeclarations() {
     addPhase(new WalkPhase() {
       ParseTreePattern declarationPattern;
 
