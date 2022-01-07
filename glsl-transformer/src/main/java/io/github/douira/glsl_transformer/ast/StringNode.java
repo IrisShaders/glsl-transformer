@@ -17,14 +17,14 @@ public class StringNode extends UnparsableASTNode {
   /**
    * Creates a new string node with the given string content.
    * 
-   * @param text The string to create a token for
+   * @param content The string to create a token for
    */
-  public StringNode(String contents) {
-    if (contents == null) {
+  public StringNode(String content) {
+    if (content == null) {
       throw new IllegalArgumentException("String node content must not be null!");
     }
 
-    this.content = contents;
+    this.content = content;
   }
 
   @Override

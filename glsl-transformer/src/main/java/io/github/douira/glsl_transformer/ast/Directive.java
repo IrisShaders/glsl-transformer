@@ -94,6 +94,10 @@ public class Directive extends StringNode {
     this.type = type;
   }
 
+  /**
+   * Creates a new directive of the empty type. It receives no content because
+   * it's not allowed to have content as per the GLSL spec.
+   */
   public Directive() {
     super("");
     this.type = Type.EMPTY;
