@@ -7,6 +7,7 @@ import com.github.bsideup.jabel.Desugar;
 
 import org.antlr.v4.runtime.BufferedTokenStream;
 import org.antlr.v4.runtime.ParserRuleContext;
+import org.antlr.v4.runtime.RuleContextWithAltNum;
 import org.antlr.v4.runtime.misc.Interval;
 import org.antlr.v4.runtime.tree.ParseTree;
 
@@ -26,7 +27,7 @@ import org.antlr.v4.runtime.tree.ParseTree;
  * been removed. The printer then uses this to not print any non-hidden tokens
  * contained within any local root's omission set.
  */
-public class ExtendedContext extends ParserRuleContext {
+public class ExtendedContext extends RuleContextWithAltNum {
   @Desugar
   private static record LocalRoot(CachingIntervalSet omissionSet, BufferedTokenStream tokenStream) {
     LocalRoot(BufferedTokenStream tokenStream) {
