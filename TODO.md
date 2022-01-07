@@ -1,6 +1,5 @@
 # Todo
 
-- StringTerminalNode tests (printing did not work previously)
 - IdentifierReplacement that lets the user register replacements of identifiers with expressions and then during transformation it performs the replacements (In Iris there actually should be no remaining #define statements when glsl-transformer gets the code after preprocessing)
 - Write tests that matching still works even after injection
 - Test node removal, replacement and injection in local roots (in `TransformationPhaseTest`)
