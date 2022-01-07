@@ -27,6 +27,7 @@ import io.github.douira.glsl_transformer.ast.Directive;
 import io.github.douira.glsl_transformer.ast.Directive.Type;
 import io.github.douira.glsl_transformer.generic.EmptyTerminalNode;
 import io.github.douira.glsl_transformer.generic.ExtendedContext;
+import io.github.douira.glsl_transformer.util.CompatUtil;
 
 /**
  * The transformations phase actually does a specific transformation. It can be
@@ -294,7 +295,7 @@ public abstract class TransformationPhase extends GLSLParserBaseListener {
       // strongest (strongest having the most inject-before conditions)
       // BEFORE_VERSION and BEFORE_EOF are handled as special cases
 
-      BEFORE_FUNCTIONS.EDBeforeTypes = Set.of(FunctionDefinitionContext.class);
+      BEFORE_FUNCTIONS.EDBeforeTypes = CompatUtil.setOf(FunctionDefinitionContext.class);
 
       BEFORE_DECLARATIONS.EDBeforeTypes = new HashSet<>(BEFORE_FUNCTIONS.EDBeforeTypes);
       BEFORE_DECLARATIONS.EDBeforeTypes.add(LayoutDefaultsContext.class);

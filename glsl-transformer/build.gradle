@@ -32,6 +32,9 @@ dependencies {
 
     testImplementation 'io.github.origin-energy:java-snapshot-testing-junit5:3.2.+'
     testImplementation "org.slf4j:slf4j-simple:2.0.0-alpha5"
+
+    annotationProcessor 'com.github.bsideup.jabel:jabel-javac-plugin:0.4.2'
+    compileOnly 'com.github.bsideup.jabel:jabel-javac-plugin:0.4.2'
 }
 
 generateGrammarSource {
@@ -49,6 +52,15 @@ testing {
             // Use JUnit Jupiter test framework
             useJUnitJupiter('5.7.2')
         }
+    }
+}
+
+configure([tasks.compileJava]) {
+    sourceCompatibility = 16 // for the IDE support
+    options.release = 8
+
+    javaCompiler = javaToolchains.compilerFor {
+        languageVersion = JavaLanguageVersion.of(16)
     }
 }
 

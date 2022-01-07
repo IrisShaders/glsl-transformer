@@ -3,6 +3,8 @@ package io.github.douira.glsl_transformer.transformations;
 import java.util.HashMap;
 import java.util.Map;
 
+import com.github.bsideup.jabel.Desugar;
+
 import org.antlr.v4.runtime.tree.pattern.ParseTreePattern;
 
 import io.github.douira.glsl_transformer.GLSLParser;
@@ -21,6 +23,7 @@ import io.github.douira.glsl_transformer.transform.WalkPhase;
  * references to them with function calls and other code.
  */
 public class DeclarationReplacement extends Transformation {
+  @Desugar
   private static record Declaration(String type, String name) {
   }
 

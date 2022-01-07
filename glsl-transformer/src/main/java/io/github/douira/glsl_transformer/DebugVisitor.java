@@ -5,6 +5,7 @@ import org.antlr.v4.runtime.tree.RuleNode;
 import org.antlr.v4.runtime.tree.TerminalNode;
 
 import io.github.douira.glsl_transformer.generic.ExtendedContext;
+import io.github.douira.glsl_transformer.util.CompatUtil;
 
 /**
  * The debug visitor prints the tree and some other information to the console.
@@ -39,7 +40,7 @@ public class DebugVisitor extends GLSLParserBaseVisitor<Void> {
     }
 
     // indent with the tree depth
-    var prefix = ". ".repeat(depth);
+    var prefix = CompatUtil.repeat(". ", depth);
     int n = node.getChildCount();
 
     // print the name of the node

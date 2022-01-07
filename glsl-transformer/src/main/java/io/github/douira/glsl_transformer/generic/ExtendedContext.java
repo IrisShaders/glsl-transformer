@@ -3,6 +3,8 @@ package io.github.douira.glsl_transformer.generic;
 import java.util.LinkedList;
 import java.util.Optional;
 
+import com.github.bsideup.jabel.Desugar;
+
 import org.antlr.v4.runtime.BufferedTokenStream;
 import org.antlr.v4.runtime.ParserRuleContext;
 import org.antlr.v4.runtime.misc.Interval;
@@ -25,6 +27,7 @@ import org.antlr.v4.runtime.tree.ParseTree;
  * contained within any local root's omission set.
  */
 public class ExtendedContext extends ParserRuleContext {
+  @Desugar
   private static record LocalRoot(CachingIntervalSet omissionSet, BufferedTokenStream tokenStream) {
     LocalRoot(BufferedTokenStream tokenStream) {
       this(new CachingIntervalSet(), tokenStream);
