@@ -135,7 +135,13 @@ public class TransformationManagerTest extends TestWithTransformationManager {
           if (content == null) {
             expectScenario.toMatchSnapshot("<invalid content>");
           } else {
-            manager.transform(resource.content());
+            var input = resource.content();
+            var result = manager.transform(input);
+
+            if (collectingListener.errors.isEmpty()) {
+              assertEquals(input, result, "It should re-print the same string it parsed if there were no errors");
+            }
+
             expectScenario.toMatchSnapshot(
                 SnapshotUtil.inputOutputSnapshot(
                     content, String.join("\n", collectingListener.errors)));
