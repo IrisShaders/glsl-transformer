@@ -24,17 +24,18 @@ repositories {
     mavenCentral()
 }
 
-def antlrVersion = '4.9.3'
+def antlrVersion = '4.9.+'
+def jabelVersion = '0.4.+'
 
 dependencies {
     antlr group: 'org.antlr', name: 'antlr4', version: antlrVersion
     api group: 'org.antlr', name: 'antlr4-runtime', version: antlrVersion
 
-    testImplementation 'io.github.origin-energy:java-snapshot-testing-junit5:3.2.+'
-    testImplementation "org.slf4j:slf4j-simple:2.0.0-alpha5"
+    testImplementation group: 'io.github.origin-energy', name:'java-snapshot-testing-junit5', version: '3.2.+'
+    testImplementation group: 'org.slf4j', name: 'slf4j-simple', version: '2.0.0-alpha5'
 
-    annotationProcessor 'com.github.bsideup.jabel:jabel-javac-plugin:0.4.2'
-    compileOnly 'com.github.bsideup.jabel:jabel-javac-plugin:0.4.2'
+    annotationProcessor group: 'com.github.bsideup.jabel', name:'jabel-javac-plugin', version: jabelVersion
+    compileOnly group: 'com.github.bsideup.jabel', name:'jabel-javac-plugin', version: jabelVersion
 }
 
 generateGrammarSource {
