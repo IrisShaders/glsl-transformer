@@ -1,5 +1,6 @@
 # Todo
 
+- Make a token filter mechanism in PrintVisitor and TransformationManager
 - Test removal/replacement of single terminal node (tests ExtendedTerminalNode)
 - Figure out if and how removal of local roots works (nothing needs to be omitted since they are additions, trying to omit them may break. a placeholder still needs to be placed though)
 - Write tests that matching still works even after injection
