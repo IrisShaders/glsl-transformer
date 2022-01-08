@@ -1,7 +1,7 @@
 # Todo
 
 - Test removal/replacement of single terminal node (tests ExtendedTerminalNode)
-- Figure out if and how removal of local roots works
+- Figure out if and how removal of local roots works (nothing needs to be omitted since they are additions, trying to omit them may break. a placeholder still needs to be placed though)
 - Write tests that matching still works even after injection
 - Test node removal, replacement and injection in local roots (in `TransformationPhaseTest`)
 - Write tests that tree walker doesn't break even with child array modification (apart from injection, which is already being tested)
