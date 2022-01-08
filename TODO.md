@@ -1,6 +1,5 @@
 # Todo
 
-- MoveCheckable and DynamicParseTreeWalker tests (related)
 - Test removal/replacement of single terminal node (tests ExtendedTerminalNode)
 - Figure out if and how removal of local roots works
 - Write tests that matching still works even after injection
