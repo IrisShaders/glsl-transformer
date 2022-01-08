@@ -15,6 +15,8 @@
 - Make the Lexer parse #define directives (and others?) better
 - Macro expansion (preprocessor) and other functions?
 
+- DynamicParseTreeWalker: have transformation phase tell it about movements in the child array it caused to avoid inserting placeholder nodes (and then also avoid even doing the compacting step if it's not necessary)
+
 ## Other
 
 - Publish Java 8-compatible version as `glsl-transformer-j8` instead of it being the main version. This would only be useful in case testing doesn't find a bug that jabel introduced into the J8 version that version being tested on J16/17 doesn't have. The main version would be "safe" from this kind of bug in jabel since it's the same exact code as is being tested.
