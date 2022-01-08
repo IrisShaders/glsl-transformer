@@ -20,40 +20,110 @@ public class MultiFilter extends ArrayList<TokenFilter> implements TokenFilter {
   private boolean conjunction = true;
   private boolean shortCircuit = false;
 
-  public MultiFilter(Collection<? extends TokenFilter> c, boolean conjunction, boolean shortCircuit) {
-    super(c);
+  /**
+   * Creates a new multi filter with the given list of subfilters and the behavior
+   * options.
+   * 
+   * @see ArrayList#ArrayList(Collection)
+   * 
+   * @param subfilters   The subfilters to add initially
+   * @param conjunction  If all filters are required to allow a token for it to be
+   *                     globally allowed
+   * @param shortCircuit If the evaluation of the filter should be stopped early
+   *                     if the outcome can't change anymore.
+   */
+  public MultiFilter(Collection<? extends TokenFilter> subfilters, boolean conjunction, boolean shortCircuit) {
+    super(subfilters);
     this.conjunction = conjunction;
     this.shortCircuit = shortCircuit;
   }
 
+  /**
+   * Creates a new multi filter with an initial size capacity and the behavior
+   * options.
+   * 
+   * @see ArrayList#ArrayList(int)
+   * 
+   * @param initialCapacity The initial list capacity
+   * @param conjunction     If all filters are required to allow a token for it to
+   *                        be globally allowed
+   * @param shortCircuit    If the evaluation of the filter should be stopped
+   *                        early if the outcome can't change anymore.
+   */
   public MultiFilter(int initialCapacity, boolean conjunction, boolean shortCircuit) {
     super(initialCapacity);
     this.conjunction = conjunction;
     this.shortCircuit = shortCircuit;
   }
 
+  /**
+   * Creates a new multi filter the behavior options.
+   * 
+   * @see ArrayList#ArrayList()
+   * 
+   * @param conjunction  If all filters are required to allow a token for it to
+   *                     be globally allowed
+   * @param shortCircuit If the evaluation of the filter should be stopped
+   *                     early if the outcome can't change anymore.
+   */
   public MultiFilter(boolean conjunction, boolean shortCircuit) {
     this.conjunction = conjunction;
     this.shortCircuit = shortCircuit;
   }
 
-  public MultiFilter() {
+  /**
+   * Creates a new default multi filter with the given list of subfilters.
+   * 
+   * @see ArrayList#ArrayList(Collection)
+   * 
+   * @param subfilters The subfilters to add initially
+   */
+  public MultiFilter(Collection<? extends TokenFilter> subfilters) {
+    super(subfilters);
   }
 
+  /**
+   * Creates a new default multi filter with an initial size capacity.
+   * 
+   * @see ArrayList#ArrayList(int)
+   * 
+   * @param initialCapacity The initial list capacity
+   */
   public MultiFilter(int initialCapacity) {
     super(initialCapacity);
   }
 
-  public MultiFilter(Collection<? extends TokenFilter> c) {
-    super(c);
+  /**
+   * Creates a new empty default multi filter.
+   * 
+   * @see ArrayList#ArrayList()
+   */
+  public MultiFilter() {
   }
 
+  /**
+   * Sets the conjunction behavior flag
+   * 
+   * @param conjunction The new flag state
+   */
   public void setConjunction(boolean conjunction) {
     this.conjunction = conjunction;
   }
 
+  /**
+   * Sets the conjunction short circuit flag
+   * 
+   * @param shortCircuit The new flag state
+   */
   public void setShortCircuit(boolean shortCircuit) {
     this.shortCircuit = shortCircuit;
+  }
+
+  @Override
+  public void resetState() {
+    for (var filter : this) {
+      filter.resetState();
+    }
   }
 
   @Override
@@ -67,12 +137,5 @@ public class MultiFilter extends ArrayList<TokenFilter> implements TokenFilter {
       }
     }
     return result;
-  }
-
-  @Override
-  public void resetState() {
-    for (var filter : this) {
-      filter.resetState();
-    }
   }
 }
