@@ -24,7 +24,7 @@ repositories {
     mavenCentral()
 }
 
-def antlrVersion = '4.9.2'
+def antlrVersion = '4.9.3'
 
 dependencies {
     antlr group: 'org.antlr', name: 'antlr4', version: antlrVersion
