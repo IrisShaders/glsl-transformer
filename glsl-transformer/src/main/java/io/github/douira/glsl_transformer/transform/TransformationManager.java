@@ -14,6 +14,7 @@ import org.antlr.v4.runtime.misc.ParseCancellationException;
 import io.github.douira.glsl_transformer.GLSLLexer;
 import io.github.douira.glsl_transformer.GLSLParser;
 import io.github.douira.glsl_transformer.print.PrintVisitor;
+import io.github.douira.glsl_transformer.print.TokenFilter;
 import io.github.douira.glsl_transformer.tree.ExtendedContext;
 
 /**
@@ -68,6 +69,12 @@ public class TransformationManager extends PhaseCollector {
   protected BufferedTokenStream tokenStream;
 
   /**
+   * Optionally a token filter for printing a tree. Can be {@code null} if no
+   * filter is to be used.
+   */
+  private TokenFilter tokenFilter;
+
+  /**
    * Creates a new transformation manager and specifies if parse errors should be
    * thrown during parsing. If they should not be thrown they will not be reported
    * or printed to the console. ANTLR will attempt to recover from errors during
@@ -117,6 +124,26 @@ public class TransformationManager extends PhaseCollector {
   @Override
   public GLSLLexer getLexer() {
     return lexer;
+  }
+
+  /**
+   * Sets the token filter to use for printing a tree. Set it to {@code null} to
+   * remove the filter.
+   * 
+   * @param tokenFilter The token filter to use for printing. May be {@code null}.
+   */
+  public void setTokenFilter(TokenFilter tokenFilter) {
+    this.tokenFilter = tokenFilter;
+  }
+
+  /**
+   * Adds a token filter for printing. This will create a new multi token filter
+   * if another filter is already present.
+   * 
+   * @param newFilter The token filter to also use for printing.
+   */
+  public void addTokenFilter(TokenFilter newFilter) {
+    setTokenFilter(TokenFilter.join(tokenFilter, newFilter));
   }
 
   /**
