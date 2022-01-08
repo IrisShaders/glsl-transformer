@@ -1,10 +1,17 @@
 package io.github.douira.glsl_transformer.generic;
 
 import static org.junit.jupiter.api.Assertions.*;
+
 import org.junit.jupiter.api.Test;
 
+/**
+ * Tests the empty terminal node. MoveCheckable is tested in its own file.
+ */
 public class EmptyTerminalNodeTest {
-  EmptyTerminalNode emptyNode = new EmptyTerminalNode();
+  ExtendedContext parent = new ExtendedContext(null, 0) {
+  };
+  TreeMember replacedNode = new EmptyTerminalNode(parent);
+  EmptyTerminalNode emptyNode = new EmptyTerminalNode(replacedNode);
 
   @Test
   void hasNoChildren() {
@@ -13,7 +20,7 @@ public class EmptyTerminalNodeTest {
 
   @Test
   void testGetParent() {
-    assertNull(emptyNode.getParent(), "It should not have a parent");
+    assertEquals(replacedNode.getParent(), emptyNode.getParent(), "It should have the correct parent");
   }
 
   @Test

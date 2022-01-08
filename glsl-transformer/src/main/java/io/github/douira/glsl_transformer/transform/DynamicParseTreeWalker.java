@@ -33,7 +33,7 @@ public class DynamicParseTreeWalker extends ParseTreeWalker {
    * @implNote Node removal never reduces the length of the array so "removal" is
    *           not an issue. (since removed nodes are instead replaced with empty
    *           terminal nodes) Node addition after the current position is ok
-   *           since the length is dynamically determined in the loop.The only
+   *           since the length is dynamically determined in the loop. The only
    *           problematic thing is node addition before the current position for
    *           which the current iteration index needs to be compensated for. This
    *           is done by fast-forwarding the iteration index after the walk

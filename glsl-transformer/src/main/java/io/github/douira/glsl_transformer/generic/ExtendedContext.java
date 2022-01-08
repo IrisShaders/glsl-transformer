@@ -27,7 +27,7 @@ import org.antlr.v4.runtime.tree.ParseTree;
  * been removed. The printer then uses this to not print any non-hidden tokens
  * contained within any local root's omission set.
  */
-public class ExtendedContext extends RuleContextWithAltNum {
+public abstract class ExtendedContext extends RuleContextWithAltNum implements TreeMember {
   @Desugar
   private static record LocalRoot(CachingIntervalSet omissionSet, BufferedTokenStream tokenStream) {
     LocalRoot(BufferedTokenStream tokenStream) {
@@ -190,12 +190,24 @@ public class ExtendedContext extends RuleContextWithAltNum {
    * node. Other nodes will however, still be printed in order to preserve
    * whitespace.
    */
+  @Override
   public void omitTokens() {
+    omitTokens(getSourceInterval());
+  }
+
+  /**
+   * Omits the given token interval on this node's local root.
+   * 
+   * @see #omitTokens()
+   * 
+   * @param tokenInterval The token interval to be omitted
+   */
+  public void omitTokens(Interval tokenInterval) {
     if (isTreeReadonly()) {
       throw new IllegalStateException("Can't add intervals to the omission set if editing is already finished!");
     }
 
-    getLocalRoot().getOmissionSet().add(getSourceInterval());
+    getLocalRoot().getOmissionSet().add(tokenInterval);
   }
 
   private boolean isTreeReadonly() {

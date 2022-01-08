@@ -1,7 +1,6 @@
 package io.github.douira.glsl_transformer.transformation.target;
 
-import org.antlr.v4.runtime.tree.TerminalNode;
-
+import io.github.douira.glsl_transformer.generic.TreeMember;
 import io.github.douira.glsl_transformer.transform.SemanticException;
 
 /**
@@ -14,7 +13,7 @@ public abstract class IllegalTarget extends HandlerTarget {
   }
 
   @Override
-  public void handleResult(TerminalNode node, String match) {
+  public void handleResult(TreeMember node, String match) {
     throw getMessage(node, match);
   }
 
@@ -25,12 +24,12 @@ public abstract class IllegalTarget extends HandlerTarget {
    * @param match The identifier that contains the needle
    * @return The semantic exception to throw
    */
-  public abstract SemanticException getMessage(TerminalNode node, String match);
+  public abstract SemanticException getMessage(TreeMember node, String match);
 
   public static IllegalTarget fromMessage(String needle, String message) {
     return new IllegalTarget(needle) {
       @Override
-      public SemanticException getMessage(TerminalNode node, String match) {
+      public SemanticException getMessage(TreeMember node, String match) {
         return new SemanticException(message, node);
       }
     };

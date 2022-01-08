@@ -21,11 +21,13 @@ parser grammar GLSLParser;
 
 @header {
 import io.github.douira.glsl_transformer.generic.ExtendedContext;
+import io.github.douira.glsl_transformer.generic.ExtendedParser;
 }
 
 options {
 	tokenVocab = GLSLLexer;
 	contextSuperClass = ExtendedContext;
+	superClass = ExtendedParser;
 }
 
 //the root rule
