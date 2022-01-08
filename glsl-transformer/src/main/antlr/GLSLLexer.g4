@@ -22,6 +22,9 @@ fragment IDENTIFIER_frag: (
 		| '_'
 	) (DIGIT | 'a' ..'z' | 'A' ..'Z' | '_')*;
 fragment WS_frag: [\t\r\u000C ]+;
+fragment NEWLINE: '\r'? '\n';
+fragment NO_NEWLINE: ~('\r' | '\n');
+fragment LINE_CONTINUE: '\\' NEWLINE;
 
 //GLSL tokens
 COLON: ':';
@@ -351,20 +354,21 @@ PP_ENTER_MODE:
 		| 'line'
 	) -> channel(PREPROCESSOR), pushMode(Preprocessor);
 PP_EMPTY:
-	NR_PP_PREFIX '\n' -> channel(PREPROCESSOR);
+	NR_PP_PREFIX (WS_frag | LINE_CONTINUE)* NEWLINE -> channel(PREPROCESSOR);
 
 //preprocessor-related tokens
 NR: '#' -> pushMode(NR_Mode);
 IDENTIFIER: IDENTIFIER_frag;
 
 //hidden comment and whitespace tokens
-LINE_CONTINUE: '\\\n' -> channel(WHITESPACE);
+LINE_CONTINUATION:
+	LINE_CONTINUE -> channel(WHITESPACE);
 COMMENT: (
-		'//' ~('\n' | '\r')* '\r'? '\n'
+		'//' NO_NEWLINE* NEWLINE
 		| '/*' (.)*? '*/'
-	) -> channel(HIDDEN);
+	) -> channel(COMMENTS);
 WS: WS_frag -> channel(WHITESPACE);
-EOL: '\n' -> channel(WHITESPACE);
+EOL: NEWLINE -> channel(WHITESPACE);
 
 //nr-sign parsing mode
 mode NR_Mode;
@@ -389,12 +393,15 @@ NR_STDGL: 'STDGL';
 NR_INTCONSTANT: INTCONSTANT_frag;
 NR_IDENTIFIER: IDENTIFIER_frag;
 NR_WS: WS_frag -> channel(WHITESPACE);
-NR_LINE_CONTINUE: '\\\n' -> channel(WHITESPACE);
-NR_EOL: '\n' -> popMode;
+NR_LINE_CONTINUATION:
+	LINE_CONTINUE -> channel(WHITESPACE);
+NR_EOL: NEWLINE -> popMode;
 
 //gobble the preprocessor content only if started a preprocessor directive
 mode Preprocessor;
-PP_LINE_CONTINUE: '\\\n' -> channel(PREPROCESSOR);
-PP_EOL: '\n' -> channel(PREPROCESSOR), popMode;
+PP_LINE_CONTINUE:
+	LINE_CONTINUE -> channel(WHITESPACE);
+PP_EOL:
+	NEWLINE -> channel(PREPROCESSOR), popMode;
 PP_CONTENT:
-	~('\n')* ~('\n' | '\\') -> channel(PREPROCESSOR);
+	NO_NEWLINE* ~('\r' | '\n' | '\\') -> channel(PREPROCESSOR);
