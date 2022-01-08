@@ -11,16 +11,26 @@ import org.antlr.v4.runtime.Token;
 public class ChannelFilter implements TokenFilter {
   private EnumSet<TokenChannel> disallowedChannels;
 
+  /**
+   * Creates a new channel filter with the given disallowed channels.
+   * 
+   * @param disallowedChannels The disallowed channels
+   */
   public ChannelFilter(EnumSet<TokenChannel> disallowedChannels) {
     this.disallowedChannels = disallowedChannels;
   }
 
+  /**
+   * Creates a new channel filter with a single disallowed channel.
+   * 
+   * @param disallowedChannel The disallowed channel
+   */
   public ChannelFilter(TokenChannel disallowedChannel) {
     this(EnumSet.of(disallowedChannel));
   }
 
   @Override
   public boolean isTokenAllowed(Token token) {
-    return !disallowedChannels.contains(TokenFilter.getTokenChannel(token));
+    return !disallowedChannels.contains(TokenChannel.getTokenChannel(token));
   }
 }

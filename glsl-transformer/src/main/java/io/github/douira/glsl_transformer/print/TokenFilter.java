@@ -14,14 +14,33 @@ public interface TokenFilter {
    * generated Lexer's {@code channelNames} array.
    */
   public static enum TokenChannel {
+    /**
+     * The default channel
+     */
     DEFAULT,
+
+    /**
+     * The default hidden channel
+     */
     HIDDEN,
+
+    /**
+     * The custom whitespace channel
+     */
     WHITESPACE,
+
+    /**
+     * The custom comments channel
+     */
     COMMENTS,
+
+    /**
+     * The custom preprocessor channel
+     */
     PREPROCESSOR;
-
-    public static TokenChannel[] channels = TokenChannel.values();
-
+    
+    private static TokenChannel[] channels = TokenChannel.values();
+    
     // sanity check the items and their names
     static {
       if (channels[Token.DEFAULT_CHANNEL] != TokenChannel.DEFAULT) {
@@ -40,16 +59,16 @@ public interface TokenFilter {
         }
       }
     }
-  }
-
-  /**
-   * Returns the channel enum for this token's integer channel number.
-   * 
-   * @param token The token to get the channel of
-   * @return The channel of the token
-   */
-  public static TokenChannel getTokenChannel(Token token) {
-    return TokenChannel.channels[token.getChannel()];
+    
+    /**
+     * Returns the channel enum for this token's integer channel number.
+     * 
+     * @param token The token to get the channel of
+     * @return The channel of the token
+     */
+    public static TokenChannel getTokenChannel(Token token) {
+      return TokenChannel.channels[token.getChannel()];
+    }
   }
 
   /**
