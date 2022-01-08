@@ -48,8 +48,43 @@ public interface TokenFilter {
    * @param token The token to get the channel of
    * @return The channel of the token
    */
-  static TokenChannel getTokenChannel(Token token) {
+  public static TokenChannel getTokenChannel(Token token) {
     return TokenChannel.channels[token.getChannel()];
+  }
+
+  /**
+   * Joins two arbitrary token filters into a new filter. They may be null,
+   * regular filters or multi filters and will be joined accordingly. The returned
+   * instance is either a or b or a new multi filter containing a, b, or their
+   * contents.
+   * 
+   * @param a A token filter. May be {@code null}.
+   * @param b A token filter. May be {@code null}.
+   * @return The joined token filter
+   */
+  public static TokenFilter join(TokenFilter a, TokenFilter b) {
+    if (a == null) {
+      return b;
+    } else if (b == null) {
+      return a;
+    } else if (b instanceof MultiFilter bMulti) {
+      if (a instanceof MultiFilter aMulti) {
+        var multi = new MultiFilter(aMulti);
+        multi.addAll(bMulti);
+        return multi;
+      } else {
+        return join(b, a);
+      }
+    } else if (a instanceof MultiFilter aMulti) {
+      var multi = new MultiFilter(aMulti);
+      multi.add(b);
+      return multi;
+    } else {
+      var multi = new MultiFilter();
+      multi.add(a);
+      multi.add(b);
+      return multi;
+    }
   }
 
   /**
