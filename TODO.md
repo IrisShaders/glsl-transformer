@@ -1,6 +1,9 @@
 # Todo
 
 - IdentifierReplacement that lets the user register replacements of identifiers with expressions and then during transformation it performs the replacements (In Iris there actually should be no remaining #define statements when glsl-transformer gets the code after preprocessing)
+- MoveCheckable and DynamicParseTreeWalker tests (related)
+- Test removal/replacement of single terminal node (tests ExtendedTerminalNode)
+- Figure out if and how removal of local roots works
 - Write tests that matching still works even after injection
 - Test node removal, replacement and injection in local roots (in `TransformationPhaseTest`)
 - Write tests that tree walker doesn't break even with child array modification (apart from injection, which is already being tested)
