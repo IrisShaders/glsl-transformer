@@ -105,6 +105,10 @@ public class PrintVisitor extends AbstractParseTreeVisitor<Void> {
     currentRoot = rootNode;
     visit(rootNode);
 
+    if (tokenFilter != null) {
+      tokenFilter.resetState();
+    }
+
     // convert the list of tokens and intervals into just tokens,
     // and then into their strings
     var builder = new StringBuilder(512); // guessing
