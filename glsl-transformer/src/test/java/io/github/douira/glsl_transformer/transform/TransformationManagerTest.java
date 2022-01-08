@@ -7,6 +7,7 @@ import java.util.List;
 
 import org.antlr.v4.runtime.BaseErrorListener;
 import org.antlr.v4.runtime.CharStreams;
+import org.antlr.v4.runtime.CommonToken;
 import org.antlr.v4.runtime.InputMismatchException;
 import org.antlr.v4.runtime.LexerNoViableAltException;
 import org.antlr.v4.runtime.NoViableAltException;
@@ -109,7 +110,9 @@ public class TransformationManagerTest extends TestWithTransformationManager {
             line + ":" + charPositionInLine + "; " +
                 (offendingSymbol == null
                     ? "<no symbol>"
-                    : offendingSymbol.toString())
+                    : offendingSymbol instanceof CommonToken token
+                        ? token.toString(recognizer)
+                        : offendingSymbol.toString())
                 + "; " + msg + "; " +
                 (e == null
                     ? "<no exception>"
