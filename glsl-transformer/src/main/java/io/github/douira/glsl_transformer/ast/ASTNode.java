@@ -10,15 +10,6 @@ import io.github.douira.glsl_transformer.generic.ExtendedTerminalNode;
  */
 public abstract class ASTNode extends ExtendedTerminalNode {
   /**
-   * Creates a new AST node. Internally this calls the terminal node constructor
-   * with a null string since the token facilities of the terminal node are not
-   * used.
-   */
-  public ASTNode() {
-    super(null, null);
-  }
-
-  /**
    * Generates the string representation of this AST object as it would be in the
    * generated code.
    * 
