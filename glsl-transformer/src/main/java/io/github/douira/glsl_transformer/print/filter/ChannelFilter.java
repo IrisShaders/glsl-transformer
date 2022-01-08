@@ -1,4 +1,4 @@
-package io.github.douira.glsl_transformer.print;
+package io.github.douira.glsl_transformer.print.filter;
 
 import java.util.EnumSet;
 

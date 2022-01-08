@@ -12,6 +12,7 @@ import org.antlr.v4.runtime.tree.RuleNode;
 import org.antlr.v4.runtime.tree.TerminalNode;
 
 import io.github.douira.glsl_transformer.ast.UnparsableASTNode;
+import io.github.douira.glsl_transformer.print.filter.TokenFilter;
 import io.github.douira.glsl_transformer.tree.ExtendedContext;
 
 /**

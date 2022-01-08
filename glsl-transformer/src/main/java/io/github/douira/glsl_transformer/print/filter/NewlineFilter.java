@@ -1,4 +1,4 @@
-package io.github.douira.glsl_transformer.print;
+package io.github.douira.glsl_transformer.print.filter;
 
 import org.antlr.v4.runtime.Token;
 
