@@ -102,6 +102,8 @@ javadoc {
             'implNote:a:Implementation Note:',
             'apiNote:a:API Usage Note:'
         )
+        links "https://javadoc.io/doc/org.antlr/antlr4-runtime/$antlrVersion/"
+        links "https://javadoc.io/doc/com.github.bsideup.jabel/jabel-javac-plugin/$jabelVersion/"
     }
     exclude '**/GLSLParser*.java'
     exclude '**/GLSLLexer*.java'
