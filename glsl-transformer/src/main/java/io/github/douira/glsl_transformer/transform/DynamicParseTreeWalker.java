@@ -55,6 +55,10 @@ public class DynamicParseTreeWalker extends ParseTreeWalker {
 
     for (var i = 0; i < node.getChildCount(); i++) {
       var child = node.getChild(i);
+      if (child instanceof EmptyTerminalNode) {
+        continue;
+      }
+
       walk(listener, child);
 
       // if the walk added items before the current index
