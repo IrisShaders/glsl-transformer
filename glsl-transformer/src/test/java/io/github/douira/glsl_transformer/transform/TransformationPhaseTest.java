@@ -215,6 +215,14 @@ public class TransformationPhaseTest extends TestWithTransformationManager {
           }
         }),
         "It should correctly replace the second node");
+
+    assertThrows(IllegalArgumentException.class,
+        () -> wrapRunTransform("a;", new RunPhase() {
+          @Override
+          protected void run(TranslationUnitContext ctx) {
+            replaceNode(ctx, null);
+          }
+        }));
   }
 
   @Test
