@@ -42,10 +42,21 @@ import io.github.douira.glsl_transformer.util.CompatUtil;
 public abstract class TransformationPhase extends GLSLParserBaseListener {
   private PhaseCollector collector;
 
+  /**
+   * Gets this phase's phase collector.
+   * 
+   * @return The phase collector
+   */
   protected PhaseCollector getCollector() {
     return collector;
   }
 
+  /**
+   * Sets the phase collector on this phase. This must be called before executing
+   * this phase in the context of a specific parse tree.
+   * 
+   * @param parent The phase collector to set
+   */
   protected void setCollector(PhaseCollector parent) {
     this.collector = parent;
   }
@@ -114,6 +125,7 @@ public abstract class TransformationPhase extends GLSLParserBaseListener {
    * 
    * @param removeNode The node to be removed
    * @param newNode    The new node to take its place
+   * @return The index of the removed and new node
    */
   protected int replaceNode(TreeMember removeNode, TreeMember newNode) {
     var parent = removeNode.getParent();
