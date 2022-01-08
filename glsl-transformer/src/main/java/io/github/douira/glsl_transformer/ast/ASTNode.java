@@ -1,6 +1,6 @@
 package io.github.douira.glsl_transformer.ast;
 
-import org.antlr.v4.runtime.tree.TerminalNodeImpl;
+import io.github.douira.glsl_transformer.generic.ExtendedTerminalNode;
 
 /**
  * The AST node is a terminal node that can be printed with a method implemented
@@ -8,14 +8,14 @@ import org.antlr.v4.runtime.tree.TerminalNodeImpl;
  * classes to re-insert the result of an AST manipulation back into the parse
  * tree.
  */
-public abstract class ASTNode extends TerminalNodeImpl {
+public abstract class ASTNode extends ExtendedTerminalNode {
   /**
    * Creates a new AST node. Internally this calls the terminal node constructor
    * with a null string since the token facilities of the terminal node are not
    * used.
    */
   public ASTNode() {
-    super(null);
+    super(null, null);
   }
 
   /**

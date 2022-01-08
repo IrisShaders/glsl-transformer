@@ -2,8 +2,7 @@ package io.github.douira.glsl_transformer.transformation.target;
 
 import java.util.function.BiConsumer;
 
-import org.antlr.v4.runtime.tree.TerminalNode;
-
+import io.github.douira.glsl_transformer.generic.TreeMember;
 import io.github.douira.glsl_transformer.transform.PhaseCollector;
 import io.github.douira.glsl_transformer.transform.TransformationPhase;
 
@@ -35,12 +34,13 @@ public abstract class HandlerTarget extends TransformationPhase {
    * @param node  The node that contains the token
    * @param match The identifier that contains the needle
    */
-  public abstract void handleResult(TerminalNode node, String match);
+  public abstract void handleResult(TreeMember node, String match);
 
-  public static HandlerTarget fromConsumer(String needle, BiConsumer<TerminalNode, String> handler) {
+  public static HandlerTarget fromConsumer(
+      String needle, BiConsumer<TreeMember, String> handler) {
     return new HandlerTarget(needle) {
       @Override
-      public void handleResult(TerminalNode node, String match) {
+      public void handleResult(TreeMember node, String match) {
         handler.accept(node, match);
       }
     };

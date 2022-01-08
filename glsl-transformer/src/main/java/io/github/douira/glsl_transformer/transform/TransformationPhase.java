@@ -28,6 +28,7 @@ import io.github.douira.glsl_transformer.ast.Directive;
 import io.github.douira.glsl_transformer.ast.Directive.Type;
 import io.github.douira.glsl_transformer.generic.EmptyTerminalNode;
 import io.github.douira.glsl_transformer.generic.ExtendedContext;
+import io.github.douira.glsl_transformer.generic.TreeMember;
 import io.github.douira.glsl_transformer.util.CompatUtil;
 
 /**
@@ -85,7 +86,7 @@ public abstract class TransformationPhase extends GLSLParserBaseListener {
    * @return The siblings of the given node. {@code null} if the node has no
    *         parent.
    */
-  protected static List<ParseTree> getSiblings(ExtendedContext node) {
+  protected static List<ParseTree> getSiblings(TreeMember node) {
     var parent = node.getParent();
     return parent == null ? null : parent.children;
   }
@@ -96,15 +97,32 @@ public abstract class TransformationPhase extends GLSLParserBaseListener {
    * {@link #createLocalRoot(String, ExtendedContext, Function)} for details of
    * creating parsed nodes.
    * 
-   * @param node        The node to be replaced
+   * @param removeNode  The node to be replaced
    * @param newContents The string from which a new node is generated
    * @param parseMethod The method with which the string will be parsed
    */
-  protected void replaceNode(ExtendedContext node, String newContents,
+  protected void replaceNode(TreeMember removeNode, String newContents,
       Function<GLSLParser, ExtendedContext> parseMethod) {
-    var removedIndex = removeNode(node);
-    getSiblings(node).add(
-        removedIndex, createLocalRoot(newContents, node.getParent(), parseMethod));
+    replaceNode(removeNode,
+        createLocalRoot(newContents, removeNode.getParent(), parseMethod));
+  }
+
+  /**
+   * Replaces the given node in its parent with a new given node. The new node
+   * should either be already set up as a local root or be a terminal node tree
+   * member.
+   * 
+   * @param removeNode The node to be removed
+   * @param newNode The new node to take its place
+   */
+  protected int replaceNode(TreeMember removeNode, TreeMember newNode) {
+    // the node needs to be replaced with something to preserve the containing
+    // array's length or there's a NullPointerException in the walker
+    var children = getSiblings(removeNode);
+    var index = children.indexOf(removeNode);
+    children.set(index, newNode);
+    removeNode.omitTokens();
+    return index;
   }
 
   /**
@@ -115,14 +133,8 @@ public abstract class TransformationPhase extends GLSLParserBaseListener {
    * @param removeNode The node to remove
    * @return the index of the removed node
    */
-  protected int removeNode(ExtendedContext removeNode) {
-    // the node needs to be replaced with something to preserve the containing
-    // array's length or there's a NullPointerException in the walker
-    var children = getSiblings(removeNode);
-    var index = children.indexOf(removeNode);
-    children.set(index, new EmptyTerminalNode(removeNode));
-    removeNode.omitTokens();
-    return index;
+  protected int removeNode(TreeMember removeNode) {
+    return replaceNode(removeNode, new EmptyTerminalNode(removeNode));
   }
 
   /**
