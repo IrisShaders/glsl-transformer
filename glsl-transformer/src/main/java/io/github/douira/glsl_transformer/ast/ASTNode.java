@@ -1,6 +1,6 @@
 package io.github.douira.glsl_transformer.ast;
 
-import io.github.douira.glsl_transformer.generic.ExtendedTerminalNode;
+import io.github.douira.glsl_transformer.tree.ExtendedTerminalNode;
 
 /**
  * The AST node is a terminal node that can be printed with a method implemented

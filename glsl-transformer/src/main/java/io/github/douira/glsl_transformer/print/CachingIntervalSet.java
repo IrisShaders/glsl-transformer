@@ -1,4 +1,4 @@
-package io.github.douira.glsl_transformer.generic;
+package io.github.douira.glsl_transformer.print;
 
 import org.antlr.v4.runtime.Token;
 import org.antlr.v4.runtime.misc.Interval;
@@ -12,7 +12,7 @@ import org.antlr.v4.runtime.misc.IntervalSet;
  * same query is a common operation and therefore caching it like this can be
  * helpful.
  */
-public class CachingIntervalSet extends IntervalSet {
+public class CachingIntervalSet extends IntervalSet implements TokenFilter {
   private Interval lastIntervalHit;
 
   /**

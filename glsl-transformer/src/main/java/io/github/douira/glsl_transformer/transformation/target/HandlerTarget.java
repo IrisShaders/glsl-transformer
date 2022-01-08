@@ -1,8 +1,8 @@
 package io.github.douira.glsl_transformer.transformation.target;
 
-import io.github.douira.glsl_transformer.generic.TreeMember;
 import io.github.douira.glsl_transformer.transform.PhaseCollector;
 import io.github.douira.glsl_transformer.transform.TransformationPhase;
+import io.github.douira.glsl_transformer.tree.TreeMember;
 
 /**
  * A handler target contains a string to search for and a method that is called

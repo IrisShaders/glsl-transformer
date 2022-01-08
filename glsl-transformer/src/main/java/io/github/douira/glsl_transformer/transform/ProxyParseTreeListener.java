@@ -1,4 +1,4 @@
-package io.github.douira.glsl_transformer.generic;
+package io.github.douira.glsl_transformer.transform;
 
 import java.util.ArrayList;
 import java.util.List;

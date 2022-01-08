@@ -3,8 +3,8 @@ package io.github.douira.glsl_transformer.ast;
 import java.util.function.Function;
 
 import io.github.douira.glsl_transformer.GLSLParser;
-import io.github.douira.glsl_transformer.generic.ExtendedContext;
 import io.github.douira.glsl_transformer.transform.TransformationManager;
+import io.github.douira.glsl_transformer.tree.ExtendedContext;
 
 /**
  * The parsable a AST node defines how AST nodes that can be converted back into

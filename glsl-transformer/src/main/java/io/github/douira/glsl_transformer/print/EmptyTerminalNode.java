@@ -1,6 +1,10 @@
-package io.github.douira.glsl_transformer.generic;
+package io.github.douira.glsl_transformer.print;
 
 import org.antlr.v4.runtime.tree.ParseTree;
+
+import io.github.douira.glsl_transformer.transform.MoveCheckable;
+import io.github.douira.glsl_transformer.tree.ExtendedTerminalNode;
+import io.github.douira.glsl_transformer.tree.TreeMember;
 
 /**
  * The empty terminal node is a placeholder in parse tree children lists in

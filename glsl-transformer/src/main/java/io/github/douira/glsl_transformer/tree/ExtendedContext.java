@@ -1,4 +1,4 @@
-package io.github.douira.glsl_transformer.generic;
+package io.github.douira.glsl_transformer.tree;
 
 import java.util.LinkedList;
 import java.util.Optional;
@@ -10,6 +10,8 @@ import org.antlr.v4.runtime.ParserRuleContext;
 import org.antlr.v4.runtime.RuleContextWithAltNum;
 import org.antlr.v4.runtime.misc.Interval;
 import org.antlr.v4.runtime.tree.ParseTree;
+
+import io.github.douira.glsl_transformer.print.CachingIntervalSet;
 
 /**
  * Implements custom behavior in parse rule contexts. This class is used as the

@@ -6,9 +6,9 @@ import org.antlr.v4.runtime.Token;
 import org.antlr.v4.runtime.tree.TerminalNode;
 
 import io.github.douira.glsl_transformer.GLSLLexer;
-import io.github.douira.glsl_transformer.generic.TreeMember;
 import io.github.douira.glsl_transformer.transform.WalkPhase;
 import io.github.douira.glsl_transformer.transformation.target.HandlerTarget;
+import io.github.douira.glsl_transformer.tree.TreeMember;
 import io.github.douira.glsl_transformer.util.CompatUtil;
 
 /**
