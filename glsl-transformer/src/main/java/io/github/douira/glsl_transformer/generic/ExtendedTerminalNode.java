@@ -26,13 +26,22 @@ public class ExtendedTerminalNode extends TerminalNodeImpl implements TreeMember
 
   /**
    * Creates a null-token terminal node that has an extended context as a parent.
-   * This should only be used internally when the node is a placeholder for
-   * something. It will not be printed since the token is null.
+   * This should only be used when the node is a placeholder for something. It
+   * will not be printed since the token is null.
    * 
    * @param parent The parent node
    */
-  protected ExtendedTerminalNode(ExtendedContext parent) {
+  public ExtendedTerminalNode(ExtendedContext parent) {
     this(parent, null);
+  }
+
+  /**
+   * Creates a null-token and parentless terminal node. This is to be used when
+   * the node is a placeholder and it will be added to a parse tree node. Adding
+   * it as a child using the node's method will attach it as a parent.
+   */
+  public ExtendedTerminalNode() {
+    this(null);
   }
 
   /** Override to make type more specific */
