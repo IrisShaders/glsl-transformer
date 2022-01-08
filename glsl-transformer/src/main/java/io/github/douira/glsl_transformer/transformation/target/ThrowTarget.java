@@ -4,11 +4,16 @@ import io.github.douira.glsl_transformer.generic.TreeMember;
 import io.github.douira.glsl_transformer.transform.SemanticException;
 
 /**
- * An illegal target to search for in identifiers contains a string to search
- * for and a method for generating exceptions.
+ * A target that searches for a search string in and upon finding a match uses a
+ * method to generate an exception which is then thrown.
  */
-public abstract class IllegalTarget extends HandlerTarget {
-  public IllegalTarget(String needle) {
+public abstract class ThrowTarget extends HandlerTarget {
+  /**
+   * Creates a new throw target with a given search string
+   * 
+   * @param needle The search string
+   */
+  public ThrowTarget(String needle) {
     super(needle);
   }
 
@@ -26,8 +31,16 @@ public abstract class IllegalTarget extends HandlerTarget {
    */
   public abstract SemanticException getMessage(TreeMember node, String match);
 
-  public static IllegalTarget fromMessage(String needle, String message) {
-    return new IllegalTarget(needle) {
+  /**
+   * Creates a new throw target with a fixed message instead of using the
+   * implemented method of a subclass to generate exceptions.
+   * 
+   * @param needle  The search string for the throw target
+   * @param message The message to make the exceptions with
+   * @return The constructed throw target
+   */
+  public static ThrowTarget fromMessage(String needle, String message) {
+    return new ThrowTarget(needle) {
       @Override
       public SemanticException getMessage(TreeMember node, String match) {
         return new SemanticException(message, node);

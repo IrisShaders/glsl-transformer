@@ -12,14 +12,14 @@ import io.github.douira.glsl_transformer.transformation.target.HandlerTarget;
 import io.github.douira.glsl_transformer.util.CompatUtil;
 
 /**
- * This transformation finds strings in identifiers in the tree and triggers a
- * function when it finds one.
+ * This phase finds targets in identifiers and triggers their handlers. The
+ * behavior of the targets can be customized with the various available classes.
  */
 public class ProcessIdentifiers extends WalkPhase {
   private Collection<HandlerTarget> targets;
 
   /**
-   * Creates a new transformation of this type with the given targets.
+   * Creates a new identifier search phase with the given targets.
    * 
    * @param targets The targets to search for
    */
@@ -27,6 +27,11 @@ public class ProcessIdentifiers extends WalkPhase {
     this.targets = targets;
   }
 
+  /**
+   * Creates a new identifier search phase with only a single target.
+   * 
+   * @param target The target to search for
+   */
   public ProcessIdentifiers(HandlerTarget target) {
     this(CompatUtil.listOf(target));
   }
@@ -42,7 +47,7 @@ public class ProcessIdentifiers extends WalkPhase {
             throw new IllegalStateException(
                 "All nodes in the parse tree should be a TreeMember except for when they are errors! Then the tree is broken anyways.");
           }
-          
+
           target.setCollector(getCollector());
           target.handleResult((TreeMember) node, text);
         }
