@@ -6,9 +6,8 @@ import org.antlr.v4.runtime.tree.ParseTreeListener;
 import org.antlr.v4.runtime.tree.ParseTreeWalker;
 import org.antlr.v4.runtime.tree.TerminalNode;
 
-import io.github.douira.glsl_transformer.generic.EmptyTerminalNode;
-import io.github.douira.glsl_transformer.generic.ExtendedContext;
-import io.github.douira.glsl_transformer.generic.MoveCheckable;
+import io.github.douira.glsl_transformer.print.EmptyTerminalNode;
+import io.github.douira.glsl_transformer.tree.ExtendedContext;
 
 /**
  * The dynamic parse tree walker can with structural modification of a node's

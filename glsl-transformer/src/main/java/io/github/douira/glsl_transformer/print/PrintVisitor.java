@@ -1,4 +1,4 @@
-package io.github.douira.glsl_transformer.generic;
+package io.github.douira.glsl_transformer.print;
 
 import java.util.LinkedList;
 
@@ -12,6 +12,7 @@ import org.antlr.v4.runtime.tree.RuleNode;
 import org.antlr.v4.runtime.tree.TerminalNode;
 
 import io.github.douira.glsl_transformer.ast.UnparsableASTNode;
+import io.github.douira.glsl_transformer.tree.ExtendedContext;
 
 /**
  * The print visitor visits the parse tree and reprints it while preserving the
@@ -49,15 +50,38 @@ public class PrintVisitor extends AbstractParseTreeVisitor<Void> {
    * Prints the given parse tree that references the given token stream. Sets up
    * the given node as a root node if that hasn't happened already.
    * 
+   * If the given token filter is not {@code null}, it will be used to check if
+   * each otherwise qualified token should be printed.
+   * 
+   * @param rootTokenStream The token stream for the parse tree
+   * @param tree            The parse tree to print
+   * @param tokenFilter     An additional token filter to check before printing
+   *                        each otherwise qualified token
+   * @return The printed parse tree that includes the results of the
+   *         transformations
+   */
+  public static String printTree(
+      BufferedTokenStream rootTokenStream, ExtendedContext tree, TokenFilter tokenFilter) {
+    tree.makeLocalRoot(rootTokenStream);
+    return new PrintVisitor()
+        .visitAndJoin(rootTokenStream, tree, tree.getFullSourceInterval(), tokenFilter);
+  }
+
+  /**
+   * Prints the given parse tree that references the given token stream. Sets up
+   * the given node as a root node if that hasn't happened already.
+   * 
+   * @see #visitAndJoin(BufferedTokenStream, ExtendedContext, Interval, TokenFilter)
+   * @see #printTree(BufferedTokenStream, ExtendedContext, TokenFilter)
+   * 
    * @param rootTokenStream The token stream for the parse tree
    * @param tree            The parse tree to print
    * @return The printed parse tree that includes the results of the
    *         transformations
    */
-  public static String printTree(BufferedTokenStream rootTokenStream, ExtendedContext tree) {
-    tree.makeLocalRoot(rootTokenStream);
-    return new PrintVisitor()
-        .visitAndJoin(rootTokenStream, tree, tree.getFullSourceInterval());
+  public static String printTree(
+      BufferedTokenStream rootTokenStream, ExtendedContext tree) {
+    return printTree(rootTokenStream, tree, null);
   }
 
   /**
@@ -70,11 +94,13 @@ public class PrintVisitor extends AbstractParseTreeVisitor<Void> {
    * @param rootNode        The parse tree to print
    * @param bounds          An token index interval of the tokens that should be
    *                        included in the printed string
+   * @param tokenFilter     An additional token filter for checking if tokens
+   *                        should be printed
    * @return The printed parse tree that is within the bounds and contains the
    *         results of the transformations applied to the tree
    */
-  public String visitAndJoin(BufferedTokenStream rootTokenStream,
-      ExtendedContext rootNode, Interval bounds) {
+  private String visitAndJoin(BufferedTokenStream rootTokenStream,
+      ExtendedContext rootNode, Interval bounds, TokenFilter tokenFilter) {
     // visit the whole tree and accumulate tokens and intervals
     currentRoot = rootNode;
     visit(rootNode);
@@ -97,7 +123,8 @@ public class PrintVisitor extends AbstractParseTreeVisitor<Void> {
           if (token.getType() != Lexer.EOF
               && (tokenIndex == -1
                   || (localRoot != rootNode || inInterval(bounds, tokenIndex))
-                      && omissionSet.isTokenAllowed(token))) {
+                      && omissionSet.isTokenAllowed(token)
+                      && (tokenFilter == null || tokenFilter.isTokenAllowed(token)))) {
             builder.append(token.getText());
           }
         }

@@ -13,8 +13,8 @@ import org.antlr.v4.runtime.misc.ParseCancellationException;
 
 import io.github.douira.glsl_transformer.GLSLLexer;
 import io.github.douira.glsl_transformer.GLSLParser;
-import io.github.douira.glsl_transformer.generic.ExtendedContext;
-import io.github.douira.glsl_transformer.generic.PrintVisitor;
+import io.github.douira.glsl_transformer.print.PrintVisitor;
+import io.github.douira.glsl_transformer.tree.ExtendedContext;
 
 /**
  * Implements the phase collector by providing the boilerplate code for setting

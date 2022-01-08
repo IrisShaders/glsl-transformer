@@ -1,7 +1,7 @@
 package io.github.douira.glsl_transformer.transformation.target;
 
-import io.github.douira.glsl_transformer.generic.TreeMember;
 import io.github.douira.glsl_transformer.transform.SemanticException;
+import io.github.douira.glsl_transformer.tree.TreeMember;
 
 /**
  * A target that searches for a search string in and upon finding a match uses a

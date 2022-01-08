@@ -10,9 +10,9 @@ import org.antlr.v4.runtime.tree.TerminalNode;
 import org.junit.jupiter.api.Test;
 
 import io.github.douira.glsl_transformer.ast.StringNode;
-import io.github.douira.glsl_transformer.generic.EmptyTerminalNode;
-import io.github.douira.glsl_transformer.generic.ExtendedContext;
-import io.github.douira.glsl_transformer.generic.TreeMember;
+import io.github.douira.glsl_transformer.print.EmptyTerminalNode;
+import io.github.douira.glsl_transformer.tree.ExtendedContext;
+import io.github.douira.glsl_transformer.tree.TreeMember;
 
 public class DynamicParseTreeWalkerTest {
   @Test

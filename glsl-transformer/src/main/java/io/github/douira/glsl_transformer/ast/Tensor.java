@@ -12,8 +12,8 @@ import org.antlr.v4.runtime.tree.TerminalNode;
 import io.github.douira.glsl_transformer.GLSLLexer;
 import io.github.douira.glsl_transformer.GLSLParser;
 import io.github.douira.glsl_transformer.GLSLParser.BuiltinTypeSpecifierParseableContext;
-import io.github.douira.glsl_transformer.generic.ExtendedContext;
 import io.github.douira.glsl_transformer.transform.TransformationManager;
+import io.github.douira.glsl_transformer.tree.ExtendedContext;
 
 /**
  * A tensor abstractly represents the many multidimensional number types that

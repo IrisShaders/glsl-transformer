@@ -12,10 +12,10 @@ import io.github.douira.glsl_transformer.GLSLParser.ExternalDeclarationContext;
 import io.github.douira.glsl_transformer.GLSLParser.FunctionHeaderContext;
 import io.github.douira.glsl_transformer.GLSLParser.TranslationUnitContext;
 import io.github.douira.glsl_transformer.GLSLParser.VariableIdentifierContext;
-import io.github.douira.glsl_transformer.generic.ExtendedContext;
 import io.github.douira.glsl_transformer.transform.SemanticException;
 import io.github.douira.glsl_transformer.transform.Transformation;
 import io.github.douira.glsl_transformer.transform.WalkPhase;
+import io.github.douira.glsl_transformer.tree.ExtendedContext;
 
 //TODO: treat each found declaration with the same location=0 as the same declaration and replace all of them identically
 /**
