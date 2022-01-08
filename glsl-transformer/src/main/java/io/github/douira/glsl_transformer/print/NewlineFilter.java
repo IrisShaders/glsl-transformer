@@ -5,7 +5,7 @@ import org.antlr.v4.runtime.Token;
 import io.github.douira.glsl_transformer.GLSLLexer;
 
 /**
- * The trim filter filters out regular unnecessary newlines if there is more
+ * The newline filter filters out regular unnecessary newlines if there is more
  * than one.
  */
 public class NewlineFilter implements TokenFilter {
