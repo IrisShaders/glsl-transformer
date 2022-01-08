@@ -17,7 +17,17 @@ import org.antlr.v4.runtime.Token;
  * to notify all of them of all tokens.
  */
 public class MultiFilter extends ArrayList<TokenFilter> implements TokenFilter {
+  /**
+   * If this is true, then it will require all filters to allow a token for it to
+   * be globally allowed.
+   */
   private boolean conjunction = true;
+
+  /**
+   * If this is true, then it will check all filters even if the outcome can't
+   * change anymore. Otherwise it will stop checking the filters early if
+   * possible.
+   */
   private boolean shortCircuit = false;
 
   /**
@@ -27,10 +37,8 @@ public class MultiFilter extends ArrayList<TokenFilter> implements TokenFilter {
    * @see ArrayList#ArrayList(Collection)
    * 
    * @param subfilters   The subfilters to add initially
-   * @param conjunction  If all filters are required to allow a token for it to be
-   *                     globally allowed
-   * @param shortCircuit If the evaluation of the filter should be stopped early
-   *                     if the outcome can't change anymore.
+   * @param conjunction  The conjunction flag state
+   * @param shortCircuit The short circuit flag state
    */
   public MultiFilter(Collection<? extends TokenFilter> subfilters, boolean conjunction, boolean shortCircuit) {
     super(subfilters);
@@ -45,10 +53,8 @@ public class MultiFilter extends ArrayList<TokenFilter> implements TokenFilter {
    * @see ArrayList#ArrayList(int)
    * 
    * @param initialCapacity The initial list capacity
-   * @param conjunction     If all filters are required to allow a token for it to
-   *                        be globally allowed
-   * @param shortCircuit    If the evaluation of the filter should be stopped
-   *                        early if the outcome can't change anymore.
+   * @param conjunction     The conjunction flag state
+   * @param shortCircuit    The short circuit flag state
    */
   public MultiFilter(int initialCapacity, boolean conjunction, boolean shortCircuit) {
     super(initialCapacity);
@@ -61,10 +67,8 @@ public class MultiFilter extends ArrayList<TokenFilter> implements TokenFilter {
    * 
    * @see ArrayList#ArrayList()
    * 
-   * @param conjunction  If all filters are required to allow a token for it to
-   *                     be globally allowed
-   * @param shortCircuit If the evaluation of the filter should be stopped
-   *                     early if the outcome can't change anymore.
+   * @param conjunction  The conjunction flag state
+   * @param shortCircuit The short circuit flag state
    */
   public MultiFilter(boolean conjunction, boolean shortCircuit) {
     this.conjunction = conjunction;
@@ -104,7 +108,7 @@ public class MultiFilter extends ArrayList<TokenFilter> implements TokenFilter {
   /**
    * Sets the conjunction behavior flag
    * 
-   * @param conjunction The new flag state
+   * @param conjunction The new conjunction flag state
    */
   public void setConjunction(boolean conjunction) {
     this.conjunction = conjunction;
@@ -113,7 +117,7 @@ public class MultiFilter extends ArrayList<TokenFilter> implements TokenFilter {
   /**
    * Sets the conjunction short circuit flag
    * 
-   * @param shortCircuit The new flag state
+   * @param shortCircuit The new short circuit flag state
    */
   public void setShortCircuit(boolean shortCircuit) {
     this.shortCircuit = shortCircuit;
