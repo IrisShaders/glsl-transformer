@@ -1,6 +1,5 @@
 # Todo
 
-- IdentifierReplacement that lets the user register replacements of identifiers with expressions and then during transformation it performs the replacements (In Iris there actually should be no remaining #define statements when glsl-transformer gets the code after preprocessing)
 - MoveCheckable and DynamicParseTreeWalker tests (related)
 - Test removal/replacement of single terminal node (tests ExtendedTerminalNode)
 - Figure out if and how removal of local roots works
