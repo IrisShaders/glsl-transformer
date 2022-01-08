@@ -4,9 +4,10 @@ import org.antlr.v4.runtime.tree.ErrorNode;
 import org.antlr.v4.runtime.tree.ParseTree;
 import org.antlr.v4.runtime.tree.ParseTreeListener;
 import org.antlr.v4.runtime.tree.ParseTreeWalker;
-import org.antlr.v4.runtime.tree.RuleNode;
 import org.antlr.v4.runtime.tree.TerminalNode;
 
+import io.github.douira.glsl_transformer.generic.EmptyTerminalNode;
+import io.github.douira.glsl_transformer.generic.ExtendedContext;
 import io.github.douira.glsl_transformer.generic.MoveCheckable;
 
 /**
@@ -49,20 +50,23 @@ public class DynamicParseTreeWalker extends ParseTreeWalker {
       return;
     }
 
-    var ruleNode = (RuleNode) tree;
-    enterRule(listener, ruleNode);
+    var node = (ExtendedContext) tree;
+    enterRule(listener, node);
 
-    for (var i = 0; i < ruleNode.getChildCount(); i++) {
-      var child = ruleNode.getChild(i);
+    for (var i = 0; i < node.getChildCount(); i++) {
+      var child = node.getChild(i);
       walk(listener, child);
 
       // if the walk added items before the current index
       // then the current item was moved forewards.
-      while (!MoveCheckable.replaces(child, ruleNode.getChild(i))) {
+      while (!MoveCheckable.replaces(child, node.getChild(i))) {
         i++;
       }
     }
 
-    exitRule(listener, ruleNode);
+    // compact the tree by removing empty terminal nodes after walking
+    node.children.removeIf(child -> child instanceof EmptyTerminalNode);
+
+    exitRule(listener, node);
   }
 }
