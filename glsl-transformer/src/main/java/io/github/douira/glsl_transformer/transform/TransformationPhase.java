@@ -113,13 +113,17 @@ public abstract class TransformationPhase extends GLSLParserBaseListener {
    * member.
    * 
    * @param removeNode The node to be removed
-   * @param newNode The new node to take its place
+   * @param newNode    The new node to take its place
    */
   protected int replaceNode(TreeMember removeNode, TreeMember newNode) {
-    // the node needs to be replaced with something to preserve the containing
-    // array's length or there's a NullPointerException in the walker
-    var children = getSiblings(removeNode);
+    var parent = removeNode.getParent();
+    if (parent == null) {
+      throw new IllegalArgumentException("The root node may not be removed!");
+    }
+
+    var children = parent.children;
     var index = children.indexOf(removeNode);
+    newNode.setParent(parent);
     children.set(index, newNode);
     removeNode.omitTokens();
     return index;
@@ -134,6 +138,8 @@ public abstract class TransformationPhase extends GLSLParserBaseListener {
    * @return the index of the removed node
    */
   protected int removeNode(TreeMember removeNode) {
+    // the node needs to be replaced with something to preserve the containing
+    // array's length or there's a NullPointerException in the walker
     return replaceNode(removeNode, new EmptyTerminalNode(removeNode));
   }
 
