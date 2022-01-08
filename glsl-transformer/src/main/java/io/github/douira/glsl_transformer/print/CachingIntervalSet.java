@@ -4,6 +4,8 @@ import org.antlr.v4.runtime.Token;
 import org.antlr.v4.runtime.misc.Interval;
 import org.antlr.v4.runtime.misc.IntervalSet;
 
+import io.github.douira.glsl_transformer.print.filter.TokenFilter;
+
 /**
  * The caching interval set is a regular interval set
  * {@link org.antlr.v4.runtime.misc.IntervalSet} but the @link

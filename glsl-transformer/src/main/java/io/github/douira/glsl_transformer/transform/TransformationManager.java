@@ -14,7 +14,7 @@ import org.antlr.v4.runtime.misc.ParseCancellationException;
 import io.github.douira.glsl_transformer.GLSLLexer;
 import io.github.douira.glsl_transformer.GLSLParser;
 import io.github.douira.glsl_transformer.print.PrintVisitor;
-import io.github.douira.glsl_transformer.print.TokenFilter;
+import io.github.douira.glsl_transformer.print.filter.TokenFilter;
 import io.github.douira.glsl_transformer.tree.ExtendedContext;
 
 /**
