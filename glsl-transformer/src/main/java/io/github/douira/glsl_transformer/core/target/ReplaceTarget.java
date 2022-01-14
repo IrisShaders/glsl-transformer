@@ -1,4 +1,4 @@
-package io.github.douira.glsl_transformer.transformation.target;
+package io.github.douira.glsl_transformer.core.target;
 
 import io.github.douira.glsl_transformer.tree.TreeMember;
 
