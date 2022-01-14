@@ -109,13 +109,13 @@ public abstract class TransformationPhase extends GLSLParserBaseListener {
    * creating parsed nodes.
    * 
    * @param removeNode  The node to be replaced
-   * @param newContents The string from which a new node is generated
+   * @param newContent The string from which a new node is generated
    * @param parseMethod The method with which the string will be parsed
    */
-  protected void replaceNode(TreeMember removeNode, String newContents,
+  protected void replaceNode(TreeMember removeNode, String newContent,
       Function<GLSLParser, ExtendedContext> parseMethod) {
     replaceNode(removeNode,
-        createLocalRoot(newContents, removeNode.getParent(), parseMethod));
+        createLocalRoot(newContent, removeNode.getParent(), parseMethod));
   }
 
   /**

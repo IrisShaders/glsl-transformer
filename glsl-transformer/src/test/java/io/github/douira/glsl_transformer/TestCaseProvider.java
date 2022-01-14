@@ -68,10 +68,10 @@ public class TestCaseProvider implements ArgumentsProvider, AnnotationConsumer<T
   private List<TestCase> getTestCases(Path file) throws IOException {
     var testCases = TEST_CASE_CACHE.get(file);
     if (testCases == null) {
-      var contents = Files.readString(file);
+      var content = Files.readString(file);
 
       // parse the testcases
-      var rawCases = contents.trim().split("§");
+      var rawCases = content.trim().split("§");
       testCases = new ArrayList<>(rawCases.length - 1);
       for (var i = 1; i < rawCases.length; i++) {
         var rawCase = rawCases[i];
