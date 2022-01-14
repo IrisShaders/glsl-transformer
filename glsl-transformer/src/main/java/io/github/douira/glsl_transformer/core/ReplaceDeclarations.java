@@ -1,4 +1,4 @@
-package io.github.douira.glsl_transformer.transformation;
+package io.github.douira.glsl_transformer.core;
 
 import java.util.HashMap;
 import java.util.Map;

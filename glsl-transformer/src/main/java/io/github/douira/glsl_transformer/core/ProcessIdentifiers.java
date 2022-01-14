@@ -1,4 +1,4 @@
-package io.github.douira.glsl_transformer.transformation;
+package io.github.douira.glsl_transformer.core;
 
 import java.util.Collection;
 
@@ -6,8 +6,8 @@ import org.antlr.v4.runtime.Token;
 import org.antlr.v4.runtime.tree.TerminalNode;
 
 import io.github.douira.glsl_transformer.GLSLLexer;
+import io.github.douira.glsl_transformer.core.target.HandlerTarget;
 import io.github.douira.glsl_transformer.transform.WalkPhase;
-import io.github.douira.glsl_transformer.transformation.target.HandlerTarget;
 import io.github.douira.glsl_transformer.tree.TreeMember;
 import io.github.douira.glsl_transformer.util.CompatUtil;
 
@@ -16,7 +16,7 @@ import io.github.douira.glsl_transformer.util.CompatUtil;
  * behavior of the targets can be customized with the various available classes.
  */
 public class ProcessIdentifiers extends WalkPhase {
-  private Collection<HandlerTarget> targets;
+  protected Collection<HandlerTarget> targets;
 
   /**
    * Creates a new identifier search phase with the given targets.
