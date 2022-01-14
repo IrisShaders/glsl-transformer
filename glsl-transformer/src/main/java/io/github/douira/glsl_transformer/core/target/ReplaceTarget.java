@@ -28,7 +28,7 @@ public abstract class ReplaceTarget extends HandlerTarget {
 
   /**
    * Returns the node to insert replacing the node found with the search string.
-   * The replacement can be cancelled if {@code null} is returned.
+   * The replacement can be cancelled by returning {@code null}.
    * 
    * @param node  The node found to contain the search string
    * @param match The entire content of the node that matches the search string

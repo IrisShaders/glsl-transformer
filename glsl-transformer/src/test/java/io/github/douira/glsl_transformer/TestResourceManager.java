@@ -100,12 +100,12 @@ public class TestResourceManager {
   private static Resource getPathResource(Path path) {
     var result = RESOURCE_CACHE.get(path);
     if (result == null) {
-      result = new Resource(path, getFileContents(path));
+      result = new Resource(path, getFileContent(path));
     }
     return result;
   }
 
-  private static String getFileContents(Path path) {
+  private static String getFileContent(Path path) {
     var resourcePath = getResourcePath(path);
     return assertDoesNotThrow(
         () -> {
