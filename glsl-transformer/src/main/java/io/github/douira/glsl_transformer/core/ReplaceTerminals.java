@@ -79,6 +79,7 @@ public class ReplaceTerminals extends SearchTerminals {
    * @param needle      The needle (search string)
    * @param newContent  The new content to parse into a node
    * @param parseMethod The parser method to create the new node with
+   * @return The configured identifier replacement transformation
    */
   public ReplaceTerminals withReplacement(
       String needle, String newContent,
@@ -95,6 +96,7 @@ public class ReplaceTerminals extends SearchTerminals {
    * 
    * @param needle            The needle (search string)
    * @param expressionContent The new content to parse into an expression
+   * @return The configured identifier replacement transformation
    */
   public ReplaceTerminals withReplacementExpression(String needle, String expressionContent) {
     var phase = new ReplaceTerminals();
@@ -108,6 +110,7 @@ public class ReplaceTerminals extends SearchTerminals {
    * 
    * @param needle          The needle (search string)
    * @param terminalContent The new terminal content to insert as a string node
+   * @return The configured identifier replacement transformation
    */
   public ReplaceTerminals withReplacementTerminal(String needle, String terminalContent) {
     var phase = new ReplaceTerminals();
