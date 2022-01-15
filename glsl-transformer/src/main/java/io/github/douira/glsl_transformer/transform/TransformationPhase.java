@@ -306,9 +306,6 @@ public abstract class TransformationPhase extends GLSLParserBaseListener {
      * aren't mixed with other directives and directly follow the #version)
      * 
      * TODO: describe what happens to unparsed tokens that are in the stream
-     * 
-     * @apiNote This is semantically equivalent to AFTER_VERSION if unparsed tokens
-     *          are disregarded.
      */
     BEFORE_DIRECTIVES,
 
