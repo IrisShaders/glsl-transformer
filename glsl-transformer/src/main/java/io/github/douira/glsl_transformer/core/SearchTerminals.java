@@ -25,12 +25,12 @@ public class SearchTerminals extends WalkPhase {
   /**
    * The list of targets to process for each targeted context.
    */
-  protected Collection<HandlerTarget> targets;
+  protected final Collection<HandlerTarget> targets;
 
   /**
    * The target type of token to replace
    */
-  private int terminalTokenType;
+  private final int terminalTokenType;
 
   /**
    * Creates a new target search phase with the given targets.

@@ -70,7 +70,7 @@ public class Directive extends StringNode {
     EMPTY
   }
 
-  private Type type;
+  private final Type type;
 
   /**
    * Crates a new directive with the given directive type and content after the

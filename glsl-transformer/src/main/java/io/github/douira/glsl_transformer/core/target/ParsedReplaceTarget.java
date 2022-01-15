@@ -11,8 +11,8 @@ import io.github.douira.glsl_transformer.tree.TreeMember;
  * time a replacement is handled.
  */
 public class ParsedReplaceTarget extends HandlerTarget {
-  private String newContent;
-  private Function<GLSLParser, ExtendedContext> parseMethod;
+  private final String newContent;
+  private final Function<GLSLParser, ExtendedContext> parseMethod;
 
   /**
    * Create a new parsed replacement target with a given needle and new content to
