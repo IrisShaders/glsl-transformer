@@ -1,5 +1,6 @@
 # Todo
 
+- Add transformation that does wrapping: check for presence of wrap replacement, inject wrapper code, perform identifier replacement with expression or terminal
 - Reduce the amount of `instanceof` usage, especially around RunPhase/WalkPhase
 - Test ReplaceTerminals static methods
 - Test addConcurrentPhase on Transformation
