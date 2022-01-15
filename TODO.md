@@ -1,5 +1,6 @@
 # Todo
 
+- Token filtering also before parsing
 - Add transformation that does wrapping: check for presence of wrap replacement, inject wrapper code, perform identifier replacement with expression or terminal
 - Some sort of additional parameter system for passing per-job state to transformation phases is required. (in order to have them activate/deactivate using the already present isActive system)
 - Reduce the amount of `instanceof` usage, especially around RunPhase/WalkPhase
