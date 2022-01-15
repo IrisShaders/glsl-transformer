@@ -36,7 +36,7 @@ public class TransformationPhaseTest extends TestWithTransformationManager {
 
   @Test
   void testCompilePath() {
-    wrapRunTransform(new RunPhase() {
+    runTransformation(new RunPhase() {
       @Override
       protected void run(TranslationUnitContext ctx) {
         assertEquals(
@@ -50,7 +50,7 @@ public class TransformationPhaseTest extends TestWithTransformationManager {
 
   @Test
   void testCompilePattern() {
-    wrapRunTransform(new RunPhase() {
+    runTransformation(new RunPhase() {
       @Override
       protected void run(TranslationUnitContext ctx) {
         var match = compilePattern(
@@ -67,7 +67,7 @@ public class TransformationPhaseTest extends TestWithTransformationManager {
 
   @Test
   void testCreateLocalRoot() {
-    wrapRunTransform(new RunPhase() {
+    runTransformation(new RunPhase() {
       @Override
       protected void run(TranslationUnitContext ctx) {
         var localRoot = createLocalRoot("f;", ctx, GLSLParser::externalDeclaration);
@@ -81,7 +81,7 @@ public class TransformationPhaseTest extends TestWithTransformationManager {
 
   @Test
   void testFindAndMatch() {
-    wrapRunTransform(new RunPhase() {
+    runTransformation(new RunPhase() {
       @Override
       protected void run(TranslationUnitContext ctx) {
         var matches = findAndMatch(ctx,
@@ -96,7 +96,7 @@ public class TransformationPhaseTest extends TestWithTransformationManager {
 
   @Test
   void testGetSiblings() {
-    wrapRunTransform(new RunPhase() {
+    runTransformation(new RunPhase() {
       @Override
       protected void run(TranslationUnitContext ctx) {
         assertSame(
@@ -122,7 +122,7 @@ public class TransformationPhaseTest extends TestWithTransformationManager {
   void testInjectNode(String scenario, String input) {
     for (var location : InjectionPoint.values()) {
       setTestCode(input);
-      var output = wrapRunTransform(new RunPhase() {
+      var output = runTransformation(new RunPhase() {
         @Override
         protected void run(TranslationUnitContext ctx) {
           injectExternalDeclaration("//prefix\ninjection; //suffix\n", location);
@@ -141,7 +141,7 @@ public class TransformationPhaseTest extends TestWithTransformationManager {
   void testInjectDefine(String scenario, String input) {
     for (var location : InjectionPoint.values()) {
       setTestCode(input);
-      var output = wrapRunTransform(new RunPhase() {
+      var output = runTransformation(new RunPhase() {
         @Override
         protected void run(TranslationUnitContext ctx) {
           injectDefine("foo bar + baz", location);
@@ -158,7 +158,7 @@ public class TransformationPhaseTest extends TestWithTransformationManager {
   void testInjectNodes() {
     assertEquals(
         "e;//\nf;a;//present\nb;c;d;",
-        wrapRunTransform("a;//present\nb;c;d;", new RunPhase() {
+        runTransformation("a;//present\nb;c;d;", new RunPhase() {
           @Override
           protected void run(TranslationUnitContext ctx) {
             injectNodes(new LinkedList<ParseTree>(List.of(
@@ -173,7 +173,7 @@ public class TransformationPhaseTest extends TestWithTransformationManager {
   void testInjectExternalDeclaration() {
     assertEquals(
         "e;a;//present\nb;c;int foo;",
-        wrapRunTransform("a;//present\nb;c;int foo;", new RunPhase() {
+        runTransformation("a;//present\nb;c;int foo;", new RunPhase() {
           @Override
           protected void run(TranslationUnitContext ctx) {
             injectExternalDeclaration("e;", InjectionPoint.BEFORE_VERSION);
@@ -194,7 +194,7 @@ public class TransformationPhaseTest extends TestWithTransformationManager {
   void testRemoveNode() {
     assertEquals(
         "a;//present\nd;",
-        wrapRunTransform("a;//present\nb;c;d;", new RunPhase() {
+        runTransformation("a;//present\nb;c;d;", new RunPhase() {
           @Override
           protected void run(TranslationUnitContext ctx) {
             removeNode(ctx.externalDeclaration(1));
@@ -208,7 +208,7 @@ public class TransformationPhaseTest extends TestWithTransformationManager {
   void testReplaceNode() {
     assertEquals(
         "a;new;//present\nc;d;",
-        wrapRunTransform("a;//present\nb;c;d;", new RunPhase() {
+        runTransformation("a;//present\nb;c;d;", new RunPhase() {
           @Override
           protected void run(TranslationUnitContext ctx) {
             replaceNode(ctx.externalDeclaration(1), "new;", GLSLParser::externalDeclaration);
@@ -217,7 +217,7 @@ public class TransformationPhaseTest extends TestWithTransformationManager {
         "It should correctly replace the second node");
 
     assertThrows(IllegalArgumentException.class,
-        () -> wrapRunTransform("a;", new RunPhase() {
+        () -> runTransformation("a;", new RunPhase() {
           @Override
           protected void run(TranslationUnitContext ctx) {
             replaceNode(ctx, null);
@@ -227,7 +227,7 @@ public class TransformationPhaseTest extends TestWithTransformationManager {
 
   @Test
   void testSetParent() {
-    wrapRunTransform(new RunPhase() {
+    runTransformation(new RunPhase() {
       @Override
       protected void run(TranslationUnitContext ctx) {
         assertSame(manager.getParser(), getParser(),
