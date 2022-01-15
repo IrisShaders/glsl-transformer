@@ -26,7 +26,7 @@ public abstract class ThrowTarget extends HandlerTarget {
    * Generates the exception when this target is found.
    * 
    * @param node  The node that contains the token
-   * @param match The identifier that contains the needle
+   * @param match The token text that contains the needle
    * @return The semantic exception to throw
    */
   public abstract SemanticException getMessage(TreeMember node, String match);
