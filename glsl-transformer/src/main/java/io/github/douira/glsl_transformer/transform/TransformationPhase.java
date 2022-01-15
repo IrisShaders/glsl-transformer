@@ -109,7 +109,7 @@ public abstract class TransformationPhase extends GLSLParserBaseListener {
    * creating parsed nodes.
    * 
    * @param removeNode  The node to be replaced
-   * @param newContent The string from which a new node is generated
+   * @param newContent  The string from which a new node is generated
    * @param parseMethod The method with which the string will be parsed
    */
   protected void replaceNode(TreeMember removeNode, String newContent,
@@ -392,10 +392,10 @@ public abstract class TransformationPhase extends GLSLParserBaseListener {
    *           this operation runs in linear time O(n) with respect to the the
    *           number n of external declarations in the root node.
    * 
-   * @param newNode  The new node to be inserted
    * @param location The injection point at which the new node is inserted
+   * @param newNode  The new node to be inserted
    */
-  protected void injectNode(ParseTree newNode, InjectionPoint location) {
+  protected void injectNode(InjectionPoint location, ParseTree newNode) {
     getRootNode().addChild(getInjectionIndex(location), newNode);
   }
 
@@ -405,11 +405,11 @@ public abstract class TransformationPhase extends GLSLParserBaseListener {
    * other directives the {@link io.github.douira.glsl_transformer.ast.Directive }
    * class should be used.
    * 
-   * @param content  The content after the #define prefix
    * @param location The injection point at which the new node is inserted
+   * @param content  The content after the #define prefix
    */
-  protected void injectDefine(String content, InjectionPoint location) {
-    injectNode(new Directive(Type.DEFINE, content), location);
+  protected void injectDefine(InjectionPoint location, String content) {
+    injectNode(location, new Directive(Type.DEFINE, content));
   }
 
   /**
@@ -417,10 +417,10 @@ public abstract class TransformationPhase extends GLSLParserBaseListener {
    * thing as {@link #injectNode(ParseTree, InjectionPoint)} but with a list of
    * nodes.
    * 
-   * @param newNodes The list of nodes to be inserted
    * @param location The injection point at which the new nodes are inserted
+   * @param newNodes The list of nodes to be inserted
    */
-  protected void injectNodes(Deque<ParseTree> newNodes, InjectionPoint location) {
+  protected void injectNodes(InjectionPoint location, Deque<ParseTree> newNodes) {
     var injectIndex = getInjectionIndex(location);
     var rootNode = getRootNode();
     newNodes.descendingIterator()
@@ -433,11 +433,11 @@ public abstract class TransformationPhase extends GLSLParserBaseListener {
    * declarations.
    * 
    * @see #injectNode(ParseTree, InjectionPoint)
+   * @param location The injection point at which the new node is inserted
    * @param str      The code fragment to be parsed as an external declaration and
    *                 inserted at the given injection point
-   * @param location The injection point at which the new node is inserted
    */
-  protected void injectExternalDeclaration(String str, InjectionPoint location) {
-    injectNode(createLocalRoot(str, getRootNode(), GLSLParser::externalDeclaration), location);
+  protected void injectExternalDeclaration(InjectionPoint location, String str) {
+    injectNode(location, createLocalRoot(str, getRootNode(), GLSLParser::externalDeclaration));
   }
 }
