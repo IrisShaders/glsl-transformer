@@ -16,7 +16,7 @@ public class ThrowTargetTest extends TestWithTransformationManager {
   void testFromMessage() {
     var target = ThrowTarget.fromMessage("needle", "message");
     assertEquals("needle", target.getNeedle());
-    assertEquals("message", target.getMessage(null, null));
+    assertEquals("message", target.getException(null, null).getMessage());
   }
 
   @Test
@@ -26,7 +26,7 @@ public class ThrowTargetTest extends TestWithTransformationManager {
     try {
       runTransformation("int f = foo + oofevilinside;", new SearchTerminals(new ThrowTarget("evil") {
         @Override
-        public SemanticException getMessage(TreeMember node, String match) {
+        public SemanticException getException(TreeMember node, String match) {
           nextIndex++;
           return exception;
         }

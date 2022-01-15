@@ -19,7 +19,7 @@ public abstract class ThrowTarget extends HandlerTarget {
 
   @Override
   public void handleResult(TreeMember node, String match) {
-    throw getMessage(node, match);
+    throw getException(node, match);
   }
 
   /**
@@ -29,7 +29,7 @@ public abstract class ThrowTarget extends HandlerTarget {
    * @param match The token text that contains the needle
    * @return The semantic exception to throw
    */
-  public abstract SemanticException getMessage(TreeMember node, String match);
+  public abstract SemanticException getException(TreeMember node, String match);
 
   /**
    * Creates a new throw target with a fixed message instead of using the
@@ -42,7 +42,7 @@ public abstract class ThrowTarget extends HandlerTarget {
   public static ThrowTarget fromMessage(String needle, String message) {
     return new ThrowTarget(needle) {
       @Override
-      public SemanticException getMessage(TreeMember node, String match) {
+      public SemanticException getException(TreeMember node, String match) {
         return new SemanticException(message, node);
       }
     };
