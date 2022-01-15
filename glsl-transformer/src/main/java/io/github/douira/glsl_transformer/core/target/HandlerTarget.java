@@ -39,7 +39,7 @@ public abstract class HandlerTarget extends TransformationPhase {
    * Handles the containing node and token that the string was found in.
    * 
    * @param node  The node that contains the token
-   * @param match The identifier that contains the needle
+   * @param match The token text that contains the needle
    */
   public abstract void handleResult(TreeMember node, String match);
 }
