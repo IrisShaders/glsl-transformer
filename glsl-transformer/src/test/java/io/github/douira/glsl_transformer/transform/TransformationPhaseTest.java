@@ -125,7 +125,7 @@ public class TransformationPhaseTest extends TestWithTransformationManager {
       var output = runTransformation(new RunPhase() {
         @Override
         protected void run(TranslationUnitContext ctx) {
-          injectExternalDeclaration("//prefix\ninjection; //suffix\n", location);
+          injectExternalDeclaration(location, "//prefix\ninjection; //suffix\n");
         }
       });
 
@@ -144,7 +144,7 @@ public class TransformationPhaseTest extends TestWithTransformationManager {
       var output = runTransformation(new RunPhase() {
         @Override
         protected void run(TranslationUnitContext ctx) {
-          injectDefine("foo bar + baz", location);
+          injectDefine(location, "foo bar + baz");
         }
       });
 
@@ -161,10 +161,10 @@ public class TransformationPhaseTest extends TestWithTransformationManager {
         runTransformation("a;//present\nb;c;d;", new RunPhase() {
           @Override
           protected void run(TranslationUnitContext ctx) {
-            injectNodes(new LinkedList<ParseTree>(List.of(
-                createLocalRoot("e;", getRootNode(), GLSLParser::externalDeclaration),
-                createLocalRoot("//\nf;", getRootNode(), GLSLParser::externalDeclaration))),
-                InjectionPoint.BEFORE_VERSION);
+            injectNodes(InjectionPoint.BEFORE_VERSION,
+                new LinkedList<ParseTree>(List.of(
+                    createLocalRoot("e;", getRootNode(), GLSLParser::externalDeclaration),
+                    createLocalRoot("//\nf;", getRootNode(), GLSLParser::externalDeclaration))));
           }
         }));
   }
@@ -176,7 +176,7 @@ public class TransformationPhaseTest extends TestWithTransformationManager {
         runTransformation("a;//present\nb;c;int foo;", new RunPhase() {
           @Override
           protected void run(TranslationUnitContext ctx) {
-            injectExternalDeclaration("e;", InjectionPoint.BEFORE_VERSION);
+            injectExternalDeclaration(InjectionPoint.BEFORE_VERSION, "e;");
           }
         }),
         "It should inject an external declaration at the right position");
