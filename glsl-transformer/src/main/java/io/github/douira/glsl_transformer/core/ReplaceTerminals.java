@@ -27,7 +27,7 @@ public class ReplaceTerminals extends SearchTerminals {
   }
 
   /**
-   * Creates a new empty terminal node replacement transformation.
+   * Creates a new empty identifier replacement transformation.
    */
   public ReplaceTerminals() {
     super(new HashSet<>());
@@ -37,12 +37,13 @@ public class ReplaceTerminals extends SearchTerminals {
    * Adds a replacement target that replaces matching terminal nodes with new
    * nodes parsed from the given string using a specified parser method.
    * 
-   * 
    * @param needle      The needle (search string)
    * @param newContent  The new content to parse into a node
    * @param parseMethod The parser method to create the new node with
    */
-  public void addReplacement(String needle, String newContent, Function<GLSLParser, ExtendedContext> parseMethod) {
+  public void addReplacement(
+      String needle, String newContent,
+      Function<GLSLParser, ExtendedContext> parseMethod) {
     addTarget(new ParsedReplaceTarget(needle, newContent, parseMethod));
   }
 
@@ -66,5 +67,51 @@ public class ReplaceTerminals extends SearchTerminals {
    */
   public void addReplacementTerminal(String needle, String terminalContent) {
     addTarget(new TerminalReplaceTarget(needle, terminalContent));
+  }
+
+  /**
+   * Creates a new identifier replacement transformation with a replacement
+   * target that replaces matching terminal nodes with new nodes parsed from the
+   * given string using a specified parser method.
+   * 
+   * @see #addReplacement(String, String, Function)
+   * 
+   * @param needle      The needle (search string)
+   * @param newContent  The new content to parse into a node
+   * @param parseMethod The parser method to create the new node with
+   */
+  public ReplaceTerminals withReplacement(
+      String needle, String newContent,
+      Function<GLSLParser, ExtendedContext> parseMethod) {
+    var phase = new ReplaceTerminals();
+    phase.addReplacement(needle, newContent, parseMethod);
+    return phase;
+  }
+
+  /**
+   * Creates a new identifier replacement transformation with a replacement target
+   * that replaces matching terminal nodes with new expression nodes parsed from
+   * the given string.
+   * 
+   * @param needle            The needle (search string)
+   * @param expressionContent The new content to parse into an expression
+   */
+  public ReplaceTerminals withReplacementExpression(String needle, String expressionContent) {
+    var phase = new ReplaceTerminals();
+    phase.addReplacementExpression(needle, expressionContent);
+    return phase;
+  }
+
+  /**
+   * Creates a new identifier replacement transformation with a replacement target
+   * that replaces matching terminal nodes with new unparsed string nodes.
+   * 
+   * @param needle          The needle (search string)
+   * @param terminalContent The new terminal content to insert as a string node
+   */
+  public ReplaceTerminals withReplacementTerminal(String needle, String terminalContent) {
+    var phase = new ReplaceTerminals();
+    phase.addReplacementTerminal(needle, terminalContent);
+    return phase;
   }
 }
