@@ -17,12 +17,20 @@ import io.github.douira.glsl_transformer.tree.ExtendedContext;
  */
 public class ReplaceTerminals extends SearchTerminals {
   /**
-   * Creates a new empty terminal node replacement transformation.
+   * Creates a new empty terminal node replacement transformation with the a
+   * type of token to search in.
    * 
    * @param targetRule The type of the token to search for
    */
   public ReplaceTerminals(int targetRule) {
     super(targetRule, new HashSet<>());
+  }
+
+  /**
+   * Creates a new empty terminal node replacement transformation.
+   */
+  public ReplaceTerminals() {
+    super(new HashSet<>());
   }
 
   /**
