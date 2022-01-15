@@ -54,12 +54,21 @@ public class SearchTerminals extends WalkPhase {
   }
 
   /**
+   * Creates a new identifier search phase with with given targets.
+   * 
+   * @param targets The targets to search for in identifiers
+   */
+  public SearchTerminals(Collection<HandlerTarget> targets) {
+    this(IDENTIFIER, targets);
+  }
+
+  /**
    * Creates a new identifier search phase with only a single target.
    * 
    * @param target The target to search for in identifiers
    */
   public SearchTerminals(HandlerTarget target) {
-    this(IDENTIFIER, CompatUtil.listOf(target));
+    this(CompatUtil.listOf(target));
   }
 
   @Override
