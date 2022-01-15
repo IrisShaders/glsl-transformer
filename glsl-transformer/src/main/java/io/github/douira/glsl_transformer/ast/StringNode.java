@@ -12,7 +12,7 @@ package io.github.douira.glsl_transformer.ast;
  * @see ASTNode
  */
 public class StringNode extends UnparsableASTNode {
-  private String content;
+  private final String content;
 
   /**
    * Creates a new string node with the given string content.
