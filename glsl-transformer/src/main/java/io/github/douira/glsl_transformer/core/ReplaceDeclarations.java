@@ -85,8 +85,9 @@ public class ReplaceDeclarations extends Transformation {
       protected void afterWalk(TranslationUnitContext ctx) {
         // is only run if phase is found to be active
         // TODO: the function content and the new attribute declaration
-        injectExternalDeclaration("void iris_getModelSpaceVertexPosition() { }", InjectionPoint.BEFORE_EOF);
-        injectExternalDeclaration("layout (location = 0) attribute vec4 iris_Position;", InjectionPoint.BEFORE_FUNCTIONS);
+        injectExternalDeclaration(InjectionPoint.BEFORE_EOF, "void iris_getModelSpaceVertexPosition() { }");
+        injectExternalDeclaration(InjectionPoint.BEFORE_FUNCTIONS,
+            "layout (location = 0) attribute vec4 iris_Position;");
       }
     });
 
