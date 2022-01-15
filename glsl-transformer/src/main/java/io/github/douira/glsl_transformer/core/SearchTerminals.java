@@ -30,7 +30,7 @@ public class SearchTerminals extends WalkPhase {
   /**
    * The target type of token to replace
    */
-  private final int terminalTokenType;
+  private int terminalTokenType;
 
   /**
    * Creates a new target search phase with the given targets.
@@ -88,6 +88,16 @@ public class SearchTerminals extends WalkPhase {
         }
       }
     }
+  }
+
+  /**
+   * Sets the terminal token type. Use {@link #IDENTIFIER} to search for
+   * identifiers.
+   * 
+   * @param terminalTokenType The terminal token type
+   */
+  public void setTerminalTokenType(int terminalTokenType) {
+    this.terminalTokenType = terminalTokenType;
   }
 
   /**
