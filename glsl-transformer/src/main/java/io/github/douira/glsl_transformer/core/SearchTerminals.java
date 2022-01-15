@@ -77,7 +77,7 @@ public class SearchTerminals extends WalkPhase {
     if (token.getType() == terminalTokenType) {
       String text = token.getText();
       for (var target : targets) {
-        if (text.contains(target.getNeedle())) {
+        if (findNeedle(text, target)) {
           if (!(node instanceof TreeMember)) {
             throw new IllegalStateException(
                 "All nodes in the parse tree should be a TreeMember except for when they are errors! Then the tree is broken anyways.");
@@ -97,5 +97,18 @@ public class SearchTerminals extends WalkPhase {
    */
   public void addTarget(HandlerTarget target) {
     targets.add(target);
+  }
+
+  /**
+   * Checks if the given content contains a needle. This should be overwritten if
+   * the matching should be done differently, like using regex or case-insensitive
+   * matching.
+   * 
+   * @param content The content to search in
+   * @param target  The target being searched for
+   * @return If the target was found in the content
+   */
+  protected boolean findNeedle(String content, HandlerTarget target) {
+    return content.contains(target.getNeedle());
   }
 }
