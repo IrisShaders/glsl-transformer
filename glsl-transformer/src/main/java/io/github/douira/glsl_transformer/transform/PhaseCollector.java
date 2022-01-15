@@ -25,8 +25,8 @@ import io.github.douira.glsl_transformer.util.ComparablePair;
  * transformation at the same index.
  */
 public abstract class PhaseCollector {
-  private Map<ComparablePair<Integer, Integer>, List<TransformationPhase>> executionLevels = new TreeMap<>();
-  private Collection<Transformation> transformations = new ArrayList<>();
+  private final Map<ComparablePair<Integer, Integer>, List<TransformationPhase>> executionLevels = new TreeMap<>();
+  private final Collection<Transformation> transformations = new ArrayList<>();
   private TranslationUnitContext rootNode;
 
   /**

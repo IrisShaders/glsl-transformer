@@ -13,7 +13,7 @@ import io.github.douira.glsl_transformer.tree.TreeMember;
  * ignores it during printing because it's token is null.
  */
 public class EmptyTerminalNode extends ExtendedTerminalNode implements MoveCheckable {
-  private ParseTree previousNode;
+  private final ParseTree previousNode;
 
   /**
    * Creates a new empty terminal node with a given previous node.

@@ -9,7 +9,7 @@ import org.antlr.v4.runtime.Token;
  * is on the given list of disallowed channels.
  */
 public class ChannelFilter implements TokenFilter {
-  private EnumSet<TokenChannel> disallowedChannels;
+  private final EnumSet<TokenChannel> disallowedChannels;
 
   /**
    * Creates a new channel filter with the given disallowed channels.

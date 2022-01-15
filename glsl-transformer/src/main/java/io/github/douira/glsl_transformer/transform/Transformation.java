@@ -51,7 +51,7 @@ public class Transformation {
   public static record PhaseEntry(TransformationPhase phase, int order, int group) {
   };
 
-  private List<PhaseEntry> phaseRegistry = new LinkedList<>();
+  private final List<PhaseEntry> phaseRegistry = new LinkedList<>();
   private int phaseCounter = 0;
 
   /**

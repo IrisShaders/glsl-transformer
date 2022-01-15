@@ -9,7 +9,7 @@ import io.github.douira.glsl_transformer.tree.TreeMember;
  * to handle finding the string in a parse tree.
  */
 public abstract class HandlerTarget extends TransformationPhase {
-  private String needle;
+  private final String needle;
 
   /**
    * Creates a new handler target with the given search string
