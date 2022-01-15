@@ -81,7 +81,7 @@ public class ReplaceTerminals extends SearchTerminals {
    * @param parseMethod The parser method to create the new node with
    * @return The configured identifier replacement transformation
    */
-  public ReplaceTerminals withReplacement(
+  public static ReplaceTerminals withReplacement(
       String needle, String newContent,
       Function<GLSLParser, ExtendedContext> parseMethod) {
     var phase = new ReplaceTerminals();
@@ -98,7 +98,7 @@ public class ReplaceTerminals extends SearchTerminals {
    * @param expressionContent The new content to parse into an expression
    * @return The configured identifier replacement transformation
    */
-  public ReplaceTerminals withReplacementExpression(String needle, String expressionContent) {
+  public static ReplaceTerminals withReplacementExpression(String needle, String expressionContent) {
     var phase = new ReplaceTerminals();
     phase.addReplacementExpression(needle, expressionContent);
     return phase;
@@ -112,7 +112,7 @@ public class ReplaceTerminals extends SearchTerminals {
    * @param terminalContent The new terminal content to insert as a string node
    * @return The configured identifier replacement transformation
    */
-  public ReplaceTerminals withReplacementTerminal(String needle, String terminalContent) {
+  public static ReplaceTerminals withReplacementTerminal(String needle, String terminalContent) {
     var phase = new ReplaceTerminals();
     phase.addReplacementTerminal(needle, terminalContent);
     return phase;
