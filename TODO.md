@@ -1,6 +1,8 @@
 # Todo
 
 - Reduce the amount of `instanceof` usage, especially around RunPhase/WalkPhase
+- Test ReplaceTerminals static methods
+- Test addConcurrentPhase on Transformation
 - Test the token filters and all their associated functionality (on transformation manager, printer and all the token filters themselves)
 - Test removal/replacement of single terminal node (tests ExtendedTerminalNode)
 - Figure out if and how removal of local roots works (nothing needs to be omitted since they are additions, trying to omit them may break. a placeholder still needs to be placed though)

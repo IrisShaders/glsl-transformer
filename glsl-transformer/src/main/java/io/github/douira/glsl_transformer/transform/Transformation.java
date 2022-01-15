@@ -52,7 +52,7 @@ public class Transformation {
   };
 
   private final List<PhaseEntry> phaseRegistry = new LinkedList<>();
-  private int phaseCounter = 0;
+  private int phaseCounter = 1;
 
   /**
    * Creates a stateless transformation and adds a single phase to it. If you want
@@ -125,6 +125,18 @@ public class Transformation {
    */
   public void addPhase(PhaseEntry entry) {
     phaseRegistry.add(entry);
+  }
+
+  /**
+   * Adds a transformation phase to this transformation at the previous phase
+   * counter position without incrementing the current phase counter. This means
+   * the phase will run at the same time as the previous phase in the case of walk
+   * phases.
+   * 
+   * @param phase The phase to add at the same position as the previous one
+   */
+  public void addConcurrentPhase(TransformationPhase phase) {
+    addPhase(phaseCounter - 1, phase);
   }
 
   /**
