@@ -39,7 +39,7 @@ public class TransformationManagerTest extends TestWithTransformationManager {
     manager.registerTransformation(new Transformation(new RunPhase() {
       @Override
       protected void run(TranslationUnitContext ctx) {
-        injectExternalDeclaration("f;", InjectionPoint.BEFORE_VERSION);
+        injectExternalDeclaration(InjectionPoint.BEFORE_VERSION, "f;");
       }
     }));
   }
