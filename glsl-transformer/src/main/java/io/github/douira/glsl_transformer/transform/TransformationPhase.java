@@ -411,7 +411,7 @@ public abstract class TransformationPhase extends GLSLParserBaseListener {
 
   /**
    * Injects a list of nodes into the translation unit context node. Does the same
-   * thing as {@link #injectNode(ParseTree, InjectionPoint)} but with a list of
+   * thing as {@link #injectNode(InjectionPoint, ParseTree)} but with a list of
    * nodes.
    * 
    * @param location The injection point at which the new nodes are inserted
@@ -429,7 +429,7 @@ public abstract class TransformationPhase extends GLSLParserBaseListener {
    * convenience method since most of the time injected nodes are external
    * declarations.
    * 
-   * @see #injectNode(ParseTree, InjectionPoint)
+   * @see #injectNode(InjectionPoint, ParseTree)
    * @param location The injection point at which the new node is inserted
    * @param str      The code fragment to be parsed as an external declaration and
    *                 inserted at the given injection point
