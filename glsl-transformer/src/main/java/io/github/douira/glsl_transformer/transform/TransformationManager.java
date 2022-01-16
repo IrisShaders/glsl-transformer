@@ -72,7 +72,14 @@ public class TransformationManager extends PhaseCollector {
    * Optionally a token filter for printing a tree. Can be {@code null} if no
    * filter is to be used.
    */
-  private TokenFilter tokenFilter;
+  private TokenFilter printTokenFilter;
+
+  /**
+   * Optionally a token filter that is applied before parsing. It filters the
+   * tokens coming from the lexer before the parser consumes them. Can be
+   * {@code null} if no filter is to be used.
+   */
+  private TokenFilter parseTokenFilter;
 
   /**
    * Creates a new transformation manager and specifies if parse errors should be
@@ -126,24 +133,12 @@ public class TransformationManager extends PhaseCollector {
     return lexer;
   }
 
-  /**
-   * Sets the token filter to use for printing a tree. Set it to {@code null} to
-   * remove the filter.
-   * 
-   * @param tokenFilter The token filter to use for printing. May be {@code null}.
-   */
-  public void setTokenFilter(TokenFilter tokenFilter) {
-    this.tokenFilter = tokenFilter;
+  public void setPrintTokenFilter(TokenFilter printTokenFilter) {
+    this.printTokenFilter = printTokenFilter;
   }
 
-  /**
-   * Adds a token filter for printing. This will create a new multi token filter
-   * if another filter is already present.
-   * 
-   * @param newFilter The token filter to also use for printing.
-   */
-  public void addTokenFilter(TokenFilter newFilter) {
-    setTokenFilter(TokenFilter.join(tokenFilter, newFilter));
+  public void setParseTokenFilter(TokenFilter parseTokenFilter) {
+    this.parseTokenFilter = parseTokenFilter;
   }
 
   /**
@@ -223,6 +218,6 @@ public class TransformationManager extends PhaseCollector {
   public String transformStream(IntStream stream) throws RecognitionException {
     var tree = parse(stream, null, GLSLParser::translationUnit);
     transformTree(tree, tokenStream);
-    return PrintVisitor.printTree(tokenStream, tree);
+    return PrintVisitor.printTree(tokenStream, tree, printTokenFilter);
   }
 }
