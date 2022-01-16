@@ -288,16 +288,12 @@ public class Tensor extends ParsableASTNode {
       throw new IllegalArgumentException("Invalid type specifier context given. It must have exactly one child.");
     }
 
-    var child = children.get(0);
-    Token token;
-    if (child instanceof TerminalNode terminalNode) {
-      token = terminalNode.getSymbol();
+    if (children.get(0) instanceof TerminalNode terminalNode) {
+      return terminalNode.getSymbol().getType();
     } else {
       throw new IllegalArgumentException(
           "Type specifier context child has the wrong structure. It should be a terminal node.");
     }
-
-    return token.getType();
   }
 
   /**
