@@ -45,19 +45,24 @@ public abstract class TransformationPhase extends GLSLParserBaseListener {
   /**
    * Method called by the phase collector before the walk happens. The returned
    * boolean determines if the phase is added to the list of phases that are
-   * walked on the tree.
+   * walked on the tree. Returns false by default and implementing classes should
+   * overwrite this.
    * 
    * @param ctx The root node
    * @return {@code true} if the phase should be walked on the tree
    */
-  abstract boolean checkBeforeWalk(TranslationUnitContext ctx);
+  protected boolean checkBeforeWalk(TranslationUnitContext ctx) {
+    return false;
+  }
 
   /**
-   * Method called by teh phase collector after the walk happens.
+   * Method called by the phase collector after the walk happens. Does nothing by
+   * default.
    * 
    * @param ctx The root node
    */
-  abstract void runAfterWalk(TranslationUnitContext ctx);
+  protected void runAfterWalk(TranslationUnitContext ctx) {
+  }
 
   /**
    * Gets this phase's phase collector.

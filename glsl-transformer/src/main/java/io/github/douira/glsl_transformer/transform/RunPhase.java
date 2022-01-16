@@ -18,7 +18,7 @@ public abstract class RunPhase extends TransformationPhase {
   protected abstract void run(TranslationUnitContext ctx);
 
   @Override
-  final boolean checkBeforeWalk(TranslationUnitContext ctx) {
+  final protected boolean checkBeforeWalk(TranslationUnitContext ctx) {
     if (isActive()) {
       run(ctx);
     }
@@ -26,6 +26,6 @@ public abstract class RunPhase extends TransformationPhase {
   }
 
   @Override
-  final void runAfterWalk(TranslationUnitContext ctx) {
+  final protected void runAfterWalk(TranslationUnitContext ctx) {
   }
 }

@@ -56,7 +56,7 @@ public abstract class WalkPhase extends TransformationPhase {
   }
 
   @Override
-  final boolean checkBeforeWalk(TranslationUnitContext ctx) {
+  final protected boolean checkBeforeWalk(TranslationUnitContext ctx) {
     if (isActiveBeforeWalk()) {
       beforeWalk(ctx);
     }
@@ -64,7 +64,7 @@ public abstract class WalkPhase extends TransformationPhase {
   }
 
   @Override
-  final void runAfterWalk(TranslationUnitContext ctx) {
+  final protected void runAfterWalk(TranslationUnitContext ctx) {
     if (isActiveAfterWalk()) {
       afterWalk(ctx);
     }
