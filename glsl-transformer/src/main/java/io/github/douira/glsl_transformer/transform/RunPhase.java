@@ -16,4 +16,16 @@ public abstract class RunPhase extends TransformationPhase {
    * @param ctx The root node of the parse tree being transformed
    */
   protected abstract void run(TranslationUnitContext ctx);
+
+  @Override
+  final boolean checkBeforeWalk(TranslationUnitContext ctx) {
+    if (isActive()) {
+      run(ctx);
+    }
+    return false;
+  }
+
+  @Override
+  final void runAfterWalk(TranslationUnitContext ctx) {
+  }
 }
