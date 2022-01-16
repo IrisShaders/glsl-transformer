@@ -75,11 +75,11 @@ public class TransformationManager extends PhaseCollector {
   private TokenFilter printTokenFilter;
 
   /**
-   * Optionally a token filter that is applied before parsing. It filters the
-   * tokens coming from the lexer before the parser consumes them. Can be
-   * {@code null} if no filter is to be used.
+   * Optionally a token filter source that applies a token filter before parsing.
+   * It filters the tokens coming from the lexer before the parser consumes them.
+   * The contained token filter can be {@code null} if no filter is to be used.
    */
-  private TokenFilter parseTokenFilter;
+  private FilterTokenSource tokenSource = new FilterTokenSource(lexer);
 
   /**
    * Creates a new transformation manager and specifies if parse errors should be
@@ -133,12 +133,23 @@ public class TransformationManager extends PhaseCollector {
     return lexer;
   }
 
+  /**
+   * Sets the token filter to use before printing.
+   * 
+   * @param printTokenFilter The new print token filter
+   */
   public void setPrintTokenFilter(TokenFilter printTokenFilter) {
     this.printTokenFilter = printTokenFilter;
   }
 
+  /**
+   * Sets the token filter to use before parsing. It's placed between the lexer
+   * and the token stream.
+   * 
+   * @param parseTokenFilter The new parse token filter
+   */
   public void setParseTokenFilter(TokenFilter parseTokenFilter) {
-    this.parseTokenFilter = parseTokenFilter;
+    this.tokenSource.setTokenFilter(parseTokenFilter);
   }
 
   /**
@@ -186,7 +197,7 @@ public class TransformationManager extends PhaseCollector {
     input = stream;
     lexer.setInputStream(input);
     lexer.reset();
-    tokenStream = new CommonTokenStream(lexer);
+    tokenStream = new CommonTokenStream(tokenSource);
     parser.setTokenStream(tokenStream);
     parser.reset();
 
