@@ -117,15 +117,8 @@ public abstract class PhaseCollector {
       for (var phase : level) {
         phase.setCollector(this);
 
-        if (phase instanceof WalkPhase walkPhase) {
-          if (walkPhase.isActiveBeforeWalk()) {
-            walkPhase.beforeWalk(ctx);
-          }
-          if (walkPhase.isActiveAtWalk()) {
-            proxyListener.add(walkPhase);
-          }
-        } else if (phase instanceof RunPhase runPhase && phase.isActive()) {
-          runPhase.run(ctx);
+        if (phase.checkBeforeWalk(ctx)) {
+          proxyListener.add(phase);
         }
       }
 
@@ -134,11 +127,7 @@ public abstract class PhaseCollector {
       }
 
       for (var phase : level) {
-        if (phase instanceof WalkPhase walkPhase) {
-          if (walkPhase.isActiveAfterWalk()) {
-            walkPhase.afterWalk(ctx);
-          }
-        }
+        phase.runAfterWalk(ctx);
       }
     }
 
