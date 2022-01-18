@@ -29,14 +29,14 @@ import io.github.douira.glsl_transformer.GLSLParser.TranslationUnitContext;
 import io.github.douira.glsl_transformer.TestResourceManager.DirectoryLocation;
 
 @ExtendWith({ SnapshotExtension.class })
-public class TransformationManagerTest extends TestWithTransformationManager {
+public class TransformationManagerTest extends TestWithTransformationManager<Void> {
   private Expect expect;
   private Exception storeException;
 
   @BeforeEach
   void setup() {
-    manager = new TransformationManager();
-    manager.registerTransformation(new Transformation(new RunPhase() {
+    manager = new TransformationManager<>();
+    manager.registerTransformation(new Transformation<>(new RunPhase<>() {
       @Override
       protected void run(TranslationUnitContext ctx) {
         injectExternalDeclaration(InjectionPoint.BEFORE_VERSION, "f;");
@@ -123,7 +123,7 @@ public class TransformationManagerTest extends TestWithTransformationManager {
     TestResourceManager
         .getDirectoryResources(DirectoryLocation.GLSLANG_TESTS)
         .forEach(resource -> {
-          manager = new TransformationManager(false);
+          manager = new TransformationManager<>(false);
           var collectingListener = new CollectingErrorListener();
           manager.getLexer().addErrorListener(collectingListener);
           manager.getParser().addErrorListener(collectingListener);

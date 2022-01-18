@@ -22,7 +22,7 @@ import io.github.douira.glsl_transformer.tree.ExtendedContext;
  * The declaration replacement finds layout declarations and replaces all
  * references to them with function calls and other code.
  */
-public class ReplaceDeclarations extends Transformation {
+public class ReplaceDeclarations<P> extends Transformation<P> {
   @Desugar
   private static record Declaration(String type, String name) {
   }
@@ -39,7 +39,7 @@ public class ReplaceDeclarations extends Transformation {
    * finding declarations and one for inserting calls to the generated functions.
    */
   public ReplaceDeclarations() {
-    addPhase(new WalkPhase() {
+    addPhase(new WalkPhase<>() {
       ParseTreePattern declarationPattern;
 
       @Override
@@ -91,7 +91,7 @@ public class ReplaceDeclarations extends Transformation {
       }
     });
 
-    addPhase(new WalkPhase() {
+    addPhase(new WalkPhase<>() {
       @Override
       protected boolean isActive() {
         return !declarations.isEmpty();

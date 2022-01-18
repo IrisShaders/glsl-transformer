@@ -31,13 +31,26 @@ import io.github.douira.glsl_transformer.tree.ExtendedContext;
  * 
  * Creating manager instances isn't costly as ANTLR's parser and lexer
  * instantiation is efficient.
+ * 
+ * The transformation manager also manages job parameters. It has a private
+ * field that it stores the job parameters, that are passed to it along with the
+ * string to be transformed, during transformation. This means that the entire
+ * chain of objects that are involved in the transformation have to be generic
+ * in order to be able to make use of job parameters. If no job parameter is
+ * used the {@link java.lang.Void} type can be used and object constructors can
+ * use the default parameter {@code <>} which assigns an
+ * {@link java.lang.Object}. This is fine as long as the anonymous class being
+ * constructed doesn't need to use the job parameters. If it does need to use
+ * them, the whole chain of participating objects needs to be properly
+ * parameterized. (transformation manager -> transformation -> transformation
+ * phase)
  */
-public class TransformationManager extends PhaseCollector {
+public class TransformationManager<P> extends PhaseCollector<P> {
   /**
    * An internal instance of this class that is used by other library-internal
    * classes for parsing needs.
    */
-  public static final TransformationManager INTERNAL = new TransformationManager();
+  public static final TransformationManager<Void> INTERNAL = new TransformationManager<>();
 
   private static class ThrowingErrorListener extends BaseErrorListener {
     public static final ThrowingErrorListener INSTANCE = new ThrowingErrorListener();
@@ -53,6 +66,7 @@ public class TransformationManager extends PhaseCollector {
   // inited with null since they need an argument
   private final GLSLLexer lexer = new GLSLLexer(null);
   private final GLSLParser parser = new GLSLParser(null);
+  private P jobParameters;
 
   /**
    * The last parsed input stream. This property can be used together with the
@@ -133,6 +147,11 @@ public class TransformationManager extends PhaseCollector {
     return lexer;
   }
 
+  @Override
+  P getJobParameters() {
+    return jobParameters;
+  }
+
   /**
    * Sets the token filter to use before printing.
    * 
@@ -208,13 +227,39 @@ public class TransformationManager extends PhaseCollector {
 
   /**
    * Transforms the given string by parsing, transforming it with the already
-   * registered transformations and then re-printing it.
+   * registered transformations and then re-printing it. The job parameters are
+   * set to {@code null} since none are passed.
    * 
    * @param str The string to be transformed
    * @return The transformed string
    */
   public String transform(String str) throws RecognitionException {
-    return transformStream(CharStreams.fromString(str));
+    return transform(str, null);
+  }
+
+  /**
+   * Transforms the given string by parsing, transforming it with the already
+   * registered transformations and then re-printing it. The job parameters are
+   * set to {@code null} since none are passed.
+   * 
+   * @param str        The string to be transformed
+   * @param parameters The job parameters
+   * @return The transformed string
+   */
+  public String transform(String str, P parameters) throws RecognitionException {
+    return transformStream(CharStreams.fromString(str), parameters);
+  }
+
+  /**
+   * Transforms a given input stream and re-prints it as a string.
+   * 
+   * @see #transformStream(IntStream, Object)
+   * 
+   * @param stream The input stream to be transformed
+   * @return The transformed string
+   */
+  public String transformStream(IntStream stream) throws RecognitionException {
+    return transformStream(stream, null);
   }
 
   /**
@@ -223,12 +268,22 @@ public class TransformationManager extends PhaseCollector {
    * {@link org.antlr.v4.runtime.CharStreams} can be used to generate a stream,
    * not necessarily from a string.
    * 
-   * @param stream The input stream to be transformed
+   * This is the entry point for job parameters that can be accessed by
+   * transformation phases during transformation. It's called "job" parameters
+   * because it may change for each transformation job. A transformation job is a
+   * single instance of parsing and transformation. There is only one job
+   * parameter reference. If multiple values are required, they have to be packed
+   * into an object or an array. (This is a good place to use a Record)
+   * 
+   * @param stream     The input stream to be transformed
+   * @param parameters The job parameters
    * @return The transformed string
    */
-  public String transformStream(IntStream stream) throws RecognitionException {
+  public String transformStream(IntStream stream, P parameters) throws RecognitionException {
     var tree = parse(stream, null, GLSLParser::translationUnit);
+    jobParameters = parameters;
     transformTree(tree, tokenStream);
+    jobParameters = null;
     return PrintVisitor.printTree(tokenStream, tree, printTokenFilter);
   }
 }

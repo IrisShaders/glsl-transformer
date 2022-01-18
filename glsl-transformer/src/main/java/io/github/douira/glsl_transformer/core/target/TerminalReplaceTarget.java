@@ -8,7 +8,7 @@ import io.github.douira.glsl_transformer.tree.TreeMember;
  * Since the string terminal node is immutable, it's only created once and then
  * re-used if it needs to be printed multiple times.
  */
-public class TerminalReplaceTarget extends ReplaceTarget {
+public class TerminalReplaceTarget extends ReplaceTarget<Void> {
   private final String terminalContent;
   private TreeMember cacheNode;
 

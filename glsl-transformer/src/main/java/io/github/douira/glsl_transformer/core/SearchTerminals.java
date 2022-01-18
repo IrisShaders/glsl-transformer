@@ -16,7 +16,7 @@ import io.github.douira.glsl_transformer.util.CompatUtil;
  * identifiers) and triggers their handlers. The behavior of the targets can be
  * customized with the various available classes.
  */
-public class SearchTerminals extends WalkPhase {
+public class SearchTerminals<P> extends WalkPhase<P> {
   /**
    * A constant for easy access to the identifier token type.
    */
@@ -25,7 +25,7 @@ public class SearchTerminals extends WalkPhase {
   /**
    * The list of targets to process for each targeted context.
    */
-  protected final Collection<HandlerTarget> targets;
+  protected final Collection<HandlerTarget<P>> targets;
 
   /**
    * The target type of token to replace
@@ -38,7 +38,7 @@ public class SearchTerminals extends WalkPhase {
    * @param terminalTokenType The type of the token to search in
    * @param targets           The targets to search for
    */
-  public SearchTerminals(int terminalTokenType, Collection<HandlerTarget> targets) {
+  public SearchTerminals(int terminalTokenType, Collection<HandlerTarget<P>> targets) {
     this.terminalTokenType = terminalTokenType;
     this.targets = targets;
   }
@@ -49,7 +49,7 @@ public class SearchTerminals extends WalkPhase {
    * @param terminalTokenType The type of the token to search in
    * @param target            The target to search for
    */
-  public SearchTerminals(int terminalTokenType, HandlerTarget target) {
+  public SearchTerminals(int terminalTokenType, HandlerTarget<P> target) {
     this(terminalTokenType, CompatUtil.listOf(target));
   }
 
@@ -58,7 +58,7 @@ public class SearchTerminals extends WalkPhase {
    * 
    * @param targets The targets to search for in identifiers
    */
-  public SearchTerminals(Collection<HandlerTarget> targets) {
+  public SearchTerminals(Collection<HandlerTarget<P>> targets) {
     this(IDENTIFIER, targets);
   }
 
@@ -67,7 +67,7 @@ public class SearchTerminals extends WalkPhase {
    * 
    * @param target The target to search for in identifiers
    */
-  public SearchTerminals(HandlerTarget target) {
+  public SearchTerminals(HandlerTarget<P> target) {
     this(CompatUtil.listOf(target));
   }
 
@@ -105,7 +105,7 @@ public class SearchTerminals extends WalkPhase {
    * 
    * @param target The target to add to the collection of targets
    */
-  public void addTarget(HandlerTarget target) {
+  public void addTarget(HandlerTarget<P> target) {
     targets.add(target);
   }
 
@@ -118,7 +118,7 @@ public class SearchTerminals extends WalkPhase {
    * @param target  The target being searched for
    * @return If the target was found in the content
    */
-  protected boolean findNeedle(String content, HandlerTarget target) {
+  protected boolean findNeedle(String content, HandlerTarget<P> target) {
     return content.contains(target.getNeedle());
   }
 }

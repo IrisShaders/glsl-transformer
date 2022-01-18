@@ -8,7 +8,7 @@ import io.github.douira.glsl_transformer.GLSLParser.TranslationUnitContext;
  * is*Walk and isActive methods. It can also run before and after the tree walk
  * happens.
  */
-public abstract class WalkPhase extends TransformationPhase {
+public abstract class WalkPhase<P> extends TransformationPhase<P> {
   /**
    * Determines if this phase's {@link #beforeWalk(TranslationUnitContext)} should
    * be run.

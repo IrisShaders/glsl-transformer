@@ -10,11 +10,11 @@ import io.github.douira.glsl_transformer.transform.TransformationPhase;
 /**
  * Handles setup of all the things required to run a transformation.
  */
-public abstract class TestWithTransformationManager {
+public abstract class TestWithTransformationManager<P> {
   private static String testResourceInput;
 
   private static String testCode;
-  protected TransformationManager manager;
+  protected TransformationManager<P> manager;
 
   public static void loadResource(FileLocation location) {
     testResourceInput = TestResourceManager.getResource(location).content();
@@ -29,13 +29,13 @@ public abstract class TestWithTransformationManager {
     setTestCode(testResourceInput);
   }
 
-  public String runTransformation(String code, TransformationPhase phase) {
-    manager = new TransformationManager();
-    manager.registerTransformation(new Transformation(phase));
+  public String runTransformation(String code, TransformationPhase<P> phase) {
+    manager = new TransformationManager<P>();
+    manager.registerTransformation(new Transformation<>(phase));
     return manager.transform(code);
   }
 
-  public String runTransformation(TransformationPhase phase) {
+  public String runTransformation(TransformationPhase<P> phase) {
     return runTransformation(testCode, phase);
   }
 }

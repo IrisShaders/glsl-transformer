@@ -33,7 +33,7 @@ import com.github.bsideup.jabel.Desugar;
  * matter and the parser is just used to figure out how the rules of the
  * tree are.
  */
-public class Transformation {
+public class Transformation<P> {
   /**
    * The default group index. If no group index is specified, this group index is
    * used. All phases without an explicit group index are added in this group. If
@@ -48,10 +48,10 @@ public class Transformation {
    * of these entries is used to add the contained phases to the collector.
    */
   @Desugar
-  public static record PhaseEntry(TransformationPhase phase, int order, int group) {
+  public static record PhaseEntry<P>(TransformationPhase<P> phase, int order, int group) {
   };
 
-  private final List<PhaseEntry> phaseRegistry = new LinkedList<>();
+  private final List<PhaseEntry<P>> phaseRegistry = new LinkedList<>();
   private int phaseCounter = 1;
 
   /**
@@ -62,7 +62,7 @@ public class Transformation {
    * @param phase The only transformation phase to add to a new stateless
    *              transformation
    */
-  public Transformation(TransformationPhase phase) {
+  public Transformation(TransformationPhase<P> phase) {
     addPhase(phase);
   }
 
@@ -80,7 +80,7 @@ public class Transformation {
    * 
    * @param phase The transformation phase to append
    */
-  public void addPhase(TransformationPhase phase) {
+  public void addPhase(TransformationPhase<P> phase) {
     addPhase(phaseCounter++, phase);
   }
 
@@ -91,7 +91,7 @@ public class Transformation {
    * @param order The index at which the phase should be executed
    * @param phase The transformation phase to insert
    */
-  public void addPhase(int order, TransformationPhase phase) {
+  public void addPhase(int order, TransformationPhase<P> phase) {
     addPhase(order, getDefaultGroup(), phase);
   }
 
@@ -112,8 +112,8 @@ public class Transformation {
    * @param phase The transformation phase to insert. For better formatting this
    *              parameter is at the end.
    */
-  public void addPhase(int order, int group, TransformationPhase phase) {
-    addPhase(new PhaseEntry(phase, order, group));
+  public void addPhase(int order, int group, TransformationPhase<P> phase) {
+    addPhase(new PhaseEntry<>(phase, order, group));
   }
 
   /**
@@ -123,7 +123,7 @@ public class Transformation {
    * 
    * @param entry The phase entry to add to the registry
    */
-  public void addPhase(PhaseEntry entry) {
+  public void addPhase(PhaseEntry<P> entry) {
     phaseRegistry.add(entry);
   }
 
@@ -135,7 +135,7 @@ public class Transformation {
    * 
    * @param phase The phase to add at the same position as the previous one
    */
-  public void addConcurrentPhase(TransformationPhase phase) {
+  public void addConcurrentPhase(TransformationPhase<P> phase) {
     addPhase(phaseCounter - 1, phase);
   }
 
@@ -164,7 +164,7 @@ public class Transformation {
    * 
    * @param collector The phase collector to add the phases to
    */
-  void addPhasesTo(PhaseCollector collector) {
+  void addPhasesTo(PhaseCollector<P> collector) {
     for (var entry : phaseRegistry) {
       collector.addPhaseAt(entry);
     }

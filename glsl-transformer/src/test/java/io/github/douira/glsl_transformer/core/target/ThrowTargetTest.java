@@ -9,7 +9,7 @@ import io.github.douira.glsl_transformer.core.SearchTerminals;
 import io.github.douira.glsl_transformer.transform.SemanticException;
 import io.github.douira.glsl_transformer.tree.TreeMember;
 
-public class ThrowTargetTest extends TestWithTransformationManager {
+public class ThrowTargetTest extends TestWithTransformationManager<Void> {
   private int nextIndex;
 
   @Test
@@ -24,7 +24,7 @@ public class ThrowTargetTest extends TestWithTransformationManager {
     var exception = new SemanticException("message");
     nextIndex = 0;
     try {
-      runTransformation("int f = foo + oofevilinside;", new SearchTerminals(new ThrowTarget("evil") {
+      runTransformation("int f = foo + oofevilinside;", new SearchTerminals<>(new ThrowTarget<Void>("evil") {
         @Override
         public SemanticException getException(TreeMember node, String match) {
           nextIndex++;
@@ -44,6 +44,6 @@ public class ThrowTargetTest extends TestWithTransformationManager {
     assertDoesNotThrow(
         () -> runTransformation(
             "int f = foo + EvilInCaps + EVILCAPS + e_v_i_l_spaced;",
-            new SearchTerminals(ThrowTarget.fromMessage("evil", "message"))));
+            new SearchTerminals<>(ThrowTarget.fromMessage("evil", "message"))));
   }
 }

@@ -7,7 +7,7 @@ import io.github.douira.glsl_transformer.tree.TreeMember;
  * A target that searches for a search string in and upon finding a match uses a
  * method to generate an exception which is then thrown.
  */
-public abstract class ThrowTarget extends HandlerTarget {
+public abstract class ThrowTarget<P> extends HandlerTarget<P> {
   /**
    * Creates a new throw target with a given search string
    * 
@@ -39,8 +39,8 @@ public abstract class ThrowTarget extends HandlerTarget {
    * @param message The message to make the exceptions with
    * @return The constructed throw target
    */
-  public static ThrowTarget fromMessage(String needle, String message) {
-    return new ThrowTarget(needle) {
+  public static ThrowTarget<Void> fromMessage(String needle, String message) {
+    return new ThrowTarget<Void>(needle) {
       @Override
       public SemanticException getException(TreeMember node, String match) {
         return new SemanticException(message, node);

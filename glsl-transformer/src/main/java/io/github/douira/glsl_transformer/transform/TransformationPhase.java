@@ -39,8 +39,8 @@ import io.github.douira.glsl_transformer.util.CompatUtil;
  * adding and removing parse tree nodes. It can also inject nodes into the root
  * node's child array with injection points.
  */
-public abstract class TransformationPhase extends GLSLParserBaseListener {
-  private PhaseCollector collector;
+public abstract class TransformationPhase<P> extends GLSLParserBaseListener {
+  private PhaseCollector<P> collector;
 
   /**
    * Method called by the phase collector before the walk happens. The returned
@@ -69,7 +69,7 @@ public abstract class TransformationPhase extends GLSLParserBaseListener {
    * 
    * @return The phase collector
    */
-  protected PhaseCollector getCollector() {
+  protected PhaseCollector<P> getCollector() {
     return collector;
   }
 
@@ -79,7 +79,7 @@ public abstract class TransformationPhase extends GLSLParserBaseListener {
    * 
    * @param parent The phase collector to set
    */
-  protected void setCollector(PhaseCollector parent) {
+  protected void setCollector(PhaseCollector<P> parent) {
     this.collector = parent;
   }
 
@@ -109,6 +109,17 @@ public abstract class TransformationPhase extends GLSLParserBaseListener {
    */
   protected TranslationUnitContext getRootNode() {
     return collector.getRootNode();
+  }
+
+  /**
+   * Returns the phase collector's current job parameters.
+   * 
+   * @see io.github.douira.glsl_transformer.transform.PhaseCollector#getJobParameters()
+   * 
+   * @return The phase collector's current job parameters
+   */
+  protected P getJobParameters() {
+    return collector.getJobParameters();
   }
 
   /**

@@ -24,9 +24,9 @@ import io.github.douira.glsl_transformer.util.ComparablePair;
  * time. A level of phases consists of all phases that were added to their
  * transformation at the same index.
  */
-public abstract class PhaseCollector {
-  private final Map<ComparablePair<Integer, Integer>, List<TransformationPhase>> executionLevels = new TreeMap<>();
-  private final Collection<Transformation> transformations = new ArrayList<>();
+public abstract class PhaseCollector<P> {
+  private final Map<ComparablePair<Integer, Integer>, List<TransformationPhase<P>>> executionLevels = new TreeMap<>();
+  private final Collection<Transformation<P>> transformations = new ArrayList<>();
   private TranslationUnitContext rootNode;
 
   /**
@@ -45,30 +45,14 @@ public abstract class PhaseCollector {
   public abstract GLSLLexer getLexer();
 
   /**
-   * Registers a single transformation with this phase collector. When the phase
-   * collector transforms a tree, the phases contributed by this transformation
-   * will be run.
+   * Returns the phase collector's current job parameters. This may be null if the
+   * transformation manager's caller decides not to pass job parameters. However,
+   * a convention to always pass valid job parameters (whatever that may be) could
+   * be established if they are required for transformation phases to function.
    * 
-   * @param transformation The transformation to collect the phases from
+   * @return The job parameters
    */
-  public void registerTransformation(Transformation transformation) {
-    transformation.addPhasesTo(this);
-    transformations.add(transformation);
-  }
-
-  /**
-   * Registers multiple transformations by calling a function that consumes a
-   * phase collector. This can be used together with transformation groups by
-   * having them register many transformations with a phase collector.
-   * 
-   * @see #registerTransformation(Transformation)
-   * 
-   * @param groupRegisterer The function that registers transformations on the
-   *                        phase collector it is given
-   */
-  public void registerTransformationMultiple(Consumer<PhaseCollector> groupRegisterer) {
-    groupRegisterer.accept(this);
-  }
+  abstract P getJobParameters();
 
   /**
    * Returns the current root node being processed. Access to this method is
@@ -83,6 +67,32 @@ public abstract class PhaseCollector {
   }
 
   /**
+   * Registers a single transformation with this phase collector. When the phase
+   * collector transforms a tree, the phases contributed by this transformation
+   * will be run.
+   * 
+   * @param transformation The transformation to collect the phases from
+   */
+  public void registerTransformation(Transformation<P> transformation) {
+    transformation.addPhasesTo(this);
+    transformations.add(transformation);
+  }
+
+  /**
+   * Registers multiple transformations by calling a function that consumes a
+   * phase collector. This can be used together with transformation groups by
+   * having them register many transformations with a phase collector.
+   * 
+   * @see #registerTransformation(Transformation)
+   * 
+   * @param groupRegisterer The function that registers transformations on the
+   *                        phase collector it is given
+   */
+  public void registerTransformationMultiple(Consumer<PhaseCollector<P>> groupRegisterer) {
+    groupRegisterer.accept(this);
+  }
+
+  /**
    * Collects a phase of a transformation and inserts it at a given level index.
    * During transformations the phases of each level are executed in the order
    * they were added.
@@ -90,7 +100,7 @@ public abstract class PhaseCollector {
    * @param phase The phase to collect into the specified level
    * @param order The level this phase should be added to
    */
-  void addPhaseAt(PhaseEntry entry) {
+  void addPhaseAt(PhaseEntry<P> entry) {
     var phase = entry.phase();
     var indexPair = new ComparablePair<>(entry.group(), entry.order());
     var phasesForIndex = executionLevels.get(indexPair);
