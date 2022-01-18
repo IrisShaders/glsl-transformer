@@ -1,7 +1,8 @@
 # Todo
 
+- Add transformation that does wrapping: check for presence of wrap target (identifier), replace uses of the identifier with the new wrapping identifier, insert block of statements or an external declaration that uses the wrap target
+- Test WrapIdentifier
 - Test job parameter system
-- Add transformation that does wrapping: check for presence of wrap replacement, inject wrapper code, perform identifier replacement with expression or terminal
 - Test ReplaceTerminals static methods
 - Test addConcurrentPhase on Transformation
 - Test the token filters and all their associated functionality (on transformation manager, printer and all the token filters themselves)
