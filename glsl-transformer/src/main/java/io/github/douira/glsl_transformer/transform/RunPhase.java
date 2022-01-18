@@ -8,7 +8,7 @@ import io.github.douira.glsl_transformer.GLSLParser.TranslationUnitContext;
  * listener methods on
  * it are executed.
  */
-public abstract class RunPhase extends TransformationPhase {
+public abstract class RunPhase<P> extends TransformationPhase<P> {
   /**
    * This method is implemented by subclasses to be executed by the phase
    * collector at the right time.

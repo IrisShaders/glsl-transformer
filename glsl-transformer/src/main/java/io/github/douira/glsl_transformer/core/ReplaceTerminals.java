@@ -15,7 +15,7 @@ import io.github.douira.glsl_transformer.tree.ExtendedContext;
  * and
  * {@link io.github.douira.glsl_transformer.core.target.ParsedReplaceTarget}.
  */
-public class ReplaceTerminals extends SearchTerminals {
+public class ReplaceTerminals extends SearchTerminals<Void> {
   /**
    * Creates a new empty terminal node replacement transformation with the a
    * type of token to search in.

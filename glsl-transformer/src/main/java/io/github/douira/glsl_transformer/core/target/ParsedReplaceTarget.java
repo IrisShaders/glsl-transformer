@@ -10,7 +10,7 @@ import io.github.douira.glsl_transformer.tree.TreeMember;
  * A parsed replace target generates a new parsed node from a stored string each
  * time a replacement is handled.
  */
-public class ParsedReplaceTarget extends HandlerTarget {
+public class ParsedReplaceTarget extends HandlerTarget<Void> {
   private final String newContent;
   private final Function<GLSLParser, ExtendedContext> parseMethod;
 

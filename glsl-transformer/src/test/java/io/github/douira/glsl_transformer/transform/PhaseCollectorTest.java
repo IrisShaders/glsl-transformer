@@ -8,12 +8,12 @@ import io.github.douira.glsl_transformer.GLSLParser.TranslationUnitContext;
 import io.github.douira.glsl_transformer.transform.Transformation.PhaseEntry;
 
 public class PhaseCollectorTest {
-  private TransformationManager manager;
+  private TransformationManager<Void> manager;
   private int nextIndex;
 
   void addOrderedPhase(int order, int group) {
     final var assertIndex = nextIndex++;
-    manager.addPhaseAt(new PhaseEntry(new RunPhase() {
+    manager.addPhaseAt(new PhaseEntry<>(new RunPhase<>() {
       @Override
       protected void run(TranslationUnitContext ctx) {
         assertEquals(assertIndex, nextIndex++,
@@ -24,7 +24,7 @@ public class PhaseCollectorTest {
 
   void assertPhaseExecutionOrder(Runnable runnable) {
     nextIndex = 0;
-    manager = new TransformationManager();
+    manager = new TransformationManager<Void>();
     runnable.run();
     var expectedNextIndex = nextIndex;
     nextIndex = 0;
@@ -64,9 +64,9 @@ public class PhaseCollectorTest {
 
   @Test
   void testGetRootNode() {
-    manager = new TransformationManager();
+    manager = new TransformationManager<Void>();
     nextIndex = 0;
-    manager.registerTransformation(new Transformation(new RunPhase() {
+    manager.registerTransformation(new Transformation<>(new RunPhase<>() {
       @Override
       protected void run(TranslationUnitContext ctx) {
         assertSame(ctx, manager.getRootNode());
@@ -84,11 +84,11 @@ public class PhaseCollectorTest {
 
   @Test
   void testRegisterTransformation() {
-    manager = new TransformationManager();
+    manager = new TransformationManager<Void>();
     nextIndex = 0;
-    var transformation = new Transformation() {
+    var transformation = new Transformation<Void>() {
       @Override
-      void addPhasesTo(PhaseCollector collector) {
+      void addPhasesTo(PhaseCollector<Void> collector) {
         nextIndex++;
       }
 
@@ -109,7 +109,7 @@ public class PhaseCollectorTest {
 
   @Test
   void testRegisterTransformationMultiple() {
-    manager = new TransformationManager();
+    manager = new TransformationManager<Void>();
     nextIndex = 0;
     manager.registerTransformationMultiple(collector -> {
       assertEquals(manager, collector, "It should pass itself as the collector to register transformations to");
@@ -120,17 +120,17 @@ public class PhaseCollectorTest {
 
   @Test
   void testInitsPhases() {
-    manager = new TransformationManager();
+    manager = new TransformationManager<Void>();
     nextIndex = 0;
-    var transformation = new Transformation();
-    transformation.addPhase(2, new TransformationPhase() {
+    var transformation = new Transformation<Void>();
+    transformation.addPhase(2, new TransformationPhase<>() {
       @Override
       protected void init() {
         nextIndex++;
         assertSame(manager.getParser(), getParser(), "It should set the parent before initializing the phases");
       }
     });
-    transformation.addPhase(0, new TransformationPhase() {
+    transformation.addPhase(0, new TransformationPhase<>() {
       @Override
       protected void init() {
         nextIndex++;
