@@ -39,8 +39,8 @@ public abstract class ThrowTarget<P> extends HandlerTarget<P> {
    * @param message The message to make the exceptions with
    * @return The constructed throw target
    */
-  public static ThrowTarget<Void> fromMessage(String needle, String message) {
-    return new ThrowTarget<Void>(needle) {
+  public static <P> ThrowTarget<P> fromMessage(String needle, String message) {
+    return new ThrowTarget<P>(needle) {
       @Override
       public SemanticException getException(TreeMember node, String match) {
         return new SemanticException(message, node);
