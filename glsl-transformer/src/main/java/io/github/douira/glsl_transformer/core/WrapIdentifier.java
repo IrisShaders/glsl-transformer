@@ -7,7 +7,10 @@ import io.github.douira.glsl_transformer.transform.TransformationPhase;
 
 public class WrapIdentifier<P> extends Transformation<P> {
   public WrapIdentifier(
-      String wrapTarget, String wrapResult, HandlerTarget<P> replaceTarget, TransformationPhase<P> wrappingInjector) {
+      String wrapTarget,
+      String wrapResult,
+      HandlerTarget<P> replaceTarget,
+      TransformationPhase<P> wrappingInjector) {
     // throw if the wrap result already exists
     addPhase(new SearchTerminals<P>(
         ThrowTarget.fromMessage(wrapResult,
