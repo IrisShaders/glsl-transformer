@@ -38,7 +38,7 @@ public class ReplaceDeclarations<P> extends Transformation<P> {
    * Creates a new declaration replacement transformation with a walk phase for
    * finding declarations and one for inserting calls to the generated functions.
    */
-  public ReplaceDeclarations() {
+  {
     addPhase(new WalkPhase<>() {
       ParseTreePattern declarationPattern;
 
