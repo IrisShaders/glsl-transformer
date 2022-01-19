@@ -321,7 +321,7 @@ public abstract class TransformationPhase<P> extends GLSLParserBaseListener {
    * @implNote AFTER versions of these points would be the same as the next BEFORE
    *           point in the list.
    */
-  protected enum InjectionPoint {
+  public enum InjectionPoint {
     /**
      * Before the #version statement (and all other syntax features by necessity)
      */
