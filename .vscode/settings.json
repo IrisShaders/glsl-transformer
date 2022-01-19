@@ -11,5 +11,13 @@
     "*.snap": "glsl",
     "*.cases": "glsl",
     "**/glslang-test/*": "glsl"
-  }
+  },
+  "coverage-gutters.coverageFileNames": [
+    "lcov.info",
+    "cov.xml",
+    "coverage.xml",
+    "jacoco.xml",
+    "jacocoTestReport.xml"
+  ],
+  "coverage-gutters.coverageBaseDir": "glsl-transformer/build/reports/jacoco/test"
 }
