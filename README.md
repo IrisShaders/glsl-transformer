@@ -6,7 +6,7 @@
 
 This is an actively being developed library that parses GLSL using an ANTLR4 grammar and provides the facilities for transforming and re-printing the resulting parse tree.
 
-See the Javadoc, the documentation section further down and the tests. Also check ot `Demo.java` in the tests.
+See the Javadoc, the documentation section further down and the tests. The test also illustrate the usage of each individual feature. The `core` package uses `glsl-transformer`'s features and extends them to provide structures for common tasks.
 
 ## Capabilities
 
