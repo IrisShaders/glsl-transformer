@@ -44,6 +44,8 @@ import io.github.douira.glsl_transformer.tree.ExtendedContext;
  * them, the whole chain of participating objects needs to be properly
  * parameterized. (transformation manager -> transformation -> transformation
  * phase)
+ * 
+ * @param <T> The job parameters type
  */
 public class TransformationManager<T> extends PhaseCollector<T> {
   /**
