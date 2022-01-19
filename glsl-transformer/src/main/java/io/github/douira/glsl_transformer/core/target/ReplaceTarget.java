@@ -8,7 +8,7 @@ import io.github.douira.glsl_transformer.tree.TreeMember;
  * than node replacement should be done, implement a custom
  * {@link HandlerTarget} subclass.
  */
-public abstract class ReplaceTarget<P> extends HandlerTarget<P> {
+public abstract class ReplaceTarget<T> extends HandlerTarget<T> {
   /**
    * Creates a new replace target with a given search string
    * 

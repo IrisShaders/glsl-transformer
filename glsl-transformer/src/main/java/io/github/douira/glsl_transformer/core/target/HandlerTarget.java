@@ -8,7 +8,7 @@ import io.github.douira.glsl_transformer.tree.TreeMember;
  * A handler target contains a string to search for and a method that is called
  * to handle finding the string in a parse tree.
  */
-public abstract class HandlerTarget<P> extends TransformationPhase<P> {
+public abstract class HandlerTarget<T> extends TransformationPhase<T> {
   private final String needle;
 
   /**
@@ -31,7 +31,7 @@ public abstract class HandlerTarget<P> extends TransformationPhase<P> {
   }
 
   @Override
-  public void setCollector(PhaseCollector<P> parent) {
+  public void setCollector(PhaseCollector<T> parent) {
     super.setCollector(parent);
   }
 

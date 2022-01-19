@@ -45,7 +45,7 @@ import io.github.douira.glsl_transformer.tree.ExtendedContext;
  * parameterized. (transformation manager -> transformation -> transformation
  * phase)
  */
-public class TransformationManager<P> extends PhaseCollector<P> {
+public class TransformationManager<T> extends PhaseCollector<T> {
   /**
    * An internal instance of this class that is used by other library-internal
    * classes for parsing needs.
@@ -66,7 +66,7 @@ public class TransformationManager<P> extends PhaseCollector<P> {
   // inited with null since they need an argument
   private final GLSLLexer lexer = new GLSLLexer(null);
   private final GLSLParser parser = new GLSLParser(null);
-  private P jobParameters;
+  private T jobParameters;
 
   /**
    * The last parsed input stream. This property can be used together with the
@@ -148,7 +148,7 @@ public class TransformationManager<P> extends PhaseCollector<P> {
   }
 
   @Override
-  P getJobParameters() {
+  T getJobParameters() {
     return jobParameters;
   }
 
@@ -246,7 +246,7 @@ public class TransformationManager<P> extends PhaseCollector<P> {
    * @param parameters The job parameters
    * @return The transformed string
    */
-  public String transform(String str, P parameters) throws RecognitionException {
+  public String transform(String str, T parameters) throws RecognitionException {
     return transformStream(CharStreams.fromString(str), parameters);
   }
 
@@ -279,7 +279,7 @@ public class TransformationManager<P> extends PhaseCollector<P> {
    * @param parameters The job parameters
    * @return The transformed string
    */
-  public String transformStream(IntStream stream, P parameters) throws RecognitionException {
+  public String transformStream(IntStream stream, T parameters) throws RecognitionException {
     var tree = parse(stream, null, GLSLParser::translationUnit);
     jobParameters = parameters;
     transformTree(tree, tokenStream);
