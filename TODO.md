@@ -1,5 +1,7 @@
 # Todo
 
+- Exclude generated from jacoco coverage reports
+- Test everything that isn't covered yet
 - Test WrapIdentifier
 - Test job parameter system
 - Test ReplaceTerminals static methods
