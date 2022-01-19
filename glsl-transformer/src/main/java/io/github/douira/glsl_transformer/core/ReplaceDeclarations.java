@@ -22,7 +22,7 @@ import io.github.douira.glsl_transformer.tree.ExtendedContext;
  * The declaration replacement finds layout declarations and replaces all
  * references to them with function calls and other code.
  */
-public class ReplaceDeclarations<P> extends Transformation<P> {
+public class ReplaceDeclarations<T> extends Transformation<T> {
   @Desugar
   private static record Declaration(String type, String name) {
   }

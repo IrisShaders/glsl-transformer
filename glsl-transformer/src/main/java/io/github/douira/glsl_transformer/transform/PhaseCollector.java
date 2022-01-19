@@ -24,9 +24,9 @@ import io.github.douira.glsl_transformer.util.ComparablePair;
  * time. A level of phases consists of all phases that were added to their
  * transformation at the same index.
  */
-public abstract class PhaseCollector<P> {
-  private final Map<ComparablePair<Integer, Integer>, List<TransformationPhase<P>>> executionLevels = new TreeMap<>();
-  private final Collection<Transformation<P>> transformations = new ArrayList<>();
+public abstract class PhaseCollector<T> {
+  private final Map<ComparablePair<Integer, Integer>, List<TransformationPhase<T>>> executionLevels = new TreeMap<>();
+  private final Collection<Transformation<T>> transformations = new ArrayList<>();
   private TranslationUnitContext rootNode;
 
   /**
@@ -52,7 +52,7 @@ public abstract class PhaseCollector<P> {
    * 
    * @return The job parameters
    */
-  abstract P getJobParameters();
+  abstract T getJobParameters();
 
   /**
    * Returns the current root node being processed. Access to this method is
@@ -73,7 +73,7 @@ public abstract class PhaseCollector<P> {
    * 
    * @param transformation The transformation to collect the phases from
    */
-  public void registerTransformation(Transformation<P> transformation) {
+  public void registerTransformation(Transformation<T> transformation) {
     transformation.addPhasesTo(this);
     transformations.add(transformation);
   }
@@ -88,7 +88,7 @@ public abstract class PhaseCollector<P> {
    * @param groupRegisterer The function that registers transformations on the
    *                        phase collector it is given
    */
-  public void registerTransformationMultiple(Consumer<PhaseCollector<P>> groupRegisterer) {
+  public void registerTransformationMultiple(Consumer<PhaseCollector<T>> groupRegisterer) {
     groupRegisterer.accept(this);
   }
 
@@ -100,7 +100,7 @@ public abstract class PhaseCollector<P> {
    * @param phase The phase to collect into the specified level
    * @param order The level this phase should be added to
    */
-  void addPhaseAt(PhaseEntry<P> entry) {
+  void addPhaseAt(PhaseEntry<T> entry) {
     var phase = entry.phase();
     var indexPair = new ComparablePair<>(entry.group(), entry.order());
     var phasesForIndex = executionLevels.get(indexPair);

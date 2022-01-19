@@ -25,7 +25,7 @@ import io.github.douira.glsl_transformer.util.CompatUtil;
  * By default, an exact string match of the text in the terminal node and the
  * needle search string is required. However, this behavior can be configured.
  */
-public class SearchTerminals<P> extends WalkPhase<P> {
+public class SearchTerminals<T> extends WalkPhase<T> {
   /**
    * A constant for easy access to the identifier token type.
    */
@@ -34,7 +34,7 @@ public class SearchTerminals<P> extends WalkPhase<P> {
   /**
    * The list of targets to process for each targeted context.
    */
-  protected final Collection<HandlerTarget<P>> targets;
+  protected final Collection<HandlerTarget<T>> targets;
 
   /**
    * The target type of token to replace
@@ -53,7 +53,7 @@ public class SearchTerminals<P> extends WalkPhase<P> {
    * @param terminalTokenType The type of the tokens to search in
    * @param targets           The targets to search for
    */
-  public SearchTerminals(int terminalTokenType, Collection<HandlerTarget<P>> targets) {
+  public SearchTerminals(int terminalTokenType, Collection<HandlerTarget<T>> targets) {
     this.terminalTokenType = terminalTokenType;
     this.targets = targets;
   }
@@ -64,7 +64,7 @@ public class SearchTerminals<P> extends WalkPhase<P> {
    * @param terminalTokenType The type of the token to search in
    * @param target            The target to search for
    */
-  public SearchTerminals(int terminalTokenType, HandlerTarget<P> target) {
+  public SearchTerminals(int terminalTokenType, HandlerTarget<T> target) {
     this(terminalTokenType, CompatUtil.listOf(target));
   }
 
@@ -73,7 +73,7 @@ public class SearchTerminals<P> extends WalkPhase<P> {
    * 
    * @param targets The targets to search for in identifiers
    */
-  public SearchTerminals(Collection<HandlerTarget<P>> targets) {
+  public SearchTerminals(Collection<HandlerTarget<T>> targets) {
     this(IDENTIFIER, targets);
   }
 
@@ -82,7 +82,7 @@ public class SearchTerminals<P> extends WalkPhase<P> {
    * 
    * @param target The target to search for in identifiers
    */
-  public SearchTerminals(HandlerTarget<P> target) {
+  public SearchTerminals(HandlerTarget<T> target) {
     this(CompatUtil.listOf(target));
   }
 
@@ -134,7 +134,7 @@ public class SearchTerminals<P> extends WalkPhase<P> {
    * 
    * @param target The target to add to the collection of targets
    */
-  public void addTarget(HandlerTarget<P> target) {
+  public void addTarget(HandlerTarget<T> target) {
     targets.add(target);
   }
 
@@ -147,7 +147,7 @@ public class SearchTerminals<P> extends WalkPhase<P> {
    * @param target  The target being searched for
    * @return If the target was found in the content
    */
-  protected boolean findNeedle(String content, HandlerTarget<P> target) {
+  protected boolean findNeedle(String content, HandlerTarget<T> target) {
     return exactMatch
         ? content.equals(target.getNeedle())
         : content.contains(target.getNeedle());
@@ -204,9 +204,11 @@ public class SearchTerminals<P> extends WalkPhase<P> {
   public static SearchTerminals<Void> withReplacement(
       String needle, String newContent,
       Function<GLSLParser, ExtendedContext> parseMethod) {
-    var phase = new SearchTerminals<Void>();
-    phase.addReplacement(needle, newContent, parseMethod);
-    return phase;
+    return new SearchTerminals<Void>() {
+      {
+        addReplacement(needle, newContent, parseMethod);
+      }
+    };
   }
 
   /**
@@ -219,9 +221,11 @@ public class SearchTerminals<P> extends WalkPhase<P> {
    * @return The configured identifier replacement transformation
    */
   public static SearchTerminals<Void> withReplacementExpression(String needle, String expressionContent) {
-    var phase = new SearchTerminals<Void>();
-    phase.addReplacementExpression(needle, expressionContent);
-    return phase;
+    return new SearchTerminals<Void>() {
+      {
+        addReplacementExpression(needle, expressionContent);
+      }
+    };
   }
 
   /**
@@ -233,8 +237,10 @@ public class SearchTerminals<P> extends WalkPhase<P> {
    * @return The configured identifier replacement transformation
    */
   public static SearchTerminals<Void> withReplacementTerminal(String needle, String terminalContent) {
-    var phase = new SearchTerminals<Void>();
-    phase.addReplacementTerminal(needle, terminalContent);
-    return phase;
+    return new SearchTerminals<Void>() {
+      {
+        addReplacementTerminal(needle, terminalContent);
+      }
+    };
   }
 }
