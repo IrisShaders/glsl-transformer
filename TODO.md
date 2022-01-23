@@ -1,6 +1,6 @@
 # Todo
 
-- Exclude generated from jacoco coverage reports
+- Exclude generated classes from jacoco coverage reports
 - Test everything that isn't covered yet
 - Test WrapIdentifier
 - Test job parameter system
