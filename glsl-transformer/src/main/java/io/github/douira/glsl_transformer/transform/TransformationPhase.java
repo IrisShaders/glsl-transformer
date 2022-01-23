@@ -495,11 +495,11 @@ public abstract class TransformationPhase<T> extends GLSLParserBaseListener {
    * @param location The injection point at which the new nodes are inserted
    * @param newNodes The list of nodes to be inserted
    */
-  protected void injectNodes(InjectionPoint location, ParseTree... nodes) {
+  protected void injectNodes(InjectionPoint location, ParseTree... newNodes) {
     var injectIndex = getInjectionIndex(location);
     var rootNode = getRootNode();
-    for (var i = nodes.length - 1; i >= 0; i--) {
-      rootNode.addChild(injectIndex, nodes[i]);
+    for (var i = newNodes.length - 1; i >= 0; i--) {
+      rootNode.addChild(injectIndex, newNodes[i]);
     }
   }
 }
