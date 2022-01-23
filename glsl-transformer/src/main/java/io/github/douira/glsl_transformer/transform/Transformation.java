@@ -48,7 +48,7 @@ public class Transformation<T> {
    * of these entries is used to add the contained phases to the collector.
    */
   @Desugar
-  public static record PhaseEntry<T>(TransformationPhase<T> phase, int order, int group) {
+  public static record PhaseEntry<T> (TransformationPhase<T> phase, int order, int group) {
   };
 
   private final List<PhaseEntry<T>> phaseRegistry = new LinkedList<>();
@@ -121,10 +121,15 @@ public class Transformation<T> {
    * a phase and information about when it should be executed by the phase
    * collector in relation to other phases in this and other transformations.
    * 
+   * If the contained phase is null, the entry is ignored. This can be useful when
+   * a phase is expected but it be a no-op.
+   * 
    * @param entry The phase entry to add to the registry
    */
   public void addPhase(PhaseEntry<T> entry) {
-    phaseRegistry.add(entry);
+    if (entry.phase() != null) {
+      phaseRegistry.add(entry);
+    }
   }
 
   /**
