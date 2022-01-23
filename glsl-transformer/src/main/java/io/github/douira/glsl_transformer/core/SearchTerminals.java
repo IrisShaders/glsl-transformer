@@ -201,10 +201,10 @@ public class SearchTerminals<T> extends WalkPhase<T> {
    * @param parseMethod The parser method to create the new node with
    * @return The configured identifier replacement transformation
    */
-  public static SearchTerminals<Void> withReplacement(
+  public static <T> SearchTerminals<T> withReplacement(
       String needle, String newContent,
       Function<GLSLParser, ExtendedContext> parseMethod) {
-    return new SearchTerminals<Void>() {
+    return new SearchTerminals<T>() {
       {
         addReplacement(needle, newContent, parseMethod);
       }
@@ -220,8 +220,8 @@ public class SearchTerminals<T> extends WalkPhase<T> {
    * @param expressionContent The new content to parse into an expression
    * @return The configured identifier replacement transformation
    */
-  public static SearchTerminals<Void> withReplacementExpression(String needle, String expressionContent) {
-    return new SearchTerminals<Void>() {
+  public static <T> SearchTerminals<T> withReplacementExpression(String needle, String expressionContent) {
+    return new SearchTerminals<T>() {
       {
         addReplacementExpression(needle, expressionContent);
       }
@@ -236,8 +236,8 @@ public class SearchTerminals<T> extends WalkPhase<T> {
    * @param terminalContent The new terminal content to insert as a string node
    * @return The configured identifier replacement transformation
    */
-  public static SearchTerminals<Void> withReplacementTerminal(String needle, String terminalContent) {
-    return new SearchTerminals<Void>() {
+  public static <T> SearchTerminals<T> withReplacementTerminal(String needle, String terminalContent) {
+    return new SearchTerminals<T>() {
       {
         addReplacementTerminal(needle, terminalContent);
       }
