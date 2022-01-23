@@ -196,6 +196,7 @@ public class SearchTerminals<T> extends WalkPhase<T> {
    * 
    * @see #addReplacement(String, String, Function)
    * 
+   * @param <T>         The job parameter type
    * @param needle      The needle (search string)
    * @param newContent  The new content to parse into a node
    * @param parseMethod The parser method to create the new node with
@@ -216,6 +217,7 @@ public class SearchTerminals<T> extends WalkPhase<T> {
    * that replaces matching terminal nodes with new expression nodes parsed from
    * the given string.
    * 
+   * @param <T>               The job parameter type
    * @param needle            The needle (search string)
    * @param expressionContent The new content to parse into an expression
    * @return The configured identifier replacement transformation
@@ -232,6 +234,7 @@ public class SearchTerminals<T> extends WalkPhase<T> {
    * Creates a new identifier replacement transformation with a replacement target
    * that replaces matching terminal nodes with new unparsed string nodes.
    * 
+   * @param <T>             The job parameter type
    * @param needle          The needle (search string)
    * @param terminalContent The new terminal content to insert as a string node
    * @return The configured identifier replacement transformation
