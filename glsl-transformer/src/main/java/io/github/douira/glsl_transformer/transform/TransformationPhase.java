@@ -1,6 +1,7 @@
 package io.github.douira.glsl_transformer.transform;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Deque;
 import java.util.HashSet;
 import java.util.List;
@@ -443,6 +444,36 @@ public abstract class TransformationPhase<T> extends GLSLParserBaseListener {
   }
 
   /**
+   * Injects the given string parsed as an external declaration. This is a
+   * convenience method since most of the time injected nodes are external
+   * declarations.
+   * 
+   * @see #injectNode(InjectionPoint, ParseTree)
+   * @param location The injection point at which the new node is inserted
+   * @param str      The code fragment to be parsed as an external declaration and
+   *                 inserted at the given injection point
+   */
+  protected void injectExternalDeclaration(InjectionPoint location, String str) {
+    injectNode(location, createLocalRoot(str, getRootNode(), GLSLParser::externalDeclaration));
+  }
+
+  /**
+   * Injects multiple strings parsed as individual external declarations.
+   * 
+   * @see #injectNode(InjectionPoint, ParseTree)
+   * @param location The injection point at which the new nodes are inserted
+   * @param str      The strings to parse as external declarations and then insert
+   */
+  protected void injectExternalDeclarations(InjectionPoint location, String... str) {
+    var nodes = new ParseTree[str.length];
+    var rootNode = getRootNode();
+    for (var i = 0; i < str.length; i++) {
+      nodes[i] = createLocalRoot(str[i], rootNode, GLSLParser::externalDeclaration);
+    }
+    injectNodes(location, nodes);
+  }
+
+  /**
    * Injects a list of nodes into the translation unit context node. Does the same
    * thing as {@link #injectNode(InjectionPoint, ParseTree)} but with a list of
    * nodes.
@@ -458,16 +489,17 @@ public abstract class TransformationPhase<T> extends GLSLParserBaseListener {
   }
 
   /**
-   * Injects the given string parsed as an external declaration. This is a
-   * convenience method since most of the time injected nodes are external
-   * declarations.
+   * Injects an array of nodes at an injection location.
    * 
-   * @see #injectNode(InjectionPoint, ParseTree)
-   * @param location The injection point at which the new node is inserted
-   * @param str      The code fragment to be parsed as an external declaration and
-   *                 inserted at the given injection point
+   * @see #injectNodes(InjectionPoint, Deque)
+   * @param location The injection point at which the new nodes are inserted
+   * @param newNodes The list of nodes to be inserted
    */
-  protected void injectExternalDeclaration(InjectionPoint location, String str) {
-    injectNode(location, createLocalRoot(str, getRootNode(), GLSLParser::externalDeclaration));
+  protected void injectNodes(InjectionPoint location, ParseTree... nodes) {
+    var injectIndex = getInjectionIndex(location);
+    var rootNode = getRootNode();
+    for (var i = nodes.length - 1; i >= 0; i--) {
+      rootNode.addChild(injectIndex, nodes[i]);
+    }
   }
 }
