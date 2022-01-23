@@ -4,6 +4,7 @@ import io.github.douira.glsl_transformer.GLSLParser;
 import io.github.douira.glsl_transformer.GLSLParser.TranslationUnitContext;
 import io.github.douira.glsl_transformer.core.target.HandlerTarget;
 import io.github.douira.glsl_transformer.core.target.ParsedReplaceTarget;
+import io.github.douira.glsl_transformer.core.target.TerminalReplaceTarget;
 import io.github.douira.glsl_transformer.core.target.ThrowTarget;
 import io.github.douira.glsl_transformer.transform.RunPhase;
 import io.github.douira.glsl_transformer.transform.Transformation;
@@ -44,6 +45,30 @@ public class WrapIdentifier<T> extends Transformation<T> {
     // TODO: does the wrapping injector need to be told about something?
     // should there be some kind of communication system for phases that were not
     // directly constructed within a transformation?
+  }
+
+  /**
+   * Creates a new wrap identifier transformation that uses an unparsed terminal
+   * replace target. It uses the wrap result as the identifier to disallow as well
+   * as the terminal to insert as a replacement. This is a commonly used operation
+   * when the inserted replacement is just a different identifier.
+   * 
+   * @param <T>              The job parameter type
+   * @param wrapTarget       The identifier to replace
+   * @param wrapResult       The identifier that will be used to replace it
+   * @param wrappingInjector A transformation phase that does the additional code
+   *                         injection
+   * @return The wrap identifier transformation with the given parameters
+   */
+  public static <T> WrapIdentifier<T> fromTerminal(
+      String wrapTarget,
+      String wrapResult,
+      RunPhase<T> wrappingInjector) {
+    return new WrapIdentifier<T>(
+        wrapTarget,
+        wrapResult,
+        new TerminalReplaceTarget<T>(wrapTarget, wrapResult),
+        wrappingInjector);
   }
 
   /**
