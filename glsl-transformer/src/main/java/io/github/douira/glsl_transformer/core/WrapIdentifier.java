@@ -33,7 +33,7 @@ public class WrapIdentifier<T> extends Transformation<T> {
     // throw if the wrap result already exists
     addPhase(new SearchTerminals<T>(
         ThrowTarget.fromMessage(wrapResult,
-            "The wrapper '" + wrapResult + "' can't already be in the string!")));
+            "The wrapper '" + wrapResult + "' shouldn't already be present in the code!")));
 
     // replace the wrap target with the wrap result
     addPhase(new SearchTerminals<T>(replaceTarget));
