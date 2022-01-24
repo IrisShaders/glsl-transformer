@@ -1,7 +1,6 @@
 package io.github.douira.glsl_transformer.transform;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Deque;
 import java.util.HashSet;
 import java.util.List;
