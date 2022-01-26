@@ -110,7 +110,7 @@ public abstract class PhaseCollector<T> {
     }
     phasesForIndex.add(phase);
     phase.setCollector(this);
-    phase.init();
+    phase.lazyInit();
   }
 
   private void execute(TranslationUnitContext ctx) {
