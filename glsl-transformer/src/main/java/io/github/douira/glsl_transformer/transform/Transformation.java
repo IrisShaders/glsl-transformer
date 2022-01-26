@@ -55,7 +55,8 @@ public class Transformation<T> {
   private int phaseCounter = 1;
 
   /**
-   * Creates a stateless transformation and adds a single phase to it. If you want
+   * Creates a stateless transformatio n and adds a single phase to it. If you
+   * want
    * to add multiple phases to a transformation, create an instance and call
    * {@link #addPhase(TransformationPhase)} multiple times.
    * 
@@ -136,12 +137,13 @@ public class Transformation<T> {
    * Adds a transformation phase to this transformation at the previous phase
    * counter position without incrementing the current phase counter. This means
    * the phase will run at the same time as the previous phase in the case of walk
-   * phases.
+   * phases. If no phase has been added yet, this will add the phase normally but
+   * still not increment the phase counter.
    * 
    * @param phase The phase to add at the same position as the previous one
    */
   public void addConcurrentPhase(TransformationPhase<T> phase) {
-    addPhase(phaseCounter - 1, phase);
+    addPhase(Math.max(1, phaseCounter - 1), phase);
   }
 
   /**
