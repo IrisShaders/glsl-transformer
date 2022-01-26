@@ -41,6 +41,7 @@ import io.github.douira.glsl_transformer.util.CompatUtil;
  */
 public abstract class TransformationPhase<T> extends GLSLParserBaseListener {
   private PhaseCollector<T> collector;
+  private boolean initialized = false;
 
   /**
    * Method called by the phase collector before the walk happens. The returned
@@ -62,6 +63,18 @@ public abstract class TransformationPhase<T> extends GLSLParserBaseListener {
    * @param ctx The root node
    */
   protected void runAfterWalk(TranslationUnitContext ctx) {
+  }
+
+  /**
+   * This method internally calls {@link #init()} if the phase has not yet been
+   * initialized. This is the method that the phase collector calls since it
+   * prevents multiple inits.
+   */
+  protected void lazyInit() {
+    if (!initialized) {
+      init();
+      initialized = true;
+    }
   }
 
   /**
@@ -261,8 +274,8 @@ public abstract class TransformationPhase<T> extends GLSLParserBaseListener {
   }
 
   /**
-   * This method is called right after this phase is collected by the phase
-   * collector. It can be used to compile xpaths and pattern matchers.
+   * This method is called one in the lifetime of a phase. It can be used to
+   * compile xpaths and pattern matchers.
    * 
    * This method should not be used to initialize state specific to a specific
    * transformation job. That is handled by
