@@ -23,6 +23,11 @@
 
 - DynamicParseTreeWalker: have transformation phase tell it about movements in the child array it caused to avoid inserting placeholder nodes (and then also avoid even doing the compacting step if it's not necessary)
 
+- Performance ideas:
+  - Stop tree walk if all participating walk phases signal that they're done
+  - Limit depth of tree walk if participating walk phases agree
+  - Limit tree walk to certain nodes (/node types) or exclude some node types from being visited if participating walk phases agree (maybe also dynamically adjust)
+
 ## Future Goals
 
 - Macro substitution by parsing preprocessor directives
