@@ -24,6 +24,10 @@ import io.github.douira.glsl_transformer.util.CompatUtil;
  * 
  * By default, an exact string match of the text in the terminal node and the
  * needle search string is required. However, this behavior can be configured.
+ * 
+ * If something other than terminals should be searched, simply extend the walk
+ * phase yourself and do something when it visits the parse context of
+ * interest.
  */
 public class SearchTerminals<T> extends WalkPhase<T> {
   /**
