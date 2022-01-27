@@ -93,16 +93,15 @@ public abstract class PhaseCollector<T> {
   }
 
   /**
-   * Collects a phase of a transformation and inserts it at a given level index.
-   * During transformations the phases of each level are executed in the order
-   * they were added.
+   * Adds a single phase entry and inserts it at its position within the list of
+   * execution levels and phases within levels.
    * 
-   * @param phase The phase to collect into the specified level
-   * @param order The level this phase should be added to
+   * @param entry The entry containing the index, group index and phase to be
+   *              added
    */
   void addPhaseAt(PhaseEntry<T> entry) {
     var phase = entry.phase();
-    var indexPair = new ComparablePair<>(entry.group(), entry.order());
+    var indexPair = new ComparablePair<>(entry.group(), entry.index());
     var phasesForIndex = executionLevels.get(indexPair);
     if (phasesForIndex == null) {
       phasesForIndex = new ArrayList<>();
