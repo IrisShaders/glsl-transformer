@@ -9,15 +9,9 @@ import io.github.douira.glsl_transformer.tree.TreeMember;
  * to handle finding the string in a parse tree.
  */
 public abstract class HandlerTarget<T> extends TransformationPhase<T> {
-  private final String needle;
-
-  /**
-   * Creates a new handler target with the given search string
-   * 
-   * @param needle The search string
-   */
-  public HandlerTarget(String needle) {
-    this.needle = needle;
+  @Override
+  public void setCollector(PhaseCollector<T> parent) {
+    super.setCollector(parent);
   }
 
   /**
@@ -26,14 +20,7 @@ public abstract class HandlerTarget<T> extends TransformationPhase<T> {
    * 
    * @return The string to search for
    */
-  public String getNeedle() {
-    return needle;
-  }
-
-  @Override
-  public void setCollector(PhaseCollector<T> parent) {
-    super.setCollector(parent);
-  }
+  public abstract String getNeedle();
 
   /**
    * Handles the containing node and token that the string was found in.
