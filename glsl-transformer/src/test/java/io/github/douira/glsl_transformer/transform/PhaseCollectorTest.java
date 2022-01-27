@@ -11,15 +11,15 @@ public class PhaseCollectorTest {
   private TransformationManager<Void> manager;
   private int nextIndex;
 
-  void addOrderedPhase(int order, int group) {
+  void addOrderedPhase(int index, int group) {
     final var assertIndex = nextIndex++;
     manager.addPhaseAt(new PhaseEntry<>(new RunPhase<>() {
       @Override
       protected void run(TranslationUnitContext ctx) {
         assertEquals(assertIndex, nextIndex++,
-            "It should execute the phase with order  " + order + " and group " + group + " at the right time.");
+            "It should execute the phase with index  " + index + " and group " + group + " at the right time.");
       }
-    }, order, group));
+    }, index, group));
   }
 
   void assertPhaseExecutionOrder(Runnable runnable) {
