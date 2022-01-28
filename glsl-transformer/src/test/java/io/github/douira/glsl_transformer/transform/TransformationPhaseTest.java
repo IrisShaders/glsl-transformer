@@ -84,6 +84,7 @@ public class TransformationPhaseTest extends TestWithTransformationManager<Void>
     runTransformation(new RunPhase<>() {
       @Override
       protected void run(TranslationUnitContext ctx) {
+        // note that usually the xpath and pattern should be compiled in the init method
         var matches = findAndMatch(ctx,
             compilePath("/translationUnit/externalDeclaration/declaration"),
             compilePattern(
