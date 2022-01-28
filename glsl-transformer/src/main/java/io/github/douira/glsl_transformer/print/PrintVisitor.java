@@ -128,7 +128,7 @@ public class PrintVisitor extends AbstractParseTreeVisitor<Void> {
           if (token.getType() != Lexer.EOF
               && (tokenIndex == -1
                   || (localRoot != rootNode || inInterval(bounds, tokenIndex))
-                      && omissionSet.isTokenAllowed(token)
+                      && omissionSet.tokenNotOmitted(token)
                       && (tokenFilter == null || tokenFilter.isTokenAllowed(token)))) {
             builder.append(token.getText());
           }

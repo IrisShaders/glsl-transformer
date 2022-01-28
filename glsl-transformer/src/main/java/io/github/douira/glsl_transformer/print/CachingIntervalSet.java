@@ -4,8 +4,6 @@ import org.antlr.v4.runtime.Token;
 import org.antlr.v4.runtime.misc.Interval;
 import org.antlr.v4.runtime.misc.IntervalSet;
 
-import io.github.douira.glsl_transformer.print.filter.TokenFilter;
-
 /**
  * The caching interval set is a regular interval set
  * {@link org.antlr.v4.runtime.misc.IntervalSet} but the @link
@@ -14,7 +12,7 @@ import io.github.douira.glsl_transformer.print.filter.TokenFilter;
  * same query is a common operation and therefore caching it like this can be
  * helpful.
  */
-public class CachingIntervalSet extends IntervalSet implements TokenFilter {
+public class CachingIntervalSet extends IntervalSet {
   private Interval lastIntervalHit;
 
   /**
@@ -74,7 +72,7 @@ public class CachingIntervalSet extends IntervalSet implements TokenFilter {
    * @param token The token to check
    * @return {@code true} if the token should be printed
    */
-  public boolean isTokenAllowed(Token token) {
+  public boolean tokenNotOmitted(Token token) {
     return token.getChannel() != Token.DEFAULT_CHANNEL || !contains(token.getTokenIndex());
   }
 }
