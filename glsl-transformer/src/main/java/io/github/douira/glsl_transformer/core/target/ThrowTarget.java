@@ -7,7 +7,7 @@ import io.github.douira.glsl_transformer.tree.TreeMember;
  * A target that searches for a search string in and upon finding a match uses a
  * method to generate an exception which is then thrown.
  */
-public abstract class ThrowTarget<T> extends HandlerTargetSimple<T> {
+public abstract class ThrowTarget<T> extends HandlerTargetImpl<T> {
   /**
    * Creates a new throw target with a given search string
    * 
