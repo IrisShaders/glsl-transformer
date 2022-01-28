@@ -123,26 +123,41 @@ public class MultiFilter extends TokenFilter {
     this.shortCircuit = shortCircuit;
   }
 
-  public Collection<TokenFilter> getSubfilters() {
-    return subfilters;
-  }
-
-  public int size() {
-    return subfilters.size();
-  }
-
+  /**
+   * Adds a token filter to the collection of subfilters.
+   * 
+   * @param filter The filter to add
+   * @return {@code true} if the underlying collection changed
+   */
   public boolean add(TokenFilter filter) {
     return subfilters.add(filter);
   }
 
+  /**
+   * Adds a collection of token filters to the collection of subfilters.
+   * 
+   * @param newSubfilters The filters to add
+   * @return {@code true} if the underlying collection changed
+   */
   public boolean addAll(Collection<? extends TokenFilter> newSubfilters) {
     return subfilters.addAll(newSubfilters);
   }
 
+  /**
+   * Adds all subfilters contained in an other multi filter to this multi filter's
+   * collection of subfilters.
+   * 
+   * @param other The other multi filter to take subfilters from
+   * @return {@code true} if the underlying collection changed
+   */
   public boolean addAll(MultiFilter other) {
     return addAll(other.subfilters);
   }
 
+  /**
+   * Creates a shallow clone of this multi filter. It copies over the collection
+   * of subfilters shallowly and copies the settings.
+   */
   public MultiFilter clone() {
     return new MultiFilter(subfilters, conjunction, shortCircuit);
   }
