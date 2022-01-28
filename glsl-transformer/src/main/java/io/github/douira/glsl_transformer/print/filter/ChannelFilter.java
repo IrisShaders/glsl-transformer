@@ -8,7 +8,7 @@ import org.antlr.v4.runtime.Token;
  * The channel filter accepts all tokens that are not from a lexer channel that
  * is on the given list of disallowed channels.
  */
-public class ChannelFilter implements TokenFilter {
+public class ChannelFilter extends TokenFilter {
   private final EnumSet<TokenChannel> disallowedChannels;
 
   /**

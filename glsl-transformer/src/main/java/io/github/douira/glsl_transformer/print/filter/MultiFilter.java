@@ -16,7 +16,9 @@ import org.antlr.v4.runtime.Token;
  * filter has disallowed it. Since filters can have state, it can be desirerable
  * to notify all of them of all tokens.
  */
-public class MultiFilter extends ArrayList<TokenFilter> implements TokenFilter {
+public class MultiFilter extends TokenFilter {
+  private Collection<TokenFilter> subfilters;
+
   /**
    * If this is true, then it will require all filters to allow a token for it to
    * be globally allowed.
@@ -40,8 +42,8 @@ public class MultiFilter extends ArrayList<TokenFilter> implements TokenFilter {
    * @param conjunction  The conjunction flag state
    * @param shortCircuit The short circuit flag state
    */
-  public MultiFilter(Collection<? extends TokenFilter> subfilters, boolean conjunction, boolean shortCircuit) {
-    super(subfilters);
+  public MultiFilter(Collection<TokenFilter> subfilters, boolean conjunction, boolean shortCircuit) {
+    this(subfilters);
     this.conjunction = conjunction;
     this.shortCircuit = shortCircuit;
   }
@@ -57,9 +59,7 @@ public class MultiFilter extends ArrayList<TokenFilter> implements TokenFilter {
    * @param shortCircuit    The short circuit flag state
    */
   public MultiFilter(int initialCapacity, boolean conjunction, boolean shortCircuit) {
-    super(initialCapacity);
-    this.conjunction = conjunction;
-    this.shortCircuit = shortCircuit;
+    this(new ArrayList<>(initialCapacity), conjunction, shortCircuit);
   }
 
   /**
@@ -83,7 +83,7 @@ public class MultiFilter extends ArrayList<TokenFilter> implements TokenFilter {
    * @param subfilters The subfilters to add initially
    */
   public MultiFilter(Collection<? extends TokenFilter> subfilters) {
-    super(subfilters);
+    this.subfilters = new ArrayList<>();
   }
 
   /**
@@ -94,7 +94,7 @@ public class MultiFilter extends ArrayList<TokenFilter> implements TokenFilter {
    * @param initialCapacity The initial list capacity
    */
   public MultiFilter(int initialCapacity) {
-    super(initialCapacity);
+    this.subfilters = new ArrayList<>(initialCapacity);
   }
 
   /**
@@ -123,9 +123,33 @@ public class MultiFilter extends ArrayList<TokenFilter> implements TokenFilter {
     this.shortCircuit = shortCircuit;
   }
 
+  public Collection<TokenFilter> getSubfilters() {
+    return subfilters;
+  }
+
+  public int size() {
+    return subfilters.size();
+  }
+
+  public boolean add(TokenFilter filter) {
+    return subfilters.add(filter);
+  }
+
+  public boolean addAll(Collection<? extends TokenFilter> newSubfilters) {
+    return subfilters.addAll(newSubfilters);
+  }
+
+  public boolean addAll(MultiFilter other) {
+    return addAll(other.subfilters);
+  }
+
+  public MultiFilter clone() {
+    return new MultiFilter(subfilters, conjunction, shortCircuit);
+  }
+
   @Override
   public void resetState() {
-    for (var filter : this) {
+    for (var filter : subfilters) {
       filter.resetState();
     }
   }
@@ -133,7 +157,7 @@ public class MultiFilter extends ArrayList<TokenFilter> implements TokenFilter {
   @Override
   public boolean isTokenAllowed(Token token) {
     var result = conjunction;
-    for (var filter : this) {
+    for (var filter : subfilters) {
       var verdict = filter.isTokenAllowed(token);
       result = conjunction ? result && verdict : result || verdict;
       if (shortCircuit && result != conjunction) {

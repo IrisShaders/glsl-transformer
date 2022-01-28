@@ -8,7 +8,7 @@ import io.github.douira.glsl_transformer.GLSLLexer;
  * The newline filter filters out regular unnecessary newlines if there is more
  * than one.
  */
-public class NewlineFilter implements TokenFilter {
+public class NewlineFilter extends TokenFilter {
   private boolean lastWasNewline;
 
   @Override
