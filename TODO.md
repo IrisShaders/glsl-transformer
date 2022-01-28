@@ -1,7 +1,6 @@
 # Todo
 
 - Exclude generated classes from jacoco coverage reports
-- make replacement targets and WrapIdentifier more extensible
 - Call init on handler targets, also other things like before/after search and activation
 - Job parameters on token filters
 - Test everything that isn't covered yet
