@@ -10,8 +10,8 @@ import org.antlr.v4.runtime.tree.TerminalNode;
 import io.github.douira.glsl_transformer.GLSLLexer;
 import io.github.douira.glsl_transformer.GLSLParser;
 import io.github.douira.glsl_transformer.core.target.HandlerTarget;
-import io.github.douira.glsl_transformer.core.target.ParsedReplaceTarget;
-import io.github.douira.glsl_transformer.core.target.TerminalReplaceTarget;
+import io.github.douira.glsl_transformer.core.target.ParsedReplaceTargetImpl;
+import io.github.douira.glsl_transformer.core.target.TerminalReplaceTargetImpl;
 import io.github.douira.glsl_transformer.transform.WalkPhase;
 import io.github.douira.glsl_transformer.tree.ExtendedContext;
 import io.github.douira.glsl_transformer.tree.TreeMember;
@@ -168,7 +168,7 @@ public class SearchTerminals<T> extends WalkPhase<T> {
   public void addReplacement(
       String needle, String newContent,
       Function<GLSLParser, ExtendedContext> parseMethod) {
-    addTarget(new ParsedReplaceTarget<>(needle, newContent, parseMethod));
+    addTarget(new ParsedReplaceTargetImpl<>(needle, newContent, parseMethod));
   }
 
   /**
@@ -190,7 +190,7 @@ public class SearchTerminals<T> extends WalkPhase<T> {
    * @param terminalContent The new terminal content to insert as a string node
    */
   public void addReplacementTerminal(String needle, String terminalContent) {
-    addTarget(new TerminalReplaceTarget<>(needle, terminalContent));
+    addTarget(new TerminalReplaceTargetImpl<>(needle, terminalContent));
   }
 
   /**

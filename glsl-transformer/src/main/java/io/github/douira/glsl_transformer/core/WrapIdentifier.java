@@ -1,14 +1,9 @@
 package io.github.douira.glsl_transformer.core;
 
-import io.github.douira.glsl_transformer.GLSLParser;
-import io.github.douira.glsl_transformer.GLSLParser.TranslationUnitContext;
-import io.github.douira.glsl_transformer.core.target.HandlerTarget;
-import io.github.douira.glsl_transformer.core.target.ParsedReplaceTarget;
-import io.github.douira.glsl_transformer.core.target.TerminalReplaceTarget;
 import io.github.douira.glsl_transformer.core.target.ThrowTarget;
-import io.github.douira.glsl_transformer.transform.RunPhase;
 import io.github.douira.glsl_transformer.transform.Transformation;
-import io.github.douira.glsl_transformer.transform.TransformationPhase.InjectionPoint;
+import io.github.douira.glsl_transformer.transform.TransformationPhase;
+import io.github.douira.glsl_transformer.tree.TreeMember;
 
 /**
  * The wrap identifier transformation wraps the usage of a certain identifier
@@ -16,114 +11,42 @@ import io.github.douira.glsl_transformer.transform.TransformationPhase.Injection
  * that takes care of handling the conversion from the new to the old value. It
  * also checks that the wrapped value isn't already present in the code.
  */
-public class WrapIdentifier<T> extends Transformation<T> {
+public abstract class WrapIdentifier<T> extends Transformation<T> {
   /**
    * Creates a new wrap identifier transformation.
    * 
-   * @param wrapTarget       The identifier to replace
-   * @param wrapResult       The identifier that will be used to replace it
-   * @param replaceTarget    The target that is used as a replacement
-   * @param wrappingInjector A transformation phase that does the additional code
-   *                         injection
+   * @param wrappingReplacer The replacer phase that should replace a target
+   *                         identifier with a replacement expression or
+   *                         identifier
+   * @param wrappingInjector A transformation phase that does the additional
+   *                         code injection, usually providing a definition
+   *                         for the newly inserted identifier in the form of
+   *                         an external declaration of some sort
    */
-  public WrapIdentifier(
-      String wrapTarget,
-      String wrapResult,
-      HandlerTarget<T> replaceTarget,
-      RunPhase<T> wrappingInjector) {
+  public WrapIdentifier(TransformationPhase<T> wrappingReplacer, TransformationPhase<T> wrappingInjector) {
     // throw if the wrap result already exists
-    addPhase(new SearchTerminals<T>(
-        ThrowTarget.fromMessage(wrapResult,
-            "The wrapper '" + wrapResult + "' shouldn't already be present in the code!")));
-
-    // replace the wrap target with the wrap result
-    addPhase(new SearchTerminals<T>(replaceTarget));
-
-    // inject the wrapper code
-    addConcurrentPhase(wrappingInjector);
-
-    // TODO: does the wrapping injector need to be told about something?
-    // should there be some kind of communication system for phases that were not
-    // directly constructed within a transformation?
-  }
-
-  /**
-   * Creates a new wrap identifier transformation that uses an unparsed terminal
-   * replace target. It uses the wrap result as the identifier to disallow as well
-   * as the terminal to insert as a replacement. This is a commonly used operation
-   * when the inserted replacement is just a different identifier.
-   * 
-   * @param <T>              The job parameter type
-   * @param wrapTarget       The identifier to replace
-   * @param wrapResult       The identifier that will be used to replace it
-   * @param wrappingInjector A transformation phase that does the additional code
-   *                         injection
-   * @return The wrap identifier transformation with the given parameters
-   */
-  public static <T> WrapIdentifier<T> fromTerminal(
-      String wrapTarget,
-      String wrapResult,
-      RunPhase<T> wrappingInjector) {
-    return new WrapIdentifier<T>(
-        wrapTarget,
-        wrapResult,
-        new TerminalReplaceTarget<T>(wrapTarget, wrapResult),
-        wrappingInjector);
-  }
-
-  /**
-   * Creates a new wrap identifier transformation that uses a parsed replace
-   * target that replaces identifiers with an expression. (which may also just be
-   * an identifier)
-   * 
-   * @param <T>              The job parameter type
-   * @param wrapTarget       The identifier to replace
-   * @param wrapResult       The identifier that will be used to replace it
-   * @param wrapExpression   The expression to insert instead of the
-   *                         {@code wrapTarget}
-   * @param wrappingInjector A transformation phase that does the additional code
-   *                         injection
-   * @return The wrap identifier transformation with the given parameters
-   */
-  public static <T> WrapIdentifier<T> fromExpression(
-      String wrapTarget,
-      String wrapResult,
-      String wrapExpression,
-      RunPhase<T> wrappingInjector) {
-    return new WrapIdentifier<T>(
-        wrapTarget,
-        wrapResult,
-        new ParsedReplaceTarget<T>(wrapTarget, wrapExpression, GLSLParser::expression),
-        wrappingInjector);
-  }
-
-  /**
-   * Creates a new wrap identifier transformation that inserts a parsed expression
-   * as a replacement and inserts a new external declaration.
-   * 
-   * @see #fromExpression(String, String, String, RunPhase)
-   * 
-   * @param <T>            The job parameter type
-   * @param wrapTarget     The identifier to replace
-   * @param wrapResult     The identifier that will be used to replace it
-   * @param wrapExpression The expression to insert instead of the
-   *                       {@code wrapTarget}
-   * @param location       The injection location for the new code
-   * @param injectedCode   The code to parse and inject as an external declaration
-   *                       at the given location
-   * @return The wrap identifier transformation with the given parameters
-   */
-  public static <T> WrapIdentifier<T> withExternalDeclaration(
-      String wrapTarget,
-      String wrapResult,
-      String wrapExpression,
-      InjectionPoint location,
-      String injectedCode) {
-    return fromExpression(wrapTarget, wrapResult, wrapExpression, new RunPhase<>() {
+    addPhase(new SearchTerminals<T>(new ThrowTarget<T>() {
       @Override
-      protected void run(TranslationUnitContext ctx) {
-        injectExternalDeclaration(location, injectedCode);
+      public String getMessage(TreeMember node, String match) {
+        return "The wrapper identifier '" + getNeedle() + "' shouldn't already be present in the code!";
       }
-    });
+
+      @Override
+      public String getNeedle() {
+        return getWrapResult();
+      }
+    }));
+
+    addPhase(wrappingReplacer);
+    addConcurrentPhase(wrappingInjector);
   }
+
+  /**
+   * Returns the wrap result that will be preset after wrapping. This is only used
+   * for detection of the identifier prior to wrapping for throwing an error if
+   * it's present.
+   * 
+   * @return The identifier that's inserted for the wrapping
+   */
+  public abstract String getWrapResult();
 }

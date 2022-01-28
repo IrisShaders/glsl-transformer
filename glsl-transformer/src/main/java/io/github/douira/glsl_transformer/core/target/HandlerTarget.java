@@ -9,9 +9,10 @@ import io.github.douira.glsl_transformer.tree.TreeMember;
  * to handle finding the string in a parse tree.
  */
 public abstract class HandlerTarget<T> extends TransformationPhase<T> {
-  @Override
-  public void setCollector(PhaseCollector<T> parent) {
-    super.setCollector(parent);
+  /**
+   * Creates a new empty handler target.
+   */
+  protected HandlerTarget() {
   }
 
   /**
@@ -29,4 +30,9 @@ public abstract class HandlerTarget<T> extends TransformationPhase<T> {
    * @param match The token text that contains the needle
    */
   public abstract void handleResult(TreeMember node, String match);
+
+  @Override
+  public void setCollector(PhaseCollector<T> parent) {
+    super.setCollector(parent);
+  }
 }
