@@ -5,30 +5,37 @@ import io.github.douira.glsl_transformer.tree.TreeMember;
 
 /**
  * A terminal replace target replaces the target with a terminal string node.
- * Since the string terminal node is immutable, it's only created once and then
- * re-used if it needs to be printed multiple times.
  */
-public class TerminalReplaceTarget<T> extends ReplaceTarget<T> {
-  private final String terminalContent;
-  private TreeMember cacheNode;
+public abstract class TerminalReplaceTarget<T> extends ReplaceTarget<T> {
 
   /**
-   * Creates a new terminal replace target with a given needle and content of the
-   * terminal node to create as a replacement.
+   * Creates a new terminal placement target with a search string.
    * 
-   * @param needle          The needle (search string)
-   * @param terminalContent The new string node content.
+   * @param needle The search string
    */
-  public TerminalReplaceTarget(String needle, String terminalContent) {
+  public TerminalReplaceTarget(String needle) {
     super(needle);
-    this.terminalContent = terminalContent;
   }
+
+  /**
+   * Creates a new terminal replace target with no search string. The
+   * {@link #getNeedle()} method should be overwritten if this constructor is
+   * used.
+   * 
+   * @see io.github.douira.glsl_transformer.core.target.HandlerTargetImpl#HandlerTargetImpl()
+   */
+  protected TerminalReplaceTarget() {
+  }
+
+  /**
+   * Returns the content to insert as a terminal replacement node.
+   * 
+   * @return The string to insert as a terminal replacement node
+   */
+  protected abstract String getTerminalContent();
 
   @Override
   public TreeMember getReplacement(TreeMember node, String match) {
-    if (cacheNode == null) {
-      cacheNode = new StringNode(terminalContent);
-    }
-    return cacheNode;
+    return new StringNode(getTerminalContent());
   }
 }

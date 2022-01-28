@@ -14,14 +14,14 @@ public class ThrowTargetTest extends TestWithTransformationManager<Void> {
 
   @Test
   void testFromMessage() {
-    var target = ThrowTarget.fromMessage("needle", "message");
+    var target = new ThrowTargetImpl<>("needle", "message");
     assertEquals("needle", target.getNeedle());
-    assertEquals("message", target.getException(null, null).getMessage());
+    assertEquals("message", target.getMessage(null, null));
   }
 
   @Test
   void testThrow() {
-    var exception = new SemanticException("message");
+    var message = "message";
     nextIndex = 0;
     try {
       runTransformation(
@@ -29,19 +29,18 @@ public class ThrowTargetTest extends TestWithTransformationManager<Void> {
           new SearchTerminals<>(
               new ThrowTarget<Void>("evil") {
                 @Override
-                public SemanticException getException(TreeMember node, String match) {
+                public String getMessage(TreeMember node, String match) {
                   assertEquals(match, "oofevilinside", "It should match the inexact match");
                   nextIndex++;
-                  return exception;
+                  return message;
                 }
               }) {
             {
               allowInexactMatches();
             }
           });
-
     } catch (SemanticException e) {
-      assertEquals(exception, e, "It should throw the right exception");
+      assertSame(message, e.getMessage(), "It should throw an exception containins the right message");
       nextIndex += 100;
     }
     assertEquals(101, nextIndex,
@@ -50,7 +49,7 @@ public class ThrowTargetTest extends TestWithTransformationManager<Void> {
   
   @Test
   void testThrowInexactMatch() {
-    var exception = new SemanticException("message");
+    var message = "message";
     nextIndex = 0;
     try {
       runTransformation(
@@ -58,14 +57,14 @@ public class ThrowTargetTest extends TestWithTransformationManager<Void> {
           new SearchTerminals<>(
               new ThrowTarget<Void>("evil") {
                 @Override
-                public SemanticException getException(TreeMember node, String match) {
+                public String getMessage(TreeMember node, String match) {
                   assertEquals(match, "evil", "It should match the exact match");
                   nextIndex++;
-                  return exception;
+                  return message;
                 }
               }));
     } catch (SemanticException e) {
-      assertEquals(exception, e, "It should throw the right exception");
+      assertSame(message, e.getMessage(), "It should throw an exception containins the right message");
       nextIndex += 100;
     }
     assertEquals(101, nextIndex,
@@ -77,6 +76,6 @@ public class ThrowTargetTest extends TestWithTransformationManager<Void> {
     assertDoesNotThrow(
         () -> runTransformation(
             "int f = foo + EvilInCaps + EVILCAPS + e_v_i_l_spaced;",
-            new SearchTerminals<>(ThrowTarget.fromMessage("evil", "message"))));
+            new SearchTerminals<>(new ThrowTargetImpl<>("evil", "message"))));
   }
 }

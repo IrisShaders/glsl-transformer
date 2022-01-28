@@ -17,6 +17,15 @@ public abstract class HandlerTargetImpl<T> extends HandlerTarget<T> {
     this.needle = needle;
   }
 
+  /**
+   * Creates a new empty handler target that doesn't have a needle. The
+   * {@link #getNeedle()} method has to be overwritten if this constructor is
+   * used. This is also true for all subclasses using this constructor.
+   */
+  protected HandlerTargetImpl() {
+    this(null);
+  }
+
   @Override
   public String getNeedle() {
     return needle;

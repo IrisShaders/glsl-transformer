@@ -6,7 +6,7 @@ import io.github.douira.glsl_transformer.tree.TreeMember;
  * A replacement target searches for a search string and uses a method to
  * generate a tree member to replace it in the tree. If something more
  * than node replacement should be done, implement a custom
- * {@link HandlerTarget} subclass.
+ * {@link HandlerTargetImpl} subclass.
  */
 public abstract class ReplaceTarget<T> extends HandlerTargetImpl<T> {
   /**
@@ -18,12 +18,13 @@ public abstract class ReplaceTarget<T> extends HandlerTargetImpl<T> {
     super(needle);
   }
 
-  @Override
-  public void handleResult(TreeMember node, String match) {
-    var newNode = getReplacement(node, match);
-    if (newNode != null) {
-      replaceNode(node, newNode);
-    }
+  /**
+   * Creates a new replace target with no search string. The {@link #getNeedle()}
+   * method should be overwritten if this constructor is used.
+   * 
+   * @see io.github.douira.glsl_transformer.core.target.HandlerTargetImpl#HandlerTargetImpl()
+   */
+  protected ReplaceTarget() {
   }
 
   /**
@@ -35,4 +36,12 @@ public abstract class ReplaceTarget<T> extends HandlerTargetImpl<T> {
    * @return The new node to replace the found node with
    */
   public abstract TreeMember getReplacement(TreeMember node, String match);
+
+  @Override
+  public void handleResult(TreeMember node, String match) {
+    var newNode = getReplacement(node, match);
+    if (newNode != null) {
+      replaceNode(node, newNode);
+    }
+  }
 }
