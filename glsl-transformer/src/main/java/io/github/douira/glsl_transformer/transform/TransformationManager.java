@@ -266,6 +266,12 @@ public class TransformationManager<T> extends PhaseCollector<T> {
     return transformStream(stream, null);
   }
 
+  private void setTokenFilterCollector(TokenFilter<T> tokenFilter) {
+    if (tokenFilter != null) {
+      tokenFilter.setCollector(this);
+    }
+  }
+
   /**
    * Transforms a given input stream and re-prints it as a string. This is useful
    * if the input isn't a string yet. Then ANTLR's
@@ -284,8 +290,8 @@ public class TransformationManager<T> extends PhaseCollector<T> {
    * @return The transformed string
    */
   public String transformStream(IntStream stream, T parameters) throws RecognitionException {
-    parseTokenFilter.setCollector(this);
-    printTokenFilter.setCollector(this);
+    setTokenFilterCollector(parseTokenFilter);
+    setTokenFilterCollector(printTokenFilter);
 
     var tree = parse(stream, null, GLSLParser::translationUnit);
     jobParameters = parameters;
