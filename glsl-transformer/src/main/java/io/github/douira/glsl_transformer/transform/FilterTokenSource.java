@@ -14,7 +14,7 @@ import io.github.douira.glsl_transformer.print.filter.TokenFilter;
  */
 public class FilterTokenSource implements TokenSource {
   private TokenSource source;
-  private TokenFilter filter;
+  private TokenFilter<?> filter;
 
   /**
    * Creates a new filtering token source with a given token source to wrap.
@@ -42,7 +42,7 @@ public class FilterTokenSource implements TokenSource {
    * 
    * @param tokenFilter The new token filter
    */
-  public void setTokenFilter(TokenFilter tokenFilter) {
+  public void setTokenFilter(TokenFilter<?> tokenFilter) {
     this.filter = tokenFilter;
   }
 

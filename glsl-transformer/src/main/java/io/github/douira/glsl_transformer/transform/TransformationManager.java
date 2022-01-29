@@ -88,7 +88,7 @@ public class TransformationManager<T> extends PhaseCollector<T> {
    * Optionally a token filter for printing a tree. Can be {@code null} if no
    * filter is to be used.
    */
-  private TokenFilter printTokenFilter;
+  private TokenFilter<T> printTokenFilter;
 
   /**
    * Optionally a token filter source that applies a token filter before parsing.
@@ -96,6 +96,7 @@ public class TransformationManager<T> extends PhaseCollector<T> {
    * The contained token filter can be {@code null} if no filter is to be used.
    */
   private FilterTokenSource tokenSource = new FilterTokenSource(lexer);
+  private TokenFilter<T> parseTokenFilter;
 
   /**
    * Creates a new transformation manager and specifies if parse errors should be
@@ -159,7 +160,7 @@ public class TransformationManager<T> extends PhaseCollector<T> {
    * 
    * @param printTokenFilter The new print token filter
    */
-  public void setPrintTokenFilter(TokenFilter printTokenFilter) {
+  public void setPrintTokenFilter(TokenFilter<T> printTokenFilter) {
     this.printTokenFilter = printTokenFilter;
   }
 
@@ -169,7 +170,8 @@ public class TransformationManager<T> extends PhaseCollector<T> {
    * 
    * @param parseTokenFilter The new parse token filter
    */
-  public void setParseTokenFilter(TokenFilter parseTokenFilter) {
+  public void setParseTokenFilter(TokenFilter<T> parseTokenFilter) {
+    this.parseTokenFilter = parseTokenFilter;
     this.tokenSource.setTokenFilter(parseTokenFilter);
   }
 
@@ -282,10 +284,14 @@ public class TransformationManager<T> extends PhaseCollector<T> {
    * @return The transformed string
    */
   public String transformStream(IntStream stream, T parameters) throws RecognitionException {
+    parseTokenFilter.setCollector(this);
+    printTokenFilter.setCollector(this);
+
     var tree = parse(stream, null, GLSLParser::translationUnit);
     jobParameters = parameters;
     transformTree(tree, tokenStream);
+    var printed = PrintVisitor.printTree(tokenStream, tree, printTokenFilter);
     jobParameters = null;
-    return PrintVisitor.printTree(tokenStream, tree, printTokenFilter);
+    return printed;
   }
 }

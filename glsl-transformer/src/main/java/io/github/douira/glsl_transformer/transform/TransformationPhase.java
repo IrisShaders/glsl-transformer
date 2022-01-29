@@ -7,8 +7,6 @@ import java.util.List;
 import java.util.Set;
 import java.util.function.Function;
 
-import org.antlr.v4.runtime.Lexer;
-import org.antlr.v4.runtime.Parser;
 import org.antlr.v4.runtime.tree.ParseTree;
 import org.antlr.v4.runtime.tree.pattern.ParseTreeMatch;
 import org.antlr.v4.runtime.tree.pattern.ParseTreePattern;
@@ -39,7 +37,7 @@ import io.github.douira.glsl_transformer.util.CompatUtil;
  * adding and removing parse tree nodes. It can also inject nodes into the root
  * node's child array with injection points.
  */
-public abstract class TransformationPhase<T> extends GLSLParserBaseListener {
+public abstract class TransformationPhase<T> extends GLSLParserBaseListener implements CollectorChild<T> {
   private PhaseCollector<T> collector;
   private boolean initialized = false;
 
@@ -77,62 +75,20 @@ public abstract class TransformationPhase<T> extends GLSLParserBaseListener {
     }
   }
 
-  /**
-   * Gets this phase's phase collector.
-   * 
-   * @return The phase collector
-   */
-  protected PhaseCollector<T> getCollector() {
+  @Override
+  public PhaseCollector<T> getCollector() {
     return collector;
   }
 
   /**
-   * Sets the phase collector on this phase. This must be called before executing
-   * this phase in the context of a specific parse tree.
+   * This must be called before executing this phase in the context of a specific
+   * parse tree.
    * 
-   * @param parent The phase collector to set
+   * {@inheritDoc}
    */
-  protected void setCollector(PhaseCollector<T> parent) {
+  @Override
+  public void setCollector(PhaseCollector<T> parent) {
     this.collector = parent;
-  }
-
-  /**
-   * Returns the executing phase collector's parser.
-   * 
-   * @return The parser
-   */
-  protected Parser getParser() {
-    return collector.getParser();
-  }
-
-  /**
-   * Returns the executing phase collector's lexer.
-   * 
-   * @return The lexer
-   */
-  protected Lexer getLexer() {
-    return collector.getLexer();
-  }
-
-  /**
-   * Returns the root node taken from the phase collector that is currently
-   * executing this phase.
-   * 
-   * @return The root node of the current executing phase collector
-   */
-  protected TranslationUnitContext getRootNode() {
-    return collector.getRootNode();
-  }
-
-  /**
-   * Returns the phase collector's current job parameters.
-   * 
-   * @see io.github.douira.glsl_transformer.transform.PhaseCollector#getJobParameters()
-   * 
-   * @return The phase collector's current job parameters
-   */
-  protected T getJobParameters() {
-    return collector.getJobParameters();
   }
 
   /**

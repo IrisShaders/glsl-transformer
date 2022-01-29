@@ -16,8 +16,8 @@ import org.antlr.v4.runtime.Token;
  * filter has disallowed it. Since filters can have state, it can be desirerable
  * to notify all of them of all tokens.
  */
-public class MultiFilter extends TokenFilter {
-  private Collection<TokenFilter> subfilters;
+public class MultiFilter<T> extends TokenFilter<T> {
+  private Collection<TokenFilter<T>> subfilters;
 
   /**
    * If this is true, then it will require all filters to allow a token for it to
@@ -42,7 +42,7 @@ public class MultiFilter extends TokenFilter {
    * @param conjunction  The conjunction flag state
    * @param shortCircuit The short circuit flag state
    */
-  public MultiFilter(Collection<TokenFilter> subfilters, boolean conjunction, boolean shortCircuit) {
+  public MultiFilter(Collection<TokenFilter<T>> subfilters, boolean conjunction, boolean shortCircuit) {
     this(subfilters);
     this.conjunction = conjunction;
     this.shortCircuit = shortCircuit;
@@ -82,7 +82,7 @@ public class MultiFilter extends TokenFilter {
    * 
    * @param subfilters The subfilters to add initially
    */
-  public MultiFilter(Collection<? extends TokenFilter> subfilters) {
+  public MultiFilter(Collection<? extends TokenFilter<T>> subfilters) {
     this.subfilters = new ArrayList<>();
   }
 
@@ -129,7 +129,7 @@ public class MultiFilter extends TokenFilter {
    * @param filter The filter to add
    * @return {@code true} if the underlying collection changed
    */
-  public boolean add(TokenFilter filter) {
+  public boolean add(TokenFilter<T> filter) {
     return subfilters.add(filter);
   }
 
@@ -139,7 +139,7 @@ public class MultiFilter extends TokenFilter {
    * @param newSubfilters The filters to add
    * @return {@code true} if the underlying collection changed
    */
-  public boolean addAll(Collection<? extends TokenFilter> newSubfilters) {
+  public boolean addAll(Collection<? extends TokenFilter<T>> newSubfilters) {
     return subfilters.addAll(newSubfilters);
   }
 
@@ -150,7 +150,7 @@ public class MultiFilter extends TokenFilter {
    * @param other The other multi filter to take subfilters from
    * @return {@code true} if the underlying collection changed
    */
-  public boolean addAll(MultiFilter other) {
+  public boolean addAll(MultiFilter<T> other) {
     return addAll(other.subfilters);
   }
 
@@ -158,8 +158,8 @@ public class MultiFilter extends TokenFilter {
    * Creates a shallow clone of this multi filter. It copies over the collection
    * of subfilters shallowly and copies the settings.
    */
-  public MultiFilter clone() {
-    return new MultiFilter(subfilters, conjunction, shortCircuit);
+  public MultiFilter<T> clone() {
+    return new MultiFilter<T>(subfilters, conjunction, shortCircuit);
   }
 
   @Override

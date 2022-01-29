@@ -1,7 +1,7 @@
 # Todo
 
+- Test token filter job parameters
 - Call init on handler targets, also other things like before/after search and activation
-- Job parameters on token filters
 - AST structures for GLSL types: Continue work on Tensor (tensor manipulation methods and "widening" until it hits the maximum)
 - AST: Structs
 - More Phase functionality (abstract declaration replacement into a separate class)
