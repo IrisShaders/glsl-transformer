@@ -62,7 +62,7 @@ public class PrintVisitor extends AbstractParseTreeVisitor<Void> {
    *         transformations
    */
   public static String printTree(
-      BufferedTokenStream rootTokenStream, ExtendedContext tree, TokenFilter tokenFilter) {
+      BufferedTokenStream rootTokenStream, ExtendedContext tree, TokenFilter<?> tokenFilter) {
     tree.makeLocalRoot(rootTokenStream);
     return new PrintVisitor()
         .visitAndJoin(rootTokenStream, tree, tree.getFullSourceInterval(), tokenFilter);
@@ -101,7 +101,7 @@ public class PrintVisitor extends AbstractParseTreeVisitor<Void> {
    *         results of the transformations applied to the tree
    */
   private String visitAndJoin(BufferedTokenStream rootTokenStream,
-      ExtendedContext rootNode, Interval bounds, TokenFilter tokenFilter) {
+      ExtendedContext rootNode, Interval bounds, TokenFilter<?> tokenFilter) {
     // visit the whole tree and accumulate tokens and intervals
     currentRoot = rootNode;
     visit(rootNode);
