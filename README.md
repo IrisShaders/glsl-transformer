@@ -41,6 +41,10 @@ The files in `glslang-test` are from [glslang](https://github.com/KhronosGroup/g
 
 Of course all of this wouldn't be possible without ANTLR4 and its contributors, in particular Terence Parr, the creator of ANTLR and author of the ANTLR book. Thanks!
 
+## Support
+
+If something breaks, please make an issue report with the details so I can fix the issue and add a testcase. Until 1.0 is released, expect many features to be untested. For more direct support, you can also ask in the `glsl-transformer` thread in the [Iris discord server](https://discord.gg/jQJnav2jPu).
+
 # Usage
 
 ## Building and Testing
