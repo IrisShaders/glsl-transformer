@@ -78,6 +78,9 @@ public class TokenFilterTest extends TestWithTransformationManager<Void> {
         " c;   c; ; ; ", manager.transform(" c; a b c; d; e; "),
         "It should filter like all of the contained filters");
     assertTrue(abde instanceof MultiFilter, "It should still be a multi filter");
+
+    assertSame(a, TokenFilter.join(a, null), "It should pass through token filters if one of them is null");
+    assertSame(a, TokenFilter.join(null, a), "It should pass through token filters if one of them is null");
   }
 
   @Test
@@ -88,7 +91,9 @@ public class TokenFilterTest extends TestWithTransformationManager<Void> {
     testResetStateOnce(manager, manager::setPrintTokenFilter);
   }
 
-  void testResetStateOnce(TransformationManager<Void> man, Consumer<TokenFilter<Void>> setMethod) {
+  void testResetStateOnce(
+      TransformationManager<Void> man,
+      Consumer<TokenFilter<Void>> setMethod) {
     setMethod.accept(new TokenFilter<Void>() {
       @Override
       public boolean isTokenAllowed(Token token) {
@@ -110,6 +115,33 @@ public class TokenFilterTest extends TestWithTransformationManager<Void> {
 
   @Test
   void testJobParameters() {
-    // TODO
+    var manager = new TransformationManager<Object>();
+    testJobParametersOnce(manager, manager::setParseTokenFilter);
+    manager = new TransformationManager<Object>();
+    testJobParametersOnce(manager, manager::setPrintTokenFilter);
+  }
+
+  void testJobParametersOnce(
+      TransformationManager<Object> man,
+      Consumer<TokenFilter<Object>> setMethod) {
+    var parameters = new Object();
+    setMethod.accept(new TokenFilter<Object>() {
+      @Override
+      public boolean isTokenAllowed(Token token) {
+        nextIndex++;
+        assertSame(parameters, getJobParameters());
+        return true;
+      }
+
+      @Override
+      public void resetState() {
+        nextIndex += 100;
+        assertSame(parameters, getJobParameters());
+      }
+    });
+
+    nextIndex = 0;
+    man.transform(" ", parameters);
+    assertEquals(101, nextIndex, "It should run the token filter");
   }
 }
