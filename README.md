@@ -56,6 +56,9 @@ gradle generateGrammarSource
 # building also runs the tests
 gradle build
 
+# run the tests (also generates the jacoco coverage report)
+gradle test
+
 # generate javadoc
 gradle javadoc
 ```
