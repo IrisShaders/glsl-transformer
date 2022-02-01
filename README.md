@@ -43,7 +43,7 @@ Of course all of this wouldn't be possible without ANTLR4 and its contributors, 
 
 ## Support
 
-If something breaks, please make an issue report with the details so I can fix the issue and add a testcase. Until 1.0 is released, expect many features to be untested. For more direct support, you can also ask in the `glsl-transformer` thread in the [Iris discord server](https://discord.gg/jQJnav2jPu).
+If something breaks, please make an issue report with the details so I can fix the issue and add a test case. Until 1.0 is released, expect many features to be untested. For more direct support, you can also ask in the `glsl-transformer` thread in the [Iris discord server](https://discord.gg/jQJnav2jPu). I'm also interested in hearing from anyone using this library in their projects!
 
 # Usage
 
