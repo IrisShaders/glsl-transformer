@@ -217,6 +217,10 @@ public class TransformationManager<T> extends PhaseCollector<T> {
   public <RuleType extends ExtendedContext> RuleType parse(
       IntStream stream, ExtendedContext parent,
       Function<GLSLParser, RuleType> parseMethod) {
+    if (parseTokenFilter != null) {
+      parseTokenFilter.resetState();
+    }
+
     input = stream;
     lexer.setInputStream(input);
     lexer.reset();
