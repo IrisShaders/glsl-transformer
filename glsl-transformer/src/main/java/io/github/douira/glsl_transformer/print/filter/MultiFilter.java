@@ -85,7 +85,7 @@ public class MultiFilter<T> extends TokenFilter<T> {
    * @param subfilters The subfilters to add initially
    */
   public MultiFilter(Collection<? extends TokenFilter<T>> subfilters) {
-    this.subfilters = new ArrayList<>();
+    this.subfilters = new ArrayList<>(subfilters);
   }
 
   /**
@@ -105,6 +105,7 @@ public class MultiFilter<T> extends TokenFilter<T> {
    * @see ArrayList#ArrayList()
    */
   public MultiFilter() {
+    this.subfilters = new ArrayList<>();
   }
 
   /**

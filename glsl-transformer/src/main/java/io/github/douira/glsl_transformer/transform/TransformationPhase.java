@@ -404,6 +404,9 @@ public abstract class TransformationPhase<T> extends GLSLParserBaseListener impl
    * other directives the {@link io.github.douira.glsl_transformer.ast.Directive }
    * class should be used.
    * 
+   * @apiNote This method should be avoided if a direct replacement of identifiers
+   *          using the appropriate core transformations is possible.
+   * 
    * @param location The injection point at which the new node is inserted
    * @param content  The content after the #define prefix
    */

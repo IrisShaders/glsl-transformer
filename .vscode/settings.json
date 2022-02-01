@@ -19,5 +19,6 @@
     "jacoco.xml",
     "jacocoTestReport.xml"
   ],
-  "coverage-gutters.coverageBaseDir": "glsl-transformer/build/reports/jacoco/test"
+  "coverage-gutters.coverageBaseDir": "glsl-transformer/build/reports/jacoco/test",
+  "cSpell.words": ["abde"]
 }
