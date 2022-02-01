@@ -148,4 +148,20 @@ public class TransformationManagerTest extends TestWithTransformationManager<Voi
           }
         });
   }
+
+  @Test
+  void testWithJobParameters() {
+    TransformationManager<Object> man = new TransformationManager<>();
+    assertNull(man.getJobParameters(), "It should start with no job parameters");
+    var parameters = new Object();
+    man.withJobParameters(parameters,
+        () -> assertSame(parameters, man.getJobParameters(), "It should contain the job parameters"));
+    assertNull(man.getJobParameters(), "It should delete the job parameters after use");
+    var result = new Object();
+    assertSame(result, man.withJobParameters(parameters,
+        () -> {
+          assertSame(parameters, man.getJobParameters(), "It should contain the job parameters again");
+          return result;
+        }), "It should return the value of the supplier function");
+  }
 }
