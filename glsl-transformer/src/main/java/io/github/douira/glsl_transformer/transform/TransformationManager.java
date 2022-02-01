@@ -1,6 +1,7 @@
 package io.github.douira.glsl_transformer.transform;
 
 import java.util.function.Function;
+import java.util.function.Supplier;
 
 import org.antlr.v4.runtime.BaseErrorListener;
 import org.antlr.v4.runtime.BufferedTokenStream;
@@ -156,6 +157,42 @@ public class TransformationManager<T> extends PhaseCollector<T> {
   }
 
   /**
+   * Runs a function while this transformation manager has the given job
+   * parameters set. It returns the value that the itself function returns.
+   * This can be used together with non-standard ways of using a transformation
+   * manager like using {@link #parse(IntStream, ExtendedContext, Function)}
+   * directly.
+   * 
+   * @param <R>        The return type of the function
+   * @param parameters The job parameters to set
+   * @param run        The function to run while the transformation manager has
+   *                   job parameters
+   */
+  public <R> R withJobParameters(T parameters, Supplier<R> run) {
+    jobParameters = parameters;
+    var value = run.get();
+    jobParameters = null;
+    return value;
+  }
+
+  /**
+   * Runs a function while this transformation manager has the given job
+   * parameters set.
+   * 
+   * @see #withJobParameters(Object, Supplier)
+   * 
+   * @param parameters The job parameters
+   * @param run        The function to run while the transformation manager has
+   *                   job parameters
+   */
+  public void withJobParameters(T parameters, Runnable run) {
+    this.<Void>withJobParameters(parameters, () -> {
+      run.run();
+      return null;
+    });
+  }
+
+  /**
    * Sets the token filter to use before printing.
    * 
    * @param printTokenFilter The new print token filter
@@ -217,6 +254,7 @@ public class TransformationManager<T> extends PhaseCollector<T> {
   public <RuleType extends ExtendedContext> RuleType parse(
       IntStream stream, ExtendedContext parent,
       Function<GLSLParser, RuleType> parseMethod) {
+    setTokenFilterCollector(parseTokenFilter);
     if (parseTokenFilter != null) {
       parseTokenFilter.resetState();
     }
@@ -294,14 +332,12 @@ public class TransformationManager<T> extends PhaseCollector<T> {
    * @return The transformed string
    */
   public String transformStream(IntStream stream, T parameters) throws RecognitionException {
-    setTokenFilterCollector(parseTokenFilter);
-    setTokenFilterCollector(printTokenFilter);
+    return withJobParameters(parameters, () -> {
+      setTokenFilterCollector(printTokenFilter);
 
-    var tree = parse(stream, null, GLSLParser::translationUnit);
-    jobParameters = parameters;
-    transformTree(tree, tokenStream);
-    var printed = PrintVisitor.printTree(tokenStream, tree, printTokenFilter);
-    jobParameters = null;
-    return printed;
+      var tree = parse(stream, null, GLSLParser::translationUnit);
+      transformTree(tree, tokenStream);
+      return PrintVisitor.printTree(tokenStream, tree, printTokenFilter);
+    });
   }
 }
