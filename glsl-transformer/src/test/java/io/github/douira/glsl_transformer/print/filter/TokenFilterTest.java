@@ -2,17 +2,11 @@ package io.github.douira.glsl_transformer.print.filter;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-import java.util.function.BiFunction;
 import java.util.function.Consumer;
-import java.util.function.Function;
-import java.util.stream.Stream;
 
 import org.antlr.v4.runtime.Token;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.params.ParameterizedTest;
-import org.junit.jupiter.params.provider.Arguments;
-import org.junit.jupiter.params.provider.MethodSource;
 
 import io.github.douira.glsl_transformer.TestWithTransformationManager;
 import io.github.douira.glsl_transformer.transform.TransformationManager;

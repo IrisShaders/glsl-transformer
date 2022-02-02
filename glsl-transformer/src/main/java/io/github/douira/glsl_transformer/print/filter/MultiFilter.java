@@ -188,7 +188,6 @@ public class MultiFilter<T> extends TokenFilter<T> {
   @Override
   public void setCollector(PhaseCollector<T> collector) {
     super.setCollector(collector);
-    
     for (var subfilter : subfilters) {
       subfilter.setCollector(collector);
     }
