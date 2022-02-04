@@ -19,7 +19,7 @@ public class WrapIdentifierImpl<T> extends WrapIdentifier<T> {
   /**
    * Creates a new wrap identifier transformation with a fixed result identifier.
    * 
-   * @see WrapIdentifier#WrapIdentifier(TransformationPhase, TransformationPhase)
+   * @see WrapIdentifier#WrapIdentifier(TransformationPhase, TransformationPhase, TransformationPhase)
    * 
    * @param wrapResult       The identifier that's inserted for the wrapping
    * @param wrappingReplacer The replacer phase that replaces a target identifier
