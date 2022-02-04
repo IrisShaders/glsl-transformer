@@ -1,9 +1,7 @@
 package io.github.douira.glsl_transformer.core;
 
-import io.github.douira.glsl_transformer.core.target.ThrowTarget;
 import io.github.douira.glsl_transformer.transform.Transformation;
 import io.github.douira.glsl_transformer.transform.TransformationPhase;
-import io.github.douira.glsl_transformer.tree.TreeMember;
 
 /**
  * The wrap identifier transformation wraps the usage of a certain identifier
@@ -15,6 +13,8 @@ public abstract class WrapIdentifier<T> extends Transformation<T> {
   /**
    * Creates a new wrap identifier transformation.
    * 
+   * @param wrapResultFilter A phase that makes sure the wrap result doesn't
+   *                         already exist in the tree
    * @param wrappingReplacer The replacer phase that should replace a target
    *                         identifier with a replacement expression or
    *                         identifier
@@ -23,30 +23,13 @@ public abstract class WrapIdentifier<T> extends Transformation<T> {
    *                         for the newly inserted identifier in the form of
    *                         an external declaration of some sort
    */
-  public WrapIdentifier(TransformationPhase<T> wrappingReplacer, TransformationPhase<T> wrappingInjector) {
+  public WrapIdentifier(
+      TransformationPhase<T> wrapResultFilter,
+      TransformationPhase<T> wrappingReplacer,
+      TransformationPhase<T> wrappingInjector) {
     // throw if the wrap result already exists
-    addPhase(new SearchTerminals<T>(new ThrowTarget<T>() {
-      @Override
-      public String getMessage(TreeMember node, String match) {
-        return "The wrapper identifier '" + getNeedle() + "' shouldn't already be present in the code!";
-      }
-
-      @Override
-      public String getNeedle() {
-        return getWrapResult();
-      }
-    }));
-
+    addPhase(wrapResultFilter);
     addPhase(wrappingReplacer);
     addConcurrentPhase(wrappingInjector);
   }
-
-  /**
-   * Returns the wrap result that will be preset after wrapping. This is only used
-   * for detection of the identifier prior to wrapping for throwing an error if
-   * it's present.
-   * 
-   * @return The identifier that's inserted for the wrapping
-   */
-  public abstract String getWrapResult();
 }
