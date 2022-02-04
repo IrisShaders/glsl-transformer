@@ -16,7 +16,7 @@ public class StringFilter<T> extends TokenFilter<T> {
   /**
    * Creates a new string token filter with a set of disallowed strings.
    * 
-   * @param disallowed The strings to match as the tokens
+   * @param disallowed The strings to match
    */
   public StringFilter(Set<String> disallowed) {
     this.disallowed = disallowed;
@@ -34,7 +34,7 @@ public class StringFilter<T> extends TokenFilter<T> {
   /**
    * Creates a new string token filter with an array of disallowed strings.
    * 
-   * @param disallowed
+   * @param disallowed The stirngs to match
    */
   public StringFilter(String... disallowed) {
     this.disallowed = CompatUtil.setOf(disallowed);

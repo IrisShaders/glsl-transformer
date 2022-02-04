@@ -167,6 +167,7 @@ public class TransformationManager<T> extends PhaseCollector<T> {
    * @param parameters The job parameters to set
    * @param run        The function to run while the transformation manager has
    *                   job parameters
+   * @return The value returned by the supplier function
    */
   public <R> R withJobParameters(T parameters, Supplier<R> run) {
     jobParameters = parameters;
