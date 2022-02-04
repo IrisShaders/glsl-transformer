@@ -1,6 +1,5 @@
 # Todo
 
-- Test multi filter job parameters
 - Call init on handler targets, also other things like before/after search and activation
 - AST structures for GLSL types: Continue work on Tensor (tensor manipulation methods and "widening" until it hits the maximum)
 - AST: Structs
