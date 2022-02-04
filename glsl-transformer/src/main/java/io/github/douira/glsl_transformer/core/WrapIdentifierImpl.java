@@ -5,6 +5,7 @@ import io.github.douira.glsl_transformer.GLSLParser.TranslationUnitContext;
 import io.github.douira.glsl_transformer.core.target.HandlerTarget;
 import io.github.douira.glsl_transformer.core.target.ParsedReplaceTargetImpl;
 import io.github.douira.glsl_transformer.core.target.TerminalReplaceTargetImpl;
+import io.github.douira.glsl_transformer.core.target.WrapTargetImpl;
 import io.github.douira.glsl_transformer.transform.RunPhase;
 import io.github.douira.glsl_transformer.transform.TransformationPhase;
 import io.github.douira.glsl_transformer.transform.TransformationPhase.InjectionPoint;
@@ -15,8 +16,6 @@ import io.github.douira.glsl_transformer.transform.TransformationPhase.Injection
  * @see WrapIdentifier
  */
 public class WrapIdentifierImpl<T> extends WrapIdentifier<T> {
-  private final String wrapResult;
-
   /**
    * Creates a new wrap identifier transformation with a fixed result identifier.
    * 
@@ -34,8 +33,7 @@ public class WrapIdentifierImpl<T> extends WrapIdentifier<T> {
       String wrapResult,
       TransformationPhase<T> wrappingReplacer,
       TransformationPhase<T> wrappingInjector) {
-    super(wrappingReplacer, wrappingInjector);
-    this.wrapResult = wrapResult;
+    super(new WrapTargetImpl<T>(wrapResult), wrappingReplacer, wrappingInjector);
   }
 
   /**
@@ -54,12 +52,7 @@ public class WrapIdentifierImpl<T> extends WrapIdentifier<T> {
       String wrapResult,
       HandlerTarget<T> wrappingTarget,
       TransformationPhase<T> wrappingInjector) {
-    this(wrapResult, new SearchTerminals<>(wrappingTarget), wrappingInjector);
-  }
-
-  @Override
-  public String getWrapResult() {
-    return wrapResult;
+    this(wrapResult, new SearchTerminals<T>(wrappingTarget), wrappingInjector);
   }
 
   /**
