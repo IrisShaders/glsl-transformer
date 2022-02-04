@@ -4,7 +4,7 @@ package io.github.douira.glsl_transformer.core.target;
  * This implementation of the wrap target uses a field for statically holding
  * the wrap result.
  */
-public class WrapTargetImpl<T> extends WrapTarget<T> {
+public class WrapThrowTargetImpl<T> extends WrapThrowTarget<T> {
   private final String wrapResult;
 
   /**
@@ -12,7 +12,7 @@ public class WrapTargetImpl<T> extends WrapTarget<T> {
    * 
    * @param wrapResult The wrap target which is the search string
    */
-  public WrapTargetImpl(String wrapResult) {
+  public WrapThrowTargetImpl(String wrapResult) {
     this.wrapResult = wrapResult;
   }
 
