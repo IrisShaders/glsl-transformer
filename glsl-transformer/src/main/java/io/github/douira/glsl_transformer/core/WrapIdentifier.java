@@ -21,22 +21,22 @@ public class WrapIdentifier<T> extends Transformation<T> {
   /**
    * Creates a new wrap identifier transformation.
    * 
-   * @param wrapResultFilter A phase that makes sure the wrap result doesn't
-   *                         already exist in the tree
-   * @param wrappingReplacer The replacer phase that should replace a target
-   *                         identifier with a replacement expression or
-   *                         identifier
-   * @param wrappingInjector A transformation phase that does the additional
-   *                         code injection, usually providing a definition
-   *                         for the newly inserted identifier in the form of
-   *                         an external declaration of some sort
+   * @param wrapResultDetector A phase that makes sure the wrap result doesn't
+   *                           already exist in the tree
+   * @param wrappingReplacer   The replacer phase that should replace a target
+   *                           identifier with a replacement expression or
+   *                           identifier
+   * @param wrappingInjector   A transformation phase that does the additional
+   *                           code injection, usually providing a definition
+   *                           for the newly inserted identifier in the form of
+   *                           an external declaration of some sort
    */
   public WrapIdentifier(
-      TransformationPhase<T> wrapResultFilter,
+      TransformationPhase<T> wrapResultDetector,
       TransformationPhase<T> wrappingReplacer,
       TransformationPhase<T> wrappingInjector) {
     // throw if the wrap result already exists
-    addPhase(wrapResultFilter);
+    addPhase(wrapResultDetector);
     addPhase(wrappingReplacer);
     addConcurrentPhase(wrappingInjector);
   }

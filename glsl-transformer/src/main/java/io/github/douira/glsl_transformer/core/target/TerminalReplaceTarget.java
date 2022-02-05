@@ -35,7 +35,7 @@ public abstract class TerminalReplaceTarget<T> extends ReplaceTarget<T> {
   protected abstract String getTerminalContent();
 
   @Override
-  public TreeMember getReplacement(TreeMember node, String match) {
+  protected TreeMember getReplacement(TreeMember node, String match) {
     return new StringNode(getTerminalContent());
   }
 }

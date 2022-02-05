@@ -17,7 +17,7 @@ public class WrapThrowTargetImpl<T> extends WrapThrowTarget<T> {
   }
 
   @Override
-  public String getWrapResult() {
+  protected String getWrapResult() {
     return wrapResult;
   }
 }

@@ -30,7 +30,7 @@ public abstract class ParsedReplaceTarget<T> extends HandlerTargetImpl<T> {
    * 
    * @see io.github.douira.glsl_transformer.core.target.HandlerTargetImpl#HandlerTargetImpl()
    */
-  public ParsedReplaceTarget() {
+  protected ParsedReplaceTarget() {
   }
 
   /**
@@ -39,11 +39,11 @@ public abstract class ParsedReplaceTarget<T> extends HandlerTargetImpl<T> {
    * that is inserted as a
    * replacement for the found target.
    * 
-   * @param node The node that contains the token
+   * @param node  The node that contains the token
    * @param match The token text that contains the needle
    * @return The string to parse as a new node
    */
-  abstract protected String getNewContent(TreeMember node, String match);
+  protected abstract String getNewContent(TreeMember node, String match);
 
   /**
    * Returns the method for parsing the string returned by
@@ -55,7 +55,7 @@ public abstract class ParsedReplaceTarget<T> extends HandlerTargetImpl<T> {
    * @return The parser method that should be used for parsing the new node as a
    *         replacement for the node found to contain the needle
    */
-  abstract protected Function<GLSLParser, ExtendedContext> getParseMethod(TreeMember node, String match);
+  protected abstract Function<GLSLParser, ExtendedContext> getParseMethod(TreeMember node, String match);
 
   @Override
   public void handleResult(TreeMember node, String match) {

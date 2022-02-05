@@ -21,7 +21,7 @@ public class ThrowTargetImpl<T> extends ThrowTarget<T> {
   }
 
   @Override
-  public String getMessage(TreeMember node, String match) {
+  protected String getMessage(TreeMember node, String match) {
     return message;
   }
 }

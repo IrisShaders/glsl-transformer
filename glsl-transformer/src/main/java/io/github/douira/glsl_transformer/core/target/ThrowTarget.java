@@ -33,7 +33,7 @@ public abstract class ThrowTarget<T> extends HandlerTargetImpl<T> {
    * @param match The token text that contains the needle
    * @return The semantic exception to throw
    */
-  public abstract String getMessage(TreeMember node, String match);
+  protected abstract String getMessage(TreeMember node, String match);
 
   @Override
   public void handleResult(TreeMember node, String match) {
