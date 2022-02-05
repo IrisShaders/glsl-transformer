@@ -23,5 +23,5 @@ public abstract class WrapThrowTarget<T> extends ThrowTarget<T> {
    * 
    * @return The identifier that's inserted for the wrapping
    */
-  public abstract String getWrapResult();
+  protected abstract String getWrapResult();
 }

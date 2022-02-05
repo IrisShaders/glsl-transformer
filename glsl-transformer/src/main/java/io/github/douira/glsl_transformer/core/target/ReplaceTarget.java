@@ -35,7 +35,7 @@ public abstract class ReplaceTarget<T> extends HandlerTargetImpl<T> {
    * @param match The entire content of the node that matches the search string
    * @return The new node to replace the found node with
    */
-  public abstract TreeMember getReplacement(TreeMember node, String match);
+  protected abstract TreeMember getReplacement(TreeMember node, String match);
 
   @Override
   public void handleResult(TreeMember node, String match) {

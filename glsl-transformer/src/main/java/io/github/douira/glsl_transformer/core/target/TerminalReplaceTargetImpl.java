@@ -31,7 +31,7 @@ public class TerminalReplaceTargetImpl<T> extends TerminalReplaceTarget<T> {
   }
 
   @Override
-  public TreeMember getReplacement(TreeMember node, String match) {
+  protected TreeMember getReplacement(TreeMember node, String match) {
     if (cacheNode == null) {
       cacheNode = super.getReplacement(node, match);
     }
