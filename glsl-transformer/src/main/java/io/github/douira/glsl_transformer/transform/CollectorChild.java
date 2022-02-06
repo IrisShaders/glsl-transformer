@@ -15,14 +15,14 @@ public interface CollectorChild<T> {
    * 
    * @param collector The phase collector to set as the parent
    */
-  void setCollector(PhaseCollector<T> collector);
+  public void setCollector(PhaseCollector<T> collector);
 
   /**
    * Returns the phase collector set on this child.
    * 
    * @return The currently set phase collector
    */
-  PhaseCollector<T> getCollector();
+  public PhaseCollector<T> getCollector();
 
   /**
    * Returns the executing phase collector's parser.
