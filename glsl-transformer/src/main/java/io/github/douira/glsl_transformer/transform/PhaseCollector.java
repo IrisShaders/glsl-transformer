@@ -117,6 +117,7 @@ public abstract class PhaseCollector<T> {
 
     // refresh each transformation's state before starting the transformation
     for (var transformation : transformations) {
+      transformation.setCollector(this);
       transformation.resetState();
     }
 

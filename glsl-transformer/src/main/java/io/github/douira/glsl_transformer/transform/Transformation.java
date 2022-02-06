@@ -34,7 +34,7 @@ import com.github.bsideup.jabel.Desugar;
  * matter and the parser is just used to figure out how the rules of the
  * tree are.
  */
-public class Transformation<T> {
+public class Transformation<T> extends CollectorChildImpl<T> {
   /**
    * The default group index. If no group index is specified, this group index is
    * used. All phases without an explicit group index are added in this group. If
