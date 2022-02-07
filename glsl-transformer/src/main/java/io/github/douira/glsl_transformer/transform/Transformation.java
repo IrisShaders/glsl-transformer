@@ -57,9 +57,8 @@ public class Transformation<T> extends CollectorChildImpl<T> {
   private int nextPhaseIndex = 1;
 
   /**
-   * Creates a stateless transformatio n and adds a single phase to it. If you
-   * want
-   * to add multiple phases to a transformation, create an instance and call
+   * Creates a stateless transformation and adds a single phase to it. If you
+   * want to add multiple phases to a transformation, create an instance and call
    * {@link #addPhase(TransformationPhase)} multiple times.
    * 
    * @param phase The only transformation phase to add to a new stateless
