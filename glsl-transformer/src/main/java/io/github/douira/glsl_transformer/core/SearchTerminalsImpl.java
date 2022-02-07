@@ -25,7 +25,7 @@ public class SearchTerminalsImpl<T> extends SearchTerminals<T> {
   /**
    * The list of targets to process for each targeted context.
    */
-  protected final Collection<HandlerTarget<T>> targets;
+  protected Collection<HandlerTarget<T>> targets;
 
   /**
    * Creates a new target search phase with the given targets.
