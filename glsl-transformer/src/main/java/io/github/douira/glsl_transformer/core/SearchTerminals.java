@@ -60,6 +60,9 @@ public abstract class SearchTerminals<T> extends WalkPhase<T> {
   @Override
   public void visitTerminal(TerminalNode node) {
     Token token = node.getSymbol();
+    if (token == null) {
+      return;
+    }
     var tokenType = token.getType();
     if (tokenType == Token.INVALID_TYPE || tokenType == getTerminalTokenType()) {
       String text = token.getText();
