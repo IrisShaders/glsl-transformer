@@ -24,9 +24,14 @@ import io.github.douira.glsl_transformer.tree.TreeMember;
  */
 public abstract class SearchTerminals<T> extends WalkPhase<T> {
   /**
-   * A constant for easy access to the identifier token type.
+   * The identifier token type.
    */
   public static final int IDENTIFIER = GLSLLexer.IDENTIFIER;
+
+  /**
+   * The token type that matches any terminal token.
+   */
+  public static final int ANY_TYPE = Token.INVALID_TYPE;
 
   /**
    * If string matching is done exactly or also larger strings that contain the
@@ -55,7 +60,7 @@ public abstract class SearchTerminals<T> extends WalkPhase<T> {
   @Override
   public void visitTerminal(TerminalNode node) {
     Token token = node.getSymbol();
-    var tokenType =  getTerminalTokenType();
+    var tokenType = getTerminalTokenType();
     if (tokenType == Token.INVALID_TYPE || token.getType() == tokenType) {
       String text = token.getText();
 
