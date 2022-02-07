@@ -2,6 +2,7 @@ package io.github.douira.glsl_transformer.tree;
 
 import org.antlr.v4.runtime.ParserRuleContext;
 import org.antlr.v4.runtime.Token;
+import org.antlr.v4.runtime.tree.ParseTree;
 import org.antlr.v4.runtime.tree.TerminalNodeImpl;
 
 /**
@@ -10,6 +11,8 @@ import org.antlr.v4.runtime.tree.TerminalNodeImpl;
  * be a tree member.
  */
 public class ExtendedTerminalNode extends TerminalNodeImpl implements TreeMember {
+  private ParseTree previousNode;
+
   /**
    * Creates a new extended terminal node with a parent node and a token as the
    * symbol.
@@ -38,7 +41,7 @@ public class ExtendedTerminalNode extends TerminalNodeImpl implements TreeMember
   /**
    * Creates a null-token and parentless terminal node. This is to be used when
    * the node is a placeholder and it will be added to a parse tree node. Adding
-   * it as a child using the node's method will attach it as a parent.
+   * it as a child using a node's addChild method will attach it as a parent.
    */
   public ExtendedTerminalNode() {
     this(null);
@@ -59,5 +62,15 @@ public class ExtendedTerminalNode extends TerminalNodeImpl implements TreeMember
     }
 
     parent.omitTokens(getSourceInterval());
+  }
+
+  @Override
+  public ParseTree getPreviousNode() {
+    return previousNode;
+  }
+
+  @Override
+  public void setPreviousNode(ParseTree previousNode) {
+    this.previousNode = previousNode;
   }
 }

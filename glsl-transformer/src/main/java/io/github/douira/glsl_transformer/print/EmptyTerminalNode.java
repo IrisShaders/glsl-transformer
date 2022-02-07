@@ -1,8 +1,5 @@
 package io.github.douira.glsl_transformer.print;
 
-import org.antlr.v4.runtime.tree.ParseTree;
-
-import io.github.douira.glsl_transformer.transform.MoveCheckable;
 import io.github.douira.glsl_transformer.tree.ExtendedTerminalNode;
 import io.github.douira.glsl_transformer.tree.TreeMember;
 
@@ -12,21 +9,23 @@ import io.github.douira.glsl_transformer.tree.TreeMember;
  * expects child lists not to change length during iteration. The print visitor
  * ignores it during printing because it's token is null.
  */
-public class EmptyTerminalNode extends ExtendedTerminalNode implements MoveCheckable {
-  private final ParseTree previousNode;
-
+public class EmptyTerminalNode extends ExtendedTerminalNode {
   /**
-   * Creates a new empty terminal node with a given previous node.
+   * Creates a new empty terminal node with a given previous node. This method is
+   * not to be used productively as it is only for compactness in certain
+   * unusual situations (like in tests).
    * 
    * @param previousNode The previous node to keep a reference to
    */
   public EmptyTerminalNode(TreeMember previousNode) {
     super(previousNode.getParent());
-    this.previousNode = previousNode;
+    setPreviousNode(previousNode);
   }
 
-  @Override
-  public boolean replacesNode(ParseTree node) {
-    return previousNode == node;
+  /**
+   * Creates a new empty terminal node. The previous node and parent node are set
+   * when it is inserted as a child.
+   */
+  public EmptyTerminalNode() {
   }
 }

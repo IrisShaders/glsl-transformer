@@ -135,6 +135,15 @@ public abstract class TransformationPhase<T> extends GLSLParserBaseListener impl
       throw new IllegalArgumentException("The root node may not be removed!");
     }
 
+    /*
+     * tell the node being replaced which node preceded it, this is to ensure that
+     * the dynamic parse tree walker knows where to continue walking if some
+     * operation during the walk modifies the array structurally (though it can only
+     * be modified in such a way that the item the walker currently is looking at
+     * moves further to the end of the array.)
+     */
+    newNode.setPreviousNode(removeNode);
+
     var children = parent.children;
     var index = children.indexOf(removeNode);
     newNode.setParent(parent);
@@ -154,7 +163,7 @@ public abstract class TransformationPhase<T> extends GLSLParserBaseListener impl
   protected int removeNode(TreeMember removeNode) {
     // the node needs to be replaced with something to preserve the containing
     // array's length or there's a NullPointerException in the walker
-    return replaceNode(removeNode, new EmptyTerminalNode(removeNode));
+    return replaceNode(removeNode, new EmptyTerminalNode());
   }
 
   /**

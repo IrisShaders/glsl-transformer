@@ -2,10 +2,12 @@ package io.github.douira.glsl_transformer.transform;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+import java.time.Duration;
 import java.util.LinkedList;
 import java.util.List;
 
 import org.antlr.v4.runtime.tree.ParseTree;
+import org.antlr.v4.runtime.tree.TerminalNode;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -19,8 +21,10 @@ import io.github.douira.glsl_transformer.GLSLParser.TranslationUnitContext;
 import io.github.douira.glsl_transformer.SnapshotUtil;
 import io.github.douira.glsl_transformer.TestCaseSource;
 import io.github.douira.glsl_transformer.TestResourceManager.FileLocation;
+import io.github.douira.glsl_transformer.ast.StringNode;
 import io.github.douira.glsl_transformer.TestWithTransformationManager;
 import io.github.douira.glsl_transformer.transform.TransformationPhase.InjectionPoint;
+import io.github.douira.glsl_transformer.tree.TreeMember;
 
 /**
  * TODO: test node removal, replacement and injection in local roots
@@ -223,7 +227,19 @@ public class TransformationPhaseTest extends TestWithTransformationManager<Void>
           protected void run(TranslationUnitContext ctx) {
             replaceNode(ctx, null);
           }
-        }));
+        }), "It should throw if the root node is replaced");
+  }
+
+  @Test
+  void testPreviousNodeHandling() {
+    // this timeout is pretty long because overhead takes a while sometimes
+    assertTimeoutPreemptively(Duration.ofMillis(500),
+        () -> runTransformation("a;", new WalkPhase<>() {
+          @Override
+          public void visitTerminal(TerminalNode node) {
+            replaceNode((TreeMember) node, new StringNode("b"));
+          }
+        }), "It should not get stuck in an infinite loop after replacement in a walk phase");
   }
 
   @Test
