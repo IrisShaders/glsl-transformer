@@ -16,7 +16,6 @@ import io.github.douira.glsl_transformer.util.CompatUtil;
  * fields to return the targets and the terminal token type.
  */
 public class SearchTerminalsImpl<T> extends SearchTerminals<T> {
-
   /**
    * The target type of token to replace
    */
@@ -46,6 +45,16 @@ public class SearchTerminalsImpl<T> extends SearchTerminals<T> {
    */
   public SearchTerminalsImpl(int terminalTokenType, HandlerTarget<T> target) {
     this(terminalTokenType, CompatUtil.listOf(target));
+  }
+
+  /**
+   * Creates a new target search phase with only the terminal token type given.
+   * 
+   * @param terminalTokenType The type of the token to search in
+   */
+  public SearchTerminalsImpl(int terminalTokenType) {
+    this();
+    this.terminalTokenType = terminalTokenType;
   }
 
   /**
