@@ -68,7 +68,9 @@ public class DynamicParseTreeWalker extends ParseTreeWalker {
     }
 
     // compact the tree by removing empty terminal nodes after walking
-    node.children.removeIf(child -> child instanceof EmptyTerminalNode);
+    if (node.children != null) {
+      node.children.removeIf(child -> child instanceof EmptyTerminalNode);
+    }
 
     exitRule(listener, node);
   }
