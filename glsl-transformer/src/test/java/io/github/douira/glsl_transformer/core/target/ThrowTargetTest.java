@@ -5,7 +5,7 @@ import static org.junit.jupiter.api.Assertions.*;
 import org.junit.jupiter.api.Test;
 
 import io.github.douira.glsl_transformer.TestWithTransformationManager;
-import io.github.douira.glsl_transformer.core.SearchTerminals;
+import io.github.douira.glsl_transformer.core.SearchTerminalsImpl;
 import io.github.douira.glsl_transformer.transform.SemanticException;
 import io.github.douira.glsl_transformer.tree.TreeMember;
 
@@ -26,7 +26,7 @@ public class ThrowTargetTest extends TestWithTransformationManager<Void> {
     try {
       runTransformation(
           "int f = foo + oofevilinside;",
-          new SearchTerminals<>(
+          new SearchTerminalsImpl<>(
               new ThrowTarget<Void>("evil") {
                 @Override
                 public String getMessage(TreeMember node, String match) {
@@ -54,7 +54,7 @@ public class ThrowTargetTest extends TestWithTransformationManager<Void> {
     try {
       runTransformation(
           "int f = foo + oofevilinside + outside + evil;",
-          new SearchTerminals<>(
+          new SearchTerminalsImpl<>(
               new ThrowTarget<Void>("evil") {
                 @Override
                 public String getMessage(TreeMember node, String match) {
@@ -76,6 +76,6 @@ public class ThrowTargetTest extends TestWithTransformationManager<Void> {
     assertDoesNotThrow(
         () -> runTransformation(
             "int f = foo + EvilInCaps + EVILCAPS + e_v_i_l_spaced;",
-            new SearchTerminals<>(new ThrowTargetImpl<>("evil", "message"))));
+            new SearchTerminalsImpl<>(new ThrowTargetImpl<>("evil", "message"))));
   }
 }
