@@ -60,8 +60,8 @@ public abstract class SearchTerminals<T> extends WalkPhase<T> {
   @Override
   public void visitTerminal(TerminalNode node) {
     Token token = node.getSymbol();
-    var tokenType = getTerminalTokenType();
-    if (tokenType == Token.INVALID_TYPE || token.getType() == tokenType) {
+    var tokenType = token.getType();
+    if (tokenType == Token.INVALID_TYPE || tokenType == getTerminalTokenType()) {
       String text = token.getText();
 
       // TODO: this could be optimized using a trie if there are very many needles
