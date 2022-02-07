@@ -2,6 +2,8 @@ package io.github.douira.glsl_transformer.transform;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+import java.util.ArrayList;
+
 import org.antlr.v4.runtime.ParserRuleContext;
 import org.antlr.v4.runtime.tree.ErrorNode;
 import org.antlr.v4.runtime.tree.ErrorNodeImpl;
@@ -68,5 +70,30 @@ public class DynamicParseTreeWalkerTest {
     assertEquals(3, listener.terminalVisits, "It should visit each terminal but not the removed one");
     assertEquals(1, listener.errorVisits, "It should visit the error node");
     assertEquals(2, listener.ruleState, "It should enter and exit one time");
+  }
+
+  @Test
+  void testNullChildList() {
+    assertDoesNotThrow(() -> {
+      var tree = new ExtendedContext(null, 0) {
+      };
+
+      DynamicParseTreeWalker.DEFAULT.walk(new WalkPhase<Void>() {
+      }, tree);
+      assertNull(tree.children, "The child array should be null");
+    }, "It should not throw when a parent has a null child array");
+  }
+
+  @Test
+  void testEmptyChildList() {
+    assertDoesNotThrow(() -> {
+      var tree = new ExtendedContext(null, 0) {
+      };
+      tree.children = new ArrayList<>();
+
+      DynamicParseTreeWalker.DEFAULT.walk(new WalkPhase<Void>() {
+      }, tree);
+      assertEquals(0, tree.children.size(), "The child array should be not null but empty");
+    }, "It should not throw when a parent has an empty child array");
   }
 }
