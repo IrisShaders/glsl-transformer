@@ -37,6 +37,8 @@ public abstract class ExtendedContext extends RuleContextWithAltNum implements T
     }
   };
 
+  private ParseTree previousNode;
+
   /**
    * A reference to a node closer to the local root. For local roots or the
    * root node this is the node itself. For all other nodes it can actually be the
@@ -78,6 +80,16 @@ public abstract class ExtendedContext extends RuleContextWithAltNum implements T
   public ExtendedContext(ParserRuleContext parent, int invokingStateNumber) {
     super(parent, invokingStateNumber);
     updateRoot();
+  }
+
+  @Override
+  public ParseTree getPreviousNode() {
+    return previousNode;
+  }
+
+  @Override
+  public void setPreviousNode(ParseTree previousNode) {
+    this.previousNode = previousNode;
   }
 
   /** Override to make type more specific */

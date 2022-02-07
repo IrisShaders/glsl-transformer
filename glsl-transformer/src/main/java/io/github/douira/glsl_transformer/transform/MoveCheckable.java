@@ -13,30 +13,32 @@ import org.antlr.v4.runtime.tree.ParseTree;
  */
 public interface MoveCheckable {
   /**
-   * Checks if the implementing object was inserted into the tree to replace the
-   * given node. This is used to check if an empty terminal node replaced this
-   * node in the parse tree.
+   * Returns the node that this node replaced during a tree transformation.
    * 
-   * @param node The node to check for having been replaced by this node
-   * @return {@code true} if this node replaced the given node
+   * @return The replaced node
    */
-  public boolean replacesNode(ParseTree node);
+  public ParseTree getPreviousNode();
 
   /**
-   * Checks if any given parse tree node replaces another. This also deals with
-   * some nodes being regular terminal nodes and maybe not implementing this
-   * interface. Otherwise it does the same thing as
-   * {@link #replacesNode(ParseTree)}.
+   * Allows the transformation phase to tell this node which node it replaces.
+   * 
+   * @param previousNode The node to set as the previous node in this position in
+   *                     the parent's child array that this node replaces
+   */
+  public void setPreviousNode(ParseTree previousNode);
+
+  /**
+   * Checks if any given parse tree node replaces another. If the nodes aren't the
+   * same, it checks recursively if the previous node of the new node maybe
+   * replaces the old node. This chain must end at some point or something is
+   * wrong.
    * 
    * @param oldNode The node having maybe been replaced
    * @param newNode The node that could be the replacement
    * @return {@code true} if the new node replaced the old node
    */
   public static boolean replaces(ParseTree oldNode, ParseTree newNode) {
-    if (newNode instanceof MoveCheckable checkable) {
-      return checkable.replacesNode(oldNode);
-    } else {
-      return oldNode == newNode;
-    }
+    return oldNode == newNode
+        || newNode instanceof MoveCheckable checkable && replaces(oldNode, checkable.getPreviousNode());
   }
 }
