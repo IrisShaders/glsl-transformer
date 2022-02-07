@@ -1,5 +1,6 @@
 package io.github.douira.glsl_transformer.transform;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
@@ -53,8 +54,9 @@ public class Transformation<T> extends CollectorChildImpl<T> {
   public static record PhaseEntry<T> (TransformationPhase<T> phase, int index, int group) {
   };
 
-  private final List<PhaseEntry<T>> phaseRegistry = new LinkedList<>();
+  private final List<PhaseEntry<T>> phaseRegistry = new ArrayList<>();
   private int nextPhaseIndex = 1;
+  private final List<Transformation<T>> childTransformations = new LinkedList<>();
 
   /**
    * Creates a stateless transformation and adds a single phase to it. If you
@@ -178,6 +180,24 @@ public class Transformation<T> extends CollectorChildImpl<T> {
   };
 
   /**
+   * Inits the state of this transformation and all child transformations.
+   */
+  void resetStateInternal() {
+    resetState();
+    for (var child : childTransformations) {
+      child.resetState();
+    }
+  }
+
+  @Override
+  public void setCollector(PhaseCollector<T> collector) {
+    super.setCollector(collector);
+    for (var child : childTransformations) {
+      child.setCollector(collector);
+    }
+  }
+
+  /**
    * Adds all the stored phases to the given phase collector.
    * 
    * @param collector The phase collector to add the phases to
@@ -197,6 +217,7 @@ public class Transformation<T> extends CollectorChildImpl<T> {
    */
   public void merge(Transformation<T> other) {
     addPhases(other.phaseRegistry);
+    childTransformations.add(other);
   }
 
   /**
@@ -219,5 +240,6 @@ public class Transformation<T> extends CollectorChildImpl<T> {
       maxIndex = Math.max(maxIndex, index);
     }
     nextPhaseIndex = maxIndex + 1;
+    childTransformations.add(other);
   }
 }

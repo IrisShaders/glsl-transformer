@@ -1,6 +1,6 @@
 # Todo
 
-- Test Transformation.append and merge
+- Test Transformation.append and .merge (and that job parameters are available in phases added this way)
 - Call init on handler targets, also other things like before/after search and activation
 - AST structures for GLSL types: Continue work on Tensor (tensor manipulation methods and "widening" until it hits the maximum)
 - AST: Structs
