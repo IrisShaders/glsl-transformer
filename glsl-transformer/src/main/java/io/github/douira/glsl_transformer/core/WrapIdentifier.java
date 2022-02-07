@@ -78,7 +78,7 @@ public class WrapIdentifier<T> extends Transformation<T> {
       String wrapResult,
       HandlerTarget<T> wrappingTarget,
       TransformationPhase<T> wrappingInjector) {
-    this(wrapResult, new SearchTerminals<T>(wrappingTarget), wrappingInjector);
+    this(wrapResult, new SearchTerminalsImpl<T>(wrappingTarget), wrappingInjector);
   }
 
   /**
