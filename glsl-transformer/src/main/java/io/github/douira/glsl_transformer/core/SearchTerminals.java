@@ -59,6 +59,10 @@ public abstract class SearchTerminals<T> extends WalkPhase<T> {
       String text = token.getText();
 
       // TODO: this could be optimized using a trie if there are very many needles
+      var targets = getTargets();
+      if (targets == null) {
+        return;
+      }
       for (var target : getTargets()) {
         if (findNeedle(text, target)) {
           if (!(node instanceof TreeMember)) {
