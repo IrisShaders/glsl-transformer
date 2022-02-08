@@ -63,8 +63,11 @@ public abstract class SearchTerminals<T> extends WalkPhase<T> {
     if (token == null) {
       return;
     }
-    var tokenType = token.getType();
-    if (tokenType == Token.INVALID_TYPE || tokenType == getTerminalTokenType()) {
+
+    // check this token if the accepted type is the invalid type or if it matches
+    // the token's type
+    var targetType = getTerminalTokenType();
+    if (targetType == Token.INVALID_TYPE || targetType == token.getType()) {
       String text = token.getText();
 
       // TODO: this could be optimized using a trie if there are very many needles
