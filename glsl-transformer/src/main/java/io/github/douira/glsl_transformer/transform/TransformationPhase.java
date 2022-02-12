@@ -408,19 +408,33 @@ public abstract class TransformationPhase<T> extends GLSLParserBaseListener impl
   }
 
   /**
-   * Injects a new {@code #define} statement at the specified location. This
-   * method is for convenience since injecting defines is a common operation. For
-   * other directives the {@link io.github.douira.glsl_transformer.ast.Directive }
-   * class should be used.
+   * Injects a list of nodes into the translation unit context node. Does the same
+   * thing as {@link #injectNode(InjectionPoint, ParseTree)} but with a list of
+   * nodes.
    * 
-   * @apiNote This method should be avoided if a direct replacement of identifiers
-   *          using the appropriate core transformations is possible.
-   * 
-   * @param location The injection point at which the new node is inserted
-   * @param content  The content after the #define prefix
+   * @param location The injection point at which the new nodes are inserted
+   * @param newNodes The list of nodes to be inserted
    */
-  protected void injectDefine(InjectionPoint location, String content) {
-    injectNode(location, new Directive(Type.DEFINE, content));
+  protected void injectNodes(InjectionPoint location, Deque<ParseTree> newNodes) {
+    var injectIndex = getInjectionIndex(location);
+    var rootNode = getRootNode();
+    newNodes.descendingIterator()
+        .forEachRemaining(newNode -> rootNode.addChild(injectIndex, newNode));
+  }
+
+  /**
+   * Injects an array of nodes at an injection location.
+   * 
+   * @see #injectNodes(InjectionPoint, Deque)
+   * @param location The injection point at which the new nodes are inserted
+   * @param newNodes The list of nodes to be inserted
+   */
+  protected void injectNodes(InjectionPoint location, ParseTree... newNodes) {
+    var injectIndex = getInjectionIndex(location);
+    var rootNode = getRootNode();
+    for (var i = newNodes.length - 1; i >= 0; i--) {
+      rootNode.addChild(injectIndex, newNodes[i]);
+    }
   }
 
   /**
@@ -454,32 +468,18 @@ public abstract class TransformationPhase<T> extends GLSLParserBaseListener impl
   }
 
   /**
-   * Injects a list of nodes into the translation unit context node. Does the same
-   * thing as {@link #injectNode(InjectionPoint, ParseTree)} but with a list of
-   * nodes.
+   * Injects a new {@code #define} statement at the specified location. This
+   * method is for convenience since injecting defines is a common operation. For
+   * other directives the {@link io.github.douira.glsl_transformer.ast.Directive }
+   * class should be used.
    * 
-   * @param location The injection point at which the new nodes are inserted
-   * @param newNodes The list of nodes to be inserted
-   */
-  protected void injectNodes(InjectionPoint location, Deque<ParseTree> newNodes) {
-    var injectIndex = getInjectionIndex(location);
-    var rootNode = getRootNode();
-    newNodes.descendingIterator()
-        .forEachRemaining(newNode -> rootNode.addChild(injectIndex, newNode));
-  }
-
-  /**
-   * Injects an array of nodes at an injection location.
+   * @apiNote This method should be avoided if a direct replacement of identifiers
+   *          using the appropriate core transformations is possible.
    * 
-   * @see #injectNodes(InjectionPoint, Deque)
-   * @param location The injection point at which the new nodes are inserted
-   * @param newNodes The list of nodes to be inserted
+   * @param location The injection point at which the new node is inserted
+   * @param content  The content after the #define prefix
    */
-  protected void injectNodes(InjectionPoint location, ParseTree... newNodes) {
-    var injectIndex = getInjectionIndex(location);
-    var rootNode = getRootNode();
-    for (var i = newNodes.length - 1; i >= 0; i--) {
-      rootNode.addChild(injectIndex, newNodes[i]);
-    }
+  protected void injectDefine(InjectionPoint location, String content) {
+    injectNode(location, new Directive(Type.DEFINE, content));
   }
 }
