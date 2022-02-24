@@ -61,7 +61,7 @@ public class Transformation<T> extends CollectorChildImpl<T> {
   };
 
   private final List<PhaseEntry<T>> phaseRegistry = new ArrayList<>();
-  private int nextPhaseIndex = DEFAULT_INDEX;
+  private int nextPhaseIndex;
   private final List<Transformation<T>> childTransformations = new LinkedList<>();
 
   /**
@@ -73,6 +73,7 @@ public class Transformation<T> extends CollectorChildImpl<T> {
    *              transformation
    */
   public Transformation(TransformationPhase<T> phase) {
+    this();
     addPhase(phase);
   }
 
@@ -81,6 +82,7 @@ public class Transformation<T> extends CollectorChildImpl<T> {
    * be added later.
    */
   public Transformation() {
+    resetNextPhaseIndex();
   }
 
   /**
@@ -163,6 +165,13 @@ public class Transformation<T> extends CollectorChildImpl<T> {
    */
   public void addPhases(Collection<PhaseEntry<T>> entries) {
     phaseRegistry.addAll(entries);
+  }
+
+  /**
+   * Resets the next phase index to the default index.
+   */
+  public void resetNextPhaseIndex() {
+    nextPhaseIndex = DEFAULT_INDEX;
   }
 
   /**
