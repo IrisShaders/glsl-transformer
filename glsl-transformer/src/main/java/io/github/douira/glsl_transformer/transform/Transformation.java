@@ -45,6 +45,12 @@ public class Transformation<T> extends CollectorChildImpl<T> {
   public static final int DEFAULT_GROUP = 0;
 
   /**
+   * The default index. The first added phase has this index, even if it is added
+   * with {@link #addConcurrentPhase(TransformationPhase)}.
+   */
+  public static final int DEFAULT_INDEX = 1;
+
+  /**
    * The record used to store added transformation phases with their ordering
    * index and group index. When this transformation is added to a phase collector
    * the list of these entries is used to add the contained phases to the
@@ -55,7 +61,7 @@ public class Transformation<T> extends CollectorChildImpl<T> {
   };
 
   private final List<PhaseEntry<T>> phaseRegistry = new ArrayList<>();
-  private int nextPhaseIndex = 1;
+  private int nextPhaseIndex = DEFAULT_INDEX;
   private final List<Transformation<T>> childTransformations = new LinkedList<>();
 
   /**
@@ -146,7 +152,7 @@ public class Transformation<T> extends CollectorChildImpl<T> {
    * @param phase The phase to add at the same position as the previous one
    */
   public void addConcurrentPhase(TransformationPhase<T> phase) {
-    addPhase(Math.max(1, nextPhaseIndex - 1), phase);
+    addPhase(Math.max(DEFAULT_INDEX, nextPhaseIndex - 1), phase);
   }
 
   /**
