@@ -41,7 +41,7 @@ public abstract class RunPhase<T> extends TransformationPhase<T> {
    * @param newNodes The nodes to inject
    * @return The run phase that does only these injections
    */
-  public <R> RunPhase<R> withInjectNodes(InjectionPoint location, ParseTree newNodes) {
+  public static <R> RunPhase<R> withInjectNodes(InjectionPoint location, ParseTree newNodes) {
     return new RunPhase<R>() {
       @Override
       protected void run(TranslationUnitContext ctx) {
@@ -62,7 +62,7 @@ public abstract class RunPhase<T> extends TransformationPhase<T> {
    * @param str      The strings to parse as external declarations
    * @return The run phase that does only these injections
    */
-  public <R> RunPhase<R> withInjectExternalDeclarations(InjectionPoint location, String... str) {
+  public static <R> RunPhase<R> withInjectExternalDeclarations(InjectionPoint location, String... str) {
     return new RunPhase<R>() {
       @Override
       protected void run(TranslationUnitContext ctx) {
