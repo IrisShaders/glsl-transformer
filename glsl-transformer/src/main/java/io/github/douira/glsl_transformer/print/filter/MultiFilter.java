@@ -5,7 +5,7 @@ import java.util.Collection;
 
 import org.antlr.v4.runtime.Token;
 
-import io.github.douira.glsl_transformer.transform.PhaseCollector;
+import io.github.douira.glsl_transformer.transform.ExecutionPlanner;
 
 /**
  * A multi filter checks all contained filters with either requiring all of them
@@ -186,10 +186,10 @@ public class MultiFilter<T> extends TokenFilter<T> {
   }
 
   @Override
-  public void setCollector(PhaseCollector<T> collector) {
-    super.setCollector(collector);
+  public void setPlanner(ExecutionPlanner<T> planner) {
+    super.setPlanner(planner);
     for (var subfilter : subfilters) {
-      subfilter.setCollector(collector);
+      subfilter.setPlanner(planner);
     }
   }
 }

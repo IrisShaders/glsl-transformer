@@ -1,6 +1,6 @@
 package io.github.douira.glsl_transformer.core.target;
 
-import io.github.douira.glsl_transformer.transform.PhaseCollector;
+import io.github.douira.glsl_transformer.transform.ExecutionPlanner;
 import io.github.douira.glsl_transformer.transform.TransformationPhase;
 import io.github.douira.glsl_transformer.tree.TreeMember;
 
@@ -32,7 +32,7 @@ public abstract class HandlerTarget<T> extends TransformationPhase<T> {
   public abstract void handleResult(TreeMember node, String match);
 
   @Override
-  public void setCollector(PhaseCollector<T> parent) {
-    super.setCollector(parent);
+  public void setPlanner(ExecutionPlanner<T> parent) {
+    super.setPlanner(parent);
   }
 }

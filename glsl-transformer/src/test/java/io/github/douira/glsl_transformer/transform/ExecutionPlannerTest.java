@@ -5,15 +5,15 @@ import static org.junit.jupiter.api.Assertions.*;
 import org.junit.jupiter.api.Test;
 
 import io.github.douira.glsl_transformer.GLSLParser.TranslationUnitContext;
-import io.github.douira.glsl_transformer.transform.Transformation.PhaseEntry;
+import io.github.douira.glsl_transformer.transform.Transformation.Node;
 
-public class PhaseCollectorTest {
+public class ExecutionPlannerTest {
   private TransformationManager<Void> manager;
   private int nextIndex;
 
   void addOrderedPhase(int index, int group) {
     final var assertIndex = nextIndex++;
-    manager.addPhaseAt(new PhaseEntry<>(new RunPhase<>() {
+    manager.addPhaseAt(new Node<>(new RunPhase<>() {
       @Override
       protected void run(TranslationUnitContext ctx) {
         assertEquals(assertIndex, nextIndex++,
@@ -88,7 +88,7 @@ public class PhaseCollectorTest {
     nextIndex = 0;
     var transformation = new Transformation<Void>() {
       @Override
-      void addPhasesTo(PhaseCollector<Void> collector) {
+      void addPhasesTo(ExecutionPlanner<Void> planner) {
         nextIndex++;
       }
 
@@ -111,8 +111,8 @@ public class PhaseCollectorTest {
   void testRegisterTransformationMultiple() {
     manager = new TransformationManager<Void>();
     nextIndex = 0;
-    manager.registerTransformationMultiple(collector -> {
-      assertEquals(manager, collector, "It should pass itself as the collector to register transformations to");
+    manager.registerTransformationMultiple(planner -> {
+      assertEquals(manager, planner, "It should pass itself as the planner to register transformations to");
       nextIndex++;
     });
     assertEquals(1, nextIndex, "It should call the function for registering transformations on it");

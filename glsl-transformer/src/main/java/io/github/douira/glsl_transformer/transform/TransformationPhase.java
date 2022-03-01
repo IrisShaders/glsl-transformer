@@ -37,12 +37,12 @@ import io.github.douira.glsl_transformer.util.CompatUtil;
  * adding and removing parse tree nodes. It can also inject nodes into the root
  * node's child array with injection points.
  */
-public abstract class TransformationPhase<T> extends GLSLParserBaseListener implements CollectorChild<T> {
-  private PhaseCollector<T> collector;
+public abstract class TransformationPhase<T> extends GLSLParserBaseListener implements LifecycleUser<T> {
+  private ExecutionPlanner<T> planner;
   private boolean initialized = false;
 
   /**
-   * Method called by the phase collector before the walk happens. The returned
+   * Method called by the execution planner before the walk happens. The returned
    * boolean determines if the phase is added to the list of phases that are
    * walked on the tree. Returns false by default and implementing classes should
    * overwrite this.
@@ -55,7 +55,8 @@ public abstract class TransformationPhase<T> extends GLSLParserBaseListener impl
   }
 
   /**
-   * Method called by the phase collector after the walk happens. Does nothing by
+   * Method called by the execution planner after the walk happens. Does nothing
+   * by
    * default.
    * 
    * @param ctx The root node
@@ -65,7 +66,7 @@ public abstract class TransformationPhase<T> extends GLSLParserBaseListener impl
 
   /**
    * This method internally calls {@link #init()} if the phase has not yet been
-   * initialized. This is the method that the phase collector calls since it
+   * initialized. This is the method that the execution planner calls since it
    * prevents multiple inits.
    */
   protected void lazyInit() {
@@ -76,8 +77,8 @@ public abstract class TransformationPhase<T> extends GLSLParserBaseListener impl
   }
 
   @Override
-  public PhaseCollector<T> getCollector() {
-    return collector;
+  public ExecutionPlanner<T> getPlanner() {
+    return planner;
   }
 
   /**
@@ -87,8 +88,8 @@ public abstract class TransformationPhase<T> extends GLSLParserBaseListener impl
    * {@inheritDoc}
    */
   @Override
-  public void setCollector(PhaseCollector<T> parent) {
-    this.collector = parent;
+  public void setPlanner(ExecutionPlanner<T> parent) {
+    this.planner = parent;
   }
 
   /**
@@ -236,17 +237,6 @@ public abstract class TransformationPhase<T> extends GLSLParserBaseListener impl
    */
   protected boolean isActive() {
     return true;
-  }
-
-  /**
-   * This method is called one in the lifetime of a phase. It can be used to
-   * compile xpaths and pattern matchers.
-   * 
-   * This method should not be used to initialize state specific to a specific
-   * transformation job. That is handled by
-   * {@link io.github.douira.glsl_transformer.transform.Transformation}.
-   */
-  protected void init() {
   }
 
   /**

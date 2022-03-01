@@ -2,13 +2,13 @@ package io.github.douira.glsl_transformer.print.filter;
 
 import org.antlr.v4.runtime.Token;
 
-import io.github.douira.glsl_transformer.transform.CollectorChildImpl;
+import io.github.douira.glsl_transformer.transform.LifecycleUserImpl;
 
 /**
  * A token filter is an object that can check if given tokens should be printed
  * or not.
  */
-public abstract class TokenFilter<T> extends CollectorChildImpl<T> {
+public abstract class TokenFilter<T> extends LifecycleUserImpl<T> {
 
   /**
    * Checks if the token should be printed.
