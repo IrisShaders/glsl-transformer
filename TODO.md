@@ -1,5 +1,6 @@
 # Todo
 
+- Improve transformation phase scheduling by moving to a dependency graph-based system. The transformation phases define which they depend on which forms a DAG that can be traversed starting from transformations that have no dependencies. This can lead to an even more efficient walk packing scheme.
 - Test Transformation.append and .merge (and that job parameters are available in phases added this way)
 - Call init on handler targets, also other things like before/after search and activation
 - AST structures for GLSL types: Continue work on Tensor (tensor manipulation methods and "widening" until it hits the maximum)
