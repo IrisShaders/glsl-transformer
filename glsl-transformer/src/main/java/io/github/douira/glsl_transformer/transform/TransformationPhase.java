@@ -39,7 +39,6 @@ import io.github.douira.glsl_transformer.util.CompatUtil;
  */
 public abstract class TransformationPhase<T> extends GLSLParserBaseListener implements LifecycleUser<T> {
   private ExecutionPlanner<T> planner;
-  private boolean initialized = false;
 
   /**
    * Method called by the execution planner before the walk happens. The returned
@@ -62,18 +61,6 @@ public abstract class TransformationPhase<T> extends GLSLParserBaseListener impl
    * @param ctx The root node
    */
   protected void runAfterWalk(TranslationUnitContext ctx) {
-  }
-
-  /**
-   * This method internally calls {@link #init()} if the phase has not yet been
-   * initialized. This is the method that the execution planner calls since it
-   * prevents multiple inits.
-   */
-  protected void lazyInit() {
-    if (!initialized) {
-      init();
-      initialized = true;
-    }
   }
 
   @Override

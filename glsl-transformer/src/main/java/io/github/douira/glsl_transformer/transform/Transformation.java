@@ -29,7 +29,7 @@ import java.util.Map;
  * tree are.
  */
 public class Transformation<T> extends LifecycleUserImpl<T> {
-  private final Map<LifecycleUser<T>, Node<T>> nodeMap = new HashMap<>();
+  private final Map<LifecycleUser<T>, Node<T>> nodes = new HashMap<>();
   private Node<T> rootNode = new Node<>();
   private Node<T> endNode = new Node<>();
   private Node<T> lastAddedDependency;
@@ -59,19 +59,18 @@ public class Transformation<T> extends LifecycleUserImpl<T> {
   }
 
   public Node<T> getNode(LifecycleUser<T> content) {
-    var node = nodeMap.get(content);
+    var node = nodes.get(content);
     if (node == null) {
       node = new Node<T>(content);
-      nodeMap.put(content, node);
+      nodes.put(content, node);
     }
     return node;
   }
 
   private void addDependency(Node<T> dependentNode, Node<T> dependencyNode) {
-    lastAddedDependency = dependencyNode;
     dependentNode.addDependency(dependencyNode);
+    lastAddedDependency = dependencyNode;
 
-    // fix root and end node links
     updateInternalLinks();
     dependentNode.updateBothLinks(rootNode, endNode);
     dependencyNode.updateBothLinks(rootNode, endNode);
