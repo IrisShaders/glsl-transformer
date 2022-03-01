@@ -107,7 +107,7 @@ public class MultiFilterTest extends TestWithTransformationManager<Void> {
   }
 
   @Test
-  void testSetCollector() {
+  void testsetPlanner() {
     nextIndex = 0;
     var parameters = new Object();
     var multiFilter = new MultiFilter<Object>();
@@ -152,7 +152,7 @@ public class MultiFilterTest extends TestWithTransformationManager<Void> {
     nextIndex = 0;
     assertPrintFilterResult(";b;;;", "a;b;A;B;", multiFilter, "It should filter with a conjunction by default");
     assertEquals(808, nextIndex, "It should call both filters each time");
-    
+
     nextIndex = 0;
     multiFilter.setConjunction(false);
     assertPrintFilterResult("a;b;;B;", "a;b;A;B;", multiFilter, "It should filter correctly with a disjunction");

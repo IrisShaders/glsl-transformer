@@ -12,25 +12,24 @@ import org.antlr.v4.runtime.BufferedTokenStream;
 import io.github.douira.glsl_transformer.GLSLLexer;
 import io.github.douira.glsl_transformer.GLSLParser;
 import io.github.douira.glsl_transformer.GLSLParser.TranslationUnitContext;
-import io.github.douira.glsl_transformer.transform.Transformation.PhaseEntry;
+import io.github.douira.glsl_transformer.transform.Transformation.Node;
 import io.github.douira.glsl_transformer.util.ComparablePair;
 
 /**
- * The phase collector holds the registered transformations and manages their
- * execution. After creating an instance, transformations should be registered
- * with it. During registration the phase collector organizes the phases each
- * transformation contributes. In order to reduce the number of times the tree
- * has to be walked, it processes all walk phases of each level at the same
- * time. A level of phases consists of all phases that were added to their
- * transformation at the same index.
+ * The execution planner finds a valid way of satisfying the root
+ * transformation's dependencies. All other transformations and phases are added
+ * as dependencies to the root transformation.
  */
-public abstract class PhaseCollector<T> {
+public abstract class ExecutionPlanner<T> {
   private final Map<ComparablePair<Integer, Integer>, List<TransformationPhase<T>>> executionLevels = new TreeMap<>();
   private final Collection<Transformation<T>> transformations = new ArrayList<>();
+  private Transformation<T> rootTransformation = new Transformation<>();
+
   private TranslationUnitContext rootNode;
 
   /**
-   * Returns this phase collector's parser. How the parser is stored is up to the
+   * Returns this execution planner's parser. How the parser is stored is up to
+   * the
    * implementing class.
    * 
    * @return The parser
@@ -38,17 +37,22 @@ public abstract class PhaseCollector<T> {
   public abstract GLSLParser getParser();
 
   /**
-   * Returns the phase collector's lexer.
+   * Returns the execution planner's lexer.
    * 
    * @return The lexer
    */
   public abstract GLSLLexer getLexer();
 
+  public void finalize() {
+    // TODO: do execution planning and set flag to allow
+  }
+
   /**
-   * Returns the phase collector's current job parameters. This may be null if the
-   * transformation manager's caller decides not to pass job parameters. However,
-   * a convention to always pass valid job parameters (whatever that may be) could
-   * be established if they are required for transformation phases to function.
+   * Returns the execution planner's current job parameters. This may be null if
+   * the transformation manager's caller decides not to pass job parameters.
+   * However, a convention to always pass valid job parameters (whatever that may
+   * be) could be established if they are required for transformation phases to
+   * function.
    * 
    * @return The job parameters
    */
@@ -67,29 +71,18 @@ public abstract class PhaseCollector<T> {
   }
 
   /**
-   * Registers a single transformation with this phase collector. When the phase
-   * collector transforms a tree, the phases contributed by this transformation
+   * Registers a single transformation with this execution planner. When the phase
+   * planner transforms a tree, the phases contributed by this transformation
    * will be run.
+   * 
+   * Multiple transformations can be added by calling this function multiple times
+   * or by adding a single enclosing transformation that includes multiple
+   * sub-transformations as concurrent dependencies.
    * 
    * @param transformation The transformation to collect the phases from
    */
-  public void registerTransformation(Transformation<T> transformation) {
-    transformation.addPhasesTo(this);
-    transformations.add(transformation);
-  }
-
-  /**
-   * Registers multiple transformations by calling a function that consumes a
-   * phase collector. This can be used together with transformation groups by
-   * having them register many transformations with a phase collector.
-   * 
-   * @see #registerTransformation(Transformation)
-   * 
-   * @param groupRegisterer The function that registers transformations on the
-   *                        phase collector it is given
-   */
-  public void registerTransformationMultiple(Consumer<PhaseCollector<T>> groupRegisterer) {
-    groupRegisterer.accept(this);
+  public void addConcurrentTransformation(Transformation<T> transformation) {
+    rootTransformation.concurrent(transformation);
   }
 
   /**
@@ -99,7 +92,7 @@ public abstract class PhaseCollector<T> {
    * @param entry The entry containing the index, group index and phase to be
    *              added
    */
-  void addPhaseAt(PhaseEntry<T> entry) {
+  void addPhaseAt(Node<T> entry) {
     var phase = entry.phase();
     var indexPair = new ComparablePair<>(entry.group(), entry.index());
     var phasesForIndex = executionLevels.get(indexPair);
@@ -108,7 +101,7 @@ public abstract class PhaseCollector<T> {
       executionLevels.put(indexPair, phasesForIndex);
     }
     phasesForIndex.add(phase);
-    phase.setCollector(this);
+    phase.setPlanner(this);
     phase.lazyInit();
   }
 
@@ -117,7 +110,7 @@ public abstract class PhaseCollector<T> {
 
     // refresh each transformation's state before starting the transformation
     for (var transformation : transformations) {
-      transformation.setCollector(this);
+      transformation.setPlanner(this);
       transformation.resetStateInternal();
     }
 
@@ -125,7 +118,7 @@ public abstract class PhaseCollector<T> {
       var proxyListener = new ProxyParseTreeListener(new ArrayList<>());
 
       for (var phase : level) {
-        phase.setCollector(this);
+        phase.setPlanner(this);
 
         if (phase.checkBeforeWalk(ctx)) {
           proxyListener.add(phase);
