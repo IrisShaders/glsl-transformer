@@ -3,17 +3,12 @@ package io.github.douira.glsl_transformer.transform;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
-import java.util.Map;
-import java.util.TreeMap;
-import java.util.function.Consumer;
 
 import org.antlr.v4.runtime.BufferedTokenStream;
 
 import io.github.douira.glsl_transformer.GLSLLexer;
 import io.github.douira.glsl_transformer.GLSLParser;
 import io.github.douira.glsl_transformer.GLSLParser.TranslationUnitContext;
-import io.github.douira.glsl_transformer.transform.Transformation.Node;
-import io.github.douira.glsl_transformer.util.ComparablePair;
 
 /**
  * The execution planner finds a valid way of satisfying the root
@@ -21,11 +16,16 @@ import io.github.douira.glsl_transformer.util.ComparablePair;
  * as dependencies to the root transformation.
  */
 public abstract class ExecutionPlanner<T> {
-  private final Map<ComparablePair<Integer, Integer>, List<TransformationPhase<T>>> executionLevels = new TreeMap<>();
+  private final List<Collection<TransformationPhase<T>>> executionLevels = new ArrayList<>();
   private final Collection<Transformation<T>> transformations = new ArrayList<>();
-  private Transformation<T> rootTransformation = new Transformation<>();
-
+  private final Transformation<T> rootTransformation = new Transformation<>();
   private TranslationUnitContext rootNode;
+  private boolean finalized = false;
+  private boolean initialized = false;
+
+  private static class LabeledNode<T> extends Node<T> {
+    int searchIndex = -1;
+  }
 
   /**
    * Returns this execution planner's parser. How the parser is stored is up to
@@ -42,10 +42,6 @@ public abstract class ExecutionPlanner<T> {
    * @return The lexer
    */
   public abstract GLSLLexer getLexer();
-
-  public void finalize() {
-    // TODO: do execution planning and set flag to allow
-  }
 
   /**
    * Returns the execution planner's current job parameters. This may be null if
@@ -81,44 +77,55 @@ public abstract class ExecutionPlanner<T> {
    * 
    * @param transformation The transformation to collect the phases from
    */
-  public void addConcurrentTransformation(Transformation<T> transformation) {
+  public void addConcurrent(Transformation<T> transformation) {
     rootTransformation.concurrent(transformation);
   }
 
-  /**
-   * Adds a single phase entry and inserts it at its position within the list of
-   * execution levels and phases within levels.
-   * 
-   * @param entry The entry containing the index, group index and phase to be
-   *              added
-   */
-  void addPhaseAt(Node<T> entry) {
-    var phase = entry.phase();
-    var indexPair = new ComparablePair<>(entry.group(), entry.index());
-    var phasesForIndex = executionLevels.get(indexPair);
-    if (phasesForIndex == null) {
-      phasesForIndex = new ArrayList<>();
-      executionLevels.put(indexPair, phasesForIndex);
+  public Transformation<T> getRootTransformation() {
+    return rootTransformation;
+  }
+
+  public void finalize() {
+    if (finalized) {
+      throw new IllegalStateException("The execution planner should not be finalized multiple times!");
     }
-    phasesForIndex.add(phase);
-    phase.setPlanner(this);
-    phase.lazyInit();
+
+    // establish the entire graph including null-nodes but no nested structures
+    // (resolve nested Transformations)
+
+    // do search (depth first) to label nodes with their depth number, while not
+    // incrementing it for null-content nodes, collect transformations for init
+
+    // sort labelled nodes into execution levels
+
+    finalized = true;
   }
 
   private void execute(TranslationUnitContext ctx) {
+    if (!finalized) {
+      throw new IllegalStateException("The execution planner has to be finalized before execution!");
+    }
+
     rootNode = ctx;
 
     // refresh each transformation's state before starting the transformation
     for (var transformation : transformations) {
       transformation.setPlanner(this);
-      transformation.resetStateInternal();
+      if (!initialized) {
+        transformation.init();
+      }
+      transformation.resetState();
     }
 
-    for (var level : executionLevels.values()) {
+    for (var level : executionLevels) {
       var proxyListener = new ProxyParseTreeListener(new ArrayList<>());
 
       for (var phase : level) {
         phase.setPlanner(this);
+        if (!initialized) {
+          phase.init();
+        }
+        phase.resetState();
 
         if (phase.checkBeforeWalk(ctx)) {
           proxyListener.add(phase);
@@ -135,6 +142,7 @@ public abstract class ExecutionPlanner<T> {
     }
 
     rootNode = null;
+    initialized = true;
   }
 
   /**
