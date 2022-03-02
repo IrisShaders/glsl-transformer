@@ -5,13 +5,15 @@ import java.util.HashSet;
 
 class Node<T> {
   private LifecycleUser<T> content;
-  private Collection<Node<T>> dependencies = new HashSet<>();
+  private Collection<Node<T>> dependencies;
   private int dependents = 0;
 
   Node() {
+    dependencies = new HashSet<>();
   }
 
   Node(LifecycleUser<T> content) {
+    this();
     this.content = content;
   }
 
@@ -21,6 +23,10 @@ class Node<T> {
 
   void setContent(LifecycleUser<T> content) {
     this.content = content;
+  }
+
+  Collection<Node<T>> getDependencies() {
+    return dependencies;
   }
 
   private void addDependent() {
