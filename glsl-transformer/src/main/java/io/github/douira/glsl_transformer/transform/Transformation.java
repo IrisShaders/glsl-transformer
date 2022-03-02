@@ -54,17 +54,25 @@ public class Transformation<T> extends LifecycleUserImpl<T> {
   public Transformation() {
   }
 
-  private void updateInternalLinks() {
-    rootNode.updateEndLink(endNode);
+  Node<T> getRootDepNode() {
+    return rootNode;
   }
 
-  public Node<T> getNode(LifecycleUser<T> content) {
+  Node<T> getEndDepNode() {
+    return endNode;
+  }
+
+  Node<T> getNode(LifecycleUser<T> content) {
     var node = nodes.get(content);
     if (node == null) {
       node = new Node<T>(content);
       nodes.put(content, node);
     }
     return node;
+  }
+
+  private void updateInternalLinks() {
+    rootNode.updateEndLink(endNode);
   }
 
   private void addDependency(Node<T> dependentNode, Node<T> dependencyNode) {

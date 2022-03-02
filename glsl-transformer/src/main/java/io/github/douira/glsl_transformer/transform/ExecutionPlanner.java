@@ -2,7 +2,13 @@ package io.github.douira.glsl_transformer.transform;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Deque;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 import org.antlr.v4.runtime.BufferedTokenStream;
 
@@ -22,10 +28,6 @@ public abstract class ExecutionPlanner<T> {
   private TranslationUnitContext rootNode;
   private boolean finalized = false;
   private boolean initialized = false;
-
-  private static class LabeledNode<T> extends Node<T> {
-    int searchIndex = -1;
-  }
 
   /**
    * Returns this execution planner's parser. How the parser is stored is up to
@@ -85,18 +87,126 @@ public abstract class ExecutionPlanner<T> {
     return rootTransformation;
   }
 
-  public void finalize() {
+  public void planExecution() {
     if (finalized) {
       throw new IllegalStateException("The execution planner should not be finalized multiple times!");
     }
 
-    // establish the entire graph including null-nodes but no nested structures
-    // (resolve nested Transformations)
+    record StackEntry<R> (TransformationPhase<R> dependent, Node<R> node, Transformation<R> context) {
+      StackEntry(Transformation<R> context) {
+        this(null, null, context);
+      }
+    }
+
+    class LabeledNode<R> {
+      final TransformationPhase<R> phase;
+      Collection<TransformationPhase<R>> dependencies = new HashSet<>();
+      int searchIndex = -1;
+
+      public LabeledNode(TransformationPhase<R> phase) {
+        this.phase = phase;
+      }
+
+      void addDependency(TransformationPhase<R> phase) {
+        dependencies.add(phase);
+      }
+
+      public void compact() {
+        dependencies = new ArrayList<>(dependencies);
+      }
+
+      public TransformationPhase<R> getPhase() {
+        return phase;
+      }
+    }
+
+    // establish the the un-nested version of the graph by finding dependencies
+    Map<TransformationPhase<T>, LabeledNode<T>> nodeMap = new HashMap<>();
+    Collection<LabeledNode<T>> nodes = new ArrayList<>();
+    Deque<StackEntry<T>> stack = new LinkedList<>();
+    Set<Transformation<T>> transformationSet = new HashSet<>();
+    Set<Node<T>> visited = new HashSet<>();
+
+    // start the stack with a fake node that just contains the root transformation
+    // this makes the first loop iteration like finding some nested transformation
+    stack.push(new StackEntry<>(null, new Node<>(rootTransformation), rootTransformation));
+
+    // TODO: verify correctness and efficiency
+    while (!stack.isEmpty()) {
+      var entry = stack.pop();
+      var dependent = entry.dependent();
+      var node = entry.node();
+      var content = node.getContent();
+
+      if (content instanceof Transformation<T> transformation) {
+        transformationSet.add(transformation);
+
+        // add an entry with the current context used for restoring it when the inner
+        // context is done
+        stack.push(new StackEntry<>(transformation));
+
+        // start processing nested nodes of transformations with the root node
+        stack.push(new StackEntry<>(dependent, transformation.getRootDepNode(), transformation));
+
+        continue;
+      }
+
+      // add phase as a content dependency, transformations are not content
+      // dependencies since they don't participate in execution directly
+      var closestContent = dependent;
+      if (content instanceof TransformationPhase<T> phase) {
+        var labeledNode = nodeMap.get(dependent);
+        if (labeledNode == null) {
+          labeledNode = new LabeledNode<>(dependent);
+          nodeMap.put(dependent, labeledNode);
+          nodes.add(labeledNode);
+        }
+        labeledNode.addDependency(phase);
+
+        closestContent = phase;
+      }
+
+      // TODO: don't process the same node's dependencies multiple times
+      // make sure the stack ordering isn't messed up with this though
+      // multiple iteration could happen when a node has multiple dependents
+
+      var dependencies = node.getDependencies();
+      if (!dependencies.isEmpty()) {
+        var context = entry.context();
+
+        // if the node is the end node of the context, restore the context using the
+        // special entry added to the stack when the transformation was entered
+        if (node == context.getEndDepNode()) {
+          context = stack.pop().context();
+        }
+
+        // process dependencies for non-transformation content
+        for (var dependency : node.getDependencies()) {
+          stack.push(new StackEntry<>(closestContent, dependency, context));
+        }
+      }
+    }
+
+    // compact the gathered transformations into a list for fast iteration
+    transformations.addAll(transformationSet);
+    for (var node : nodes) {
+      node.compact();
+    }
 
     // do search (depth first) to label nodes with their depth number, while not
     // incrementing it for null-content nodes, collect transformations for init
+    // TODO
 
     // sort labelled nodes into execution levels
+    for (var node : nodes) {
+      var index = node.searchIndex;
+      var level = executionLevels.get(index);
+      if (level == null) {
+        level = new ArrayList<>();
+        executionLevels.set(index, level);
+      }
+      level.add(node.getPhase());
+    }
 
     finalized = true;
   }
@@ -117,7 +227,11 @@ public abstract class ExecutionPlanner<T> {
       transformation.resetState();
     }
 
-    for (var level : executionLevels) {
+    // iterate the levels in reverse order since level 0 in the execution levels
+    // depends on those with higher indexes
+    for (var iterator = executionLevels.listIterator(executionLevels.size()); iterator.hasPrevious();) {
+      var level = iterator.previous();
+
       var proxyListener = new ProxyParseTreeListener(new ArrayList<>());
 
       for (var phase : level) {
