@@ -2,6 +2,7 @@ package io.github.douira.glsl_transformer.transform;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Optional;
 
 /**
  * The transformation holds information about dependencies between
@@ -63,12 +64,11 @@ public class Transformation<T> extends LifecycleUserImpl<T> {
   }
 
   Node<T> getNode(LifecycleUser<T> content) {
-    var node = nodes.get(content);
-    if (node == null) {
-      node = new Node<T>(content);
-      nodes.put(content, node);
-    }
-    return node;
+    return Optional.ofNullable(nodes.get(content)).orElseGet(() -> {
+      var newNode = new Node<T>(content);
+      nodes.put(content, newNode);
+      return newNode;
+    });
   }
 
   private void updateInternalLinks() {

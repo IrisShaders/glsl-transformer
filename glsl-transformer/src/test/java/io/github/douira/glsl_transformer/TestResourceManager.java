@@ -9,6 +9,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Stream;
 
@@ -98,11 +99,9 @@ public class TestResourceManager {
   }
 
   private static Resource getPathResource(Path path) {
-    var result = RESOURCE_CACHE.get(path);
-    if (result == null) {
-      result = new Resource(path, getFileContent(path));
-    }
-    return result;
+    return Optional
+        .ofNullable(RESOURCE_CACHE.get(path))
+        .orElseGet(() -> new Resource(path, getFileContent(path)));
   }
 
   private static String getFileContent(Path path) {
