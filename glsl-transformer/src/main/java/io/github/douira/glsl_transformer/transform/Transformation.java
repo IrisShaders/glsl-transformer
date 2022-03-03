@@ -30,7 +30,7 @@ import java.util.Optional;
  * tree are.
  */
 public class Transformation<T> extends LifecycleUserImpl<T> {
-  private final Map<LifecycleUser<T>, Node<T>> nodes = new HashMap<>();
+  private final Map<LifecycleUser<T>, Node<T>> contentNodes = new HashMap<>();
   private Node<T> rootNode = new Node<>();
   private Node<T> endNode = new Node<>();
   private Node<T> lastAddedDependency;
@@ -64,9 +64,9 @@ public class Transformation<T> extends LifecycleUserImpl<T> {
   }
 
   private Node<T> getNode(LifecycleUser<T> content) {
-    return Optional.ofNullable(nodes.get(content)).orElseGet(() -> {
+    return Optional.ofNullable(contentNodes.get(content)).orElseGet(() -> {
       var newNode = new Node<T>(content);
-      nodes.put(content, newNode);
+      contentNodes.put(content, newNode);
       return newNode;
     });
   }
@@ -127,7 +127,7 @@ public class Transformation<T> extends LifecycleUserImpl<T> {
     var previousEnd = endNode;
     endNode = new Node<T>();
     previousEnd.setContent(toAppend);
-    nodes.put(toAppend, previousEnd);
+    contentNodes.put(toAppend, previousEnd);
     previousEnd.addDependency(endNode);
     return toAppend;
   }
@@ -142,7 +142,7 @@ public class Transformation<T> extends LifecycleUserImpl<T> {
     var previousRoot = rootNode;
     rootNode = new Node<T>();
     previousRoot.setContent(toPrepend);
-    nodes.put(toPrepend, previousRoot);
+    contentNodes.put(toPrepend, previousRoot);
     rootNode.addDependency(previousRoot);
     return toPrepend;
   }
