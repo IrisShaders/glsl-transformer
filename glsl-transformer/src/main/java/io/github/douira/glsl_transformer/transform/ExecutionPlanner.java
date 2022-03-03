@@ -90,7 +90,8 @@ public abstract class ExecutionPlanner<T> {
 
   public void planExecution() {
     if (finalized) {
-      throw new IllegalStateException("The execution planner should not be finalized multiple times!");
+      throw new IllegalStateException(
+          "The execution planner should not be finalized multiple times! Finalization is performed before the first execution or explicitly by calling planExecution.");
     }
 
     class LabeledNode<R> {
@@ -109,10 +110,6 @@ public abstract class ExecutionPlanner<T> {
 
       void addDependency(LabeledNode<R> dependency) {
         dependencies.add(dependency);
-      }
-
-      void compact() {
-        dependencies = new ArrayList<>(dependencies);
       }
     }
 
@@ -196,11 +193,6 @@ public abstract class ExecutionPlanner<T> {
     // compact the gathered transformations into the final list for fast iteration
     transformations.addAll(transformationSet);
 
-    // compact nodes' internal dependency list for fast iteration
-    for (var node : nodes) {
-      node.compact();
-    }
-
     record DFSEntry<R> (LabeledNode<R> node, boolean enter) {
     }
 
@@ -256,7 +248,7 @@ public abstract class ExecutionPlanner<T> {
 
   private void execute(TranslationUnitContext ctx) {
     if (!finalized) {
-      throw new IllegalStateException("The execution planner has to be finalized before execution!");
+      planExecution();
     }
 
     rootNode = ctx;
