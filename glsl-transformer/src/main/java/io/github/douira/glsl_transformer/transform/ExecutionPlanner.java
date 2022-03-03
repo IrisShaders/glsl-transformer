@@ -70,9 +70,8 @@ public abstract class ExecutionPlanner<T> {
   }
 
   /**
-   * Registers a single transformation with this execution planner. When the phase
-   * planner transforms a tree, the phases contributed by this transformation
-   * will be run.
+   * Registers a single lifecycle user with this execution planner. This can be a
+   * transformation or a transformation phase.
    * 
    * Multiple transformations can be added by calling this function multiple times
    * or by adding a single enclosing transformation that includes multiple
@@ -80,8 +79,8 @@ public abstract class ExecutionPlanner<T> {
    * 
    * @param transformation The transformation to collect the phases from
    */
-  public void addConcurrent(Transformation<T> transformation) {
-    rootTransformation.addRootDependency(transformation);
+  public void addConcurrent(LifecycleUser<T> rootDependency) {
+    rootTransformation.addRootDependency(rootDependency);
   }
 
   public Transformation<T> getRootTransformation() {
