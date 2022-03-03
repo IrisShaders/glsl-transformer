@@ -273,9 +273,7 @@ public abstract class ExecutionPlanner<T> {
     // iterate the levels in reverse order since level 0 in the execution levels
     // depends on those with higher indexes
     // TODO: use right order once search part is done (maybe make 0->n again)
-    for (var iterator = executionLevels.listIterator(executionLevels.size()); iterator.hasPrevious();) {
-      var level = iterator.previous();
-
+    for (var level : executionLevels) {
       var proxyListener = new ProxyParseTreeListener(new ArrayList<>());
 
       for (var phase : level) {
