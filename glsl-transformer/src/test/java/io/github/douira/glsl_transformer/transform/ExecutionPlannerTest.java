@@ -31,26 +31,13 @@ public class ExecutionPlannerTest {
   }
 
   @Test
-  void testRegisterTransformation() {
+  void testAddConcurrent() {
     manager = new TransformationManager<Void>();
     nextIndex = 0;
-    var transformation = new Transformation<Void>() {
-      @Override
-      public void init() {
-        nextIndex++;
-      }
 
-      @Override
-      public void resetState() {
-        nextIndex++;
-      }
-    };
+    manager.addConcurrent(RunPhase.withRun(() -> nextIndex++));
 
-    manager.addConcurrent(transformation);
-    assertEquals(2, nextIndex, "It should request the transformation to add phases to it");
-
-    nextIndex = 0;
     manager.transform("");
-    assertEquals(2, nextIndex, "It should reset the state on each stored transformation");
+    assertEquals(1, nextIndex, "It should run the added phase");
   }
 }
