@@ -6,7 +6,6 @@ import java.util.Deque;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedList;
-import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
@@ -23,7 +22,7 @@ import io.github.douira.glsl_transformer.GLSLParser.TranslationUnitContext;
  * as dependencies to the root transformation.
  */
 public abstract class ExecutionPlanner<T> {
-  private final List<Collection<TransformationPhase<T>>> executionLevels = new ArrayList<>();
+  private final ArrayList<Collection<TransformationPhase<T>>> executionLevels = new ArrayList<>();
   private final Collection<Transformation<T>> transformations = new ArrayList<>();
   private final Transformation<T> rootTransformation = new Transformation<>();
   private TranslationUnitContext rootNode;
@@ -115,7 +114,6 @@ public abstract class ExecutionPlanner<T> {
     record CollectEntry<R> (Node<R> nodeToProcess, LabeledNode<R> dependent) {
     }
 
-    Collection<LabeledNode<T>> nodes = new ArrayList<>();
     Set<Transformation<T>> transformationSet = new HashSet<>();
     Set<Node<T>> dependenciesProcessed = new HashSet<>();
     Map<Node<T>, LabeledNode<T>> endNodeMap = new HashMap<>();
@@ -200,6 +198,7 @@ public abstract class ExecutionPlanner<T> {
     record DFSEntry<R> (LabeledNode<R> node, boolean enter) {
     }
 
+    int maximumDepth = 0;
     Deque<DFSEntry<T>> dfsStack = new LinkedList<>();
     dfsStack.add(new DFSEntry<>(rootNode, true));
 
@@ -229,21 +228,25 @@ public abstract class ExecutionPlanner<T> {
         // distance of the dependencies. other nodes don't increase the distance.
         if (node.content instanceof TransformationPhase) {
           node.endDistance++;
+          maximumDepth = Math.max(node.endDistance, maximumDepth);
         }
       }
     }
 
+    executionLevels.ensureCapacity(maximumDepth + 1);
+
     // place labelled nodes that contain phases into execution levels
-    for (var node : nodes) {
+    for (var node : contentNodeMap.values()) {
       if (node.content instanceof TransformationPhase<T> phase) {
-        Optional
-            .ofNullable(executionLevels.get(node.endDistance))
-            .orElseGet(() -> {
-              var newLevel = new ArrayList<TransformationPhase<T>>();
-              executionLevels.set(node.endDistance, newLevel);
-              return newLevel;
-            })
-            .add(phase);
+        Collection<TransformationPhase<T>> executionLevel;
+
+        if (executionLevels.get(node.endDistance) == null) {
+          executionLevel = new ArrayList<TransformationPhase<T>>();
+          executionLevels.set(node.endDistance, executionLevel);
+        } else {
+          executionLevel = executionLevels.get(node.endDistance);
+        }
+        executionLevel.add(phase);
       }
     }
 
