@@ -21,7 +21,8 @@ public abstract class WrapIdentifierDynamic<T> extends Transformation<T> {
    */
   public WrapIdentifierDynamic(TransformationPhase<T> wrappingInjector) {
     this();
-    addConcurrentPhase(wrappingInjector);
+    //TODO: fix up the dependencies around this
+    chainConcurrentDependency(wrappingInjector);
   }
 
   /**
@@ -29,7 +30,7 @@ public abstract class WrapIdentifierDynamic<T> extends Transformation<T> {
    * phase for that should be added to the transformation manually.
    */
   protected WrapIdentifierDynamic() {
-    addPhase(new SearchTerminalsImpl<T>(new WrapThrowTarget<T>() {
+    addRootDependency(new SearchTerminalsImpl<T>(new WrapThrowTarget<T>() {
       @Override
       protected String getWrapResult() {
         return getWrapResultDynamic();
@@ -41,7 +42,7 @@ public abstract class WrapIdentifierDynamic<T> extends Transformation<T> {
       }
     });
 
-    addPhase(new SearchTerminalsImpl<T>(new TerminalReplaceTarget<T>() {
+    chainConcurrentDependency(new SearchTerminalsImpl<T>(new TerminalReplaceTarget<T>() {
       @Override
       protected String getTerminalContent() {
         return getWrapResultDynamic();

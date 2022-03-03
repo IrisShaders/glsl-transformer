@@ -17,7 +17,9 @@ public abstract class WrapIdentifierExternalDeclaration<T>
    */
   public WrapIdentifierExternalDeclaration() {
     super();
-    addConcurrentPhase(new RunPhase<T>() {
+    // TODO: fix up the dependencies around this (do the same as in
+    // WrapIdentifierDynamic)
+    chainConcurrentDependency(new RunPhase<T>() {
       @Override
       protected void run(TranslationUnitContext ctx) {
         injectExternalDeclaration(getInjectionLocation(), getInjectionContent());
