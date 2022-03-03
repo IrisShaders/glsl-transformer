@@ -6,7 +6,7 @@ import io.github.douira.glsl_transformer.transform.TransformationPhase.Injection
 
 /**
  * A wrap identifier transformation that injects an external declaration at a
- * specified location. By default it's injected at
+ * specified location. By default, it's injected at
  * {@link InjectionPoint#BEFORE_DECLARATIONS}.
  */
 public abstract class WrapIdentifierExternalDeclaration<T>
@@ -41,7 +41,7 @@ public abstract class WrapIdentifierExternalDeclaration<T>
 
   /**
    * Returns the injection location for where the external declaration should be
-   * injected. By default this is {@link InjectionPoint#BEFORE_DECLARATIONS} but
+   * injected. By default, this is {@link InjectionPoint#BEFORE_DECLARATIONS} but
    * it can be overwritten.
    * 
    * @return The injection location to use
