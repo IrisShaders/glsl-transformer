@@ -96,8 +96,8 @@ public abstract class ExecutionPlanner<T> {
     class LabeledNode<R> {
       final LifecycleUser<R> content;
       Collection<LabeledNode<R>> dependencies = new HashSet<>();
-      final Collection<LabeledNode<R>> dependents = new ArrayList<>();
-      int searchIndex = -1;
+      int endDistance = -1;
+      boolean dfsFinished = false;
 
       LabeledNode(LifecycleUser<R> content) {
         this.content = content;
@@ -111,34 +111,8 @@ public abstract class ExecutionPlanner<T> {
         dependencies.add(dependency);
       }
 
-      void addDependent(LabeledNode<R> dependent) {
-        dependents.add(dependent);
-      }
-
       void compact() {
         dependencies = new ArrayList<>(dependencies);
-      }
-
-      void notifyDependencies() {
-        for (var dependency : dependencies) {
-          dependency.addDependent(this);
-        }
-      }
-
-      LifecycleUser<R> getContent() {
-        return content;
-      }
-
-      int getSearchIndex() {
-        return searchIndex;
-      }
-
-      void setSearchIndex(int searchIndex) {
-        this.searchIndex = searchIndex;
-      }
-
-      Collection<LabeledNode<R>> getDependencies() {
-        return dependencies;
       }
     }
 
@@ -208,6 +182,8 @@ public abstract class ExecutionPlanner<T> {
 
           // and the root node is a dependency of the node for the transformation
           collectQueue.add(new CollectEntry<>(transformation.getRootDepNode(), labeledNode));
+
+          transformationSet.add(transformation);
         } else {
           // queue processing of dependencies
           for (var dependency : node.getDependencies()) {
@@ -221,38 +197,57 @@ public abstract class ExecutionPlanner<T> {
     transformations.addAll(transformationSet);
 
     // compact nodes' internal dependency list for fast iteration
-    ArrayList<LabeledNode<T>> independentNodes = new ArrayList<>();
     for (var node : nodes) {
       node.compact();
-      node.notifyDependencies();
-      if (node.getDependencies().isEmpty()) {
-        independentNodes.add(node);
+    }
+
+    record DFSEntry<R> (LabeledNode<R> node, boolean enter) {
+    }
+
+    Deque<DFSEntry<T>> dfsStack = new LinkedList<>();
+    dfsStack.add(new DFSEntry<>(rootNode, true));
+
+    // generate a topological sort with the first item in the list being an end node
+    while (!dfsStack.isEmpty()) {
+      var entry = dfsStack.pop();
+      var node = entry.node();
+      if (entry.enter()) {
+        if (!node.dfsFinished) {
+          dfsStack.add(new DFSEntry<>(node, false));
+          for (var dependency : node.dependencies) {
+            dfsStack.add(new DFSEntry<>(dependency, true));
+          }
+        }
+      } else {
+        node.dfsFinished = true;
+
+        // nodes will be finished in the order of the topological sort.
+        // find the maximum distance any dependency has from the end node
+        for (var dependency : node.dependencies) {
+          if (dependency.endDistance > node.endDistance) {
+            node.endDistance = dependency.endDistance;
+          }
+        }
+
+        // if this is a transformation phase node, increment one above the maximum
+        // distance of the dependencies. other nodes don't increase the distance.
+        if (node.content instanceof TransformationPhase) {
+          node.endDistance++;
+        }
       }
     }
 
-    record SearchEntry<R> (LabeledNode<R> nodeToProcess, int writeIndex) {
-    }
-
-    Deque<SearchEntry<T>> searchQueue = new LinkedList<>();
-    searchQueue.add(new SearchEntry<>(rootNode, 0));
-
-    // start with independent nodes and work upwards to avoid costly worst-case
-    // structures that can occur during top-down search
-    // TODO: use topological sort first and then traverse for finding indexes
-
-    // sort labelled nodes that contain phases into execution levels
+    // place labelled nodes that contain phases into execution levels
     for (var node : nodes) {
-      var content = node.getContent();
-      if (content instanceof TransformationPhase<T> phase) {
-        var index = node.getSearchIndex();
-        var level = Optional
-            .ofNullable(executionLevels.get(index))
+      if (node.content instanceof TransformationPhase<T> phase) {
+        Optional
+            .ofNullable(executionLevels.get(node.endDistance))
             .orElseGet(() -> {
               var newLevel = new ArrayList<TransformationPhase<T>>();
-              executionLevels.set(index, newLevel);
+              executionLevels.set(node.endDistance, newLevel);
               return newLevel;
-            });
-        level.add(phase);
+            })
+            .add(phase);
       }
     }
 
