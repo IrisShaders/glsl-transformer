@@ -191,7 +191,7 @@ public abstract class TransformationPhase<T> extends GLSLParserBaseListener impl
   }
 
   /**
-   * This method uses a statically constructed xpath so it doesn't need to be
+   * This method uses a statically constructed xpath, so it doesn't need to be
    * repeatedly constructed. The subtrees yielded by the xpath need to start with
    * the rule that the pattern was constructed with or nothing will match.
    * 
@@ -239,7 +239,7 @@ public abstract class TransformationPhase<T> extends GLSLParserBaseListener impl
    * {@code functionCall}, a {@code primaryExpression}, an {@code expression} or
    * other enclosing parse rules. If it's inserted into an expression, it should
    * be parsed as an {@code expression} so that this rule isn't missing from the
-   * parse tree. Using the wrong parse method often doesn't matter but it can
+   * parse tree. Using the wrong parse method often doesn't matter, but it can
    * cause tree matchers to not find the node if they are, for example, looking
    * for an {@code expression} specifically.
    * 
@@ -313,7 +313,7 @@ public abstract class TransformationPhase<T> extends GLSLParserBaseListener impl
     BEFORE_EOF;
 
     /**
-     * A set of the rule contexts that can make up a external declaration that each
+     * A set of the rule contexts that can make up an external declaration that each
      * injection point needs to inject before.
      */
     public Set<Class<? extends ParseTree>> EDBeforeTypes;

@@ -7,7 +7,7 @@ import java.util.Optional;
 /**
  * The transformation holds information about dependencies between
  * transformation phases and nested transformations. It also has a root node and
- * an end node. The root node dependends on all nodes that have no dependents
+ * an end node. The root node dependents on all nodes that have no dependents
  * while the end node is depended on by all nodes that have no dependencies.
  * 
  * Any directed acyclic graph of dependencies may be created between the nodes
@@ -26,7 +26,7 @@ import java.util.Optional;
  * TODO: unclear if sharing phases between transformation managers is
  * problematic since then the compiled paths/patterns in phases have a different
  * parser than the one being used for the transformation. Probably it doesn't
- * matter and the parser is just used to figure out how the rules of the
+ * matter, and the parser is just used to figure out how the rules of the
  * tree are.
  */
 public class Transformation<T> extends LifecycleUserImpl<T> {

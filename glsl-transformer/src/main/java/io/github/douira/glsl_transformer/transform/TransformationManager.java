@@ -136,8 +136,8 @@ public class TransformationManager<T> extends ExecutionPlanner<T> {
 
   /**
    * The returned parser (and lexer) may contain no token stream or a wrong token
-   * stream. However, the parser should not be used for parsing manually anyways.
-   * The state and contents of the parser are setup correctly when the
+   * stream. However, the parser should not be used for parsing manually anyway.
+   * The state and contents of the parser are set up correctly when the
    * transformation is performed.
    * 
    * {@inheritDoc}
@@ -159,7 +159,7 @@ public class TransformationManager<T> extends ExecutionPlanner<T> {
 
   /**
    * Runs a function while this transformation manager has the given job
-   * parameters set. It returns the value that the itself function returns.
+   * parameters set. It returns the value that the function returns.
    * This can be used together with non-standard ways of using a transformation
    * manager like using {@link #parse(IntStream, ExtendedContext, Function)}
    * directly.
