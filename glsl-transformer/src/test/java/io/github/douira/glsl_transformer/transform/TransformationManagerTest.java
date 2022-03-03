@@ -36,7 +36,7 @@ public class TransformationManagerTest extends TestWithTransformationManager<Voi
   @BeforeEach
   void setup() {
     manager = new TransformationManager<>();
-    manager.registerTransformation(new Transformation<>(new RunPhase<>() {
+    manager.addConcurrent(new Transformation<>(new RunPhase<>() {
       @Override
       protected void run(TranslationUnitContext ctx) {
         injectExternalDeclaration(InjectionPoint.BEFORE_VERSION, "f;");
