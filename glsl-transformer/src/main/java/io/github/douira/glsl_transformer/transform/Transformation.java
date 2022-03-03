@@ -101,7 +101,7 @@ public class Transformation<T> extends LifecycleUserImpl<T> {
   }
 
   /**
-   * Adds a dependency for the last added dependency. If this is the first
+   * Adds a dependency to the last added dependency. If this is the first
    * dependency added to this transformation, this adds it as a dependency of the
    * root node.
    * 
@@ -148,7 +148,7 @@ public class Transformation<T> extends LifecycleUserImpl<T> {
   }
 
   /**
-   * Adds a dependency for the root node. All dependencies added by this method
+   * Adds a dependency to the root node. All dependencies added by this method
    * can be run concurrently.
    * 
    * @param dependency The node to add as a root dependency
@@ -167,9 +167,10 @@ public class Transformation<T> extends LifecycleUserImpl<T> {
   }
 
   /**
-   * Adds a dependency for the dependent of the last added dependency. If there is
-   * no such dependency this method will throw. The dependencies added by this
-   * method can be run concurrently with other methods added by it.
+   * Adds a dependency to the dependent of the last added dependency. (sibling
+   * with a common dependent) If there is no such dependency this method will
+   * throw. The dependencies added by this method can be run concurrently with
+   * other methods added by it.
    * 
    * @param dependency The node to add as a dependency of the last added
    *                   dependency's dependent
@@ -183,7 +184,7 @@ public class Transformation<T> extends LifecycleUserImpl<T> {
     var latestDependent = lastAddedDependency.getLatestDependent();
     if (latestDependent == null) {
       throw new IllegalStateException(
-          "Can't add a concurrent dependency for the last added dependency if it was removed again! Only the last dependency is stored for this feature.");
+          "Can't add a concurrent dependency for the last added dependency if it was removed again! Only the last dependent is stored for this feature.");
     }
 
     var dependencyNode = getNode(dependency);
@@ -191,5 +192,27 @@ public class Transformation<T> extends LifecycleUserImpl<T> {
     return dependency;
   }
 
-  //TODO: chainConcurrentDependent
+  /**
+   * Adds a dependent to the dependency of the last added node. (Sibling with a
+   * common dependency)
+   * 
+   * @param dependent The node to add as a dependent of the last added
+   *                  dependency's dependency.
+   * @return The added node
+   */
+  public LifecycleUser<T> chainConcurrentDependent(LifecycleUser<T> dependent) {
+    if (lastAddedDependency == null) {
+      throw new IllegalStateException(
+          "Can't add a concurrent dependency for the last added dependency if none was added yet!");
+    }
+    var latestDependency = lastAddedDependency.getLatestDependency();
+    if (latestDependency == null) {
+      throw new IllegalStateException(
+          "Can't add a concurrent dependency for the last added dependency if it was removed again! Only the last dependency is stored for this feature.");
+    }
+
+    var dependentNode = getNode(dependent);
+    addDependency(dependentNode, latestDependency);
+    return dependent;
+  }
 }
