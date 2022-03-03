@@ -5,11 +5,11 @@ import java.util.HashSet;
 
 class Node<T> {
   private LifecycleUser<T> content;
-  private Collection<Node<T>> dependencies;
+  private Collection<Node<T>> dependencies = new HashSet<>();
+  private Node<T> latestDependent;
   private int dependents = 0;
 
   Node() {
-    dependencies = new HashSet<>();
   }
 
   Node(LifecycleUser<T> content) {
@@ -29,11 +29,19 @@ class Node<T> {
     return dependencies;
   }
 
-  private void addDependent() {
+  Node<T> getLatestDependent() {
+    return latestDependent;
+  }
+
+  private void addDependent(Node<T> dependent) {
+    latestDependent = dependent;
     dependents++;
   }
 
-  private void removeDependent() {
+  private void removeDependent(Node<T> dependent) {
+    if (latestDependent == dependent) {
+      latestDependent = null;
+    }
     dependents--;
   }
 
@@ -45,15 +53,14 @@ class Node<T> {
     return dependents > 0;
   }
 
-  Node<T> addDependency(Node<T> dependency) {
+  void addDependency(Node<T> dependency) {
     dependencies.add(dependency);
-    dependency.addDependent();
-    return dependency;
+    dependency.addDependent(this);
   }
 
   void removeDependency(Node<T> dependency) {
     dependencies.remove(dependency);
-    dependency.removeDependent();
+    dependency.removeDependent(this);
   }
 
   private void setDependency(Node<T> dependency, boolean enable) {
