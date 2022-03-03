@@ -6,6 +6,7 @@ import java.util.HashSet;
 class Node<T> {
   private LifecycleUser<T> content;
   private Collection<Node<T>> dependencies = new HashSet<>();
+  private Node<T> latestDependency;
   private Node<T> latestDependent;
   private int dependents = 0;
 
@@ -29,38 +30,38 @@ class Node<T> {
     return dependencies;
   }
 
+  Node<T> getLatestDependency() {
+    return latestDependency;
+  }
+
   Node<T> getLatestDependent() {
     return latestDependent;
   }
 
   private void addDependent(Node<T> dependent) {
-    latestDependent = dependent;
     dependents++;
+    latestDependent = dependent;
   }
 
   private void removeDependent(Node<T> dependent) {
+    dependents--;
     if (latestDependent == dependent) {
       latestDependent = null;
     }
-    dependents--;
-  }
-
-  boolean hasDependencies() {
-    return !dependencies.isEmpty();
-  }
-
-  boolean hasDependents() {
-    return dependents > 0;
   }
 
   void addDependency(Node<T> dependency) {
     dependencies.add(dependency);
     dependency.addDependent(this);
+    latestDependency = dependency;
   }
 
   void removeDependency(Node<T> dependency) {
     dependencies.remove(dependency);
     dependency.removeDependent(this);
+    if (latestDependency == dependency) {
+      latestDependency = null;
+    }
   }
 
   private void setDependency(Node<T> dependency, boolean enable) {
@@ -69,6 +70,14 @@ class Node<T> {
     } else {
       removeDependency(dependency);
     }
+  }
+
+  boolean hasDependencies() {
+    return !dependencies.isEmpty();
+  }
+
+  boolean hasDependents() {
+    return dependents > 0;
   }
 
   /**
