@@ -36,10 +36,9 @@ public class WrapIdentifier<T> extends Transformation<T> {
       TransformationPhase<T> wrappingReplacer,
       TransformationPhase<T> wrappingInjector) {
     // throw if the wrap result already exists
-    // TODO: use chainConcurrentDependent
     addEndDependent(wrapResultDetector);
-    addDependency(wrappingReplacer, wrapResultDetector);
-    addDependency(wrappingInjector, wrapResultDetector);
+    chainDependent(wrappingReplacer);
+    chainConcurrentDependent(wrappingInjector);
   }
 
   /**
