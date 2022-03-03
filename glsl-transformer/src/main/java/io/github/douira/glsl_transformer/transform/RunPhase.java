@@ -70,4 +70,13 @@ public abstract class RunPhase<T> extends TransformationPhase<T> {
       }
     };
   }
+
+  public static <R> RunPhase<R> withRun(Runnable run) {
+    return new RunPhase<R>() {
+      @Override
+      protected void run(TranslationUnitContext ctx) {
+        run.run();
+      }
+    };
+  }
 }
