@@ -81,7 +81,7 @@ public abstract class ExecutionPlanner<T> {
    * @param transformation The transformation to collect the phases from
    */
   public void addConcurrent(Transformation<T> transformation) {
-    rootTransformation.concurrent(transformation);
+    rootTransformation.addRootDependency(transformation);
   }
 
   public Transformation<T> getRootTransformation() {
@@ -126,7 +126,7 @@ public abstract class ExecutionPlanner<T> {
     var rootNode = new LabeledNode<T>();
     collectQueue.add(new CollectEntry<>(new Node<>(rootTransformation), rootNode));
 
-    // traverse the tree converting all nodes to labeled nodes and combinding
+    // traverse the tree converting all nodes to labeled nodes and combining
     // dependencies of transformations
     while (!collectQueue.isEmpty()) {
       // node can be: empty (root or end), phase, transformation
@@ -139,7 +139,7 @@ public abstract class ExecutionPlanner<T> {
         // check if a node has already been generated if this is an end node
         labeledNode = Optional
             .ofNullable(endNodeMap.get(node))
-            // if there is no content, crewate a new labeled node for this unlabeled node
+            // if there is no content, create a new labeled node for this unlabeled node
             .orElseGet(LabeledNode::new);
       } else {
         // if there content, find the previously created labeled node for it
@@ -160,7 +160,7 @@ public abstract class ExecutionPlanner<T> {
        * Since this is per node (which are transformation-specific), the same content
        * may be queued for processing multiple times but since the label nodes are
        * created only once for each content, the duplicate traversal is prevented.
-       * Label nodes aren't bound for root nodes but they aren't depended on by
+       * Label nodes aren't bound for root nodes, but they aren't depended on by
        * definition. End nodes can have multiple dependents and label nodes for them
        * are de-duplicated using the endNodeMap.
        */
@@ -170,9 +170,14 @@ public abstract class ExecutionPlanner<T> {
         if (content instanceof Transformation<T> transformation) {
           // a transformation's dependencies should be dependencies of the end node.
           // use an existing labeled node for this end node if there is one already
+          var endNode = transformation.getEndDepNode();
           var endLabeledNode = Optional
-              .ofNullable(endNodeMap.get(transformation.getEndDepNode()))
-              .orElseGet(LabeledNode::new);
+              .ofNullable(endNodeMap.get(endNode))
+              .orElseGet(() -> {
+                var newNode = new LabeledNode<T>();
+                endNodeMap.put(endNode, newNode);
+                return newNode;
+              });
           for (var dependency : node.getDependencies()) {
             collectQueue.add(new CollectEntry<>(dependency, endLabeledNode));
           }
