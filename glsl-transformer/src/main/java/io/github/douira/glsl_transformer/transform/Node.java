@@ -6,9 +6,9 @@ import java.util.HashSet;
 class Node<T> {
   private LifecycleUser<T> content;
   private Collection<Node<T>> dependencies = new HashSet<>();
+  private Collection<Node<T>> dependents = new HashSet<>();
   private Node<T> latestDependency;
   private Node<T> latestDependent;
-  private int dependents = 0;
 
   Node() {
   }
@@ -38,33 +38,55 @@ class Node<T> {
     return latestDependent;
   }
 
-  private void addDependent(Node<T> dependent) {
-    dependents++;
+  void addDependent(Node<T> dependent) {
+    if (dependents.add(dependent)) {
+      dependent.addDependency(this);
+    }
     latestDependent = dependent;
   }
 
-  private void removeDependent(Node<T> dependent) {
-    dependents--;
+  void removeDependent(Node<T> dependent) {
+    if (dependents.remove(dependent)) {
+      dependent.removeDependency(this);
+    }
     if (latestDependent == dependent) {
       latestDependent = null;
     }
   }
 
   void addDependency(Node<T> dependency) {
-    dependencies.add(dependency);
-    dependency.addDependent(this);
+    if (dependencies.add(dependency)) {
+      dependency.addDependent(this);
+    }
     latestDependency = dependency;
   }
 
   void removeDependency(Node<T> dependency) {
-    dependencies.remove(dependency);
-    dependency.removeDependent(this);
+    if (dependencies.remove(dependency)) {
+      dependency.removeDependent(this);
+    }
     if (latestDependency == dependency) {
       latestDependency = null;
     }
   }
 
+  private void setDependent(Node<T> dependent, boolean enable) {
+    if (dependents.contains(dependent) == enable) {
+      return;
+    }
+
+    if (enable) {
+      addDependent(dependent);
+    } else {
+      removeDependent(dependent);
+    }
+  }
+
   private void setDependency(Node<T> dependency, boolean enable) {
+    if (dependencies.contains(dependency) == enable) {
+      return;
+    }
+
     if (enable) {
       addDependency(dependency);
     } else {
@@ -72,26 +94,34 @@ class Node<T> {
     }
   }
 
-  boolean hasDependencies() {
-    return !dependencies.isEmpty();
-  }
-
-  boolean hasDependents() {
-    return dependents > 0;
-  }
-
   /**
    * Checks if an upwards link to the root node is required.
    */
   void updateRootLink(Node<T> rootNode) {
-    rootNode.setDependency(this, !hasDependents());
+    if (this != rootNode) {
+      var setRootLink = dependents.isEmpty();
+
+      //don't remove the root dependent if it's the only one
+      if (!setRootLink && dependents.size() == 1 && dependents.contains(rootNode)) {
+        return;
+      }
+      setDependent(rootNode, setRootLink);
+    }
   }
 
   /**
    * Checks if a downwards link to the end node is required.
    */
   void updateEndLink(Node<T> endNode) {
-    this.setDependency(endNode, !hasDependencies());
+    if (this != endNode) {
+      var setEndLink = dependencies.isEmpty();
+
+      //don't remove the end dependency if it's the only one
+      if (!setEndLink && dependencies.size() == 1 && dependencies.contains(endNode)) {
+        return;
+      }
+      setDependency(endNode, setEndLink);
+    }
   }
 
   void updateBothLinks(Node<T> rootNode, Node<T> endNode) {
