@@ -10,6 +10,8 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
 
+import com.github.bsideup.jabel.Desugar;
+
 import org.antlr.v4.runtime.BufferedTokenStream;
 
 import io.github.douira.glsl_transformer.GLSLLexer;
@@ -22,7 +24,7 @@ import io.github.douira.glsl_transformer.GLSLParser.TranslationUnitContext;
  * as dependencies to the root transformation.
  */
 public abstract class ExecutionPlanner<T> {
-  private final ArrayList<Collection<TransformationPhase<T>>> executionLevels = new ArrayList<>();
+  private ArrayList<Collection<TransformationPhase<T>>> executionLevels;
   private final Collection<Transformation<T>> transformations = new ArrayList<>();
   private final Transformation<T> rootTransformation = new Transformation<>();
   private TranslationUnitContext rootNode;
@@ -76,7 +78,7 @@ public abstract class ExecutionPlanner<T> {
    * or by adding a single enclosing transformation that includes multiple
    * sub-transformations as concurrent dependencies.
    * 
-   * @param transformation The transformation to collect the phases from
+   * @param rootDependency The node to add as a dependency of the root node
    */
   public void addConcurrent(LifecycleUser<T> rootDependency) {
     rootTransformation.addRootDependency(rootDependency);
@@ -86,32 +88,37 @@ public abstract class ExecutionPlanner<T> {
     return rootTransformation;
   }
 
+  private static class LabeledNode<R> {
+    final LifecycleUser<R> content;
+    Collection<LabeledNode<R>> dependencies = new HashSet<>();
+    int endDistance = -1;
+    boolean dfsFinished = false;
+
+    LabeledNode(LifecycleUser<R> content) {
+      this.content = content;
+    }
+
+    LabeledNode() {
+      content = null;
+    }
+
+    void addDependency(LabeledNode<R> dependency) {
+      dependencies.add(dependency);
+    }
+  }
+
+  @Desugar
+  private static record CollectEntry<R> (Node<R> nodeToProcess, LabeledNode<R> dependent) {
+  }
+
+  @Desugar
+  private static record DFSEntry<R> (LabeledNode<R> node, boolean enter) {
+  }
+
   public void planExecution() {
     if (finalized) {
       throw new IllegalStateException(
           "The execution planner should not be finalized multiple times! Finalization is performed before the first execution or explicitly by calling planExecution.");
-    }
-
-    class LabeledNode<R> {
-      final LifecycleUser<R> content;
-      Collection<LabeledNode<R>> dependencies = new HashSet<>();
-      int endDistance = -1;
-      boolean dfsFinished = false;
-
-      LabeledNode(LifecycleUser<R> content) {
-        this.content = content;
-      }
-
-      LabeledNode() {
-        content = null;
-      }
-
-      void addDependency(LabeledNode<R> dependency) {
-        dependencies.add(dependency);
-      }
-    }
-
-    record CollectEntry<R> (Node<R> nodeToProcess, LabeledNode<R> dependent) {
     }
 
     Set<Transformation<T>> transformationSet = new HashSet<>();
@@ -164,9 +171,10 @@ public abstract class ExecutionPlanner<T> {
       if (!dependenciesProcessed.contains(node)) {
         dependenciesProcessed.add(node);
 
-        if (content instanceof Transformation<T> transformation) {
+        if (Transformation.class.isInstance(content)) {
           // a transformation's dependencies should be dependencies of the end node.
           // use an existing labeled node for this end node if there is one already
+          var transformation = (Transformation<T>) content;
           var endNode = transformation.getEndDepNode();
           var endLabeledNode = Optional
               .ofNullable(endNodeMap.get(endNode))
@@ -194,9 +202,6 @@ public abstract class ExecutionPlanner<T> {
 
     // compact the gathered transformations into the final list for fast iteration
     transformations.addAll(transformationSet);
-
-    record DFSEntry<R> (LabeledNode<R> node, boolean enter) {
-    }
 
     int maximumDepth = 0;
     Deque<DFSEntry<T>> dfsStack = new LinkedList<>();
@@ -226,27 +231,22 @@ public abstract class ExecutionPlanner<T> {
 
         // if this is a transformation phase node, increment one above the maximum
         // distance of the dependencies. other nodes don't increase the distance.
-        if (node.content instanceof TransformationPhase) {
+        if (TransformationPhase.class.isInstance(node.content)) {
           node.endDistance++;
           maximumDepth = Math.max(node.endDistance, maximumDepth);
         }
       }
     }
 
-    executionLevels.ensureCapacity(maximumDepth + 1);
+    executionLevels = new ArrayList<>(maximumDepth + 1);
+    for (int i = 0; i <= maximumDepth; i++) {
+      executionLevels.add(new ArrayList<TransformationPhase<T>>());
+    }
 
     // place labelled nodes that contain phases into execution levels
     for (var node : contentNodeMap.values()) {
-      if (node.content instanceof TransformationPhase<T> phase) {
-        Collection<TransformationPhase<T>> executionLevel;
-
-        if (executionLevels.get(node.endDistance) == null) {
-          executionLevel = new ArrayList<TransformationPhase<T>>();
-          executionLevels.set(node.endDistance, executionLevel);
-        } else {
-          executionLevel = executionLevels.get(node.endDistance);
-        }
-        executionLevel.add(phase);
+      if (TransformationPhase.class.isInstance(node.content)) {
+        executionLevels.get(node.endDistance).add((TransformationPhase<T>) node.content);
       }
     }
 
