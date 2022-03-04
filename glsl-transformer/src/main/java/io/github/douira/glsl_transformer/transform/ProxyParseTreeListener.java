@@ -12,7 +12,7 @@ import org.antlr.v4.runtime.tree.TerminalNode;
 /**
  * This class was taken from <a href=
  * "https://github.com/antlr/antlr4/issues/841#issuecomment-84450146">here</a>
- * and was added to the public domain by the author DaveJarvis
+ * and was added to the public domain by the author DaveJarvis.
  * 
  * Instances of this class allows multiple listeners to receive events while
  * walking the parse tree. For example:

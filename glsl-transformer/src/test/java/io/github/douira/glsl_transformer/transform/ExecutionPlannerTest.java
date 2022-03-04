@@ -46,9 +46,32 @@ public class ExecutionPlannerTest {
     manager = new TransformationManager<Void>();
     nextIndex = 0;
 
-    manager.addConcurrent(RunPhase.withRun(() -> nextIndex++));
-    manager.addConcurrent(RunPhase.withRun(() -> nextIndex++));
-    manager.addConcurrent(RunPhase.withRun(() -> nextIndex++));
+    for (int i = 0; i < 3; i++) {
+      manager.addConcurrent(RunPhase.withRun(() -> nextIndex++));
+    }
+
+    manager.transform("");
+    assertEquals(3, nextIndex, "It should run all of the added phases");
+  }
+
+  @Test
+  void testAddConcurrentMultipleSingleLevel() {
+    manager = new TransformationManager<Void>();
+    nextIndex = 0;
+
+    for (int i = 0; i < 3; i++) {
+      manager.addConcurrent(new RunPhase<Void>() {
+        @Override
+        protected void run(TranslationUnitContext ctx) {
+          nextIndex++;
+        }
+
+        @Override
+        public void resetState() {
+          assertEquals(0, nextIndex);
+        }
+      });
+    }
 
     manager.transform("");
     assertEquals(3, nextIndex, "It should run all of the added phases");
