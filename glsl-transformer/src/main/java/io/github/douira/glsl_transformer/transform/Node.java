@@ -30,6 +30,10 @@ class Node<T> {
     return dependencies;
   }
 
+  Collection<Node<T>> getDependents() {
+    return dependents;
+  }
+
   Node<T> getLatestDependency() {
     return latestDependency;
   }
