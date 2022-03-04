@@ -33,7 +33,11 @@ public class Transformation<T> extends LifecycleUserImpl<T> {
   private final Map<LifecycleUser<T>, Node<T>> contentNodes = new HashMap<>();
   private Node<T> rootNode = new Node<>();
   private Node<T> endNode = new Node<>();
-  private Node<T> lastAddedDependency;
+
+  // these defaults are for chaining in the same direction
+  // (downwards for dependency, upwards for dependent)
+  private Node<T> lastDependency = rootNode;
+  private Node<T> lastDependent = endNode;
 
   {
     updateInternalLinks();
@@ -77,7 +81,8 @@ public class Transformation<T> extends LifecycleUserImpl<T> {
 
   private void addDependency(Node<T> dependentNode, Node<T> dependencyNode) {
     dependentNode.addDependency(dependencyNode);
-    lastAddedDependency = dependencyNode;
+    lastDependency = dependencyNode;
+    lastDependent = dependentNode;
 
     dependentNode.updateBothLinks(rootNode, endNode);
     dependencyNode.updateBothLinks(rootNode, endNode);
@@ -112,12 +117,12 @@ public class Transformation<T> extends LifecycleUserImpl<T> {
    * @param dependency The node to add as a further dependency
    */
   public LifecycleUser<T> chainDependency(LifecycleUser<T> dependency) {
-    addDependency(Optional.ofNullable(lastAddedDependency).orElse(rootNode), getNode(dependency));
+    addDependency(lastDependency, getNode(dependency));
     return dependency;
   }
 
   public LifecycleUser<T> chainDependent(LifecycleUser<T> dependent) {
-    addDependency(getNode(dependent), Optional.ofNullable(lastAddedDependency).orElse(endNode));
+    addDependent(lastDependent, getNode(dependent));
     return dependent;
   }
 
@@ -129,14 +134,12 @@ public class Transformation<T> extends LifecycleUserImpl<T> {
    * @return The added node
    */
   public LifecycleUser<T> addRootDependency(LifecycleUser<T> dependency) {
-    var dependencyNode = getNode(dependency);
-    addDependency(rootNode, dependencyNode);
+    addDependency(rootNode, getNode(dependency));
     return dependency;
   }
 
   public LifecycleUser<T> addEndDependent(LifecycleUser<T> dependent) {
-    var dependentNode = getNode(dependent);
-    addDependency(dependentNode, endNode);
+    addDependent(endNode, getNode(dependent));
     return dependent;
   }
 
@@ -170,31 +173,22 @@ public class Transformation<T> extends LifecycleUserImpl<T> {
     return toPrepend;
   }
 
-  private void requireLastAddedDependency() {
-    if (lastAddedDependency == null) {
-      throw new IllegalStateException(
-          "No dependency to chain onto was added yet!");
-    }
-  }
-
-  private Node<T> requireLatestDependency() {
-    requireLastAddedDependency();
-    var latestDependency = lastAddedDependency.getLatestDependency();
-    if (latestDependency == null) {
+  private Node<T> getNewestSubDependency() {
+    var newestDependency = lastDependency.getNewestDependency();
+    if (newestDependency == null) {
       throw new IllegalStateException(
           "The latest dependency of the last added dependency was removed! Only the last dependency is stored for this feature.");
     }
-    return latestDependency;
+    return newestDependency;
   }
 
-  private Node<T> requireLatestDependent() {
-    requireLastAddedDependency();
-    var latestDependent = lastAddedDependency.getLatestDependent();
-    if (latestDependent == null) {
+  private Node<T> getNewestSuperDependent() {
+    var newestDependent = lastDependent.getNewestDependent();
+    if (newestDependent == null) {
       throw new IllegalStateException(
-          "The latest dependent of the last added dependency was removed! Only the last dependent is stored for this feature.");
+          "The latest dependent of the last added dependent was removed! Only the last dependent is stored for this feature.");
     }
-    return latestDependent;
+    return newestDependent;
   }
 
   /**
@@ -209,7 +203,7 @@ public class Transformation<T> extends LifecycleUserImpl<T> {
    */
   public LifecycleUser<T> chainConcurrentDependency(LifecycleUser<T> dependency) {
     var dependencyNode = getNode(dependency);
-    addDependency(requireLatestDependent(), dependencyNode);
+    addDependency(getNewestSuperDependent(), dependencyNode);
     return dependency;
   }
 
@@ -223,14 +217,14 @@ public class Transformation<T> extends LifecycleUserImpl<T> {
    */
   public LifecycleUser<T> chainConcurrentDependent(LifecycleUser<T> dependent) {
     var dependentNode = getNode(dependent);
-    addDependency(dependentNode, requireLatestDependency());
+    addDependency(dependentNode, getNewestSubDependency());
     return dependent;
   }
 
   public LifecycleUser<T> chainConcurrentBoth(LifecycleUser<T> sibling) {
     var siblingNode = getNode(sibling);
-    addDependency(siblingNode, requireLatestDependency());
-    addDependent(siblingNode, requireLatestDependent());
+    addDependency(siblingNode, getNewestSubDependency());
+    addDependent(siblingNode, getNewestSuperDependent());
     return sibling;
   }
 }

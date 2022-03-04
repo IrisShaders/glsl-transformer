@@ -34,11 +34,11 @@ class Node<T> {
     return dependents;
   }
 
-  Node<T> getLatestDependency() {
+  Node<T> getNewestDependency() {
     return latestDependency;
   }
 
-  Node<T> getLatestDependent() {
+  Node<T> getNewestDependent() {
     return latestDependent;
   }
 
