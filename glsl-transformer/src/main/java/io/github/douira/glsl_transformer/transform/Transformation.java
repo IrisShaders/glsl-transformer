@@ -79,9 +79,9 @@ public class Transformation<T> extends LifecycleUserImpl<T> {
     dependentNode.addDependency(dependencyNode);
     lastAddedDependency = dependencyNode;
 
-    updateInternalLinks();
     dependentNode.updateBothLinks(rootNode, endNode);
     dependencyNode.updateBothLinks(rootNode, endNode);
+    updateInternalLinks();
   }
 
   private void addDependent(Node<T> dependencyNode, Node<T> dependentNode) {
@@ -122,6 +122,25 @@ public class Transformation<T> extends LifecycleUserImpl<T> {
   }
 
   /**
+   * Adds a dependency to the root node. All dependencies added by this method
+   * can be run concurrently.
+   * 
+   * @param dependency The node to add as a root dependency
+   * @return The added node
+   */
+  public LifecycleUser<T> addRootDependency(LifecycleUser<T> dependency) {
+    var dependencyNode = getNode(dependency);
+    addDependency(rootNode, dependencyNode);
+    return dependency;
+  }
+
+  public LifecycleUser<T> addEndDependent(LifecycleUser<T> dependent) {
+    var dependentNode = getNode(dependent);
+    addDependency(dependentNode, endNode);
+    return dependent;
+  }
+
+  /**
    * Adds a dependency between the end node and all of its dependents. This
    * replaces the end node with a new end node.
    * 
@@ -149,25 +168,6 @@ public class Transformation<T> extends LifecycleUserImpl<T> {
     contentNodes.put(toPrepend, previousRoot);
     rootNode.addDependency(previousRoot);
     return toPrepend;
-  }
-
-  /**
-   * Adds a dependency to the root node. All dependencies added by this method
-   * can be run concurrently.
-   * 
-   * @param dependency The node to add as a root dependency
-   * @return The added node
-   */
-  public LifecycleUser<T> addRootDependency(LifecycleUser<T> dependency) {
-    var dependencyNode = getNode(dependency);
-    addDependency(rootNode, dependencyNode);
-    return dependency;
-  }
-
-  public LifecycleUser<T> addEndDependent(LifecycleUser<T> dependent) {
-    var dependentNode = getNode(dependent);
-    addDependency(dependentNode, endNode);
-    return dependent;
   }
 
   private void requireLastAddedDependency() {
