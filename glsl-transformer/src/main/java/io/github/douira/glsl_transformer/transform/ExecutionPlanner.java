@@ -275,13 +275,16 @@ public abstract class ExecutionPlanner<T> {
     for (var level : executionLevels) {
       var proxyListener = new ProxyParseTreeListener(new ArrayList<>());
 
+      //first init all, then run RunPhases and add to the walker list
       for (var phase : level) {
         phase.setPlanner(this);
         if (!initialized) {
           phase.init();
         }
         phase.resetState();
+      }
 
+      for (var phase : level) {
         if (phase.checkBeforeWalk(ctx)) {
           proxyListener.add(phase);
         }
