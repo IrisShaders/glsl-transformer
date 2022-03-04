@@ -84,6 +84,10 @@ public class Transformation<T> extends LifecycleUserImpl<T> {
     dependencyNode.updateBothLinks(rootNode, endNode);
   }
 
+  private void addDependent(Node<T> dependencyNode, Node<T> dependentNode) {
+    addDependency(dependencyNode, dependentNode);
+  }
+
   /**
    * Adds a dependency between two nodes. This means the dependency will be run
    * before the dependent. Both of them are added to this transformation if not
@@ -96,8 +100,8 @@ public class Transformation<T> extends LifecycleUserImpl<T> {
     addDependency(getNode(dependent), getNode(dependency));
   }
 
-  public void addDependent(LifecycleUser<T> dependent, LifecycleUser<T> dependency) {
-    addDependency(dependency, dependent);
+  public void addDependent(LifecycleUser<T> dependency, LifecycleUser<T> dependent) {
+    addDependency(dependent, dependency);
   }
 
   /**
@@ -166,6 +170,33 @@ public class Transformation<T> extends LifecycleUserImpl<T> {
     return dependent;
   }
 
+  private void requireLastAddedDependency() {
+    if (lastAddedDependency == null) {
+      throw new IllegalStateException(
+          "No dependency to chain onto was added yet!");
+    }
+  }
+
+  private Node<T> requireLatestDependency() {
+    requireLastAddedDependency();
+    var latestDependency = lastAddedDependency.getLatestDependency();
+    if (latestDependency == null) {
+      throw new IllegalStateException(
+          "The latest dependency of the last added dependency was removed! Only the last dependency is stored for this feature.");
+    }
+    return latestDependency;
+  }
+
+  private Node<T> requireLatestDependent() {
+    requireLastAddedDependency();
+    var latestDependent = lastAddedDependency.getLatestDependent();
+    if (latestDependent == null) {
+      throw new IllegalStateException(
+          "The latest dependent of the last added dependency was removed! Only the last dependent is stored for this feature.");
+    }
+    return latestDependent;
+  }
+
   /**
    * Adds a dependency to the dependent of the last added dependency. (sibling
    * with a common dependent) If there is no such dependency this method will
@@ -177,18 +208,8 @@ public class Transformation<T> extends LifecycleUserImpl<T> {
    * @return The added node
    */
   public LifecycleUser<T> chainConcurrentDependency(LifecycleUser<T> dependency) {
-    if (lastAddedDependency == null) {
-      throw new IllegalStateException(
-          "Can't add a concurrent dependency for the last added dependency if none was added yet!");
-    }
-    var latestDependent = lastAddedDependency.getLatestDependent();
-    if (latestDependent == null) {
-      throw new IllegalStateException(
-          "Can't add a concurrent dependency for the last added dependency if it was removed again! Only the last dependent is stored for this feature.");
-    }
-
     var dependencyNode = getNode(dependency);
-    addDependency(latestDependent, dependencyNode);
+    addDependency(requireLatestDependent(), dependencyNode);
     return dependency;
   }
 
@@ -201,18 +222,15 @@ public class Transformation<T> extends LifecycleUserImpl<T> {
    * @return The added node
    */
   public LifecycleUser<T> chainConcurrentDependent(LifecycleUser<T> dependent) {
-    if (lastAddedDependency == null) {
-      throw new IllegalStateException(
-          "Can't add a concurrent dependency for the last added dependency if none was added yet!");
-    }
-    var latestDependency = lastAddedDependency.getLatestDependency();
-    if (latestDependency == null) {
-      throw new IllegalStateException(
-          "Can't add a concurrent dependency for the last added dependency if it was removed again! Only the last dependency is stored for this feature.");
-    }
-
     var dependentNode = getNode(dependent);
-    addDependency(dependentNode, latestDependency);
+    addDependency(dependentNode, requireLatestDependency());
     return dependent;
+  }
+
+  public LifecycleUser<T> chainConcurrentBoth(LifecycleUser<T> sibling) {
+    var siblingNode = getNode(sibling);
+    addDependency(siblingNode, requireLatestDependency());
+    addDependent(siblingNode, requireLatestDependent());
+    return sibling;
   }
 }
