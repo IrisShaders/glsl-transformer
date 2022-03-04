@@ -206,17 +206,21 @@ public abstract class ExecutionPlanner<T> {
 
     int maximumDepth = 0;
     Deque<DFSEntry<T>> dfsStack = new LinkedList<>();
-    dfsStack.add(new DFSEntry<>(rootNode, true));
+    dfsStack.push(new DFSEntry<>(rootNode, true));
 
     // generate a topological sort with the first item in the list being an end node
     while (!dfsStack.isEmpty()) {
+      if (dfsStack.size() > dependenciesProcessed.size() * 2) {
+        throw new Error("The dependency graph cannot be solved because there must be a cycle in it.");
+      }
+
       var entry = dfsStack.pop();
       var node = entry.node();
       if (entry.enter()) {
         if (!node.dfsFinished) {
-          dfsStack.add(new DFSEntry<>(node, false));
+          dfsStack.push(new DFSEntry<>(node, false));
           for (var dependency : node.dependencies) {
-            dfsStack.add(new DFSEntry<>(dependency, true));
+            dfsStack.push(new DFSEntry<>(dependency, true));
           }
         }
       } else {
