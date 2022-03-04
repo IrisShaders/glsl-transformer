@@ -6,6 +6,7 @@ import java.util.Deque;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedList;
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
@@ -24,7 +25,7 @@ import io.github.douira.glsl_transformer.GLSLParser.TranslationUnitContext;
  * as dependencies to the root transformation.
  */
 public abstract class ExecutionPlanner<T> {
-  private ArrayList<Collection<TransformationPhase<T>>> executionLevels;
+  private List<Collection<TransformationPhase<T>>> executionLevels;
   private final Collection<Transformation<T>> transformations = new ArrayList<>();
   private final Transformation<T> rootTransformation = new Transformation<>();
   private TranslationUnitContext rootNode;
