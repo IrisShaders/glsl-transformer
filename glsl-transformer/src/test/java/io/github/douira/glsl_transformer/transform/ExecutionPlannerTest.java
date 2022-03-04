@@ -40,4 +40,17 @@ public class ExecutionPlannerTest {
     manager.transform("");
     assertEquals(1, nextIndex, "It should run the added phase");
   }
+
+  @Test
+  void testAddConcurrentMultiple() {
+    manager = new TransformationManager<Void>();
+    nextIndex = 0;
+
+    manager.addConcurrent(RunPhase.withRun(() -> nextIndex++));
+    manager.addConcurrent(RunPhase.withRun(() -> nextIndex++));
+    manager.addConcurrent(RunPhase.withRun(() -> nextIndex++));
+
+    manager.transform("");
+    assertEquals(3, nextIndex, "It should run all of the added phases");
+  }
 }
