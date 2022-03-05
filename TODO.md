@@ -22,6 +22,7 @@
 
 - Exclude generated classes from jacoco coverage reports (because they are very large)
 - Test everything that isn't covered yet
+- Test that CachingIntervalSet actually caches something (coverage report says the cache is never hit)
 - Test WrapIdentifier
 - Test ReplaceTerminals static methods
 - Test individual token filters
