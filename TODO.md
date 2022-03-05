@@ -1,9 +1,9 @@
 # Todo
 
+- Write documentation on `Transformation` methods with diagrams
 - Call init on handler targets, also other things like before/after search and activation
 - AST structures for GLSL types: Continue work on Tensor (tensor manipulation methods and "widening" until it hits the maximum)
 - AST: Structs
-- More Phase functionality (abstract declaration replacement into a separate class)
 
 - DynamicParseTreeWalker: have transformation phase tell it about movements in the child array it caused to avoid inserting placeholder nodes (and then also avoid even doing the compacting step if it's not necessary)
 
