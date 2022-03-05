@@ -75,7 +75,9 @@ public abstract class RunPhase<T> extends TransformationPhase<T> {
     return new RunPhase<R>() {
       @Override
       protected void run(TranslationUnitContext ctx) {
-        run.run();
+        if (run != null) {
+          run.run();
+        }
       }
     };
   }
