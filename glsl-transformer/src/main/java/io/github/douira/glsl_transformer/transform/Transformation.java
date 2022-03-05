@@ -52,8 +52,8 @@ public class Transformation<T> extends LifecycleUserImpl<T> {
   /**
    * Creates a stateless transformation and adds a single lifecycle user to it.
    * 
-   * @param phase The only lifecycler user to add to this transformation.
-   *              Typically a transformation phase.
+   * @param content The only lifecycle user to add to this transformation.
+   *                Typically a transformation phase.
    */
   public Transformation(LifecycleUser<T> content) {
     addRootDependency(content);
