@@ -12,6 +12,10 @@ public class TransformationTest {
   private Transformation<Void> transformation;
   private int nextIndex;
 
+  RunPhase<Void> getAssertPhase(int index, String message) {
+    return RunPhase.withRun(() -> assertEquals(index, nextIndex++, message));
+  }
+
   @BeforeEach
   void setup() {
     manager = new TransformationManager<>();
@@ -32,10 +36,8 @@ public class TransformationTest {
   @Test
   void testAddDependency() {
     transformation.addDependency(
-        RunPhase.withRun(() -> assertEquals(1, nextIndex++,
-            "The dependent should run second.")),
-        RunPhase.withRun(() -> assertEquals(0, nextIndex++,
-            "The dependency should run first.")));
+        getAssertPhase(1, "The dependent should run second."),
+        getAssertPhase(0, "The dependency should run first."));
     manager.transform("");
     assertEquals(2, nextIndex, "Both run phases should run");
   }
@@ -43,25 +45,30 @@ public class TransformationTest {
   @Test
   void testAddDependent() {
     transformation.addDependent(
-        RunPhase.withRun(() -> assertEquals(0, nextIndex++,
-            "The dependency should run first.")),
-        RunPhase.withRun(() -> assertEquals(1, nextIndex++,
-            "The dependent should run second.")));
+        getAssertPhase(1, "The dependent should run second."),
+        getAssertPhase(0, "The dependency should run first."));
     manager.transform("");
     assertEquals(2, nextIndex, "Both run phases should run");
   }
 
   @Test
+  void testChainDependencyDefault() {
+    transformation.chainDependency(
+        getAssertPhase(1, "The first chained dependency should run second."));
+    transformation.chainDependency(
+        getAssertPhase(0, "The second chained dependency should run first."));
+    manager.transform("");
+    assertEquals(2, nextIndex, "Both phases should run");
+  }
+
+  @Test
   void testChainDependencyOnRoot() {
     transformation.addRootDependency(
-        RunPhase.withRun(() -> assertEquals(2, nextIndex++,
-            "The root dependency should run third.")));
+        getAssertPhase(2, "The root dependency should run third."));
     transformation.chainDependency(
-        RunPhase.withRun(() -> assertEquals(1, nextIndex++,
-            "The first chained dependency should run second.")));
+        getAssertPhase(1, "The first chained dependency should run second."));
     transformation.chainDependency(
-        RunPhase.withRun(() -> assertEquals(0, nextIndex++,
-            "The second chained dependency should run first.")));
+        getAssertPhase(0, "The second chained dependency should run first."));
     manager.transform("");
     assertEquals(3, nextIndex, "All three phases should run");
   }
@@ -71,28 +78,46 @@ public class TransformationTest {
     for (int i = 0; i < 10; i++) {
       var localIndex = i;
       transformation.chainDependency(
-          RunPhase.withRun(() -> assertEquals(
-              10 - localIndex - 1, nextIndex++,
-              "The dependency added with i=" + localIndex + "should run at index " + (10 - localIndex - 1) + ".")));
+          getAssertPhase(10 - localIndex - 1,
+              "The dependency added with i=" + localIndex + "should run at index " + (10 - localIndex - 1) + "."));
     }
     manager.transform("");
     assertEquals(10, nextIndex, "All phases should run");
   }
 
   @Test
+  void testChainDependentDefault() {
+    transformation.chainDependent(
+        getAssertPhase(0, "The first chained dependent should run first."));
+    transformation.chainDependent(
+        getAssertPhase(1, "The second chained dependent should run second."));
+    manager.transform("");
+    assertEquals(2, nextIndex, "Both run phases should run");
+  }
+
+  @Test
   void testChainDependentOnEnd() {
     transformation.addEndDependent(
-        RunPhase.withRun(() -> assertEquals(0, nextIndex++,
-            "The end dependent should run first.")));
+        getAssertPhase(0, "The end dependent should run first."));
     transformation.chainDependent(
-        RunPhase.withRun(() -> assertEquals(1, nextIndex++,
-            "The first chained dependent should run second.")));
+        getAssertPhase(1, "The first chained dependent should run second."));
     transformation.chainDependent(
-        RunPhase.withRun(() -> assertEquals(2, nextIndex++,
-            "The second chained dependent should run third.")));
+        getAssertPhase(2, "The second chained dependent should run third."));
     manager.planExecution();
     manager.transform("");
     assertEquals(3, nextIndex, "All three run phases should run");
+  }
+
+  @Test
+  void testChainDependentDefaultMany() {
+    for (int i = 0; i < 10; i++) {
+      var localIndex = i;
+      transformation.chainDependent(
+          getAssertPhase(localIndex,
+              "The dependent added with i=" + localIndex + "should run at index " + localIndex + "."));
+    }
+    manager.transform("");
+    assertEquals(10, nextIndex, "All phases should run");
   }
 
   @Test

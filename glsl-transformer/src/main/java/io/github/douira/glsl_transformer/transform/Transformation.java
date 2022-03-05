@@ -81,8 +81,8 @@ public class Transformation<T> extends LifecycleUserImpl<T> {
 
   private void addDependency(Node<T> dependentNode, Node<T> dependencyNode) {
     dependentNode.addDependency(dependencyNode);
-    lastDependency = dependencyNode;
     lastDependent = dependentNode;
+    lastDependency = dependencyNode;
 
     dependentNode.updateBothLinks(rootNode, endNode);
     dependencyNode.updateBothLinks(rootNode, endNode);
@@ -90,7 +90,7 @@ public class Transformation<T> extends LifecycleUserImpl<T> {
   }
 
   private void addDependent(Node<T> dependencyNode, Node<T> dependentNode) {
-    addDependency(dependencyNode, dependentNode);
+    addDependency(dependentNode, dependencyNode);
   }
 
   /**
