@@ -85,6 +85,13 @@ public abstract class ExecutionPlanner<T> {
     rootTransformation.addRootDependency(rootDependency);
   }
 
+  /**
+   * Returns the root transformation that contains all other phases and
+   * transformations. This is exposed so that simple structures may be added
+   * without requiring nested transformations.
+   * 
+   * @return The root transformation instance
+   */
   public Transformation<T> getRootTransformation() {
     return rootTransformation;
   }
@@ -116,6 +123,16 @@ public abstract class ExecutionPlanner<T> {
   private static record DFSEntry<R> (LabeledNode<R> node, boolean enter) {
   }
 
+  /**
+   * Calculates the execution plan for the constructed graph of dependencies.
+   * 
+   * @implNote First it resolves the nested transformation so that the whole
+   *           dependency graph can be traversed directly. Then nodes are visited
+   *           in toplogically sorted order. Their maximum distance from the first
+   *           visited node, an end node, is calculated. Finally the nodes are
+   *           sorted into execution levels according to their distance values.
+   *           The nodes with the lowest distance are executed first.
+   */
   public void planExecution() {
     if (finalized) {
       throw new IllegalStateException(
@@ -211,7 +228,8 @@ public abstract class ExecutionPlanner<T> {
     // generate a topological sort with the first item in the list being an end node
     while (!dfsStack.isEmpty()) {
       if (dfsStack.size() > dependenciesProcessed.size() * 2) {
-        throw new Error("The dependency graph could not be satisfied! There is probably a cycle in it. Check for cycles in the graph after construction and after resolving transformations.");
+        throw new Error(
+            "The dependency graph could not be satisfied! There is probably a cycle in it. Check for cycles in the graph after construction and after resolving transformations.");
       }
 
       var entry = dfsStack.pop();
@@ -279,7 +297,7 @@ public abstract class ExecutionPlanner<T> {
     for (var level : executionLevels) {
       var proxyListener = new ProxyParseTreeListener(new ArrayList<>());
 
-      //first init all, then run RunPhases and add to the walker list
+      // first init all, then run RunPhases and add to the walker list
       for (var phase : level) {
         phase.setPlanner(this);
         if (!initialized) {

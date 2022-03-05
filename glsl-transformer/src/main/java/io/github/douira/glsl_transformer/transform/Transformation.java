@@ -8,11 +8,16 @@ import java.util.Optional;
  * The transformation holds information about dependencies between
  * transformation phases and nested transformations. It also has a root node and
  * an end node. The root node dependents on all nodes that have no dependents
- * while the end node is depended on by all nodes that have no dependencies.
+ * while the end node is depended on by all nodes that have no dependencies. Any
+ * directed acyclic graph of dependencies may be created between the nodes
+ * within a transformation.
  * 
- * Any directed acyclic graph of dependencies may be created between the nodes
- * within a transformation. As a transformation is a lifecycle user it's
- * internal state can be reset before each transformation job.
+ * A dependency relationship between two nodes consists of a dependent and a
+ * dependency node. The dependency node must be executed at some point before
+ * the dependent node.
+ * 
+ * As a transformation is a lifecycle user, its internal state can be reset
+ * before each transformation job.
  * 
  * A stateless (no inter-phase state) transformation can be created by simply
  * making an instance of this class and adding transformations to it. If state
@@ -21,7 +26,8 @@ import java.util.Optional;
  * There cannot be any state stored as local variables either in the scope that
  * created the {@code Transformation} instance or in a subclass' constructor as
  * it will not be reset if a transformation is run multiple times. In the same
- * vein, state should only be initialized in the {@link #resetState()} method.
+ * vein, state should only be initialized in the {@link #init()} and
+ * {@link #resetState()} methods.
  * 
  * TODO: unclear if sharing phases between transformation managers is
  * problematic since then the compiled paths/patterns in phases have a different
@@ -103,9 +109,9 @@ public class Transformation<T> extends LifecycleUserImpl<T> {
   }
 
   /**
-   * Adds a dependency between two nodes. This means the dependency will be run
-   * before the dependent. Both of them are added to this transformation if not
-   * already present.
+   * Creates a dependency relationship between two nodes. This means the
+   * dependency will be run before the dependent. Both of them are added to this
+   * transformation if not already present.
    * 
    * @param dependent  The node depending on the dependency to have been run first
    * @param dependency The node that needs to be run before the dependent
@@ -114,8 +120,22 @@ public class Transformation<T> extends LifecycleUserImpl<T> {
     addDependency(getNode(dependent), getNode(dependency));
   }
 
+  /**
+   * Creates a dependency relationship between two nodes. The meaning of dependent
+   * and dependency are the same as in
+   * {@link #addDependency(LifecycleUser, LifecycleUser)} but the positions are
+   * switched. This is useful for constructing the dual algorithm in the
+   * dependent/dependency structure. Usually the one is just the dependency graph
+   * of the other but upside down.
+   * 
+   * @see #addDependency(LifecycleUser, LifecycleUser)
+   * 
+   * @param dependency The node being depended on that is executed first
+   * @param dependent  The node depending on the dependency that is executed
+   *                   second
+   */
   public void addDependent(LifecycleUser<T> dependency, LifecycleUser<T> dependent) {
-    addDependency(dependent, dependency);
+    addDependent(getNode(dependency), getNode(dependent));
   }
 
   /**
@@ -124,12 +144,20 @@ public class Transformation<T> extends LifecycleUserImpl<T> {
    * root node.
    * 
    * @param dependency The node to add as a further dependency
+   * @return The added node
    */
   public LifecycleUser<T> chainDependency(LifecycleUser<T> dependency) {
     addDependency(lastDependency, getNode(dependency));
     return dependency;
   }
 
+  /**
+   * Adds a dependent to the last added dependent. If this is the first dependent
+   * added to this transformation, this adds it as a dependent of the end node.
+   * 
+   * @param dependent The node to add as a further dependent
+   * @return The added node
+   */
   public LifecycleUser<T> chainDependent(LifecycleUser<T> dependent) {
     addDependent(lastDependent, getNode(dependent));
     return dependent;
@@ -147,6 +175,13 @@ public class Transformation<T> extends LifecycleUserImpl<T> {
     return dependency;
   }
 
+  /**
+   * Adds a dependent to the end node. All dependents added by this method
+   * can be run concurrently.
+   * 
+   * @param dependent The node to add as a end dependent
+   * @return The added node
+   */
   public LifecycleUser<T> addEndDependent(LifecycleUser<T> dependent) {
     addDependent(endNode, getNode(dependent));
     return dependent;
@@ -157,6 +192,7 @@ public class Transformation<T> extends LifecycleUserImpl<T> {
    * replaces the end node with a new end node.
    * 
    * @param newFinalDependency The node to place after all present dependencies
+   * @return The added node
    */
   public LifecycleUser<T> appendDependency(LifecycleUser<T> newFinalDependency) {
     var previousEnd = endNode;
@@ -172,6 +208,7 @@ public class Transformation<T> extends LifecycleUserImpl<T> {
    * replaces the root node with a new root node.
    * 
    * @param newInitialDependent The node to place before all present dependencies
+   * @return The added node
    */
   public LifecycleUser<T> prependDependent(LifecycleUser<T> newInitialDependent) {
     var previousRoot = rootNode;
@@ -182,16 +219,41 @@ public class Transformation<T> extends LifecycleUserImpl<T> {
     return newInitialDependent;
   }
 
+  /**
+   * Adds a dependency to the last added dependent. The newly added dependency and
+   * the last added dependency can be executed concurrently.
+   * 
+   * @param dependency The node to add as a dependency of the last added dependent
+   * @return The added node
+   */
   public LifecycleUser<T> chainConcurrentDependency(LifecycleUser<T> dependency) {
     addDependency(lastDependent, getNode(dependency));
     return dependency;
   }
 
+  /**
+   * Adds a dependent to the last added dependency. The newly added dependent and
+   * the last added dependent can be executed concurrently.
+   * 
+   * @param dependent The node to add as a dependent of the last added dependency
+   * @return The added node
+   */
   public LifecycleUser<T> chainConcurrentDependent(LifecycleUser<T> dependent) {
     addDependent(lastDependency, getNode(dependent));
     return dependent;
   }
 
+  /**
+   * Adds the same node as a dependent to the last added dependency and as a
+   * dependency to the last added dependent. The newly added node must be executed
+   * before the last added dependency and after the last added dependent. This is
+   * similar to inserting it directly between the two but is less invasive.
+   * 
+   * @param sibling The node to add between the last added dependency and
+   *                dependent without breaking the existing dependency link
+   *                between them
+   * @return The added node
+   */
   public LifecycleUser<T> chainConcurrentSibling(LifecycleUser<T> sibling) {
     var siblingNode = getNode(sibling);
     var lastDependencyLocal = lastDependency;
