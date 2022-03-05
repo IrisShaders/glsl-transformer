@@ -211,7 +211,7 @@ public abstract class ExecutionPlanner<T> {
     // generate a topological sort with the first item in the list being an end node
     while (!dfsStack.isEmpty()) {
       if (dfsStack.size() > dependenciesProcessed.size() * 2) {
-        throw new Error("The dependency graph cannot be solved because there must be a cycle in it.");
+        throw new Error("The dependency graph could not be satisfied! There is probably a cycle in it. Check for cycles in the graph after construction and after resolving transformations.");
       }
 
       var entry = dfsStack.pop();
