@@ -7,8 +7,6 @@ class Node<T> {
   private LifecycleUser<T> content;
   private Collection<Node<T>> dependencies = new HashSet<>();
   private Collection<Node<T>> dependents = new HashSet<>();
-  private Node<T> latestDependency;
-  private Node<T> latestDependent;
 
   Node() {
   }
@@ -34,27 +32,15 @@ class Node<T> {
     return dependents;
   }
 
-  Node<T> getNewestDependency() {
-    return latestDependency;
-  }
-
-  Node<T> getNewestDependent() {
-    return latestDependent;
-  }
-
   void addDependent(Node<T> dependent) {
     if (dependents.add(dependent)) {
       dependent.addDependency(this);
     }
-    latestDependent = dependent;
   }
 
   void removeDependent(Node<T> dependent) {
     if (dependents.remove(dependent)) {
       dependent.removeDependency(this);
-    }
-    if (latestDependent == dependent) {
-      latestDependent = null;
     }
   }
 
@@ -62,15 +48,11 @@ class Node<T> {
     if (dependencies.add(dependency)) {
       dependency.addDependent(this);
     }
-    latestDependency = dependency;
   }
 
   void removeDependency(Node<T> dependency) {
     if (dependencies.remove(dependency)) {
       dependency.removeDependent(this);
-    }
-    if (latestDependency == dependency) {
-      latestDependency = null;
     }
   }
 
@@ -105,7 +87,7 @@ class Node<T> {
     if (this != rootNode) {
       var setRootLink = dependents.isEmpty();
 
-      //don't remove the root dependent if it's the only one
+      // don't remove the root dependent if it's the only one
       if (!setRootLink && dependents.size() == 1 && dependents.contains(rootNode)) {
         return;
       }
@@ -120,7 +102,7 @@ class Node<T> {
     if (this != endNode) {
       var setEndLink = dependencies.isEmpty();
 
-      //don't remove the end dependency if it's the only one
+      // don't remove the end dependency if it's the only one
       if (!setEndLink && dependencies.size() == 1 && dependencies.contains(endNode)) {
         return;
       }
