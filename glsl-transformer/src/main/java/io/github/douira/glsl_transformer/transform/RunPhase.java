@@ -71,6 +71,14 @@ public abstract class RunPhase<T> extends TransformationPhase<T> {
     };
   }
 
+  /**
+   * Creates a new run phase that only executes the given runnable function. If
+   * the function is {@code null}, the generated phase does nothing.
+   * 
+   * @param <R> The job parameter type
+   * @param run The runnable to run in the run phase
+   * @return The generated run phase
+   */
   public static <R> RunPhase<R> withRun(Runnable run) {
     return new RunPhase<R>() {
       @Override
