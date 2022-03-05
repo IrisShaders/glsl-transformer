@@ -45,8 +45,8 @@ public class TransformationTest {
   @Test
   void testAddDependent() {
     transformation.addDependent(
-        getAssertPhase(1, "The dependent should run second."),
-        getAssertPhase(0, "The dependency should run first."));
+        getAssertPhase(0, "The dependency should run first."),
+        getAssertPhase(1, "The dependent should run second."));
     manager.transform("");
     assertEquals(2, nextIndex, "Both run phases should run");
   }
