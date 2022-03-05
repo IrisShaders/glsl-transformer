@@ -2,21 +2,12 @@ package io.github.douira.glsl_transformer.transform;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import io.github.douira.glsl_transformer.TestForExecutionOrder;
 import io.github.douira.glsl_transformer.GLSLParser.TranslationUnitContext;
 
-public class ExecutionPlannerTest {
-  private TransformationManager<Void> manager;
-  private int nextIndex;
-
-  @BeforeEach
-  void setup() {
-    manager = new TransformationManager<>();
-    nextIndex = 0;
-  }
-
+public class ExecutionPlannerTest extends TestForExecutionOrder {
   @Test
   void testGetRootNode() {
     manager.addConcurrent(new Transformation<>(new RunPhase<>() {
@@ -95,7 +86,6 @@ public class ExecutionPlannerTest {
 
   @Test
   void testIncrementalResetState() {
-    var transformation = manager.getRootTransformation();
     transformation.chainDependent(
         new RunPhase<Void>() {
           @Override
