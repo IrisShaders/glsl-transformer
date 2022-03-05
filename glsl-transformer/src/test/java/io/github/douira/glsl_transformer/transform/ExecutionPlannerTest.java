@@ -38,17 +38,15 @@ public class ExecutionPlannerTest {
   @Test
   void testAddConcurrent() {
     manager.addConcurrent(RunPhase.withRun(() -> nextIndex++));
-
     manager.transform("");
     assertEquals(1, nextIndex, "It should run the added phase");
   }
 
   @Test
   void testAddConcurrentMultiple() {
-    for (int i = 0; i < 3; i++) {
-      manager.addConcurrent(RunPhase.withRun(() -> nextIndex++));
-    }
-
+    manager.addConcurrent(RunPhase.withRun(() -> nextIndex++));
+    manager.addConcurrent(RunPhase.withRun(() -> nextIndex++));
+    manager.addConcurrent(RunPhase.withRun(() -> nextIndex++));
     manager.transform("");
     assertEquals(3, nextIndex, "It should run all of the added phases");
   }
@@ -68,7 +66,6 @@ public class ExecutionPlannerTest {
         }
       });
     }
-
     manager.transform("");
     assertEquals(3, nextIndex, "It should run all of the added phases");
   }
@@ -78,7 +75,6 @@ public class ExecutionPlannerTest {
     manager
         .getRootTransformation()
         .addRootDependency(RunPhase.withRun(() -> nextIndex++));
-
     manager.transform("");
     assertEquals(1, nextIndex, "It should run the root transformation");
   }
@@ -95,5 +91,36 @@ public class ExecutionPlannerTest {
     manager.planExecution();
     assertDoesNotThrow(() -> manager.transform(""),
         "It should not throw after regular manual planning.");
+  }
+
+  @Test
+  void testIncrementalResetState() {
+    var transformation = manager.getRootTransformation();
+    transformation.chainDependent(
+        new RunPhase<Void>() {
+          @Override
+          protected void run(TranslationUnitContext ctx) {
+            nextIndex++;
+          }
+
+          @Override
+          public void resetState() {
+            assertEquals(0, nextIndex, "The first chained dependent should reset first.");
+          }
+        });
+    transformation.chainDependent(
+        new RunPhase<Void>() {
+          @Override
+          protected void run(TranslationUnitContext ctx) {
+            nextIndex++;
+          }
+
+          @Override
+          public void resetState() {
+            assertEquals(1, nextIndex, "The first chained dependent should reset after the first one has run.");
+          }
+        });
+    manager.transform("");
+    assertEquals(2, nextIndex, "Both phases should run.");
   }
 }
