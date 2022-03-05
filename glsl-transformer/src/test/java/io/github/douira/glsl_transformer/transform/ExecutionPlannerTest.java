@@ -175,4 +175,29 @@ public class ExecutionPlannerTest extends TestForExecutionOrder {
     manager.transform("");
     assertEquals(1, nextIndex, "The nested phase should run.");
   }
+
+  @Test
+  void testNoInitOnSecondRun() {
+    transformation.addRootDependency(new RunPhase<Void>() {
+      @Override
+      protected void run(TranslationUnitContext ctx) {
+      }
+
+      @Override
+      public void init() {
+        assertEquals(0, nextIndex, "The phase should only be initialized once.");
+        nextIndex += 100;
+      }
+
+      @Override
+      public void resetState() {
+        assertEquals(0, nextIndex % 100 % 10, "The phase should be reset every time.");
+        nextIndex += 10;
+      }
+    });
+    manager.transform("");
+    manager.transform("");
+    manager.transform("");
+    assertEquals(130, nextIndex, "The phase should run each time.");
+  }
 }

@@ -229,7 +229,7 @@ public abstract class ExecutionPlanner<T> {
     while (!dfsStack.isEmpty()) {
       if (dfsStack.size() > dependenciesProcessed.size() * 2) {
         throw new Error(
-            "The dependency graph could not be satisfied! There is probably a cycle in it. Check for cycles in the graph after construction and after resolving transformations.");
+            "The dependency graph could not be satisfied! There is may be a cycle in it or the root and end nodes are messed up. Check for cycles in the graph after construction and after resolving transformations.");
       }
 
       var entry = dfsStack.pop();
