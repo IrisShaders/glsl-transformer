@@ -156,30 +156,30 @@ public class Transformation<T> extends LifecycleUserImpl<T> {
    * Adds a dependency between the end node and all of its dependents. This
    * replaces the end node with a new end node.
    * 
-   * @param superDependency The node to place after all present dependencies
+   * @param newFinalDependency The node to place after all present dependencies
    */
-  public LifecycleUser<T> appendDependency(LifecycleUser<T> superDependency) {
+  public LifecycleUser<T> appendDependency(LifecycleUser<T> newFinalDependency) {
     var previousEnd = endNode;
     endNode = new Node<T>();
-    previousEnd.setContent(superDependency);
-    contentNodes.put(superDependency, previousEnd);
+    previousEnd.setContent(newFinalDependency);
+    contentNodes.put(newFinalDependency, previousEnd);
     previousEnd.addDependency(endNode);
-    return superDependency;
+    return newFinalDependency;
   }
 
   /**
    * Adds a dependency between the root node and all of its dependencies. This
    * replaces the root node with a new root node.
    * 
-   * @param superDependent The node to place before all present dependencies
+   * @param newInitialDependent The node to place before all present dependencies
    */
-  public LifecycleUser<T> prependDependent(LifecycleUser<T> superDependent) {
+  public LifecycleUser<T> prependDependent(LifecycleUser<T> newInitialDependent) {
     var previousRoot = rootNode;
     rootNode = new Node<T>();
-    previousRoot.setContent(superDependent);
-    contentNodes.put(superDependent, previousRoot);
+    previousRoot.setContent(newInitialDependent);
+    contentNodes.put(newInitialDependent, previousRoot);
     rootNode.addDependency(previousRoot);
-    return superDependent;
+    return newInitialDependent;
   }
 
   private Node<T> getNewestSubDependency() {
