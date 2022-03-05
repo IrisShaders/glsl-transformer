@@ -1,11 +1,9 @@
 # Todo
 
-- Improve transformation phase scheduling by moving to a dependency graph-based system. The transformation phases define which they depend on which forms a DAG that can be traversed starting from transformations that have no dependencies. This can lead to an even more efficient walk packing scheme.
-- Test Transformation.append and .merge (and that job parameters are available in phases added this way)
+- Write documentation on `Transformation` methods with diagrams
 - Call init on handler targets, also other things like before/after search and activation
 - AST structures for GLSL types: Continue work on Tensor (tensor manipulation methods and "widening" until it hits the maximum)
 - AST: Structs
-- More Phase functionality (abstract declaration replacement into a separate class)
 
 - DynamicParseTreeWalker: have transformation phase tell it about movements in the child array it caused to avoid inserting placeholder nodes (and then also avoid even doing the compacting step if it's not necessary)
 
@@ -24,11 +22,10 @@
 
 - Exclude generated classes from jacoco coverage reports (because they are very large)
 - Test everything that isn't covered yet
+- Test that CachingIntervalSet actually caches something (coverage report says the cache is never hit)
 - Test WrapIdentifier
-- Test job parameter system
 - Test ReplaceTerminals static methods
-- Test addConcurrentPhase on Transformation
-- Test the token filters and all their associated functionality (on transformation manager, printer and all the token filters themselves)
+- Test individual token filters
 - Test removal/replacement of single terminal node (tests ExtendedTerminalNode)
 - Figure out if and how removal of local roots works (nothing needs to be omitted since they are additions, trying to omit them may break. a placeholder still needs to be placed though)
 - Write tests that matching still works even after injection (does it work before placeholder cleanup? and after?)

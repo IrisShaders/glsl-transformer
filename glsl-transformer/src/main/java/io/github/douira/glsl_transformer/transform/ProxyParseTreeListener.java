@@ -2,6 +2,7 @@ package io.github.douira.glsl_transformer.transform;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import org.antlr.v4.runtime.ParserRuleContext;
 import org.antlr.v4.runtime.tree.ErrorNode;
@@ -11,7 +12,7 @@ import org.antlr.v4.runtime.tree.TerminalNode;
 /**
  * This class was taken from <a href=
  * "https://github.com/antlr/antlr4/issues/841#issuecomment-84450146">here</a>
- * and was added to the public domain by the author DaveJarvis
+ * and was added to the public domain by the author DaveJarvis.
  * 
  * Instances of this class allows multiple listeners to receive events while
  * walking the parse tree. For example:
@@ -111,11 +112,7 @@ public class ProxyParseTreeListener implements ParseTreeListener {
    * @param listeners A list of listeners to receive tree walking events.
    */
   public void setListeners(List<ParseTreeListener> listeners) {
-    if (listeners == null) {
-      listeners = new ArrayList<ParseTreeListener>();
-    }
-
-    this.listeners = listeners;
+    this.listeners = Optional.ofNullable(listeners).orElseGet(ArrayList<ParseTreeListener>::new);
   }
 
   /**

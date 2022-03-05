@@ -37,12 +37,11 @@ import io.github.douira.glsl_transformer.util.CompatUtil;
  * adding and removing parse tree nodes. It can also inject nodes into the root
  * node's child array with injection points.
  */
-public abstract class TransformationPhase<T> extends GLSLParserBaseListener implements CollectorChild<T> {
-  private PhaseCollector<T> collector;
-  private boolean initialized = false;
+public abstract class TransformationPhase<T> extends GLSLParserBaseListener implements LifecycleUser<T> {
+  private ExecutionPlanner<T> planner;
 
   /**
-   * Method called by the phase collector before the walk happens. The returned
+   * Method called by the execution planner before the walk happens. The returned
    * boolean determines if the phase is added to the list of phases that are
    * walked on the tree. Returns false by default and implementing classes should
    * overwrite this.
@@ -55,7 +54,8 @@ public abstract class TransformationPhase<T> extends GLSLParserBaseListener impl
   }
 
   /**
-   * Method called by the phase collector after the walk happens. Does nothing by
+   * Method called by the execution planner after the walk happens. Does nothing
+   * by
    * default.
    * 
    * @param ctx The root node
@@ -63,21 +63,9 @@ public abstract class TransformationPhase<T> extends GLSLParserBaseListener impl
   protected void runAfterWalk(TranslationUnitContext ctx) {
   }
 
-  /**
-   * This method internally calls {@link #init()} if the phase has not yet been
-   * initialized. This is the method that the phase collector calls since it
-   * prevents multiple inits.
-   */
-  protected void lazyInit() {
-    if (!initialized) {
-      init();
-      initialized = true;
-    }
-  }
-
   @Override
-  public PhaseCollector<T> getCollector() {
-    return collector;
+  public ExecutionPlanner<T> getPlanner() {
+    return planner;
   }
 
   /**
@@ -87,8 +75,8 @@ public abstract class TransformationPhase<T> extends GLSLParserBaseListener impl
    * {@inheritDoc}
    */
   @Override
-  public void setCollector(PhaseCollector<T> parent) {
-    this.collector = parent;
+  public void setPlanner(ExecutionPlanner<T> parent) {
+    this.planner = parent;
   }
 
   /**
@@ -203,7 +191,7 @@ public abstract class TransformationPhase<T> extends GLSLParserBaseListener impl
   }
 
   /**
-   * This method uses a statically constructed xpath so it doesn't need to be
+   * This method uses a statically constructed xpath, so it doesn't need to be
    * repeatedly constructed. The subtrees yielded by the xpath need to start with
    * the rule that the pattern was constructed with or nothing will match.
    * 
@@ -239,17 +227,6 @@ public abstract class TransformationPhase<T> extends GLSLParserBaseListener impl
   }
 
   /**
-   * This method is called one in the lifetime of a phase. It can be used to
-   * compile xpaths and pattern matchers.
-   * 
-   * This method should not be used to initialize state specific to a specific
-   * transformation job. That is handled by
-   * {@link io.github.douira.glsl_transformer.transform.Transformation}.
-   */
-  protected void init() {
-  }
-
-  /**
    * Parses the given string using the given parser method. Since the parser
    * doesn't know which part of the parse tree any string would be part of, we
    * need to tell it. In many cases multiple methods would produce a correct
@@ -262,7 +239,7 @@ public abstract class TransformationPhase<T> extends GLSLParserBaseListener impl
    * {@code functionCall}, a {@code primaryExpression}, an {@code expression} or
    * other enclosing parse rules. If it's inserted into an expression, it should
    * be parsed as an {@code expression} so that this rule isn't missing from the
-   * parse tree. Using the wrong parse method often doesn't matter but it can
+   * parse tree. Using the wrong parse method often doesn't matter, but it can
    * cause tree matchers to not find the node if they are, for example, looking
    * for an {@code expression} specifically.
    * 
@@ -336,7 +313,7 @@ public abstract class TransformationPhase<T> extends GLSLParserBaseListener impl
     BEFORE_EOF;
 
     /**
-     * A set of the rule contexts that can make up a external declaration that each
+     * A set of the rule contexts that can make up an external declaration that each
      * injection point needs to inject before.
      */
     public Set<Class<? extends ParseTree>> EDBeforeTypes;

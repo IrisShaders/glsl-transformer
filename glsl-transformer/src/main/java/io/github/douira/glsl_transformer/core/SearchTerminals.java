@@ -82,7 +82,7 @@ public abstract class SearchTerminals<T> extends WalkPhase<T> {
                 "All nodes in the parse tree should be a TreeMember except for when they are errors! Then the tree is broken anyways.");
           }
 
-          target.setCollector(getCollector());
+          target.setPlanner(getPlanner());
           target.handleResult((TreeMember) node, text);
         }
       }

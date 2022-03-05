@@ -6,14 +6,14 @@ import io.github.douira.glsl_transformer.GLSLParser.TranslationUnitContext;
 
 /**
  * A run phase simply executes one method when it is executed in a level by the
- * phase collector. Even though it extends {@link TransformationPhase}, no
+ * execution planner. Even though it extends {@link TransformationPhase}, no
  * listener methods on
  * it are executed.
  */
 public abstract class RunPhase<T> extends TransformationPhase<T> {
   /**
    * This method is implemented by subclasses to be executed by the phase
-   * collector at the right time.
+   * planner at the right time.
    * 
    * @param ctx The root node of the parse tree being transformed
    */
@@ -67,6 +67,25 @@ public abstract class RunPhase<T> extends TransformationPhase<T> {
       @Override
       protected void run(TranslationUnitContext ctx) {
         injectExternalDeclarations(location, str);
+      }
+    };
+  }
+
+  /**
+   * Creates a new run phase that only executes the given runnable function. If
+   * the function is {@code null}, the generated phase does nothing.
+   * 
+   * @param <R> The job parameter type
+   * @param run The runnable to run in the run phase
+   * @return The generated run phase
+   */
+  public static <R> RunPhase<R> withRun(Runnable run) {
+    return new RunPhase<R>() {
+      @Override
+      protected void run(TranslationUnitContext ctx) {
+        if (run != null) {
+          run.run();
+        }
       }
     };
   }

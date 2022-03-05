@@ -72,7 +72,8 @@ public class PrintVisitor extends AbstractParseTreeVisitor<Void> {
    * Prints the given parse tree that references the given token stream. Sets up
    * the given node as a root node if that hasn't happened already.
    * 
-   * @see #visitAndJoin(BufferedTokenStream, ExtendedContext, Interval, TokenFilter)
+   * @see #visitAndJoin(BufferedTokenStream, ExtendedContext, Interval,
+   *      TokenFilter)
    * @see #printTree(BufferedTokenStream, ExtendedContext, TokenFilter)
    * 
    * @param rootTokenStream The token stream for the parse tree

@@ -36,9 +36,9 @@ public class WrapIdentifier<T> extends Transformation<T> {
       TransformationPhase<T> wrappingReplacer,
       TransformationPhase<T> wrappingInjector) {
     // throw if the wrap result already exists
-    addPhase(wrapResultDetector);
-    addPhase(wrappingReplacer);
-    addConcurrentPhase(wrappingInjector);
+    addEndDependent(wrapResultDetector);
+    chainDependent(wrappingReplacer);
+    chainConcurrentDependent(wrappingInjector);
   }
 
   /**
@@ -67,8 +67,8 @@ public class WrapIdentifier<T> extends Transformation<T> {
    * and a fixed replacement phase for which only the target is given.
    * 
    * @param wrapResult       The identifier that's inserted for the wrapping
-   * @param wrappingTarget   A replacement target to be used in a search terminals
-   *                         phase
+   * @param wrappingTarget   A replacement target to be used in a search
+   *                         terminal's phase
    * @param wrappingInjector A transformation phase that does the additional code
    *                         injection, usually providing a definition for the
    *                         newly inserted identifier in the form of an external

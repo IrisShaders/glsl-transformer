@@ -49,7 +49,7 @@ public class PrintVisitorTest extends TestWithTransformationManager<Void> {
         return printed;
       }
     };
-    modifiedManager.registerTransformation(new Transformation<>(new RunPhase<>() {
+    modifiedManager.addConcurrent(new Transformation<>(new RunPhase<>() {
       @Override
       protected void run(TranslationUnitContext ctx) {
         injectExternalDeclaration(InjectionPoint.BEFORE_VERSION, "f;");

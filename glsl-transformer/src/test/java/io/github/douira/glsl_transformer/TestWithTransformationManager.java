@@ -31,7 +31,7 @@ public abstract class TestWithTransformationManager<T> {
 
   public String runTransformation(String code, TransformationPhase<T> phase) {
     manager = new TransformationManager<T>();
-    manager.registerTransformation(new Transformation<>(phase));
+    manager.addConcurrent(new Transformation<>(phase));
     return manager.transform(code);
   }
 

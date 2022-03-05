@@ -73,7 +73,7 @@ var manager = new TransformationManager<>();
 System.out.println(manager.transform(string));
 
 // register a transformation
-manager.registerTransformation(transformation);
+manager.addRootDependency(transformation);
 
 // after transformation
 System.out.println(manager.transform(string));
@@ -95,7 +95,7 @@ System.out.println(manager.transform(string));
 
 # Documentation
 
-See the the Javadocs for API documentation and some API-specific notes. See `DOCUMENTATION.md` for detailled documentation. The tests also illustrate the usage of each individual feature. The `core` package uses `glsl-transformer`'s features and extends them to provide structures for common tasks.
+See the Javadocs for API documentation and some API-specific notes. See `DOCUMENTATION.md` for detailed documentation. The tests also illustrate the usage of each individual feature. The `core` package uses `glsl-transformer`'s features and extends them to provide structures for common tasks.
 
 # Notes
 
@@ -104,6 +104,7 @@ See the the Javadocs for API documentation and some API-specific notes. See `DOC
 See the planned features and other work items in `TODO.md`.
 
 ## Releasing Publishing
+
 See [publish-on-central](https://github.com/DanySK/publish-on-central) for docs on how it works.
 
 1. Test that everything builds ok `gradle build --warning-mode all`

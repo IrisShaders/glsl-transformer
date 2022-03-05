@@ -248,9 +248,9 @@ public class TransformationPhaseTest extends TestWithTransformationManager<Void>
       @Override
       protected void run(TranslationUnitContext ctx) {
         assertSame(manager.getParser(), getParser(),
-            "It should return the previously set parser inside the phase collector");
+            "It should return the previously set parser inside the execution planner");
         assertSame(manager.getLexer(), getLexer(),
-            "It should return the previously set lexer inside the phase collector");
+            "It should return the previously set lexer inside the execution planner");
       }
     });
   }

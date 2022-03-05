@@ -22,7 +22,7 @@ public class FilterTokenSource implements TokenSource {
    * @param tokenSource The real token source to get tokens from
    */
   public FilterTokenSource(TokenSource tokenSource) {
-    this.source = tokenSource;
+    source = tokenSource;
   }
 
   /**
@@ -32,7 +32,7 @@ public class FilterTokenSource implements TokenSource {
    * @param tokenSource The new token source
    */
   public void setTokenSource(TokenSource tokenSource) {
-    this.source = tokenSource;
+    source = tokenSource;
   }
 
   /**
@@ -43,7 +43,8 @@ public class FilterTokenSource implements TokenSource {
    * @param tokenFilter The new token filter
    */
   public void setTokenFilter(TokenFilter<?> tokenFilter) {
-    this.filter = tokenFilter;
+    filter = tokenFilter;
+    filter.init();
   }
 
   /**
