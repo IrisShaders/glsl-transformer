@@ -80,6 +80,15 @@ public class Transformation<T> extends LifecycleUserImpl<T> {
   }
 
   private void addDependency(Node<T> dependentNode, Node<T> dependencyNode) {
+    // sanity check for cases that can happen when things are chained badly
+    // (like chainDependent after addRootDependency)
+    if (dependencyNode == rootNode) {
+      throw new Error("The root node may not be made a dependency. Use prependDependent for replacing the root node.");
+    }
+    if (dependentNode == endNode) {
+      throw new Error("The end node may not be made a dependent. Use appendDependency for replacing the end node.");
+    }
+
     dependentNode.addDependency(dependencyNode);
     lastDependent = dependentNode;
     lastDependency = dependencyNode;
@@ -147,30 +156,30 @@ public class Transformation<T> extends LifecycleUserImpl<T> {
    * Adds a dependency between the end node and all of its dependents. This
    * replaces the end node with a new end node.
    * 
-   * @param toAppend
+   * @param superDependency The node to place after all present dependencies
    */
-  public LifecycleUser<T> append(LifecycleUser<T> toAppend) {
+  public LifecycleUser<T> appendDependency(LifecycleUser<T> superDependency) {
     var previousEnd = endNode;
     endNode = new Node<T>();
-    previousEnd.setContent(toAppend);
-    contentNodes.put(toAppend, previousEnd);
+    previousEnd.setContent(superDependency);
+    contentNodes.put(superDependency, previousEnd);
     previousEnd.addDependency(endNode);
-    return toAppend;
+    return superDependency;
   }
 
   /**
    * Adds a dependency between the root node and all of its dependencies. This
    * replaces the root node with a new root node.
    * 
-   * @param toPrepend The node to place before all present dependencies
+   * @param superDependent The node to place before all present dependencies
    */
-  public LifecycleUser<T> prepend(LifecycleUser<T> toPrepend) {
+  public LifecycleUser<T> prependDependent(LifecycleUser<T> superDependent) {
     var previousRoot = rootNode;
     rootNode = new Node<T>();
-    previousRoot.setContent(toPrepend);
-    contentNodes.put(toPrepend, previousRoot);
+    previousRoot.setContent(superDependent);
+    contentNodes.put(superDependent, previousRoot);
     rootNode.addDependency(previousRoot);
-    return toPrepend;
+    return superDependent;
   }
 
   private Node<T> getNewestSubDependency() {
