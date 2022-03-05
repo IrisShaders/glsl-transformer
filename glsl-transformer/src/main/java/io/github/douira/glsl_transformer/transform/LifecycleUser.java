@@ -6,9 +6,13 @@ import org.antlr.v4.runtime.Parser;
 import io.github.douira.glsl_transformer.GLSLParser.TranslationUnitContext;
 
 /**
- * Implemented by classes that have a execution planner parent and can receive
+ * Implemented by classes that have an execution planner parent and can receive
  * job parameters. All lifecycle users are notified of init and reset events as
- * well as job parameters by the execution planner.
+ * well as job parameters by the execution planner. {@link #init()} is called
+ * the before the first reset while the reset {@link #resetState()} is called
+ * for every transformation job. For transformations, state is reset before
+ * execution starts. For transformation phases, state is reset before the
+ * phase's execution level is executed.
  */
 public interface LifecycleUser<T> {
   /**
