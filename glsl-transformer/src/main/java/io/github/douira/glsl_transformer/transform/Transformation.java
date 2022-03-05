@@ -182,58 +182,20 @@ public class Transformation<T> extends LifecycleUserImpl<T> {
     return newInitialDependent;
   }
 
-  private Node<T> getNewestSubDependency() {
-    var newestDependency = lastDependency.getNewestDependency();
-    if (newestDependency == null) {
-      throw new IllegalStateException(
-          "The latest dependency of the last added dependency was removed! Only the last dependency is stored for this feature.");
-    }
-    return newestDependency;
-  }
-
-  private Node<T> getNewestSuperDependent() {
-    var newestDependent = lastDependent.getNewestDependent();
-    if (newestDependent == null) {
-      throw new IllegalStateException(
-          "The latest dependent of the last added dependent was removed! Only the last dependent is stored for this feature.");
-    }
-    return newestDependent;
-  }
-
-  /**
-   * Adds a dependency to the dependent of the last added dependency. (sibling
-   * with a common dependent) If there is no such dependency this method will
-   * throw. The dependencies added by this method can be run concurrently with
-   * other methods added by it.
-   * 
-   * @param dependency The node to add as a dependency of the last added
-   *                   dependency's dependent
-   * @return The added node
-   */
   public LifecycleUser<T> chainConcurrentDependency(LifecycleUser<T> dependency) {
-    var dependencyNode = getNode(dependency);
-    addDependency(getNewestSuperDependent(), dependencyNode);
+    addDependency(lastDependent, getNode(dependency));
     return dependency;
   }
 
-  /**
-   * Adds a dependent to the dependency of the last added node. (Sibling with a
-   * common dependency)
-   * 
-   * @param dependent The node to add as a dependent of the last added
-   *                  dependency's dependency.
-   * @return The added node
-   */
   public LifecycleUser<T> chainConcurrentDependent(LifecycleUser<T> dependent) {
-    var dependentNode = getNode(dependent);
-    addDependency(dependentNode, getNewestSubDependency());
+    addDependent(lastDependency, getNode(dependent));
     return dependent;
   }
 
   public LifecycleUser<T> chainConcurrentBoth(LifecycleUser<T> sibling) {
     var siblingNode = getNode(sibling);
-    addDependency(siblingNode, getNewestSubDependency());
-    addDependent(siblingNode, getNewestSuperDependent());
+    addDependency(lastDependent, siblingNode);
+    addDependent(lastDependency, siblingNode);
     return sibling;
   }
 }
