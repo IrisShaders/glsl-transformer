@@ -8,6 +8,16 @@ import io.github.douira.glsl_transformer.TestForExecutionOrder;
 
 public class TransformationTest extends TestForExecutionOrder {
   @Test
+  void testSingleContentConstructor() {
+    var transformation = new Transformation<>(
+        assertOrderPhase(1, "The phase passed in the constructor should run second."));
+    transformation.chainDependency(assertOrderPhase(0, "The second chained phase should run first."));
+    manager.addConcurrent(transformation);
+    manager.transform("");
+    assertEquals(2, nextIndex, "Both run phases should run.");
+  }
+
+  @Test
   void testRootAndEndNode() {
     var rootNode = transformation.getRootDepNode();
     var endNode = transformation.getEndDepNode();

@@ -113,4 +113,66 @@ public class ExecutionPlannerTest extends TestForExecutionOrder {
     manager.transform("");
     assertEquals(2, nextIndex, "Both phases should run.");
   }
+
+  @Test
+  void testNestedSingleTransformation() {
+    transformation.addRootDependency(new Transformation<>(
+        assertOrderPhase(0, "The nested phase should run.")));
+    manager.transform("");
+    assertEquals(1, nextIndex, "The phase should run.");
+  }
+
+  @Test
+  void testNestedMultipleTransformation() {
+    transformation.addEndDependent(new Transformation<>(
+        assertOrderPhase(0, "The first nested phase should run first.")));
+    transformation.chainDependent(new Transformation<>(
+        assertOrderPhase(1, "The second chained nested phase should run second.")));
+    manager.transform("");
+    assertEquals(2, nextIndex, "Both phases should run.");
+  }
+
+  @Test
+  void testNestedMixedTransformation() {
+    transformation.addDependency(
+        new Transformation<>(
+            assertOrderPhase(2, "The phase in the dependent transformation should run third.")),
+        new Transformation<>(
+            assertOrderPhase(0, "The phase in the dependency transformation should run first.")));
+    transformation.chainConcurrentSibling(assertOrderPhase(1, "The chained sibling phase should run second."));
+    manager.transform("");
+    assertEquals(3, nextIndex, "All three phases should run.");
+  }
+
+  @Test
+  void testSharedExternalTransformationDependency() {
+    var a = transformation.addRootDependency(
+        new Transformation<>(assertResetPhase(1, "The concurrent nested phases should run in the second level")));
+    var b = transformation.addRootDependency(
+        new Transformation<>(assertResetPhase(1, "The concurrent nested phases should run in the second level")));
+    var sibling = assertOrderPhase(0, "The shared dependency phase should run first.");
+    transformation.addDependency(a, sibling);
+    transformation.addDependency(b, sibling);
+    manager.transform("");
+    assertEquals(3, nextIndex, "All three phases should run.");
+  }
+
+  @Test
+  void testCrossTransformationDependency() {
+    var aPhase = assertOrderPhase(1, "The transformation with the dependent phase should run second.");
+    var bPhase = assertOrderPhase(0, "The transformation with the dependency phase should run first.");
+    transformation.addRootDependency(new Transformation<>(aPhase));
+    transformation.addRootDependency(new Transformation<>(bPhase));
+    transformation.addDependency(aPhase, bPhase);
+    manager.transform("");
+    assertEquals(2, nextIndex, "Both phases should run.");
+  }
+
+  @Test
+  void testDeeplyNestedTransformation() {
+    transformation.addRootDependency(new Transformation<>(new Transformation<>(new Transformation<>(
+        assertOrderPhase(0, "The nested phase should run.")))));
+    manager.transform("");
+    assertEquals(1, nextIndex, "The nested phase should run.");
+  }
 }
