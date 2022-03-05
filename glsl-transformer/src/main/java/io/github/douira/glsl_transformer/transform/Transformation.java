@@ -192,10 +192,11 @@ public class Transformation<T> extends LifecycleUserImpl<T> {
     return dependent;
   }
 
-  public LifecycleUser<T> chainConcurrentBoth(LifecycleUser<T> sibling) {
+  public LifecycleUser<T> chainConcurrentSibling(LifecycleUser<T> sibling) {
     var siblingNode = getNode(sibling);
+    var lastDependencyLocal = lastDependency;
     addDependency(lastDependent, siblingNode);
-    addDependent(lastDependency, siblingNode);
+    addDependent(lastDependencyLocal, siblingNode);
     return sibling;
   }
 }
