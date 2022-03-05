@@ -73,7 +73,7 @@ var manager = new TransformationManager<>();
 System.out.println(manager.transform(string));
 
 // register a transformation
-manager.addRootDependency(transformation);
+manager.addConcurrent(transformation);
 
 // after transformation
 System.out.println(manager.transform(string));
