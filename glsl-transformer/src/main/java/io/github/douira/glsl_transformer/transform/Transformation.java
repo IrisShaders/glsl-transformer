@@ -200,6 +200,8 @@ public class Transformation<T> extends LifecycleUserImpl<T> {
     previousEnd.setContent(newFinalDependency);
     contentNodes.put(newFinalDependency, previousEnd);
     previousEnd.addDependency(endNode);
+    lastDependent = previousEnd;
+    lastDependency = endNode;
     return newFinalDependency;
   }
 
@@ -216,6 +218,8 @@ public class Transformation<T> extends LifecycleUserImpl<T> {
     previousRoot.setContent(newInitialDependent);
     contentNodes.put(newInitialDependent, previousRoot);
     rootNode.addDependency(previousRoot);
+    lastDependent = rootNode;
+    lastDependency = previousRoot;
     return newInitialDependent;
   }
 
