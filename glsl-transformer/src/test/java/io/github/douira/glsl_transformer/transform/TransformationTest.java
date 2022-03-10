@@ -125,21 +125,21 @@ public class TransformationTest extends TestForExecutionOrder {
   }
 
   @Test
-  void testAppendDependency() {
+  void testAppendDependent() {
     transformation.addEndDependent(RunPhase.withRun(() -> nextIndex++));
     transformation.addRootDependency(RunPhase.withRun(() -> nextIndex++));
     transformation.chainDependency(RunPhase.withRun(() -> nextIndex++));
-    transformation.appendDependency(
+    transformation.appendDependent(
         assertOrderPhase(0, "The appended phase should run before all other phases."));
     manager.transform("");
     assertEquals(4, nextIndex, "All phases should run.");
   }
 
   @Test
-  void testAppendDependencyChaining() {
+  void testAppendDependentChaining() {
     transformation.addEndDependent(RunPhase.withRun(() -> nextIndex++));
-    transformation.appendDependency(RunPhase.withRun(() -> nextIndex++));
-    transformation.appendDependency(RunPhase.withRun(() -> nextIndex++));
+    transformation.appendDependent(RunPhase.withRun(() -> nextIndex++));
+    transformation.appendDependent(RunPhase.withRun(() -> nextIndex++));
     transformation.chainConcurrentDependency(
         assertOrderPhase(0, "The chained concurrent dependency should run before all other phases."));
     manager.transform("");
@@ -147,21 +147,21 @@ public class TransformationTest extends TestForExecutionOrder {
   }
 
   @Test
-  void testPrependDependent() {
+  void testPrependDependency() {
     transformation.addRootDependency(RunPhase.withRun(() -> nextIndex++));
     transformation.addEndDependent(RunPhase.withRun(() -> nextIndex++));
     transformation.chainDependent(RunPhase.withRun(() -> nextIndex++));
-    transformation.prependDependent(
+    transformation.prependDependency(
         assertOrderPhase(3, "The prepended phase should run after all other phases."));
     manager.transform("");
     assertEquals(4, nextIndex, "All phases should run.");
   }
 
   @Test
-  void testPrependDependentChaining() {
+  void testPrependDependencyChaining() {
     transformation.addRootDependency(RunPhase.withRun(() -> nextIndex++));
-    transformation.prependDependent(RunPhase.withRun(() -> nextIndex++));
-    transformation.prependDependent(RunPhase.withRun(() -> nextIndex++));
+    transformation.prependDependency(RunPhase.withRun(() -> nextIndex++));
+    transformation.prependDependency(RunPhase.withRun(() -> nextIndex++));
     transformation.chainConcurrentDependent(
         assertOrderPhase(3, "The chained concurrent dependent should run after all other phases."));
     manager.transform("");

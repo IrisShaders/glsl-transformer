@@ -89,10 +89,10 @@ public class Transformation<T> extends LifecycleUserImpl<T> {
     // sanity check for cases that can happen when things are chained badly
     // (like chainDependent after addRootDependency)
     if (dependencyNode == rootNode) {
-      throw new Error("The root node may not be made a dependency. Use prependDependent for replacing the root node.");
+      throw new Error("The root node may not be made a dependency. Use prependDependency for replacing the root node.");
     }
     if (dependentNode == endNode) {
-      throw new Error("The end node may not be made a dependent. Use appendDependency for replacing the end node.");
+      throw new Error("The end node may not be made a dependent. Use appendDependent for replacing the end node.");
     }
 
     dependentNode.addDependency(dependencyNode);
@@ -189,38 +189,46 @@ public class Transformation<T> extends LifecycleUserImpl<T> {
 
   /**
    * Adds a dependency between the end node and all of its dependents. This
-   * replaces the end node with a new end node.
+   * replaces the end node with a new end node. This method is called
+   * appendDependent because it adds a new node that is the only dependent of the
+   * root node after this operation. Furthermore, chaining after this method will
+   * see the node with the new content as the dependent and the new end node as
+   * the dependency.
    * 
-   * @param newFinalDependency The node to place after all present dependencies
+   * @param newSoleEndDependent The node to place after all present dependencies
    * @return The added node
    */
-  public LifecycleUser<T> appendDependency(LifecycleUser<T> newFinalDependency) {
-    var previousEnd = endNode;
+  public LifecycleUser<T> appendDependent(LifecycleUser<T> newSoleEndDependent) {
+    var soleEndDependency = endNode;
     endNode = new Node<T>();
-    previousEnd.setContent(newFinalDependency);
-    contentNodes.put(newFinalDependency, previousEnd);
-    previousEnd.addDependency(endNode);
-    lastDependent = previousEnd;
+    soleEndDependency.setContent(newSoleEndDependent);
+    contentNodes.put(newSoleEndDependent, soleEndDependency);
+    soleEndDependency.addDependency(endNode);
+    lastDependent = soleEndDependency;
     lastDependency = endNode;
-    return newFinalDependency;
+    return newSoleEndDependent;
   }
 
   /**
    * Adds a dependency between the root node and all of its dependencies. This
    * replaces the root node with a new root node.
    * 
-   * @param newInitialDependent The node to place before all present dependencies
+   * See {@link #appendDependent(LifecycleUser)} for why this method is called
+   * this way. The argument is the same.
+   * 
+   * @param newSoleRootDependency The node to place before all present
+   *                              dependencies
    * @return The added node
    */
-  public LifecycleUser<T> prependDependent(LifecycleUser<T> newInitialDependent) {
-    var previousRoot = rootNode;
+  public LifecycleUser<T> prependDependency(LifecycleUser<T> newSoleRootDependency) {
+    var soleRootDependency = rootNode;
     rootNode = new Node<T>();
-    previousRoot.setContent(newInitialDependent);
-    contentNodes.put(newInitialDependent, previousRoot);
-    rootNode.addDependency(previousRoot);
+    soleRootDependency.setContent(newSoleRootDependency);
+    contentNodes.put(newSoleRootDependency, soleRootDependency);
+    rootNode.addDependency(soleRootDependency);
     lastDependent = rootNode;
-    lastDependency = previousRoot;
-    return newInitialDependent;
+    lastDependency = soleRootDependency;
+    return newSoleRootDependency;
   }
 
   /**
