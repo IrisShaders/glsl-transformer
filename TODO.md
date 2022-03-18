@@ -5,6 +5,8 @@
 - Call init on handler targets, also other things like before/after search and activation
 - AST structures for GLSL types: Continue work on Tensor (tensor manipulation methods and "widening" until it hits the maximum)
 - AST: Structs
+- Improve grammar by reducing number of expression-related rules (possible?)
+- Insert rule element labels and rule alternative labels to make visitation and usage easier (see also https://github.com/QuiltMC/chasm/blob/main/chasm-lang/src/main/antlr/org/quiltmc/chasm/lang/antlr/Chasm.g4)
 
 - DynamicParseTreeWalker: have transformation phase tell it about movements in the child array it caused to avoid inserting placeholder nodes (and then also avoid even doing the compacting step if it's not necessary)
 
@@ -12,6 +14,7 @@
   - Stop tree walk if all participating walk phases signal that they're done
   - Limit depth of tree walk if participating walk phases agree
   - Limit tree walk to certain nodes (/node types) or exclude some node types from being visited if participating walk phases agree (maybe also dynamically adjust)
+  - Improve ExecutionPlanner to use as few walk-phase containing execution levels as possible while ignoring how many non-walk levels there are. This would reduce the number of walks that have to be performed.
 
 ## Future Goals
 
