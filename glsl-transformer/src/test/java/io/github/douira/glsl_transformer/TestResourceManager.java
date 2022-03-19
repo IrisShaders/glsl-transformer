@@ -30,7 +30,8 @@ public class TestResourceManager {
     BENCHMARK1("/unlicensed/benchmark1.glsl"),
     BENCHMARK2("/unlicensed/benchmark2.glsl"),
     TEST("/unlicensed/test.glsl"),
-    TYPE_TEST("/typeTest.glsl");
+    TYPE_TEST("/typeTest.glsl"),
+    UNIFORM_TEST("/uniformTest.glsl");
 
     Path path;
 
@@ -69,6 +70,9 @@ public class TestResourceManager {
   }
 
   public static record Resource(Path path, String content) {
+    public String getScenarioName() {
+      return path().getFileName().toString();
+    }
   }
 
   private TestResourceManager() {

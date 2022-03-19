@@ -11,9 +11,11 @@ import org.antlr.v4.runtime.CommonToken;
 import org.antlr.v4.runtime.InputMismatchException;
 import org.antlr.v4.runtime.LexerNoViableAltException;
 import org.antlr.v4.runtime.NoViableAltException;
+import org.antlr.v4.runtime.ParserRuleContext;
 import org.antlr.v4.runtime.RecognitionException;
 import org.antlr.v4.runtime.Recognizer;
 import org.antlr.v4.runtime.misc.ParseCancellationException;
+import org.antlr.v4.runtime.tree.TerminalNode;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -22,11 +24,13 @@ import org.junit.jupiter.api.function.Executable;
 import au.com.origin.snapshots.Expect;
 import au.com.origin.snapshots.annotations.SnapshotName;
 import au.com.origin.snapshots.junit5.SnapshotExtension;
+import io.github.douira.glsl_transformer.GLSLParser.TranslationUnitContext;
 import io.github.douira.glsl_transformer.SnapshotUtil;
 import io.github.douira.glsl_transformer.TestResourceManager;
-import io.github.douira.glsl_transformer.TestWithTransformationManager;
-import io.github.douira.glsl_transformer.GLSLParser.TranslationUnitContext;
 import io.github.douira.glsl_transformer.TestResourceManager.DirectoryLocation;
+import io.github.douira.glsl_transformer.TestResourceManager.FileLocation;
+import io.github.douira.glsl_transformer.util.CompatUtil;
+import io.github.douira.glsl_transformer.TestWithTransformationManager;
 
 @ExtendWith({ SnapshotExtension.class })
 public class TransformationManagerTest extends TestWithTransformationManager<Void> {
@@ -129,8 +133,7 @@ public class TransformationManagerTest extends TestWithTransformationManager<Voi
           manager.getParser().addErrorListener(collectingListener);
 
           var content = resource.content();
-          var expectScenario = expect.scenario(
-              resource.path().getFileName().toString());
+          var expectScenario = expect.scenario(resource.getScenarioName());
 
           if (content == null) {
             expectScenario.toMatchSnapshot("<invalid content>");
@@ -163,5 +166,62 @@ public class TransformationManagerTest extends TestWithTransformationManager<Voi
           assertSame(parameters, man.getJobParameters(), "It should contain the job parameters again");
           return result;
         }), "It should return the value of the supplier function");
+  }
+
+  @Test
+  @SnapshotName("testParsedTree")
+  void testParsedTree() {
+    var man = new TransformationManager<StringBuilder>();
+    man.addConcurrent(new WalkPhase<StringBuilder>() {
+      int depth;
+
+      @Override
+      public void resetState() {
+        depth = 0;
+      }
+
+      @Override
+      public void enterEveryRule(ParserRuleContext ctx) {
+        var builder = getJobParameters();
+        builder.append(CompatUtil.repeat("|", depth));
+        builder.append(ctx.getClass().getSimpleName());
+        builder.append('\n');
+        depth++;
+      }
+
+      @Override
+      public void exitEveryRule(ParserRuleContext ctx) {
+        depth--;
+      }
+
+      @Override
+      public void visitTerminal(TerminalNode node) {
+        var builder = getJobParameters();
+        builder.append(CompatUtil.repeat("-", depth - 1));
+        builder.append('+');
+        builder.append(node.toString().replace("{", "{    \\}"));
+        builder.append('\n');
+      }
+    });
+
+    var resource = TestResourceManager.getResource(FileLocation.UNIFORM_TEST);
+    var content = resource.content();
+    var builder = new StringBuilder();
+    man.transform(content, builder);
+    expect.scenario(resource.getScenarioName())
+        .toMatchSnapshot(SnapshotUtil.inputOutputSnapshot(content, builder.toString()));
+  }
+
+  /**
+   * Example transformation that is tested here. Requirements (not fully
+   * specified):
+   * - remove existing uniform declarations
+   * - add const declarations
+   * - add uniform blocks
+   */
+  @Test
+  @SnapshotName("testUniformTransform")
+  void testUniformTransform() {
+    // TODO
   }
 }
