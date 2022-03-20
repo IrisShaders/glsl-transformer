@@ -183,7 +183,10 @@ public class TransformationManagerTest extends TestWithTransformationManager<Voi
       @Override
       public void enterEveryRule(ParserRuleContext ctx) {
         var builder = getJobParameters();
-        builder.append(CompatUtil.repeat("|", depth));
+        builder.append(CompatUtil.repeat("│", depth - 1));
+        if (depth > 0) {
+          builder.append('├');
+        }
         builder.append(ctx.getClass().getSimpleName());
         builder.append('\n');
         depth++;
@@ -197,13 +200,16 @@ public class TransformationManagerTest extends TestWithTransformationManager<Voi
       @Override
       public void visitTerminal(TerminalNode node) {
         var builder = getJobParameters();
-        builder.append(CompatUtil.repeat("-", depth - 1));
-        builder.append('+');
+        builder.append(CompatUtil.repeat("│", depth - 1));
+        if (depth > 0) {
+          builder.append('├');
+        }
         builder.append(node.toString().replace("{", "{    \\}"));
         builder.append('\n');
       }
     });
 
+    // a * b + (c + d) * e;
     var resource = TestResourceManager.getResource(FileLocation.UNIFORM_TEST);
     var content = resource.content();
     var builder = new StringBuilder();
