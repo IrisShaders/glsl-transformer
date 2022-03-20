@@ -101,7 +101,8 @@ public class TestResourceManager {
 
           return true;
         })
-        .map(TestResourceManager::getPathResource);
+        .map(TestResourceManager::getPathResource)
+        .filter(resource -> resource.content() != null);
   }
 
   private static Resource getPathResource(Path path) {
