@@ -13,6 +13,5 @@ layout(std140, binding = 0) uniform ubo_DynamicState {
 
 void main() {
   const uint baz = 4;
-  foo = a[3].f;
-  foo = b.length();
+  foo = a + b + c + e[3].f; 
 }

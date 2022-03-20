@@ -77,43 +77,13 @@ functionDefinition:
 
 variableIdentifier: IDENTIFIER;
 
-primaryExpression:
-	variableIdentifier
-	| INT16CONSTANT
-	| UINT16CONSTANT
-	| INT32CONSTANT
-	| UINT32CONSTANT
-	| INT64CONSTANT
-	| UINT64CONSTANT
-	| FLOAT16CONSTANT
-	| FLOAT32CONSTANT
-	| FLOAT64CONSTANT
-	| BOOLCONSTANT
-	| LPAREN expression RPAREN;
-
-//Note: diverges from the spec by explicity adding a method call instead of handling it through postfixExpression in functionIdentifier
-postfixExpression:
-	primaryExpression
-	| postfixExpression (
-		LBRACKET expression RBRACKET
-		| DOT IDENTIFIER
-		| DOT methodCall
-		| INC_OP
-		| DEC_OP
-	)
-	| functionCall;
-
 functionCall: functionIdentifier callParameterList;
 
 methodCall: variableIdentifier callParameterList;
 
+//assignment expressions
 callParameterList:
-	LPAREN (
-		| VOID
-		| assignmentExpression (
-			COMMA assignmentExpression
-		)*
-	) RPAREN;
+	LPAREN ( | VOID | expression ( COMMA expression)*) RPAREN;
 
 //Note: diverges from the spec by not allowing a prefixExpression as an identifier
 //array-type function identfiers are handled by typeSpecifier
@@ -121,98 +91,64 @@ functionIdentifier:
 	typeSpecifier
 	| variableIdentifier;
 
-unaryExpression:
-	postfixExpression
-	| unaryOperator unaryExpression;
-
-unaryOperator:
-	INC_OP
-	| DEC_OP
-	| PLUS_OP
-	| MINUS_OP
-	| NOT_OP
-	| BNEG_OP;
-
-//this weird nested structure is necessary to ensure correct operator precendence
-multiplicativeExpression:
-	unaryExpression (
-		(TIMES_OP | DIV_OP | MOD_OP) unaryExpression
-	)*;
-
-additiveExpression:
-	multiplicativeExpression (
-		(PLUS_OP | MINUS_OP) multiplicativeExpression
-	)*;
-
-shiftExpression:
-	additiveExpression (
-		(LEFT_OP | RIGHT_OP) additiveExpression
-	)*;
-
-relationalExpression:
-	shiftExpression (
-		(LT_OP | GT_OP | LE_OP | GE_OP) shiftExpression
-	)*;
-
-equalityExpression:
-	relationalExpression (
-		(EQ_OP | NE_OP) relationalExpression
-	)*;
-
-andExpression:
-	equalityExpression (BAND_OP equalityExpression)*;
-
-exclusiveOrExpression:
-	andExpression (BXOR_OP andExpression)*;
-
-inclusiveOrExpression:
-	exclusiveOrExpression (
-		BOR_OP exclusiveOrExpression
-	)*;
-
-logicalAndExpression:
-	inclusiveOrExpression (
-		AND_OP inclusiveOrExpression
-	)*;
-
-logicalXorExpression:
-	logicalAndExpression (
-		XOR_OP logicalAndExpression
-	)*;
-
-logicalOrExpression:
-	logicalXorExpression (
-		OR_OP logicalXorExpression
-	)*;
-
-conditionalExpression:
-	logicalOrExpression (
-		QUERY_OP expression COLON assignmentExpression
-	)*;
-
-assignmentExpression:
-	conditionalExpression
-	| unaryExpression assignmentOperator assignmentExpression;
-
-assignmentOperator:
-	ASSIGN_OP
-	| MUL_ASSIGN
-	| DIV_ASSIGN
-	| MOD_ASSIGN
-	| ADD_ASSIGN
-	| SUB_ASSIGN
-	| LEFT_ASSIGN
-	| RIGHT_ASSIGN
-	| AND_ASSIGN
-	| XOR_ASSIGN
-	| OR_ASSIGN;
-
+//Note: diverges from the spec by explicity adding a method call instead of handling it through postfixExpression in functionIdentifier
 expression:
-	assignmentExpression (
-		COMMA assignmentExpression
-	)*;
-
-constantExpression: conditionalExpression;
+	variableIdentifier # referenceExpression
+	| (
+		INT16CONSTANT
+		| UINT16CONSTANT
+		| INT32CONSTANT
+		| UINT32CONSTANT
+		| INT64CONSTANT
+		| UINT64CONSTANT
+		| FLOAT16CONSTANT
+		| FLOAT32CONSTANT
+		| FLOAT64CONSTANT
+		| BOOLCONSTANT
+	)																					# literalExpression
+	| LPAREN expression RPAREN								# groupingExpression
+	| expression LBRACKET expression RBRACKET	# arrayAccessExpression
+	| expression DOT methodCall								# methodCallExpression
+	| functionCall														# functionCallExpression
+	| expression DOT IDENTIFIER								# memberAccessExpression
+	| expression op = (INC_OP | DEC_OP)				# postfixExpression
+	| <assoc = right> op = (
+		INC_OP
+		| DEC_OP
+		| PLUS_OP
+		| MINUS_OP
+		| NOT_OP
+		| BNEG_OP
+	) expression																							# prefixExpression
+	| expression op = (TIMES_OP | DIV_OP | MOD_OP) expression	#
+		multiplicativeExpression
+	| expression op = (PLUS_OP | MINUS_OP) expression							# additiveExpression
+	| expression op = (LEFT_OP | RIGHT_OP) expression							# shiftExpression
+	| expression op = (LT_OP | GT_OP | LE_OP | GE_OP) expression	#
+		relationalExpression
+	| expression op = (EQ_OP | NE_OP) expression											# equalityExpression
+	| expression op = BAND_OP expression															# bitwiseAndExpression
+	| expression op = BXOR_OP expression															# bitwiseExclusiveOrExpression
+	| expression op = BOR_OP expression																# bitwiseInclusiveOrExpression
+	| expression op = AND_OP expression																# logicalAndExpression
+	| expression op = XOR_OP expression																# logicalExclusiveOrExpression
+	| expression op = OR_OP expression																# logicalInclusiveOrExpression
+	| <assoc = right> expression QUERY_OP expression COLON expression	#
+		conditionalExpression
+	| <assoc = right> expression op = (
+		ASSIGN_OP
+		| MUL_ASSIGN
+		| DIV_ASSIGN
+		| MOD_ASSIGN
+		| ADD_ASSIGN
+		| SUB_ASSIGN
+		| LEFT_ASSIGN
+		| RIGHT_ASSIGN
+		| AND_ASSIGN
+		| XOR_ASSIGN
+		| OR_ASSIGN
+	) expression										# assignmentExpression
+	| expression (COMMA expression)	# sequenceExpression;
 
 declaration:
 	functionPrototype SEMICOLON
@@ -227,8 +163,7 @@ declaration:
 functionPrototype:
 	attribute? functionHeader LPAREN functionParameterList RPAREN attribute?;
 
-functionParameterList:
-	(
+functionParameterList: (
 		parameterDeclaration (
 			COMMA parameterDeclaration
 		)*
@@ -250,9 +185,10 @@ attribute:
 		COMMA singleAttribute
 	)* RBRACKET RBRACKET;
 
+//constant expression
 singleAttribute:
 	(IDENTIFIER COLON COLON)? IDENTIFIER (
-		LPAREN constantExpression RPAREN
+		LPAREN expression RPAREN
 	)?;
 
 initDeclaratorList:
@@ -262,9 +198,7 @@ declarationMemberList:
 	declarationMember? (COMMA declarationMember)*;
 
 declarationMember:
-	IDENTIFIER arraySpecifier? (
-		ASSIGN_OP initializer
-	)?;
+	IDENTIFIER arraySpecifier? (ASSIGN_OP initializer)?;
 
 fullySpecifiedType: typeQualifier? typeSpecifier;
 
@@ -299,8 +233,9 @@ layoutQualifier:
 		COMMA layoutQualifierId
 	)* RPAREN;
 
+//constant expression
 layoutQualifierId:
-	IDENTIFIER (ASSIGN_OP constantExpression)?
+	IDENTIFIER (ASSIGN_OP expression)?
 	| SHARED;
 
 precisionQualifier: HIGHP | MEDIUMP | LOWP;
@@ -330,9 +265,11 @@ typeSpecifier:
 	typeSpecifierNonarray arraySpecifier?;
 
 //needs duplicated rule parts like this or it becomes mutually left-recursive
-arraySpecifier:
-	arraySpecifier LBRACKET constantExpression? RBRACKET
-	| LBRACKET constantExpression? RBRACKET;
+//constant expressions
+arraySpecifier: arraySpecifierSegment+;
+arraySpecifierSegment: (
+		LBRACKET expression? RBRACKET
+	);
 
 //TYPE_NAME instead of IDENTIFIER in the spec
 typeSpecifierNonarray:
@@ -508,16 +445,14 @@ structDeclaratorList:
 
 structDeclarator: IDENTIFIER arraySpecifier?;
 
+//assignment epxression
 initializer:
-	assignmentExpression
-	| LBRACE (
-		initializer (COMMA initializer)* COMMA?
-	)? RBRACE;
+	expression
+	| LBRACE (initializer (COMMA initializer)* COMMA?)? RBRACE;
 
-statement: compoundStatement | simpleStatement;
-
-simpleStatement:
-	declarationStatement
+statement:
+	compoundStatement
+	| declarationStatement
 	| expressionStatement
 	| emptyStatement
 	| selectionStatement
