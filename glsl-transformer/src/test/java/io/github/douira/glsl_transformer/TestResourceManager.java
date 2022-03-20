@@ -31,7 +31,9 @@ public class TestResourceManager {
     BENCHMARK2("/unlicensed/benchmark2.glsl"),
     TEST("/unlicensed/test.glsl"),
     TYPE_TEST("/typeTest.glsl"),
-    UNIFORM_TEST("/uniformTest.glsl");
+    UNIFORM_TEST("/uniformTest.glsl"),
+    MATRIX_PARSE_TEST("/glslang-test/matrix.frag"),
+    DEEP_EXPRESSION_TEST("/deepExpressionTest.glsl");
 
     Path path;
 
@@ -87,19 +89,19 @@ public class TestResourceManager {
     return assertDoesNotThrow(
         () -> Files.walk(resourcePath),
         "The resource directory at " + resourcePath + " could not be enumerated.")
-            .filter(path -> {
-              if (!location.allowPath(path)) {
-                return false;
-              }
+        .filter(path -> {
+          if (!location.allowPath(path)) {
+            return false;
+          }
 
-              var file = path.toFile();
-              if (file.isDirectory()) {
-                return false;
-              }
+          var file = path.toFile();
+          if (file.isDirectory()) {
+            return false;
+          }
 
-              return true;
-            })
-            .map(TestResourceManager::getPathResource);
+          return true;
+        })
+        .map(TestResourceManager::getPathResource);
   }
 
   private static Resource getPathResource(Path path) {
