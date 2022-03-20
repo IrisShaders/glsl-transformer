@@ -7,7 +7,6 @@ import com.github.bsideup.jabel.Desugar;
 
 import org.antlr.v4.runtime.BufferedTokenStream;
 import org.antlr.v4.runtime.ParserRuleContext;
-import org.antlr.v4.runtime.RuleContextWithAltNum;
 import org.antlr.v4.runtime.misc.Interval;
 import org.antlr.v4.runtime.tree.ParseTree;
 
@@ -29,7 +28,7 @@ import io.github.douira.glsl_transformer.print.CachingIntervalSet;
  * been removed. The printer then uses this to not print any non-hidden tokens
  * contained within any local root's omission set.
  */
-public abstract class ExtendedContext extends RuleContextWithAltNum implements TreeMember {
+public abstract class ExtendedContext extends ParserRuleContext implements TreeMember {
   @Desugar
   private static record LocalRoot(CachingIntervalSet omissionSet, BufferedTokenStream tokenStream) {
     LocalRoot(BufferedTokenStream tokenStream) {
@@ -79,6 +78,14 @@ public abstract class ExtendedContext extends RuleContextWithAltNum implements T
    */
   public ExtendedContext(ParserRuleContext parent, int invokingStateNumber) {
     super(parent, invokingStateNumber);
+    updateRoot();
+  }
+
+  /**
+   * Creates a new extended parser rule context without a parent. This is also
+   * used in the generated code.
+   */
+  public ExtendedContext() {
     updateRoot();
   }
 
