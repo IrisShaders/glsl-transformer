@@ -4,6 +4,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Stream;
 
 import org.antlr.v4.runtime.BaseErrorListener;
 import org.antlr.v4.runtime.CharStreams;
@@ -11,11 +12,9 @@ import org.antlr.v4.runtime.CommonToken;
 import org.antlr.v4.runtime.InputMismatchException;
 import org.antlr.v4.runtime.LexerNoViableAltException;
 import org.antlr.v4.runtime.NoViableAltException;
-import org.antlr.v4.runtime.ParserRuleContext;
 import org.antlr.v4.runtime.RecognitionException;
 import org.antlr.v4.runtime.Recognizer;
 import org.antlr.v4.runtime.misc.ParseCancellationException;
-import org.antlr.v4.runtime.tree.TerminalNode;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -25,11 +24,11 @@ import au.com.origin.snapshots.Expect;
 import au.com.origin.snapshots.annotations.SnapshotName;
 import au.com.origin.snapshots.junit5.SnapshotExtension;
 import io.github.douira.glsl_transformer.GLSLParser.TranslationUnitContext;
+import io.github.douira.glsl_transformer.PrintTreeSnapshot;
 import io.github.douira.glsl_transformer.SnapshotUtil;
 import io.github.douira.glsl_transformer.TestResourceManager;
 import io.github.douira.glsl_transformer.TestResourceManager.DirectoryLocation;
 import io.github.douira.glsl_transformer.TestResourceManager.FileLocation;
-import io.github.douira.glsl_transformer.util.CompatUtil;
 import io.github.douira.glsl_transformer.TestWithTransformationManager;
 
 @ExtendWith({ SnapshotExtension.class })
@@ -135,20 +134,16 @@ public class TransformationManagerTest extends TestWithTransformationManager<Voi
           var content = resource.content();
           var expectScenario = expect.scenario(resource.getScenarioName());
 
-          if (content == null) {
-            expectScenario.toMatchSnapshot("<invalid content>");
-          } else {
-            var input = resource.content();
-            var result = manager.transform(input);
+          var result = manager.transform(content);
 
-            if (collectingListener.errors.isEmpty()) {
-              assertEquals(input, result, "It should re-print the same string it parsed if there were no errors");
-            }
-
-            expectScenario.toMatchSnapshot(
-                SnapshotUtil.inputOutputSnapshot(
-                    content, String.join("\n", collectingListener.errors)));
+          if (collectingListener.errors.isEmpty()) {
+            assertEquals(content, result, "It should re-print the same string it parsed if there were no errors");
           }
+
+          expectScenario.toMatchSnapshot(
+              SnapshotUtil.inputOutputSnapshot(
+                  content, String.join("\n", collectingListener.errors)));
+
         });
   }
 
@@ -169,53 +164,24 @@ public class TransformationManagerTest extends TestWithTransformationManager<Voi
   }
 
   @Test
-  @SnapshotName("testParsedTree")
-  void testParsedTree() {
-    var man = new TransformationManager<StringBuilder>();
-    man.addConcurrent(new WalkPhase<StringBuilder>() {
-      int depth;
+  @SnapshotName("testParseTree")
+  void testParseTree() {
+    var man = new TransformationManager<StringBuilder>(false);
+    man.addConcurrent(new PrintTreeSnapshot());
 
-      @Override
-      public void resetState() {
-        depth = 0;
-      }
-
-      @Override
-      public void enterEveryRule(ParserRuleContext ctx) {
-        var builder = getJobParameters();
-        builder.append(CompatUtil.repeat("│", depth - 1));
-        if (depth > 0) {
-          builder.append('├');
-        }
-        builder.append(ctx.getClass().getSimpleName());
-        builder.append('\n');
-        depth++;
-      }
-
-      @Override
-      public void exitEveryRule(ParserRuleContext ctx) {
-        depth--;
-      }
-
-      @Override
-      public void visitTerminal(TerminalNode node) {
-        var builder = getJobParameters();
-        builder.append(CompatUtil.repeat("│", depth - 1));
-        if (depth > 0) {
-          builder.append('├');
-        }
-        builder.append(node.toString().replace("{", "{    \\}"));
-        builder.append('\n');
-      }
-    });
-
-    // a * b + (c + d) * e;
-    var resource = TestResourceManager.getResource(FileLocation.UNIFORM_TEST);
-    var content = resource.content();
-    var builder = new StringBuilder();
-    man.transform(content, builder);
-    expect.scenario(resource.getScenarioName())
-        .toMatchSnapshot(SnapshotUtil.inputOutputSnapshot(content, builder.toString()));
+    Stream.concat(Stream.of(
+        TestResourceManager.getResource(FileLocation.UNIFORM_TEST),
+        TestResourceManager.getResource(FileLocation.MATRIX_PARSE_TEST)),
+        TestResourceManager
+            .getDirectoryResources(DirectoryLocation.GLSLANG_TESTS))
+        .limit(10)
+        .forEach(resource -> {
+          var content = resource.content();
+          var builder = new StringBuilder();
+          man.transform(content, builder);
+          expect.scenario(resource.getScenarioName())
+              .toMatchSnapshot(SnapshotUtil.inputOutputSnapshot(content, builder.toString()));
+        });
   }
 
   /**
