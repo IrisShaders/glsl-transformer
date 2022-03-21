@@ -34,6 +34,7 @@ dependencies {
 
     testImplementation group: 'io.github.origin-energy', name:'java-snapshot-testing-junit5', version: '3.2.+'
     testImplementation group: 'org.slf4j', name: 'slf4j-simple', version: '2.0.0-alpha5'
+    testImplementation group: 'org.fusesource.jansi', name:'jansi', version:'2.4.0'
 
     annotationProcessor group: 'com.github.bsideup.jabel', name:'jabel-javac-plugin', version: jabelVersion
     compileOnly group: 'com.github.bsideup.jabel', name:'jabel-javac-plugin', version: jabelVersion
@@ -60,6 +61,7 @@ testing {
 test {
     // report is always generated after tests run
     finalizedBy jacocoTestReport
+    testLogging.showStandardStreams = true
 }
 
 jacocoTestReport {
