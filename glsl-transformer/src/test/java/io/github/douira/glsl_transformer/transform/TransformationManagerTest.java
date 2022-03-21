@@ -4,7 +4,6 @@ import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Stream;
 
 import org.antlr.v4.runtime.BaseErrorListener;
 import org.antlr.v4.runtime.CharStreams;
@@ -24,11 +23,9 @@ import au.com.origin.snapshots.Expect;
 import au.com.origin.snapshots.annotations.SnapshotName;
 import au.com.origin.snapshots.junit5.SnapshotExtension;
 import io.github.douira.glsl_transformer.GLSLParser.TranslationUnitContext;
-import io.github.douira.glsl_transformer.PrintTreeSnapshot;
 import io.github.douira.glsl_transformer.SnapshotUtil;
 import io.github.douira.glsl_transformer.TestResourceManager;
 import io.github.douira.glsl_transformer.TestResourceManager.DirectoryLocation;
-import io.github.douira.glsl_transformer.TestResourceManager.FileLocation;
 import io.github.douira.glsl_transformer.TestWithTransformationManager;
 
 @ExtendWith({ SnapshotExtension.class })
@@ -161,27 +158,6 @@ public class TransformationManagerTest extends TestWithTransformationManager<Voi
           assertSame(parameters, man.getJobParameters(), "It should contain the job parameters again");
           return result;
         }), "It should return the value of the supplier function");
-  }
-
-  @Test
-  @SnapshotName("testParseTree")
-  void testParseTree() {
-    var man = new TransformationManager<StringBuilder>(false);
-    man.addConcurrent(new PrintTreeSnapshot());
-
-    Stream.concat(Stream.of(
-        TestResourceManager.getResource(FileLocation.UNIFORM_TEST),
-        TestResourceManager.getResource(FileLocation.MATRIX_PARSE_TEST)),
-        TestResourceManager
-            .getDirectoryResources(DirectoryLocation.GLSLANG_TESTS))
-        .limit(10)
-        .forEach(resource -> {
-          var content = resource.content();
-          var builder = new StringBuilder();
-          man.transform(content, builder);
-          expect.scenario(resource.getScenarioName())
-              .toMatchSnapshot(SnapshotUtil.inputOutputSnapshot(content, builder.toString()));
-        });
   }
 
   /**
