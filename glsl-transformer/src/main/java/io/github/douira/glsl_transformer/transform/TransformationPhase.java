@@ -2,7 +2,6 @@ package io.github.douira.glsl_transformer.transform;
 
 import java.util.ArrayList;
 import java.util.Deque;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.function.Function;
@@ -27,7 +26,6 @@ import io.github.douira.glsl_transformer.ast.Directive.Type;
 import io.github.douira.glsl_transformer.print.EmptyTerminalNode;
 import io.github.douira.glsl_transformer.tree.ExtendedContext;
 import io.github.douira.glsl_transformer.tree.TreeMember;
-import io.github.douira.glsl_transformer.util.CompatUtil;
 
 /**
  * The transformations phase actually does a specific transformation. It can be
@@ -286,7 +284,13 @@ public abstract class TransformationPhase<T> extends GLSLParserBaseListener impl
      * Before the #extension statement, before other directives, declarations and
      * function definitions
      */
-    BEFORE_EXTENSIONS,
+    BEFORE_EXTENSIONS() {
+      @Override
+      protected boolean checkChildRelevant(Class<?> childClass) {
+        return BEFORE_DIRECTIVES.checkChildRelevant(childClass)
+            || childClass == ExtensionStatementContext.class;
+      }
+    },
 
     /**
      * Before non-extension parsed #-directives such as #pragma, before
@@ -295,17 +299,35 @@ public abstract class TransformationPhase<T> extends GLSLParserBaseListener impl
      * 
      * TODO: describe what happens to unparsed tokens that are in the stream
      */
-    BEFORE_DIRECTIVES,
+    BEFORE_DIRECTIVES() {
+      @Override
+      protected boolean checkChildRelevant(Class<?> childClass) {
+        return BEFORE_DECLARATIONS.checkChildRelevant(childClass)
+            || childClass == PragmaStatementContext.class;
+      }
+    },
 
     /**
      * Before declarations like layout and struct, before function definitions
      */
-    BEFORE_DECLARATIONS,
+    BEFORE_DECLARATIONS() {
+      @Override
+      protected boolean checkChildRelevant(Class<?> childClass) {
+        return BEFORE_FUNCTIONS.checkChildRelevant(childClass)
+            || childClass == LayoutDefaultsContext.class
+            || DeclarationContext.class.isAssignableFrom(childClass);
+      }
+    },
 
     /**
      * Before function definitions
      */
-    BEFORE_FUNCTIONS,
+    BEFORE_FUNCTIONS() {
+      @Override
+      protected boolean checkChildRelevant(Class<?> childClass) {
+        return childClass == FunctionDefinitionContext.class;
+      }
+    },
 
     /**
      * Before the end of the file, basically the last possible location
@@ -318,22 +340,21 @@ public abstract class TransformationPhase<T> extends GLSLParserBaseListener impl
      */
     public Set<Class<? extends ParseTree>> EDBeforeTypes;
 
-    static {
-      // builds the injections points' before type sets from the weakest to the
-      // strongest (strongest having the most inject-before conditions)
-      // BEFORE_VERSION and BEFORE_EOF are handled as special cases
-
-      BEFORE_FUNCTIONS.EDBeforeTypes = CompatUtil.setOf(FunctionDefinitionContext.class);
-
-      BEFORE_DECLARATIONS.EDBeforeTypes = new HashSet<>(BEFORE_FUNCTIONS.EDBeforeTypes);
-      BEFORE_DECLARATIONS.EDBeforeTypes.add(LayoutDefaultsContext.class);
-      BEFORE_DECLARATIONS.EDBeforeTypes.add(DeclarationContext.class);
-
-      BEFORE_DIRECTIVES.EDBeforeTypes = new HashSet<>(BEFORE_DECLARATIONS.EDBeforeTypes);
-      BEFORE_DIRECTIVES.EDBeforeTypes.add(PragmaStatementContext.class);
-
-      BEFORE_EXTENSIONS.EDBeforeTypes = new HashSet<>(BEFORE_DIRECTIVES.EDBeforeTypes);
-      BEFORE_EXTENSIONS.EDBeforeTypes.add(ExtensionStatementContext.class);
+    /**
+     * Checks if the given class of the child of an external declaration makes the
+     * external declaration one that should be injected before. When this method
+     * returns true, the injection happens right before the external declaration
+     * that has the child that was found to be relevant.
+     * 
+     * @param childClass The class of the only child node of the external
+     *                   declaration being tested for being a node before which the
+     *                   injection has to happen
+     * @return {@code true} if the class means the injection should happen before
+     *         this external declaration according to the implementing injection
+     *         location
+     */
+    protected boolean checkChildRelevant(Class<?> childClass) {
+      throw new Error("A non-special injection point doesn't have a child relevance implementation!");
     }
   }
 
@@ -349,17 +370,12 @@ public abstract class TransformationPhase<T> extends GLSLParserBaseListener impl
     } else if (location == InjectionPoint.BEFORE_EOF) {
       injectIndex = rootNode.getChildCount();
     } else {
-      var beforeTypes = location.EDBeforeTypes;
-      if (beforeTypes == null) {
-        throw new Error("A non-special injection point is missing its EDBeforeTypes!");
-      }
       do {
         injectIndex++;
-        if (rootNode.getChild(injectIndex) instanceof ExternalDeclarationContext externalDeclaration) {
-          var child = externalDeclaration.getChild(0);
-          if (child instanceof ExtendedContext && beforeTypes.contains(child.getClass())) {
-            break;
-          }
+        if (rootNode.getChild(injectIndex) instanceof ExternalDeclarationContext externalDeclaration
+            && externalDeclaration.getChild(0) instanceof ExtendedContext eChild
+            && location.checkChildRelevant(eChild.getClass())) {
+          break;
         }
       } while (injectIndex < rootNode.getChildCount());
     }
