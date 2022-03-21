@@ -33,7 +33,8 @@ public class TestResourceManager {
     TYPE_TEST("/typeTest.glsl"),
     UNIFORM_TEST("/uniformTest.glsl"),
     MATRIX_PARSE_TEST("/glslang-test/matrix.frag"),
-    DEEP_EXPRESSION_TEST("/deepExpressionTest.glsl");
+    DEEP_EXPRESSION_TEST("/deepExpressionTest.glsl"),
+    GRAMMAR_DEBUG("/grammarDebug.glsl");
 
     Path path;
 

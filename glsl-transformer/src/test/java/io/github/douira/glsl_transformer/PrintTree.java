@@ -11,9 +11,17 @@ public abstract class PrintTree extends WalkPhase<StringBuilder> {
 
   private static final int nameSuffixLength = "Context".length();
 
-  protected void processRuleToggle(ParserRuleContext ctx, StringBuilder builder) {
+  protected String getRuleName(ParserRuleContext ctx) {
     var name = ctx.getClass().getSimpleName();
-    builder.append(name.substring(0, name.length() - nameSuffixLength));
+    return name.substring(0, name.length() - nameSuffixLength);
+  }
+
+  protected String getTerminalContent(TerminalNode node) {
+    return node.toString().replace("{", "{    \\}");
+  }
+
+  protected void processRuleToggle(ParserRuleContext ctx, StringBuilder builder) {
+    builder.append(getRuleName(ctx));
     builder.append('\n');
   }
 
@@ -27,7 +35,7 @@ public abstract class PrintTree extends WalkPhase<StringBuilder> {
 
   public void processVisitTerminal(TerminalNode node, StringBuilder builder) {
     // this replacement makes syntax highlighting of the snapshot file not as bad
-    builder.append(node.toString().replace("{", "{    \\}"));
+    builder.append(getTerminalContent(node));
     builder.append('\n');
   }
 
