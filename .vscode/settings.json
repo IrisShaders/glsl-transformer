@@ -19,5 +19,8 @@
     "jacoco.xml",
     "jacocoTestReport.xml"
   ],
-  "coverage-gutters.coverageBaseDir": "glsl-transformer/build/reports/jacoco/test"
+  "coverage-gutters.coverageBaseDir": "glsl-transformer/build/reports/jacoco/test",
+  "antlr4.format": {
+    "columnLimit": 110
+  }
 }
