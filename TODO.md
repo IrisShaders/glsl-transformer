@@ -8,8 +8,7 @@
 - DynamicParseTreeWalker: have transformation phase tell it about movements in the child array it caused to avoid inserting placeholder nodes (and then also avoid even doing the compacting step if it's not necessary)
 
 - Performance ideas:
-  - Stop tree walk if all participating walk phases signal that they're done
-  - Limit depth of tree walk if participating walk phases agree
+  - Limit depth of tree walk if participating walk phases agree (todo: abstract `isDeepEnough` into a maximum-depth functionality)
   - Limit tree walk to certain nodes (/node types) or exclude some node types from being visited if participating walk phases agree (maybe also dynamically adjust)
   - Improve ExecutionPlanner to use as few walk-phase containing execution levels as possible while ignoring how many non-walk levels there are. This would reduce the number of walks that have to be performed.
 
