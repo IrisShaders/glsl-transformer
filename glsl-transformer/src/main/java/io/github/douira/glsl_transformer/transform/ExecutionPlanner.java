@@ -254,6 +254,7 @@ public abstract class ExecutionPlanner<T> {
 
         // if this is a transformation phase node, increment one above the maximum
         // distance of the dependencies. other nodes don't increase the distance.
+        // next, the execution levels are generated for nodes with equal distance
         if (TransformationPhase.class.isInstance(node.content)) {
           node.endDistance++;
           maximumDepth = Math.max(node.endDistance, maximumDepth);
