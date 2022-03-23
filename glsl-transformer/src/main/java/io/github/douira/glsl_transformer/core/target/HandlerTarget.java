@@ -35,4 +35,9 @@ public abstract class HandlerTarget<T> extends TransformationPhase<T> {
   public void setPlanner(ExecutionPlanner<T> parent) {
     super.setPlanner(parent);
   }
+
+  @Override
+  protected boolean canWalk() {
+    return false;
+  }
 }
