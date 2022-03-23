@@ -100,7 +100,12 @@ public abstract class ExecutionPlanner<T> {
   private static class LabeledNode<R> {
     final LifecycleUser<R> content;
     Collection<LabeledNode<R>> dependencies = new HashSet<>();
-    int endDistance = -1;
+    Collection<LabeledNode<R>> dependents = new HashSet<>();
+
+    // initialized as a maximum and minimum since they're the maximum and minimum of
+    // the neighbors (up or down depending on direction) corresponding bounds
+    int minimumExecutionLevel = Integer.MIN_VALUE;
+    int maximumExecutionLevel = Integer.MAX_VALUE;
     boolean dfsFinished = false;
 
     LabeledNode(LifecycleUser<R> content) {
@@ -113,6 +118,7 @@ public abstract class ExecutionPlanner<T> {
 
     void addDependency(LabeledNode<R> dependency) {
       dependencies.add(dependency);
+      dependency.dependents.add(this);
     }
   }
 
@@ -226,6 +232,9 @@ public abstract class ExecutionPlanner<T> {
     Deque<DFSEntry<T>> dfsStack = new LinkedList<>();
     dfsStack.push(new DFSEntry<>(rootNode, true));
 
+    // the topological sort starts at the end node and goes to the root node
+    List<LabeledNode<T>> topoSort = new ArrayList<>();
+
     // generate a topological sort with the first item in the list being an end node
     while (!dfsStack.isEmpty()) {
       if (dfsStack.size() > dependenciesProcessed.size() * 2) {
@@ -243,26 +252,59 @@ public abstract class ExecutionPlanner<T> {
           }
         }
       } else {
-        node.dfsFinished = true;
-
         // nodes will be finished in the order of the topological sort.
-        // find the maximum distance any dependency has from the end node
-        for (var dependency : node.dependencies) {
-          if (dependency.endDistance > node.endDistance) {
-            node.endDistance = dependency.endDistance;
-          }
-        }
-
-        // if this is a transformation phase node, increment one above the maximum
-        // distance of the dependencies. other nodes don't increase the distance.
-        // next, the execution levels are generated for nodes with equal distance
-        if (TransformationPhase.class.isInstance(node.content)) {
-          node.endDistance++;
-          maximumDepth = Math.max(node.endDistance, maximumDepth);
-        }
+        node.dfsFinished = true;
+        topoSort.add(node);
       }
     }
 
+    /*
+     * Determining max and minimum possible execution levels:
+     * traverse graph in forward/reverse topological order and calculate the
+     * minimum/maximum execution level index as the maximum/minimum of the
+     * minimum/maximum execution levels of the dependencies + 1/dependents - 1
+     * 
+     * This doesn't yet cover better execution plans in which more execution levels in
+     * total but less with walk phases are used since in that case the plan doesn't
+     * fit inside the maximumDepth anymore.
+     */
+
+    topoSort.get(0).minimumExecutionLevel = -1;
+
+    // iterate in the end to root direction
+    for (var node : topoSort) {
+      for (var neighbor : node.dependencies) {
+        if (neighbor.minimumExecutionLevel > node.minimumExecutionLevel) {
+          node.minimumExecutionLevel = neighbor.minimumExecutionLevel;
+        }
+      }
+
+      // increment the minimum execution level above that of the dependencies
+      if (TransformationPhase.class.isInstance(node.content)) {
+        node.minimumExecutionLevel++;
+        maximumDepth = Math.max(node.minimumExecutionLevel, maximumDepth);
+      }
+    }
+
+    rootNode.maximumExecutionLevel = maximumDepth + 1;
+
+    // iterate in the root to end direction
+    var iterator = topoSort.listIterator();
+    while (iterator.hasPrevious()) {
+      var node = iterator.previous();
+      for (var neighbor : node.dependents) {
+        if (neighbor.maximumExecutionLevel < node.maximumExecutionLevel) {
+          node.maximumExecutionLevel = neighbor.maximumExecutionLevel;
+        }
+      }
+
+      // decrement the maximum execution level below that of the dependents
+      if (TransformationPhase.class.isInstance(node.content)) {
+        node.maximumExecutionLevel--;
+      }
+    }
+
+    // TODO: make use of the calculated min and max execution levels
     executionLevels = new ArrayList<>(maximumDepth + 1);
     for (int i = 0; i <= maximumDepth; i++) {
       executionLevels.add(new ArrayList<TransformationPhase<T>>());
@@ -271,7 +313,7 @@ public abstract class ExecutionPlanner<T> {
     // place labelled nodes that contain phases into execution levels
     for (var node : contentNodeMap.values()) {
       if (TransformationPhase.class.isInstance(node.content)) {
-        executionLevels.get(node.endDistance).add((TransformationPhase<T>) node.content);
+        executionLevels.get(node.minimumExecutionLevel).add((TransformationPhase<T>) node.content);
       }
     }
 
