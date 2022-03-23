@@ -56,6 +56,11 @@ public abstract class WalkPhase<T> extends TransformationPhase<T> {
   }
 
   @Override
+  protected boolean canWalk() {
+    return true;
+  }
+
+  @Override
   final protected boolean checkBeforeWalk(TranslationUnitContext ctx) {
     if (isActiveBeforeWalk()) {
       beforeWalk(ctx);

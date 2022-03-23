@@ -20,6 +20,11 @@ public abstract class RunPhase<T> extends TransformationPhase<T> {
   protected abstract void run(TranslationUnitContext ctx);
 
   @Override
+  protected boolean canWalk() {
+    return false;
+  }
+
+  @Override
   final protected boolean checkBeforeWalk(TranslationUnitContext ctx) {
     if (isActive()) {
       run(ctx);

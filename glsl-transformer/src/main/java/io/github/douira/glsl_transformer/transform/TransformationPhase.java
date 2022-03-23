@@ -39,6 +39,22 @@ public abstract class TransformationPhase<T> extends GLSLParserBaseListener impl
   private ExecutionPlanner<T> planner;
 
   /**
+   * Called during planning in order to determine if this phase does any
+   * walking at all or if it just runs some code, like a RunPhase. This doesn't
+   * exclude or include this phase from walking but rather helps the execution
+   * planner combine walk phases into execution levels. Enabling and disabling a
+   * phase should be done with the methods
+   * {@link #checkBeforeWalk(TranslationUnitContext)} and
+   * {@link #runAfterWalk(TranslationUnitContext)}.
+   * 
+   * @implNote This method should run quickly and will only be called once (or
+   *           never) during execution planning.
+   * 
+   * @return If this phase needs to be walked on the tree
+   */
+  protected abstract boolean canWalk();
+
+  /**
    * Method called by the execution planner before the walk happens. The returned
    * boolean determines if the phase is added to the list of phases that are
    * walked on the tree. Returns false by default and implementing classes should
@@ -53,8 +69,7 @@ public abstract class TransformationPhase<T> extends GLSLParserBaseListener impl
 
   /**
    * Method called by the execution planner after the walk happens. Does nothing
-   * by
-   * default.
+   * by default.
    * 
    * @param ctx The root node
    */

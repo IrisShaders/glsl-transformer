@@ -61,7 +61,7 @@ public class DynamicParseTreeWalker extends ParseTreeWalker {
       walk(listener, child);
 
       // if the walk added items before the current index
-      // then the current item was moved forewards.
+      // then the current item was moved forwards.
       while (!MoveCheckable.replaces(child, node.getChild(i))) {
         i++;
       }
