@@ -13,12 +13,12 @@ public interface TreeMember extends ParseTree, MoveCheckable {
    * Gets the parent of this node. The parent is an {@link ExtendedContext}
    * because in this tree all parents should be an extended context.
    */
-  public ExtendedContext getParent();
+  ExtendedContext getParent();
 
   /**
    * Omits the tokens this node encompasses from the next local root. For terminal
    * nodes this is always at least the parent's local root. Other nodes may be
    * their own local root.
    */
-  public void omitTokens();
+  void omitTokens();
 }

@@ -17,7 +17,7 @@ public interface MoveCheckable {
    * 
    * @return The replaced node
    */
-  public ParseTree getPreviousNode();
+  ParseTree getPreviousNode();
 
   /**
    * Allows the transformation phase to tell this node which node it replaces.
@@ -25,7 +25,7 @@ public interface MoveCheckable {
    * @param previousNode The node to set as the previous node in this position in
    *                     the parent's child array that this node replaces
    */
-  public void setPreviousNode(ParseTree previousNode);
+  void setPreviousNode(ParseTree previousNode);
 
   /**
    * Checks if any given parse tree node replaces another. If the nodes aren't the
@@ -37,7 +37,7 @@ public interface MoveCheckable {
    * @param newNode The node that could be the replacement
    * @return {@code true} if the new node replaced the old node
    */
-  public static boolean replaces(ParseTree oldNode, ParseTree newNode) {
+  static boolean replaces(ParseTree oldNode, ParseTree newNode) {
     return oldNode == newNode
         || newNode instanceof MoveCheckable checkable && replaces(oldNode, checkable.getPreviousNode());
   }
