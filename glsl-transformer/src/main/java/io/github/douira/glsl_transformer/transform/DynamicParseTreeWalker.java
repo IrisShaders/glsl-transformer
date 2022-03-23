@@ -10,9 +10,9 @@ import io.github.douira.glsl_transformer.print.EmptyTerminalNode;
 import io.github.douira.glsl_transformer.tree.ExtendedContext;
 
 /**
- * The dynamic parse tree walker can with structural modification of a node's
- * child array. This enables injection of new nodes without disallowing such
- * modifications to happen during tree walking.
+ * The dynamic parse tree walker can handle some structural modification of a
+ * node's child array. This enables injection of new nodes without disallowing
+ * such modifications to happen during tree walking.
  */
 public class DynamicParseTreeWalker extends ParseTreeWalker {
   /**
@@ -52,18 +52,25 @@ public class DynamicParseTreeWalker extends ParseTreeWalker {
     var node = (ExtendedContext) tree;
     enterRule(listener, node);
 
-    for (var i = 0; i < node.getChildCount(); i++) {
-      var child = node.getChild(i);
-      if (child instanceof EmptyTerminalNode) {
-        continue;
-      }
+    if (!(listener instanceof PartialParseTreeListener partialListener
+        && (partialListener.isFinished() || partialListener.isDeepEnough(node)))) {
+      for (var i = 0; i < node.getChildCount(); i++) {
+        var child = node.getChild(i);
+        if (child instanceof EmptyTerminalNode) {
+          continue;
+        }
 
-      walk(listener, child);
+        walk(listener, child);
 
-      // if the walk added items before the current index
-      // then the current item was moved forwards.
-      while (!MoveCheckable.replaces(child, node.getChild(i))) {
-        i++;
+        // if the walk added items before the current index
+        // then the current item was moved forwards.
+        while (!MoveCheckable.replaces(child, node.getChild(i))) {
+          i++;
+        }
+
+        if (listener instanceof PartialParseTreeListener partialListener && partialListener.isFinished()) {
+          break;
+        }
       }
     }
 

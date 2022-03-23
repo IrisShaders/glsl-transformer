@@ -35,8 +35,10 @@ import io.github.douira.glsl_transformer.tree.TreeMember;
  * adding and removing parse tree nodes. It can also inject nodes into the root
  * node's child array with injection points.
  */
-public abstract class TransformationPhase<T> extends GLSLParserBaseListener implements LifecycleUser<T> {
+public abstract class TransformationPhase<T> extends GLSLParserBaseListener
+    implements LifecycleUser<T>, PartialParseTreeListener {
   private ExecutionPlanner<T> planner;
+  private boolean walkFinishedNotified = false;
 
   /**
    * Called during planning in order to determine if this phase does any
@@ -90,6 +92,28 @@ public abstract class TransformationPhase<T> extends GLSLParserBaseListener impl
   @Override
   public void setPlanner(ExecutionPlanner<T> parent) {
     this.planner = parent;
+  }
+
+  /**
+   * Marks this phase as being done walking the tree in the current execution.
+   * This removes it from the proxy parse tree listener which in turn can make the
+   * dynamic parse tree walker not further walk the parse tree if there are no
+   * more listeners that are interested in continuing.
+   * 
+   * @apiNote Calling this method multiple times in the same execution has no
+   *          effect but is efficient
+   */
+  protected void walkFinished() {
+    if (walkFinishedNotified) {
+      return;
+    }
+
+    walkFinishedNotified = true;
+    getPlanner().removeCurrentPhaseFromWalk();
+  }
+
+  void resetWalkFinishState() {
+    walkFinishedNotified = false;
   }
 
   /**

@@ -29,6 +29,7 @@ public abstract class ExecutionPlanner<T> {
   private final Collection<Transformation<T>> transformations = new ArrayList<>();
   private final Transformation<T> rootTransformation = new Transformation<>();
   private TranslationUnitContext rootNode;
+  private ProxyParseTreeListener proxyListener;
   private boolean finalized = false;
   private boolean initialized = false;
 
@@ -277,6 +278,10 @@ public abstract class ExecutionPlanner<T> {
     finalized = true;
   }
 
+  void removeCurrentPhaseFromWalk() {
+    proxyListener.removeCurrentListener();
+  }
+
   private void execute(TranslationUnitContext ctx) {
     if (!finalized) {
       planExecution();
@@ -296,7 +301,7 @@ public abstract class ExecutionPlanner<T> {
     // iterate the levels in reverse order since level 0 in the execution levels
     // depends on those with higher indexes
     for (var level : executionLevels) {
-      var proxyListener = new ProxyParseTreeListener(new ArrayList<>());
+      proxyListener = new ProxyParseTreeListener(new ArrayList<>());
 
       // first init all, then run RunPhases and add to the walker list
       for (var phase : level) {
@@ -310,6 +315,7 @@ public abstract class ExecutionPlanner<T> {
       for (var phase : level) {
         if (phase.checkBeforeWalk(ctx)) {
           proxyListener.add(phase);
+          phase.resetWalkFinishState();
         }
       }
 
@@ -323,6 +329,7 @@ public abstract class ExecutionPlanner<T> {
     }
 
     rootNode = null;
+    proxyListener = null;
     initialized = true;
   }
 
