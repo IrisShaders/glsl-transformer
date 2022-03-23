@@ -20,21 +20,21 @@ public interface LifecycleUser<T> {
    * 
    * @param planner The execution planner to set as the parent
    */
-  public void setPlanner(ExecutionPlanner<T> planner);
+  void setPlanner(ExecutionPlanner<T> planner);
 
   /**
    * Returns the execution planner set on this child.
    * 
    * @return The currently set execution planner
    */
-  public ExecutionPlanner<T> getPlanner();
+  ExecutionPlanner<T> getPlanner();
 
   /**
    * Returns the executing execution planner's parser.
    * 
    * @return The parser
    */
-  default public Parser getParser() {
+  default Parser getParser() {
     return getPlanner().getParser();
   }
 
@@ -43,7 +43,7 @@ public interface LifecycleUser<T> {
    * 
    * @return The lexer
    */
-  default public Lexer getLexer() {
+  default Lexer getLexer() {
     return getPlanner().getLexer();
   }
 
@@ -53,7 +53,7 @@ public interface LifecycleUser<T> {
    * 
    * @return The root node of the current executing execution planner
    */
-  default public TranslationUnitContext getRootNode() {
+  default TranslationUnitContext getRootNode() {
     return getPlanner().getRootNode();
   }
 
@@ -64,7 +64,7 @@ public interface LifecycleUser<T> {
    * 
    * @return The execution planner's current job parameters
    */
-  default public T getJobParameters() {
+  default T getJobParameters() {
     return getPlanner().getJobParameters();
   }
 
@@ -72,13 +72,13 @@ public interface LifecycleUser<T> {
    * Called when this object is set up in a processing environment like the
    * printer or the execution planner.
    */
-  default public void init() {
+  default void init() {
   }
 
   /**
    * Called before this object is used on a job. This is called before each
    * transformation/printing job.
    */
-  default public void resetState() {
+  default void resetState() {
   }
 }
