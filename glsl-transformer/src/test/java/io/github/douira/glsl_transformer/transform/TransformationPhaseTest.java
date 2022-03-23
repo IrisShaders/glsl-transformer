@@ -190,7 +190,7 @@ public class TransformationPhaseTest extends TestWithTransformationManager<Void>
   @Test
   void testIsActive() {
     assertTrue(
-        (new TransformationPhase<>() {
+        (new WalkPhase<>() {
         }).isActive(),
         "It should always be active");
   }
