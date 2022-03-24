@@ -302,7 +302,7 @@ public abstract class ExecutionPlanner<T> {
     proxyListener.removeCurrentListener();
   }
 
-  void phaseRunSetup(TransformationPhase<T> phase) {
+  private void phaseRunSetup(TransformationPhase<T> phase) {
     phase.setPlanner(this);
     if (!initialized) {
       phase.init();
