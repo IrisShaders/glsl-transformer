@@ -18,8 +18,17 @@ public abstract class TestForExecutionOrder {
   protected Transformation<Void> transformation;
   protected int nextIndex;
 
+  public static void assertRange(int minimum, int maximum, int value, String message) {
+    assertTrue(value >= minimum, message);
+    assertTrue(value <= maximum, message);
+  }
+
   protected RunPhase<Void> assertOrderPhase(int index, String message) {
     return RunPhase.withRun(() -> assertEquals(index, nextIndex++, message));
+  }
+
+  protected RunPhase<Void> assertOrderPhase(int minimum, int maximum, String message) {
+    return RunPhase.withRun(() -> assertRange(minimum, maximum, nextIndex++, message));
   }
 
   protected RunPhase<Void> assertResetPhase(int index, String message) {
@@ -32,6 +41,20 @@ public abstract class TestForExecutionOrder {
       @Override
       public void resetState() {
         assertEquals(index, nextIndex, message);
+      }
+    };
+  }
+
+  protected RunPhase<Void> assertResetPhase(int minimum, int maximum, String message) {
+    return new RunPhase<Void>() {
+      @Override
+      protected void run(TranslationUnitContext ctx) {
+        nextIndex++;
+      }
+
+      @Override
+      public void resetState() {
+        assertRange(minimum, maximum, nextIndex, message);
       }
     };
   }

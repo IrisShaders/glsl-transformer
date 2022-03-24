@@ -77,7 +77,10 @@ public interface LifecycleUser<T> {
 
   /**
    * Called before this object is used on a job. This is called before each
-   * transformation/printing job.
+   * transformation/printing job. This method is called in a dependency-satisfying
+   * order on the phases. No guarantees on the relationship between when this
+   * method is called and when the implementing class is activated (walk/run for
+   * transformation phases) are given.
    */
   default void resetState() {
   }

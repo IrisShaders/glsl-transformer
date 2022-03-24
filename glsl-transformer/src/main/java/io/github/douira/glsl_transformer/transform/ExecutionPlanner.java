@@ -5,11 +5,13 @@ import java.util.Collection;
 import java.util.Deque;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
+import java.util.stream.Stream;
 
 import com.github.bsideup.jabel.Desugar;
 
@@ -25,7 +27,7 @@ import io.github.douira.glsl_transformer.GLSLParser.TranslationUnitContext;
  * as dependencies to the root transformation.
  */
 public abstract class ExecutionPlanner<T> {
-  private List<Collection<TransformationPhase<T>>> executionLevels;
+  private List<ExecutionLevel<T>> executionLevels;
   private final Collection<Transformation<T>> transformations = new ArrayList<>();
   private final Transformation<T> rootTransformation = new Transformation<>();
   private TranslationUnitContext rootNode;
@@ -97,15 +99,26 @@ public abstract class ExecutionPlanner<T> {
     return rootTransformation;
   }
 
+  @Desugar
+  private static record ExecutionLevel<R> (
+      Collection<TransformationPhase<R>> walkPhases,
+      List<TransformationPhase<R>> nonWalkPhases) implements Iterable<TransformationPhase<R>> {
+    public ExecutionLevel() {
+      this(new ArrayList<>(), new ArrayList<>());
+    }
+
+    @Override
+    public Iterator<TransformationPhase<R>> iterator() {
+      return Stream.concat(walkPhases().stream(), nonWalkPhases().stream()).iterator();
+    }
+  }
+
   private static class LabeledNode<R> {
     final LifecycleUser<R> content;
     Collection<LabeledNode<R>> dependencies = new HashSet<>();
     Collection<LabeledNode<R>> dependents = new HashSet<>();
 
-    // initialized as a maximum and minimum since they're the maximum and minimum of
-    // the neighbors (up or down depending on direction) corresponding bounds
-    int minimumExecutionLevel = Integer.MIN_VALUE;
-    int maximumExecutionLevel = Integer.MAX_VALUE;
+    int executionLevelIndex = Integer.MIN_VALUE;
     boolean dfsFinished = false;
 
     LabeledNode(LifecycleUser<R> content) {
@@ -228,7 +241,6 @@ public abstract class ExecutionPlanner<T> {
     // compact the gathered transformations into the final list for fast iteration
     transformations.addAll(transformationSet);
 
-    int maximumDepth = 0;
     Deque<DFSEntry<T>> dfsStack = new LinkedList<>();
     dfsStack.push(new DFSEntry<>(rootNode, true));
 
@@ -239,7 +251,7 @@ public abstract class ExecutionPlanner<T> {
     while (!dfsStack.isEmpty()) {
       if (dfsStack.size() > dependenciesProcessed.size() * 2) {
         throw new Error(
-            "The dependency graph could not be satisfied! There is may be a cycle in it or the root and end nodes are messed up. Check for cycles in the graph after construction and after resolving transformations.");
+            "The dependency graph could not be satisfied! There is may be a cycle in it or the root and end nodes are messed up. Check for cycles in the graph after construction and after resolving transformations. Also make sure there is a single end and a single (generated) root node.");
       }
 
       var entry = dfsStack.pop();
@@ -258,62 +270,33 @@ public abstract class ExecutionPlanner<T> {
       }
     }
 
-    /*
-     * Determining max and minimum possible execution levels:
-     * traverse graph in forward/reverse topological order and calculate the
-     * minimum/maximum execution level index as the maximum/minimum of the
-     * minimum/maximum execution levels of the dependencies + 1/dependents - 1
-     * 
-     * This doesn't yet cover better execution plans in which more execution levels in
-     * total but less with walk phases are used since in that case the plan doesn't
-     * fit inside the maximumDepth anymore.
-     */
+    // The minimum execution level of a node is the maximum minimum execution level
+    // of all dependencies + 1.
 
-    topoSort.get(0).minimumExecutionLevel = -1;
+    executionLevels = new ArrayList<>();
+    executionLevels.add(new ExecutionLevel<>());
+    topoSort.get(0).executionLevelIndex = -1;
 
-    // iterate in the end to root direction
+    // iterate the nodes topologically sorted in the end to root direction
     for (var node : topoSort) {
       for (var neighbor : node.dependencies) {
-        if (neighbor.minimumExecutionLevel > node.minimumExecutionLevel) {
-          node.minimumExecutionLevel = neighbor.minimumExecutionLevel;
+        if (neighbor.executionLevelIndex > node.executionLevelIndex) {
+          node.executionLevelIndex = neighbor.executionLevelIndex;
         }
       }
 
-      // increment the minimum execution level above that of the dependencies
       if (TransformationPhase.class.isInstance(node.content)) {
-        node.minimumExecutionLevel++;
-        maximumDepth = Math.max(node.minimumExecutionLevel, maximumDepth);
-      }
-    }
+        var phase = (TransformationPhase<T>) node.content;
+        if (phase.canWalk()) {
+          node.executionLevelIndex++;
 
-    rootNode.maximumExecutionLevel = maximumDepth + 1;
-
-    // iterate in the root to end direction
-    var iterator = topoSort.listIterator();
-    while (iterator.hasPrevious()) {
-      var node = iterator.previous();
-      for (var neighbor : node.dependents) {
-        if (neighbor.maximumExecutionLevel < node.maximumExecutionLevel) {
-          node.maximumExecutionLevel = neighbor.maximumExecutionLevel;
+          if (executionLevels.size() <= node.executionLevelIndex + 1) {
+            executionLevels.add(new ExecutionLevel<>());
+          }
+          executionLevels.get(node.executionLevelIndex + 1).walkPhases().add(phase);
+        } else {
+          executionLevels.get(node.executionLevelIndex + 1).nonWalkPhases.add(phase);
         }
-      }
-
-      // decrement the maximum execution level below that of the dependents
-      if (TransformationPhase.class.isInstance(node.content)) {
-        node.maximumExecutionLevel--;
-      }
-    }
-
-    // TODO: make use of the calculated min and max execution levels
-    executionLevels = new ArrayList<>(maximumDepth + 1);
-    for (int i = 0; i <= maximumDepth; i++) {
-      executionLevels.add(new ArrayList<TransformationPhase<T>>());
-    }
-
-    // place labelled nodes that contain phases into execution levels
-    for (var node : contentNodeMap.values()) {
-      if (TransformationPhase.class.isInstance(node.content)) {
-        executionLevels.get(node.minimumExecutionLevel).add((TransformationPhase<T>) node.content);
       }
     }
 
@@ -322,6 +305,14 @@ public abstract class ExecutionPlanner<T> {
 
   void removeCurrentPhaseFromWalk() {
     proxyListener.removeCurrentListener();
+  }
+
+  void phaseRunSetup(TransformationPhase<T> phase) {
+    phase.setPlanner(this);
+    if (!initialized) {
+      phase.init();
+    }
+    phase.resetState();
   }
 
   private void execute(TranslationUnitContext ctx) {
@@ -345,28 +336,26 @@ public abstract class ExecutionPlanner<T> {
     for (var level : executionLevels) {
       proxyListener = new ProxyParseTreeListener(new ArrayList<>());
 
-      // first init all, then run RunPhases and add to the walker list
-      for (var phase : level) {
-        phase.setPlanner(this);
-        if (!initialized) {
-          phase.init();
-        }
-        phase.resetState();
-      }
-
-      for (var phase : level) {
-        if (phase.checkBeforeWalk(ctx)) {
-          proxyListener.add(phase);
-          phase.resetWalkFinishState();
+      // process the concurrently processable walk phases in one tree-walk
+      for (var walkPhase : level.walkPhases()) {
+        phaseRunSetup(walkPhase);
+        if (walkPhase.checkBeforeWalk(ctx)) {
+          proxyListener.add(walkPhase);
+          walkPhase.resetWalkFinishState();
         }
       }
-
       if (!proxyListener.isEmpty()) {
         DynamicParseTreeWalker.DEFAULT.walk(proxyListener, ctx);
       }
+      for (var walkPhase : level.walkPhases()) {
+        walkPhase.runAfterWalk(ctx);
+      }
 
-      for (var phase : level) {
-        phase.runAfterWalk(ctx);
+      // process each non-walking phase individually
+      for (var nonWalkPhase : level.nonWalkPhases()) {
+        phaseRunSetup(nonWalkPhase);
+        nonWalkPhase.checkBeforeWalk(ctx);
+        nonWalkPhase.runAfterWalk(ctx);
       }
     }
 

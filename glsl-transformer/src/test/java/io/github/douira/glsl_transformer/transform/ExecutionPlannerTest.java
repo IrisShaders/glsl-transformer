@@ -45,17 +45,8 @@ public class ExecutionPlannerTest extends TestForExecutionOrder {
   @Test
   void testAddConcurrentMultipleSingleLevel() {
     for (int i = 0; i < 3; i++) {
-      manager.addConcurrent(new RunPhase<Void>() {
-        @Override
-        protected void run(TranslationUnitContext ctx) {
-          nextIndex++;
-        }
-
-        @Override
-        public void resetState() {
-          assertEquals(0, nextIndex);
-        }
-      });
+      manager.addConcurrent(
+        assertResetPhase(0, 2, "It should reset the phases within bounds."));
     }
     manager.transform("");
     assertEquals(3, nextIndex, "It should run all of the added phases");
@@ -124,7 +115,7 @@ public class ExecutionPlannerTest extends TestForExecutionOrder {
 
   @Test
   void testNestedMultipleTransformation() {
-    transformation.addEndDependent(new Transformation<>(
+    transformation.chainDependent(new Transformation<>(
         assertOrderPhase(0, "The first nested phase should run first.")));
     transformation.chainDependent(new Transformation<>(
         assertOrderPhase(1, "The second chained nested phase should run second.")));
@@ -147,9 +138,9 @@ public class ExecutionPlannerTest extends TestForExecutionOrder {
   @Test
   void testSharedExternalTransformationDependency() {
     var a = transformation.addRootDependency(
-        new Transformation<>(assertResetPhase(1, "The concurrent nested phases should run in the second level")));
+        new Transformation<>(assertResetPhase(1, 2, "The concurrent nested phases should run in the second level")));
     var b = transformation.addRootDependency(
-        new Transformation<>(assertResetPhase(1, "The concurrent nested phases should run in the second level")));
+        new Transformation<>(assertResetPhase(1, 2, "The concurrent nested phases should run in the second level")));
     var sibling = assertOrderPhase(0, "The shared dependency phase should run first.");
     transformation.addDependency(a, sibling);
     transformation.addDependency(b, sibling);
@@ -178,7 +169,7 @@ public class ExecutionPlannerTest extends TestForExecutionOrder {
 
   @Test
   void testNoInitOnSecondRun() {
-    transformation.addRootDependency(new RunPhase<Void>() {
+    transformation.chainDependency(new RunPhase<Void>() {
       @Override
       protected void run(TranslationUnitContext ctx) {
       }
