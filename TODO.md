@@ -10,7 +10,6 @@
 - Performance ideas:
   - Limit depth of tree walk if participating walk phases agree (todo: abstract `isDeepEnough` into a maximum-depth functionality)
   - Limit tree walk to certain nodes (/node types) or exclude some node types from being visited if participating walk phases agree (maybe also dynamically adjust)
-  - Improve ExecutionPlanner to use as few walk-phase containing execution levels as possible while ignoring how many non-walk levels there are. This would reduce the number of walks that have to be performed.
 
 ## Future Goals
 
