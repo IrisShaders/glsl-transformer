@@ -28,7 +28,7 @@ import io.github.douira.glsl_transformer.GLSLParser.TranslationUnitContext;
  */
 public abstract class ExecutionPlanner<T> {
   private List<ExecutionLevel<T>> executionLevels;
-  private final Collection<Transformation<T>> transformations = new ArrayList<>();
+  private Collection<Transformation<T>> transformations;
   private final Transformation<T> rootTransformation = new Transformation<>();
   private TranslationUnitContext rootNode;
   private ProxyParseTreeListener proxyListener;
@@ -154,11 +154,6 @@ public abstract class ExecutionPlanner<T> {
    *           The nodes with the lowest distance are executed first.
    */
   public void planExecution() {
-    if (finalized) {
-      throw new IllegalStateException(
-          "The execution planner should not be finalized multiple times! Finalization is performed before the first execution or explicitly by calling planExecution.");
-    }
-
     Set<Transformation<T>> transformationSet = new HashSet<>();
     Set<Node<T>> dependenciesProcessed = new HashSet<>();
     Map<Node<T>, LabeledNode<T>> endNodeMap = new HashMap<>();
@@ -239,6 +234,7 @@ public abstract class ExecutionPlanner<T> {
     }
 
     // compact the gathered transformations into the final list for fast iteration
+    transformations = new ArrayList<>();
     transformations.addAll(transformationSet);
 
     Deque<DFSEntry<T>> dfsStack = new LinkedList<>();
@@ -272,7 +268,6 @@ public abstract class ExecutionPlanner<T> {
 
     // The minimum execution level of a node is the maximum minimum execution level
     // of all dependencies + 1.
-
     executionLevels = new ArrayList<>();
     executionLevels.add(new ExecutionLevel<>());
     topoSort.get(0).executionLevelIndex = -1;

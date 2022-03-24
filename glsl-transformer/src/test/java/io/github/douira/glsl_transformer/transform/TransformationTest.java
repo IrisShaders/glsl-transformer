@@ -117,11 +117,12 @@ public class TransformationTest extends TestForExecutionOrder {
   @Test
   void testAddRootAndEndDependency() {
     transformation.addRootDependency(
-        assertResetPhase(0, "The root dependency should run in the first level."));
+        assertResetPhase(1, 2, "The root dependency should run in the second level."));
     transformation.addEndDependent(
-        assertResetPhase(0, "The end dependent should run in the first level."));
+        assertResetPhase(1, 2, "The end dependent should run in the second level."));
+    transformation.appendDependent(RunPhase.withRun(() -> nextIndex++));
     manager.transform("");
-    assertEquals(2, nextIndex, "Both phases should run.");
+    assertEquals(3, nextIndex, "All phases should run.");
   }
 
   @Test
@@ -172,9 +173,9 @@ public class TransformationTest extends TestForExecutionOrder {
   void testChainConcurrentDependency() {
     transformation.addDependency(
         assertOrderPhase(2, "The dependent should run third."),
-        assertResetPhase(0, "The dependency should run in the first level"));
+        assertResetPhase(0, 1, "The dependency should run in the first level"));
     transformation.chainConcurrentDependency(
-        assertResetPhase(0, "The chained concurrent dependency should also run in the first level"));
+        assertResetPhase(0, 1, "The chained concurrent dependency should also run in the first level"));
     manager.transform("");
     assertEquals(3, nextIndex, "All three phases should run.");
   }
@@ -183,9 +184,9 @@ public class TransformationTest extends TestForExecutionOrder {
   void testChainConcurrentDependent() {
     transformation.addDependent(
         assertOrderPhase(0, "The dependency should run first."),
-        assertResetPhase(1, "The dependent should run in the second level"));
+        assertResetPhase(1, 2, "The dependent should run in the second level"));
     transformation.chainConcurrentDependent(
-        assertResetPhase(1, "The chained concurrent dependency should also run in the second level"));
+        assertResetPhase(1, 2, "The chained concurrent dependency should also run in the second level"));
     manager.transform("");
     assertEquals(3, nextIndex, "All three phases should run.");
   }
