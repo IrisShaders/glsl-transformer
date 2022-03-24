@@ -46,7 +46,7 @@ public class ExecutionPlannerTest extends TestForExecutionOrder {
   void testAddConcurrentMultipleSingleLevel() {
     for (int i = 0; i < 3; i++) {
       manager.addConcurrent(
-        assertResetPhase(0, 2, "It should reset the phases within bounds."));
+          assertResetPhase(0, 2, "It should reset the phases within bounds."));
     }
     manager.transform("");
     assertEquals(3, nextIndex, "It should run all of the added phases");
@@ -62,10 +62,22 @@ public class ExecutionPlannerTest extends TestForExecutionOrder {
   }
 
   @Test
-  void testThrowMultipleFinalization() {
+  void testAllowMultipleFinalization() {
     manager.planExecution();
-    assertThrows(IllegalStateException.class, () -> manager.planExecution(),
+    assertDoesNotThrow(() -> manager.planExecution(),
         "It should throw if execution planning is initiated manually multiple times.");
+  }
+
+  @Test
+  void testIncrementalFinalization() {
+    var transformation = manager
+        .getRootTransformation();
+    transformation.addRootDependency(RunPhase.withRun(() -> nextIndex++));
+    manager.transform("");
+    assertEquals(1, nextIndex, "It should run the phase");
+    transformation.addRootDependency(RunPhase.withRun(() -> nextIndex++));
+    manager.transform("");
+    assertEquals(2, nextIndex, "It should run the previous and the new phase");
   }
 
   @Test
