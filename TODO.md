@@ -1,5 +1,6 @@
 # Todo
 
+- Add structures for creating multiple execution plans (through multiple root transformations) for a set of various static parameters. Required: something to hold the execution plans, something to execute on them, something to model a fixed parameter state, something to select execution plans with this state (hash map? record?). Previously this was solved by using multiple transformation mangers and using one of them depending on the fixed parameters. -> make it possible to use subclasses of a job parameter type, somehow.
 - Write documentation on `Transformation` methods with diagrams
 - Call init on handler targets, also other things like before/after search and activation
 - AST structures for GLSL types: Continue work on Tensor (tensor manipulation methods and "widening" until it hits the maximum)
