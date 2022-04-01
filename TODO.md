@@ -1,35 +1,12 @@
 # Todo
 
-- Add structures for creating multiple execution plans (through multiple root transformations) for a set of various static parameters. Required: something to hold the execution plans, something to execute on them, something to model a fixed parameter state, something to select execution plans with this state (hash map? record?). Previously this was solved by using multiple transformation mangers and using one of them depending on the fixed parameters. -> make it possible to use subclasses of a job parameter type, somehow.
-- Write documentation on `Transformation` methods with diagrams
-- Call init on handler targets, also other things like before/after search and activation
-- AST structures for GLSL types: Continue work on Tensor (tensor manipulation methods and "widening" until it hits the maximum)
-- AST: Structs
-
-- DynamicParseTreeWalker: have transformation phase tell it about movements in the child array it caused to avoid inserting placeholder nodes (and then also avoid even doing the compacting step if it's not necessary)
-
-- Performance ideas:
-  - Limit depth of tree walk if participating walk phases agree (todo: abstract `isDeepEnough` into a maximum-depth functionality)
-  - Limit tree walk to certain nodes (/node types) or exclude some node types from being visited if participating walk phases agree (maybe also dynamically adjust)
+Current to-do items can be found in the issues and the progress [https://github.com/IrisShaders/glsl-transformer/projects/1](project board).
 
 ## Future Goals
 
 - Make the Lexer parse #define directives (and others?) better
 - Macro expansion (preprocessor) and other functions?
 - Macro substitution by parsing preprocessor directives
-
-## Testing/Meta
-
-- Exclude generated classes from jacoco coverage reports (because they are very large)
-- Test everything that isn't covered yet
-- Test that CachingIntervalSet actually caches something (coverage report says the cache is never hit)
-- Test WrapIdentifier
-- Test ReplaceTerminals static methods
-- Test individual token filters
-- Test removal/replacement of single terminal node (tests ExtendedTerminalNode)
-- Figure out if and how removal of local roots works (nothing needs to be omitted since they are additions, trying to omit them may break. a placeholder still needs to be placed though)
-- Write tests that matching still works even after injection (does it work before placeholder cleanup? and after?)
-- Test node removal, replacement and injection in local roots (in `TransformationPhaseTest`)
 
 ## An example transformation
 
