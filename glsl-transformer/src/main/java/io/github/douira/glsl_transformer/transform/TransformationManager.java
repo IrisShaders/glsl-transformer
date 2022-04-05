@@ -49,12 +49,12 @@ import io.github.douira.glsl_transformer.tree.ExtendedContext;
  * 
  * @param <T> The job parameters type
  */
-public class TransformationManager<T> extends ExecutionPlanner<T> {
+public class TransformationManager<T extends JobParameters> extends ExecutionPlanner<T> {
   /**
    * An internal instance of this class that is used by other library-internal
    * classes for parsing needs.
    */
-  public static final TransformationManager<Void> INTERNAL = new TransformationManager<>();
+  public static final TransformationManager<NonFixedJobParameters> INTERNAL = new TransformationManager<>();
 
   private static class ThrowingErrorListener extends BaseErrorListener {
     public static final ThrowingErrorListener INSTANCE = new ThrowingErrorListener();

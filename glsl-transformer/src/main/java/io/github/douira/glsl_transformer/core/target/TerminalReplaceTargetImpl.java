@@ -1,5 +1,6 @@
 package io.github.douira.glsl_transformer.core.target;
 
+import io.github.douira.glsl_transformer.transform.JobParameters;
 import io.github.douira.glsl_transformer.tree.TreeMember;
 
 /**
@@ -9,7 +10,7 @@ import io.github.douira.glsl_transformer.tree.TreeMember;
  * Since the string terminal node is immutable, it's only created once and then
  * re-used if it needs to be printed multiple times.
  */
-public class TerminalReplaceTargetImpl<T> extends TerminalReplaceTarget<T> {
+public class TerminalReplaceTargetImpl<T extends JobParameters> extends TerminalReplaceTarget<T> {
   private final String terminalContent;
   private TreeMember cacheNode;
 

@@ -4,6 +4,7 @@ import java.util.Collection;
 
 import io.github.douira.glsl_transformer.GLSLParser.TranslationUnitContext;
 import io.github.douira.glsl_transformer.core.target.HandlerTarget;
+import io.github.douira.glsl_transformer.transform.JobParameters;
 
 /**
  * This class extends the search terminals implementation by adding at method
@@ -11,7 +12,7 @@ import io.github.douira.glsl_transformer.core.target.HandlerTarget;
  * dynamically but is only called if the targets are every actually needed. The
  * targets are generated each time the phase is run.
  */
-public abstract class SearchTerminalsDynamic<T> extends SearchTerminalsImpl<T> {
+public abstract class SearchTerminalsDynamic<T extends JobParameters> extends SearchTerminalsImpl<T> {
   /**
    * Creates a new dynamic search terminals phase.
    */

@@ -1,11 +1,12 @@
 package io.github.douira.glsl_transformer.core.target;
 
+import io.github.douira.glsl_transformer.transform.JobParameters;
 import io.github.douira.glsl_transformer.tree.TreeMember;
 
 /**
  * The wrap target is used for detecting the presence of a wrap result.
  */
-public abstract class WrapThrowTarget<T> extends ThrowTarget<T> {
+public abstract class WrapThrowTarget<T extends JobParameters> extends ThrowTarget<T> {
   @Override
   public String getMessage(TreeMember node, String match) {
     return "The wrapper identifier '" + getNeedle() + "' shouldn't already be present in the code!";

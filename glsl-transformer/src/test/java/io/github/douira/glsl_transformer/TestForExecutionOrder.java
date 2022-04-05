@@ -6,6 +6,8 @@ import org.junit.jupiter.api.BeforeEach;
 
 import io.github.douira.glsl_transformer.GLSLParser.TranslationUnitContext;
 import io.github.douira.glsl_transformer.transform.WalkPhase;
+import io.github.douira.glsl_transformer.transform.JobParameters;
+import io.github.douira.glsl_transformer.transform.NonFixedJobParameters;
 import io.github.douira.glsl_transformer.transform.Transformation;
 import io.github.douira.glsl_transformer.transform.TransformationManager;
 import io.github.douira.glsl_transformer.transform.TransformationPhase;
@@ -15,8 +17,8 @@ import io.github.douira.glsl_transformer.transform.TransformationPhase;
  * execution of phases.
  */
 public abstract class TestForExecutionOrder {
-  protected TransformationManager<Void> manager;
-  protected Transformation<Void> transformation;
+  protected TransformationManager<NonFixedJobParameters> manager;
+  protected Transformation<NonFixedJobParameters> transformation;
   protected int nextIndex;
 
   public static void assertRange(int minimum, int maximum, int value, String message) {
@@ -24,15 +26,15 @@ public abstract class TestForExecutionOrder {
     assertTrue(value <= maximum, message);
   }
 
-  private abstract class RunWalkPhase<R> extends WalkPhase<R> {
+  private abstract class RunWalkPhase<R extends JobParameters> extends WalkPhase<R> {
     @Override
     protected boolean isActiveAtWalk() {
       return false;
     }
   }
 
-  protected TransformationPhase<Void> assertOrderPhase(int index, String message) {
-    return new RunWalkPhase<Void>() {
+  protected TransformationPhase<NonFixedJobParameters> assertOrderPhase(int index, String message) {
+    return new RunWalkPhase<>() {
       @Override
       protected void beforeWalk(TranslationUnitContext ctx) {
         assertEquals(index, nextIndex++, message);
@@ -40,9 +42,9 @@ public abstract class TestForExecutionOrder {
     };
   }
 
-  protected TransformationPhase<Void> assertOrderPhase(
+  protected TransformationPhase<NonFixedJobParameters> assertOrderPhase(
       int minimum, int maximum, String message) {
-    return new RunWalkPhase<Void>() {
+    return new RunWalkPhase<>() {
       @Override
       protected void beforeWalk(TranslationUnitContext ctx) {
         assertRange(minimum, maximum, nextIndex++, message);
@@ -50,8 +52,8 @@ public abstract class TestForExecutionOrder {
     };
   }
 
-  protected TransformationPhase<Void> assertResetPhase(int index, String message) {
-    return new RunWalkPhase<Void>() {
+  protected TransformationPhase<NonFixedJobParameters> assertResetPhase(int index, String message) {
+    return new RunWalkPhase<>() {
       @Override
       protected void beforeWalk(TranslationUnitContext ctx) {
         nextIndex++;
@@ -64,9 +66,9 @@ public abstract class TestForExecutionOrder {
     };
   }
 
-  protected TransformationPhase<Void> assertResetPhase(
+  protected TransformationPhase<NonFixedJobParameters> assertResetPhase(
       int minimum, int maximum, String message) {
-    return new RunWalkPhase<Void>() {
+    return new RunWalkPhase<>() {
       @Override
       protected void beforeWalk(TranslationUnitContext ctx) {
         nextIndex++;

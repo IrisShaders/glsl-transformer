@@ -1,6 +1,7 @@
 package io.github.douira.glsl_transformer.core;
 
 import io.github.douira.glsl_transformer.GLSLParser.TranslationUnitContext;
+import io.github.douira.glsl_transformer.transform.JobParameters;
 import io.github.douira.glsl_transformer.transform.RunPhase;
 import io.github.douira.glsl_transformer.transform.TransformationPhase.InjectionPoint;
 
@@ -9,7 +10,7 @@ import io.github.douira.glsl_transformer.transform.TransformationPhase.Injection
  * specified location. By default, it's injected at
  * {@link InjectionPoint#BEFORE_DECLARATIONS}.
  */
-public abstract class WrapIdentifierExternalDeclaration<T>
+public abstract class WrapIdentifierExternalDeclaration<T extends JobParameters>
     extends WrapIdentifierDynamic<T> {
   /**
    * Creates a new wrap identifier transformation that injects an external

@@ -3,7 +3,7 @@ package io.github.douira.glsl_transformer.transform;
 import java.util.Collection;
 import java.util.HashSet;
 
-class Node<T> {
+class Node<T extends JobParameters> {
   private LifecycleUser<T> content;
   private Collection<Node<T>> dependencies = new HashSet<>();
   private Collection<Node<T>> dependents = new HashSet<>();

@@ -29,7 +29,7 @@ import io.github.douira.glsl_transformer.TestResourceManager.DirectoryLocation;
 import io.github.douira.glsl_transformer.TestWithTransformationManager;
 
 @ExtendWith({ SnapshotExtension.class })
-public class TransformationManagerTest extends TestWithTransformationManager<Void> {
+public class TransformationManagerTest extends TestWithTransformationManager<NonFixedJobParameters> {
   private Expect expect;
   private Exception storeException;
 
@@ -146,13 +146,13 @@ public class TransformationManagerTest extends TestWithTransformationManager<Voi
 
   @Test
   void testWithJobParameters() {
-    TransformationManager<Object> man = new TransformationManager<>();
+    TransformationManager<NonFixedJobParameters> man = new TransformationManager<>();
     assertNull(man.getJobParameters(), "It should start with no job parameters");
-    var parameters = new Object();
+    var parameters = new NonFixedJobParameters();
     man.withJobParameters(parameters,
         () -> assertSame(parameters, man.getJobParameters(), "It should contain the job parameters"));
     assertNull(man.getJobParameters(), "It should delete the job parameters after use");
-    var result = new Object();
+    var result = new NonFixedJobParameters();
     assertSame(result, man.withJobParameters(parameters,
         () -> {
           assertSame(parameters, man.getJobParameters(), "It should contain the job parameters again");

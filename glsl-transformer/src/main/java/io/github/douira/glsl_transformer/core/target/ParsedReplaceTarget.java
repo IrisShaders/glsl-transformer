@@ -3,6 +3,7 @@ package io.github.douira.glsl_transformer.core.target;
 import java.util.function.Function;
 
 import io.github.douira.glsl_transformer.GLSLParser;
+import io.github.douira.glsl_transformer.transform.JobParameters;
 import io.github.douira.glsl_transformer.tree.ExtendedContext;
 import io.github.douira.glsl_transformer.tree.TreeMember;
 
@@ -10,7 +11,7 @@ import io.github.douira.glsl_transformer.tree.TreeMember;
  * A parsed replace target generates a node from parsing a string for each
  * replacement.
  */
-public abstract class ParsedReplaceTarget<T> extends HandlerTargetImpl<T> {
+public abstract class ParsedReplaceTarget<T extends JobParameters> extends HandlerTargetImpl<T> {
   /**
    * Creates a new parsed replace target that takes a search string. The
    * replacement is given by implementing the

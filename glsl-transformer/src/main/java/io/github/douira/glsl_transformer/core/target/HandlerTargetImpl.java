@@ -1,11 +1,13 @@
 package io.github.douira.glsl_transformer.core.target;
 
+import io.github.douira.glsl_transformer.transform.JobParameters;
+
 /**
  * Implements a handler target in a simple way by simply being constructed with
  * a fixed needle. If more flexibility is desired, extend
  * {@link io.github.douira.glsl_transformer.core.target.HandlerTarget}.
  */
-public abstract class HandlerTargetImpl<T> extends HandlerTarget<T> {
+public abstract class HandlerTargetImpl<T extends JobParameters> extends HandlerTarget<T> {
   private final String needle;
 
   /**

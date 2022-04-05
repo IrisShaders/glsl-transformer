@@ -1,5 +1,6 @@
 package io.github.douira.glsl_transformer.core.target;
 
+import io.github.douira.glsl_transformer.transform.JobParameters;
 import io.github.douira.glsl_transformer.tree.TreeMember;
 
 /**
@@ -8,7 +9,7 @@ import io.github.douira.glsl_transformer.tree.TreeMember;
  * than node replacement should be done, implement a custom
  * {@link HandlerTargetImpl} subclass.
  */
-public abstract class ReplaceTarget<T> extends HandlerTargetImpl<T> {
+public abstract class ReplaceTarget<T extends JobParameters> extends HandlerTargetImpl<T> {
   /**
    * Creates a new replace target with a given search string
    * 

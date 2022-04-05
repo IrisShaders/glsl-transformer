@@ -1,12 +1,13 @@
 package io.github.douira.glsl_transformer.core.target;
 
+import io.github.douira.glsl_transformer.transform.JobParameters;
 import io.github.douira.glsl_transformer.tree.TreeMember;
 
 /**
  * A throw target that has a fixed message it puts into the exception that's
  * thrown when the target is found.
  */
-public class ThrowTargetImpl<T> extends ThrowTarget<T> {
+public class ThrowTargetImpl<T extends JobParameters> extends ThrowTarget<T> {
   private final String message;
 
   /**

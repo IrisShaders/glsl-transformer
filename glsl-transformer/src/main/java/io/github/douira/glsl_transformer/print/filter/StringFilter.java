@@ -4,13 +4,14 @@ import java.util.Set;
 
 import org.antlr.v4.runtime.Token;
 
+import io.github.douira.glsl_transformer.transform.JobParameters;
 import io.github.douira.glsl_transformer.util.CompatUtil;
 
 /**
  * The string token filter disallows tokens that are matched against a set of
  * disallowed strings.
  */
-public class StringFilter<T> extends TokenFilter<T> {
+public class StringFilter<T extends JobParameters> extends TokenFilter<T> {
   private Set<String> disallowed;
 
   /**
