@@ -39,6 +39,7 @@ public abstract class TransformationPhase<T> extends GLSLParserBaseListener
     implements LifecycleUser<T>, PartialParseTreeListener {
   private ExecutionPlanner<T> planner;
   private boolean walkFinishedNotified = false;
+  private boolean initialized = false;
 
   /**
    * Called during planning in order to determine if this phase does any
@@ -92,6 +93,16 @@ public abstract class TransformationPhase<T> extends GLSLParserBaseListener
   @Override
   public void setPlanner(ExecutionPlanner<T> parent) {
     this.planner = parent;
+  }
+
+  @Override
+  public boolean isInitialized() {
+    return initialized;
+  }
+
+  @Override
+  public void setInitialized() {
+    initialized = true;
   }
 
   /**

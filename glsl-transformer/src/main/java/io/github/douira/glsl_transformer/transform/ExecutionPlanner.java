@@ -33,7 +33,6 @@ public abstract class ExecutionPlanner<T> {
   private TranslationUnitContext rootNode;
   private ProxyParseTreeListener proxyListener;
   private boolean finalized = false;
-  private boolean initialized = false;
 
   /**
    * Returns this execution planner's parser. How the parser is stored is up to
@@ -304,9 +303,7 @@ public abstract class ExecutionPlanner<T> {
 
   private void phaseRunSetup(TransformationPhase<T> phase) {
     phase.setPlanner(this);
-    if (!initialized) {
-      phase.init();
-    }
+    phase.initOnce();
     phase.resetState();
   }
 
@@ -320,9 +317,7 @@ public abstract class ExecutionPlanner<T> {
     // refresh each transformation's state before starting the transformation
     for (var transformation : transformations) {
       transformation.setPlanner(this);
-      if (!initialized) {
-        transformation.init();
-      }
+      transformation.initOnce();
       transformation.resetState();
     }
 
@@ -356,7 +351,6 @@ public abstract class ExecutionPlanner<T> {
 
     rootNode = null;
     proxyListener = null;
-    initialized = true;
   }
 
   /**

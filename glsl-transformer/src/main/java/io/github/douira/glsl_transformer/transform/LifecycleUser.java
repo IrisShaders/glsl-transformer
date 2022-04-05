@@ -69,6 +69,32 @@ public interface LifecycleUser<T> {
   }
 
   /**
+   * Checks if this lifecycle user has been initialized.
+   * 
+   * @return True if initialized, false otherwise
+   */
+  boolean isInitialized();
+
+  /**
+   * Marks this lifecycle user as initialized.
+   */
+  void setInitialized();
+
+  /**
+   * Is called before the first execution by the execution planner. This method
+   * may be called multiple times but the implementing class should implement
+   * {@link #isInitialized()} and {@link #setInitialized()} to ensure that only
+   * one initialization is performed.
+   */
+  default void initOnce() {
+    if (isInitialized()) {
+      return;
+    }
+    init();
+    setInitialized();
+  }
+
+  /**
    * Called when this object is set up in a processing environment like the
    * printer or the execution planner.
    */
