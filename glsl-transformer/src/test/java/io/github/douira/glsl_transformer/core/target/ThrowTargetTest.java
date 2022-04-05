@@ -6,10 +6,11 @@ import org.junit.jupiter.api.Test;
 
 import io.github.douira.glsl_transformer.TestWithTransformationManager;
 import io.github.douira.glsl_transformer.core.SearchTerminalsImpl;
+import io.github.douira.glsl_transformer.transform.NonFixedJobParameters;
 import io.github.douira.glsl_transformer.transform.SemanticException;
 import io.github.douira.glsl_transformer.tree.TreeMember;
 
-public class ThrowTargetTest extends TestWithTransformationManager<Void> {
+public class ThrowTargetTest extends TestWithTransformationManager<NonFixedJobParameters> {
   private int nextIndex;
 
   @Test
@@ -27,7 +28,7 @@ public class ThrowTargetTest extends TestWithTransformationManager<Void> {
       runTransformation(
           "int f = foo + oofevilinside;",
           new SearchTerminalsImpl<>(
-              new ThrowTarget<Void>("evil") {
+              new ThrowTarget<>("evil") {
                 @Override
                 public String getMessage(TreeMember node, String match) {
                   assertEquals(match, "oofevilinside", "It should match the inexact match");
@@ -55,7 +56,7 @@ public class ThrowTargetTest extends TestWithTransformationManager<Void> {
       runTransformation(
           "int f = foo + oofevilinside + outside + evil;",
           new SearchTerminalsImpl<>(
-              new ThrowTarget<Void>("evil") {
+              new ThrowTarget<>("evil") {
                 @Override
                 public String getMessage(TreeMember node, String match) {
                   assertEquals(match, "evil", "It should match the exact match");

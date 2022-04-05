@@ -97,7 +97,7 @@ public class TransformationTest extends TestForExecutionOrder {
         assertOrderPhase(1, "The first chained dependent should run second."));
     transformation.chainDependent(
         assertOrderPhase(2, "The second chained dependent should run third."));
-    manager.planExecution();
+    manager.planExecutionFor(NonFixedJobParameters.INSTANCE);
     manager.transform("");
     assertEquals(3, nextIndex, "All three run phases should run.");
   }

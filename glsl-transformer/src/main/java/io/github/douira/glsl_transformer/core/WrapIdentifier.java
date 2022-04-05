@@ -6,6 +6,7 @@ import io.github.douira.glsl_transformer.core.target.HandlerTarget;
 import io.github.douira.glsl_transformer.core.target.ParsedReplaceTargetImpl;
 import io.github.douira.glsl_transformer.core.target.TerminalReplaceTargetImpl;
 import io.github.douira.glsl_transformer.core.target.WrapThrowTargetImpl;
+import io.github.douira.glsl_transformer.transform.JobParameters;
 import io.github.douira.glsl_transformer.transform.RunPhase;
 import io.github.douira.glsl_transformer.transform.Transformation;
 import io.github.douira.glsl_transformer.transform.TransformationPhase;
@@ -17,7 +18,7 @@ import io.github.douira.glsl_transformer.transform.TransformationPhase.Injection
  * that takes care of handling the conversion from the new to the old value. It
  * also checks that the wrapped value isn't already present in the code.
  */
-public class WrapIdentifier<T> extends Transformation<T> {
+public class WrapIdentifier<T extends JobParameters> extends Transformation<T> {
   /**
    * Creates a new wrap identifier transformation.
    * 
@@ -94,7 +95,7 @@ public class WrapIdentifier<T> extends Transformation<T> {
    *                         injection
    * @return The wrap identifier transformation with the given parameters
    */
-  public static <T> WrapIdentifier<T> fromTerminal(
+  public static <T extends JobParameters> WrapIdentifier<T> fromTerminal(
       String wrapTarget,
       String wrapResult,
       RunPhase<T> wrappingInjector) {
@@ -118,7 +119,7 @@ public class WrapIdentifier<T> extends Transformation<T> {
    *                         injection
    * @return The wrap identifier transformation with the given parameters
    */
-  public static <T> WrapIdentifier<T> fromExpression(
+  public static <T extends JobParameters> WrapIdentifier<T> fromExpression(
       String wrapTarget,
       String wrapResult,
       String wrapExpression,
@@ -145,7 +146,7 @@ public class WrapIdentifier<T> extends Transformation<T> {
    *                       at the given location
    * @return The wrap identifier transformation with the given parameters
    */
-  public static <T> WrapIdentifier<T> withExternalDeclaration(
+  public static <T extends JobParameters> WrapIdentifier<T> withExternalDeclaration(
       String wrapTarget,
       String wrapResult,
       String wrapExpression,

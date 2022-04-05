@@ -1,10 +1,12 @@
 package io.github.douira.glsl_transformer.core.target;
 
+import io.github.douira.glsl_transformer.transform.JobParameters;
+
 /**
  * This implementation of the wrap target uses a field for statically holding
  * the wrap result.
  */
-public class WrapThrowTargetImpl<T> extends WrapThrowTarget<T> {
+public class WrapThrowTargetImpl<T extends JobParameters> extends WrapThrowTarget<T> {
   private final String wrapResult;
 
   /**

@@ -35,7 +35,7 @@ import java.util.Optional;
  * matter, and the parser is just used to figure out how the rules of the
  * tree are.
  */
-public class Transformation<T> extends LifecycleUserImpl<T> {
+public class Transformation<T extends JobParameters> extends LifecycleUserImpl<T> {
   private final Map<LifecycleUser<T>, Node<T>> contentNodes = new HashMap<>();
   private Node<T> rootNode = new Node<>();
   private Node<T> endNode = new Node<>();

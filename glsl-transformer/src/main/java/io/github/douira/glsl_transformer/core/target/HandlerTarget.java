@@ -1,6 +1,7 @@
 package io.github.douira.glsl_transformer.core.target;
 
 import io.github.douira.glsl_transformer.transform.ExecutionPlanner;
+import io.github.douira.glsl_transformer.transform.JobParameters;
 import io.github.douira.glsl_transformer.transform.TransformationPhase;
 import io.github.douira.glsl_transformer.tree.TreeMember;
 
@@ -8,7 +9,7 @@ import io.github.douira.glsl_transformer.tree.TreeMember;
  * A handler target contains a string to search for and a method that is called
  * to handle finding the string in a parse tree.
  */
-public abstract class HandlerTarget<T> extends TransformationPhase<T> {
+public abstract class HandlerTarget<T extends JobParameters> extends TransformationPhase<T> {
   /**
    * Creates a new empty handler target.
    */

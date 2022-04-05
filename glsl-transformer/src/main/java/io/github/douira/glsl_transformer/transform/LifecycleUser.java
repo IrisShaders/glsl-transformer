@@ -14,7 +14,7 @@ import io.github.douira.glsl_transformer.GLSLParser.TranslationUnitContext;
  * execution starts. For transformation phases, state is reset before the
  * phase's execution level is executed.
  */
-public interface LifecycleUser<T> {
+public interface LifecycleUser<T extends JobParameters> {
   /**
    * Sets the parent planner of this child.
    * 

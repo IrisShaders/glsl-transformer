@@ -10,12 +10,13 @@ import org.junit.jupiter.api.Test;
 
 import io.github.douira.glsl_transformer.TestResourceManager.FileLocation;
 import io.github.douira.glsl_transformer.transform.TransformationManager;
+import io.github.douira.glsl_transformer.transform.WrappedParameters;
 
 public class GrammarDebugTest {
   @Test
   @Disabled
   void testParseTree() {
-    var man = new TransformationManager<StringBuilder>(false);
+    var man = new TransformationManager<WrappedParameters<StringBuilder>>(false);
     man.addConcurrent(new PrintTreeDebug());
 
     Stream.of(
@@ -23,7 +24,7 @@ public class GrammarDebugTest {
         .forEach(resource -> {
           var content = resource.content();
           var builder = new StringBuilder();
-          man.transform(content, builder);
+          man.transform(content, new WrappedParameters<>(builder));
           System.out.println(ansi().fgBrightMagenta().bold().a(resource.getScenarioName()).reset());
           System.out.println(content);
           System.out.println(builder.toString());

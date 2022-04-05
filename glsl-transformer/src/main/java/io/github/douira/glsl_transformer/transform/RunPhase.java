@@ -10,7 +10,7 @@ import io.github.douira.glsl_transformer.GLSLParser.TranslationUnitContext;
  * listener methods on
  * it are executed.
  */
-public abstract class RunPhase<T> extends TransformationPhase<T> {
+public abstract class RunPhase<T extends JobParameters> extends TransformationPhase<T> {
   /**
    * This method is implemented by subclasses to be executed by the phase
    * planner at the right time.
@@ -46,7 +46,8 @@ public abstract class RunPhase<T> extends TransformationPhase<T> {
    * @param newNodes The nodes to inject
    * @return The run phase that does only these injections
    */
-  public static <R> RunPhase<R> withInjectNodes(InjectionPoint location, ParseTree newNodes) {
+  public static <R extends JobParameters> RunPhase<R> withInjectNodes(
+      InjectionPoint location, ParseTree newNodes) {
     return new RunPhase<R>() {
       @Override
       protected void run(TranslationUnitContext ctx) {
@@ -67,7 +68,8 @@ public abstract class RunPhase<T> extends TransformationPhase<T> {
    * @param str      The strings to parse as external declarations
    * @return The run phase that does only these injections
    */
-  public static <R> RunPhase<R> withInjectExternalDeclarations(InjectionPoint location, String... str) {
+  public static <R extends JobParameters> RunPhase<R> withInjectExternalDeclarations(
+      InjectionPoint location, String... str) {
     return new RunPhase<R>() {
       @Override
       protected void run(TranslationUnitContext ctx) {
@@ -84,7 +86,7 @@ public abstract class RunPhase<T> extends TransformationPhase<T> {
    * @param run The runnable to run in the run phase
    * @return The generated run phase
    */
-  public static <R> RunPhase<R> withRun(Runnable run) {
+  public static <R extends JobParameters> RunPhase<R> withRun(Runnable run) {
     return new RunPhase<R>() {
       @Override
       protected void run(TranslationUnitContext ctx) {

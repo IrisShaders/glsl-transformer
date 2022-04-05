@@ -63,8 +63,8 @@ public class ExecutionPlannerTest extends TestForExecutionOrder {
 
   @Test
   void testAllowMultipleFinalization() {
-    manager.planExecution();
-    assertDoesNotThrow(() -> manager.planExecution(),
+    manager.planExecutionFor(NonFixedJobParameters.INSTANCE);
+    assertDoesNotThrow(() -> manager.planExecutionFor(NonFixedJobParameters.INSTANCE),
         "It should throw if execution planning is initiated manually multiple times.");
   }
 
@@ -82,7 +82,7 @@ public class ExecutionPlannerTest extends TestForExecutionOrder {
 
   @Test
   void testAllowManualFinalization() {
-    manager.planExecution();
+    manager.planExecutionFor(NonFixedJobParameters.INSTANCE);
     assertDoesNotThrow(() -> manager.transform(""),
         "It should not throw after regular manual planning.");
   }
@@ -90,7 +90,7 @@ public class ExecutionPlannerTest extends TestForExecutionOrder {
   @Test
   void testIncrementalResetState() {
     transformation.chainDependent(
-        new RunPhase<Void>() {
+        new RunPhase<>() {
           @Override
           protected void run(TranslationUnitContext ctx) {
             nextIndex++;
@@ -102,7 +102,7 @@ public class ExecutionPlannerTest extends TestForExecutionOrder {
           }
         });
     transformation.chainDependent(
-        new RunPhase<Void>() {
+        new RunPhase<>() {
           @Override
           protected void run(TranslationUnitContext ctx) {
             nextIndex++;
@@ -181,7 +181,7 @@ public class ExecutionPlannerTest extends TestForExecutionOrder {
 
   @Test
   void testNoInitOnSecondRun() {
-    transformation.chainDependency(new RunPhase<Void>() {
+    transformation.chainDependency(new RunPhase<>() {
       @Override
       protected void run(TranslationUnitContext ctx) {
       }

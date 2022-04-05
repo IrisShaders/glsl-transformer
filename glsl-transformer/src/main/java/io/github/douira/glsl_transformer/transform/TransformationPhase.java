@@ -35,7 +35,7 @@ import io.github.douira.glsl_transformer.tree.TreeMember;
  * adding and removing parse tree nodes. It can also inject nodes into the root
  * node's child array with injection points.
  */
-public abstract class TransformationPhase<T> extends GLSLParserBaseListener
+public abstract class TransformationPhase<T extends JobParameters> extends GLSLParserBaseListener
     implements LifecycleUser<T>, PartialParseTreeListener {
   private ExecutionPlanner<T> planner;
   private boolean walkFinishedNotified = false;

@@ -8,6 +8,7 @@ import io.github.douira.glsl_transformer.GLSLParser;
 import io.github.douira.glsl_transformer.core.target.HandlerTarget;
 import io.github.douira.glsl_transformer.core.target.ParsedReplaceTargetImpl;
 import io.github.douira.glsl_transformer.core.target.TerminalReplaceTargetImpl;
+import io.github.douira.glsl_transformer.transform.JobParameters;
 import io.github.douira.glsl_transformer.tree.ExtendedContext;
 import io.github.douira.glsl_transformer.util.CompatUtil;
 
@@ -15,7 +16,7 @@ import io.github.douira.glsl_transformer.util.CompatUtil;
  * This implementation of the search terminals transformation phase uses static
  * fields to return the targets and the terminal token type.
  */
-public class SearchTerminalsImpl<T> extends SearchTerminals<T> {
+public class SearchTerminalsImpl<T extends JobParameters> extends SearchTerminals<T> {
   /**
    * The target type of token to replace
    */
@@ -122,7 +123,7 @@ public class SearchTerminalsImpl<T> extends SearchTerminals<T> {
   public void addReplacement(
       String needle, String newContent,
       Function<GLSLParser, ExtendedContext> parseMethod) {
-    addTarget(new ParsedReplaceTargetImpl<>(needle, newContent, parseMethod));
+    addTarget(new ParsedReplaceTargetImpl<T>(needle, newContent, parseMethod));
   }
 
   /**
@@ -160,7 +161,7 @@ public class SearchTerminalsImpl<T> extends SearchTerminals<T> {
    * @param parseMethod The parser method to create the new node with
    * @return The configured identifier replacement transformation
    */
-  public static <T> SearchTerminals<T> withReplacement(
+  public static <T extends JobParameters> SearchTerminals<T> withReplacement(
       String needle, String newContent,
       Function<GLSLParser, ExtendedContext> parseMethod) {
     return new SearchTerminalsImpl<T>() {
@@ -180,7 +181,8 @@ public class SearchTerminalsImpl<T> extends SearchTerminals<T> {
    * @param expressionContent The new content to parse into an expression
    * @return The configured identifier replacement transformation
    */
-  public static <T> SearchTerminals<T> withReplacementExpression(String needle, String expressionContent) {
+  public static <T extends JobParameters> SearchTerminals<T> withReplacementExpression(
+      String needle, String expressionContent) {
     return new SearchTerminalsImpl<T>() {
       {
         addReplacementExpression(needle, expressionContent);
@@ -197,7 +199,8 @@ public class SearchTerminalsImpl<T> extends SearchTerminals<T> {
    * @param terminalContent The new terminal content to insert as a string node
    * @return The configured identifier replacement transformation
    */
-  public static <T> SearchTerminals<T> withReplacementTerminal(String needle, String terminalContent) {
+  public static <T extends JobParameters> SearchTerminals<T> withReplacementTerminal(
+      String needle, String terminalContent) {
     return new SearchTerminalsImpl<T>() {
       {
         addReplacementTerminal(needle, terminalContent);

@@ -3,6 +3,7 @@ package io.github.douira.glsl_transformer;
 import org.junit.jupiter.api.BeforeEach;
 
 import io.github.douira.glsl_transformer.TestResourceManager.FileLocation;
+import io.github.douira.glsl_transformer.transform.JobParameters;
 import io.github.douira.glsl_transformer.transform.Transformation;
 import io.github.douira.glsl_transformer.transform.TransformationManager;
 import io.github.douira.glsl_transformer.transform.TransformationPhase;
@@ -10,7 +11,7 @@ import io.github.douira.glsl_transformer.transform.TransformationPhase;
 /**
  * Handles setup of all the things required to run a transformation.
  */
-public abstract class TestWithTransformationManager<T> {
+public abstract class TestWithTransformationManager<T extends JobParameters> {
   private static String testResourceInput;
 
   private static String testCode;
