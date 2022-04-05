@@ -8,6 +8,7 @@ package io.github.douira.glsl_transformer.transform;
  */
 public class LifecycleUserImpl<T> implements LifecycleUser<T> {
   private ExecutionPlanner<T> planner;
+  private boolean initialized = false;
 
   @Override
   public ExecutionPlanner<T> getPlanner() {
@@ -17,5 +18,15 @@ public class LifecycleUserImpl<T> implements LifecycleUser<T> {
   @Override
   public void setPlanner(ExecutionPlanner<T> planner) {
     this.planner = planner;
+  }
+
+  @Override
+  public boolean isInitialized() {
+    return initialized;
+  }
+
+  @Override
+  public void setInitialized() {
+    initialized = true;
   }
 }
