@@ -28,7 +28,7 @@ public class ThrowTargetTest extends TestWithTransformationManager<NonFixedJobPa
       runTransformation(
           "int f = foo + oofevilinside;",
           new SearchTerminalsImpl<>(
-              new ThrowTarget<>("evil") {
+              new ThrowTarget<NonFixedJobParameters>("evil") {
                 @Override
                 public String getMessage(TreeMember node, String match) {
                   assertEquals(match, "oofevilinside", "It should match the inexact match");
@@ -47,7 +47,7 @@ public class ThrowTargetTest extends TestWithTransformationManager<NonFixedJobPa
     assertEquals(101, nextIndex,
         "It should visit the right points in the control flow");
   }
-  
+
   @Test
   void testThrowInexactMatch() {
     var message = "message";
@@ -56,7 +56,7 @@ public class ThrowTargetTest extends TestWithTransformationManager<NonFixedJobPa
       runTransformation(
           "int f = foo + oofevilinside + outside + evil;",
           new SearchTerminalsImpl<>(
-              new ThrowTarget<>("evil") {
+              new ThrowTarget<NonFixedJobParameters>("evil") {
                 @Override
                 public String getMessage(TreeMember node, String match) {
                   assertEquals(match, "evil", "It should match the exact match");
