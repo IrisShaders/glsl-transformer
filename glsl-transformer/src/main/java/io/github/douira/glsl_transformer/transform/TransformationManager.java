@@ -181,7 +181,7 @@ public class TransformationManager<T extends JobParameters> extends ExecutionPla
    * Runs a function while this transformation manager has the given job
    * parameters set.
    * 
-   * @see #withJobParameters(Object, Supplier)
+   * @see #withJobParameters(JobParameters, Supplier)
    * 
    * @param parameters The job parameters
    * @param run        The function to run while the transformation manager has
@@ -301,7 +301,7 @@ public class TransformationManager<T extends JobParameters> extends ExecutionPla
   /**
    * Transforms a given input stream and re-prints it as a string.
    * 
-   * @see #transformStream(IntStream, Object)
+   * @see #transformStream(IntStream, JobParameters)
    * 
    * @param stream The input stream to be transformed
    * @return The transformed string
