@@ -28,7 +28,12 @@ import io.github.douira.glsl_transformer.GLSLParser.TranslationUnitContext;
  */
 public abstract class ExecutionPlanner<T extends JobParameters> {
   private Map<T, ExecutionPlan<T>> executionPlanCache = new HashMap<>();
-  private final Transformation<T> rootTransformation = new Transformation<>();
+  private final Transformation<T> rootTransformation = new Transformation<>() {
+    @Override
+    public FixedActivation getFixedActivation() {
+      return FixedActivation.SHALLOW;
+    }
+  };
   private TranslationUnitContext rootNode;
   private ProxyParseTreeListener proxyListener;
 
@@ -104,6 +109,8 @@ public abstract class ExecutionPlanner<T extends JobParameters> {
 
       var rootNode = new LabeledNode<R>();
       collectQueue.add(new CollectEntry<>(new Node<>(rootTransformation), rootNode));
+
+      //TODO: implement fixed activation with the new method
 
       // traverse the tree converting all nodes to labeled nodes and combining
       // dependencies of transformations
