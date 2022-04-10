@@ -110,4 +110,28 @@ public interface LifecycleUser<T extends JobParameters> {
    */
   default void resetState() {
   }
+
+  enum FixedActivation {
+    /**
+     * Doesn't activate or deactivate the lifecycle user. Will be included if a
+     * cascading activation encounters this lifecycle user as a dependency.
+     */
+    NONE,
+
+    /**
+     * Activates the lifecycle user locally but doesn't activate all transitive
+     * dependencies. The activation of direct dependencies is evaluated though.
+     */
+    SHALLOW,
+
+    /**
+     * Activates the lifecycle user locally and all its transitive dependencies. The
+     * activation "cascades" down the dependency graph.
+     */
+    CASCADING
+  }
+
+  default FixedActivation getFixedActivation() {
+    return FixedActivation.NONE;
+  }
 }
