@@ -404,7 +404,7 @@ public abstract class TransformationPhase<T extends JobParameters> extends GLSLP
      *         location
      */
     protected boolean checkChildRelevant(Class<?> childClass) {
-      throw new Error("A non-special injection point doesn't have a child relevance implementation!");
+      throw new AssertionError("A non-special injection point doesn't have a child relevance implementation!");
     }
   }
 
