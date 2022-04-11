@@ -6,7 +6,6 @@ import java.util.function.Function;
 
 import com.github.bsideup.jabel.Desugar;
 
-import org.antlr.v4.runtime.Token;
 import org.antlr.v4.runtime.tree.TerminalNode;
 
 import io.github.douira.glsl_transformer.GLSLLexer;
@@ -138,7 +137,7 @@ public class Tensor extends ParsableASTNode {
       for (var entry : entries) {
         var index = entry.tokenType - minIndex;
         if (types[index] != null) {
-          throw new Error(
+          throw new AssertionError(
               "A type was registered multiple times for the same token. Fix the Tensor class' initialization!");
         }
         types[index] = entry;

@@ -89,10 +89,12 @@ public class Transformation<T extends JobParameters> extends LifecycleUserImpl<T
     // sanity check for cases that can happen when things are chained badly
     // (like chainDependent after addRootDependency)
     if (dependencyNode == rootNode) {
-      throw new Error("The root node may not be made a dependency. Use prependDependency for replacing the root node.");
+      throw new AssertionError(
+          "The root node may not be made a dependency. Use prependDependency for replacing the root node.");
     }
     if (dependentNode == endNode) {
-      throw new Error("The end node may not be made a dependent. Use appendDependent for replacing the end node.");
+      throw new AssertionError(
+          "The end node may not be made a dependent. Use appendDependent for replacing the end node.");
     }
 
     dependentNode.addDependency(dependencyNode);
