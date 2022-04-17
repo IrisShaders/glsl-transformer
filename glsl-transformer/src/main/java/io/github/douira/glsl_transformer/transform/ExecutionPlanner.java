@@ -20,6 +20,7 @@ import org.antlr.v4.runtime.BufferedTokenStream;
 import io.github.douira.glsl_transformer.GLSLLexer;
 import io.github.douira.glsl_transformer.GLSLParser;
 import io.github.douira.glsl_transformer.GLSLParser.TranslationUnitContext;
+import io.github.douira.glsl_transformer.transform.LifecycleUser.FixedActivation;
 
 /**
  * The execution planner finds a valid way of satisfying the root
@@ -31,7 +32,7 @@ public abstract class ExecutionPlanner<T extends JobParameters> {
   private final Transformation<T> rootTransformation = new Transformation<>() {
     @Override
     public FixedActivation getFixedActivation() {
-      return FixedActivation.SHALLOW;
+      return FixedActivation.ON_SHALLOW;
     }
   };
   private TranslationUnitContext rootNode;
@@ -62,6 +63,7 @@ public abstract class ExecutionPlanner<T extends JobParameters> {
 
     static class LabeledNode<R extends JobParameters> {
       final LifecycleUser<R> content;
+      final FixedActivation activation;
       Collection<LabeledNode<R>> dependencies = new HashSet<>();
       Collection<LabeledNode<R>> dependents = new HashSet<>();
 
@@ -70,20 +72,32 @@ public abstract class ExecutionPlanner<T extends JobParameters> {
 
       LabeledNode(LifecycleUser<R> content) {
         this.content = content;
+        this.activation = content.getFixedActivation();
       }
 
       LabeledNode() {
         content = null;
+        activation = FixedActivation.OFF_PASSIVE;
       }
 
-      void addDependency(LabeledNode<R> dependency) {
+      /**
+       * Creates a two-way connection between this node and a given dependency that's
+       * registered on this node. This node is registered as a dependent of the given
+       * dependency.
+       * 
+       * @param dependency The dependency node
+       */
+      void linkDependency(LabeledNode<R> dependency) {
         dependencies.add(dependency);
         dependency.dependents.add(this);
       }
     }
 
     @Desugar
-    record CollectEntry<S extends JobParameters> (Node<S> nodeToProcess, LabeledNode<S> dependent) {
+    record CollectEntry<S extends JobParameters> (
+        Node<S> nodeToProcess,
+        LabeledNode<S> dependent,
+        FixedActivation activation) {
     }
 
     @Desugar
@@ -108,16 +122,17 @@ public abstract class ExecutionPlanner<T extends JobParameters> {
       Deque<CollectEntry<R>> collectQueue = new LinkedList<>();
 
       var rootNode = new LabeledNode<R>();
-      collectQueue.add(new CollectEntry<>(new Node<>(rootTransformation), rootNode));
+      collectQueue.add(new CollectEntry<>(new Node<>(rootTransformation), rootNode, FixedActivation.ON_SHALLOW));
 
-      //TODO: implement fixed activation with the new method
+      // TODO: test that transformations aren't broken. maybe a different activation
+      // has to be passed to the internal nodes?
 
       // traverse the tree converting all nodes to labeled nodes and combining
       // dependencies of transformations
       while (!collectQueue.isEmpty()) {
         // node can be: empty (root or end), phase, transformation
-        var entry = collectQueue.poll();
-        var node = entry.nodeToProcess();
+        var queueEntry = collectQueue.poll();
+        var node = queueEntry.nodeToProcess();
         var content = node.getContent();
 
         LabeledNode<R> labeledNode;
@@ -138,8 +153,17 @@ public abstract class ExecutionPlanner<T extends JobParameters> {
               });
         }
 
+        // If it's forced off or passive and not cascaded on, don't process dependencies
+        // and don't link it to the dependent.
+        if (labeledNode.activation == FixedActivation.OFF_FORCED
+            || labeledNode.activation == FixedActivation.OFF_PASSIVE
+                && queueEntry.activation != FixedActivation.ON_CASCADING) {
+          dependenciesProcessed.add(node);
+          continue;
+        }
+
         // tell the node that queued processing this node about this labeled node
-        entry.dependent().addDependency(labeledNode);
+        queueEntry.dependent().linkDependency(labeledNode);
 
         /*
          * Only process dependencies if not done yet for this node.
@@ -153,10 +177,17 @@ public abstract class ExecutionPlanner<T extends JobParameters> {
         if (!dependenciesProcessed.contains(node)) {
           dependenciesProcessed.add(node);
 
+          // inherit cascading activation from the dependent node (if not aborted)
+          var cascadingActivation = queueEntry.activation == FixedActivation.ON_CASCADING
+              ? queueEntry.activation
+              : labeledNode.activation;
+
           if (Transformation.class.isInstance(content)) {
             // a transformation's dependencies should be dependencies of the end node.
             // use an existing labeled node for this end node if there is one already
             var transformation = (Transformation<R>) content;
+            transformationSet.add(transformation);
+
             var endNode = transformation.getEndDepNode();
             var endLabeledNode = Optional
                 .ofNullable(endNodeMap.get(endNode))
@@ -166,17 +197,16 @@ public abstract class ExecutionPlanner<T extends JobParameters> {
                   return newNode;
                 });
             for (var dependency : node.getDependencies()) {
-              collectQueue.add(new CollectEntry<>(dependency, endLabeledNode));
+              collectQueue.add(new CollectEntry<>(dependency, endLabeledNode, cascadingActivation));
             }
 
-            // and the root node is a dependency of the node for the transformation
-            collectQueue.add(new CollectEntry<>(transformation.getRootDepNode(), labeledNode));
-
-            transformationSet.add(transformation);
+            // and the root node as a dependency of the node for the transformation
+            // this causes all internal nodes of the transformation to be processed
+            collectQueue.add(new CollectEntry<>(transformation.getRootDepNode(), labeledNode, cascadingActivation));
           } else {
-            // queue processing of dependencies
+            // queue processing of regular node dependencies
             for (var dependency : node.getDependencies()) {
-              collectQueue.add(new CollectEntry<>(dependency, labeledNode));
+              collectQueue.add(new CollectEntry<>(dependency, labeledNode, cascadingActivation));
             }
           }
         }

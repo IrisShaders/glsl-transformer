@@ -113,25 +113,31 @@ public interface LifecycleUser<T extends JobParameters> {
 
   enum FixedActivation {
     /**
-     * Doesn't activate or deactivate the lifecycle user. Will be included if a
-     * cascading activation encounters this lifecycle user as a dependency.
+     * Deactivates this lifecycle user even if there is a cascading activation. No
+     * dependencies are processed.
      */
-    NONE,
+    OFF_FORCED,
 
     /**
-     * Activates the lifecycle user locally but doesn't activate all transitive
-     * dependencies. The activation of direct dependencies is evaluated though.
+     * Doesn't activate this lifecycle user but allows cascading activation.
      */
-    SHALLOW,
+    OFF_PASSIVE,
 
     /**
-     * Activates the lifecycle user locally and all its transitive dependencies. The
-     * activation "cascades" down the dependency graph.
+     * Activates this lifecycle user but doesn't necessarily cause activation of
+     * dependencies. The dependencies have to report their own activation of at
+     * least ON_SHALLOW.
      */
-    CASCADING
+    ON_SHALLOW,
+
+    /**
+     * Activates this lifecycle user and causes cascading activation of dependencies
+     * (unless forced off).
+     */
+    ON_CASCADING
   }
 
   default FixedActivation getFixedActivation() {
-    return FixedActivation.NONE;
+    return FixedActivation.OFF_PASSIVE;
   }
 }
