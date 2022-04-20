@@ -20,7 +20,6 @@ import org.antlr.v4.runtime.BufferedTokenStream;
 import io.github.douira.glsl_transformer.GLSLLexer;
 import io.github.douira.glsl_transformer.GLSLParser;
 import io.github.douira.glsl_transformer.GLSLParser.TranslationUnitContext;
-import io.github.douira.glsl_transformer.transform.LifecycleUser.FixedActivation;
 
 /**
  * The execution planner finds a valid way of satisfying the root
@@ -29,12 +28,7 @@ import io.github.douira.glsl_transformer.transform.LifecycleUser.FixedActivation
  */
 public abstract class ExecutionPlanner<T extends JobParameters> {
   private Map<T, ExecutionPlan<T>> executionPlanCache = new HashMap<>();
-  private final Transformation<T> rootTransformation = new Transformation<>() {
-    @Override
-    public FixedActivation getFixedActivation() {
-      return FixedActivation.ON_SHALLOW;
-    }
-  };
+  private final Transformation<T> rootTransformation = new Transformation<>();
   private TranslationUnitContext rootNode;
   private ProxyParseTreeListener proxyListener;
 
@@ -63,7 +57,6 @@ public abstract class ExecutionPlanner<T extends JobParameters> {
 
     static class LabeledNode<R extends JobParameters> {
       final LifecycleUser<R> content;
-      final FixedActivation activation;
       Collection<LabeledNode<R>> dependencies = new HashSet<>();
       Collection<LabeledNode<R>> dependents = new HashSet<>();
 
@@ -72,12 +65,10 @@ public abstract class ExecutionPlanner<T extends JobParameters> {
 
       LabeledNode(LifecycleUser<R> content) {
         this.content = content;
-        this.activation = content.getFixedActivation();
       }
 
       LabeledNode() {
         content = null;
-        activation = FixedActivation.OFF_PASSIVE;
       }
 
       /**
@@ -94,10 +85,7 @@ public abstract class ExecutionPlanner<T extends JobParameters> {
     }
 
     @Desugar
-    record CollectEntry<S extends JobParameters> (
-        Node<S> nodeToProcess,
-        LabeledNode<S> dependent,
-        FixedActivation activation) {
+    record CollectEntry<S extends JobParameters> (Node<S> nodeToProcess, LabeledNode<S> dependent) {
     }
 
     @Desugar
@@ -122,7 +110,7 @@ public abstract class ExecutionPlanner<T extends JobParameters> {
       Deque<CollectEntry<R>> collectQueue = new LinkedList<>();
 
       var rootNode = new LabeledNode<R>();
-      collectQueue.add(new CollectEntry<>(new Node<>(rootTransformation), rootNode, FixedActivation.ON_SHALLOW));
+      collectQueue.add(new CollectEntry<>(new Node<>(rootTransformation), rootNode));
 
       // TODO: test that transformations aren't broken. maybe a different activation
       // has to be passed to the internal nodes?
@@ -153,15 +141,6 @@ public abstract class ExecutionPlanner<T extends JobParameters> {
               });
         }
 
-        // If it's forced off or passive and not cascaded on, don't process dependencies
-        // and don't link it to the dependent.
-        if (labeledNode.activation == FixedActivation.OFF_FORCED
-            || labeledNode.activation == FixedActivation.OFF_PASSIVE
-                && queueEntry.activation != FixedActivation.ON_CASCADING) {
-          dependenciesProcessed.add(node);
-          continue;
-        }
-
         // tell the node that queued processing this node about this labeled node
         queueEntry.dependent().linkDependency(labeledNode);
 
@@ -176,11 +155,6 @@ public abstract class ExecutionPlanner<T extends JobParameters> {
          */
         if (!dependenciesProcessed.contains(node)) {
           dependenciesProcessed.add(node);
-
-          // inherit cascading activation from the dependent node (if not aborted)
-          var cascadingActivation = queueEntry.activation == FixedActivation.ON_CASCADING
-              ? queueEntry.activation
-              : labeledNode.activation;
 
           if (Transformation.class.isInstance(content)) {
             // a transformation's dependencies should be dependencies of the end node.
@@ -197,16 +171,16 @@ public abstract class ExecutionPlanner<T extends JobParameters> {
                   return newNode;
                 });
             for (var dependency : node.getDependencies()) {
-              collectQueue.add(new CollectEntry<>(dependency, endLabeledNode, cascadingActivation));
+              collectQueue.add(new CollectEntry<>(dependency, endLabeledNode));
             }
 
             // and the root node as a dependency of the node for the transformation
             // this causes all internal nodes of the transformation to be processed
-            collectQueue.add(new CollectEntry<>(transformation.getRootDepNode(), labeledNode, cascadingActivation));
+            collectQueue.add(new CollectEntry<>(transformation.getRootDepNode(), labeledNode));
           } else {
             // queue processing of regular node dependencies
             for (var dependency : node.getDependencies()) {
-              collectQueue.add(new CollectEntry<>(dependency, labeledNode, cascadingActivation));
+              collectQueue.add(new CollectEntry<>(dependency, labeledNode));
             }
           }
         }
