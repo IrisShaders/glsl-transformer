@@ -35,11 +35,6 @@ public abstract class ExecutionPlanner<T extends JobParameters> {
   private class ExecutionPlan<R extends JobParameters> {
     List<ExecutionLevel<R>> executionLevels;
     Collection<Transformation<R>> transformations;
-    final R fixedParameters;
-
-    ExecutionPlan(R fixedParameters) {
-      this.fixedParameters = fixedParameters;
-    }
 
     @Desugar
     private static record ExecutionLevel<S extends JobParameters> (
@@ -109,6 +104,7 @@ public abstract class ExecutionPlanner<T extends JobParameters> {
       Map<LifecycleUser<R>, LabeledNode<R>> contentNodeMap = new HashMap<>();
       Deque<CollectEntry<R>> collectQueue = new LinkedList<>();
 
+      rootTransformation.doGraphSetup();
       var rootNode = new LabeledNode<R>();
       collectQueue.add(new CollectEntry<>(new Node<>(rootTransformation), rootNode));
 
@@ -366,7 +362,7 @@ public abstract class ExecutionPlanner<T extends JobParameters> {
     var jobParameters = getJobParameters();
     var plan = executionPlanCache.get(jobParameters);
     if (plan == null) {
-      plan = new ExecutionPlan<>(jobParameters);
+      plan = new ExecutionPlan<>(); // gets the job parameters itself during planning
       plan.planExecution(rootTransformation);
       executionPlanCache.put(jobParameters, plan);
     }
