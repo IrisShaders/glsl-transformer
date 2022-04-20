@@ -55,15 +55,15 @@ public abstract class ExecutionPlanner<T extends JobParameters> {
       }
     }
 
-    static class LabeledNode<R extends JobParameters> {
-      final LifecycleUser<R> content;
-      Collection<LabeledNode<R>> dependencies = new HashSet<>();
-      Collection<LabeledNode<R>> dependents = new HashSet<>();
+    static class LabeledNode<S extends JobParameters> {
+      final LifecycleUser<S> content;
+      Collection<LabeledNode<S>> dependencies = new HashSet<>();
+      Collection<LabeledNode<S>> dependents = new HashSet<>();
 
       int executionLevelIndex = Integer.MIN_VALUE;
       boolean dfsFinished = false;
 
-      LabeledNode(LifecycleUser<R> content) {
+      LabeledNode(LifecycleUser<S> content) {
         this.content = content;
       }
 
@@ -78,7 +78,7 @@ public abstract class ExecutionPlanner<T extends JobParameters> {
        * 
        * @param dependency The dependency node
        */
-      void linkDependency(LabeledNode<R> dependency) {
+      void linkDependency(LabeledNode<S> dependency) {
         dependencies.add(dependency);
         dependency.dependents.add(this);
       }
@@ -147,8 +147,8 @@ public abstract class ExecutionPlanner<T extends JobParameters> {
         /*
          * Only process dependencies if not done yet for this node.
          * Since this is per node (which are transformation-specific), the same content
-         * may be queued for processing multiple times but since the label nodes are
-         * created only once for each content, the duplicate traversal is prevented.
+         * may be queued for processing multiple times but since labeled nodes are
+         * created only once for each content, full duplicate traversal is prevented.
          * Label nodes aren't bound for root nodes, but they aren't depended on by
          * definition. End nodes can have multiple dependents and label nodes for them
          * are de-duplicated using the endNodeMap.
