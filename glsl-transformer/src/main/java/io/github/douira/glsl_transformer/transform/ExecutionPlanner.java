@@ -352,6 +352,11 @@ public abstract class ExecutionPlanner<T extends JobParameters> {
     return rootTransformation;
   }
 
+  /**
+   * Called by {@link TransformationPhase} in order to get access to the current
+   * proxy listener and tell it to stop and remove the listener that is currently
+   * walking.
+   */
   void removeCurrentPhaseFromWalk() {
     proxyListener.removeCurrentListener();
   }
@@ -369,6 +374,13 @@ public abstract class ExecutionPlanner<T extends JobParameters> {
     return plan;
   }
 
+  /**
+   * Triggers execution planning for a given set of fixed job parameters. This can
+   * be useful for pre-computing execution plans instead of having them be
+   * computed on the fly and cached.
+   * 
+   * @param parameters The fixed job parameters to compute the execution plan for
+   */
   public void planExecutionFor(T parameters) {
     getExecutionPlanFor(parameters);
   }
