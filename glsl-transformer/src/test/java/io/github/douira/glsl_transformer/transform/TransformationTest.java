@@ -235,7 +235,27 @@ public class TransformationTest extends TestForExecutionOrder {
   }
 
   @Test
-  void testGraphReset() {
+  void testGraphResetConditional() {
+    var man = new TransformationManager<>();
+    man.addConcurrent(new Transformation<>() {
+      @Override
+      protected void setupGraph() {
+        chainDependent(RunPhase.withRun(() -> nextIndex++));
+      }
+    });
+
+    man.transform("", new FullyFixedJobParameters());
+    assertEquals(1, nextIndex,
+        "It should run the conditional dependency once.");
+
+    nextIndex = 0;
+    man.transform("", new FullyFixedJobParameters());
+    assertEquals(1, nextIndex,
+        "It should run the conditional dependency once.");
+  }
+
+  @Test
+  void testGraphResetStatic() {
     var man = new TransformationManager<>();
     man.addConcurrent(new Transformation<>() {
       {
@@ -245,10 +265,12 @@ public class TransformationTest extends TestForExecutionOrder {
 
     man.transform("", new FullyFixedJobParameters());
     assertEquals(1, nextIndex,
-        "It should run the conditional dependency once.");
+        "It should run the static dependency once.");
+
+    nextIndex = 0;
     man.transform("", new FullyFixedJobParameters());
     assertEquals(1, nextIndex,
-        "It should run the conditional dependency once.");
+        "It should run the static dependency once.");
   }
 
   @Test
@@ -302,8 +324,8 @@ public class TransformationTest extends TestForExecutionOrder {
 
     man.planExecutionFor(new FixedWrappedParameters<>(a));
     assertEquals(2, nextIndex,
-    "It should do graph setup on the nested transformation.");
-    
+        "It should do graph setup on the nested transformation.");
+
     nextIndex = 0;
     man.planExecutionFor(new FixedWrappedParameters<>(b));
     assertEquals(1, nextIndex,
