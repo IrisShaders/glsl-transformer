@@ -24,8 +24,10 @@ import io.github.douira.glsl_transformer.GLSLParserBaseListener;
 import io.github.douira.glsl_transformer.ast.Directive;
 import io.github.douira.glsl_transformer.ast.Directive.Type;
 import io.github.douira.glsl_transformer.print.EmptyTerminalNode;
+import io.github.douira.glsl_transformer.traversal.PartialParseTreeListener;
 import io.github.douira.glsl_transformer.tree.ExtendedContext;
 import io.github.douira.glsl_transformer.tree.TreeMember;
+import io.github.douira.glsl_transformer.util.ExcludeFromJacocoGeneratedReport;
 
 /**
  * The transformations phase actually does a specific transformation. It can be
@@ -35,10 +37,11 @@ import io.github.douira.glsl_transformer.tree.TreeMember;
  * adding and removing parse tree nodes. It can also inject nodes into the root
  * node's child array with injection points.
  */
-public abstract class TransformationPhase<T> extends GLSLParserBaseListener
+public abstract class TransformationPhase<T extends JobParameters> extends GLSLParserBaseListener
     implements LifecycleUser<T>, PartialParseTreeListener {
   private ExecutionPlanner<T> planner;
   private boolean walkFinishedNotified = false;
+  private boolean initialized = false;
 
   /**
    * Called during planning in order to determine if this phase does any
@@ -92,6 +95,16 @@ public abstract class TransformationPhase<T> extends GLSLParserBaseListener
   @Override
   public void setPlanner(ExecutionPlanner<T> parent) {
     this.planner = parent;
+  }
+
+  @Override
+  public boolean isInitialized() {
+    return initialized;
+  }
+
+  @Override
+  public void setInitialized() {
+    initialized = true;
   }
 
   /**
@@ -392,8 +405,9 @@ public abstract class TransformationPhase<T> extends GLSLParserBaseListener
      *         this external declaration according to the implementing injection
      *         location
      */
+    @ExcludeFromJacocoGeneratedReport
     protected boolean checkChildRelevant(Class<?> childClass) {
-      throw new Error("A non-special injection point doesn't have a child relevance implementation!");
+      throw new AssertionError("A non-special injection point doesn't have a child relevance implementation!");
     }
   }
 

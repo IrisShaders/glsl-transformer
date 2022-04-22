@@ -1,12 +1,13 @@
 package io.github.douira.glsl_transformer.core.target;
 
 import io.github.douira.glsl_transformer.ast.StringNode;
+import io.github.douira.glsl_transformer.transform.JobParameters;
 import io.github.douira.glsl_transformer.tree.TreeMember;
 
 /**
  * A terminal replace target replaces the target with a terminal string node.
  */
-public abstract class TerminalReplaceTarget<T> extends ReplaceTarget<T> {
+public abstract class TerminalReplaceTarget<T extends JobParameters> extends ReplaceTarget<T> {
 
   /**
    * Creates a new terminal placement target with a search string.

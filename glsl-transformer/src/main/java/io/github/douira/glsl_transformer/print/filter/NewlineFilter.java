@@ -3,12 +3,13 @@ package io.github.douira.glsl_transformer.print.filter;
 import org.antlr.v4.runtime.Token;
 
 import io.github.douira.glsl_transformer.GLSLLexer;
+import io.github.douira.glsl_transformer.transform.JobParameters;
 
 /**
  * The newline filter filters out regular unnecessary newlines if there is more
  * than one.
  */
-public class NewlineFilter<T> extends TokenFilter<T> {
+public class NewlineFilter<T extends JobParameters> extends TokenFilter<T> {
   private boolean lastWasNewline;
 
   @Override

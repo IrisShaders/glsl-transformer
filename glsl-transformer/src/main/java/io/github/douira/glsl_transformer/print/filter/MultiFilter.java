@@ -6,6 +6,7 @@ import java.util.Collection;
 import org.antlr.v4.runtime.Token;
 
 import io.github.douira.glsl_transformer.transform.ExecutionPlanner;
+import io.github.douira.glsl_transformer.transform.JobParameters;
 
 /**
  * A multi filter checks all contained filters with either requiring all of them
@@ -18,7 +19,7 @@ import io.github.douira.glsl_transformer.transform.ExecutionPlanner;
  * filter has disallowed it. Since filters can have state, it can be desirerable
  * to notify all of them of all tokens.
  */
-public class MultiFilter<T> extends TokenFilter<T> {
+public class MultiFilter<T extends JobParameters> extends TokenFilter<T> {
   private Collection<TokenFilter<T>> subfilters;
 
   /**

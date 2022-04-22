@@ -11,11 +11,12 @@ import io.github.douira.glsl_transformer.TestWithTransformationManager;
 import io.github.douira.glsl_transformer.GLSLParser.TranslationUnitContext;
 import io.github.douira.glsl_transformer.ast.StringNode;
 import io.github.douira.glsl_transformer.ast.UnparsableASTNode;
+import io.github.douira.glsl_transformer.transform.NonFixedJobParameters;
 import io.github.douira.glsl_transformer.transform.RunPhase;
 import io.github.douira.glsl_transformer.transform.Transformation;
 import io.github.douira.glsl_transformer.transform.TransformationManager;
 
-public class PrintVisitorTest extends TestWithTransformationManager<Void> {
+public class PrintVisitorTest extends TestWithTransformationManager<NonFixedJobParameters> {
   @Test
   void testEmptyLiteral() {
     assertEquals(
@@ -40,9 +41,9 @@ public class PrintVisitorTest extends TestWithTransformationManager<Void> {
 
   @Test
   void testPrintTree() {
-    TransformationManager<Void> modifiedManager = new TransformationManager<>() {
+    var modifiedManager = new TransformationManager<NonFixedJobParameters>() {
       @Override
-      public String transformStream(IntStream stream, Void parameters) throws RecognitionException {
+      public String transformStream(IntStream stream, NonFixedJobParameters parameters) throws RecognitionException {
         var tree = parse(stream, null, GLSLParser::translationUnit);
         transformTree(tree, tokenStream);
         var printed = PrintVisitor.printTree(tokenStream, tree);

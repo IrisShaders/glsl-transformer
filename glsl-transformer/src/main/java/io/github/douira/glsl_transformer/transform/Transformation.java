@@ -1,8 +1,10 @@
 package io.github.douira.glsl_transformer.transform;
 
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
 import java.util.Optional;
+import java.util.Set;
 
 /**
  * The transformation holds information about dependencies between
@@ -29,24 +31,28 @@ import java.util.Optional;
  * vein, state should only be initialized in the {@link #init()} and
  * {@link #resetState()} methods.
  * 
+ * An intersting effect of the automatic root and end node linking is that it's
+ * impossible to create cycles that don't have dangling bits since a bare cycle
+ * will be completely disconnected from the rest of the graph.
+ * 
  * TODO: unclear if sharing phases between transformation managers is
  * problematic since then the compiled paths/patterns in phases have a different
  * parser than the one being used for the transformation. Probably it doesn't
  * matter, and the parser is just used to figure out how the rules of the
  * tree are.
  */
-public class Transformation<T> extends LifecycleUserImpl<T> {
+public class Transformation<T extends JobParameters> extends LifecycleUserImpl<T> {
   private final Map<LifecycleUser<T>, Node<T>> contentNodes = new HashMap<>();
-  private Node<T> rootNode = new Node<>();
-  private Node<T> endNode = new Node<>();
-
-  // these defaults are for chaining in the same direction
-  // (downwards for dependency, upwards for dependent)
-  private Node<T> lastDependency = rootNode;
-  private Node<T> lastDependent = endNode;
+  private final Set<Transformation<T>> transformations = new HashSet<>();
+  private Node<T> rootNode;
+  private Node<T> endNode;
+  private Node<T> lastDependency;
+  private Node<T> lastDependent;
+  private boolean usesConditionalGraph = false;
+  private Object updateTag;
 
   {
-    updateInternalLinks();
+    resetGraph();
   }
 
   /**
@@ -65,6 +71,71 @@ public class Transformation<T> extends LifecycleUserImpl<T> {
   public Transformation() {
   }
 
+  /**
+   * If conditional dependencies are required for this transformation, all
+   * dependencies should be created within this method. Fixed job parameters may
+   * be accessed through {@link #getJobParameters()}. Only either dependencies
+   * added in this method or statically set dependencies may be used at once. If
+   * dependencies are added statically, this method is never run and no
+   * conditional dependencies can be created.
+   */
+  protected void setupGraph() {
+  }
+
+  /**
+   * Called by the execution planner to reset this transformation's dependency
+   * graph with the current fixed parameters.
+   * 
+   * On the first graph setup there will be no content nodes if a conditional
+   * dependency graph is used. {@link #setupGraph()} isn't called if any static
+   * dependencies were created.
+   */
+  private void doGraphSetup(Object updateTag) {
+    if (this.updateTag == updateTag) {
+      return;
+    }
+    this.updateTag = updateTag;
+
+    if (contentNodes.isEmpty()) {
+      usesConditionalGraph = true;
+    }
+    if (usesConditionalGraph) {
+      resetGraph();
+      setupGraph();
+    }
+
+    // do graph setup on all current transformations
+    for (Transformation<T> transformation : transformations) {
+      transformation.setPlanner(getPlanner());
+      transformation.doGraphSetup(updateTag);
+    }
+  }
+
+  /**
+   * Generates an update tag to keep track of which update walk this is in order
+   * to prevent duplicate traversal of dependencies that are used by multiple
+   * transformations.
+   * 
+   * {@see #doGraphSetup(Object)}
+   */
+  void doGraphSetup() {
+    doGraphSetup(new Object());
+  }
+
+  private void resetGraph() {
+    rootNode = new Node<>();
+    endNode = new Node<>();
+    contentNodes.clear();
+    transformations.clear();
+
+    // these defaults are for chaining in the same direction
+    // (downwards for dependency, upwards for dependent)
+    lastDependency = rootNode;
+    lastDependent = endNode;
+
+    updateInternalLinks();
+  }
+
   Node<T> getRootDepNode() {
     return rootNode;
   }
@@ -73,10 +144,17 @@ public class Transformation<T> extends LifecycleUserImpl<T> {
     return endNode;
   }
 
+  private void addContentNode(LifecycleUser<T> content, Node<T> node) {
+    contentNodes.put(content, node);
+    if (content instanceof Transformation) {
+      transformations.add((Transformation<T>) content);
+    }
+  }
+
   private Node<T> getNode(LifecycleUser<T> content) {
     return Optional.ofNullable(contentNodes.get(content)).orElseGet(() -> {
       var newNode = new Node<T>(content);
-      contentNodes.put(content, newNode);
+      addContentNode(content, newNode);
       return newNode;
     });
   }
@@ -89,10 +167,12 @@ public class Transformation<T> extends LifecycleUserImpl<T> {
     // sanity check for cases that can happen when things are chained badly
     // (like chainDependent after addRootDependency)
     if (dependencyNode == rootNode) {
-      throw new Error("The root node may not be made a dependency. Use prependDependency for replacing the root node.");
+      throw new AssertionError(
+          "The root node may not be made a dependency. Use prependDependency for replacing the root node.");
     }
     if (dependentNode == endNode) {
-      throw new Error("The end node may not be made a dependent. Use appendDependent for replacing the end node.");
+      throw new AssertionError(
+          "The end node may not be made a dependent. Use appendDependent for replacing the end node.");
     }
 
     dependentNode.addDependency(dependencyNode);
@@ -202,7 +282,7 @@ public class Transformation<T> extends LifecycleUserImpl<T> {
     var soleEndDependency = endNode;
     endNode = new Node<T>();
     soleEndDependency.setContent(newSoleEndDependent);
-    contentNodes.put(newSoleEndDependent, soleEndDependency);
+    addContentNode(newSoleEndDependent, soleEndDependency);
     soleEndDependency.addDependency(endNode);
     lastDependent = soleEndDependency;
     lastDependency = endNode;
@@ -224,7 +304,7 @@ public class Transformation<T> extends LifecycleUserImpl<T> {
     var soleRootDependency = rootNode;
     rootNode = new Node<T>();
     soleRootDependency.setContent(newSoleRootDependency);
-    contentNodes.put(newSoleRootDependency, soleRootDependency);
+    addContentNode(newSoleRootDependency, soleRootDependency);
     rootNode.addDependency(soleRootDependency);
     lastDependent = rootNode;
     lastDependency = soleRootDependency;

@@ -135,7 +135,7 @@ public class PrintVisitor extends AbstractParseTreeVisitor<Void> {
           }
         }
       } else {
-        throw new Error(
+        throw new AssertionError(
             "A wrong type of object was inserted into the printItems! Only String and AttributedInterval are allowed.");
       }
     }

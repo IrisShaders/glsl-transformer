@@ -6,13 +6,15 @@ import org.antlr.v4.runtime.Token;
 import org.junit.jupiter.api.Test;
 
 import io.github.douira.glsl_transformer.TestWithTransformationManager;
+import io.github.douira.glsl_transformer.transform.JobParameters;
+import io.github.douira.glsl_transformer.transform.NonFixedJobParameters;
 import io.github.douira.glsl_transformer.transform.TransformationManager;
 import io.github.douira.glsl_transformer.util.CompatUtil;
 
-public class MultiFilterTest extends TestWithTransformationManager<Void> {
+public class MultiFilterTest extends TestWithTransformationManager<NonFixedJobParameters> {
   int nextIndex;
 
-  static <T> TransformationManager<T> assertPrintFilterResult(
+  static <T extends JobParameters> TransformationManager<T> assertPrintFilterResult(
       String expected, String input, T parameters, TokenFilter<T> filter, String message) {
     var man = new TransformationManager<T>();
     man.setPrintTokenFilter(filter);
@@ -20,7 +22,7 @@ public class MultiFilterTest extends TestWithTransformationManager<Void> {
     return man;
   }
 
-  static <T> TransformationManager<T> assertPrintFilterResult(
+  static <T extends JobParameters> TransformationManager<T> assertPrintFilterResult(
       String expected, String input, TokenFilter<T> filter, String message) {
     return assertPrintFilterResult(expected, input, null, filter, message);
   }
@@ -68,8 +70,8 @@ public class MultiFilterTest extends TestWithTransformationManager<Void> {
   @Test
   void testResetState() {
     nextIndex = 0;
-    var multiFilter = new MultiFilter<Void>();
-    multiFilter.add(new StringFilter<Void>("a") {
+    var multiFilter = new MultiFilter<NonFixedJobParameters>();
+    multiFilter.add(new StringFilter<>("a") {
       boolean finished;
 
       @Override
@@ -92,7 +94,7 @@ public class MultiFilterTest extends TestWithTransformationManager<Void> {
         nextIndex++;
       }
     });
-    multiFilter.add(new StringFilter<Void>("b") {
+    multiFilter.add(new StringFilter<>("b") {
       @Override
       public void resetState() {
         nextIndex += 100;
@@ -109,9 +111,9 @@ public class MultiFilterTest extends TestWithTransformationManager<Void> {
   @Test
   void testsetPlanner() {
     nextIndex = 0;
-    var parameters = new Object();
-    var multiFilter = new MultiFilter<Object>();
-    multiFilter.add(new StringFilter<Object>("a") {
+    var parameters = new NonFixedJobParameters();
+    var multiFilter = new MultiFilter<NonFixedJobParameters>();
+    multiFilter.add(new StringFilter<>("a") {
       @Override
       public boolean isTokenAllowed(Token token) {
         nextIndex++;
@@ -133,15 +135,15 @@ public class MultiFilterTest extends TestWithTransformationManager<Void> {
   @Test
   void testConjunctionAndShortCircuit() {
     nextIndex = 0;
-    var multiFilter = new MultiFilter<Void>();
-    multiFilter.add(new TokenFilter<Void>() {
+    var multiFilter = new MultiFilter<NonFixedJobParameters>();
+    multiFilter.add(new TokenFilter<>() {
       @Override
       public boolean isTokenAllowed(Token token) {
         nextIndex++;
         return !token.getText().toLowerCase().equals("a");
       }
     });
-    multiFilter.add(new TokenFilter<Void>() {
+    multiFilter.add(new TokenFilter<>() {
       @Override
       public boolean isTokenAllowed(Token token) {
         nextIndex += 100;

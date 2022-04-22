@@ -114,7 +114,7 @@ public class Directive extends StringNode {
     }
 
     return ("#"
-        + (type == null ? "" : type.name().toLowerCase())
+        + type.name().toLowerCase() // type can never be null here
         + " " + getContent()).trim() + "\n";
   }
 }

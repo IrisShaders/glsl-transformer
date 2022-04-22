@@ -7,6 +7,7 @@ import org.antlr.v4.runtime.tree.TerminalNode;
 
 import io.github.douira.glsl_transformer.GLSLLexer;
 import io.github.douira.glsl_transformer.core.target.HandlerTarget;
+import io.github.douira.glsl_transformer.transform.JobParameters;
 import io.github.douira.glsl_transformer.transform.WalkPhase;
 import io.github.douira.glsl_transformer.tree.TreeMember;
 
@@ -22,7 +23,7 @@ import io.github.douira.glsl_transformer.tree.TreeMember;
  * phase yourself and do something when it visits the parse context of
  * interest.
  */
-public abstract class SearchTerminals<T> extends WalkPhase<T> {
+public abstract class SearchTerminals<T extends JobParameters> extends WalkPhase<T> {
   /**
    * The identifier token type.
    */

@@ -1,7 +1,6 @@
 package io.github.douira.glsl_transformer.transform;
 
 import java.util.function.Function;
-import java.util.function.Supplier;
 
 import org.antlr.v4.runtime.BaseErrorListener;
 import org.antlr.v4.runtime.BufferedTokenStream;
@@ -49,12 +48,12 @@ import io.github.douira.glsl_transformer.tree.ExtendedContext;
  * 
  * @param <T> The job parameters type
  */
-public class TransformationManager<T> extends ExecutionPlanner<T> {
+public class TransformationManager<T extends JobParameters> extends ExecutionPlanner<T> {
   /**
    * An internal instance of this class that is used by other library-internal
    * classes for parsing needs.
    */
-  public static final TransformationManager<Void> INTERNAL = new TransformationManager<>();
+  public static final TransformationManager<NonFixedJobParameters> INTERNAL = new TransformationManager<>();
 
   private static class ThrowingErrorListener extends BaseErrorListener {
     public static final ThrowingErrorListener INSTANCE = new ThrowingErrorListener();
@@ -70,7 +69,6 @@ public class TransformationManager<T> extends ExecutionPlanner<T> {
   // inited with null since they need an argument
   private final GLSLLexer lexer = new GLSLLexer(null);
   private final GLSLParser parser = new GLSLParser(null);
-  private T jobParameters;
 
   /**
    * The last parsed input stream. This property can be used together with the
@@ -150,48 +148,6 @@ public class TransformationManager<T> extends ExecutionPlanner<T> {
   @Override
   public GLSLLexer getLexer() {
     return lexer;
-  }
-
-  @Override
-  T getJobParameters() {
-    return jobParameters;
-  }
-
-  /**
-   * Runs a function while this transformation manager has the given job
-   * parameters set. It returns the value that the function returns.
-   * This can be used together with non-standard ways of using a transformation
-   * manager like using {@link #parse(IntStream, ExtendedContext, Function)}
-   * directly.
-   * 
-   * @param <R>        The return type of the function
-   * @param parameters The job parameters to set
-   * @param run        The function to run while the transformation manager has
-   *                   job parameters
-   * @return The value returned by the supplier function
-   */
-  public <R> R withJobParameters(T parameters, Supplier<R> run) {
-    jobParameters = parameters;
-    var value = run.get();
-    jobParameters = null;
-    return value;
-  }
-
-  /**
-   * Runs a function while this transformation manager has the given job
-   * parameters set.
-   * 
-   * @see #withJobParameters(Object, Supplier)
-   * 
-   * @param parameters The job parameters
-   * @param run        The function to run while the transformation manager has
-   *                   job parameters
-   */
-  public void withJobParameters(T parameters, Runnable run) {
-    this.<Void>withJobParameters(parameters, () -> {
-      run.run();
-      return null;
-    });
   }
 
   /**
@@ -301,7 +257,7 @@ public class TransformationManager<T> extends ExecutionPlanner<T> {
   /**
    * Transforms a given input stream and re-prints it as a string.
    * 
-   * @see #transformStream(IntStream, Object)
+   * @see #transformStream(IntStream, JobParameters)
    * 
    * @param stream The input stream to be transformed
    * @return The transformed string

@@ -39,16 +39,16 @@ public enum TokenChannel {
   // sanity check the items and their names
   static {
     if (channels[Token.DEFAULT_CHANNEL] != TokenChannel.DEFAULT) {
-      throw new Error("The default channel position should match ANTLR's convention!");
+      throw new AssertionError("The default channel position should match ANTLR's convention!");
     }
     if (channels[Token.HIDDEN_CHANNEL] != TokenChannel.HIDDEN) {
-      throw new Error("The hidden channel position should match ANTLR's convention!");
+      throw new AssertionError("The hidden channel position should match ANTLR's convention!");
     }
     for (var i = Token.MIN_USER_CHANNEL_VALUE; i < channels.length; i++) {
       var enumName = channels[i].name();
       var generatedName = GLSLLexer.channelNames[i];
       if (!enumName.equals(generatedName)) {
-        throw new Error("The channel with name " + enumName + " at position " + i
+        throw new AssertionError("The channel with name " + enumName + " at position " + i
             + " has to match the corresponding generated channel name "
             + generatedName + "!");
       }

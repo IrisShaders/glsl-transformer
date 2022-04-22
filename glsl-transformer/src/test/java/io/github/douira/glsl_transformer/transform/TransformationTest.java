@@ -4,6 +4,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 import org.junit.jupiter.api.Test;
 
+import io.github.douira.glsl_transformer.FullyFixedJobParameters;
 import io.github.douira.glsl_transformer.TestForExecutionOrder;
 
 public class TransformationTest extends TestForExecutionOrder {
@@ -97,7 +98,7 @@ public class TransformationTest extends TestForExecutionOrder {
         assertOrderPhase(1, "The first chained dependent should run second."));
     transformation.chainDependent(
         assertOrderPhase(2, "The second chained dependent should run third."));
-    manager.planExecution();
+    manager.planExecutionFor(NonFixedJobParameters.INSTANCE);
     manager.transform("");
     assertEquals(3, nextIndex, "All three run phases should run.");
   }
@@ -212,5 +213,145 @@ public class TransformationTest extends TestForExecutionOrder {
       transformation.addRootDependency(RunPhase.withRun(null));
       transformation.chainDependent(RunPhase.withRun(null));
     }, "It should not allow making the root node a dependency");
+  }
+
+  @Test
+  void testPreferStaticGraph() {
+    var man = new TransformationManager<>();
+    man.addConcurrent(new Transformation<>() {
+      {
+        chainDependent(RunPhase.withRun(() -> nextIndex++));
+      }
+
+      @Override
+      protected void setupGraph() {
+        throw new IllegalStateException(
+            "setupGraph should not be called if there are static dependencies in the graph.");
+      }
+    });
+
+    man.transform("", new FullyFixedJobParameters());
+    assertEquals(1, nextIndex, "It should run the static dependency.");
+  }
+
+  @Test
+  void testGraphResetConditional() {
+    var man = new TransformationManager<>();
+    man.addConcurrent(new Transformation<>() {
+      @Override
+      protected void setupGraph() {
+        chainDependent(RunPhase.withRun(() -> nextIndex++));
+      }
+    });
+
+    man.transform("", new FullyFixedJobParameters());
+    assertEquals(1, nextIndex,
+        "It should run the conditional dependency once.");
+
+    nextIndex = 0;
+    man.transform("", new FullyFixedJobParameters());
+    assertEquals(1, nextIndex,
+        "It should run the conditional dependency once.");
+  }
+
+  @Test
+  void testGraphResetStatic() {
+    var man = new TransformationManager<>();
+    man.addConcurrent(new Transformation<>() {
+      {
+        chainDependent(RunPhase.withRun(() -> nextIndex++));
+      }
+    });
+
+    man.transform("", new FullyFixedJobParameters());
+    assertEquals(1, nextIndex,
+        "It should run the static dependency once.");
+
+    nextIndex = 0;
+    man.transform("", new FullyFixedJobParameters());
+    assertEquals(1, nextIndex,
+        "It should run the static dependency once.");
+  }
+
+  @Test
+  void testConditionalDependency() {
+    var a = new Object();
+    var b = new Object();
+    var man = new TransformationManager<FixedWrappedParameters<Object>>();
+    man.addConcurrent(new Transformation<>() {
+      @Override
+      protected void setupGraph() {
+        chainDependent(RunPhase.withRun(() -> nextIndex++));
+        if (getJobParameters().getContents() == a) {
+          chainDependent(RunPhase.withRun(() -> nextIndex++));
+          chainDependent(RunPhase.withRun(() -> nextIndex *= 3));
+        } else {
+          chainDependent(RunPhase.withRun(() -> nextIndex *= 3));
+          chainDependent(RunPhase.withRun(() -> nextIndex++));
+        }
+      }
+    });
+
+    man.transform("", new FixedWrappedParameters<>(a));
+    assertEquals(6, nextIndex,
+        "It should run the conditional dependencies in the right order.");
+
+    nextIndex = 0;
+    man.transform("", new FixedWrappedParameters<>(b));
+    assertEquals(4, nextIndex,
+        "It should run the conditional dependencies in the right order.");
+  }
+
+  @Test
+  void testConditionalNesting() {
+    var a = new Object();
+    var b = new Object();
+    var man = new TransformationManager<FixedWrappedParameters<Object>>();
+    man.addConcurrent(new Transformation<>() {
+      @Override
+      protected void setupGraph() {
+        nextIndex++;
+        if (getJobParameters().getContents() == a) {
+          chainDependent(new Transformation<>() {
+            @Override
+            protected void setupGraph() {
+              nextIndex++;
+            }
+          });
+        }
+      }
+    });
+
+    man.planExecutionFor(new FixedWrappedParameters<>(a));
+    assertEquals(2, nextIndex,
+        "It should do graph setup on the nested transformation.");
+
+    nextIndex = 0;
+    man.planExecutionFor(new FixedWrappedParameters<>(b));
+    assertEquals(1, nextIndex,
+        "It should not do graph setup on the nested transformation.");
+  }
+
+  @Test
+  void testGraphSetupDeduplication() {
+    var t = new Transformation<NonFixedJobParameters>() {
+      @Override
+      protected void setupGraph() {
+        nextIndex++;
+      }
+    };
+    manager.addConcurrent(new Transformation<>() {
+      {
+        chainDependent(t);
+      }
+    });
+    manager.addConcurrent(new Transformation<>() {
+      {
+        chainDependent(t);
+      }
+    });
+    manager.planExecutionFor(null);
+    assertEquals(1, nextIndex,
+        "It should only do graph setup once.");
   }
 }

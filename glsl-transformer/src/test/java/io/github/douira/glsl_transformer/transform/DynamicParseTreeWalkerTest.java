@@ -13,6 +13,7 @@ import org.junit.jupiter.api.Test;
 
 import io.github.douira.glsl_transformer.ast.StringNode;
 import io.github.douira.glsl_transformer.print.EmptyTerminalNode;
+import io.github.douira.glsl_transformer.traversal.DynamicParseTreeWalker;
 import io.github.douira.glsl_transformer.tree.ExtendedContext;
 import io.github.douira.glsl_transformer.tree.TreeMember;
 
@@ -78,7 +79,7 @@ public class DynamicParseTreeWalkerTest {
       var tree = new ExtendedContext(null, 0) {
       };
 
-      DynamicParseTreeWalker.DEFAULT.walk(new WalkPhase<Void>() {
+      DynamicParseTreeWalker.DEFAULT.walk(new WalkPhase<>() {
       }, tree);
       assertNull(tree.children, "The child array should be null");
     }, "It should not throw when a parent has a null child array");
@@ -91,7 +92,7 @@ public class DynamicParseTreeWalkerTest {
       };
       tree.children = new ArrayList<>();
 
-      DynamicParseTreeWalker.DEFAULT.walk(new WalkPhase<Void>() {
+      DynamicParseTreeWalker.DEFAULT.walk(new WalkPhase<>() {
       }, tree);
       assertEquals(0, tree.children.size(), "The child array should be not null but empty");
     }, "It should not throw when a parent has an empty child array");

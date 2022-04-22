@@ -21,7 +21,7 @@ public class TransformationManagerTestTree {
   @Test
   @SnapshotName("testParseTree")
   void testParseTree() {
-    var man = new TransformationManager<StringBuilder>(false);
+    var man = new TransformationManager<WrappedParameters<StringBuilder>>(false);
     man.addConcurrent(new PrintTreeSnapshot());
 
     Stream.concat(Stream.of(
@@ -32,7 +32,7 @@ public class TransformationManagerTestTree {
         .forEach(resource -> {
           var content = resource.content();
           var builder = new StringBuilder();
-          man.transform(content, builder);
+          man.transform(content, new WrappedParameters<>(builder));
           expect.scenario(resource.getScenarioName())
               .toMatchSnapshot(SnapshotUtil.inputOutputSnapshot(content, builder.toString()));
         });

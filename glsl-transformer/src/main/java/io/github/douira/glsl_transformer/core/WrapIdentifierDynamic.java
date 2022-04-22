@@ -2,6 +2,7 @@ package io.github.douira.glsl_transformer.core;
 
 import io.github.douira.glsl_transformer.core.target.TerminalReplaceTarget;
 import io.github.douira.glsl_transformer.core.target.WrapThrowTarget;
+import io.github.douira.glsl_transformer.transform.JobParameters;
 import io.github.douira.glsl_transformer.transform.Transformation;
 import io.github.douira.glsl_transformer.transform.TransformationPhase;
 
@@ -11,7 +12,7 @@ import io.github.douira.glsl_transformer.transform.TransformationPhase;
  * this identifier wrap operation. The wrapping injector is given directly
  * though since the injection methods can vary greatly.
  */
-public abstract class WrapIdentifierDynamic<T> extends Transformation<T> {
+public abstract class WrapIdentifierDynamic<T extends JobParameters> extends Transformation<T> {
   /**
    * Creates a new wrap identifier transformation with a specified wrapping
    * injector phase.

@@ -5,8 +5,9 @@ import org.antlr.v4.runtime.tree.ErrorNode;
 import org.antlr.v4.runtime.tree.TerminalNode;
 
 import io.github.douira.glsl_transformer.transform.WalkPhase;
+import io.github.douira.glsl_transformer.transform.WrappedParameters;
 
-public abstract class PrintTree extends WalkPhase<StringBuilder> {
+public abstract class PrintTree extends WalkPhase<WrappedParameters<StringBuilder>> {
   int depth;
 
   private static final int nameSuffixLength = "Context".length();
@@ -51,23 +52,23 @@ public abstract class PrintTree extends WalkPhase<StringBuilder> {
 
   @Override
   public void enterEveryRule(ParserRuleContext ctx) {
-    processEnterRule(ctx, getJobParameters());
+    processEnterRule(ctx, getJobParameters().getContents());
     depth++;
   }
 
   @Override
   public void exitEveryRule(ParserRuleContext ctx) {
     depth--;
-    processExitRule(ctx, getJobParameters());
+    processExitRule(ctx, getJobParameters().getContents());
   }
 
   @Override
   public void visitTerminal(TerminalNode node) {
-    processVisitTerminal(node, getJobParameters());
+    processVisitTerminal(node, getJobParameters().getContents());
   }
 
   @Override
   public void visitErrorNode(ErrorNode node) {
-    processVisitErrorNode(node, getJobParameters());
+    processVisitErrorNode(node, getJobParameters().getContents());
   }
 }

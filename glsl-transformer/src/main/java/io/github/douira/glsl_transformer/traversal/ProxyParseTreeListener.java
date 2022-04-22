@@ -1,4 +1,4 @@
-package io.github.douira.glsl_transformer.transform;
+package io.github.douira.glsl_transformer.traversal;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -32,15 +32,6 @@ import io.github.douira.glsl_transformer.tree.ExtendedContext;
 public class ProxyParseTreeListener implements PartialParseTreeListener {
   private Collection<PartialParseTreeListener> listeners;
   private Iterator<PartialParseTreeListener> listenerIterator;
-
-  /**
-   * Creates a new proxy without an empty list of listeners. Add listeners before
-   * walking the tree.
-   */
-  public ProxyParseTreeListener() {
-    // Setting the listener to null automatically instantiates a new list.
-    this(null);
-  }
 
   /**
    * Creates a new proxy with the given list of listeners.

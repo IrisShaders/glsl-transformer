@@ -4,8 +4,9 @@ import static org.junit.jupiter.api.Assertions.*;
 
 import org.junit.jupiter.api.Test;
 
-import io.github.douira.glsl_transformer.TestForExecutionOrder;
+import io.github.douira.glsl_transformer.FullyFixedJobParameters;
 import io.github.douira.glsl_transformer.GLSLParser.TranslationUnitContext;
+import io.github.douira.glsl_transformer.TestForExecutionOrder;
 
 public class ExecutionPlannerTest extends TestForExecutionOrder {
   @Test
@@ -63,8 +64,8 @@ public class ExecutionPlannerTest extends TestForExecutionOrder {
 
   @Test
   void testAllowMultipleFinalization() {
-    manager.planExecution();
-    assertDoesNotThrow(() -> manager.planExecution(),
+    manager.planExecutionFor(NonFixedJobParameters.INSTANCE);
+    assertDoesNotThrow(() -> manager.planExecutionFor(NonFixedJobParameters.INSTANCE),
         "It should throw if execution planning is initiated manually multiple times.");
   }
 
@@ -82,7 +83,7 @@ public class ExecutionPlannerTest extends TestForExecutionOrder {
 
   @Test
   void testAllowManualFinalization() {
-    manager.planExecution();
+    manager.planExecutionFor(NonFixedJobParameters.INSTANCE);
     assertDoesNotThrow(() -> manager.transform(""),
         "It should not throw after regular manual planning.");
   }
@@ -90,7 +91,7 @@ public class ExecutionPlannerTest extends TestForExecutionOrder {
   @Test
   void testIncrementalResetState() {
     transformation.chainDependent(
-        new RunPhase<Void>() {
+        new RunPhase<>() {
           @Override
           protected void run(TranslationUnitContext ctx) {
             nextIndex++;
@@ -102,7 +103,7 @@ public class ExecutionPlannerTest extends TestForExecutionOrder {
           }
         });
     transformation.chainDependent(
-        new RunPhase<Void>() {
+        new RunPhase<>() {
           @Override
           protected void run(TranslationUnitContext ctx) {
             nextIndex++;
@@ -181,7 +182,7 @@ public class ExecutionPlannerTest extends TestForExecutionOrder {
 
   @Test
   void testNoInitOnSecondRun() {
-    transformation.chainDependency(new RunPhase<Void>() {
+    transformation.chainDependency(new RunPhase<>() {
       @Override
       protected void run(TranslationUnitContext ctx) {
       }
@@ -202,5 +203,132 @@ public class ExecutionPlannerTest extends TestForExecutionOrder {
     manager.transform("");
     manager.transform("");
     assertEquals(130, nextIndex, "The phase should run each time.");
+  }
+
+  @Test
+  void testNotCachedParameters() {
+    var man = new TransformationManager<>();
+    man.addConcurrent(new Transformation<>() {
+      @Override
+      protected void setupGraph() {
+        nextIndex++;
+      }
+    });
+
+    man.planExecutionFor(new FullyFixedJobParameters());
+    man.planExecutionFor(new FullyFixedJobParameters());
+    man.planExecutionFor(new FullyFixedJobParameters());
+
+    assertEquals(3, nextIndex, "It should run the graph setup method during each planning run.");
+  }
+
+  @Test
+  void testFullyCachedParameters() {
+    var man = new TransformationManager<>();
+    man.addConcurrent(new Transformation<>() {
+      @Override
+      protected void setupGraph() {
+        nextIndex++;
+      }
+    });
+
+    man.planExecutionFor(new NonFixedJobParameters());
+    man.planExecutionFor(new NonFixedJobParameters());
+    man.planExecutionFor(new NonFixedJobParameters());
+
+    assertEquals(1, nextIndex, "It should run the graph setup method only once.");
+  }
+
+  @Test
+  void testBranchedCycleThrow() {
+    var aPhase = RunPhase.<NonFixedJobParameters>withRun(() -> {
+    });
+    var bPhase = RunPhase.<NonFixedJobParameters>withRun(() -> {
+    });
+    var cPhase = RunPhase.<NonFixedJobParameters>withRun(() -> {
+    });
+    var dPhase = RunPhase.<NonFixedJobParameters>withRun(() -> {
+    });
+
+    transformation.addDependency(aPhase, bPhase);
+    transformation.addDependency(bPhase, aPhase);
+    transformation.addDependency(cPhase, aPhase);
+    transformation.addDependency(bPhase, dPhase);
+
+    assertThrows(Error.class, () -> manager.transform(""),
+        "It should throw if there is a reachable cycle.");
+  }
+
+  @Test
+  void testHalfBranchedCycleThrow() {
+    var aPhase = RunPhase.<NonFixedJobParameters>withRun(() -> {
+    });
+    var bPhase = RunPhase.<NonFixedJobParameters>withRun(() -> {
+    });
+    var cPhase = RunPhase.<NonFixedJobParameters>withRun(() -> {
+    });
+
+    transformation.addDependency(aPhase, bPhase);
+    transformation.addDependency(bPhase, aPhase);
+    transformation.addDependency(cPhase, aPhase);
+
+    assertThrows(Error.class, () -> manager.transform(""),
+        "It should throw if there is a reachable cycle even without reaching the end node.");
+  }
+
+  @Test
+  void testUnreachableCycleSilent() {
+    var aPhase = RunPhase.<NonFixedJobParameters>withRun(() -> {
+      throw new IllegalStateException("It should not run unreachable nodes.");
+    });
+    var bPhase = RunPhase.<NonFixedJobParameters>withRun(() -> {
+      throw new IllegalStateException("It should not run unreachable nodes.");
+    });
+    var dPhase = RunPhase.<NonFixedJobParameters>withRun(() -> {
+      throw new IllegalStateException("It should not run unreachable nodes.");
+    });
+
+    transformation.addDependency(aPhase, bPhase);
+    transformation.addDependency(bPhase, aPhase);
+    transformation.addDependency(bPhase, dPhase);
+
+    assertDoesNotThrow(() -> manager.transform(""),
+        "It should not throw if there is an unreachable cycle and do nothing instead.");
+  }
+  
+  @Test
+  void testBareCycleSilent() {
+    var aPhase = RunPhase.<NonFixedJobParameters>withRun(() -> {
+      throw new IllegalStateException("It should not run unreachable nodes.");
+    });
+    var bPhase = RunPhase.<NonFixedJobParameters>withRun(() -> {
+      throw new IllegalStateException("It should not run unreachable nodes.");
+    });
+
+    transformation.addDependency(aPhase, bPhase);
+    transformation.addDependency(bPhase, aPhase);
+
+    assertDoesNotThrow(() -> manager.transform(""),
+        "It should not throw if there is an unreachable cycle and do nothing instead.");
+  }
+
+  @Test
+  void testThreeCycleThrow() {
+    var aPhase = RunPhase.<NonFixedJobParameters>withRun(() -> {
+    });
+    var bPhase = RunPhase.<NonFixedJobParameters>withRun(() -> {
+    });
+    var cPhase = RunPhase.<NonFixedJobParameters>withRun(() -> {
+    });
+    var dPhase = RunPhase.<NonFixedJobParameters>withRun(() -> {
+    });
+
+    transformation.addDependency(aPhase, bPhase);
+    transformation.addDependency(bPhase, cPhase);
+    transformation.addDependency(cPhase, aPhase);
+    transformation.addDependency(dPhase, aPhase);
+
+    assertThrows(Error.class, () -> manager.transform(""),
+        "It should throw if there is a reachable cycle also with more nodes (3).");
   }
 }

@@ -1,13 +1,14 @@
 package io.github.douira.glsl_transformer.core.target;
 
-import io.github.douira.glsl_transformer.transform.SemanticException;
+import io.github.douira.glsl_transformer.core.SemanticException;
+import io.github.douira.glsl_transformer.transform.JobParameters;
 import io.github.douira.glsl_transformer.tree.TreeMember;
 
 /**
  * A target that searches for a search string in and upon finding a match uses a
  * method to generate a string for a semantic exception which is then thrown.
  */
-public abstract class ThrowTarget<T> extends HandlerTargetImpl<T> {
+public abstract class ThrowTarget<T extends JobParameters> extends HandlerTargetImpl<T> {
   /**
    * Creates a new throw target with a given search string
    * 

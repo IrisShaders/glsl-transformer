@@ -4,11 +4,13 @@ import java.util.EnumSet;
 
 import org.antlr.v4.runtime.Token;
 
+import io.github.douira.glsl_transformer.transform.JobParameters;
+
 /**
  * The channel filter accepts all tokens that are not from a lexer channel that
  * is on the given list of disallowed channels.
  */
-public class ChannelFilter<T> extends TokenFilter<T> {
+public class ChannelFilter<T extends JobParameters> extends TokenFilter<T> {
   private final EnumSet<TokenChannel> disallowedChannels;
 
   /**

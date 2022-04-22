@@ -9,9 +9,10 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import io.github.douira.glsl_transformer.TestWithTransformationManager;
+import io.github.douira.glsl_transformer.transform.NonFixedJobParameters;
 import io.github.douira.glsl_transformer.transform.TransformationManager;
 
-public class TokenFilterTest extends TestWithTransformationManager<Void> {
+public class TokenFilterTest extends TestWithTransformationManager<NonFixedJobParameters> {
   private int nextIndex;
 
   @BeforeEach
@@ -37,9 +38,9 @@ public class TokenFilterTest extends TestWithTransformationManager<Void> {
 
   @Test
   void testJoin() {
-    var a = new StringFilter<Void>("a");
-    var b = new StringFilter<Void>("b");
-    var c = new StringFilter<Void>("c");
+    var a = new StringFilter<NonFixedJobParameters>("a");
+    var b = new StringFilter<NonFixedJobParameters>("b");
+    var c = new StringFilter<NonFixedJobParameters>("c");
     var ab = TokenFilter.join(a, b);
     manager.setParseTokenFilter(ab);
     assertEquals(
@@ -64,8 +65,8 @@ public class TokenFilterTest extends TestWithTransformationManager<Void> {
     assertTrue(cab instanceof MultiFilter, "It should still be a multi filter");
     assertNotSame(ab, cab, "It should create a new filter");
 
-    var d = new StringFilter<Void>("d");
-    var e = new StringFilter<Void>("e");
+    var d = new StringFilter<NonFixedJobParameters>("d");
+    var e = new StringFilter<NonFixedJobParameters>("e");
     var abde = TokenFilter.join(ab, TokenFilter.join(d, e));
     manager.setParseTokenFilter(abde);
     assertEquals(
@@ -79,16 +80,16 @@ public class TokenFilterTest extends TestWithTransformationManager<Void> {
 
   @Test
   void testResetState() {
-    var manager = new TransformationManager<Void>();
+    var manager = new TransformationManager<NonFixedJobParameters>();
     testResetStateOnce(manager, manager::setParseTokenFilter);
-    manager = new TransformationManager<Void>();
+    manager = new TransformationManager<NonFixedJobParameters>();
     testResetStateOnce(manager, manager::setPrintTokenFilter);
   }
 
   void testResetStateOnce(
-      TransformationManager<Void> man,
-      Consumer<TokenFilter<Void>> setMethod) {
-    setMethod.accept(new TokenFilter<Void>() {
+      TransformationManager<NonFixedJobParameters> man,
+      Consumer<TokenFilter<NonFixedJobParameters>> setMethod) {
+    setMethod.accept(new TokenFilter<>() {
       @Override
       public boolean isTokenAllowed(Token token) {
         return true;
@@ -109,17 +110,17 @@ public class TokenFilterTest extends TestWithTransformationManager<Void> {
 
   @Test
   void testJobParameters() {
-    var manager = new TransformationManager<Object>();
+    var manager = new TransformationManager<NonFixedJobParameters>();
     testJobParametersOnce(manager, manager::setParseTokenFilter);
-    manager = new TransformationManager<Object>();
+    manager = new TransformationManager<NonFixedJobParameters>();
     testJobParametersOnce(manager, manager::setPrintTokenFilter);
   }
 
   void testJobParametersOnce(
-      TransformationManager<Object> man,
-      Consumer<TokenFilter<Object>> setMethod) {
-    var parameters = new Object();
-    setMethod.accept(new TokenFilter<Object>() {
+      TransformationManager<NonFixedJobParameters> man,
+      Consumer<TokenFilter<NonFixedJobParameters>> setMethod) {
+    var parameters = new NonFixedJobParameters();
+    setMethod.accept(new TokenFilter<>() {
       @Override
       public boolean isTokenAllowed(Token token) {
         nextIndex++;

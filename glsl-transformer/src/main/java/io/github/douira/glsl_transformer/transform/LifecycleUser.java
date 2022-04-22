@@ -14,7 +14,7 @@ import io.github.douira.glsl_transformer.GLSLParser.TranslationUnitContext;
  * execution starts. For transformation phases, state is reset before the
  * phase's execution level is executed.
  */
-public interface LifecycleUser<T> {
+public interface LifecycleUser<T extends JobParameters> {
   /**
    * Sets the parent planner of this child.
    * 
@@ -66,6 +66,32 @@ public interface LifecycleUser<T> {
    */
   default T getJobParameters() {
     return getPlanner().getJobParameters();
+  }
+
+  /**
+   * Checks if this lifecycle user has been initialized.
+   * 
+   * @return True if initialized, false otherwise
+   */
+  boolean isInitialized();
+
+  /**
+   * Marks this lifecycle user as initialized.
+   */
+  void setInitialized();
+
+  /**
+   * Is called before the first execution by the execution planner. This method
+   * may be called multiple times but the implementing class should implement
+   * {@link #isInitialized()} and {@link #setInitialized()} to ensure that only
+   * one initialization is performed.
+   */
+  default void initOnce() {
+    if (isInitialized()) {
+      return;
+    }
+    init();
+    setInitialized();
   }
 
   /**

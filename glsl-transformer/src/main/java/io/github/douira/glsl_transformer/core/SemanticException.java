@@ -1,4 +1,4 @@
-package io.github.douira.glsl_transformer.transform;
+package io.github.douira.glsl_transformer.core;
 
 import org.antlr.v4.runtime.tree.ParseTree;
 
