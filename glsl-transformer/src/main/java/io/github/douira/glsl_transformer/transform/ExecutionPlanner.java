@@ -5,7 +5,6 @@ import java.util.Collection;
 import java.util.Deque;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
@@ -13,7 +12,6 @@ import java.util.Optional;
 import java.util.Set;
 import java.util.function.Function;
 import java.util.function.Supplier;
-import java.util.stream.Stream;
 
 import com.github.bsideup.jabel.Desugar;
 
@@ -46,14 +44,9 @@ public abstract class ExecutionPlanner<T extends JobParameters> {
     @Desugar
     private static record ExecutionLevel<S extends JobParameters> (
         Collection<TransformationPhase<S>> walkPhases,
-        List<TransformationPhase<S>> nonWalkPhases) implements Iterable<TransformationPhase<S>> {
+        List<TransformationPhase<S>> nonWalkPhases) {
       public ExecutionLevel() {
         this(new ArrayList<>(), new ArrayList<>());
-      }
-
-      @Override
-      public Iterator<TransformationPhase<S>> iterator() {
-        return Stream.concat(walkPhases().stream(), nonWalkPhases().stream()).iterator();
       }
     }
 
