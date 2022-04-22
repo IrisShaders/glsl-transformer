@@ -11,17 +11,21 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
+import java.util.function.Function;
+import java.util.function.Supplier;
 import java.util.stream.Stream;
 
 import com.github.bsideup.jabel.Desugar;
 
 import org.antlr.v4.runtime.BufferedTokenStream;
+import org.antlr.v4.runtime.IntStream;
 
 import io.github.douira.glsl_transformer.GLSLLexer;
 import io.github.douira.glsl_transformer.GLSLParser;
 import io.github.douira.glsl_transformer.GLSLParser.TranslationUnitContext;
 import io.github.douira.glsl_transformer.traversal.DynamicParseTreeWalker;
 import io.github.douira.glsl_transformer.traversal.ProxyParseTreeListener;
+import io.github.douira.glsl_transformer.tree.ExtendedContext;
 
 /**
  * The execution planner finds a valid way of satisfying the root
@@ -29,14 +33,15 @@ import io.github.douira.glsl_transformer.traversal.ProxyParseTreeListener;
  * as dependencies to the root transformation.
  */
 public abstract class ExecutionPlanner<T extends JobParameters> {
-  private Map<T, ExecutionPlan<T>> executionPlanCache = new HashMap<>();
+  private Map<T, ExecutionPlan> executionPlanCache = new HashMap<>();
   private final Transformation<T> rootTransformation = new Transformation<>();
   private TranslationUnitContext rootNode;
   private ProxyParseTreeListener proxyListener;
+  private T jobParameters;
 
-  private class ExecutionPlan<R extends JobParameters> {
-    List<ExecutionLevel<R>> executionLevels;
-    Collection<Transformation<R>> transformations;
+  private class ExecutionPlan {
+    List<ExecutionLevel<T>> executionLevels;
+    Collection<Transformation<T>> transformations;
 
     @Desugar
     private static record ExecutionLevel<S extends JobParameters> (
@@ -99,19 +104,17 @@ public abstract class ExecutionPlanner<T extends JobParameters> {
      *           sorted into execution levels according to their distance values.
      *           The nodes with the lowest distance are executed first.
      */
-    void planExecution(Transformation<R> rootTransformation) {
-      Set<Transformation<R>> transformationSet = new HashSet<>();
-      Set<Node<R>> dependenciesProcessed = new HashSet<>();
-      Map<Node<R>, LabeledNode<R>> endNodeMap = new HashMap<>();
-      Map<LifecycleUser<R>, LabeledNode<R>> contentNodeMap = new HashMap<>();
-      Deque<CollectEntry<R>> collectQueue = new LinkedList<>();
+    void planExecution(Transformation<T> rootTransformation) {
+      Set<Transformation<T>> transformationSet = new HashSet<>();
+      Set<Node<T>> dependenciesProcessed = new HashSet<>();
+      Map<Node<T>, LabeledNode<T>> endNodeMap = new HashMap<>();
+      Map<LifecycleUser<T>, LabeledNode<T>> contentNodeMap = new HashMap<>();
+      Deque<CollectEntry<T>> collectQueue = new LinkedList<>();
 
+      rootTransformation.setPlanner(ExecutionPlanner.this);
       rootTransformation.doGraphSetup();
-      var rootNode = new LabeledNode<R>();
+      var rootNode = new LabeledNode<T>();
       collectQueue.add(new CollectEntry<>(new Node<>(rootTransformation), rootNode));
-
-      // TODO: test that transformations aren't broken. maybe a different activation
-      // has to be passed to the internal nodes?
 
       // traverse the tree converting all nodes to labeled nodes and combining
       // dependencies of transformations
@@ -121,7 +124,7 @@ public abstract class ExecutionPlanner<T extends JobParameters> {
         var node = queueEntry.nodeToProcess();
         var content = node.getContent();
 
-        LabeledNode<R> labeledNode;
+        LabeledNode<T> labeledNode;
         if (content == null) {
           // check if a node has already been generated if this is an end node
           labeledNode = Optional
@@ -157,14 +160,14 @@ public abstract class ExecutionPlanner<T extends JobParameters> {
           if (Transformation.class.isInstance(content)) {
             // a transformation's dependencies should be dependencies of the end node.
             // use an existing labeled node for this end node if there is one already
-            var transformation = (Transformation<R>) content;
+            var transformation = (Transformation<T>) content;
             transformationSet.add(transformation);
 
             var endNode = transformation.getEndDepNode();
             var endLabeledNode = Optional
                 .ofNullable(endNodeMap.get(endNode))
                 .orElseGet(() -> {
-                  var newNode = new LabeledNode<R>();
+                  var newNode = new LabeledNode<T>();
                   endNodeMap.put(endNode, newNode);
                   return newNode;
                 });
@@ -188,11 +191,11 @@ public abstract class ExecutionPlanner<T extends JobParameters> {
       transformations = new ArrayList<>();
       transformations.addAll(transformationSet);
 
-      Deque<DFSEntry<R>> dfsStack = new LinkedList<>();
+      Deque<DFSEntry<T>> dfsStack = new LinkedList<>();
       dfsStack.push(new DFSEntry<>(rootNode, true));
 
       // the topological sort starts at the end node and goes to the root node
-      List<LabeledNode<R>> topoSort = new ArrayList<>();
+      List<LabeledNode<T>> topoSort = new ArrayList<>();
 
       // generate a topological sort with the first item in the list being an end node
       while (!dfsStack.isEmpty()) {
@@ -232,7 +235,7 @@ public abstract class ExecutionPlanner<T extends JobParameters> {
         }
 
         if (TransformationPhase.class.isInstance(node.content)) {
-          var phase = (TransformationPhase<R>) node.content;
+          var phase = (TransformationPhase<T>) node.content;
           if (phase.canWalk()) {
             node.executionLevelIndex++;
 
@@ -247,7 +250,7 @@ public abstract class ExecutionPlanner<T extends JobParameters> {
       }
     }
 
-    void execute(ExecutionPlanner<R> planner) {
+    void execute(ExecutionPlanner<T> planner) {
       // refresh each transformation's state before starting the transformation
       for (var transformation : transformations) {
         transformation.setPlanner(planner);
@@ -308,14 +311,52 @@ public abstract class ExecutionPlanner<T extends JobParameters> {
 
   /**
    * Returns the execution planner's current job parameters. This may be null if
-   * the transformation manager's caller decides not to pass job parameters.
-   * However, a convention to always pass valid job parameters (whatever that may
-   * be) could be established if they are required for transformation phases to
-   * function.
+   * the caller decides not to pass job parameters. However, a convention to
+   * always pass valid job parameters could be established if they are required
+   * for transformation phases to function.
    * 
    * @return The job parameters
    */
-  abstract T getJobParameters();
+  T getJobParameters() {
+    return jobParameters;
+  }
+
+  /**
+   * Runs a function while this transformation manager has the given job
+   * parameters set. It returns the value that the function returns.
+   * This can be used together with non-standard ways of using a transformation
+   * manager like using {@link #parse(IntStream, ExtendedContext, Function)}
+   * directly.
+   * 
+   * @param <R>        The return type of the function
+   * @param parameters The job parameters to set
+   * @param run        The function to run while the transformation manager has
+   *                   job parameters
+   * @return The value returned by the supplier function
+   */
+  public <R> R withJobParameters(T parameters, Supplier<R> run) {
+    jobParameters = parameters;
+    var value = run.get();
+    jobParameters = null;
+    return value;
+  }
+
+  /**
+   * Runs a function while this transformation manager has the given job
+   * parameters set.
+   * 
+   * @see #withJobParameters(JobParameters, Supplier)
+   * 
+   * @param parameters The job parameters
+   * @param run        The function to run while the transformation manager has
+   *                   job parameters
+   */
+  public void withJobParameters(T parameters, Runnable run) {
+    this.<Void>withJobParameters(parameters, () -> {
+      run.run();
+      return null;
+    });
+  }
 
   /**
    * Returns the current root node being processed. Access to this method is
@@ -363,13 +404,13 @@ public abstract class ExecutionPlanner<T extends JobParameters> {
     proxyListener.removeCurrentListener();
   }
 
-  private ExecutionPlan<T> getExecutionPlanFor(T parameters) {
+  private ExecutionPlan getExecutionPlan() {
     // make sure there is a planned execution plan for the fixed part of the
     // parameters
     var jobParameters = getJobParameters();
     var plan = executionPlanCache.get(jobParameters);
     if (plan == null) {
-      plan = new ExecutionPlan<>(); // gets the job parameters itself during planning
+      plan = new ExecutionPlan(); // gets the job parameters itself during planning
       plan.planExecution(rootTransformation);
       executionPlanCache.put(jobParameters, plan);
     }
@@ -384,11 +425,11 @@ public abstract class ExecutionPlanner<T extends JobParameters> {
    * @param parameters The fixed job parameters to compute the execution plan for
    */
   public void planExecutionFor(T parameters) {
-    getExecutionPlanFor(parameters);
+    withJobParameters(parameters, this::getExecutionPlan);
   }
 
   private void execute(TranslationUnitContext ctx) {
-    var plan = getExecutionPlanFor(getJobParameters());
+    var plan = getExecutionPlan();
     rootNode = ctx;
     plan.execute(this);
     rootNode = null;
