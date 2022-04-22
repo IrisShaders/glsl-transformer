@@ -102,6 +102,7 @@ public class Transformation<T extends JobParameters> extends LifecycleUserImpl<T
 
     // do graph setup on all current transformations
     for (Transformation<T> transformation : transformations) {
+      transformation.setPlanner(getPlanner());
       transformation.doGraphSetup(updateTag);
     }
   }
