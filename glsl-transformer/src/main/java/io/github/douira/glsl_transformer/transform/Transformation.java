@@ -31,6 +31,10 @@ import java.util.Set;
  * vein, state should only be initialized in the {@link #init()} and
  * {@link #resetState()} methods.
  * 
+ * An intersting effect of the automatic root and end node linking is that it's
+ * impossible to create cycles that don't have dangling bits since a bare cycle
+ * will be completely disconnected from the rest of the graph.
+ * 
  * TODO: unclear if sharing phases between transformation managers is
  * problematic since then the compiled paths/patterns in phases have a different
  * parser than the one being used for the transformation. Probably it doesn't
