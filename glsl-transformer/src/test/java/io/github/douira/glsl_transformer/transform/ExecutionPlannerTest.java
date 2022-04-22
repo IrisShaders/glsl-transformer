@@ -9,7 +9,6 @@ import io.github.douira.glsl_transformer.GLSLParser.TranslationUnitContext;
 import io.github.douira.glsl_transformer.TestForExecutionOrder;
 
 public class ExecutionPlannerTest extends TestForExecutionOrder {
-
   @Test
   void testGetRootNode() {
     manager.addConcurrent(new Transformation<>(new RunPhase<>() {

@@ -34,15 +34,6 @@ public class ProxyParseTreeListener implements PartialParseTreeListener {
   private Iterator<PartialParseTreeListener> listenerIterator;
 
   /**
-   * Creates a new proxy without an empty list of listeners. Add listeners before
-   * walking the tree.
-   */
-  public ProxyParseTreeListener() {
-    // Setting the listener to null automatically instantiates a new list.
-    this(null);
-  }
-
-  /**
    * Creates a new proxy with the given list of listeners.
    * 
    * @param listeners A list of listeners to receive events.
