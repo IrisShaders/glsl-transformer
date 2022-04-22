@@ -331,4 +331,27 @@ public class TransformationTest extends TestForExecutionOrder {
     assertEquals(1, nextIndex,
         "It should not do graph setup on the nested transformation.");
   }
+
+  @Test
+  void testGraphSetupDeduplication() {
+    var t = new Transformation<NonFixedJobParameters>() {
+      @Override
+      protected void setupGraph() {
+        nextIndex++;
+      }
+    };
+    manager.addConcurrent(new Transformation<>() {
+      {
+        chainDependent(t);
+      }
+    });
+    manager.addConcurrent(new Transformation<>() {
+      {
+        chainDependent(t);
+      }
+    });
+    manager.planExecutionFor(null);
+    assertEquals(1, nextIndex,
+        "It should only do graph setup once.");
+  }
 }
