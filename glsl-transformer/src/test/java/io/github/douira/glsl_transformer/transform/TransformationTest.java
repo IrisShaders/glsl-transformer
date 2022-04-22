@@ -4,6 +4,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 import org.junit.jupiter.api.Test;
 
+import io.github.douira.glsl_transformer.FullyFixedJobParameters;
 import io.github.douira.glsl_transformer.TestForExecutionOrder;
 
 public class TransformationTest extends TestForExecutionOrder {
@@ -212,5 +213,70 @@ public class TransformationTest extends TestForExecutionOrder {
       transformation.addRootDependency(RunPhase.withRun(null));
       transformation.chainDependent(RunPhase.withRun(null));
     }, "It should not allow making the root node a dependency");
+  }
+
+  @Test
+  void testPreferStaticGraph() {
+    var man = new TransformationManager<>();
+    man.addConcurrent(new Transformation<>() {
+      {
+        chainDependent(RunPhase.withRun(() -> nextIndex++));
+      }
+
+      @Override
+      protected void setupGraph() {
+        throw new IllegalStateException(
+            "setupGraph should not be called if there are static dependencies in the graph.");
+      }
+    });
+
+    man.transform("", new FullyFixedJobParameters());
+    assertEquals(1, nextIndex, "It should run the static dependency.");
+  }
+
+  @Test
+  void testGraphReset() {
+    var man = new TransformationManager<>();
+    man.addConcurrent(new Transformation<>() {
+      {
+        chainDependent(RunPhase.withRun(() -> nextIndex++));
+      }
+    });
+
+    man.transform("", new FullyFixedJobParameters());
+    assertEquals(1, nextIndex,
+        "It should run the conditional dependency once.");
+    man.transform("", new FullyFixedJobParameters());
+    assertEquals(1, nextIndex,
+        "It should run the conditional dependency once.");
+  }
+
+  @Test
+  void testConditionalDependency() {
+    var a = new Object();
+    var b = new Object();
+    var man = new TransformationManager<FixedWrappedParameters<Object>>();
+    man.addConcurrent(new Transformation<>() {
+      @Override
+      protected void setupGraph() {
+        chainDependent(RunPhase.withRun(() -> nextIndex++));
+        if (getJobParameters().getContents() == a) {
+          chainDependent(RunPhase.withRun(() -> nextIndex++));
+          chainDependent(RunPhase.withRun(() -> nextIndex *= 3));
+        } else {
+          chainDependent(RunPhase.withRun(() -> nextIndex *= 3));
+          chainDependent(RunPhase.withRun(() -> nextIndex++));
+        }
+      }
+    });
+
+    man.transform("", new FixedWrappedParameters<>(a));
+    assertEquals(6, nextIndex,
+        "It should run the conditional dependencies in the right order.");
+
+    nextIndex = 0;
+    man.transform("", new FixedWrappedParameters<>(b));
+    assertEquals(4, nextIndex,
+        "It should run the conditional dependencies in the right order.");
   }
 }

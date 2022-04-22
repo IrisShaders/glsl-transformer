@@ -4,8 +4,9 @@ import static org.junit.jupiter.api.Assertions.*;
 
 import org.junit.jupiter.api.Test;
 
-import io.github.douira.glsl_transformer.TestForExecutionOrder;
+import io.github.douira.glsl_transformer.FullyFixedJobParameters;
 import io.github.douira.glsl_transformer.GLSLParser.TranslationUnitContext;
+import io.github.douira.glsl_transformer.TestForExecutionOrder;
 
 public class ExecutionPlannerTest extends TestForExecutionOrder {
   @Test
@@ -202,5 +203,40 @@ public class ExecutionPlannerTest extends TestForExecutionOrder {
     manager.transform("");
     manager.transform("");
     assertEquals(130, nextIndex, "The phase should run each time.");
+  }
+
+ 
+  @Test
+  void testNotCachedParameters() {
+    var man = new TransformationManager<>();
+    man.addConcurrent(new Transformation<>() {
+      @Override
+      protected void setupGraph() {
+        nextIndex++;
+      }
+    });
+
+    man.planExecutionFor(new FullyFixedJobParameters());
+    man.planExecutionFor(new FullyFixedJobParameters());
+    man.planExecutionFor(new FullyFixedJobParameters());
+
+    assertEquals(3, nextIndex, "It should run the graph setup method during each planning run.");
+  }
+
+  @Test
+  void testFullyCachedParameters() {
+    var man = new TransformationManager<>();
+    man.addConcurrent(new Transformation<>() {
+      @Override
+      protected void setupGraph() {
+        nextIndex++;
+      }
+    });
+
+    man.planExecutionFor(new NonFixedJobParameters());
+    man.planExecutionFor(new NonFixedJobParameters());
+    man.planExecutionFor(new NonFixedJobParameters());
+
+    assertEquals(1, nextIndex, "It should run the graph setup method only once.");
   }
 }
