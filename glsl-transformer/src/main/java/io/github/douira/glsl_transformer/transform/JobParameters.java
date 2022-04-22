@@ -17,6 +17,11 @@ public abstract class JobParameters {
    */
   public abstract boolean equals(JobParameters other);
 
+  @Override
+  public boolean equals(Object other) {
+    return other instanceof JobParameters ? equals((JobParameters) other) : false;
+  }
+
   /**
    * Requires the implementation of the hashCode method.
    */
