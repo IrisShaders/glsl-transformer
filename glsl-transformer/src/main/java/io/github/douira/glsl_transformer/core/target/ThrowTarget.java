@@ -1,7 +1,7 @@
 package io.github.douira.glsl_transformer.core.target;
 
+import io.github.douira.glsl_transformer.core.SemanticException;
 import io.github.douira.glsl_transformer.transform.JobParameters;
-import io.github.douira.glsl_transformer.transform.SemanticException;
 import io.github.douira.glsl_transformer.tree.TreeMember;
 
 /**

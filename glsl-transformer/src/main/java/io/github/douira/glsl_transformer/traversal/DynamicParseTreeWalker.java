@@ -1,4 +1,4 @@
-package io.github.douira.glsl_transformer.transform;
+package io.github.douira.glsl_transformer.traversal;
 
 import org.antlr.v4.runtime.tree.ErrorNode;
 import org.antlr.v4.runtime.tree.ParseTree;

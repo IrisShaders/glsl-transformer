@@ -20,6 +20,8 @@ import org.antlr.v4.runtime.BufferedTokenStream;
 import io.github.douira.glsl_transformer.GLSLLexer;
 import io.github.douira.glsl_transformer.GLSLParser;
 import io.github.douira.glsl_transformer.GLSLParser.TranslationUnitContext;
+import io.github.douira.glsl_transformer.traversal.DynamicParseTreeWalker;
+import io.github.douira.glsl_transformer.traversal.ProxyParseTreeListener;
 
 /**
  * The execution planner finds a valid way of satisfying the root

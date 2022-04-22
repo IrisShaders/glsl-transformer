@@ -6,8 +6,8 @@ import org.junit.jupiter.api.Test;
 
 import io.github.douira.glsl_transformer.TestWithTransformationManager;
 import io.github.douira.glsl_transformer.core.SearchTerminalsImpl;
+import io.github.douira.glsl_transformer.core.SemanticException;
 import io.github.douira.glsl_transformer.transform.NonFixedJobParameters;
-import io.github.douira.glsl_transformer.transform.SemanticException;
 import io.github.douira.glsl_transformer.tree.TreeMember;
 
 public class ThrowTargetTest extends TestWithTransformationManager<NonFixedJobParameters> {

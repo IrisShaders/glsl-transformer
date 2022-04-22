@@ -24,6 +24,7 @@ import io.github.douira.glsl_transformer.GLSLParserBaseListener;
 import io.github.douira.glsl_transformer.ast.Directive;
 import io.github.douira.glsl_transformer.ast.Directive.Type;
 import io.github.douira.glsl_transformer.print.EmptyTerminalNode;
+import io.github.douira.glsl_transformer.traversal.PartialParseTreeListener;
 import io.github.douira.glsl_transformer.tree.ExtendedContext;
 import io.github.douira.glsl_transformer.tree.TreeMember;
 

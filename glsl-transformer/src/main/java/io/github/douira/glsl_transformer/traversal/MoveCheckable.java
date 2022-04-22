@@ -1,11 +1,11 @@
-package io.github.douira.glsl_transformer.transform;
+package io.github.douira.glsl_transformer.traversal;
 
 import org.antlr.v4.runtime.tree.ParseTree;
 
 /**
  * The move checkable interface provides a method for checking if the
  * implementing node replaces a given node. This is helpful for the dynamic
- * parse tree walker in determining if the current node is was looking at has
+ * parse tree walker in determining if the current node it was looking at has
  * moved or was replaced by an empty terminal node.
  * 
  * All nodes that are not terminal nodes with tokens should implement this
