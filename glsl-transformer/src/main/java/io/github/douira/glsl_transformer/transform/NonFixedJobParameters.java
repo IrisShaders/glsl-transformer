@@ -13,7 +13,7 @@ public class NonFixedJobParameters extends JobParameters {
   public static final NonFixedJobParameters INSTANCE = new NonFixedJobParameters();
 
   @Override
-  public boolean equals(Object obj) {
+  public boolean equals(JobParameters obj) {
     return obj instanceof NonFixedJobParameters;
   }
 
