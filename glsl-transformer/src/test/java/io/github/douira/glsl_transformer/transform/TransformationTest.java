@@ -279,4 +279,34 @@ public class TransformationTest extends TestForExecutionOrder {
     assertEquals(4, nextIndex,
         "It should run the conditional dependencies in the right order.");
   }
+
+  @Test
+  void testConditionalNesting() {
+    var a = new Object();
+    var b = new Object();
+    var man = new TransformationManager<FixedWrappedParameters<Object>>();
+    man.addConcurrent(new Transformation<>() {
+      @Override
+      protected void setupGraph() {
+        nextIndex++;
+        if (getJobParameters().getContents() == a) {
+          chainDependent(new Transformation<>() {
+            @Override
+            protected void setupGraph() {
+              nextIndex++;
+            }
+          });
+        }
+      }
+    });
+
+    man.planExecutionFor(new FixedWrappedParameters<>(a));
+    assertEquals(2, nextIndex,
+    "It should do graph setup on the nested transformation.");
+    
+    nextIndex = 0;
+    man.planExecutionFor(new FixedWrappedParameters<>(b));
+    assertEquals(1, nextIndex,
+        "It should not do graph setup on the nested transformation.");
+  }
 }
