@@ -12,7 +12,7 @@ public abstract class JobParameters {
   /**
    * Requires the implementation of the equals method.
    */
-  public abstract boolean equals(Object obj);
+  public abstract boolean equals(JobParameters obj);
 
   /**
    * Requires the implementation of the hashCode method.
