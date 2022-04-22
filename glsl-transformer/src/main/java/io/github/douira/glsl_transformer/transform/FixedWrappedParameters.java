@@ -1,5 +1,11 @@
 package io.github.douira.glsl_transformer.transform;
 
+/**
+ * The default {@link WrappedParameters} implementation uses the
+ * {@link NonFixedJobParameters} which means that it never produces cached
+ * execution plans. This class on the other hand causes execution plans to be
+ * cached if the contained parameter object is the same.
+ */
 public class FixedWrappedParameters<T> extends JobParameters {
   private final T parameters;
 
@@ -28,9 +34,9 @@ public class FixedWrappedParameters<T> extends JobParameters {
    */
   @Override
   @SuppressWarnings("unchecked")
-  public boolean equals(JobParameters obj) {
-    return FixedWrappedParameters.class.isInstance(obj) &&
-        parameters.equals(((FixedWrappedParameters<Object>) obj).getContents());
+  public boolean equals(JobParameters other) {
+    return FixedWrappedParameters.class.isInstance(other) &&
+        parameters.equals(((FixedWrappedParameters<Object>) other).getContents());
   }
 
   @Override

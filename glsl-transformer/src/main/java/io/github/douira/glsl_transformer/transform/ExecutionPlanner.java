@@ -325,7 +325,8 @@ public abstract class ExecutionPlanner<T extends JobParameters> {
    * Runs a function while this transformation manager has the given job
    * parameters set. It returns the value that the function returns.
    * This can be used together with non-standard ways of using a transformation
-   * manager like using {@link #parse(IntStream, ExtendedContext, Function)}
+   * manager like using
+   * {@link TransformationManager#parse(IntStream, ExtendedContext, Function)}
    * directly.
    * 
    * @param <R>        The return type of the function
