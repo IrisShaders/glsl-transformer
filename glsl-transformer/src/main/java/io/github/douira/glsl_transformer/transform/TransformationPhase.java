@@ -27,6 +27,7 @@ import io.github.douira.glsl_transformer.print.EmptyTerminalNode;
 import io.github.douira.glsl_transformer.traversal.PartialParseTreeListener;
 import io.github.douira.glsl_transformer.tree.ExtendedContext;
 import io.github.douira.glsl_transformer.tree.TreeMember;
+import io.github.douira.glsl_transformer.util.ExcludeFromJacocoGeneratedReport;
 
 /**
  * The transformations phase actually does a specific transformation. It can be
@@ -404,6 +405,7 @@ public abstract class TransformationPhase<T extends JobParameters> extends GLSLP
      *         this external declaration according to the implementing injection
      *         location
      */
+    @ExcludeFromJacocoGeneratedReport
     protected boolean checkChildRelevant(Class<?> childClass) {
       throw new AssertionError("A non-special injection point doesn't have a child relevance implementation!");
     }
