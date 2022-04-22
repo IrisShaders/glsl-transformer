@@ -312,4 +312,24 @@ public class ExecutionPlannerTest extends TestForExecutionOrder {
     assertDoesNotThrow(() -> manager.transform(""),
         "It should not throw if there is an unreachable cycle and do nothing instead.");
   }
+
+  @Test
+  void testThreeCycleThrow() {
+    var aPhase = RunPhase.<NonFixedJobParameters>withRun(() -> {
+    });
+    var bPhase = RunPhase.<NonFixedJobParameters>withRun(() -> {
+    });
+    var cPhase = RunPhase.<NonFixedJobParameters>withRun(() -> {
+    });
+    var dPhase = RunPhase.<NonFixedJobParameters>withRun(() -> {
+    });
+
+    transformation.addDependency(aPhase, bPhase);
+    transformation.addDependency(bPhase, cPhase);
+    transformation.addDependency(cPhase, aPhase);
+    transformation.addDependency(dPhase, aPhase);
+
+    assertThrows(Error.class, () -> manager.transform(""),
+        "It should throw if there is a reachable cycle also with more nodes (3).");
+  }
 }
