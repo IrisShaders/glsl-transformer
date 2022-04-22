@@ -11,8 +11,11 @@ package io.github.douira.glsl_transformer.transform;
 public abstract class JobParameters {
   /**
    * Requires the implementation of the equals method.
+   * 
+   * @param other The other job parameters to compare to
+   * @return {@code true} if the fixed parts of the two job parameters are equal
    */
-  public abstract boolean equals(JobParameters obj);
+  public abstract boolean equals(JobParameters other);
 
   /**
    * Requires the implementation of the hashCode method.
