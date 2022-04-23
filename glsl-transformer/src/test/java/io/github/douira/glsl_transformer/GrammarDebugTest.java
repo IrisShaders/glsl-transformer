@@ -12,6 +12,9 @@ import io.github.douira.glsl_transformer.TestResourceManager.FileLocation;
 import io.github.douira.glsl_transformer.transform.TransformationManager;
 import io.github.douira.glsl_transformer.transform.WrappedParameters;
 
+/**
+ * This test is only enabled for debugging purposes.
+ */
 public class GrammarDebugTest {
   @Test
   @Disabled
