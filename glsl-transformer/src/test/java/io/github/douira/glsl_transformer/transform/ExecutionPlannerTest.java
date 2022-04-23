@@ -294,7 +294,7 @@ public class ExecutionPlannerTest extends TestForExecutionOrder {
     assertDoesNotThrow(() -> manager.transform(""),
         "It should not throw if there is an unreachable cycle and do nothing instead.");
   }
-  
+
   @Test
   void testBareCycleSilent() {
     var aPhase = RunPhase.<NonFixedJobParameters>withRun(() -> {
@@ -329,5 +329,31 @@ public class ExecutionPlannerTest extends TestForExecutionOrder {
 
     assertThrows(Error.class, () -> manager.transform(""),
         "It should throw if there is a reachable cycle also with more nodes (3).");
+  }
+
+  @Test
+  void testCustomRootTransformation() {
+    var man = new TransformationManager<>(new Transformation<>() {
+      @Override
+      protected void setupGraph() {
+        nextIndex++;
+      }
+    });
+    man.planExecutionFor(null);
+    assertEquals(1, nextIndex, "It should run the custom transformation's graph setup");
+
+  }
+
+  @Test
+  void testSetRootTransformation() {
+    manager.setRootTransformation(new Transformation<>() {
+      @Override
+      protected void setupGraph() {
+        nextIndex += 3;
+      }
+    });
+
+    manager.planExecutionFor(null);
+    assertEquals(3, nextIndex, "It should run the new root transformation's graph setup");
   }
 }
