@@ -400,6 +400,11 @@ public abstract class ExecutionPlanner<T extends JobParameters> {
    * this root transformation. Conditional dependencies can be used in the root
    * transformation if a custom transformation is set with this method.
    * 
+   * Note that this doesn't reset the execution plan cache and can cause old
+   * execution plans unrelated to the new root transformation to be used when
+   * fixed job parameters match. This method is only intended to be used in cases
+   * where the root transformation is set once.
+   * 
    * @param rootTransformation The root transformation
    */
   public void setRootTransformation(Transformation<T> rootTransformation) {
