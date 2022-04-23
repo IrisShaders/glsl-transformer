@@ -1,10 +1,6 @@
 package io.github.douira.glsl_transformer.transform;
 
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
 
 /**
  * The transformation holds information about dependencies between

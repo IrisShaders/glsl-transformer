@@ -6,7 +6,7 @@ public class SnapshotUtil {
   }
 
   public static String escapeSnapshotContent(String str) {
-    return str.replace("\r\n", "\n") //normalize newlines
+    return str.replace("\r\n", "\n") // normalize newlines
         .replace("\n\n\n", "\n.\n.\n")
         .replaceAll("\\n\\n$", "\n.\n.")
         .replaceAll("^\\n\\n", ".\n.\n");

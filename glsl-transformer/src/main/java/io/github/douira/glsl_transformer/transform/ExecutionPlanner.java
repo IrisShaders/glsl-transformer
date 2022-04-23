@@ -1,28 +1,15 @@
 package io.github.douira.glsl_transformer.transform;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Deque;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
-import java.util.Set;
-import java.util.function.Function;
-import java.util.function.Supplier;
+import java.util.*;
+import java.util.function.*;
 
 import com.github.bsideup.jabel.Desugar;
 
-import org.antlr.v4.runtime.BufferedTokenStream;
-import org.antlr.v4.runtime.IntStream;
+import org.antlr.v4.runtime.*;
 
-import io.github.douira.glsl_transformer.GLSLLexer;
-import io.github.douira.glsl_transformer.GLSLParser;
+import io.github.douira.glsl_transformer.*;
 import io.github.douira.glsl_transformer.GLSLParser.TranslationUnitContext;
-import io.github.douira.glsl_transformer.traversal.DynamicParseTreeWalker;
-import io.github.douira.glsl_transformer.traversal.ProxyParseTreeListener;
+import io.github.douira.glsl_transformer.traversal.*;
 import io.github.douira.glsl_transformer.tree.ExtendedContext;
 
 /**

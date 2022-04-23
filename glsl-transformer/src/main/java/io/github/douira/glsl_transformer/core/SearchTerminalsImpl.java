@@ -1,13 +1,10 @@
 package io.github.douira.glsl_transformer.core;
 
-import java.util.Collection;
-import java.util.HashSet;
+import java.util.*;
 import java.util.function.Function;
 
 import io.github.douira.glsl_transformer.GLSLParser;
-import io.github.douira.glsl_transformer.core.target.HandlerTarget;
-import io.github.douira.glsl_transformer.core.target.ParsedReplaceTargetImpl;
-import io.github.douira.glsl_transformer.core.target.TerminalReplaceTargetImpl;
+import io.github.douira.glsl_transformer.core.target.*;
 import io.github.douira.glsl_transformer.transform.JobParameters;
 import io.github.douira.glsl_transformer.tree.ExtendedContext;
 import io.github.douira.glsl_transformer.util.CompatUtil;

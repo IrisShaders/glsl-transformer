@@ -4,12 +4,9 @@ import java.util.LinkedList;
 
 import com.github.bsideup.jabel.Desugar;
 
-import org.antlr.v4.runtime.BufferedTokenStream;
-import org.antlr.v4.runtime.Lexer;
+import org.antlr.v4.runtime.*;
 import org.antlr.v4.runtime.misc.Interval;
-import org.antlr.v4.runtime.tree.AbstractParseTreeVisitor;
-import org.antlr.v4.runtime.tree.RuleNode;
-import org.antlr.v4.runtime.tree.TerminalNode;
+import org.antlr.v4.runtime.tree.*;
 
 import io.github.douira.glsl_transformer.ast.UnparsableASTNode;
 import io.github.douira.glsl_transformer.print.filter.TokenFilter;

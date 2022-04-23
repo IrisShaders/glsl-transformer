@@ -1,7 +1,6 @@
 package io.github.douira.glsl_transformer.transform;
 
-import java.util.Collection;
-import java.util.HashSet;
+import java.util.*;
 
 class Node<T extends JobParameters> {
   private LifecycleUser<T> content;

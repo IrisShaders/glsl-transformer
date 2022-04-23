@@ -1,16 +1,13 @@
 package io.github.douira.glsl_transformer;
 
-import static org.fusesource.jansi.Ansi.ansi;
+import static org.fusesource.jansi.Ansi.*;
 
 import java.util.stream.Stream;
 
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.Disabled;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.*;
 
 import io.github.douira.glsl_transformer.TestResourceManager.FileLocation;
-import io.github.douira.glsl_transformer.transform.TransformationManager;
-import io.github.douira.glsl_transformer.transform.WrappedParameters;
+import io.github.douira.glsl_transformer.transform.*;
 
 /**
  * This test is only enabled for debugging purposes.

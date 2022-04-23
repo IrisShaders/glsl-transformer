@@ -4,8 +4,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 import org.junit.jupiter.api.Test;
 
-import io.github.douira.glsl_transformer.FullyFixedJobParameters;
-import io.github.douira.glsl_transformer.TestForExecutionOrder;
+import io.github.douira.glsl_transformer.*;
 
 public class TransformationTest extends TestForExecutionOrder {
   @Test

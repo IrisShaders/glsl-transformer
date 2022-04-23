@@ -1,9 +1,6 @@
 package io.github.douira.glsl_transformer.util;
 
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 /**
  * This class contains utility methods that allow maintaining Java 8 API

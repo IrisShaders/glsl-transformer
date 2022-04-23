@@ -1,11 +1,9 @@
 package io.github.douira.glsl_transformer;
 
 import org.antlr.v4.runtime.ParserRuleContext;
-import org.antlr.v4.runtime.tree.ErrorNode;
-import org.antlr.v4.runtime.tree.TerminalNode;
+import org.antlr.v4.runtime.tree.*;
 
-import io.github.douira.glsl_transformer.transform.WalkPhase;
-import io.github.douira.glsl_transformer.transform.WrappedParameters;
+import io.github.douira.glsl_transformer.transform.*;
 
 public abstract class PrintTree extends WalkPhase<WrappedParameters<StringBuilder>> {
   int depth;

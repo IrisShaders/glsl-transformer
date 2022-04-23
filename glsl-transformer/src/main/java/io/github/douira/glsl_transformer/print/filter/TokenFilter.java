@@ -2,8 +2,7 @@ package io.github.douira.glsl_transformer.print.filter;
 
 import org.antlr.v4.runtime.Token;
 
-import io.github.douira.glsl_transformer.transform.JobParameters;
-import io.github.douira.glsl_transformer.transform.LifecycleUserImpl;
+import io.github.douira.glsl_transformer.transform.*;
 
 /**
  * A token filter is an object that can check if given tokens should be printed

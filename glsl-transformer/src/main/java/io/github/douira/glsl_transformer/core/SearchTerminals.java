@@ -7,8 +7,7 @@ import org.antlr.v4.runtime.tree.TerminalNode;
 
 import io.github.douira.glsl_transformer.GLSLLexer;
 import io.github.douira.glsl_transformer.core.target.HandlerTarget;
-import io.github.douira.glsl_transformer.transform.JobParameters;
-import io.github.douira.glsl_transformer.transform.WalkPhase;
+import io.github.douira.glsl_transformer.transform.*;
 import io.github.douira.glsl_transformer.tree.TreeMember;
 
 /**

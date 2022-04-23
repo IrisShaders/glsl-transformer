@@ -1,12 +1,10 @@
 package io.github.douira.glsl_transformer.tree;
 
-import java.util.LinkedList;
-import java.util.Optional;
+import java.util.*;
 
 import com.github.bsideup.jabel.Desugar;
 
-import org.antlr.v4.runtime.BufferedTokenStream;
-import org.antlr.v4.runtime.ParserRuleContext;
+import org.antlr.v4.runtime.*;
 import org.antlr.v4.runtime.misc.Interval;
 import org.antlr.v4.runtime.tree.ParseTree;
 

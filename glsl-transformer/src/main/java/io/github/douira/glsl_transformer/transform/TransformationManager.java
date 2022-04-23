@@ -2,17 +2,10 @@ package io.github.douira.glsl_transformer.transform;
 
 import java.util.function.Function;
 
-import org.antlr.v4.runtime.BaseErrorListener;
-import org.antlr.v4.runtime.BufferedTokenStream;
-import org.antlr.v4.runtime.CharStreams;
-import org.antlr.v4.runtime.CommonTokenStream;
-import org.antlr.v4.runtime.IntStream;
-import org.antlr.v4.runtime.RecognitionException;
-import org.antlr.v4.runtime.Recognizer;
+import org.antlr.v4.runtime.*;
 import org.antlr.v4.runtime.misc.ParseCancellationException;
 
-import io.github.douira.glsl_transformer.GLSLLexer;
-import io.github.douira.glsl_transformer.GLSLParser;
+import io.github.douira.glsl_transformer.*;
 import io.github.douira.glsl_transformer.print.PrintVisitor;
 import io.github.douira.glsl_transformer.print.filter.TokenFilter;
 import io.github.douira.glsl_transformer.tree.ExtendedContext;

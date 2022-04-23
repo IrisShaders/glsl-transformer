@@ -1,21 +1,13 @@
 package io.github.douira.glsl_transformer;
 
-import java.io.File;
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.io.*;
+import java.nio.file.*;
+import java.util.*;
 import java.util.regex.Matcher;
 import java.util.stream.Stream;
 
 import org.junit.jupiter.api.extension.ExtensionContext;
-import org.junit.jupiter.params.provider.Arguments;
-import org.junit.jupiter.params.provider.ArgumentsProvider;
+import org.junit.jupiter.params.provider.*;
 import org.junit.jupiter.params.support.AnnotationConsumer;
 
 import au.com.origin.snapshots.annotations.SnapshotName;

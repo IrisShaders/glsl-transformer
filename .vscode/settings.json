@@ -22,5 +22,7 @@
   "coverage-gutters.coverageBaseDir": "glsl-transformer/build/reports/jacoco/test",
   "antlr4.format": {
     "columnLimit": 110
-  }
+  },
+  "java.sources.organizeImports.staticStarThreshold": 1,
+  "java.sources.organizeImports.starThreshold": 2
 }

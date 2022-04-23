@@ -1,8 +1,6 @@
 package io.github.douira.glsl_transformer.core.target;
 
-import io.github.douira.glsl_transformer.transform.ExecutionPlanner;
-import io.github.douira.glsl_transformer.transform.JobParameters;
-import io.github.douira.glsl_transformer.transform.TransformationPhase;
+import io.github.douira.glsl_transformer.transform.*;
 import io.github.douira.glsl_transformer.tree.TreeMember;
 
 /**

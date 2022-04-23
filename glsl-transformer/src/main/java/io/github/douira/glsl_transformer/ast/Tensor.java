@@ -1,15 +1,13 @@
 package io.github.douira.glsl_transformer.ast;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 import java.util.function.Function;
 
 import com.github.bsideup.jabel.Desugar;
 
 import org.antlr.v4.runtime.tree.TerminalNode;
 
-import io.github.douira.glsl_transformer.GLSLLexer;
-import io.github.douira.glsl_transformer.GLSLParser;
+import io.github.douira.glsl_transformer.*;
 import io.github.douira.glsl_transformer.GLSLParser.BuiltinTypeSpecifierParseableContext;
 import io.github.douira.glsl_transformer.transform.TransformationManager;
 import io.github.douira.glsl_transformer.tree.ExtendedContext;

@@ -1,8 +1,9 @@
 package io.github.douira.glsl_transformer;
 
+import static org.fusesource.jansi.Ansi.*;
+
 import org.antlr.v4.runtime.ParserRuleContext;
 import org.antlr.v4.runtime.tree.TerminalNode;
-import static org.fusesource.jansi.Ansi.ansi;
 
 import io.github.douira.glsl_transformer.util.CompatUtil;
 
