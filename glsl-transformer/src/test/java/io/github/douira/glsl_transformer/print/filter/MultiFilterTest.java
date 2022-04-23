@@ -6,9 +6,7 @@ import org.antlr.v4.runtime.Token;
 import org.junit.jupiter.api.Test;
 
 import io.github.douira.glsl_transformer.TestWithTransformationManager;
-import io.github.douira.glsl_transformer.transform.JobParameters;
-import io.github.douira.glsl_transformer.transform.NonFixedJobParameters;
-import io.github.douira.glsl_transformer.transform.TransformationManager;
+import io.github.douira.glsl_transformer.transform.*;
 import io.github.douira.glsl_transformer.util.CompatUtil;
 
 public class MultiFilterTest extends TestWithTransformationManager<NonFixedJobParameters> {

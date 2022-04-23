@@ -5,12 +5,10 @@ import static org.junit.jupiter.api.Assertions.*;
 import java.util.function.Consumer;
 
 import org.antlr.v4.runtime.Token;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.*;
 
 import io.github.douira.glsl_transformer.TestWithTransformationManager;
-import io.github.douira.glsl_transformer.transform.NonFixedJobParameters;
-import io.github.douira.glsl_transformer.transform.TransformationManager;
+import io.github.douira.glsl_transformer.transform.*;
 
 public class TokenFilterTest extends TestWithTransformationManager<NonFixedJobParameters> {
   private int nextIndex;

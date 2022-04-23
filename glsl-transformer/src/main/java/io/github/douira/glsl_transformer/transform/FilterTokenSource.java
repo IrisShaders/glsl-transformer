@@ -1,9 +1,6 @@
 package io.github.douira.glsl_transformer.transform;
 
-import org.antlr.v4.runtime.CharStream;
-import org.antlr.v4.runtime.Token;
-import org.antlr.v4.runtime.TokenFactory;
-import org.antlr.v4.runtime.TokenSource;
+import org.antlr.v4.runtime.*;
 
 import io.github.douira.glsl_transformer.print.filter.TokenFilter;
 

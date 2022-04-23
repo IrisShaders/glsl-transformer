@@ -2,19 +2,13 @@ package io.github.douira.glsl_transformer.print;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-import org.antlr.v4.runtime.IntStream;
-import org.antlr.v4.runtime.RecognitionException;
+import org.antlr.v4.runtime.*;
 import org.junit.jupiter.api.Test;
 
-import io.github.douira.glsl_transformer.GLSLParser;
-import io.github.douira.glsl_transformer.TestWithTransformationManager;
+import io.github.douira.glsl_transformer.*;
 import io.github.douira.glsl_transformer.GLSLParser.TranslationUnitContext;
-import io.github.douira.glsl_transformer.ast.StringNode;
-import io.github.douira.glsl_transformer.ast.UnparsableASTNode;
-import io.github.douira.glsl_transformer.transform.NonFixedJobParameters;
-import io.github.douira.glsl_transformer.transform.RunPhase;
-import io.github.douira.glsl_transformer.transform.Transformation;
-import io.github.douira.glsl_transformer.transform.TransformationManager;
+import io.github.douira.glsl_transformer.ast.*;
+import io.github.douira.glsl_transformer.transform.*;
 
 public class PrintVisitorTest extends TestWithTransformationManager<NonFixedJobParameters> {
   @Test

@@ -1,7 +1,6 @@
 package io.github.douira.glsl_transformer.print;
 
-import io.github.douira.glsl_transformer.tree.ExtendedTerminalNode;
-import io.github.douira.glsl_transformer.tree.TreeMember;
+import io.github.douira.glsl_transformer.tree.*;
 
 /**
  * The empty terminal node is a placeholder in parse tree children lists in

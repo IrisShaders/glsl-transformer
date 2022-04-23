@@ -1,16 +1,10 @@
 package io.github.douira.glsl_transformer;
 
-import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
+import static org.junit.jupiter.api.Assertions.*;
 
-import java.nio.charset.MalformedInputException;
-import java.nio.charset.StandardCharsets;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Optional;
-import java.util.Set;
+import java.nio.charset.*;
+import java.nio.file.*;
+import java.util.*;
 import java.util.stream.Stream;
 
 import io.github.douira.glsl_transformer.util.CompatUtil;

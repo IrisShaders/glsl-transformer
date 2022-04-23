@@ -1,9 +1,6 @@
 package io.github.douira.glsl_transformer.tree;
 
-import org.antlr.v4.runtime.Parser;
-import org.antlr.v4.runtime.ParserRuleContext;
-import org.antlr.v4.runtime.Token;
-import org.antlr.v4.runtime.TokenStream;
+import org.antlr.v4.runtime.*;
 import org.antlr.v4.runtime.tree.TerminalNode;
 
 /**

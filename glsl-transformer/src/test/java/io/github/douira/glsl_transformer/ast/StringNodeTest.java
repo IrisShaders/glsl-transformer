@@ -1,6 +1,7 @@
 package io.github.douira.glsl_transformer.ast;
 
 import static org.junit.jupiter.api.Assertions.*;
+
 import org.junit.jupiter.api.Test;
 
 /**

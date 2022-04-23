@@ -4,8 +4,7 @@ import java.util.function.Function;
 
 import io.github.douira.glsl_transformer.GLSLParser;
 import io.github.douira.glsl_transformer.transform.JobParameters;
-import io.github.douira.glsl_transformer.tree.ExtendedContext;
-import io.github.douira.glsl_transformer.tree.TreeMember;
+import io.github.douira.glsl_transformer.tree.*;
 
 /**
  * A parsed replace target generates a node from parsing a string for each

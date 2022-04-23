@@ -1,10 +1,6 @@
 package io.github.douira.glsl_transformer;
 
-import java.lang.annotation.Documented;
-import java.lang.annotation.ElementType;
-import java.lang.annotation.Retention;
-import java.lang.annotation.RetentionPolicy;
-import java.lang.annotation.Target;
+import java.lang.annotation.*;
 
 import org.junit.jupiter.params.provider.ArgumentsSource;
 
@@ -21,6 +17,7 @@ import org.junit.jupiter.params.provider.ArgumentsSource;
 public @interface TestCaseSource {
   /**
    * The name of the test case set to use.
+   * 
    * @return The name of the test case set
    */
   String value() default "";

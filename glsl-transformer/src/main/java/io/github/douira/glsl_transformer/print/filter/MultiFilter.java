@@ -1,12 +1,10 @@
 package io.github.douira.glsl_transformer.print.filter;
 
-import java.util.ArrayList;
-import java.util.Collection;
+import java.util.*;
 
 import org.antlr.v4.runtime.Token;
 
-import io.github.douira.glsl_transformer.transform.ExecutionPlanner;
-import io.github.douira.glsl_transformer.transform.JobParameters;
+import io.github.douira.glsl_transformer.transform.*;
 
 /**
  * A multi filter checks all contained filters with either requiring all of them

@@ -3,26 +3,20 @@ package io.github.douira.glsl_transformer.transform;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.time.Duration;
-import java.util.LinkedList;
-import java.util.List;
+import java.util.*;
 
-import org.antlr.v4.runtime.tree.ParseTree;
-import org.antlr.v4.runtime.tree.TerminalNode;
-import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.Test;
+import org.antlr.v4.runtime.tree.*;
+import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.params.ParameterizedTest;
 
 import au.com.origin.snapshots.Expect;
 import au.com.origin.snapshots.annotations.SnapshotName;
 import au.com.origin.snapshots.junit5.SnapshotExtension;
-import io.github.douira.glsl_transformer.GLSLParser;
+import io.github.douira.glsl_transformer.*;
 import io.github.douira.glsl_transformer.GLSLParser.TranslationUnitContext;
-import io.github.douira.glsl_transformer.SnapshotUtil;
-import io.github.douira.glsl_transformer.TestCaseSource;
 import io.github.douira.glsl_transformer.TestResourceManager.FileLocation;
 import io.github.douira.glsl_transformer.ast.StringNode;
-import io.github.douira.glsl_transformer.TestWithTransformationManager;
 import io.github.douira.glsl_transformer.transform.TransformationPhase.InjectionPoint;
 import io.github.douira.glsl_transformer.tree.TreeMember;
 
@@ -60,7 +54,7 @@ public class TransformationPhaseTest extends TestWithTransformationManager<NonFi
         var match = compilePattern(
             "varying <type:typeSpecifier> varyVec;",
             GLSLParser.RULE_externalDeclaration)
-                .match(ctx.getChild(5));
+            .match(ctx.getChild(5));
         assertTrue(match.succeeded(), "It should compile a functioning pattern");
         assertEquals(
             "vec2", match.get("type").getText(),

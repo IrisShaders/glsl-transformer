@@ -5,8 +5,7 @@ import static org.junit.jupiter.api.Assertions.*;
 import org.junit.jupiter.api.Test;
 
 import io.github.douira.glsl_transformer.print.EmptyTerminalNode;
-import io.github.douira.glsl_transformer.tree.ExtendedContext;
-import io.github.douira.glsl_transformer.tree.TreeMember;
+import io.github.douira.glsl_transformer.tree.*;
 
 /**
  * Tests the empty terminal node. MoveCheckable is tested in its own file.

@@ -1,8 +1,7 @@
 package io.github.douira.glsl_transformer.core;
 
 import io.github.douira.glsl_transformer.GLSLParser.TranslationUnitContext;
-import io.github.douira.glsl_transformer.transform.JobParameters;
-import io.github.douira.glsl_transformer.transform.RunPhase;
+import io.github.douira.glsl_transformer.transform.*;
 import io.github.douira.glsl_transformer.transform.TransformationPhase.InjectionPoint;
 
 /**

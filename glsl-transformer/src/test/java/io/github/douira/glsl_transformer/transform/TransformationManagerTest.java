@@ -2,31 +2,21 @@ package io.github.douira.glsl_transformer.transform;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
-import org.antlr.v4.runtime.BaseErrorListener;
-import org.antlr.v4.runtime.CharStreams;
-import org.antlr.v4.runtime.CommonToken;
+import org.antlr.v4.runtime.*;
 import org.antlr.v4.runtime.InputMismatchException;
-import org.antlr.v4.runtime.LexerNoViableAltException;
-import org.antlr.v4.runtime.NoViableAltException;
-import org.antlr.v4.runtime.RecognitionException;
-import org.antlr.v4.runtime.Recognizer;
 import org.antlr.v4.runtime.misc.ParseCancellationException;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.api.function.Executable;
 
 import au.com.origin.snapshots.Expect;
 import au.com.origin.snapshots.annotations.SnapshotName;
 import au.com.origin.snapshots.junit5.SnapshotExtension;
+import io.github.douira.glsl_transformer.*;
 import io.github.douira.glsl_transformer.GLSLParser.TranslationUnitContext;
-import io.github.douira.glsl_transformer.SnapshotUtil;
-import io.github.douira.glsl_transformer.TestResourceManager;
 import io.github.douira.glsl_transformer.TestResourceManager.DirectoryLocation;
-import io.github.douira.glsl_transformer.TestWithTransformationManager;
 
 @ExtendWith({ SnapshotExtension.class })
 public class TransformationManagerTest extends TestWithTransformationManager<NonFixedJobParameters> {

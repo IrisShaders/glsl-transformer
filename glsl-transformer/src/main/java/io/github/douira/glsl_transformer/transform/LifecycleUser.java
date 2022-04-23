@@ -1,7 +1,6 @@
 package io.github.douira.glsl_transformer.transform;
 
-import org.antlr.v4.runtime.Lexer;
-import org.antlr.v4.runtime.Parser;
+import org.antlr.v4.runtime.*;
 
 import io.github.douira.glsl_transformer.GLSLParser.TranslationUnitContext;
 

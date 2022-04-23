@@ -1,8 +1,7 @@
 package io.github.douira.glsl_transformer.print;
 
 import org.antlr.v4.runtime.Token;
-import org.antlr.v4.runtime.misc.Interval;
-import org.antlr.v4.runtime.misc.IntervalSet;
+import org.antlr.v4.runtime.misc.*;
 
 /**
  * The caching interval set is a regular interval set

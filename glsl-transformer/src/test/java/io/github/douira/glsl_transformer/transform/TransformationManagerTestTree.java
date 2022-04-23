@@ -8,11 +8,8 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import au.com.origin.snapshots.Expect;
 import au.com.origin.snapshots.annotations.SnapshotName;
 import au.com.origin.snapshots.junit5.SnapshotExtension;
-import io.github.douira.glsl_transformer.PrintTreeSnapshot;
-import io.github.douira.glsl_transformer.SnapshotUtil;
-import io.github.douira.glsl_transformer.TestResourceManager;
-import io.github.douira.glsl_transformer.TestResourceManager.DirectoryLocation;
-import io.github.douira.glsl_transformer.TestResourceManager.FileLocation;
+import io.github.douira.glsl_transformer.*;
+import io.github.douira.glsl_transformer.TestResourceManager.*;
 
 @ExtendWith({ SnapshotExtension.class })
 public class TransformationManagerTestTree {

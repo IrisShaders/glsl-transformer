@@ -1,32 +1,19 @@
 package io.github.douira.glsl_transformer.transform;
 
-import java.util.ArrayList;
-import java.util.Deque;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 import java.util.function.Function;
 
 import org.antlr.v4.runtime.tree.ParseTree;
-import org.antlr.v4.runtime.tree.pattern.ParseTreeMatch;
-import org.antlr.v4.runtime.tree.pattern.ParseTreePattern;
+import org.antlr.v4.runtime.tree.pattern.*;
 import org.antlr.v4.runtime.tree.xpath.XPath;
 
-import io.github.douira.glsl_transformer.GLSLParser;
-import io.github.douira.glsl_transformer.GLSLParser.DeclarationContext;
-import io.github.douira.glsl_transformer.GLSLParser.ExtensionStatementContext;
-import io.github.douira.glsl_transformer.GLSLParser.ExternalDeclarationContext;
-import io.github.douira.glsl_transformer.GLSLParser.FunctionDefinitionContext;
-import io.github.douira.glsl_transformer.GLSLParser.LayoutDefaultsContext;
-import io.github.douira.glsl_transformer.GLSLParser.PragmaStatementContext;
-import io.github.douira.glsl_transformer.GLSLParser.TranslationUnitContext;
-import io.github.douira.glsl_transformer.GLSLParser.VersionStatementContext;
-import io.github.douira.glsl_transformer.GLSLParserBaseListener;
+import io.github.douira.glsl_transformer.*;
+import io.github.douira.glsl_transformer.GLSLParser.*;
 import io.github.douira.glsl_transformer.ast.Directive;
 import io.github.douira.glsl_transformer.ast.Directive.Type;
 import io.github.douira.glsl_transformer.print.EmptyTerminalNode;
 import io.github.douira.glsl_transformer.traversal.PartialParseTreeListener;
-import io.github.douira.glsl_transformer.tree.ExtendedContext;
-import io.github.douira.glsl_transformer.tree.TreeMember;
+import io.github.douira.glsl_transformer.tree.*;
 import io.github.douira.glsl_transformer.util.ExcludeFromJacocoGeneratedReport;
 
 /**

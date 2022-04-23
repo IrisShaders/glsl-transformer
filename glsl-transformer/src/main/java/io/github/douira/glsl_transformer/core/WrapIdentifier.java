@@ -2,14 +2,8 @@ package io.github.douira.glsl_transformer.core;
 
 import io.github.douira.glsl_transformer.GLSLParser;
 import io.github.douira.glsl_transformer.GLSLParser.TranslationUnitContext;
-import io.github.douira.glsl_transformer.core.target.HandlerTarget;
-import io.github.douira.glsl_transformer.core.target.ParsedReplaceTargetImpl;
-import io.github.douira.glsl_transformer.core.target.TerminalReplaceTargetImpl;
-import io.github.douira.glsl_transformer.core.target.WrapThrowTargetImpl;
-import io.github.douira.glsl_transformer.transform.JobParameters;
-import io.github.douira.glsl_transformer.transform.RunPhase;
-import io.github.douira.glsl_transformer.transform.Transformation;
-import io.github.douira.glsl_transformer.transform.TransformationPhase;
+import io.github.douira.glsl_transformer.core.target.*;
+import io.github.douira.glsl_transformer.transform.*;
 import io.github.douira.glsl_transformer.transform.TransformationPhase.InjectionPoint;
 
 /**

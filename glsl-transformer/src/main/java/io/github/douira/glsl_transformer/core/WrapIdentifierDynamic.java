@@ -1,10 +1,7 @@
 package io.github.douira.glsl_transformer.core;
 
-import io.github.douira.glsl_transformer.core.target.TerminalReplaceTarget;
-import io.github.douira.glsl_transformer.core.target.WrapThrowTarget;
-import io.github.douira.glsl_transformer.transform.JobParameters;
-import io.github.douira.glsl_transformer.transform.Transformation;
-import io.github.douira.glsl_transformer.transform.TransformationPhase;
+import io.github.douira.glsl_transformer.core.target.*;
+import io.github.douira.glsl_transformer.transform.*;
 
 /**
  * The dynamic wrap identifier transformation has a number of abstract methods
@@ -75,7 +72,8 @@ public abstract class WrapIdentifierDynamic<T extends JobParameters> extends Tra
   protected abstract String getWrapResultDynamic();
 
   /**
-   * Returns the wrapping target. The wrapping target is the identifier that is replaced with the wrap result.
+   * Returns the wrapping target. The wrapping target is the identifier that is
+   * replaced with the wrap result.
    * 
    * @return The wrapping target
    */
