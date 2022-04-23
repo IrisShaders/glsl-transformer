@@ -99,6 +99,18 @@ public class TransformationManager<T extends JobParameters> extends ExecutionPla
   private TokenFilter<T> parseTokenFilter;
 
   /**
+   * Creates a new transformation manager with a given root transformation and
+   * parse error throwing behavior.
+   * 
+   * @param rootTransformation The root transformation to use
+   * @param throwParseErrors   If parse errors should be thrown
+   */
+  public TransformationManager(Transformation<T> rootTransformation, boolean throwParseErrors) {
+    super(rootTransformation);
+    setThrowParseErrors(throwParseErrors);
+  }
+
+  /**
    * Creates a new transformation manager and specifies if parse errors should be
    * thrown during parsing. If they should not be thrown they will not be reported
    * or printed to the console. ANTLR will attempt to recover from errors during
@@ -115,6 +127,28 @@ public class TransformationManager<T extends JobParameters> extends ExecutionPla
    *                         parse errors encountered during parsing
    */
   public TransformationManager(boolean throwParseErrors) {
+    setThrowParseErrors(throwParseErrors);
+  }
+
+  /**
+   * Creates a new transformation manager with a given root transformation that
+   * throws parse errors by default.
+   * 
+   * @param rootTransformation The root transformation to use
+   */
+  public TransformationManager(Transformation<T> rootTransformation) {
+    super(rootTransformation);
+    setThrowParseErrors(true);
+  }
+
+  /**
+   * Creates a new transformation manager that throws parse errors by default.
+   */
+  public TransformationManager() {
+    setThrowParseErrors(true);
+  }
+
+  private void setThrowParseErrors(boolean throwParseErrors) {
     lexer.removeErrorListeners();
     parser.removeErrorListeners();
 
@@ -123,13 +157,6 @@ public class TransformationManager<T extends JobParameters> extends ExecutionPla
       parser.addErrorListener(ThrowingErrorListener.INSTANCE);
       // parser.setErrorHandler(new BailErrorStrategy());
     }
-  }
-
-  /**
-   * Creates a new transformation manager that throws parse errors by default.
-   */
-  public TransformationManager() {
-    this(true);
   }
 
   /**

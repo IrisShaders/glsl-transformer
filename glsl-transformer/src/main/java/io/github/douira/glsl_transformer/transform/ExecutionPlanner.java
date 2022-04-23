@@ -32,10 +32,26 @@ import io.github.douira.glsl_transformer.tree.ExtendedContext;
  */
 public abstract class ExecutionPlanner<T extends JobParameters> {
   private Map<T, ExecutionPlan> executionPlanCache = new HashMap<>();
-  private final Transformation<T> rootTransformation = new Transformation<>();
+  private Transformation<T> rootTransformation;
   private TranslationUnitContext rootNode;
   private ProxyParseTreeListener proxyListener;
   private T jobParameters;
+
+  /**
+   * Creates a new execution planner with no root transformation. One will be
+   * created on demand.
+   */
+  public ExecutionPlanner() {
+  }
+
+  /**
+   * Creates a new execution planner with a given root transformation.
+   * 
+   * @param rootTransformation The root transformation to use
+   */
+  public ExecutionPlanner(Transformation<T> rootTransformation) {
+    this.rootTransformation = rootTransformation;
+  }
 
   private class ExecutionPlan {
     List<ExecutionLevel<T>> executionLevels;
@@ -97,17 +113,17 @@ public abstract class ExecutionPlanner<T extends JobParameters> {
      *           sorted into execution levels according to their distance values.
      *           The nodes with the lowest distance are executed first.
      */
-    void planExecution(Transformation<T> rootTransformation) {
+    void planExecution() {
       Set<Transformation<T>> transformationSet = new HashSet<>();
       Set<Node<T>> dependenciesProcessed = new HashSet<>();
       Map<Node<T>, LabeledNode<T>> endNodeMap = new HashMap<>();
       Map<LifecycleUser<T>, LabeledNode<T>> contentNodeMap = new HashMap<>();
       Deque<CollectEntry<T>> collectQueue = new LinkedList<>();
 
-      rootTransformation.setPlanner(ExecutionPlanner.this);
-      rootTransformation.doGraphSetup();
+      getRootTransformation().setPlanner(ExecutionPlanner.this);
+      getRootTransformation().doGraphSetup();
       var rootNode = new LabeledNode<T>();
-      collectQueue.add(new CollectEntry<>(new Node<>(rootTransformation), rootNode));
+      collectQueue.add(new CollectEntry<>(new Node<>(getRootTransformation()), rootNode));
 
       // traverse the tree converting all nodes to labeled nodes and combining
       // dependencies of transformations
@@ -375,7 +391,7 @@ public abstract class ExecutionPlanner<T extends JobParameters> {
    * @param rootDependency The node to add as a dependency of the root node
    */
   public void addConcurrent(LifecycleUser<T> rootDependency) {
-    rootTransformation.addRootDependency(rootDependency);
+    getRootTransformation().addRootDependency(rootDependency);
   }
 
   /**
@@ -386,7 +402,21 @@ public abstract class ExecutionPlanner<T extends JobParameters> {
    * @return The root transformation instance
    */
   public Transformation<T> getRootTransformation() {
+    if (rootTransformation == null) {
+      rootTransformation = new Transformation<>();
+    }
     return rootTransformation;
+  }
+
+  /**
+   * Sets the root transformation. All dependencies should be accessible through
+   * this root transformation. Conditional dependencies can be used in the root
+   * transformation if a custom transformation is set with this method.
+   * 
+   * @param rootTransformation The root transformation
+   */
+  public void setRootTransformation(Transformation<T> rootTransformation) {
+    this.rootTransformation = rootTransformation;
   }
 
   /**
@@ -405,7 +435,7 @@ public abstract class ExecutionPlanner<T extends JobParameters> {
     var plan = executionPlanCache.get(jobParameters);
     if (plan == null) {
       plan = new ExecutionPlan(); // gets the job parameters itself during planning
-      plan.planExecution(rootTransformation);
+      plan.planExecution();
       executionPlanCache.put(jobParameters, plan);
     }
     return plan;
