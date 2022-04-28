@@ -10,8 +10,8 @@ public class TransformationTest extends TestForExecutionOrder {
   @Test
   void testSingleContentConstructor() {
     var transformation = new Transformation<>(
-        assertOrderWalkPhase(1, "The phase passed in the constructor should run second."));
-    transformation.chainDependency(assertOrderWalkPhase(0, "The second chained phase should run first."));
+        assertOrderPhase(1, "The phase passed in the constructor should run second."));
+    transformation.chainDependency(assertOrderPhase(0, "The second chained phase should run first."));
     manager.addConcurrent(transformation);
     manager.transform("");
     assertEquals(2, nextIndex, "Both run phases should run.");
@@ -30,8 +30,8 @@ public class TransformationTest extends TestForExecutionOrder {
   @Test
   void testAddDependency() {
     transformation.addDependency(
-        assertOrderWalkPhase(1, "The dependent should run second."),
-        assertOrderWalkPhase(0, "The dependency should run first."));
+        assertOrderPhase(1, "The dependent should run second."),
+        assertOrderPhase(0, "The dependency should run first."));
     manager.transform("");
     assertEquals(2, nextIndex, "Both run phases should run.");
   }
@@ -39,8 +39,8 @@ public class TransformationTest extends TestForExecutionOrder {
   @Test
   void testAddDependent() {
     transformation.addDependent(
-        assertOrderWalkPhase(0, "The dependency should run first."),
-        assertOrderWalkPhase(1, "The dependent should run second."));
+        assertOrderPhase(0, "The dependency should run first."),
+        assertOrderPhase(1, "The dependent should run second."));
     manager.transform("");
     assertEquals(2, nextIndex, "Both run phases should run");
   }
@@ -48,9 +48,9 @@ public class TransformationTest extends TestForExecutionOrder {
   @Test
   void testChainDependencyDefault() {
     transformation.chainDependency(
-        assertOrderWalkPhase(1, "The first chained dependency should run second."));
+        assertOrderPhase(1, "The first chained dependency should run second."));
     transformation.chainDependency(
-        assertOrderWalkPhase(0, "The second chained dependency should run first."));
+        assertOrderPhase(0, "The second chained dependency should run first."));
     manager.transform("");
     assertEquals(2, nextIndex, "Both phases should run.");
   }
@@ -58,11 +58,11 @@ public class TransformationTest extends TestForExecutionOrder {
   @Test
   void testChainDependencyOnRoot() {
     transformation.addRootDependency(
-        assertOrderWalkPhase(2, "The root dependency should run third."));
+        assertOrderPhase(2, "The root dependency should run third."));
     transformation.chainDependency(
-        assertOrderWalkPhase(1, "The first chained dependency should run second."));
+        assertOrderPhase(1, "The first chained dependency should run second."));
     transformation.chainDependency(
-        assertOrderWalkPhase(0, "The second chained dependency should run first."));
+        assertOrderPhase(0, "The second chained dependency should run first."));
     manager.transform("");
     assertEquals(3, nextIndex, "All three phases should run.");
   }
@@ -72,7 +72,7 @@ public class TransformationTest extends TestForExecutionOrder {
     for (int i = 0; i < 10; i++) {
       var localIndex = i;
       transformation.chainDependency(
-          assertOrderWalkPhase(10 - localIndex - 1,
+          assertOrderPhase(10 - localIndex - 1,
               "The dependency added with i=" + localIndex + "should run at index " + (10 - localIndex - 1) + "."));
     }
     manager.transform("");
@@ -82,9 +82,9 @@ public class TransformationTest extends TestForExecutionOrder {
   @Test
   void testChainDependentDefault() {
     transformation.chainDependent(
-        assertOrderWalkPhase(0, "The first chained dependent should run first."));
+        assertOrderPhase(0, "The first chained dependent should run first."));
     transformation.chainDependent(
-        assertOrderWalkPhase(1, "The second chained dependent should run second."));
+        assertOrderPhase(1, "The second chained dependent should run second."));
     manager.transform("");
     assertEquals(2, nextIndex, "Both run phases should run.");
   }
@@ -92,11 +92,11 @@ public class TransformationTest extends TestForExecutionOrder {
   @Test
   void testChainDependentOnEnd() {
     transformation.addEndDependent(
-        assertOrderWalkPhase(0, "The end dependent should run first."));
+        assertOrderPhase(0, "The end dependent should run first."));
     transformation.chainDependent(
-        assertOrderWalkPhase(1, "The first chained dependent should run second."));
+        assertOrderPhase(1, "The first chained dependent should run second."));
     transformation.chainDependent(
-        assertOrderWalkPhase(2, "The second chained dependent should run third."));
+        assertOrderPhase(2, "The second chained dependent should run third."));
     manager.planExecutionFor(NonFixedJobParameters.INSTANCE);
     manager.transform("");
     assertEquals(3, nextIndex, "All three run phases should run.");
@@ -107,7 +107,7 @@ public class TransformationTest extends TestForExecutionOrder {
     for (int i = 0; i < 10; i++) {
       var localIndex = i;
       transformation.chainDependent(
-          assertOrderWalkPhase(localIndex,
+          assertOrderPhase(localIndex,
               "The dependent added with i=" + localIndex + "should run at index " + localIndex + "."));
     }
     manager.transform("");
@@ -117,9 +117,9 @@ public class TransformationTest extends TestForExecutionOrder {
   @Test
   void testAddRootAndEndDependency() {
     transformation.addRootDependency(
-        assertResetWalkPhase(1, 2, "The root dependency should run in the second level."));
+        assertResetPhase(1, 2, "The root dependency should run in the second level."));
     transformation.addEndDependent(
-        assertResetWalkPhase(1, 2, "The end dependent should run in the second level."));
+        assertResetPhase(1, 2, "The end dependent should run in the second level."));
     transformation.appendDependent(RunPhase.withRun(() -> nextIndex++));
     manager.transform("");
     assertEquals(3, nextIndex, "All phases should run.");
@@ -131,7 +131,7 @@ public class TransformationTest extends TestForExecutionOrder {
     transformation.addRootDependency(RunPhase.withRun(() -> nextIndex++));
     transformation.chainDependency(RunPhase.withRun(() -> nextIndex++));
     transformation.appendDependent(
-        assertOrderWalkPhase(0, "The appended phase should run before all other phases."));
+        assertOrderPhase(0, "The appended phase should run before all other phases."));
     manager.transform("");
     assertEquals(4, nextIndex, "All phases should run.");
   }
@@ -142,7 +142,7 @@ public class TransformationTest extends TestForExecutionOrder {
     transformation.appendDependent(RunPhase.withRun(() -> nextIndex++));
     transformation.appendDependent(RunPhase.withRun(() -> nextIndex++));
     transformation.chainConcurrentDependency(
-        assertOrderWalkPhase(0, "The chained concurrent dependency should run before all other phases."));
+        assertOrderPhase(0, "The chained concurrent dependency should run before all other phases."));
     manager.transform("");
     assertEquals(4, nextIndex, "All phases should run.");
   }
@@ -153,7 +153,7 @@ public class TransformationTest extends TestForExecutionOrder {
     transformation.addEndDependent(RunPhase.withRun(() -> nextIndex++));
     transformation.chainDependent(RunPhase.withRun(() -> nextIndex++));
     transformation.prependDependency(
-        assertOrderWalkPhase(3, "The prepended phase should run after all other phases."));
+        assertOrderPhase(3, "The prepended phase should run after all other phases."));
     manager.transform("");
     assertEquals(4, nextIndex, "All phases should run.");
   }
@@ -164,7 +164,7 @@ public class TransformationTest extends TestForExecutionOrder {
     transformation.prependDependency(RunPhase.withRun(() -> nextIndex++));
     transformation.prependDependency(RunPhase.withRun(() -> nextIndex++));
     transformation.chainConcurrentDependent(
-        assertOrderWalkPhase(3, "The chained concurrent dependent should run after all other phases."));
+        assertOrderPhase(3, "The chained concurrent dependent should run after all other phases."));
     manager.transform("");
     assertEquals(4, nextIndex, "All phases should run.");
   }
@@ -172,10 +172,10 @@ public class TransformationTest extends TestForExecutionOrder {
   @Test
   void testChainConcurrentDependency() {
     transformation.addDependency(
-        assertOrderWalkPhase(2, "The dependent should run third."),
-        assertResetWalkPhase(0, 1, "The dependency should run in the first level"));
+        assertOrderPhase(2, "The dependent should run third."),
+        assertResetPhase(0, 1, "The dependency should run in the first level"));
     transformation.chainConcurrentDependency(
-        assertResetWalkPhase(0, 1, "The chained concurrent dependency should also run in the first level"));
+        assertResetPhase(0, 1, "The chained concurrent dependency should also run in the first level"));
     manager.transform("");
     assertEquals(3, nextIndex, "All three phases should run.");
   }
@@ -183,10 +183,10 @@ public class TransformationTest extends TestForExecutionOrder {
   @Test
   void testChainConcurrentDependent() {
     transformation.addDependent(
-        assertOrderWalkPhase(0, "The dependency should run first."),
-        assertResetWalkPhase(1, 2, "The dependent should run in the second level"));
+        assertOrderPhase(0, "The dependency should run first."),
+        assertResetPhase(1, 2, "The dependent should run in the second level"));
     transformation.chainConcurrentDependent(
-        assertResetWalkPhase(1, 2, "The chained concurrent dependency should also run in the second level"));
+        assertResetPhase(1, 2, "The chained concurrent dependency should also run in the second level"));
     manager.transform("");
     assertEquals(3, nextIndex, "All three phases should run.");
   }
@@ -194,10 +194,10 @@ public class TransformationTest extends TestForExecutionOrder {
   @Test
   void testChainConcurrentSibling() {
     transformation.addDependency(
-        assertOrderWalkPhase(2, "The dependent should run third."),
-        assertOrderWalkPhase(0, "The dependency should run first."));
+        assertOrderPhase(2, "The dependent should run third."),
+        assertOrderPhase(0, "The dependency should run first."));
     transformation.chainConcurrentSibling(
-        assertOrderWalkPhase(1, "The chained sibling should run second, between the two other phases."));
+        assertOrderPhase(1, "The chained sibling should run second, between the two other phases."));
     manager.transform("");
     assertEquals(3, nextIndex, "All three phases should run.");
   }

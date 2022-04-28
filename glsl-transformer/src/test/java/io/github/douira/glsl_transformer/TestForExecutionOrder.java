@@ -15,6 +15,15 @@ public abstract class TestForExecutionOrder {
   protected TransformationManager<NonFixedJobParameters> manager;
   protected Transformation<NonFixedJobParameters> transformation;
   protected int nextIndex;
+  protected boolean useWalk;
+
+  protected void useWalkPhases() {
+    useWalk = true;
+  }
+
+  protected void useRunPhases() {
+    useWalk = false;
+  }
 
   public static void assertRange(int minimum, int maximum, int value, String message) {
     assertTrue(value >= minimum, message);
@@ -28,29 +37,49 @@ public abstract class TestForExecutionOrder {
     }
   }
 
-  protected TransformationPhase<NonFixedJobParameters> assertOrderWalkPhase(int index, String message) {
-    return new RunWalkPhase<>() {
+  protected TransformationPhase<NonFixedJobParameters> assertOrderPhase(int index, String message) {
+    return useWalk ? new RunWalkPhase<>() {
       @Override
       protected void beforeWalk(TranslationUnitContext ctx) {
+        assertEquals(index, nextIndex++, message);
+      }
+    } : new RunPhase<>() {
+      @Override
+      protected void run(TranslationUnitContext ctx) {
         assertEquals(index, nextIndex++, message);
       }
     };
   }
 
-  protected TransformationPhase<NonFixedJobParameters> assertOrderWalkPhase(
+  protected TransformationPhase<NonFixedJobParameters> assertOrderPhase(
       int minimum, int maximum, String message) {
-    return new RunWalkPhase<>() {
+    return useWalk ? new RunWalkPhase<>() {
       @Override
       protected void beforeWalk(TranslationUnitContext ctx) {
+        assertRange(minimum, maximum, nextIndex++, message);
+      }
+    } : new RunPhase<>() {
+      @Override
+      protected void run(TranslationUnitContext ctx) {
         assertRange(minimum, maximum, nextIndex++, message);
       }
     };
   }
 
-  protected TransformationPhase<NonFixedJobParameters> assertResetWalkPhase(int index, String message) {
-    return new RunWalkPhase<>() {
+  protected TransformationPhase<NonFixedJobParameters> assertResetPhase(int index, String message) {
+    return useWalk ? new RunWalkPhase<>() {
       @Override
       protected void beforeWalk(TranslationUnitContext ctx) {
+        nextIndex++;
+      }
+
+      @Override
+      public void resetState() {
+        assertEquals(index, nextIndex, message);
+      }
+    } : new RunPhase<>() {
+      @Override
+      protected void run(TranslationUnitContext ctx) {
         nextIndex++;
       }
 
@@ -61,11 +90,21 @@ public abstract class TestForExecutionOrder {
     };
   }
 
-  protected TransformationPhase<NonFixedJobParameters> assertResetWalkPhase(
+  protected TransformationPhase<NonFixedJobParameters> assertResetPhase(
       int minimum, int maximum, String message) {
-    return new RunWalkPhase<>() {
+    return useWalk ? new RunWalkPhase<>() {
       @Override
       protected void beforeWalk(TranslationUnitContext ctx) {
+        nextIndex++;
+      }
+
+      @Override
+      public void resetState() {
+        assertRange(minimum, maximum, nextIndex, message);
+      }
+    } : new RunPhase<>() {
+      @Override
+      protected void run(TranslationUnitContext ctx) {
         nextIndex++;
       }
 
