@@ -238,7 +238,7 @@ public abstract class ExecutionPlanner<T extends JobParameters> {
             if (executionLevels.size() <= node.executionLevelIndex + 1) {
               executionLevels.add(new ExecutionLevel<>());
             }
-            executionLevels.get(node.executionLevelIndex + 1).walkPhases().add(phase);
+            executionLevels.get(node.executionLevelIndex + 1).walkPhases.add(phase);
           } else {
             executionLevels.get(node.executionLevelIndex + 1).nonWalkPhases.add(phase);
           }
