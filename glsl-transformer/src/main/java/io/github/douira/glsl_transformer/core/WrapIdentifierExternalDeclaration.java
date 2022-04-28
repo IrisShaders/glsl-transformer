@@ -8,6 +8,8 @@ import io.github.douira.glsl_transformer.transform.TransformationPhase.Injection
  * A wrap identifier transformation that injects an external declaration at a
  * specified location. By default, it's injected at
  * {@link InjectionPoint#BEFORE_DECLARATIONS}.
+ * 
+ * TODO: needs tests
  */
 public abstract class WrapIdentifierExternalDeclaration<T extends JobParameters>
     extends WrapIdentifierDynamic<T> {
