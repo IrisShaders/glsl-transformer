@@ -8,6 +8,9 @@ import io.github.douira.glsl_transformer.transform.*;
  * that can be implemented in order to dynamically supply the parameters for
  * this identifier wrap operation. The wrapping injector is given directly
  * though since the injection methods can vary greatly.
+ * 
+ * TODO: add test that the replacer doesn't run on the injected code (i.e. that
+ * all three steps are sequential)
  */
 public abstract class WrapIdentifierDynamic<T extends JobParameters> extends Transformation<T> {
   /**
@@ -19,7 +22,7 @@ public abstract class WrapIdentifierDynamic<T extends JobParameters> extends Tra
    */
   public WrapIdentifierDynamic(TransformationPhase<T> wrappingInjector) {
     this();
-    chainConcurrentDependent(wrappingInjector);
+    chainDependent(wrappingInjector);
   }
 
   /**
