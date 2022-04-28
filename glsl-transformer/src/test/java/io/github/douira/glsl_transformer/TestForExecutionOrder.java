@@ -28,7 +28,7 @@ public abstract class TestForExecutionOrder {
     }
   }
 
-  protected TransformationPhase<NonFixedJobParameters> assertOrderPhase(int index, String message) {
+  protected TransformationPhase<NonFixedJobParameters> assertOrderWalkPhase(int index, String message) {
     return new RunWalkPhase<>() {
       @Override
       protected void beforeWalk(TranslationUnitContext ctx) {
@@ -37,7 +37,7 @@ public abstract class TestForExecutionOrder {
     };
   }
 
-  protected TransformationPhase<NonFixedJobParameters> assertOrderPhase(
+  protected TransformationPhase<NonFixedJobParameters> assertOrderWalkPhase(
       int minimum, int maximum, String message) {
     return new RunWalkPhase<>() {
       @Override
@@ -47,7 +47,7 @@ public abstract class TestForExecutionOrder {
     };
   }
 
-  protected TransformationPhase<NonFixedJobParameters> assertResetPhase(int index, String message) {
+  protected TransformationPhase<NonFixedJobParameters> assertResetWalkPhase(int index, String message) {
     return new RunWalkPhase<>() {
       @Override
       protected void beforeWalk(TranslationUnitContext ctx) {
@@ -61,7 +61,7 @@ public abstract class TestForExecutionOrder {
     };
   }
 
-  protected TransformationPhase<NonFixedJobParameters> assertResetPhase(
+  protected TransformationPhase<NonFixedJobParameters> assertResetWalkPhase(
       int minimum, int maximum, String message) {
     return new RunWalkPhase<>() {
       @Override
