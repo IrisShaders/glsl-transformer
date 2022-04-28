@@ -17,7 +17,7 @@ public abstract class WrapIdentifierExternalDeclaration<T extends JobParameters>
    */
   public WrapIdentifierExternalDeclaration() {
     super();
-    chainConcurrentDependent(new RunPhase<T>() {
+    chainDependent(new RunPhase<T>() {
       @Override
       protected void run(TranslationUnitContext ctx) {
         injectExternalDeclaration(getInjectionLocation(), getInjectionContent());
