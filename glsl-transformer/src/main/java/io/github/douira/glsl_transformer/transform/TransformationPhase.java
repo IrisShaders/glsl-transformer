@@ -27,7 +27,7 @@ import io.github.douira.glsl_transformer.util.ExcludeFromJacocoGeneratedReport;
  * node's child array with injection points.
  */
 public abstract class TransformationPhase<T extends JobParameters> extends GLSLParserBaseListener
-    implements LifecycleUser<T>, PartialParseTreeListener, Activatable {
+    implements PartialParseTreeListener, ActivatableLifecycleUser<T> {
   private ExecutionPlanner<T> planner;
   private boolean walkFinishedNotified = false;
   private boolean initialized = false;
