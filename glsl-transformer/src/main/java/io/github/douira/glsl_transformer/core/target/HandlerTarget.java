@@ -7,7 +7,7 @@ import io.github.douira.glsl_transformer.tree.TreeMember;
  * A handler target contains a string to search for and a method that is called
  * to handle finding the string in a parse tree.
  */
-public abstract class HandlerTarget<T extends JobParameters> extends TransformationPhase<T> {
+public abstract class HandlerTarget<T extends JobParameters> extends TransformationPhaseBase<T> {
   /**
    * Creates a new empty handler target.
    */
@@ -33,10 +33,5 @@ public abstract class HandlerTarget<T extends JobParameters> extends Transformat
   @Override
   public void setPlanner(ExecutionPlanner<T> parent) {
     super.setPlanner(parent);
-  }
-
-  @Override
-  protected boolean canWalk() {
-    return false;
   }
 }

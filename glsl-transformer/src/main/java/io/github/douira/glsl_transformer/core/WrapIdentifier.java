@@ -7,7 +7,6 @@ import java.util.function.Function;
 import io.github.douira.glsl_transformer.GLSLParser;
 import io.github.douira.glsl_transformer.core.target.*;
 import io.github.douira.glsl_transformer.transform.*;
-import io.github.douira.glsl_transformer.transform.TransformationPhase.InjectionPoint;
 import io.github.douira.glsl_transformer.tree.ExtendedContext;
 
 /**
