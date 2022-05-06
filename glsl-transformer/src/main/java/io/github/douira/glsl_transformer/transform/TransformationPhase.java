@@ -1,7 +1,9 @@
 package io.github.douira.glsl_transformer.transform;
 
+import static io.github.douira.glsl_transformer.util.ConfigUtil.*;
+
 import java.util.*;
-import java.util.function.Function;
+import java.util.function.*;
 
 import org.antlr.v4.runtime.tree.ParseTree;
 import org.antlr.v4.runtime.tree.pattern.*;
@@ -25,10 +27,11 @@ import io.github.douira.glsl_transformer.util.ExcludeFromJacocoGeneratedReport;
  * node's child array with injection points.
  */
 public abstract class TransformationPhase<T extends JobParameters> extends GLSLParserBaseListener
-    implements LifecycleUser<T>, PartialParseTreeListener {
+    implements LifecycleUser<T>, PartialParseTreeListener, Activatable {
   private ExecutionPlanner<T> planner;
   private boolean walkFinishedNotified = false;
   private boolean initialized = false;
+  private Supplier<Boolean> activation;
 
   /**
    * Called during planning in order to determine if this phase does any
@@ -68,6 +71,12 @@ public abstract class TransformationPhase<T extends JobParameters> extends GLSLP
   protected void runAfterWalk(TranslationUnitContext ctx) {
   }
 
+  @Override
+  public TransformationPhase<T> activation(Supplier<Boolean> activation) {
+    this.activation = activation;
+    return this;
+  }
+
   /**
    * Overwrite this method to add a check of if this phase should be run at all.
    * Especially for WalkPhase this is important since it reduces the number of
@@ -75,8 +84,9 @@ public abstract class TransformationPhase<T extends JobParameters> extends GLSLP
    * 
    * @return If the phase should run. {@code true} by default.
    */
-  protected boolean isActive() {
-    return true;
+  @Override
+  public boolean isActive() {
+    return withDefault(activation, true);
   }
 
   @Override

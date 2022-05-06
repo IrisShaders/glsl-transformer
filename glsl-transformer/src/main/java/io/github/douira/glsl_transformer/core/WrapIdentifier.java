@@ -1,10 +1,14 @@
 package io.github.douira.glsl_transformer.core;
 
+import static io.github.douira.glsl_transformer.util.ConfigUtil.*;
+
+import java.util.function.Function;
+
 import io.github.douira.glsl_transformer.GLSLParser;
-import io.github.douira.glsl_transformer.GLSLParser.TranslationUnitContext;
 import io.github.douira.glsl_transformer.core.target.*;
 import io.github.douira.glsl_transformer.transform.*;
 import io.github.douira.glsl_transformer.transform.TransformationPhase.InjectionPoint;
+import io.github.douira.glsl_transformer.tree.ExtendedContext;
 
 /**
  * The wrap identifier transformation wraps the usage of a certain identifier
@@ -12,145 +16,121 @@ import io.github.douira.glsl_transformer.transform.TransformationPhase.Injection
  * that takes care of handling the conversion from the new to the old value. It
  * also checks that the wrapped value isn't already present in the code.
  */
-public class WrapIdentifier<T extends JobParameters> extends Transformation<T> {
-  /**
-   * Creates a new wrap identifier transformation.
-   * 
-   * @param wrapResultDetector A phase that makes sure the wrap result doesn't
-   *                           already exist in the tree
-   * @param wrappingReplacer   The replacer phase that should replace a target
-   *                           identifier with a replacement expression or
-   *                           identifier
-   * @param wrappingInjector   A transformation phase that does the additional
-   *                           code injection, usually providing a definition
-   *                           for the newly inserted identifier in the form of
-   *                           an external declaration of some sort
-   */
-  public WrapIdentifier(
-      TransformationPhase<T> wrapResultDetector,
-      TransformationPhase<T> wrappingReplacer,
-      TransformationPhase<T> wrappingInjector) {
-    // throw if the wrap result already exists
-    addEndDependent(wrapResultDetector);
-    chainDependent(wrappingReplacer);
-    chainConcurrentDependent(wrappingInjector);
+public class WrapIdentifier<T extends JobParameters> extends ActivatableTransformation<T> {
+  private TransformationPhase<T> wrapResultDetector;
+  private String wrapResult;
+  private String wrapExpression;
+  private Function<GLSLParser, ExtendedContext> parseMethod;
+
+  private TransformationPhase<T> wrappingReplacer;
+  private HandlerTarget<T> wrapHandlerTarget;
+  private String wrapTarget;
+
+  private TransformationPhase<T> wrappingInjector;
+  private InjectionPoint injectionLocation;
+  private String injectionExternalDeclaration;
+
+  public WrapIdentifier() {
+    chainDependent(getWrapResultDetector().activation(this::isActive));
+    chainDependent(getWrappingReplacer().activation(this::isActive));
+    chainDependent(getWrappingInjector().activation(this::isActive));
   }
 
-  /**
-   * Creates a new wrap identifier transformation with a fixed result identifier.
-   * 
-   * @see WrapIdentifier#WrapIdentifier(TransformationPhase, TransformationPhase,
-   *      TransformationPhase)
-   * 
-   * @param wrapResult       The identifier that's inserted for the wrapping
-   * @param wrappingReplacer The replacer phase that replaces a target identifier
-   *                         with a replacement expression or identifier
-   * @param wrappingInjector A transformation phase that does the additional code
-   *                         injection, usually providing a definition for the
-   *                         newly inserted identifier in the form of an external
-   *                         declaration of some sort
-   */
-  public WrapIdentifier(
-      String wrapResult,
-      TransformationPhase<T> wrappingReplacer,
-      TransformationPhase<T> wrappingInjector) {
-    this(new WrapThrowTargetImpl<T>(wrapResult), wrappingReplacer, wrappingInjector);
+  public WrapIdentifier<T> wrapResultDetector(TransformationPhase<T> wrapResultDetector) {
+    this.wrapResultDetector = wrapResultDetector;
+    return this;
   }
 
-  /**
-   * Creates a new wrap identifier transformation with a fixed result identifier
-   * and a fixed replacement phase for which only the target is given.
-   * 
-   * @param wrapResult       The identifier that's inserted for the wrapping
-   * @param wrappingTarget   A replacement target to be used in a search
-   *                         terminal's phase
-   * @param wrappingInjector A transformation phase that does the additional code
-   *                         injection, usually providing a definition for the
-   *                         newly inserted identifier in the form of an external
-   *                         declaration of some sort
-   */
-  public WrapIdentifier(
-      String wrapResult,
-      HandlerTarget<T> wrappingTarget,
-      TransformationPhase<T> wrappingInjector) {
-    this(wrapResult, new SearchTerminalsImpl<T>(wrappingTarget), wrappingInjector);
+  public WrapIdentifier<T> wrapResult(String wrapResult) {
+    this.wrapResult = wrapResult;
+    return this;
   }
 
-  /**
-   * Creates a new wrap identifier transformation that uses an unparsed terminal
-   * replace target. It uses the wrap result as the identifier to disallow as well
-   * as the terminal to insert as a replacement. This is a commonly used operation
-   * when the inserted replacement is just a different identifier.
-   * 
-   * @param <T>              The job parameter type
-   * @param wrapTarget       The identifier to replace
-   * @param wrapResult       The identifier that will be used to replace it
-   * @param wrappingInjector A transformation phase that does the additional code
-   *                         injection
-   * @return The wrap identifier transformation with the given parameters
-   */
-  public static <T extends JobParameters> WrapIdentifier<T> fromTerminal(
-      String wrapTarget,
-      String wrapResult,
-      RunPhase<T> wrappingInjector) {
-    return new WrapIdentifier<T>(
-        wrapResult,
-        new TerminalReplaceTargetImpl<T>(wrapTarget, wrapResult),
-        wrappingInjector);
+  public WrapIdentifier<T> wrapExpression(String wrapExpression) {
+    this.wrapExpression = wrapExpression;
+    return this;
   }
 
-  /**
-   * Creates a new wrap identifier transformation that uses a parsed replace
-   * target that replaces identifiers with an expression. (which may also just be
-   * an identifier)
-   * 
-   * @param <T>              The job parameter type
-   * @param wrapTarget       The identifier to replace
-   * @param wrapResult       The identifier that will be used to replace it
-   * @param wrapExpression   The expression to insert instead of the
-   *                         {@code wrapTarget}
-   * @param wrappingInjector A transformation phase that does the additional code
-   *                         injection
-   * @return The wrap identifier transformation with the given parameters
-   */
-  public static <T extends JobParameters> WrapIdentifier<T> fromExpression(
-      String wrapTarget,
-      String wrapResult,
-      String wrapExpression,
-      RunPhase<T> wrappingInjector) {
-    return new WrapIdentifier<T>(
-        wrapResult,
-        new ParsedReplaceTargetImpl<T>(wrapTarget, wrapExpression, GLSLParser::expression),
-        wrappingInjector);
+  public WrapIdentifier<T> parseMethod(Function<GLSLParser, ExtendedContext> parseMethod) {
+    this.parseMethod = parseMethod;
+    return this;
   }
 
-  /**
-   * Creates a new wrap identifier transformation that inserts a parsed expression
-   * as a replacement and inserts a new external declaration.
-   * 
-   * @see #fromExpression(String, String, String, RunPhase)
-   * 
-   * @param <T>            The job parameter type
-   * @param wrapTarget     The identifier to replace
-   * @param wrapResult     The identifier that will be used to replace it
-   * @param wrapExpression The expression to insert instead of the
-   *                       {@code wrapTarget}
-   * @param location       The injection location for the new code
-   * @param injectedCode   The code to parse and inject as an external declaration
-   *                       at the given location
-   * @return The wrap identifier transformation with the given parameters
-   */
-  public static <T extends JobParameters> WrapIdentifier<T> withExternalDeclaration(
-      String wrapTarget,
-      String wrapResult,
-      String wrapExpression,
-      InjectionPoint location,
-      String injectedCode) {
-    return fromExpression(wrapTarget, wrapResult, wrapExpression, new RunPhase<>() {
-      @Override
-      protected void run(TranslationUnitContext ctx) {
-        injectExternalDeclaration(location, injectedCode);
-      }
+  public WrapIdentifier<T> wrappingReplacer(TransformationPhase<T> wrappingReplacer) {
+    this.wrappingReplacer = wrappingReplacer;
+    return this;
+  }
+
+  public WrapIdentifier<T> wrapHandlerTarget(HandlerTarget<T> wrapHandlerTarget) {
+    this.wrapHandlerTarget = wrapHandlerTarget;
+    return this;
+  }
+
+  public WrapIdentifier<T> wrapTarget(String wrapTarget) {
+    this.wrapTarget = wrapTarget;
+    return this;
+  }
+
+  public WrapIdentifier<T> wrappingInjector(TransformationPhase<T> wrappingInjector) {
+    this.wrappingInjector = wrappingInjector;
+    return this;
+  }
+
+  public WrapIdentifier<T> injectionLocation(InjectionPoint injectionLocation) {
+    this.injectionLocation = injectionLocation;
+    return this;
+  }
+
+  public WrapIdentifier<T> injectionExternalDeclaration(String injectionExternalDeclaration) {
+    this.injectionExternalDeclaration = injectionExternalDeclaration;
+    return this;
+  }
+
+  protected TransformationPhase<T> getWrapResultDetector() {
+    return wrapResultDetector == null ? new WrapThrowTargetImpl<T>(getWrapResult())
+        : wrapResultDetector;
+  }
+
+  protected String getWrapResult() {
+    return withDefault(wrapResult, this::getWrapExpression);
+  }
+
+  protected String getWrapExpression() {
+    return wrapExpression;
+  }
+
+  protected Function<GLSLParser, ExtendedContext> getParseMethod() {
+    return withDefault(parseMethod, GLSLParser::expression);
+  }
+
+  protected TransformationPhase<T> getWrappingReplacer() {
+    return withDefault(wrappingReplacer,
+        () -> new SearchTerminalsImpl<T>(getWrapHandlerTarget()));
+  }
+
+  protected HandlerTarget<T> getWrapHandlerTarget() {
+    return withDefault(wrapHandlerTarget, () -> {
+      var expression = getWrapExpression();
+      return expression == null ? new TerminalReplaceTargetImpl<T>(getWrapTarget(), getWrapResult())
+          : new ParsedReplaceTargetImpl<T>(getWrapTarget(), expression, getParseMethod());
     });
+  }
+
+  protected String getWrapTarget() {
+    return wrapTarget;
+  }
+
+  protected TransformationPhase<T> getWrappingInjector() {
+    return withDefault(wrappingInjector,
+        () -> RunPhase
+            .withInjectExternalDeclarations(getInjectionLocation(), getInjectionExternalDeclaration()));
+  }
+
+  protected InjectionPoint getInjectionLocation() {
+    return withDefault(injectionLocation, InjectionPoint.BEFORE_DECLARATIONS);
+  }
+
+  protected String getInjectionExternalDeclaration() {
+    return injectionExternalDeclaration;
   }
 }
