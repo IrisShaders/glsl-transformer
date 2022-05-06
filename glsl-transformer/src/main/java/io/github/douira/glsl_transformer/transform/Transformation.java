@@ -92,7 +92,8 @@ public class Transformation<T extends JobParameters> extends LifecycleUserImpl<T
    * 
    * On the first graph setup there will be no content nodes if a conditional
    * dependency graph is used. {@link #setupGraph()} isn't called if any static
-   * dependencies were created.
+   * dependencies were created in the constructor, in the instance initializer or
+   * from outside the instance before execution planning took place.
    */
   private void doGraphSetup(Object updateTag) {
     if (this.updateTag == updateTag) {
