@@ -16,17 +16,17 @@ import io.github.douira.glsl_transformer.tree.ExtendedContext;
  * that takes care of handling the conversion from the new to the old value. It
  * also checks that the wrapped value isn't already present in the code.
  */
-public class WrapIdentifier<T extends JobParameters> extends ActivatableTransformation<T> {
-  private TransformationPhase<T> wrapResultDetector;
+public class WrapIdentifier<T extends JobParameters> extends Transformation<T> {
+  private ActivatableLifecycleUser<T> wrapResultDetector;
   private String wrapResult;
   private String wrapExpression;
   private Function<GLSLParser, ExtendedContext> parseMethod;
 
-  private TransformationPhase<T> wrappingReplacer;
+  private ActivatableLifecycleUser<T> wrappingReplacer;
   private HandlerTarget<T> wrapHandlerTarget;
   private String wrapTarget;
 
-  private TransformationPhase<T> wrappingInjector;
+  private ActivatableLifecycleUser<T> wrappingInjector;
   private InjectionPoint injectionLocation;
   private String injectionExternalDeclaration;
 
@@ -47,7 +47,7 @@ public class WrapIdentifier<T extends JobParameters> extends ActivatableTransfor
     chainDependent(getWrappingInjector());
   }
 
-  public WrapIdentifier<T> wrapResultDetector(TransformationPhase<T> wrapResultDetector) {
+  public WrapIdentifier<T> wrapResultDetector(ActivatableLifecycleUser<T> wrapResultDetector) {
     this.wrapResultDetector = wrapResultDetector;
     return this;
   }
@@ -67,7 +67,7 @@ public class WrapIdentifier<T extends JobParameters> extends ActivatableTransfor
     return this;
   }
 
-  public WrapIdentifier<T> wrappingReplacer(TransformationPhase<T> wrappingReplacer) {
+  public WrapIdentifier<T> wrappingReplacer(ActivatableLifecycleUser<T> wrappingReplacer) {
     this.wrappingReplacer = wrappingReplacer;
     return this;
   }
@@ -82,7 +82,7 @@ public class WrapIdentifier<T extends JobParameters> extends ActivatableTransfor
     return this;
   }
 
-  public WrapIdentifier<T> wrappingInjector(TransformationPhase<T> wrappingInjector) {
+  public WrapIdentifier<T> wrappingInjector(ActivatableLifecycleUser<T> wrappingInjector) {
     this.wrappingInjector = wrappingInjector;
     return this;
   }
@@ -97,9 +97,10 @@ public class WrapIdentifier<T extends JobParameters> extends ActivatableTransfor
     return this;
   }
 
-  protected TransformationPhase<T> getWrapResultDetector() {
-    return (wrapResultDetector == null ? new WrapThrowTargetImpl<T>(getWrapResult())
-        : wrapResultDetector).activation(this::isActive);
+  protected ActivatableLifecycleUser<T> getWrapResultDetector() {
+    return withDefault(wrapResultDetector,
+        () -> new SearchTerminalsImpl<>(new WrapThrowTargetImpl<T>(getWrapResult())))
+        .activation(this::isActive);
   }
 
   protected String getWrapResult() {
@@ -114,15 +115,17 @@ public class WrapIdentifier<T extends JobParameters> extends ActivatableTransfor
     return withDefault(parseMethod, GLSLParser::expression);
   }
 
-  protected TransformationPhase<T> getWrappingReplacer() {
+  protected ActivatableLifecycleUser<T> getWrappingReplacer() {
     return withDefault(wrappingReplacer,
-        () -> new SearchTerminalsImpl<T>(getWrapHandlerTarget())).activation(this::isActive);
+        () -> new SearchTerminalsImpl<T>(getWrapHandlerTarget()))
+        .activation(this::isActive);
   }
 
   protected HandlerTarget<T> getWrapHandlerTarget() {
     return withDefault(wrapHandlerTarget, () -> {
       var expression = getWrapExpression();
-      return expression == null ? new TerminalReplaceTargetImpl<T>(getWrapTarget(), getWrapResult())
+      return expression == null
+          ? new TerminalReplaceTargetImpl<T>(getWrapTarget(), getWrapResult())
           : new ParsedReplaceTargetImpl<T>(getWrapTarget(), expression, getParseMethod());
     });
   }
@@ -131,10 +134,10 @@ public class WrapIdentifier<T extends JobParameters> extends ActivatableTransfor
     return wrapTarget;
   }
 
-  protected TransformationPhase<T> getWrappingInjector() {
+  protected ActivatableLifecycleUser<T> getWrappingInjector() {
     return withDefault(wrappingInjector,
-        () -> RunPhase
-            .<T>withInjectExternalDeclarations(getInjectionLocation(), getInjectionExternalDeclaration()))
+        () -> RunPhase.<T>withInjectExternalDeclarations(
+            getInjectionLocation(), getInjectionExternalDeclaration()))
         .activation(this::isActive);
   }
 
