@@ -68,6 +68,17 @@ public abstract class TransformationPhase<T extends JobParameters> extends GLSLP
   protected void runAfterWalk(TranslationUnitContext ctx) {
   }
 
+  /**
+   * Overwrite this method to add a check of if this phase should be run at all.
+   * Especially for WalkPhase this is important since it reduces the number of
+   * listeners that need to be processed.
+   * 
+   * @return If the phase should run. {@code true} by default.
+   */
+  protected boolean isActive() {
+    return true;
+  }
+
   @Override
   public ExecutionPlanner<T> getPlanner() {
     return planner;
@@ -250,17 +261,6 @@ public abstract class TransformationPhase<T extends JobParameters> extends GLSLP
       }
     }
     return matches;
-  }
-
-  /**
-   * Overwrite this method to add a check of if this phase should be run at all.
-   * Especially for WalkPhase this is important since it reduces the number of
-   * listeners that need to be processed.
-   * 
-   * @return If the phase should run. {@code true} by default.
-   */
-  protected boolean isActive() {
-    return true;
   }
 
   /**
