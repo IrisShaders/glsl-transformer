@@ -8,7 +8,7 @@ public class ConfigUtil {
   }
 
   public static <V> V withDefault(Supplier<V> setValueSupplier, V defaultValue) {
-    return withDefault(withDefaultBare(setValueSupplier.get(), null), defaultValue);
+    return setValueSupplier == null ? withDefault((V) null, defaultValue) : setValueSupplier.get();
   }
 
   public static <V> V withDefault(V setValue, V defaultValue) {
@@ -20,9 +20,5 @@ public class ConfigUtil {
     } else {
       return setValue;
     }
-  }
-
-  public static <V> V withDefaultBare(V setValue, V defaultValue) {
-    return setValue == null ? defaultValue : setValue;
   }
 }
