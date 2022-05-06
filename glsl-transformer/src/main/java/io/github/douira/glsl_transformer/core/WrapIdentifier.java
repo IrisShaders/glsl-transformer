@@ -30,10 +30,21 @@ public class WrapIdentifier<T extends JobParameters> extends ActivatableTransfor
   private InjectionPoint injectionLocation;
   private String injectionExternalDeclaration;
 
+  /**
+   * Create a new wrap identifier transformation. Configuration is done by calling
+   * the various configuration methods.
+   */
   public WrapIdentifier() {
-    chainDependent(getWrapResultDetector().activation(this::isActive));
-    chainDependent(getWrappingReplacer().activation(this::isActive));
-    chainDependent(getWrappingInjector().activation(this::isActive));
+  }
+
+  /**
+   * Setup is done here so that it can be overridden in subclasses.
+   */
+  @Override
+  protected void setupGraph() {
+    chainDependent(getWrapResultDetector());
+    chainDependent(getWrappingReplacer());
+    chainDependent(getWrappingInjector());
   }
 
   public WrapIdentifier<T> wrapResultDetector(TransformationPhase<T> wrapResultDetector) {
@@ -87,8 +98,8 @@ public class WrapIdentifier<T extends JobParameters> extends ActivatableTransfor
   }
 
   protected TransformationPhase<T> getWrapResultDetector() {
-    return wrapResultDetector == null ? new WrapThrowTargetImpl<T>(getWrapResult())
-        : wrapResultDetector;
+    return (wrapResultDetector == null ? new WrapThrowTargetImpl<T>(getWrapResult())
+        : wrapResultDetector).activation(this::isActive);
   }
 
   protected String getWrapResult() {
@@ -105,7 +116,7 @@ public class WrapIdentifier<T extends JobParameters> extends ActivatableTransfor
 
   protected TransformationPhase<T> getWrappingReplacer() {
     return withDefault(wrappingReplacer,
-        () -> new SearchTerminalsImpl<T>(getWrapHandlerTarget()));
+        () -> new SearchTerminalsImpl<T>(getWrapHandlerTarget())).activation(this::isActive);
   }
 
   protected HandlerTarget<T> getWrapHandlerTarget() {
@@ -123,7 +134,8 @@ public class WrapIdentifier<T extends JobParameters> extends ActivatableTransfor
   protected TransformationPhase<T> getWrappingInjector() {
     return withDefault(wrappingInjector,
         () -> RunPhase
-            .withInjectExternalDeclarations(getInjectionLocation(), getInjectionExternalDeclaration()));
+            .<T>withInjectExternalDeclarations(getInjectionLocation(), getInjectionExternalDeclaration()))
+        .activation(this::isActive);
   }
 
   protected InjectionPoint getInjectionLocation() {
