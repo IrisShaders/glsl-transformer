@@ -1,6 +1,9 @@
 package io.github.douira.glsl_transformer.transform;
 
+import static io.github.douira.glsl_transformer.AssertUtil.*;
 import static org.junit.jupiter.api.Assertions.*;
+
+import java.util.function.BiConsumer;
 
 import org.junit.jupiter.api.Test;
 
@@ -28,16 +31,16 @@ public class ExecutionPlannerTest extends TestForExecutionOrder {
 
   @Test
   void testAddConcurrent() {
-    manager.addConcurrent(RunPhase.withRun(() -> nextIndex++));
+    manager.addConcurrent(incrementRunPhase());
     manager.transform("");
     assertEquals(1, nextIndex, "It should run the added phase");
   }
 
   @Test
   void testAddConcurrentMultiple() {
-    manager.addConcurrent(RunPhase.withRun(() -> nextIndex++));
-    manager.addConcurrent(RunPhase.withRun(() -> nextIndex++));
-    manager.addConcurrent(RunPhase.withRun(() -> nextIndex++));
+    manager.addConcurrent(incrementRunPhase());
+    manager.addConcurrent(incrementRunPhase());
+    manager.addConcurrent(incrementRunPhase());
     manager.transform("");
     assertEquals(3, nextIndex, "It should run all of the added phases");
   }
@@ -56,7 +59,7 @@ public class ExecutionPlannerTest extends TestForExecutionOrder {
   void testGetRootTransformation() {
     manager
         .getRootTransformation()
-        .addRootDependency(RunPhase.withRun(() -> nextIndex++));
+        .addRootDependency(incrementRunPhase());
     manager.transform("");
     assertEquals(1, nextIndex, "It should run the root transformation");
   }
@@ -72,10 +75,10 @@ public class ExecutionPlannerTest extends TestForExecutionOrder {
   void testIncrementalFinalization() {
     var transformation = manager
         .getRootTransformation();
-    transformation.addRootDependency(RunPhase.withRun(() -> nextIndex++));
+    transformation.addRootDependency(incrementRunPhase());
     manager.transform("");
     assertEquals(1, nextIndex, "It should run the phase");
-    transformation.addRootDependency(RunPhase.withRun(() -> nextIndex++));
+    transformation.addRootDependency(incrementRunPhase());
     manager.transform("");
     assertEquals(2, nextIndex, "It should run the previous and the new phase");
   }
@@ -291,8 +294,8 @@ public class ExecutionPlannerTest extends TestForExecutionOrder {
     transformation.addDependency(bPhase, aPhase);
     transformation.addDependency(bPhase, dPhase);
 
-    assertDoesNotThrow(() -> manager.transform(""),
-        "It should not throw if there is an unreachable cycle and do nothing instead.");
+    assertThrows(AssertionError.class, () -> manager.transform(""),
+        "It should throw if there is an unreachable node (like one in a cycle).");
   }
 
   @Test
@@ -307,8 +310,8 @@ public class ExecutionPlannerTest extends TestForExecutionOrder {
     transformation.addDependency(aPhase, bPhase);
     transformation.addDependency(bPhase, aPhase);
 
-    assertDoesNotThrow(() -> manager.transform(""),
-        "It should not throw if there is an unreachable cycle and do nothing instead.");
+    assertThrows(AssertionError.class, () -> manager.transform(""),
+        "It should throw if there is an unreachable node (like one in a cycle).");
   }
 
   @Test
@@ -355,5 +358,80 @@ public class ExecutionPlannerTest extends TestForExecutionOrder {
 
     manager.planExecutionFor(null);
     assertEquals(3, nextIndex, "It should run the new root transformation's graph setup");
+  }
+
+  @Test
+  void testAdjacentSerialTransformations() {
+    transformation.chainDependent(new Transformation<NonFixedJobParameters>(incrementRunPhase()));
+    transformation.chainDependent(new Transformation<NonFixedJobParameters>(incrementRunPhase()));
+    manager.transform("");
+    assertEquals(2, nextIndex, "It should run two phases wrapped in transformations added as serial dependencies.");
+  }
+
+  /*
+   * The following tests make sure that if a phase is added multiple times to the
+   * same transformation manager even if it's wrapped inside another
+   * transformation it's only run once and doesn't cause issues for execution
+   * planning. If the phase has itself as a dependency, it's expected to cause an
+   * exception during execution planning.
+   */
+
+  private void setupMultipleTimes(int count,
+      BiConsumer<TransformationPhase<JobParameters>, Transformation<JobParameters>> setupOne) {
+    var phase = incrementRunPhase();
+    var localManager = new TransformationManager<>();
+    var localTransformation = localManager.getRootTransformation();
+    for (var j = 0; j < count; j++) {
+      setupOne.accept(phase, localTransformation);
+    }
+    nextIndex = 0;
+    localManager.transform("");
+  }
+
+  private void assertMultipleRunNTimes(int expectedRuns,
+      BiConsumer<TransformationPhase<JobParameters>, Transformation<JobParameters>> setupOne) {
+    for (var i = 2; i <= 2; i++) {
+      setupMultipleTimes(i, setupOne);
+      assertEquals(expectedRuns, nextIndex,
+          "It should run the phase " + expectedRuns + " time(s) when added " + i + " time(s).");
+    }
+  }
+
+  private void assertMultipleRunOnce(
+      BiConsumer<TransformationPhase<JobParameters>, Transformation<JobParameters>> setupOne) {
+    assertMultipleRunNTimes(1, setupOne);
+  }
+
+  @Test
+  void testRepeatedParallelWrapped() {
+    // type: parallel wrapped
+    assertMultipleRunOnce((phase, t) -> t.addEndDependent(new Transformation<>(phase)));
+    assertRun(
+        "It should run a single phase wrapped in two unique transformations added twice as serial dependencies just once.");
+  }
+
+  @Test
+  void testRepeatedParallelBare() {
+    // type: parallel bare
+    assertMultipleRunOnce((phase, t) -> t.addEndDependent(phase));
+    assertRun("It should run a single phase added twice as serial dependencies just once.");
+  }
+
+  @Test
+  void testRepeatedSerialWrapped() {
+    // type: serial wrapped
+    assertThrows(AssertionError.class, () -> {
+      setupMultipleTimes(2, (phase, t) -> t.chainDependent(new Transformation<>(phase)));
+    }, "It should throw during execution planning if a phase is added as a dependency on itself.");
+  }
+
+  @Test
+  void testRepeatedSerialBare() {
+    // type: serial bare
+    // TODO: this produces a self-loop that is separate from the root and end node
+    // which end up in default configuration
+    assertThrows(AssertionError.class,
+        () -> assertMultipleRunOnce((phase, t) -> t.chainDependency(phase)),
+        "It should throw during execution planning if a phase is unreachable because it depends on itself.");
   }
 }
