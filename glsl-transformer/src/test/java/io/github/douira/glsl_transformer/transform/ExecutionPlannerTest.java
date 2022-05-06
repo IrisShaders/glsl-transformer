@@ -428,8 +428,6 @@ public class ExecutionPlannerTest extends TestForExecutionOrder {
   @Test
   void testRepeatedSerialBare() {
     // type: serial bare
-    // TODO: this produces a self-loop that is separate from the root and end node
-    // which end up in default configuration
     assertThrows(AssertionError.class,
         () -> assertMultipleRunOnce((phase, t) -> t.chainDependency(phase)),
         "It should throw during execution planning if a phase is unreachable because it depends on itself.");
