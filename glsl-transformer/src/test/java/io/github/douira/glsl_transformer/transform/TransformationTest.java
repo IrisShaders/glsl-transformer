@@ -120,16 +120,16 @@ public class TransformationTest extends TestForExecutionOrder {
         assertResetPhase(1, 2, "The root dependency should run in the second level."));
     transformation.addEndDependent(
         assertResetPhase(1, 2, "The end dependent should run in the second level."));
-    transformation.appendDependent(RunPhase.withRun(() -> nextIndex++));
+    transformation.appendDependent(incrementRunPhase());
     manager.transform("");
     assertEquals(3, nextIndex, "All phases should run.");
   }
 
   @Test
   void testAppendDependent() {
-    transformation.addEndDependent(RunPhase.withRun(() -> nextIndex++));
-    transformation.addRootDependency(RunPhase.withRun(() -> nextIndex++));
-    transformation.chainDependency(RunPhase.withRun(() -> nextIndex++));
+    transformation.addEndDependent(incrementRunPhase());
+    transformation.addRootDependency(incrementRunPhase());
+    transformation.chainDependency(incrementRunPhase());
     transformation.appendDependent(
         assertOrderPhase(0, "The appended phase should run before all other phases."));
     manager.transform("");
@@ -138,9 +138,9 @@ public class TransformationTest extends TestForExecutionOrder {
 
   @Test
   void testAppendDependentChaining() {
-    transformation.addEndDependent(RunPhase.withRun(() -> nextIndex++));
-    transformation.appendDependent(RunPhase.withRun(() -> nextIndex++));
-    transformation.appendDependent(RunPhase.withRun(() -> nextIndex++));
+    transformation.addEndDependent(incrementRunPhase());
+    transformation.appendDependent(incrementRunPhase());
+    transformation.appendDependent(incrementRunPhase());
     transformation.chainConcurrentDependency(
         assertOrderPhase(0, "The chained concurrent dependency should run before all other phases."));
     manager.transform("");
@@ -149,9 +149,9 @@ public class TransformationTest extends TestForExecutionOrder {
 
   @Test
   void testPrependDependency() {
-    transformation.addRootDependency(RunPhase.withRun(() -> nextIndex++));
-    transformation.addEndDependent(RunPhase.withRun(() -> nextIndex++));
-    transformation.chainDependent(RunPhase.withRun(() -> nextIndex++));
+    transformation.addRootDependency(incrementRunPhase());
+    transformation.addEndDependent(incrementRunPhase());
+    transformation.chainDependent(incrementRunPhase());
     transformation.prependDependency(
         assertOrderPhase(3, "The prepended phase should run after all other phases."));
     manager.transform("");
@@ -160,9 +160,9 @@ public class TransformationTest extends TestForExecutionOrder {
 
   @Test
   void testPrependDependencyChaining() {
-    transformation.addRootDependency(RunPhase.withRun(() -> nextIndex++));
-    transformation.prependDependency(RunPhase.withRun(() -> nextIndex++));
-    transformation.prependDependency(RunPhase.withRun(() -> nextIndex++));
+    transformation.addRootDependency(incrementRunPhase());
+    transformation.prependDependency(incrementRunPhase());
+    transformation.prependDependency(incrementRunPhase());
     transformation.chainConcurrentDependent(
         assertOrderPhase(3, "The chained concurrent dependent should run after all other phases."));
     manager.transform("");
@@ -219,7 +219,7 @@ public class TransformationTest extends TestForExecutionOrder {
     var man = new TransformationManager<>();
     man.addConcurrent(new Transformation<>() {
       {
-        chainDependent(RunPhase.withRun(() -> nextIndex++));
+        chainDependent(incrementRunPhase());
       }
 
       @Override
@@ -239,7 +239,7 @@ public class TransformationTest extends TestForExecutionOrder {
     man.addConcurrent(new Transformation<>() {
       @Override
       protected void setupGraph() {
-        chainDependent(RunPhase.withRun(() -> nextIndex++));
+        chainDependent(incrementRunPhase());
       }
     });
 
@@ -258,7 +258,7 @@ public class TransformationTest extends TestForExecutionOrder {
     var man = new TransformationManager<>();
     man.addConcurrent(new Transformation<>() {
       {
-        chainDependent(RunPhase.withRun(() -> nextIndex++));
+        chainDependent(incrementRunPhase());
       }
     });
 
@@ -280,13 +280,13 @@ public class TransformationTest extends TestForExecutionOrder {
     man.addConcurrent(new Transformation<>() {
       @Override
       protected void setupGraph() {
-        chainDependent(RunPhase.withRun(() -> nextIndex++));
+        chainDependent(incrementRunPhase());
         if (getJobParameters().getContents() == a) {
-          chainDependent(RunPhase.withRun(() -> nextIndex++));
+          chainDependent(incrementRunPhase());
           chainDependent(RunPhase.withRun(() -> nextIndex *= 3));
         } else {
           chainDependent(RunPhase.withRun(() -> nextIndex *= 3));
-          chainDependent(RunPhase.withRun(() -> nextIndex++));
+          chainDependent(incrementRunPhase());
         }
       }
     });

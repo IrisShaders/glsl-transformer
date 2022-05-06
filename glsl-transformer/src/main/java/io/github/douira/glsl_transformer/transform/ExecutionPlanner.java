@@ -187,6 +187,21 @@ public abstract class ExecutionPlanner<T extends JobParameters> {
       transformations = new ArrayList<>();
       transformations.addAll(transformationSet);
 
+      // check that there are is no undiscovered content and no end nodes are
+      // unreachable
+      for (var transformation : transformations) {
+        for (var contentNode : transformation.getContentNodes()) {
+          if (!contentNodeMap.containsKey(contentNode.getContent())) {
+            throw new AssertionError(
+                "There is a transformation with a node that has content that was not found traversing the dependency graph. The dependency graph is not well-formed.");
+          }
+        }
+        if (!endNodeMap.containsKey(transformation.getEndDepNode())) {
+          throw new AssertionError(
+              "There is a transformation with an unreachable end node. The dependency graph is not well-formed.");
+        }
+      }
+
       Deque<DFSEntry<T>> dfsStack = new LinkedList<>();
       dfsStack.push(new DFSEntry<>(rootNode, true));
 

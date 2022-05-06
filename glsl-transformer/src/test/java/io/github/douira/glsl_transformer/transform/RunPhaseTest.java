@@ -30,7 +30,7 @@ public class RunPhaseTest extends TestForExecutionOrder {
 
   @Test
   void testWithRun() {
-    manager.addConcurrent(RunPhase.withRun(() -> nextIndex++));
+    manager.addConcurrent(incrementRunPhase());
     manager.transform("");
     assertEquals(1, nextIndex, "It should generate a run phase that does a run.");
   }

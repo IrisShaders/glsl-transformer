@@ -140,6 +140,10 @@ public class Transformation<T extends JobParameters> extends LifecycleUserImpl<T
     return endNode;
   }
 
+  Collection<Node<T>> getContentNodes() {
+    return contentNodes.values();
+  }
+
   private void addContentNode(LifecycleUser<T> content, Node<T> node) {
     contentNodes.put(content, node);
     if (content instanceof Transformation) {

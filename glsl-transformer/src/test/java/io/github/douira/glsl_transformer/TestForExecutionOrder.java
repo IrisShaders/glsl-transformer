@@ -115,6 +115,12 @@ public abstract class TestForExecutionOrder {
     };
   }
 
+  public <T extends JobParameters> TransformationPhase<T> incrementRunPhase() {
+    return RunPhase.withRun(() -> {
+      nextIndex++;
+    });
+  }
+
   @BeforeEach
   void setup() {
     manager = new TransformationManager<>();
