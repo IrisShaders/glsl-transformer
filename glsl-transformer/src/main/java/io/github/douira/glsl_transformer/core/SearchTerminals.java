@@ -1,14 +1,18 @@
 package io.github.douira.glsl_transformer.core;
 
-import java.util.Collection;
+import static io.github.douira.glsl_transformer.util.ConfigUtil.*;
+
+import java.util.*;
+import java.util.function.Function;
 
 import org.antlr.v4.runtime.Token;
 import org.antlr.v4.runtime.tree.TerminalNode;
 
-import io.github.douira.glsl_transformer.GLSLLexer;
-import io.github.douira.glsl_transformer.core.target.HandlerTarget;
+import io.github.douira.glsl_transformer.*;
+import io.github.douira.glsl_transformer.core.target.*;
 import io.github.douira.glsl_transformer.transform.*;
-import io.github.douira.glsl_transformer.tree.TreeMember;
+import io.github.douira.glsl_transformer.tree.*;
+import io.github.douira.glsl_transformer.util.CompatUtil;
 
 /**
  * This phase finds targets in specified target token types (usually
@@ -22,7 +26,7 @@ import io.github.douira.glsl_transformer.tree.TreeMember;
  * phase yourself and do something when it visits the parse context of
  * interest.
  */
-public abstract class SearchTerminals<T extends JobParameters> extends WalkPhase<T> {
+public class SearchTerminals<T extends JobParameters> extends WalkPhase<T> {
   /**
    * The identifier token type.
    */
@@ -37,7 +41,43 @@ public abstract class SearchTerminals<T extends JobParameters> extends WalkPhase
    * If string matching is done exactly or also larger strings that contain the
    * needle are allowed.
    */
-  private boolean exactMatch = true;
+  private boolean requireFullMatch = true;
+
+  /**
+   * The target type of token to replace
+   */
+  private int terminalTokenType = IDENTIFIER;
+
+  /**
+   * The list of targets to process for each targeted context.
+   */
+  protected Collection<HandlerTarget<T>> targets;
+
+  public SearchTerminals<T> targets(Collection<HandlerTarget<T>> targets) {
+    this.targets = targets;
+    return this;
+  }
+
+  public SearchTerminals<T> target(HandlerTarget<T> target) {
+    this.targets = CompatUtil.setOf(target);
+    return this;
+  }
+
+  /**
+   * Sets the terminal token type. Use {@link SearchTerminals#IDENTIFIER} to
+   * search for identifiers.
+   * 
+   * @param terminalTokenType The terminal token type
+   */
+  public SearchTerminals<T> terminalTokenType(int terminalTokenType) {
+    this.terminalTokenType = terminalTokenType;
+    return this;
+  }
+
+  public SearchTerminals<T> requireFullMatch(boolean requireFullMatch) {
+    this.requireFullMatch = requireFullMatch;
+    return this;
+  }
 
   /**
    * Returns the collection of targets to search for. This method should be
@@ -45,7 +85,9 @@ public abstract class SearchTerminals<T extends JobParameters> extends WalkPhase
    * 
    * @return The targets to search for
    */
-  protected abstract Collection<HandlerTarget<T>> getTargets();
+  protected Collection<HandlerTarget<T>> getTargets() {
+    return withDefault(targets, () -> new ArrayList<HandlerTarget<T>>(0));
+  }
 
   /**
    * Returns the terminal token type to match the target's needles against. The
@@ -54,8 +96,61 @@ public abstract class SearchTerminals<T extends JobParameters> extends WalkPhase
    * @return The terminal token type
    */
   protected int getTerminalTokenType() {
-    return GLSLLexer.IDENTIFIER;
-  };
+    return terminalTokenType;
+  }
+
+  protected boolean getRequireFullMatch() {
+    return requireFullMatch;
+  }
+
+  /**
+   * Adds a target for processing.
+   * 
+   * @param target The target to add to the collection of targets
+   */
+  public SearchTerminals<T> addTarget(HandlerTarget<T> target) {
+    targets.add(target);
+    return this;
+  }
+
+  /**
+   * Adds a replacement target that replaces matching terminal nodes with new
+   * nodes parsed from the given string using a specified parser method.
+   * 
+   * @param needle      The needle (search string)
+   * @param newContent  The new content to parse into a node
+   * @param parseMethod The parser method to create the new node with
+   */
+  public SearchTerminals<T> addReplacement(
+      String needle, String newContent,
+      Function<GLSLParser, ExtendedContext> parseMethod) {
+    addTarget(new ParsedReplaceTargetImpl<T>(needle, newContent, parseMethod));
+    return this;
+  }
+
+  /**
+   * Adds a replacement target that replaces matching terminal nodes with new
+   * expression nodes parsed from the given string.
+   * 
+   * @param needle            The needle (search string)
+   * @param expressionContent The new content to parse into an expression
+   */
+  public SearchTerminals<T> addReplacementExpression(String needle, String expressionContent) {
+    addReplacement(needle, expressionContent, GLSLParser::expression);
+    return this;
+  }
+
+  /**
+   * Adds a replacement target that replaces matching terminal nodes with new
+   * unparsed string nodes.
+   * 
+   * @param needle          The needle (search string)
+   * @param terminalContent The new terminal content to insert as a string node
+   */
+  public SearchTerminals<T> addReplacementTerminal(String needle, String terminalContent) {
+    addTarget(new TerminalReplaceTargetImpl<>(needle, terminalContent));
+    return this;
+  }
 
   @Override
   public void visitTerminal(TerminalNode node) {
@@ -90,13 +185,6 @@ public abstract class SearchTerminals<T extends JobParameters> extends WalkPhase
   }
 
   /**
-   * Makes this search phase not use exact matching.
-   */
-  public void allowInexactMatches() {
-    exactMatch = false;
-  }
-
-  /**
    * Checks if the given content contains a needle. This should be overwritten if
    * the matching should be done differently, like using regex or case-insensitive
    * matching.
@@ -106,7 +194,7 @@ public abstract class SearchTerminals<T extends JobParameters> extends WalkPhase
    * @return If the target was found in the content
    */
   protected boolean findNeedle(String content, HandlerTarget<T> target) {
-    return exactMatch
+    return getRequireFullMatch()
         ? content.equals(target.getNeedle())
         : content.contains(target.getNeedle());
   }

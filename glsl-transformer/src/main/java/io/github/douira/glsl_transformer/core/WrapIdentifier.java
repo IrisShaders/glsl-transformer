@@ -2,12 +2,15 @@ package io.github.douira.glsl_transformer.core;
 
 import static io.github.douira.glsl_transformer.util.ConfigUtil.*;
 
-import java.util.function.Function;
+import java.util.Collection;
+import java.util.function.*;
 
 import io.github.douira.glsl_transformer.GLSLParser;
+import io.github.douira.glsl_transformer.GLSLParser.TranslationUnitContext;
 import io.github.douira.glsl_transformer.core.target.*;
 import io.github.douira.glsl_transformer.transform.*;
-import io.github.douira.glsl_transformer.tree.ExtendedContext;
+import io.github.douira.glsl_transformer.tree.*;
+import io.github.douira.glsl_transformer.util.CompatUtil;
 
 /**
  * The wrap identifier transformation wraps the usage of a certain identifier
@@ -20,6 +23,8 @@ import io.github.douira.glsl_transformer.tree.ExtendedContext;
  * methods. Additionally, configuration values can be generated dynamically by
  * overriding the getter methods.
  */
+// TODO: how do I notify the suppliers, how are they stored, and it be used
+// without them efficiently?
 public class WrapIdentifier<T extends JobParameters> extends Transformation<T> {
   private ActivatableLifecycleUser<T> wrapResultDetector;
   private String detectionResult;
@@ -34,12 +39,7 @@ public class WrapIdentifier<T extends JobParameters> extends Transformation<T> {
   private InjectionPoint injectionLocation;
   private String injectionExternalDeclaration;
 
-  /**
-   * Create a new wrap identifier transformation. Configuration is done by calling
-   * the various configuration methods.
-   */
-  public WrapIdentifier() {
-  }
+  // private Supplier<String> f = () -> this.detectionResult;
 
   /**
    * Setup is done here so that it can be overridden in subclasses.
@@ -179,7 +179,12 @@ public class WrapIdentifier<T extends JobParameters> extends Transformation<T> {
    */
   protected ActivatableLifecycleUser<T> getWrapResultDetector() {
     return withDefault(wrapResultDetector,
-        () -> new SearchTerminalsImpl<>(new WrapThrowTargetImpl<T>(detectionResult())))
+        () -> new SearchTerminals<T>().target(new WrapThrowTarget<T>() {
+          @Override
+          protected String getWrapResult() {
+            return getDetectionResult();
+          }
+        }))
         .activation(this::isActive);
   }
 
@@ -188,7 +193,7 @@ public class WrapIdentifier<T extends JobParameters> extends Transformation<T> {
    * 
    * @return The detection result
    */
-  protected String detectionResult() {
+  protected String getDetectionResult() {
     return withDefault(detectionResult, this::getParsedReplacement);
   }
 
@@ -217,7 +222,13 @@ public class WrapIdentifier<T extends JobParameters> extends Transformation<T> {
    */
   protected ActivatableLifecycleUser<T> getWrappingReplacer() {
     return withDefault(wrappingReplacer,
-        () -> new SearchTerminalsImpl<T>(getWrapHandlerTarget()))
+        () -> new SearchTerminals<T>() {
+          @Override
+          protected Collection<HandlerTarget<T>> getTargets() {
+            // TODO: this is not efficient
+            return CompatUtil.listOf(getWrapHandlerTarget());
+          }
+        })
         .activation(this::isActive);
   }
 
@@ -228,10 +239,34 @@ public class WrapIdentifier<T extends JobParameters> extends Transformation<T> {
    */
   protected HandlerTarget<T> getWrapHandlerTarget() {
     return withDefault(wrapHandlerTarget, () -> {
-      var replacement = getParsedReplacement();
-      return replacement == null
-          ? new TerminalReplaceTargetImpl<T>(getWrapTarget(), detectionResult())
-          : new ParsedReplaceTargetImpl<T>(getWrapTarget(), replacement, getParseMethod());
+      return getParsedReplacement() == null
+          ? (new TerminalReplaceTarget<T>() {
+            @Override
+            public String getNeedle() {
+              return getWrapTarget();
+            }
+
+            @Override
+            protected String getTerminalContent() {
+              return getDetectionResult();
+            }
+          })
+          : new ParsedReplaceTarget<T>() {
+            @Override
+            public String getNeedle() {
+              return getWrapTarget();
+            }
+
+            @Override
+            protected String getNewContent(TreeMember node, String match) {
+              return getParsedReplacement();
+            }
+
+            @Override
+            protected Function<GLSLParser, ExtendedContext> getParseMethod(TreeMember node, String match) {
+              return WrapIdentifier.this.getParseMethod();
+            }
+          };
     });
   }
 
@@ -251,8 +286,12 @@ public class WrapIdentifier<T extends JobParameters> extends Transformation<T> {
    */
   protected ActivatableLifecycleUser<T> getInjector() {
     return withDefault(injector,
-        () -> RunPhase.<T>withInjectExternalDeclarations(
-            getInjectionLocation(), getInjectionExternalDeclaration()))
+        () -> new RunPhase<T>() {
+          @Override
+          protected void run(TranslationUnitContext ctx) {
+            injectExternalDeclaration(getInjectionLocation(), getInjectionExternalDeclaration());
+          }
+        })
         .activation(this::isActive);
   }
 
