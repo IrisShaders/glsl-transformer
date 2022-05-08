@@ -26,7 +26,7 @@ public class ThrowTargetTest extends TestWithTransformationManager<NonFixedJobPa
     try {
       runTransformation(
           "int f = foo + oofevilinside;",
-          new SearchTerminalsImpl<>(
+          new SearchTerminals<NonFixedJobParameters>().target(
               new ThrowTarget<NonFixedJobParameters>("evil") {
                 @Override
                 public String getMessage(TreeMember node, String match) {
@@ -34,11 +34,7 @@ public class ThrowTargetTest extends TestWithTransformationManager<NonFixedJobPa
                   nextIndex++;
                   return message;
                 }
-              }) {
-            {
-              allowInexactMatches();
-            }
-          });
+              }).requireFullMatch(false));
     } catch (SemanticException e) {
       assertSame(message, e.getMessage(), "It should throw an exception containins the right message");
       nextIndex += 100;
@@ -54,7 +50,7 @@ public class ThrowTargetTest extends TestWithTransformationManager<NonFixedJobPa
     try {
       runTransformation(
           "int f = foo + oofevilinside + outside + evil;",
-          new SearchTerminalsImpl<>(
+          new SearchTerminals<NonFixedJobParameters>().target(
               new ThrowTarget<NonFixedJobParameters>("evil") {
                 @Override
                 public String getMessage(TreeMember node, String match) {
@@ -76,6 +72,6 @@ public class ThrowTargetTest extends TestWithTransformationManager<NonFixedJobPa
     assertDoesNotThrow(
         () -> runTransformation(
             "int f = foo + EvilInCaps + EVILCAPS + e_v_i_l_spaced;",
-            new SearchTerminalsImpl<>(new ThrowTargetImpl<>("evil", "message"))));
+            new SearchTerminals<NonFixedJobParameters>().target(new ThrowTargetImpl<>("evil", "message"))));
   }
 }

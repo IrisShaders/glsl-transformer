@@ -8,7 +8,6 @@ import io.github.douira.glsl_transformer.tree.TreeMember;
  * A terminal replace target replaces the target with a terminal string node.
  */
 public abstract class TerminalReplaceTarget<T extends JobParameters> extends ReplaceTarget<T> {
-
   /**
    * Creates a new terminal placement target with a search string.
    * 

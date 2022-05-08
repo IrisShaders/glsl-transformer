@@ -77,11 +77,16 @@ public class Transformation<T extends JobParameters> extends LifecycleUserImpl<T
 
   /**
    * If conditional dependencies are required for this transformation, all
-   * dependencies should be created within this method. Fixed job parameters may
+   * dependencies should be added within this method. Fixed job parameters may
    * be accessed through {@link #getJobParameters()}. Only either dependencies
    * added in this method or statically set dependencies may be used at once. If
    * dependencies are added statically, this method is never run and no
    * conditional dependencies can be created.
+   * 
+   * For more efficient memory usage, it's recommended to create the dependencies
+   * that are setup within this method once and then simply add their references
+   * as dependencies in this method. Creating them in this method will generate
+   * copies of the created phases.
    */
   protected void setupGraph() {
   }
