@@ -2,7 +2,7 @@ package io.github.douira.glsl_transformer.core;
 
 import static io.github.douira.glsl_transformer.util.ConfigUtil.*;
 
-import java.util.Collection;
+import java.util.*;
 import java.util.function.*;
 
 import io.github.douira.glsl_transformer.GLSLParser;
@@ -23,23 +23,30 @@ import io.github.douira.glsl_transformer.util.CompatUtil;
  * methods. Additionally, configuration values can be generated dynamically by
  * overriding the getter methods.
  */
-// TODO: how do I notify the suppliers, how are they stored, and it be used
-// without them efficiently?
-public class WrapIdentifier<T extends JobParameters> extends Transformation<T> {
-  private ActivatableLifecycleUser<T> wrapResultDetector;
-  private String detectionResult;
-  private String parsedReplacement;
-  private Function<GLSLParser, ExtendedContext> parseMethod;
+// TODO: replace the setter methods to use swapSupplier, add methods that use
+// the suppliers to get (cached) values (named like the setter methods but with
+// no argument, return the value from the corresponding supplier), add cache
+// invalidation triggers to the caching suppliers that are in cachingSuppliers
+public class WrapIdentifier<T extends JobParameters> extends Transformation<T> implements Configurable {
+  private Supplier<ActivatableLifecycleUser<T>> wrapResultDetector = this::getWrapResultDetector;
+  private Supplier<String> detectionResult = this::getParsedReplacement;
 
-  private ActivatableLifecycleUser<T> wrappingReplacer;
-  private HandlerTarget<T> wrapHandlerTarget;
-  private String wrapTarget;
+  private Supplier<String> parsedReplacement = this::getParsedReplacement;
+  private Supplier<Function<GLSLParser, ExtendedContext>> parseMethod = this::getParseMethod;
+  private Supplier<ActivatableLifecycleUser<T>> wrappingReplacer = this::getWrappingReplacer;
+  private Supplier<HandlerTarget<T>> wrapHandlerTarget = this::getWrapHandlerTarget;
+  private Supplier<String> wrapTarget = this::getWrapTarget;
 
-  private ActivatableLifecycleUser<T> injector;
-  private InjectionPoint injectionLocation;
-  private String injectionExternalDeclaration;
+  private Supplier<ActivatableLifecycleUser<T>> injector = this::getInjector;
+  private Supplier<InjectionPoint> injectionLocation = this::getInjectionLocation;
+  private Supplier<String> injectionExternalDeclaration = this::getInjectionExternalDeclaration;
 
-  // private Supplier<String> f = () -> this.detectionResult;
+  private Set<CachingSupplier<?>> cachingSuppliers;
+
+  @Override
+  public Set<CachingSupplier<?>> getCachingSuppliers() {
+    return cachingSuppliers;
+  }
 
   /**
    * Setup is done here so that it can be overridden in subclasses.
@@ -133,7 +140,7 @@ public class WrapIdentifier<T extends JobParameters> extends Transformation<T> {
    * @return This object
    */
   public WrapIdentifier<T> wrapTarget(String wrapTarget) {
-    this.wrapTarget = wrapTarget;
+    this.wrapTarget = swapSupplier(this.wrapTarget, wrapTarget);
     return this;
   }
 
@@ -203,7 +210,7 @@ public class WrapIdentifier<T extends JobParameters> extends Transformation<T> {
    * @return The parsed replacement
    */
   protected String getParsedReplacement() {
-    return parsedReplacement;
+    throw new IllegalStateException("No parsed replacement is set");
   }
 
   /**
@@ -212,7 +219,7 @@ public class WrapIdentifier<T extends JobParameters> extends Transformation<T> {
    * @return The replacement expression parsing method
    */
   protected Function<GLSLParser, ExtendedContext> getParseMethod() {
-    return withDefault(parseMethod, GLSLParser::expression);
+    return GLSLParser::expression;
   }
 
   /**
@@ -276,7 +283,7 @@ public class WrapIdentifier<T extends JobParameters> extends Transformation<T> {
    * @return The wrap target
    */
   protected String getWrapTarget() {
-    return wrapTarget;
+    throw new IllegalStateException("No wrap target is set");
   }
 
   /**
@@ -301,7 +308,7 @@ public class WrapIdentifier<T extends JobParameters> extends Transformation<T> {
    * @return The injection location
    */
   protected InjectionPoint getInjectionLocation() {
-    return withDefault(injectionLocation, InjectionPoint.BEFORE_DECLARATIONS);
+    return InjectionPoint.BEFORE_DECLARATIONS;
   }
 
   /**
@@ -310,6 +317,6 @@ public class WrapIdentifier<T extends JobParameters> extends Transformation<T> {
    * @return The injection external declaration
    */
   protected String getInjectionExternalDeclaration() {
-    return injectionExternalDeclaration;
+    throw new IllegalStateException("No injection external declaration is set");
   }
 }
