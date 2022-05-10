@@ -266,6 +266,7 @@ public abstract class ExecutionPlanner<T extends JobParameters> {
       for (var transformation : transformations) {
         transformation.setPlanner(planner);
         transformation.initOnce();
+        transformation.triggerJobInternal();
         transformation.resetState();
       }
 

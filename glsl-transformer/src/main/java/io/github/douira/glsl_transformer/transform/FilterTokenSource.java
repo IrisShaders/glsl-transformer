@@ -41,7 +41,7 @@ public class FilterTokenSource implements TokenSource {
    */
   public void setTokenFilter(TokenFilter<?> tokenFilter) {
     filter = tokenFilter;
-    filter.init();
+    filter.initOnce();
   }
 
   /**

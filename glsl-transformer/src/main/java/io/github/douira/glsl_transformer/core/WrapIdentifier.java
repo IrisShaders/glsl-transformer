@@ -1,8 +1,6 @@
 package io.github.douira.glsl_transformer.core;
 
-import static io.github.douira.glsl_transformer.util.ConfigUtil.*;
-
-import java.util.*;
+import java.util.Collection;
 import java.util.function.*;
 
 import io.github.douira.glsl_transformer.GLSLParser;
@@ -23,30 +21,19 @@ import io.github.douira.glsl_transformer.util.CompatUtil;
  * methods. Additionally, configuration values can be generated dynamically by
  * overriding the getter methods.
  */
-// TODO: replace the setter methods to use swapSupplier, add methods that use
-// the suppliers to get (cached) values (named like the setter methods but with
-// no argument, return the value from the corresponding supplier), add cache
-// invalidation triggers to the caching suppliers that are in cachingSuppliers
-public class WrapIdentifier<T extends JobParameters> extends Transformation<T> implements Configurable {
+public class WrapIdentifier<T extends JobParameters> extends ConfigurableTransformation<T> {
   private Supplier<ActivatableLifecycleUser<T>> wrapResultDetector = this::getWrapResultDetector;
   private Supplier<String> detectionResult = this::getParsedReplacement;
 
   private Supplier<String> parsedReplacement = this::getParsedReplacement;
   private Supplier<Function<GLSLParser, ExtendedContext>> parseMethod = this::getParseMethod;
   private Supplier<ActivatableLifecycleUser<T>> wrappingReplacer = this::getWrappingReplacer;
-  private Supplier<HandlerTarget<T>> wrapHandlerTarget = this::getWrapHandlerTarget;
+  private Supplier<Collection<HandlerTarget<T>>> wrapHandlerTargets = this::getWrapHandlerTargets;
   private Supplier<String> wrapTarget = this::getWrapTarget;
 
   private Supplier<ActivatableLifecycleUser<T>> injector = this::getInjector;
   private Supplier<InjectionPoint> injectionLocation = this::getInjectionLocation;
   private Supplier<String> injectionExternalDeclaration = this::getInjectionExternalDeclaration;
-
-  private Set<CachingSupplier<?>> cachingSuppliers;
-
-  @Override
-  public Set<CachingSupplier<?>> getCachingSuppliers() {
-    return cachingSuppliers;
-  }
 
   /**
    * Setup is done here so that it can be overridden in subclasses.
@@ -66,7 +53,7 @@ public class WrapIdentifier<T extends JobParameters> extends Transformation<T> i
    * @return This object
    */
   public WrapIdentifier<T> wrapResultDetector(ActivatableLifecycleUser<T> wrapResultDetector) {
-    this.wrapResultDetector = wrapResultDetector;
+    this.wrapResultDetector = swapSupplier(this.wrapResultDetector, wrapResultDetector);
     return this;
   }
 
@@ -81,7 +68,7 @@ public class WrapIdentifier<T extends JobParameters> extends Transformation<T> i
    * @return This object
    */
   public WrapIdentifier<T> detectionResult(String detectionResult) {
-    this.detectionResult = detectionResult;
+    this.detectionResult = swapSupplier(this.detectionResult, detectionResult);
     return this;
   }
 
@@ -93,7 +80,7 @@ public class WrapIdentifier<T extends JobParameters> extends Transformation<T> i
    * @return This object
    */
   public WrapIdentifier<T> parsedReplacement(String parsedReplacement) {
-    this.parsedReplacement = parsedReplacement;
+    this.parsedReplacement = swapSupplier(this.parsedReplacement, parsedReplacement);
     return this;
   }
 
@@ -105,7 +92,7 @@ public class WrapIdentifier<T extends JobParameters> extends Transformation<T> i
    * @return This object
    */
   public WrapIdentifier<T> parseMethod(Function<GLSLParser, ExtendedContext> parseMethod) {
-    this.parseMethod = parseMethod;
+    this.parseMethod = swapSupplier(this.parseMethod, parseMethod);
     return this;
   }
 
@@ -117,7 +104,7 @@ public class WrapIdentifier<T extends JobParameters> extends Transformation<T> i
    * @return This object
    */
   public WrapIdentifier<T> wrappingReplacer(ActivatableLifecycleUser<T> wrappingReplacer) {
-    this.wrappingReplacer = wrappingReplacer;
+    this.wrappingReplacer = swapSupplier(this.wrappingReplacer, wrappingReplacer);
     return this;
   }
 
@@ -125,11 +112,11 @@ public class WrapIdentifier<T extends JobParameters> extends Transformation<T> i
    * Sets the handler target that does the replacement of the target. Generated
    * from the wrap target by default.
    * 
-   * @param wrapHandlerTarget The replacement target handler
+   * @param wrapHandlerTargets The replacement target handler
    * @return This object
    */
-  public WrapIdentifier<T> wrapHandlerTarget(HandlerTarget<T> wrapHandlerTarget) {
-    this.wrapHandlerTarget = wrapHandlerTarget;
+  public WrapIdentifier<T> wrapHandlerTargets(Collection<HandlerTarget<T>> wrapHandlerTargets) {
+    this.wrapHandlerTargets = swapSupplier(this.wrapHandlerTargets, wrapHandlerTargets);
     return this;
   }
 
@@ -153,7 +140,7 @@ public class WrapIdentifier<T extends JobParameters> extends Transformation<T> i
    * @return This object
    */
   public WrapIdentifier<T> injector(ActivatableLifecycleUser<T> injector) {
-    this.injector = injector;
+    this.injector = swapSupplier(this.injector, injector);
     return this;
   }
 
@@ -164,7 +151,7 @@ public class WrapIdentifier<T extends JobParameters> extends Transformation<T> i
    * @return This object
    */
   public WrapIdentifier<T> injectionLocation(InjectionPoint injectionLocation) {
-    this.injectionLocation = injectionLocation;
+    this.injectionLocation = swapSupplier(this.injectionLocation, injectionLocation);
     return this;
   }
 
@@ -175,8 +162,98 @@ public class WrapIdentifier<T extends JobParameters> extends Transformation<T> i
    * @return This object
    */
   public WrapIdentifier<T> injectionExternalDeclaration(String injectionExternalDeclaration) {
-    this.injectionExternalDeclaration = injectionExternalDeclaration;
+    this.injectionExternalDeclaration = swapSupplier(this.injectionExternalDeclaration, injectionExternalDeclaration);
     return this;
+  }
+
+  public WrapIdentifier<T> wrapResultDetector(Supplier<ActivatableLifecycleUser<T>> wrapResultDetector) {
+    this.wrapResultDetector = swapSupplier(this.wrapResultDetector, wrapResultDetector);
+    return this;
+  }
+
+  public WrapIdentifier<T> detectionResult(Supplier<String> detectionResult) {
+    this.detectionResult = swapSupplier(this.detectionResult, detectionResult);
+    return this;
+  }
+
+  public WrapIdentifier<T> parsedReplacement(Supplier<String> parsedReplacement) {
+    this.parsedReplacement = swapSupplier(this.parsedReplacement, parsedReplacement);
+    return this;
+  }
+
+  public WrapIdentifier<T> parseMethod(Supplier<Function<GLSLParser, ExtendedContext>> parseMethod) {
+    this.parseMethod = swapSupplier(this.parseMethod, parseMethod);
+    return this;
+  }
+
+  public WrapIdentifier<T> wrappingReplacer(Supplier<ActivatableLifecycleUser<T>> wrappingReplacer) {
+    this.wrappingReplacer = swapSupplier(this.wrappingReplacer, wrappingReplacer);
+    return this;
+  }
+
+  public WrapIdentifier<T> wrapHandlerTargets(Supplier<Collection<HandlerTarget<T>>> wrapHandlerTargets) {
+    this.wrapHandlerTargets = swapSupplier(this.wrapHandlerTargets, wrapHandlerTargets);
+    return this;
+  }
+
+  public WrapIdentifier<T> wrapTarget(Supplier<String> wrapTarget) {
+    this.wrapTarget = swapSupplier(this.wrapTarget, wrapTarget);
+    return this;
+  }
+
+  public WrapIdentifier<T> injector(Supplier<ActivatableLifecycleUser<T>> injector) {
+    this.injector = swapSupplier(this.injector, injector);
+    return this;
+  }
+
+  public WrapIdentifier<T> injectionLocation(Supplier<InjectionPoint> injectionLocation) {
+    this.injectionLocation = swapSupplier(this.injectionLocation, injectionLocation);
+    return this;
+  }
+
+  public WrapIdentifier<T> injectionExternalDeclaration(Supplier<String> injectionExternalDeclaration) {
+    this.injectionExternalDeclaration = swapSupplier(this.injectionExternalDeclaration, injectionExternalDeclaration);
+    return this;
+  }
+
+  protected final ActivatableLifecycleUser<T> wrapResultDetector() {
+    return wrapResultDetector.get().activation(this::isActive);
+  }
+
+  protected final String detectionResult() {
+    return detectionResult.get();
+  }
+
+  protected final String parsedReplacement() {
+    return parsedReplacement.get();
+  }
+
+  protected final Function<GLSLParser, ExtendedContext> parseMethod() {
+    return parseMethod.get();
+  }
+
+  protected final ActivatableLifecycleUser<T> wrappingReplacer() {
+    return wrappingReplacer.get().activation(this::isActive);
+  }
+
+  protected final Collection<HandlerTarget<T>> wrapHandlerTargets() {
+    return wrapHandlerTargets.get();
+  }
+
+  protected final String wrapTarget() {
+    return wrapTarget.get();
+  }
+
+  protected final ActivatableLifecycleUser<T> injector() {
+    return injector.get().activation(this::isActive);
+  }
+
+  protected final InjectionPoint injectionLocation() {
+    return injectionLocation.get();
+  }
+
+  protected final String injectionExternalDeclaration() {
+    return injectionExternalDeclaration.get();
   }
 
   /**
@@ -185,14 +262,12 @@ public class WrapIdentifier<T extends JobParameters> extends Transformation<T> i
    * @return The result detector
    */
   protected ActivatableLifecycleUser<T> getWrapResultDetector() {
-    return withDefault(wrapResultDetector,
-        () -> new SearchTerminals<T>().target(new WrapThrowTarget<T>() {
-          @Override
-          protected String getWrapResult() {
-            return getDetectionResult();
-          }
-        }))
-        .activation(this::isActive);
+    return new SearchTerminals<T>().target(new WrapThrowTarget<T>() {
+      @Override
+      protected String getWrapResult() {
+        return detectionResult();
+      }
+    });
   }
 
   /**
@@ -201,7 +276,7 @@ public class WrapIdentifier<T extends JobParameters> extends Transformation<T> i
    * @return The detection result
    */
   protected String getDetectionResult() {
-    return withDefault(detectionResult, this::getParsedReplacement);
+    return parsedReplacement();
   }
 
   /**
@@ -228,15 +303,12 @@ public class WrapIdentifier<T extends JobParameters> extends Transformation<T> i
    * @return The wrapping replacer
    */
   protected ActivatableLifecycleUser<T> getWrappingReplacer() {
-    return withDefault(wrappingReplacer,
-        () -> new SearchTerminals<T>() {
-          @Override
-          protected Collection<HandlerTarget<T>> getTargets() {
-            // TODO: this is not efficient
-            return CompatUtil.listOf(getWrapHandlerTarget());
-          }
-        })
-        .activation(this::isActive);
+    return new SearchTerminals<T>() {
+      @Override
+      protected Collection<HandlerTarget<T>> getTargets() {
+        return wrapHandlerTargets();
+      }
+    };
   }
 
   /**
@@ -244,37 +316,39 @@ public class WrapIdentifier<T extends JobParameters> extends Transformation<T> i
    * 
    * @return The replacement target handler
    */
-  protected HandlerTarget<T> getWrapHandlerTarget() {
-    return withDefault(wrapHandlerTarget, () -> {
-      return getParsedReplacement() == null
-          ? (new TerminalReplaceTarget<T>() {
-            @Override
-            public String getNeedle() {
-              return getWrapTarget();
-            }
+  protected Collection<HandlerTarget<T>> getWrapHandlerTargets() {
+    // TODO: this is not great strcuturally since it's checking for a throw
+    try {
+      parsedReplacement();
+      return CompatUtil.listOf(new ParsedReplaceTarget<T>() {
+        @Override
+        public String getNeedle() {
+          return wrapTarget();
+        }
 
-            @Override
-            protected String getTerminalContent() {
-              return getDetectionResult();
-            }
-          })
-          : new ParsedReplaceTarget<T>() {
-            @Override
-            public String getNeedle() {
-              return getWrapTarget();
-            }
+        @Override
+        protected String getNewContent(TreeMember node, String match) {
+          return parsedReplacement();
+        }
 
-            @Override
-            protected String getNewContent(TreeMember node, String match) {
-              return getParsedReplacement();
-            }
+        @Override
+        protected Function<GLSLParser, ExtendedContext> getParseMethod(TreeMember node, String match) {
+          return parseMethod();
+        }
+      });
+    } catch (Exception e) {
+      return CompatUtil.listOf(new TerminalReplaceTarget<T>() {
+        @Override
+        public String getNeedle() {
+          return wrapTarget();
+        }
 
-            @Override
-            protected Function<GLSLParser, ExtendedContext> getParseMethod(TreeMember node, String match) {
-              return WrapIdentifier.this.getParseMethod();
-            }
-          };
-    });
+        @Override
+        protected String getTerminalContent() {
+          return detectionResult();
+        }
+      });
+    }
   }
 
   /**
@@ -292,14 +366,12 @@ public class WrapIdentifier<T extends JobParameters> extends Transformation<T> i
    * @return The injector
    */
   protected ActivatableLifecycleUser<T> getInjector() {
-    return withDefault(injector,
-        () -> new RunPhase<T>() {
-          @Override
-          protected void run(TranslationUnitContext ctx) {
-            injectExternalDeclaration(getInjectionLocation(), getInjectionExternalDeclaration());
-          }
-        })
-        .activation(this::isActive);
+    return new RunPhase<T>() {
+      @Override
+      protected void run(TranslationUnitContext ctx) {
+        injectExternalDeclaration(injectionLocation(), injectionExternalDeclaration());
+      }
+    };
   }
 
   /**
