@@ -25,4 +25,8 @@ public class CachingSupplier<V> implements Supplier<V> {
       cachedValue = null;
     }
   }
+
+  public static <V> Supplier<V> of(CachePolicy cachePolicy, Supplier<V> generator) {
+    return cachePolicy == CachePolicy.ALWAYS ? generator : new CachingSupplier<V>(cachePolicy, generator);
+  }
 }

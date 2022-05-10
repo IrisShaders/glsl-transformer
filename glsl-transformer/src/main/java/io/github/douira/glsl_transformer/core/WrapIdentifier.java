@@ -22,18 +22,18 @@ import io.github.douira.glsl_transformer.util.CompatUtil;
  * overriding the getter methods.
  */
 public class WrapIdentifier<T extends JobParameters> extends ConfigurableTransformation<T> {
-  private Supplier<ActivatableLifecycleUser<T>> wrapResultDetector = this::getWrapResultDetector;
-  private Supplier<String> detectionResult = this::getParsedReplacement;
+  private Supplier<ActivatableLifecycleUser<T>> wrapResultDetector = once(this::getWrapResultDetector);
+  private Supplier<String> detectionResult = once(this::getParsedReplacement);
 
-  private Supplier<String> parsedReplacement = this::getParsedReplacement;
-  private Supplier<Function<GLSLParser, ExtendedContext>> parseMethod = this::getParseMethod;
-  private Supplier<ActivatableLifecycleUser<T>> wrappingReplacer = this::getWrappingReplacer;
-  private Supplier<Collection<HandlerTarget<T>>> wrapHandlerTargets = this::getWrapHandlerTargets;
-  private Supplier<String> wrapTarget = this::getWrapTarget;
+  private Supplier<String> parsedReplacement = once(this::getParsedReplacement);
+  private Supplier<Function<GLSLParser, ExtendedContext>> parseMethod = once(this::getParseMethod);
+  private Supplier<ActivatableLifecycleUser<T>> wrappingReplacer = once(this::getWrappingReplacer);
+  private Supplier<Collection<HandlerTarget<T>>> wrapHandlerTargets = once(this::getWrapHandlerTargets);
+  private Supplier<String> wrapTarget = once(this::getWrapTarget);
 
-  private Supplier<ActivatableLifecycleUser<T>> injector = this::getInjector;
-  private Supplier<InjectionPoint> injectionLocation = this::getInjectionLocation;
-  private Supplier<String> injectionExternalDeclaration = this::getInjectionExternalDeclaration;
+  private Supplier<ActivatableLifecycleUser<T>> injector = once(this::getInjector);
+  private Supplier<InjectionPoint> injectionLocation = once(this::getInjectionLocation);
+  private Supplier<String> injectionExternalDeclaration = once(this::getInjectionExternalDeclaration);
 
   /**
    * Setup is done here so that it can be overridden in subclasses.
