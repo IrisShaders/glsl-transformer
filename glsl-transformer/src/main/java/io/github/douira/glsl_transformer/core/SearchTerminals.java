@@ -26,6 +26,9 @@ import io.github.douira.glsl_transformer.util.CompatUtil;
  * phase yourself and do something when it visits the parse context of
  * interest.
  */
+// TODO: do this with Configurable, somehow
+// if using ConfigurableTransformation, wrap the phase in a transformation (not
+// great solution)
 public class SearchTerminals<T extends JobParameters> extends WalkPhase<T> {
   /**
    * The identifier token type.

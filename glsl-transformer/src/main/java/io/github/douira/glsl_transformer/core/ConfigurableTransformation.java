@@ -28,7 +28,7 @@ public class ConfigurableTransformation<T extends JobParameters> extends Transfo
 
   protected <V> Supplier<V> swapSupplier(Supplier<V> currentSupplier, Supplier<V> newSupplier) {
     removeSupplier(currentSupplier);
-    return cachingSupplier(newSupplier);
+    return addSupplier(newSupplier);
   }
 
   protected <V> Supplier<V> swapSupplier(Supplier<V> currentSupplier, V newValue) {
@@ -44,7 +44,7 @@ public class ConfigurableTransformation<T extends JobParameters> extends Transfo
     }
   }
 
-  protected <V> Supplier<V> cachingSupplier(Supplier<V> newSupplier) {
+  protected <V> Supplier<V> addSupplier(Supplier<V> newSupplier) {
     if (newSupplier == null) {
       throw new IllegalStateException("The new supplier is null!");
     }
@@ -55,11 +55,15 @@ public class ConfigurableTransformation<T extends JobParameters> extends Transfo
   }
 
   protected <V> Supplier<V> cachingSupplier(CachePolicy cachePolicy, Supplier<V> newSupplier) {
-    return cachingSupplier(new CachingSupplier<V>(cachePolicy, newSupplier));
+    return addSupplier(CachingSupplier.of(cachePolicy, newSupplier));
   }
 
   protected <V> Supplier<V> value(V newValue) {
     return new ValueSupplier<V>(newValue);
+  }
+
+  protected <V> Supplier<V> once(Supplier<V> supplier) {
+    return cachingSupplier(CachePolicy.ONCE, supplier);
   }
 
   private void invalidateCachingSuppliers(CachePolicy fulfilledPolicy) {
