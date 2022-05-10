@@ -76,6 +76,15 @@ public class Transformation<T extends JobParameters> extends LifecycleUserImpl<T
   }
 
   /**
+   * An alternative reset method that is also called like {@link #resetState()}
+   * but should be used for core transformation internals. This is one so that
+   * users of core transformations don't have to remember to call the super
+   * implementation of {@link #resetState()} themselves.
+   */
+  protected void triggerJobInternal() {
+  }
+
+  /**
    * If conditional dependencies are required for this transformation, all
    * dependencies should be added within this method. Fixed job parameters may
    * be accessed through {@link #getJobParameters()}. Only either dependencies
