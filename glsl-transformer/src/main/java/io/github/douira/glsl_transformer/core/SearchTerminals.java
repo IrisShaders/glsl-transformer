@@ -26,10 +26,7 @@ import io.github.douira.glsl_transformer.util.CompatUtil;
  * phase yourself and do something when it visits the parse context of
  * interest.
  */
-// TODO: do this with Configurable, somehow
-// if using ConfigurableTransformation, wrap the phase in a transformation (not
-// great solution)
-public class SearchTerminals<T extends JobParameters> extends WalkPhase<T> {
+public class SearchTerminals<T extends JobParameters> extends ConfigurableTransformation<T> {
   /**
    * The identifier token type.
    */
@@ -55,6 +52,42 @@ public class SearchTerminals<T extends JobParameters> extends WalkPhase<T> {
    * The list of targets to process for each targeted context.
    */
   protected Collection<HandlerTarget<T>> targets;
+
+  {
+    addEndDependent(new WalkPhase<T>() {
+      @Override
+      public void visitTerminal(TerminalNode node) {
+        Token token = node.getSymbol();
+        if (token == null) {
+          return;
+        }
+
+        // check this token if the accepted type is the invalid type or if it matches
+        // the token's type
+        var targetType = getTerminalTokenType();
+        if (targetType == Token.INVALID_TYPE || targetType == token.getType()) {
+          String text = token.getText();
+
+          // TODO: this could be optimized using a trie if there are very many needles
+          var targets = getTargets();
+          if (targets == null) {
+            return;
+          }
+          for (var target : getTargets()) {
+            if (findNeedle(text, target)) {
+              if (!(node instanceof TreeMember)) {
+                throw new IllegalStateException(
+                    "All nodes in the parse tree should be a TreeMember except for when they are errors! Then the tree is broken anyways.");
+              }
+
+              target.setPlanner(getPlanner());
+              target.handleResult((TreeMember) node, text);
+            }
+          }
+        }
+      }
+    });
+  }
 
   public SearchTerminals<T> targets(Collection<HandlerTarget<T>> targets) {
     this.targets = targets;
@@ -153,38 +186,6 @@ public class SearchTerminals<T extends JobParameters> extends WalkPhase<T> {
   public SearchTerminals<T> addReplacementTerminal(String needle, String terminalContent) {
     addTarget(new TerminalReplaceTargetImpl<>(needle, terminalContent));
     return this;
-  }
-
-  @Override
-  public void visitTerminal(TerminalNode node) {
-    Token token = node.getSymbol();
-    if (token == null) {
-      return;
-    }
-
-    // check this token if the accepted type is the invalid type or if it matches
-    // the token's type
-    var targetType = getTerminalTokenType();
-    if (targetType == Token.INVALID_TYPE || targetType == token.getType()) {
-      String text = token.getText();
-
-      // TODO: this could be optimized using a trie if there are very many needles
-      var targets = getTargets();
-      if (targets == null) {
-        return;
-      }
-      for (var target : getTargets()) {
-        if (findNeedle(text, target)) {
-          if (!(node instanceof TreeMember)) {
-            throw new IllegalStateException(
-                "All nodes in the parse tree should be a TreeMember except for when they are errors! Then the tree is broken anyways.");
-          }
-
-          target.setPlanner(getPlanner());
-          target.handleResult((TreeMember) node, text);
-        }
-      }
-    }
   }
 
   /**
