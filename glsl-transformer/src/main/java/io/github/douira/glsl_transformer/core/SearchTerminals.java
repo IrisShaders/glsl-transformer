@@ -26,6 +26,7 @@ import io.github.douira.glsl_transformer.util.CompatUtil;
  * phase yourself and do something when it visits the parse context of
  * interest.
  */
+//TODO: actually make it configurable, write some tests
 public class SearchTerminals<T extends JobParameters> extends ConfigurableTransformation<T> {
   /**
    * The identifier token type.

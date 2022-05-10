@@ -1,6 +1,6 @@
 package io.github.douira.glsl_transformer.core;
 
-import java.util.Collection;
+import java.util.*;
 import java.util.function.Supplier;
 
 import io.github.douira.glsl_transformer.transform.*;
@@ -23,7 +23,7 @@ import io.github.douira.glsl_transformer.transform.*;
  * getters like bar and baz.
  */
 public class ConfigurableTransformation<T extends JobParameters> extends Transformation<T> {
-  private Collection<CachingSupplier<?>> cachingSuppliers;
+  private Collection<CachingSupplier<?>> cachingSuppliers = new LinkedList<>();
   private T lastJobParameters;
 
   protected <V> Supplier<V> swapSupplier(Supplier<V> currentSupplier, Supplier<V> newSupplier) {
