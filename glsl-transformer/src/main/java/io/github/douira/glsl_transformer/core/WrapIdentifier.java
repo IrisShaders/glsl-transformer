@@ -216,6 +216,56 @@ public class WrapIdentifier<T extends JobParameters> extends ConfigurableTransfo
     return this;
   }
 
+  public WrapIdentifier<T> wrapResultDetector(CachePolicy newPolicy) {
+    this.wrapResultDetector = swapPolicy(this.wrapResultDetector, newPolicy);
+    return this;
+  }
+
+  public WrapIdentifier<T> detectionResult(CachePolicy newPolicy) {
+    this.detectionResult = swapPolicy(this.detectionResult, newPolicy);
+    return this;
+  }
+
+  public WrapIdentifier<T> parsedReplacement(CachePolicy newPolicy) {
+    this.parsedReplacement = swapPolicy(this.parsedReplacement, newPolicy);
+    return this;
+  }
+
+  public WrapIdentifier<T> parseMethod(CachePolicy newPolicy) {
+    this.parseMethod = swapPolicy(this.parseMethod, newPolicy);
+    return this;
+  }
+
+  public WrapIdentifier<T> wrappingReplacer(CachePolicy newPolicy) {
+    this.wrappingReplacer = swapPolicy(this.wrappingReplacer, newPolicy);
+    return this;
+  }
+
+  public WrapIdentifier<T> wrapHandlerTargets(CachePolicy newPolicy) {
+    this.wrapHandlerTargets = swapPolicy(this.wrapHandlerTargets, newPolicy);
+    return this;
+  }
+
+  public WrapIdentifier<T> wrapTarget(CachePolicy newPolicy) {
+    this.wrapTarget = swapPolicy(this.wrapTarget, newPolicy);
+    return this;
+  }
+
+  public WrapIdentifier<T> injector(CachePolicy newPolicy) {
+    this.injector = swapPolicy(this.injector, newPolicy);
+    return this;
+  }
+
+  public WrapIdentifier<T> injectionLocation(CachePolicy newPolicy) {
+    this.injectionLocation = swapPolicy(this.injectionLocation, newPolicy);
+    return this;
+  }
+
+  public WrapIdentifier<T> injectionExternalDeclaration(CachePolicy newPolicy) {
+    this.injectionExternalDeclaration = swapPolicy(this.injectionExternalDeclaration, newPolicy);
+    return this;
+  }
+
   protected final ActivatableLifecycleUser<T> wrapResultDetector() {
     return wrapResultDetector.get().activation(this::isActive);
   }

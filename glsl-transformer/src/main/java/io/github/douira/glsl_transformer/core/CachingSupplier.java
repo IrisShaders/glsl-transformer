@@ -26,6 +26,14 @@ public class CachingSupplier<V> implements Supplier<V> {
     }
   }
 
+  Supplier<V> getSupplierWithPolicy(CachePolicy cachePolicy) {
+    if (this.cachePolicy == cachePolicy) {
+      return this;
+    } else {
+      return of(cachePolicy, generator);
+    }
+  }
+
   public static <V> Supplier<V> of(CachePolicy cachePolicy, Supplier<V> generator) {
     return cachePolicy == CachePolicy.ALWAYS ? generator : new CachingSupplier<V>(cachePolicy, generator);
   }
