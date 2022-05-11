@@ -46,6 +46,154 @@ public class WrapIdentifier<T extends JobParameters> extends ConfigurableTransfo
   }
 
   /**
+   * Gets the value of a configuration property. This method should not be called
+   * by subclasses, only implemented in case a custom value generation is needed.
+   * 
+   * @return The configuration property value
+   */
+  protected ActivatableLifecycleUser<T> getWrapResultDetector() {
+    return new SearchTerminals<T>().target(new WrapThrowTarget<T>() {
+      @Override
+      protected String getWrapResult() {
+        return detectionResult();
+      }
+    });
+  }
+
+  /**
+   * Gets the value of a configuration property. This method should not be called
+   * by subclasses, only implemented in case a custom value generation is needed.
+   * 
+   * @return The configuration property value
+   */
+  protected String getDetectionResult() {
+    return parsedReplacement();
+  }
+
+  /**
+   * Gets the value of a configuration property. This method should not be called
+   * by subclasses, only implemented in case a custom value generation is needed.
+   * 
+   * @return The configuration property value
+   */
+  protected String getParsedReplacement() {
+    throw new IllegalStateException("No parsed replacement is set");
+  }
+
+  /**
+   * Gets the value of a configuration property. This method should not be called
+   * by subclasses, only implemented in case a custom value generation is needed.
+   * 
+   * @return The configuration property value
+   */
+  protected Function<GLSLParser, ExtendedContext> getParseMethod() {
+    return GLSLParser::expression;
+  }
+
+  /**
+   * Gets the value of a configuration property. This method should not be called
+   * by subclasses, only implemented in case a custom value generation is needed.
+   * 
+   * @return The configuration property value
+   */
+  protected ActivatableLifecycleUser<T> getWrappingReplacer() {
+    return new SearchTerminals<T>() {
+      @Override
+      protected Collection<HandlerTarget<T>> getTargets() {
+        return wrapHandlerTargets();
+      }
+    };
+  }
+
+  /**
+   * Gets the value of a configuration property. This method should not be called
+   * by subclasses, only implemented in case a custom value generation is needed.
+   * 
+   * @return The configuration property value
+   */
+  protected Collection<HandlerTarget<T>> getWrapHandlerTargets() {
+    // TODO: this is not great strcuturally since it's checking for a throw
+    try {
+      parsedReplacement();
+      return CompatUtil.listOf(new ParsedReplaceTarget<T>() {
+        @Override
+        public String getNeedle() {
+          return wrapTarget();
+        }
+
+        @Override
+        protected String getNewContent(TreeMember node, String match) {
+          return parsedReplacement();
+        }
+
+        @Override
+        protected Function<GLSLParser, ExtendedContext> getParseMethod(TreeMember node, String match) {
+          return parseMethod();
+        }
+      });
+    } catch (Exception e) {
+      return CompatUtil.listOf(new TerminalReplaceTarget<T>() {
+        @Override
+        public String getNeedle() {
+          return wrapTarget();
+        }
+
+        @Override
+        protected String getTerminalContent() {
+          return detectionResult();
+        }
+      });
+    }
+  }
+
+  /**
+   * Gets the value of a configuration property. This method should not be called
+   * by subclasses, only implemented in case a custom value generation is needed.
+   * 
+   * @return The configuration property value
+   */
+  protected String getWrapTarget() {
+    throw new IllegalStateException("No wrap target is set");
+  }
+
+  /**
+   * Gets the value of a configuration property. This method should not be called
+   * by subclasses, only implemented in case a custom value generation is needed.
+   * 
+   * @return The configuration property value
+   */
+  protected ActivatableLifecycleUser<T> getInjector() {
+    return new RunPhase<T>() {
+      @Override
+      protected void run(TranslationUnitContext ctx) {
+        injectExternalDeclaration(injectionLocation(), injectionExternalDeclaration());
+      }
+    };
+  }
+
+  /**
+   * Gets the value of a configuration property. This method should not be called
+   * by subclasses, only implemented in case a custom value generation is needed.
+   * 
+   * @return The configuration property value
+   */
+  protected InjectionPoint getInjectionLocation() {
+    return InjectionPoint.BEFORE_DECLARATIONS;
+  }
+
+  /**
+   * Gets the value of a configuration property. This method should not be called
+   * by subclasses, only implemented in case a custom value generation is needed.
+   * 
+   * @return The configuration property value
+   */
+  protected String getInjectionExternalDeclaration() {
+    throw new IllegalStateException("No injection external declaration is set");
+  }
+
+  // the rest of this class is just configuration methods and doesn't do much else
+  // #region Configuration methods
+  /**
    * Sets the detector that will be used to check if the detection result exists
    * already. Generated from the detection result by default.
    * 
@@ -475,150 +623,5 @@ public class WrapIdentifier<T extends JobParameters> extends ConfigurableTransfo
   protected final String injectionExternalDeclaration() {
     return injectionExternalDeclaration.get();
   }
-
-  /**
-   * Gets the value of a configuration property. This method should not be called
-   * by subclasses, only implemented in case a custom value generation is needed.
-   * 
-   * @return The configuration property value
-   */
-  protected ActivatableLifecycleUser<T> getWrapResultDetector() {
-    return new SearchTerminals<T>().target(new WrapThrowTarget<T>() {
-      @Override
-      protected String getWrapResult() {
-        return detectionResult();
-      }
-    });
-  }
-
-  /**
-   * Gets the value of a configuration property. This method should not be called
-   * by subclasses, only implemented in case a custom value generation is needed.
-   * 
-   * @return The configuration property value
-   */
-  protected String getDetectionResult() {
-    return parsedReplacement();
-  }
-
-  /**
-   * Gets the value of a configuration property. This method should not be called
-   * by subclasses, only implemented in case a custom value generation is needed.
-   * 
-   * @return The configuration property value
-   */
-  protected String getParsedReplacement() {
-    throw new IllegalStateException("No parsed replacement is set");
-  }
-
-  /**
-   * Gets the value of a configuration property. This method should not be called
-   * by subclasses, only implemented in case a custom value generation is needed.
-   * 
-   * @return The configuration property value
-   */
-  protected Function<GLSLParser, ExtendedContext> getParseMethod() {
-    return GLSLParser::expression;
-  }
-
-  /**
-   * Gets the value of a configuration property. This method should not be called
-   * by subclasses, only implemented in case a custom value generation is needed.
-   * 
-   * @return The configuration property value
-   */
-  protected ActivatableLifecycleUser<T> getWrappingReplacer() {
-    return new SearchTerminals<T>() {
-      @Override
-      protected Collection<HandlerTarget<T>> getTargets() {
-        return wrapHandlerTargets();
-      }
-    };
-  }
-
-  /**
-   * Gets the value of a configuration property. This method should not be called
-   * by subclasses, only implemented in case a custom value generation is needed.
-   * 
-   * @return The configuration property value
-   */
-  protected Collection<HandlerTarget<T>> getWrapHandlerTargets() {
-    // TODO: this is not great strcuturally since it's checking for a throw
-    try {
-      parsedReplacement();
-      return CompatUtil.listOf(new ParsedReplaceTarget<T>() {
-        @Override
-        public String getNeedle() {
-          return wrapTarget();
-        }
-
-        @Override
-        protected String getNewContent(TreeMember node, String match) {
-          return parsedReplacement();
-        }
-
-        @Override
-        protected Function<GLSLParser, ExtendedContext> getParseMethod(TreeMember node, String match) {
-          return parseMethod();
-        }
-      });
-    } catch (Exception e) {
-      return CompatUtil.listOf(new TerminalReplaceTarget<T>() {
-        @Override
-        public String getNeedle() {
-          return wrapTarget();
-        }
-
-        @Override
-        protected String getTerminalContent() {
-          return detectionResult();
-        }
-      });
-    }
-  }
-
-  /**
-   * Gets the value of a configuration property. This method should not be called
-   * by subclasses, only implemented in case a custom value generation is needed.
-   * 
-   * @return The configuration property value
-   */
-  protected String getWrapTarget() {
-    throw new IllegalStateException("No wrap target is set");
-  }
-
-  /**
-   * Gets the value of a configuration property. This method should not be called
-   * by subclasses, only implemented in case a custom value generation is needed.
-   * 
-   * @return The configuration property value
-   */
-  protected ActivatableLifecycleUser<T> getInjector() {
-    return new RunPhase<T>() {
-      @Override
-      protected void run(TranslationUnitContext ctx) {
-        injectExternalDeclaration(injectionLocation(), injectionExternalDeclaration());
-      }
-    };
-  }
-
-  /**
-   * Gets the value of a configuration property. This method should not be called
-   * by subclasses, only implemented in case a custom value generation is needed.
-   * 
-   * @return The configuration property value
-   */
-  protected InjectionPoint getInjectionLocation() {
-    return InjectionPoint.BEFORE_DECLARATIONS;
-  }
-
-  /**
-   * Gets the value of a configuration property. This method should not be called
-   * by subclasses, only implemented in case a custom value generation is needed.
-   * 
-   * @return The configuration property value
-   */
-  protected String getInjectionExternalDeclaration() {
-    throw new IllegalStateException("No injection external declaration is set");
-  }
+  // #endregion
 }
