@@ -166,150 +166,321 @@ public class WrapIdentifier<T extends JobParameters> extends ConfigurableTransfo
     return this;
   }
 
+  /**
+   * Sets the supplier for a configuration property.
+   * 
+   * @param wrapResultDetector The value supplier
+   * @return This object
+   */
   public WrapIdentifier<T> wrapResultDetector(Supplier<ActivatableLifecycleUser<T>> wrapResultDetector) {
     this.wrapResultDetector = swapSupplier(this.wrapResultDetector, wrapResultDetector);
     return this;
   }
 
+  /**
+   * Sets the supplier for a configuration property.
+   * 
+   * @param wrapResultDetector The value supplier
+   * @return This object
+   */
   public WrapIdentifier<T> detectionResult(Supplier<String> detectionResult) {
     this.detectionResult = swapSupplier(this.detectionResult, detectionResult);
     return this;
   }
 
+  /**
+   * Sets the supplier for a configuration property.
+   * 
+   * @param parsedReplacement The value supplier
+   * @return This object
+   */
   public WrapIdentifier<T> parsedReplacement(Supplier<String> parsedReplacement) {
     this.parsedReplacement = swapSupplier(this.parsedReplacement, parsedReplacement);
     return this;
   }
 
+  /**
+   * Sets the supplier for a configuration property.
+   * 
+   * @param parseMethod The value supplier
+   * @return This object
+   */
   public WrapIdentifier<T> parseMethod(Supplier<Function<GLSLParser, ExtendedContext>> parseMethod) {
     this.parseMethod = swapSupplier(this.parseMethod, parseMethod);
     return this;
   }
 
+  /**
+   * Sets the supplier for a configuration property.
+   * 
+   * @param wrappingReplacer The value supplier
+   * @return This object
+   */
   public WrapIdentifier<T> wrappingReplacer(Supplier<ActivatableLifecycleUser<T>> wrappingReplacer) {
     this.wrappingReplacer = swapSupplier(this.wrappingReplacer, wrappingReplacer);
     return this;
   }
 
+  /**
+   * Sets the supplier for a configuration property.
+   * 
+   * @param wrapHandlerTargets The value supplier
+   * @return This object
+   */
   public WrapIdentifier<T> wrapHandlerTargets(Supplier<Collection<HandlerTarget<T>>> wrapHandlerTargets) {
     this.wrapHandlerTargets = swapSupplier(this.wrapHandlerTargets, wrapHandlerTargets);
     return this;
   }
 
+  /**
+   * Sets the supplier for a configuration property.
+   * 
+   * @param wrapTarget The value supplier
+   * @return This object
+   */
   public WrapIdentifier<T> wrapTarget(Supplier<String> wrapTarget) {
     this.wrapTarget = swapSupplier(this.wrapTarget, wrapTarget);
     return this;
   }
 
+  /**
+   * Sets the supplier for a configuration property.
+   * 
+   * @param injector The value supplier
+   * @return This object
+   */
   public WrapIdentifier<T> injector(Supplier<ActivatableLifecycleUser<T>> injector) {
     this.injector = swapSupplier(this.injector, injector);
     return this;
   }
 
+  /**
+   * Sets the supplier for a configuration property.
+   * 
+   * @param injectionLocation The value supplier
+   * @return This object
+   */
   public WrapIdentifier<T> injectionLocation(Supplier<InjectionPoint> injectionLocation) {
     this.injectionLocation = swapSupplier(this.injectionLocation, injectionLocation);
     return this;
   }
 
+  /**
+   * Sets the supplier for a configuration property.
+   * 
+   * @param injectionExternalDeclaration The value supplier
+   * @return This object
+   */
   public WrapIdentifier<T> injectionExternalDeclaration(Supplier<String> injectionExternalDeclaration) {
     this.injectionExternalDeclaration = swapSupplier(this.injectionExternalDeclaration, injectionExternalDeclaration);
     return this;
   }
 
+  /**
+   * Changes the cache policy of a configuration property.
+   * 
+   * @param newPolicy The new cache policy
+   * @return This object
+   */
   public WrapIdentifier<T> wrapResultDetector(CachePolicy newPolicy) {
     this.wrapResultDetector = swapPolicy(this.wrapResultDetector, newPolicy);
     return this;
   }
 
+  /**
+   * Changes the cache policy of a configuration property.
+   * 
+   * @param newPolicy The new cache policy
+   * @return This object
+   */
   public WrapIdentifier<T> detectionResult(CachePolicy newPolicy) {
     this.detectionResult = swapPolicy(this.detectionResult, newPolicy);
     return this;
   }
 
+  /**
+   * Changes the cache policy of a configuration property.
+   * 
+   * @param newPolicy The new cache policy
+   * @return This object
+   */
   public WrapIdentifier<T> parsedReplacement(CachePolicy newPolicy) {
     this.parsedReplacement = swapPolicy(this.parsedReplacement, newPolicy);
     return this;
   }
 
+  /**
+   * Changes the cache policy of a configuration property.
+   * 
+   * @param newPolicy The new cache policy
+   * @return This object
+   */
   public WrapIdentifier<T> parseMethod(CachePolicy newPolicy) {
     this.parseMethod = swapPolicy(this.parseMethod, newPolicy);
     return this;
   }
 
+  /**
+   * Changes the cache policy of a configuration property.
+   * 
+   * @param newPolicy The new cache policy
+   * @return This object
+   */
   public WrapIdentifier<T> wrappingReplacer(CachePolicy newPolicy) {
     this.wrappingReplacer = swapPolicy(this.wrappingReplacer, newPolicy);
     return this;
   }
 
+  /**
+   * Changes the cache policy of a configuration property.
+   * 
+   * @param newPolicy The new cache policy
+   * @return This object
+   */
   public WrapIdentifier<T> wrapHandlerTargets(CachePolicy newPolicy) {
     this.wrapHandlerTargets = swapPolicy(this.wrapHandlerTargets, newPolicy);
     return this;
   }
 
+  /**
+   * Changes the cache policy of a configuration property.
+   * 
+   * @param newPolicy The new cache policy
+   * @return This object
+   */
   public WrapIdentifier<T> wrapTarget(CachePolicy newPolicy) {
     this.wrapTarget = swapPolicy(this.wrapTarget, newPolicy);
     return this;
   }
 
+  /**
+   * Changes the cache policy of a configuration property.
+   * 
+   * @param newPolicy The new cache policy
+   * @return This object
+   */
   public WrapIdentifier<T> injector(CachePolicy newPolicy) {
     this.injector = swapPolicy(this.injector, newPolicy);
     return this;
   }
 
+  /**
+   * Changes the cache policy of a configuration property.
+   * 
+   * @param newPolicy The new cache policy
+   * @return This object
+   */
   public WrapIdentifier<T> injectionLocation(CachePolicy newPolicy) {
     this.injectionLocation = swapPolicy(this.injectionLocation, newPolicy);
     return this;
   }
 
+  /**
+   * Changes the cache policy of a configuration property.
+   * 
+   * @param newPolicy The new cache policy
+   * @return This object
+   */
   public WrapIdentifier<T> injectionExternalDeclaration(CachePolicy newPolicy) {
     this.injectionExternalDeclaration = swapPolicy(this.injectionExternalDeclaration, newPolicy);
     return this;
   }
 
+  /**
+   * Returns the proper value of a configuration property.
+   * 
+   * @return The configuration property value
+   */
   protected final ActivatableLifecycleUser<T> wrapResultDetector() {
     return wrapResultDetector.get().activation(this::isActive);
   }
 
+  /**
+   * Returns the proper value of a configuration property.
+   * 
+   * @return The configuration property value
+   */
   protected final String detectionResult() {
     return detectionResult.get();
   }
 
+  /**
+   * Returns the proper value of a configuration property.
+   * 
+   * @return The configuration property value
+   */
   protected final String parsedReplacement() {
     return parsedReplacement.get();
   }
 
+  /**
+   * Returns the proper value of a configuration property.
+   * 
+   * @return The configuration property value
+   */
   protected final Function<GLSLParser, ExtendedContext> parseMethod() {
     return parseMethod.get();
   }
 
+  /**
+   * Returns the proper value of a configuration property.
+   * 
+   * @return The configuration property value
+   */
   protected final ActivatableLifecycleUser<T> wrappingReplacer() {
     return wrappingReplacer.get().activation(this::isActive);
   }
 
+  /**
+   * Returns the proper value of a configuration property.
+   * 
+   * @return The configuration property value
+   */
   protected final Collection<HandlerTarget<T>> wrapHandlerTargets() {
     return wrapHandlerTargets.get();
   }
 
+  /**
+   * Returns the proper value of a configuration property.
+   * 
+   * @return The configuration property value
+   */
   protected final String wrapTarget() {
     return wrapTarget.get();
   }
 
+  /**
+   * Returns the proper value of a configuration property.
+   * 
+   * @return The configuration property value
+   */
   protected final ActivatableLifecycleUser<T> injector() {
     return injector.get().activation(this::isActive);
   }
 
+  /**
+   * Returns the proper value of a configuration property.
+   * 
+   * @return The configuration property value
+   */
   protected final InjectionPoint injectionLocation() {
     return injectionLocation.get();
   }
 
+  /**
+   * Returns the proper value of a configuration property.
+   * 
+   * @return The configuration property value
+   */
   protected final String injectionExternalDeclaration() {
     return injectionExternalDeclaration.get();
   }
 
   /**
-   * Gets the result detector.
+   * Gets the value of a configuration property. This method should not be called
+   * by subclasses, only implemented in case a custom value generation is needed.
    * 
-   * @return The result detector
+   * @return The configuration property value
    */
   protected ActivatableLifecycleUser<T> getWrapResultDetector() {
     return new SearchTerminals<T>().target(new WrapThrowTarget<T>() {
@@ -321,36 +492,40 @@ public class WrapIdentifier<T extends JobParameters> extends ConfigurableTransfo
   }
 
   /**
-   * Gets the detection result.
+   * Gets the value of a configuration property. This method should not be called
+   * by subclasses, only implemented in case a custom value generation is needed.
    * 
-   * @return The detection result
+   * @return The configuration property value
    */
   protected String getDetectionResult() {
     return parsedReplacement();
   }
 
   /**
-   * Gets the parsed replacement.
+   * Gets the value of a configuration property. This method should not be called
+   * by subclasses, only implemented in case a custom value generation is needed.
    * 
-   * @return The parsed replacement
+   * @return The configuration property value
    */
   protected String getParsedReplacement() {
     throw new IllegalStateException("No parsed replacement is set");
   }
 
   /**
-   * Gets the replacement expression parsing method.
+   * Gets the value of a configuration property. This method should not be called
+   * by subclasses, only implemented in case a custom value generation is needed.
    * 
-   * @return The replacement expression parsing method
+   * @return The configuration property value
    */
   protected Function<GLSLParser, ExtendedContext> getParseMethod() {
     return GLSLParser::expression;
   }
 
   /**
-   * Gets the wrapping replacer.
+   * Gets the value of a configuration property. This method should not be called
+   * by subclasses, only implemented in case a custom value generation is needed.
    * 
-   * @return The wrapping replacer
+   * @return The configuration property value
    */
   protected ActivatableLifecycleUser<T> getWrappingReplacer() {
     return new SearchTerminals<T>() {
@@ -362,9 +537,10 @@ public class WrapIdentifier<T extends JobParameters> extends ConfigurableTransfo
   }
 
   /**
-   * Gets the replacement target handler.
+   * Gets the value of a configuration property. This method should not be called
+   * by subclasses, only implemented in case a custom value generation is needed.
    * 
-   * @return The replacement target handler
+   * @return The configuration property value
    */
   protected Collection<HandlerTarget<T>> getWrapHandlerTargets() {
     // TODO: this is not great strcuturally since it's checking for a throw
@@ -402,18 +578,20 @@ public class WrapIdentifier<T extends JobParameters> extends ConfigurableTransfo
   }
 
   /**
-   * Gets the wrap target.
+   * Gets the value of a configuration property. This method should not be called
+   * by subclasses, only implemented in case a custom value generation is needed.
    * 
-   * @return The wrap target
+   * @return The configuration property value
    */
   protected String getWrapTarget() {
     throw new IllegalStateException("No wrap target is set");
   }
 
   /**
-   * Gets the wrapping injector.
+   * Gets the value of a configuration property. This method should not be called
+   * by subclasses, only implemented in case a custom value generation is needed.
    * 
-   * @return The injector
+   * @return The configuration property value
    */
   protected ActivatableLifecycleUser<T> getInjector() {
     return new RunPhase<T>() {
@@ -425,18 +603,20 @@ public class WrapIdentifier<T extends JobParameters> extends ConfigurableTransfo
   }
 
   /**
-   * Gets the injection location.
+   * Gets the value of a configuration property. This method should not be called
+   * by subclasses, only implemented in case a custom value generation is needed.
    * 
-   * @return The injection location
+   * @return The configuration property value
    */
   protected InjectionPoint getInjectionLocation() {
     return InjectionPoint.BEFORE_DECLARATIONS;
   }
 
   /**
-   * Gets the injection external declaration.
+   * Gets the value of a configuration property. This method should not be called
+   * by subclasses, only implemented in case a custom value generation is needed.
    * 
-   * @return The injection external declaration
+   * @return The configuration property value
    */
   protected String getInjectionExternalDeclaration() {
     throw new IllegalStateException("No injection external declaration is set");
