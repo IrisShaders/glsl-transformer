@@ -54,40 +54,42 @@ public class SearchTerminals<T extends JobParameters> extends ConfigurableTransf
    */
   protected Collection<HandlerTarget<T>> targets;
 
-  {
-    addEndDependent(new WalkPhase<T>() {
-      @Override
-      public void visitTerminal(TerminalNode node) {
-        Token token = node.getSymbol();
-        if (token == null) {
+  private class TerminalVisitor extends WalkPhase<T> {
+    @Override
+    public void visitTerminal(TerminalNode node) {
+      Token token = node.getSymbol();
+      if (token == null) {
+        return;
+      }
+
+      // check this token if the accepted type is the invalid type or if it matches
+      // the token's type
+      var targetType = getTerminalTokenType();
+      if (targetType == Token.INVALID_TYPE || targetType == token.getType()) {
+        String text = token.getText();
+
+        // TODO: this could be optimized using a trie if there are very many needles
+        var targets = getTargets();
+        if (targets == null) {
           return;
         }
-
-        // check this token if the accepted type is the invalid type or if it matches
-        // the token's type
-        var targetType = getTerminalTokenType();
-        if (targetType == Token.INVALID_TYPE || targetType == token.getType()) {
-          String text = token.getText();
-
-          // TODO: this could be optimized using a trie if there are very many needles
-          var targets = getTargets();
-          if (targets == null) {
-            return;
-          }
-          for (var target : getTargets()) {
-            if (findNeedle(text, target)) {
-              if (!(node instanceof TreeMember)) {
-                throw new IllegalStateException(
-                    "All nodes in the parse tree should be a TreeMember except for when they are errors! Then the tree is broken anyways.");
-              }
-
-              target.setPlanner(getPlanner());
-              target.handleResult((TreeMember) node, text);
+        for (var target : getTargets()) {
+          if (findNeedle(text, target)) {
+            if (!(node instanceof TreeMember)) {
+              throw new IllegalStateException(
+                  "All nodes in the parse tree should be a TreeMember except for when they are errors! Then the tree is broken anyways.");
             }
+
+            target.setPlanner(getPlanner());
+            target.handleResult((TreeMember) node, text);
           }
         }
       }
-    });
+    }
+  }
+
+  {
+    addEndDependent(new TerminalVisitor());
   }
 
   public SearchTerminals<T> targets(Collection<HandlerTarget<T>> targets) {
