@@ -328,7 +328,7 @@ public class WrapIdentifier<T extends JobParameters> extends ConfigurableTransfo
   /**
    * Sets the supplier for a configuration property.
    * 
-   * @param wrapResultDetector The value supplier
+   * @param detectionResult The value supplier
    * @return This object
    */
   public WrapIdentifier<T> detectionResult(Supplier<String> detectionResult) {

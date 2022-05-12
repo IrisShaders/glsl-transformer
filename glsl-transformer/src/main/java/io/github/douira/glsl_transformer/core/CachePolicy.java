@@ -1,5 +1,8 @@
 package io.github.douira.glsl_transformer.core;
 
+/**
+ * Used to specify how often a {@link CachingSupplier} should be evaluated.
+ */
 public enum CachePolicy {
   /**
    * Generate a value only once and then cache it forever.

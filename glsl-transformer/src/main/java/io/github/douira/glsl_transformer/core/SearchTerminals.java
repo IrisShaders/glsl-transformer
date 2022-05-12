@@ -15,14 +15,15 @@ import io.github.douira.glsl_transformer.util.CompatUtil;
 /**
  * This phase finds targets in specified target token types (usually
  * identifiers) and triggers their handlers. The behavior of the targets can be
- * customized with the various available target subclasses.
+ * customized with the various available core targets.
  * 
  * By default, an exact string match of the text in the terminal node and the
  * needle search string is required. However, this behavior can be configured.
  * 
  * If something other than terminals should be searched, simply extend the walk
  * phase yourself and do something when it visits the parse context of
- * interest.
+ * interest. (meaning without using this class as it's specifically for visiting
+ * terminals)
  */
 public class SearchTerminals<T extends JobParameters> extends ConfigurableTransformation<T> {
   /**
@@ -35,6 +36,11 @@ public class SearchTerminals<T extends JobParameters> extends ConfigurableTransf
    */
   public static final int ANY_TYPE = Token.INVALID_TYPE;
 
+  /**
+   * The defalt collection of targets that is added onto when adding targets
+   * individually. This field is not used if the getter method or the
+   * configuration property is overwritten.
+   */
   protected Collection<HandlerTarget<T>> targetsDirect = new ArrayList<HandlerTarget<T>>(0);
 
   private Supplier<Boolean> requireFullMatch = once(this::getRequireFullMatch);
@@ -98,6 +104,7 @@ public class SearchTerminals<T extends JobParameters> extends ConfigurableTransf
    * Adds a target for processing.
    * 
    * @param target The target to add to the collection of targets
+   * @return This object
    */
   public SearchTerminals<T> addTarget(HandlerTarget<T> target) {
     targetsDirect.add(target);
@@ -111,6 +118,7 @@ public class SearchTerminals<T extends JobParameters> extends ConfigurableTransf
    * @param needle      The needle (search string)
    * @param newContent  The new content to parse into a node
    * @param parseMethod The parser method to create the new node with
+   * @return This object
    */
   public SearchTerminals<T> addReplacement(
       String needle, String newContent,
@@ -125,6 +133,7 @@ public class SearchTerminals<T extends JobParameters> extends ConfigurableTransf
    * 
    * @param needle            The needle (search string)
    * @param expressionContent The new content to parse into an expression
+   * @return This object
    */
   public SearchTerminals<T> addReplacementExpression(String needle, String expressionContent) {
     addReplacement(needle, expressionContent, GLSLParser::expression);
@@ -137,6 +146,7 @@ public class SearchTerminals<T extends JobParameters> extends ConfigurableTransf
    * 
    * @param needle          The needle (search string)
    * @param terminalContent The new terminal content to insert as a string node
+   * @return This object
    */
   public SearchTerminals<T> addReplacementTerminal(String needle, String terminalContent) {
     addTarget(new TerminalReplaceTargetImpl<>(needle, terminalContent));
