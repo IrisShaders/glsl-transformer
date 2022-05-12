@@ -52,7 +52,7 @@ public class WrapIdentifier<T extends JobParameters> extends ConfigurableTransfo
    * @return The configuration property value
    */
   protected ActivatableLifecycleUser<T> getWrapResultDetector() {
-    return new SearchTerminals<T>().target(new WrapThrowTarget<T>() {
+    return new SearchTerminals<T>().singleTarget(new WrapThrowTarget<T>() {
       @Override
       protected String getWrapResult() {
         return detectionResult();
@@ -191,7 +191,7 @@ public class WrapIdentifier<T extends JobParameters> extends ConfigurableTransfo
     throw new IllegalStateException("No injection external declaration is set");
   }
 
-  // the rest of this class is just configuration methods and doesn't do much else
+  // the rest of this class is just configuration methods
   // #region Configuration methods
   /**
    * Sets the detector that will be used to check if the detection result exists
