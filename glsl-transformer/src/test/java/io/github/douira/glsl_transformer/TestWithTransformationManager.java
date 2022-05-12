@@ -27,13 +27,13 @@ public abstract class TestWithTransformationManager<T extends JobParameters> {
     setTestCode(testResourceInput);
   }
 
-  public String runTransformation(String code, LifecycleUser<T> activity) {
+  public String run(String code, LifecycleUser<T> activity) {
     manager = new TransformationManager<T>();
     manager.addConcurrent(activity);
     return manager.transform(code);
   }
 
-  public String runTransformation(LifecycleUser<T> activity) {
-    return runTransformation(testCode, activity);
+  public String run(LifecycleUser<T> activity) {
+    return run(testCode, activity);
   }
 }
