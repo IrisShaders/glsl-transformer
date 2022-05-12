@@ -11,9 +11,10 @@ public class WrapIdentifierTest extends TestForExecutionOrder {
   @Test
   void testThrowOnUnconfigured() {
     manager.addConcurrent(new WrapIdentifier<>());
-    assertThrows(IllegalStateException.class, () -> {
-      manager.transform("");
-    }, "It should throw if basic configuration values are missing");
+    assertThrows(
+        IllegalStateException.class,
+        () -> manager.transform(""),
+        "It should throw if basic configuration values are missing");
   }
 
   @Test
@@ -40,5 +41,33 @@ public class WrapIdentifierTest extends TestForExecutionOrder {
         "int snap = 0;int a = bar + 3;",
         manager.transform("int a = foo;"),
         "It should wrap the identifier foo, replace it with bar + 3 and inject a declaration");
+  }
+
+  @Test
+  void testResultDetection() {
+    manager.addConcurrent(new WrapIdentifier<NonFixedJobParameters>()
+        .wrapTarget("foo")
+        .detectionResult("bar")
+        .parsedReplacement("bar + 3")
+        .injectionExternalDeclaration("int snap = 0;")
+        .injectionLocation(InjectionPoint.BEFORE_DECLARATIONS));
+    assertThrows(
+        SemanticException.class,
+        () -> manager.transform("int a = bar;"),
+        "It should throw if the detection result is already present");
+  }
+
+  @Test
+  void testResultDetectionNotInInjection() {
+    manager.addConcurrent(new WrapIdentifier<NonFixedJobParameters>()
+        .wrapTarget("foo")
+        .detectionResult("bar")
+        .parsedReplacement("bar + 3")
+        .injectionExternalDeclaration("int snap = bar;")
+        .injectionLocation(InjectionPoint.BEFORE_DECLARATIONS));
+    assertEquals(
+        "int snap = bar;int a = bar + 3;",
+        manager.transform("int a = foo;"),
+        "It should normally wrap even if the detection result appears in the injection.");
   }
 }
