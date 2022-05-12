@@ -17,6 +17,13 @@ public abstract class TestForExecutionOrder {
   protected int nextIndex;
   protected boolean useWalk;
 
+  @BeforeEach
+  void setup() {
+    manager = new TransformationManager<>();
+    transformation = manager.getRootTransformation();
+    nextIndex = 0;
+  }
+
   protected void useWalkPhases() {
     useWalk = true;
   }
@@ -119,12 +126,5 @@ public abstract class TestForExecutionOrder {
     return RunPhase.withRun(() -> {
       nextIndex++;
     });
-  }
-
-  @BeforeEach
-  void setup() {
-    manager = new TransformationManager<>();
-    transformation = manager.getRootTransformation();
-    nextIndex = 0;
   }
 }
