@@ -12,4 +12,14 @@ public abstract class UnparsableASTNode extends ASTNode {
   public String getText() {
     return getPrinted();
   }
+
+  /**
+   * If true, the printer will insert a newline before each group of consecutive
+   * unparsable AST nodes.
+   * 
+   * @return If newline insertion should happen with this node
+   */
+  public boolean doNewlineInsertion() {
+    return true;
+  }
 }

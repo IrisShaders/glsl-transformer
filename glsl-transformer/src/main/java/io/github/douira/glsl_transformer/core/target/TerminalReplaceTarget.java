@@ -36,6 +36,6 @@ public abstract class TerminalReplaceTarget<T extends JobParameters> extends Rep
 
   @Override
   protected TreeMember getReplacement(TreeMember node, String match) {
-    return new StringNode(getTerminalContent());
+    return new StringNode(getTerminalContent(), false);
   }
 }
