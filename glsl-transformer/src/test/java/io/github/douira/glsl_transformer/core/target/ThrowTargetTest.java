@@ -24,7 +24,7 @@ public class ThrowTargetTest extends TestWithTransformationManager<NonFixedJobPa
     var message = "message";
     nextIndex = 0;
     try {
-      runTransformation(
+      run(
           "int f = foo + oofevilinside;",
           new SearchTerminals<NonFixedJobParameters>()
               .requireFullMatch(false)
@@ -50,7 +50,7 @@ public class ThrowTargetTest extends TestWithTransformationManager<NonFixedJobPa
     var message = "message";
     nextIndex = 0;
     try {
-      runTransformation(
+      run(
           "int f = foo + oofevilinside + outside + evil;",
           new SearchTerminals<NonFixedJobParameters>()
               .singleTarget(
@@ -73,7 +73,7 @@ public class ThrowTargetTest extends TestWithTransformationManager<NonFixedJobPa
   @Test
   void testNoThrow() {
     assertDoesNotThrow(
-        () -> runTransformation(
+        () -> run(
             "int f = foo + EvilInCaps + EVILCAPS + e_v_i_l_spaced;",
             new SearchTerminals<NonFixedJobParameters>()
                 .singleTarget(new ThrowTargetImpl<>("evil", "message"))));

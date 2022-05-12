@@ -15,7 +15,7 @@ public class PrintVisitorTest extends TestWithTransformationManager<NonFixedJobP
   void testEmptyLiteral() {
     assertEquals(
         "b;\n__ f;a;",
-        runTransformation("a;", new RunPhase<>() {
+        run("a;", new RunPhase<>() {
           @Override
           protected void run(TranslationUnitContext ctx) {
             injectExternalDeclaration(InjectionPoint.BEFORE_VERSION, "f;");

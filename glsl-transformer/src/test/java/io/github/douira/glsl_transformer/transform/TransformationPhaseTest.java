@@ -33,7 +33,7 @@ public class TransformationPhaseTest extends TestWithTransformationManager<NonFi
 
   @Test
   void testCompilePath() {
-    runTransformation(new RunPhase<>() {
+    run(new RunPhase<>() {
       @Override
       protected void run(TranslationUnitContext ctx) {
         assertEquals(
@@ -47,7 +47,7 @@ public class TransformationPhaseTest extends TestWithTransformationManager<NonFi
 
   @Test
   void testCompilePattern() {
-    runTransformation(new RunPhase<>() {
+    run(new RunPhase<>() {
       @Override
       protected void run(TranslationUnitContext ctx) {
         var match = compilePattern(
@@ -64,7 +64,7 @@ public class TransformationPhaseTest extends TestWithTransformationManager<NonFi
 
   @Test
   void testCreateLocalRoot() {
-    runTransformation(new RunPhase<>() {
+    run(new RunPhase<>() {
       @Override
       protected void run(TranslationUnitContext ctx) {
         var localRoot = createLocalRoot("f;", ctx, GLSLParser::externalDeclaration);
@@ -78,7 +78,7 @@ public class TransformationPhaseTest extends TestWithTransformationManager<NonFi
 
   @Test
   void testFindAndMatch() {
-    runTransformation(new RunPhase<>() {
+    run(new RunPhase<>() {
       @Override
       protected void run(TranslationUnitContext ctx) {
         // note that usually the xpath and pattern should be compiled in the init method
@@ -94,7 +94,7 @@ public class TransformationPhaseTest extends TestWithTransformationManager<NonFi
 
   @Test
   void testGetSiblings() {
-    runTransformation(new RunPhase<>() {
+    run(new RunPhase<>() {
       @Override
       protected void run(TranslationUnitContext ctx) {
         assertSame(
@@ -120,7 +120,7 @@ public class TransformationPhaseTest extends TestWithTransformationManager<NonFi
   void testInjectNode(String scenario, String input) {
     for (var location : InjectionPoint.values()) {
       setTestCode(input);
-      var output = runTransformation(new RunPhase<>() {
+      var output = run(new RunPhase<>() {
         @Override
         protected void run(TranslationUnitContext ctx) {
           injectExternalDeclaration(location, "//prefix\ninjection; //suffix\n");
@@ -139,7 +139,7 @@ public class TransformationPhaseTest extends TestWithTransformationManager<NonFi
   void testInjectDefine(String scenario, String input) {
     for (var location : InjectionPoint.values()) {
       setTestCode(input);
-      var output = runTransformation(new RunPhase<>() {
+      var output = run(new RunPhase<>() {
         @Override
         protected void run(TranslationUnitContext ctx) {
           injectDefine(location, "foo bar + baz");
@@ -156,7 +156,7 @@ public class TransformationPhaseTest extends TestWithTransformationManager<NonFi
   void testInjectNodes() {
     assertEquals(
         "e;//\nf;a;//present\nb;c;d;",
-        runTransformation("a;//present\nb;c;d;", new RunPhase<>() {
+        run("a;//present\nb;c;d;", new RunPhase<>() {
           @Override
           protected void run(TranslationUnitContext ctx) {
             injectNodes(InjectionPoint.BEFORE_VERSION,
@@ -171,7 +171,7 @@ public class TransformationPhaseTest extends TestWithTransformationManager<NonFi
   void testInjectExternalDeclaration() {
     assertEquals(
         "e;a;//present\nb;c;int foo;",
-        runTransformation("a;//present\nb;c;int foo;", new RunPhase<>() {
+        run("a;//present\nb;c;int foo;", new RunPhase<>() {
           @Override
           protected void run(TranslationUnitContext ctx) {
             injectExternalDeclaration(InjectionPoint.BEFORE_VERSION, "e;");
@@ -192,7 +192,7 @@ public class TransformationPhaseTest extends TestWithTransformationManager<NonFi
   void testRemoveNode() {
     assertEquals(
         "a;//present\nd;",
-        runTransformation("a;//present\nb;c;d;", new RunPhase<>() {
+        run("a;//present\nb;c;d;", new RunPhase<>() {
           @Override
           protected void run(TranslationUnitContext ctx) {
             removeNode(ctx.externalDeclaration(1));
@@ -206,7 +206,7 @@ public class TransformationPhaseTest extends TestWithTransformationManager<NonFi
   void testReplaceNode() {
     assertEquals(
         "a;new;//present\nc;d;",
-        runTransformation("a;//present\nb;c;d;", new RunPhase<>() {
+        run("a;//present\nb;c;d;", new RunPhase<>() {
           @Override
           protected void run(TranslationUnitContext ctx) {
             replaceNode(ctx.externalDeclaration(1), "new;", GLSLParser::externalDeclaration);
@@ -215,7 +215,7 @@ public class TransformationPhaseTest extends TestWithTransformationManager<NonFi
         "It should correctly replace the second node");
 
     assertThrows(IllegalArgumentException.class,
-        () -> runTransformation("a;", new RunPhase<>() {
+        () -> run("a;", new RunPhase<>() {
           @Override
           protected void run(TranslationUnitContext ctx) {
             replaceNode(ctx, null);
@@ -227,7 +227,7 @@ public class TransformationPhaseTest extends TestWithTransformationManager<NonFi
   void testPreviousNodeHandling() {
     // this timeout is pretty long because overhead takes a while sometimes
     assertTimeoutPreemptively(Duration.ofMillis(500),
-        () -> runTransformation("a;", new WalkPhase<>() {
+        () -> run("a;", new WalkPhase<>() {
           @Override
           public void visitTerminal(TerminalNode node) {
             replaceNode((TreeMember) node, new StringNode("b"));
@@ -237,7 +237,7 @@ public class TransformationPhaseTest extends TestWithTransformationManager<NonFi
 
   @Test
   void testSetParent() {
-    runTransformation(new RunPhase<>() {
+    run(new RunPhase<>() {
       @Override
       protected void run(TranslationUnitContext ctx) {
         assertSame(manager.getParser(), getParser(),
