@@ -228,14 +228,10 @@ public class PrintVisitor extends AbstractParseTreeVisitor<Void> {
    * @implNote intervals that cover tokens that are not part of children (which
    *           are only hidden tokens like whitespace because terminal nodes are
    *           children too) are moved after inserted nodes, which are local
-   *           roots, through
-   *           this process. this happens because fetchNext is not updated for
-   *           local roots
-   *           which causes the next non-local-root child (or at the after end of
-   *           the child
-   *           list) to add the whole interval covering the child after the child
-   *           itself has
-   *           been visited.
+   *           roots, through this process. this happens because fetchNext is not
+   *           updated for local roots which causes the next non-local-root child
+   *           (or at the after end of the child list) to add the whole interval
+   *           covering the child after the child itself has been visited.
    */
   @Override
   public Void visitChildren(RuleNode node) {
@@ -248,11 +244,11 @@ public class PrintVisitor extends AbstractParseTreeVisitor<Void> {
 
     if (context.children != null) {
       for (var child : context.children) {
-        // handle unparsable AST nodes
+        // prettify unparsable AST nodes
         if (child instanceof UnparsableASTNode) {
           // insert a newline before each group of unparsable ast nodes.
           // line preservation doesn't matter here since it's being broken anyways
-          if (!lastWasUnparsableASTNode) {
+          if (!lastWasUnparsableASTNode && ((UnparsableASTNode) child).doNewlineInsertion()) {
             addLiteral("\n");
             lastWasUnparsableASTNode = true;
           }

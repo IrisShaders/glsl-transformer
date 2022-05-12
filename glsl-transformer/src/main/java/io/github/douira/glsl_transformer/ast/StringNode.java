@@ -13,6 +13,7 @@ package io.github.douira.glsl_transformer.ast;
  */
 public class StringNode extends UnparsableASTNode {
   private final String content;
+  private final boolean doNewlineInsertion;
 
   /**
    * Creates a new string node with the given string content.
@@ -23,13 +24,31 @@ public class StringNode extends UnparsableASTNode {
     if (content == null) {
       throw new IllegalArgumentException("String node content must not be null!");
     }
-
     this.content = content;
+    this.doNewlineInsertion = true;
+  }
+
+  /**
+   * Creates a new string node with the given string content and a newline
+   * insertion flag.
+   * 
+   * @param content            The string to create a token for
+   * @param doNewlineInsertion Whether to insert a newline before each group of
+   *                           unparsable AST nodes in the printer
+   */
+  public StringNode(String content, boolean doNewlineInsertion) {
+    this.content = content;
+    this.doNewlineInsertion = doNewlineInsertion;
   }
 
   @Override
   protected String getPrinted() {
     return getContent();
+  }
+
+  @Override
+  public boolean doNewlineInsertion() {
+    return doNewlineInsertion;
   }
 
   /**
