@@ -28,4 +28,17 @@ public class WrapIdentifierTest extends TestForExecutionOrder {
         manager.transform("int foo = 4;"),
         "It should wrap the identifier foo, replace it with bar and inject a declaration");
   }
+
+  @Test
+  void testParsedWrap() {
+    manager.addConcurrent(new WrapIdentifier<NonFixedJobParameters>()
+        .wrapTarget("foo")
+        .parsedReplacement("bar + 3")
+        .injectionExternalDeclaration("int snap = 0;")
+        .injectionLocation(InjectionPoint.BEFORE_DECLARATIONS));
+    assertEquals(
+        "int snap = 0;int a = bar + 3;",
+        manager.transform("int a = foo;"),
+        "It should wrap the identifier foo, replace it with bar + 3 and inject a declaration");
+  }
 }

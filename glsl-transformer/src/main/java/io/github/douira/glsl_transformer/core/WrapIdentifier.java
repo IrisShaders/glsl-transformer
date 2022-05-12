@@ -23,7 +23,7 @@ import io.github.douira.glsl_transformer.util.CompatUtil;
  */
 public class WrapIdentifier<T extends JobParameters> extends ConfigurableTransformation<T> {
   private Supplier<ActivatableLifecycleUser<T>> wrapResultDetector = once(this::getWrapResultDetector);
-  private Supplier<String> detectionResult = once(this::getParsedReplacement);
+  private Supplier<String> detectionResult = once(this::parsedReplacement);
 
   private Supplier<String> parsedReplacement = once(this::getParsedReplacement);
   private Supplier<Function<GLSLParser, ExtendedContext>> parseMethod = once(this::getParseMethod);
