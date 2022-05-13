@@ -82,7 +82,7 @@ public class SearchTerminals<T extends JobParameters> extends ConfigurableTransf
   }
 
   {
-    addEndDependent(new TerminalVisitor());
+    addEndDependent(new TerminalVisitor().activation(this::isActive));
   }
 
   /**
