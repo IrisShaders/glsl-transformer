@@ -37,7 +37,7 @@ public class SearchTerminals<T extends JobParameters> extends ConfigurableTransf
   public static final int ANY_TYPE = Token.INVALID_TYPE;
 
   /**
-   * The defalt collection of targets that is added onto when adding targets
+   * The default collection of targets that is added onto when adding targets
    * individually. This field is not used if the getter method or the
    * configuration property is overwritten.
    */
