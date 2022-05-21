@@ -279,7 +279,7 @@ public class PrintVisitor extends AbstractParseTreeVisitor<Void> {
           if (childInterval.length() != 0) {
             fetchNext = childInterval.b + 1;
           }
-        }        
+        }
       }
     }
 
