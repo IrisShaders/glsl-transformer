@@ -62,11 +62,11 @@ public class SearchTerminals<T extends JobParameters> extends ConfigurableTransf
         String text = token.getText();
 
         // TODO: this could be optimized using a trie if there are very many needles
-        var targets = getTargets();
+        var targets = targets();
         if (targets == null) {
           return;
         }
-        for (var target : targets()) {
+        for (var target : targets) {
           if (findNeedle(text, target)) {
             if (!(node instanceof TreeMember)) {
               throw new IllegalStateException(
