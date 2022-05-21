@@ -95,9 +95,13 @@ public class SearchTerminals<T extends JobParameters> extends ConfigurableTransf
    * @return If the target was found in the content
    */
   protected boolean findNeedle(String content, HandlerTarget<T> target) {
+    var needle = target.getNeedle();
+    if (needle == null) {
+      return false;
+    }
     return requireFullMatch()
-        ? content.equals(target.getNeedle())
-        : content.contains(target.getNeedle());
+        ? content.equals(needle)
+        : content.contains(needle);
   }
 
   /**
@@ -228,8 +232,7 @@ public class SearchTerminals<T extends JobParameters> extends ConfigurableTransf
    * @return This object
    */
   public SearchTerminals<T> singleTarget(HandlerTarget<T> target) {
-    this.targets = swapSupplier(this.targets, CompatUtil.listOf(target));
-    return this;
+    return targets(CompatUtil.listOf(target));
   }
 
   /**
