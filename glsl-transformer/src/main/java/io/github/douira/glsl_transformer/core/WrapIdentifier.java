@@ -298,7 +298,7 @@ public class WrapIdentifier<T extends JobParameters> extends ConfigurableTransfo
    * @param detectionResult The detection result
    * @return This object
    */
-  public WrapIdentifier<T> detectionResults(String detectionResult) {
+  public WrapIdentifier<T> detectionResult(String detectionResult) {
     return detectionResults(CompatUtil.listOf(detectionResult));
   }
 
