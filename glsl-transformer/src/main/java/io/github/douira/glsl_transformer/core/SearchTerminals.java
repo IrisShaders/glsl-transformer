@@ -184,6 +184,9 @@ public class SearchTerminals<T extends JobParameters> extends ConfigurableTransf
    * @return The configuration property value
    */
   protected Collection<HandlerTarget<T>> getTargets() {
+    if (targetsDirect.isEmpty()) {
+      throw new IllegalStateException("No targets are set");
+    }
     return targetsDirect;
   }
 
