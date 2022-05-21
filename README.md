@@ -69,9 +69,6 @@ gradle javadoc
 // setup a manager
 var manager = new TransformationManager<>();
 
-// before transformation
-System.out.println(manager.transform(string));
-
 // register a transformation
 manager.addConcurrent(transformation);
 
