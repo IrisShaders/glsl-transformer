@@ -1,6 +1,6 @@
 package io.github.douira.glsl_transformer.core;
 
-import java.util.Collection;
+import java.util.*;
 import java.util.function.*;
 
 import io.github.douira.glsl_transformer.GLSLParser;
@@ -22,8 +22,11 @@ import io.github.douira.glsl_transformer.util.CompatUtil;
  * overriding the getter methods.
  */
 public class WrapIdentifier<T extends JobParameters> extends ConfigurableTransformation<T> {
+  protected Collection<String> detectionResultsDirect = new ArrayList<String>(0);
+  protected Collection<String> externalDeclarationsDirect = new ArrayList<String>(0);
+
   private Supplier<ActivatableLifecycleUser<T>> wrapResultDetector = once(this::getWrapResultDetector);
-  private Supplier<String> detectionResult = once(this::getDetectionResult);
+  private Supplier<Collection<String>> detectionResults = once(this::getDetectionResults);
 
   private Supplier<String> parsedReplacement = once(this::getParsedReplacement);
   private Supplier<Function<GLSLParser, ExtendedContext>> parseMethod = once(this::getParseMethod);
@@ -33,7 +36,7 @@ public class WrapIdentifier<T extends JobParameters> extends ConfigurableTransfo
 
   private Supplier<ActivatableLifecycleUser<T>> injector = once(this::getInjector);
   private Supplier<InjectionPoint> injectionLocation = once(this::getInjectionLocation);
-  private Supplier<String> injectionExternalDeclaration = once(this::getInjectionExternalDeclaration);
+  private Supplier<Collection<String>> injectionExternalDeclarations = once(this::getInjectionExternalDeclarations);
 
   /**
    * Setup is done here so that it can be overridden in subclasses.
@@ -46,18 +49,78 @@ public class WrapIdentifier<T extends JobParameters> extends ConfigurableTransfo
   }
 
   /**
+   * Adds a detection result to the list of static detection result to use. This
+   * constitutes the default behavior of {@link #getDetectionResults()}.
+   * 
+   * @param detectionResult The detection result to add
+   */
+  public void addDetectionResult(String detectionResult) {
+    detectionResultsDirect.add(detectionResult);
+  }
+
+  /**
+   * Adds an external declaration to the list of external declarations to use.
+   * This constitutes the default behavior of
+   * {@link #getInjectionExternalDeclarations()}.
+   * 
+   * @param externalDeclaration The external declaration to add
+   */
+  public void addExternalDeclaration(String externalDeclaration) {
+    externalDeclarationsDirect.add(externalDeclaration);
+  }
+
+  /**
    * Gets the value of a configuration property. This method should not be called
    * by subclasses, only implemented in case a custom value generation is needed.
+   * 
+   * This method can deal with a list of detection results that is longer than one
+   * item. It can even handle this list's contents or identity changing, but it
+   * doesn't handle the list getting longer and added items will be ignored. If
+   * the list gets shorter, the generated wrap throw targets will become no-ops
+   * but still exist.
    * 
    * @return The configuration property value
    */
   protected ActivatableLifecycleUser<T> getWrapResultDetector() {
-    return new SearchTerminals<T>().singleTarget(new WrapThrowTarget<T>() {
-      @Override
-      protected String getWrapResult() {
-        return detectionResult();
-      }
-    });
+    var staticDetects = detectionResults();
+    if (staticDetects.size() == 1) {
+      return new SearchTerminals<T>().singleTarget(new WrapThrowTarget<T>() {
+        @Override
+        protected String getWrapResult() {
+          return detectionResult();
+        }
+      });
+    } else {
+      return new SearchTerminals<T>() {
+        List<String> detectsList;
+
+        @Override
+        public void resetState() {
+          var detects = detectionResults();
+          if (detects != detectsList) {
+            detectsList = new ArrayList<>(detects);
+          }
+        }
+
+        @Override
+        protected Collection<HandlerTarget<T>> getTargets() {
+          var targets = new ArrayList<HandlerTarget<T>>(detectsList.size());
+          for (var i = 0; i < detectsList.size(); i++) {
+            var index = i;
+            targets.add(new WrapThrowTarget<T>() {
+              @Override
+              protected String getWrapResult() {
+                if (detectsList.size() <= index) {
+                  return null;
+                }
+                return detectsList.get(index);
+              }
+            });
+          }
+          return targets;
+        }
+      };
+    }
   }
 
   /**
@@ -66,8 +129,8 @@ public class WrapIdentifier<T extends JobParameters> extends ConfigurableTransfo
    * 
    * @return The configuration property value
    */
-  protected String getDetectionResult() {
-    return parsedReplacement();
+  protected Collection<String> getDetectionResults() {
+    return detectionResultsDirect.isEmpty() ? CompatUtil.listOf(parsedReplacement()) : detectionResultsDirect;
   }
 
   /**
@@ -77,7 +140,8 @@ public class WrapIdentifier<T extends JobParameters> extends ConfigurableTransfo
    * @return The configuration property value
    */
   protected String getParsedReplacement() {
-    throw new IllegalStateException("No parsed replacement is set");
+    throw new IllegalStateException(
+        "No parsed replacement is set. This error can also occur if no detection results are set.");
   }
 
   /**
@@ -166,7 +230,10 @@ public class WrapIdentifier<T extends JobParameters> extends ConfigurableTransfo
     return new RunPhase<T>() {
       @Override
       protected void run(TranslationUnitContext ctx) {
-        injectExternalDeclaration(injectionLocation(), injectionExternalDeclaration());
+        var location = injectionLocation();
+        for (String externalDeclaration : injectionExternalDeclarations()) {
+          injectExternalDeclaration(location, externalDeclaration);
+        }
       }
     };
   }
@@ -187,8 +254,11 @@ public class WrapIdentifier<T extends JobParameters> extends ConfigurableTransfo
    * 
    * @return The configuration property value
    */
-  protected String getInjectionExternalDeclaration() {
-    throw new IllegalStateException("No injection external declaration is set");
+  protected Collection<String> getInjectionExternalDeclarations() {
+    if (externalDeclarationsDirect.isEmpty()) {
+      throw new IllegalStateException("No injection external declarations are set");
+    }
+    return externalDeclarationsDirect;
   }
 
   // the rest of this class is just configuration methods
@@ -212,12 +282,24 @@ public class WrapIdentifier<T extends JobParameters> extends ConfigurableTransfo
    * the replacement isn't just a single identifier. If used without an explicit
    * expression to insert, this must be an identifier since it's not parsed.
    * 
+   * @param detectionResults The detection results
+   * @return This object
+   */
+  public WrapIdentifier<T> detectionResults(Collection<String> detectionResults) {
+    this.detectionResults = swapSupplier(this.detectionResults, detectionResults);
+    return this;
+  }
+
+  /**
+   * Sets a single detection result. Other detection results will be ignored.
+   * 
+   * @see #detectionResults(Collection)
+   * 
    * @param detectionResult The detection result
    * @return This object
    */
-  public WrapIdentifier<T> detectionResult(String detectionResult) {
-    this.detectionResult = swapSupplier(this.detectionResult, detectionResult);
-    return this;
+  public WrapIdentifier<T> detectionResults(String detectionResult) {
+    return detectionResults(CompatUtil.listOf(detectionResult));
   }
 
   /**
@@ -304,14 +386,26 @@ public class WrapIdentifier<T extends JobParameters> extends ConfigurableTransfo
   }
 
   /**
-   * Sets the external declaration for the generated injector.
+   * Sets the external declarations for the generated injector.
+   * 
+   * @param injectionExternalDeclarations The external declarations
+   * @return This object
+   */
+  public WrapIdentifier<T> injectionExternalDeclarations(Collection<String> injectionExternalDeclarations) {
+    this.injectionExternalDeclarations = swapSupplier(this.injectionExternalDeclarations,
+        injectionExternalDeclarations);
+    return this;
+  }
+
+  /**
+   * Sets a single external declaration for the generated injector. No other
+   * external declarations will be considered.
    * 
    * @param injectionExternalDeclaration The external declaration
    * @return This object
    */
   public WrapIdentifier<T> injectionExternalDeclaration(String injectionExternalDeclaration) {
-    this.injectionExternalDeclaration = swapSupplier(this.injectionExternalDeclaration, injectionExternalDeclaration);
-    return this;
+    return injectionExternalDeclarations(CompatUtil.listOf(injectionExternalDeclaration));
   }
 
   /**
@@ -328,11 +422,11 @@ public class WrapIdentifier<T extends JobParameters> extends ConfigurableTransfo
   /**
    * Sets the supplier for a configuration property.
    * 
-   * @param detectionResult The value supplier
+   * @param detectionResults The value supplier
    * @return This object
    */
-  public WrapIdentifier<T> detectionResult(Supplier<String> detectionResult) {
-    this.detectionResult = swapSupplier(this.detectionResult, detectionResult);
+  public WrapIdentifier<T> detectionResults(Supplier<Collection<String>> detectionResults) {
+    this.detectionResults = swapSupplier(this.detectionResults, detectionResults);
     return this;
   }
 
@@ -416,11 +510,12 @@ public class WrapIdentifier<T extends JobParameters> extends ConfigurableTransfo
   /**
    * Sets the supplier for a configuration property.
    * 
-   * @param injectionExternalDeclaration The value supplier
+   * @param injectionExternalDeclarations The value supplier
    * @return This object
    */
-  public WrapIdentifier<T> injectionExternalDeclaration(Supplier<String> injectionExternalDeclaration) {
-    this.injectionExternalDeclaration = swapSupplier(this.injectionExternalDeclaration, injectionExternalDeclaration);
+  public WrapIdentifier<T> injectionExternalDeclarations(Supplier<Collection<String>> injectionExternalDeclarations) {
+    this.injectionExternalDeclarations = swapSupplier(this.injectionExternalDeclarations,
+        injectionExternalDeclarations);
     return this;
   }
 
@@ -441,8 +536,8 @@ public class WrapIdentifier<T extends JobParameters> extends ConfigurableTransfo
    * @param newPolicy The new cache policy
    * @return This object
    */
-  public WrapIdentifier<T> detectionResult(CachePolicy newPolicy) {
-    this.detectionResult = swapPolicy(this.detectionResult, newPolicy);
+  public WrapIdentifier<T> detectionResults(CachePolicy newPolicy) {
+    this.detectionResults = swapPolicy(this.detectionResults, newPolicy);
     return this;
   }
 
@@ -529,8 +624,8 @@ public class WrapIdentifier<T extends JobParameters> extends ConfigurableTransfo
    * @param newPolicy The new cache policy
    * @return This object
    */
-  public WrapIdentifier<T> injectionExternalDeclaration(CachePolicy newPolicy) {
-    this.injectionExternalDeclaration = swapPolicy(this.injectionExternalDeclaration, newPolicy);
+  public WrapIdentifier<T> injectionExternalDeclarations(CachePolicy newPolicy) {
+    this.injectionExternalDeclarations = swapPolicy(this.injectionExternalDeclarations, newPolicy);
     return this;
   }
 
@@ -548,8 +643,17 @@ public class WrapIdentifier<T extends JobParameters> extends ConfigurableTransfo
    * 
    * @return The configuration property value
    */
+  protected final Collection<String> detectionResults() {
+    return detectionResults.get();
+  }
+
+  /**
+   * Returns the proper value of a configuration property.
+   * 
+   * @return The configuration property value
+   */
   protected final String detectionResult() {
-    return detectionResult.get();
+    return detectionResults.get().stream().findFirst().orElse(null);
   }
 
   /**
@@ -620,8 +724,8 @@ public class WrapIdentifier<T extends JobParameters> extends ConfigurableTransfo
    * 
    * @return The configuration property value
    */
-  protected final String injectionExternalDeclaration() {
-    return injectionExternalDeclaration.get();
+  protected final Collection<String> injectionExternalDeclarations() {
+    return injectionExternalDeclarations.get();
   }
   // #endregion
 }
