@@ -24,5 +24,12 @@
     "columnLimit": 110
   },
   "java.sources.organizeImports.staticStarThreshold": 1,
-  "java.sources.organizeImports.starThreshold": 2
+  "java.sources.organizeImports.starThreshold": 2,
+  "java.configuration.runtimes": [
+    {
+      "name": "JavaSE-17",
+      "path": "/Library/Java/JavaVirtualMachines/jdk-17.0.1.jdk/Contents/Home",
+      "default": true
+    }
+  ],
 }
