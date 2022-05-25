@@ -20,5 +20,5 @@ public interface TreeMember extends ParseTree, MoveCheckable {
    * nodes this is always at least the parent's local root. Other nodes may be
    * their own local root.
    */
-  void omitTokens();
+  void processRemoval();
 }

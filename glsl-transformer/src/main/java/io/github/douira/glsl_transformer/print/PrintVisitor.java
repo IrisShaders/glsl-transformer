@@ -117,7 +117,7 @@ public class PrintVisitor extends AbstractParseTreeVisitor<Void> {
       } else if (printItem instanceof AttributedInterval attributedInterval) {
         var interval = attributedInterval.interval();
         var localRoot = attributedInterval.localRoot();
-        var omissionSet = localRoot.getOmissionSet();
+        var omissionSet = localRoot.getLocalRootTokenOmissions();
 
         for (var token : localRoot.getTokenStream().getTokens(interval.a, interval.b)) {
           // don't print EOF, only print the tokens in side the printing bounds,
@@ -243,7 +243,10 @@ public class PrintVisitor extends AbstractParseTreeVisitor<Void> {
     var fetchNext = superInterval.a;
 
     if (context.children != null) {
-      for (var child : context.children) {
+      var childrenLength = context.children.size();
+      for (int i = 0; i < childrenLength; i++) {
+        var child = context.children.get(i);
+
         // prettify unparsable AST nodes
         if (child instanceof UnparsableASTNode) {
           // insert a newline before each group of unparsable ast nodes.
@@ -253,11 +256,11 @@ public class PrintVisitor extends AbstractParseTreeVisitor<Void> {
             lastWasUnparsableASTNode = true;
           }
 
-          // unparsable ast nodes have no source interval
-          child.accept(this);
-          continue;
+          // unparsable ast nodes have no source interval (length 0)
+          // they will follow the path into opening detection
+        } else {
+          lastWasUnparsableASTNode = false;
         }
-        lastWasUnparsableASTNode = false;
 
         // handle local root nodes
         if (child instanceof ExtendedContext childNode && childNode.isLocalRoot()) {
@@ -271,15 +274,28 @@ public class PrintVisitor extends AbstractParseTreeVisitor<Void> {
           // handle everything else (regular non-terminal and terminal nodes)
           // interval before the current child
           var childInterval = child.getSourceInterval();
-          if (childInterval != Interval.INVALID) {
-            addInterval(fetchNext, childInterval.a - 1);
-          }
-
-          child.accept(this);
-
-          // prevent an empty child interval from messing up fetchNext by being negative
           if (childInterval.length() > 0) {
+            addInterval(fetchNext, childInterval.a - 1);
+            child.accept(this);
+
+            // prevent an empty child interval from messing up fetchNext by being negative
+            // (fetchNext is only updated if childInterval is not empty)
             fetchNext = childInterval.b + 1;
+          } else {
+            // detect openings left by removed nodes for new nodes that have no source
+            // interval (e.g. unparsable ast nodes but also other such nodes)
+            if (childInterval == Interval.INVALID) {
+              var previousChildEnd = i > 0 ? context.children.get(i - 1).getSourceInterval().b : -1;
+              var nextOpening = currentRoot.getLocalRootOpenings().higher(previousChildEnd);
+              if (nextOpening != null) {
+                var nextChildStart = i < childrenLength - 1 ? context.children.get(i + 1).getSourceInterval().a : -1;
+                if (nextChildStart == -1 || nextOpening < nextChildStart) {
+                  addInterval(fetchNext, nextOpening);
+                  fetchNext = nextOpening + 1;
+                }
+              }
+            }
+            child.accept(this);
           }
         }
       }
@@ -292,7 +308,7 @@ public class PrintVisitor extends AbstractParseTreeVisitor<Void> {
 
   @Override
   public Void visitTerminal(TerminalNode node) {
-    // empty terminal nodes have an empty source interval and have no effect
+    // empty terminal nodes have an empty source interval and will have no effect
     addInterval(node.getSourceInterval());
 
     // if this is an unparsable AST node, add the literal it produces

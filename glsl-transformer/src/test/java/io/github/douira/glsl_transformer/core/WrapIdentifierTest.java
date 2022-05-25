@@ -70,4 +70,21 @@ public class WrapIdentifierTest extends TestForExecutionOrder {
         manager.transform("int a = foo;"),
         "It should normally wrap even if the detection result appears in the injection.");
   }
+
+  /**
+   * This test makes sure the "openings"-mechanism in the printer and local roots
+   * works. If it doesn't use the opening, the whitespace will be in the wrong
+   * position.
+   */
+  @Test
+  void testFunctionWrap() {
+    manager.addConcurrent(new WrapIdentifier<NonFixedJobParameters>()
+        .detectionResult("prevMain")
+        .wrapTarget("main")
+        .injectionLocation(InjectionPoint.BEFORE_EOF)
+        .injectionExternalDeclaration("void main() { foo();\n prevMain(); }"));
+    assertEquals("void prevMain() { bar(); }\nvoid main() { foo();\n prevMain(); }",
+        manager.transform("void main() { bar(); }\n"),
+        "It should wrap the identifier main, replace it with prevMain and add a wrapper function that calls prevMain.");
+  }
 }

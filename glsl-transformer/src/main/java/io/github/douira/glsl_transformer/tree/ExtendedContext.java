@@ -27,10 +27,33 @@ import io.github.douira.glsl_transformer.print.CachingIntervalSet;
  * contained within any local root's omission set.
  */
 public abstract class ExtendedContext extends ParserRuleContext implements TreeMember {
+  /**
+   * The token omissions keep track of which token intervals should not be printed
+   * since the corresponding nodes have been removed from the tree.
+   * 
+   * The openings navigable set keep track of the start token indexes of nodes
+   * that have been removed. This helps to insert new nodes at the right location
+   * when printing. The aim is to insert new nodes in the same whitespace context
+   * as the original node. Without this, new nodes are put directly following the
+   * preceding node in the child list without any original whitespace separating
+   * them.
+   * 
+   * The token stream is the what was used to parse the content of this local
+   * root. For the root node this is simply the main token stream. This is the
+   * token stream that the token omissions and the openings refer to.
+   */
   @Desugar
-  private static record LocalRoot(CachingIntervalSet omissionSet, BufferedTokenStream tokenStream) {
+  private static record LocalRoot(
+      CachingIntervalSet tokenOmissions,
+      NavigableSet<Integer> openings,
+      BufferedTokenStream tokenStream) {
     LocalRoot(BufferedTokenStream tokenStream) {
-      this(new CachingIntervalSet(), tokenStream);
+      this(new CachingIntervalSet(), new TreeSet<>(), tokenStream);
+    }
+
+    void addIntervalRemoval(Interval interval) {
+      tokenOmissions.add(interval);
+      openings.add(interval.a);
     }
   };
 
@@ -62,7 +85,7 @@ public abstract class ExtendedContext extends ParserRuleContext implements TreeM
   /**
    * The local root data combines an omission set and a token stream.
    * 
-   * @see #getOmissionSet()
+   * @see #getLocalRootTokenOmissions()
    * @see #getTokenStream()
    */
   private Optional<LocalRoot> localRoot = Optional.empty();
@@ -210,23 +233,23 @@ public abstract class ExtendedContext extends ParserRuleContext implements TreeM
    * whitespace.
    */
   @Override
-  public void omitTokens() {
-    omitTokens(getSourceInterval());
+  public void processRemoval() {
+    processRemoval(getSourceInterval());
   }
 
   /**
    * Omits the given token interval on this node's local root.
    * 
-   * @see #omitTokens()
+   * @see #processRemoval()
    * 
    * @param tokenInterval The token interval to be omitted
    */
-  public void omitTokens(Interval tokenInterval) {
+  public void processRemoval(Interval tokenInterval) {
     if (isTreeReadonly()) {
       throw new IllegalStateException("Can't add intervals to the omission set if editing is already finished!");
     }
 
-    getLocalRoot().getOmissionSet().add(tokenInterval);
+    getLocalRoot().localRoot.get().addIntervalRemoval(tokenInterval);
   }
 
   private boolean isTreeReadonly() {
@@ -248,19 +271,21 @@ public abstract class ExtendedContext extends ParserRuleContext implements TreeM
    * 
    * The omission set is set to be readonly if the tree has been set to readonly.
    * 
-   * @return This local root's token stream if this node is a local root,
-   *         {@code null} otherwise
+   * This method should only be called on objects that do in fact contain a local
+   * root such as those added to an attributed interval.
+   * 
+   * @return This local root's token stream if this node is a local root
    */
-  public CachingIntervalSet getOmissionSet() {
-    if (localRoot.isPresent()) {
-      var omissionSet = localRoot.get().omissionSet();
-      if (isTreeReadonly()) {
-        omissionSet.setReadonly(true);
-      }
-      return omissionSet;
-    } else {
-      return null;
+  public CachingIntervalSet getLocalRootTokenOmissions() {
+    var omissionSet = localRoot.get().tokenOmissions;
+    if (isTreeReadonly()) {
+      omissionSet.setReadonly(true);
     }
+    return omissionSet;
+  }
+
+  public NavigableSet<Integer> getLocalRootOpenings() {
+    return localRoot.get().openings;
   }
 
   /**

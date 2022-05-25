@@ -132,7 +132,7 @@ public abstract class TransformationPhaseBase<T extends JobParameters> extends G
     var index = children.indexOf(removeNode);
     newNode.setParent(parent);
     children.set(index, newNode);
-    removeNode.omitTokens();
+    removeNode.processRemoval();
     return index;
   }
 
