@@ -52,14 +52,14 @@ public class ExtendedTerminalNode extends TerminalNodeImpl implements TreeMember
   }
 
   @Override
-  public void omitTokens() {
+  public void processRemoval() {
     var parent = getParent();
     if (parent == null) {
       throw new IllegalStateException(
           "A terminal node can't be a local root node and therefore can't be the root node. It must have a parent node but null was found!");
     }
 
-    parent.omitTokens(getSourceInterval());
+    parent.processRemoval(getSourceInterval());
   }
 
   @Override
