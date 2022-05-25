@@ -271,12 +271,14 @@ public class PrintVisitor extends AbstractParseTreeVisitor<Void> {
           // handle everything else (regular non-terminal and terminal nodes)
           // interval before the current child
           var childInterval = child.getSourceInterval();
-          addInterval(fetchNext, childInterval.a - 1);
+          if (childInterval != Interval.INVALID) {
+            addInterval(fetchNext, childInterval.a - 1);
+          }
 
           child.accept(this);
 
           // prevent an empty child interval from messing up fetchNext by being negative
-          if (childInterval.length() != 0) {
+          if (childInterval.length() > 0) {
             fetchNext = childInterval.b + 1;
           }
         }
