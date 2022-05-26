@@ -285,10 +285,14 @@ public class PrintVisitor extends AbstractParseTreeVisitor<Void> {
             // detect openings left by removed nodes for new nodes that have no source
             // interval (e.g. unparsable ast nodes but also other such nodes)
             if (childInterval == Interval.INVALID) {
-              var previousChildEnd = i > 0 ? context.children.get(i - 1).getSourceInterval().b : -1;
+              var previousChildEnd = i > 0
+                  ? context.children.get(i - 1).getSourceInterval().b
+                  : -1;
               var nextOpening = currentRoot.getLocalRootOpenings().higher(previousChildEnd);
               if (nextOpening != null) {
-                var nextChildStart = i < childrenLength - 1 ? context.children.get(i + 1).getSourceInterval().a : -1;
+                var nextChildStart = i < childrenLength - 1
+                    ? context.children.get(i + 1).getSourceInterval().a
+                    : -1;
                 if (nextChildStart == -1 || nextOpening < nextChildStart) {
                   addInterval(fetchNext, nextOpening);
                   fetchNext = nextOpening + 1;
