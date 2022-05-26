@@ -78,11 +78,6 @@ public abstract class ExtendedContext extends ParserRuleContext implements TreeM
   private ExtendedContext root = this;
 
   /**
-   * If this node is the root node and it has been set to be readonly.
-   */
-  private boolean rootAndReadonly = false;
-
-  /**
    * The local root data combines an omission set and a token stream.
    * 
    * @see #getLocalRootTokenOmissions()
@@ -220,9 +215,9 @@ public abstract class ExtendedContext extends ParserRuleContext implements TreeM
   /**
    * Find the tree's global root by checking the enclosing local root's reference.
    * 
-   * @return
+   * @return The accessible global tree root
    */
-  private ExtendedContext getRoot() {
+  public ExtendedContext getRoot() {
     return getLocalRoot().root;
   }
 
@@ -245,23 +240,7 @@ public abstract class ExtendedContext extends ParserRuleContext implements TreeM
    * @param tokenInterval The token interval to be omitted
    */
   public void processRemoval(Interval tokenInterval) {
-    if (isTreeReadonly()) {
-      throw new IllegalStateException("Can't add intervals to the omission set if editing is already finished!");
-    }
-
     getLocalRoot().localRoot.get().addIntervalRemoval(tokenInterval);
-  }
-
-  private boolean isTreeReadonly() {
-    return getRoot().rootAndReadonly;
-  }
-
-  /**
-   * Marks editing on the whole tree as finished. This modifies the root node's
-   * readonly state. After this point no further modifications should be made.
-   */
-  public void finishEditingTree() {
-    getRoot().rootAndReadonly = true;
   }
 
   /**
@@ -269,19 +248,13 @@ public abstract class ExtendedContext extends ParserRuleContext implements TreeM
    * the token intervals that should be omitted by the printer when printing this
    * local root's subtree.
    * 
-   * The omission set is set to be readonly if the tree has been set to readonly.
-   * 
    * This method should only be called on objects that do in fact contain a local
    * root such as those added to an attributed interval.
    * 
    * @return This local root's token stream if this node is a local root
    */
   public CachingIntervalSet getLocalRootTokenOmissions() {
-    var omissionSet = localRoot.get().tokenOmissions;
-    if (isTreeReadonly()) {
-      omissionSet.setReadonly(true);
-    }
-    return omissionSet;
+    return localRoot.get().tokenOmissions;
   }
 
   /**

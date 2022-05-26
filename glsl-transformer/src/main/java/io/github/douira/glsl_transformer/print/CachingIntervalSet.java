@@ -6,10 +6,9 @@ import org.antlr.v4.runtime.misc.*;
 /**
  * The caching interval set is a regular interval set
  * {@link org.antlr.v4.runtime.misc.IntervalSet} but the @link
- * org.antlr.v4.runtime.misc.IntervalSet#contains(int)} method also does caching
- * of the queries if the set has been set to readonly. Repeatedly requesting the
- * same query is a common operation and therefore caching it like this can be
- * helpful.
+ * org.antlr.v4.runtime.misc.IntervalSet#contains(int)} method does caching of
+ * queries. Repeatedly requesting the same query is a common operation and
+ * therefore caching it like this can be helpful.
  */
 public class CachingIntervalSet extends IntervalSet {
   private Interval lastIntervalHit;
@@ -19,14 +18,12 @@ public class CachingIntervalSet extends IntervalSet {
    * 
    * Copied from ANTLR's
    * {@link org.antlr.v4.runtime.misc.IntervalSet#contains(int)} but with an
-   * addition of caching. The cache size is 1. If the interval set has been marked
-   * as readonly, it will return the last hit if the query is the same.
+   * addition of caching. The cache size is 1. This method will test the cached
+   * interval if it hasn't been invalidated since.
    */
   @Override
   public boolean contains(int el) {
-    // if readonly, then allow cache hits
-    if (readonly && lastIntervalHit != null
-        && lastIntervalHit.a <= el && lastIntervalHit.b >= el) {
+    if (lastIntervalHit != null && lastIntervalHit.a <= el && lastIntervalHit.b >= el) {
       return true;
     }
 
@@ -45,9 +42,7 @@ public class CachingIntervalSet extends IntervalSet {
       } else if (a > el) {
         r = m - 1;
       } else { // now: el >= a && el <= b
-        if (readonly) {
-          lastIntervalHit = I;
-        }
+        lastIntervalHit = I;
         return true;
       }
     }
@@ -55,12 +50,25 @@ public class CachingIntervalSet extends IntervalSet {
   }
 
   /**
-   * Adds the given interval to the set.
-   * 
-   * @param interval The interval to add to this interval set
+   * Add cache invalidation.
    */
+  @Override
+  public void clear() {
+    invalidateCache();
+    super.clear();
+  }
+
+  /**
+   * Makes this method accessible and add cache invalidation.
+   */
+  @Override
   public void add(Interval interval) {
+    invalidateCache();
     super.add(interval);
+  }
+
+  private void invalidateCache() {
+    lastIntervalHit = null;
   }
 
   /**
