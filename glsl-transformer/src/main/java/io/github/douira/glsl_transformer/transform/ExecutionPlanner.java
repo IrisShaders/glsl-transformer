@@ -273,7 +273,7 @@ public abstract class ExecutionPlanner<T extends JobParameters> {
       // iterate the levels in reverse order since level 0 in the execution levels
       // depends on those with higher indexes
       for (var level : executionLevels) {
-        proxyListener = new ProxyParseTreeListener(new ArrayList<>());
+        proxyListener = new ProxyParseTreeListener();
 
         // process the concurrently processable walk phases in one tree-walk
         for (var walkPhase : level.walkPhases()) {
