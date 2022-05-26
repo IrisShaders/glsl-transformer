@@ -26,17 +26,10 @@ import io.github.douira.glsl_transformer.tree.ExtendedContext;
  * </pre>
  */
 public class ProxyParseTreeListener implements PartialParseTreeListener {
-  private Collection<PartialParseTreeListener> listeners;
+  private Collection<PartialParseTreeListener> listeners = new ArrayList<>();
+  private Collection<PartialParseTreeListener> stoppableListeners = new ArrayList<>();
   private Iterator<PartialParseTreeListener> listenerIterator;
-
-  /**
-   * Creates a new proxy with the given list of listeners.
-   * 
-   * @param listeners A list of listeners to receive events.
-   */
-  public ProxyParseTreeListener(Collection<PartialParseTreeListener> listeners) {
-    setListeners(listeners);
-  }
+  private PartialParseTreeListener currentListener;
 
   /**
    * Adds the given listener to the list of event notification recipients.
@@ -44,26 +37,10 @@ public class ProxyParseTreeListener implements PartialParseTreeListener {
    * @param listener A listener to begin receiving events.
    */
   public void add(PartialParseTreeListener listener) {
-    getListeners().add(listener);
-  }
-
-  /**
-   * Removes the given listener to the list of event notification recipients.
-   * 
-   * @param listener A listener to stop receiving events.
-   * @return false The listener was not registered to receive events.
-   */
-  public boolean remove(PartialParseTreeListener listener) {
-    return getListeners().remove(listener);
-  }
-
-  /**
-   * Returns the list of listeners.
-   * 
-   * @return The list of listeners to receive tree walking events.
-   */
-  private Collection<PartialParseTreeListener> getListeners() {
-    return this.listeners;
+    listeners.add(listener);
+    if (listener.canStop()) {
+      stoppableListeners.add(listener);
+    }
   }
 
   /**
@@ -92,19 +69,28 @@ public class ProxyParseTreeListener implements PartialParseTreeListener {
    */
   public void removeCurrentListener() {
     listenerIterator.remove();
+    stoppableListeners.remove(currentListener);
   }
 
   private void iterateListeners(Consumer<PartialParseTreeListener> consumer) {
-    listenerIterator = getListeners().iterator();
+    listenerIterator = listeners.iterator();
     while (listenerIterator.hasNext()) {
-      consumer.accept(listenerIterator.next());
+      currentListener = listenerIterator.next();
+      consumer.accept(currentListener);
     }
     listenerIterator = null;
   }
 
+  private boolean hasNonStoppingListeners() {
+    return stoppableListeners.size() < listeners.size();
+  }
+
   @Override
   public boolean isDeepEnough(ExtendedContext node) {
-    for (var listener : getListeners()) {
+    if (hasNonStoppingListeners()) {
+      return false;
+    }
+    for (var listener : stoppableListeners) {
       if (!listener.isDeepEnough(node)) {
         return false;
       }
@@ -114,11 +100,14 @@ public class ProxyParseTreeListener implements PartialParseTreeListener {
 
   @Override
   public boolean isFinished() {
-    if (isEmpty()) {
-      return true;
+    if (hasNonStoppingListeners()) {
+      return false;
     }
-    for (var listener : getListeners()) {
-      if (!listener.isFinished()) {
+    for (var listener : stoppableListeners) {
+      if (listener.isFinished()) {
+        listeners.remove(listener);
+        stoppableListeners.remove(listener);
+      } else {
         return false;
       }
     }

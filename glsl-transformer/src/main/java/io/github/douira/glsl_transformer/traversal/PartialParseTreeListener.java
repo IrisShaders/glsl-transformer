@@ -34,4 +34,14 @@ public interface PartialParseTreeListener extends ParseTreeListener {
   default boolean isDeepEnough(ExtendedContext node) {
     return false;
   }
+
+  /**
+   * Returns if the parse tree listener is ever interested in maybe returning true
+   * from {@link #isFinished()} or {@link #isDeepEnough(ExtendedContext)}. If this
+   * method return false, the other two methods will never be called for better
+   * performance.
+   */
+  default boolean canStop() {
+    return false;
+  }
 }
