@@ -289,7 +289,7 @@ public class PrintVisitor extends AbstractParseTreeVisitor<Void> {
                   ? context.children.get(i - 1).getSourceInterval().b
                   : -1;
               var nextOpening = currentRoot.getLocalRootOpenings().higher(previousChildEnd);
-              if (nextOpening != null) {
+              if (nextOpening != null && nextOpening >= fetchNext) {
                 var nextChildStart = i < childrenLength - 1
                     ? context.children.get(i + 1).getSourceInterval().a
                     : -1;
