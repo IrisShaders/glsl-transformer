@@ -44,22 +44,13 @@ public class ProxyParseTreeListener implements PartialParseTreeListener {
   }
 
   /**
-   * Changes the list of listeners to receive events. If the given list of
-   * listeners is null, an empty list will be created.
+   * Returns if this listener even needs a tree walk. This is false if there are
+   * no listeners
    * 
-   * @param listeners A list of listeners to receive tree walking events.
+   * @return {@code true} if there are listeners
    */
-  public void setListeners(Collection<PartialParseTreeListener> listeners) {
-    this.listeners = Optional.ofNullable(listeners).orElseGet(ArrayList<PartialParseTreeListener>::new);
-  }
-
-  /**
-   * Checks if the list of listeners is empty.
-   * 
-   * @return {@code true} if the list of listeners is empty
-   */
-  public boolean isEmpty() {
-    return this.listeners.isEmpty();
+  public boolean needsWalk() {
+    return !listeners.isEmpty();
   }
 
   /**
@@ -103,15 +94,18 @@ public class ProxyParseTreeListener implements PartialParseTreeListener {
     if (hasNonStoppingListeners()) {
       return false;
     }
-    for (var listener : stoppableListeners) {
+    var finished = true;
+    var stoppableListenerIterator = stoppableListeners.iterator();
+    while (stoppableListenerIterator.hasNext()) {
+      var listener = stoppableListenerIterator.next();
       if (listener.isFinished()) {
         listeners.remove(listener);
-        stoppableListeners.remove(listener);
+        stoppableListenerIterator.remove();
       } else {
-        return false;
+        finished = false;
       }
     }
-    return true;
+    return finished;
   }
 
   @Override
