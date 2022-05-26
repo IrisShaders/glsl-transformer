@@ -22,7 +22,20 @@ import io.github.douira.glsl_transformer.util.CompatUtil;
  * overriding the getter methods.
  */
 public class WrapIdentifier<T extends JobParameters> extends ConfigurableTransformation<T> {
+  /**
+   * The current list of detection results to use if the getter method for the
+   * detection result configuration property is not set differently. Items are
+   * added to this list with the
+   * {@link #addDetectionResult(String)} method.
+   */
   protected Collection<String> detectionResultsDirect = new ArrayList<String>(0);
+
+  /**
+   * The current list of injection external declarations to use if the getter
+   * method for the external declarations configuration property is not set
+   * differently. Items are added to this list with the
+   * {@link #addExternalDeclaration(String)}
+   */
   protected Collection<String> externalDeclarationsDirect = new ArrayList<String>(0);
 
   private Supplier<ActivatableLifecycleUser<T>> wrapResultDetector = once(this::getWrapResultDetector);
