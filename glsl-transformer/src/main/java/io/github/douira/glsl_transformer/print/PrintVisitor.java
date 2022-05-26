@@ -242,6 +242,8 @@ public class PrintVisitor extends AbstractParseTreeVisitor<Void> {
     // keeps track of the token index that needs to be processed next
     var fetchNext = superInterval.a;
 
+    // iterate all children of this node. This uses a for loop so that previous and
+    // next children can be accessed
     if (context.children != null) {
       var childrenLength = context.children.size();
       for (int i = 0; i < childrenLength; i++) {
@@ -262,7 +264,8 @@ public class PrintVisitor extends AbstractParseTreeVisitor<Void> {
           lastWasUnparsableASTNode = false;
         }
 
-        // handle local root nodes
+        // local root node handling requires updating the current root node from which
+        // the openings are retrieved and that is annotated on the intervals
         if (child instanceof ExtendedContext childNode && childNode.isLocalRoot()) {
           // set as new current root
           var previousRoot = currentRoot;
@@ -283,17 +286,27 @@ public class PrintVisitor extends AbstractParseTreeVisitor<Void> {
             fetchNext = childInterval.b + 1;
           } else {
             // detect openings left by removed nodes for new nodes that have no source
-            // interval (e.g. unparsable ast nodes but also other such nodes)
+            // interval (e.g. unparsable ast nodes but also other such nodes).
+            // The interval has to be invalid, not just empty since some normal nodes have
+            // empty intervals when they represent empty lists (like empty function
+            // parameter lists)
             if (childInterval == Interval.INVALID) {
               var previousChildEnd = i > 0
                   ? context.children.get(i - 1).getSourceInterval().b
                   : -1;
+
+              // find the next opening that this node can be inserted into
+              // but make sure it's between the end of the last child, the beginning of the
+              // next child and not before the current fetchNext token position. (if fetchNext
+              // is corrupted, the printer will wrongly output tokens multiple times)
               var nextOpening = currentRoot.getLocalRootOpenings().higher(previousChildEnd);
               if (nextOpening != null && nextOpening >= fetchNext) {
                 var nextChildStart = i < childrenLength - 1
                     ? context.children.get(i + 1).getSourceInterval().a
                     : -1;
                 if (nextChildStart == -1 || nextOpening < nextChildStart) {
+                  // add the interval of tokens up to the next opening and advance the nextIndex
+                  // so that the whitespace before the opening is placed before the inserted node
                   addInterval(fetchNext, nextOpening);
                   fetchNext = nextOpening + 1;
                 }
