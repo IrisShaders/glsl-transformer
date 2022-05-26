@@ -27,8 +27,8 @@
   "java.sources.organizeImports.starThreshold": 2,
   "java.configuration.runtimes": [
     {
-      "name": "JavaSE-17",
-      "path": "/Library/Java/JavaVirtualMachines/jdk-17.0.1.jdk/Contents/Home",
+      "name": "JavaSE-16",
+      "path": "/Library/Java/JavaVirtualMachines/jdk-16.0.1.jdk/Contents/Home",
       "default": true
     }
   ],
