@@ -284,6 +284,12 @@ public abstract class ExtendedContext extends ParserRuleContext implements TreeM
     return omissionSet;
   }
 
+  /**
+   * Returns a navigable set of the token indexes of the nodes that were removed
+   * from this local root.
+   * 
+   * @return Navigable set with openings
+   */
   public NavigableSet<Integer> getLocalRootOpenings() {
     return localRoot.get().openings;
   }
