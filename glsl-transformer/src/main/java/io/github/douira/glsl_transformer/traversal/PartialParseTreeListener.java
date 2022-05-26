@@ -40,6 +40,9 @@ public interface PartialParseTreeListener extends ParseTreeListener {
    * from {@link #isFinished()} or {@link #isDeepEnough(ExtendedContext)}. If this
    * method return false, the other two methods will never be called for better
    * performance.
+   * 
+   * @return {@code true} if the parse tree listener is ever interested in
+   *         prematurely stopping the walk
    */
   default boolean canStop() {
     return false;
