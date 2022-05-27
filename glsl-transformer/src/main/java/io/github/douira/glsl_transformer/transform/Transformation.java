@@ -246,6 +246,7 @@ public class Transformation<T extends JobParameters> extends LifecycleUserImpl<T
    * dependency added to this transformation, this adds it as a dependency of the
    * root node.
    * 
+   * @param <L>        The input and output type
    * @param dependency The node to add as a further dependency
    * @return The added node
    */
@@ -258,6 +259,7 @@ public class Transformation<T extends JobParameters> extends LifecycleUserImpl<T
    * Adds a dependent to the last added dependent. If this is the first dependent
    * added to this transformation, this adds it as a dependent of the end node.
    * 
+   * @param <L>       The input and output type
    * @param dependent The node to add as a further dependent
    * @return The added node
    */
@@ -270,6 +272,7 @@ public class Transformation<T extends JobParameters> extends LifecycleUserImpl<T
    * Adds a dependency to the root node. All dependencies added by this method
    * can be run concurrently.
    * 
+   * @param <L>        The input and output type
    * @param dependency The node to add as a root dependency
    * @return The added node
    */
@@ -282,6 +285,7 @@ public class Transformation<T extends JobParameters> extends LifecycleUserImpl<T
    * Adds a dependent to the end node. All dependents added by this method
    * can be run concurrently.
    * 
+   * @param <L>       The input and output type
    * @param dependent The node to add as a end dependent
    * @return The added node
    */
@@ -298,6 +302,7 @@ public class Transformation<T extends JobParameters> extends LifecycleUserImpl<T
    * see the node with the new content as the dependent and the new end node as
    * the dependency.
    * 
+   * @param <L>                 The input and output type
    * @param newSoleEndDependent The node to place after all present dependencies
    * @return The added node
    */
@@ -319,6 +324,7 @@ public class Transformation<T extends JobParameters> extends LifecycleUserImpl<T
    * See {@link #appendDependent(LifecycleUser)} for why this method is called
    * this way. The argument is the same.
    * 
+   * @param <L>                   The input and output type
    * @param newSoleRootDependency The node to place before all present
    *                              dependencies
    * @return The added node
@@ -338,6 +344,7 @@ public class Transformation<T extends JobParameters> extends LifecycleUserImpl<T
    * Adds a dependency to the last added dependent. The newly added dependency and
    * the last added dependency can be executed concurrently.
    * 
+   * @param <L>        The input and output type
    * @param dependency The node to add as a dependency of the last added dependent
    * @return The added node
    */
@@ -350,6 +357,7 @@ public class Transformation<T extends JobParameters> extends LifecycleUserImpl<T
    * Adds a dependent to the last added dependency. The newly added dependent and
    * the last added dependent can be executed concurrently.
    * 
+   * @param <L>       The input and output type
    * @param dependent The node to add as a dependent of the last added dependency
    * @return The added node
    */
@@ -364,6 +372,7 @@ public class Transformation<T extends JobParameters> extends LifecycleUserImpl<T
    * before the last added dependency and after the last added dependent. This is
    * similar to inserting it directly between the two but is less invasive.
    * 
+   * @param <L>     The input and output type
    * @param sibling The node to add between the last added dependency and
    *                dependent without breaking the existing dependency link
    *                between them
