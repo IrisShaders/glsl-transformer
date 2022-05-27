@@ -100,8 +100,8 @@ publishOnCentral {
     configureMavenCentral.set(true)
     projectDescription.set("GLSL Parsing, Program Transformation and Printing with ANTLR4")
     projectLongName.set("glsl-transformer")
-    projectUrl.set("https://github.com/douira/glsl-transformer")
-    scmConnection.set("git@github.com:douira/glsl-transformer.git")
+    projectUrl.set("https://github.com/IrisShaders/glsl-transformer")
+    scmConnection.set("git@github.com:IrisShaders/glsl-transformer.git")
     licenseName.set("GNU Lesser General Public License v3.0")
     licenseUrl.set("https://www.gnu.org/licenses/lgpl-3.0.en.html")
 }
