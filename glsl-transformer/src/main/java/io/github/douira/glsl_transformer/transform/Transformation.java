@@ -249,7 +249,7 @@ public class Transformation<T extends JobParameters> extends LifecycleUserImpl<T
    * @param dependency The node to add as a further dependency
    * @return The added node
    */
-  public LifecycleUser<T> chainDependency(LifecycleUser<T> dependency) {
+  public <L extends LifecycleUser<T>> L chainDependency(L dependency) {
     addDependency(lastDependency, getNode(dependency));
     return dependency;
   }
@@ -261,7 +261,7 @@ public class Transformation<T extends JobParameters> extends LifecycleUserImpl<T
    * @param dependent The node to add as a further dependent
    * @return The added node
    */
-  public LifecycleUser<T> chainDependent(LifecycleUser<T> dependent) {
+  public <L extends LifecycleUser<T>> L chainDependent(L dependent) {
     addDependent(lastDependent, getNode(dependent));
     return dependent;
   }
@@ -273,7 +273,7 @@ public class Transformation<T extends JobParameters> extends LifecycleUserImpl<T
    * @param dependency The node to add as a root dependency
    * @return The added node
    */
-  public LifecycleUser<T> addRootDependency(LifecycleUser<T> dependency) {
+  public <L extends LifecycleUser<T>> L addRootDependency(L dependency) {
     addDependency(rootNode, getNode(dependency));
     return dependency;
   }
@@ -285,7 +285,7 @@ public class Transformation<T extends JobParameters> extends LifecycleUserImpl<T
    * @param dependent The node to add as a end dependent
    * @return The added node
    */
-  public LifecycleUser<T> addEndDependent(LifecycleUser<T> dependent) {
+  public <L extends LifecycleUser<T>> L addEndDependent(L dependent) {
     addDependent(endNode, getNode(dependent));
     return dependent;
   }
@@ -301,7 +301,7 @@ public class Transformation<T extends JobParameters> extends LifecycleUserImpl<T
    * @param newSoleEndDependent The node to place after all present dependencies
    * @return The added node
    */
-  public LifecycleUser<T> appendDependent(LifecycleUser<T> newSoleEndDependent) {
+  public <L extends LifecycleUser<T>> L appendDependent(L newSoleEndDependent) {
     var soleEndDependency = endNode;
     endNode = new Node<T>();
     soleEndDependency.setContent(newSoleEndDependent);
@@ -323,7 +323,7 @@ public class Transformation<T extends JobParameters> extends LifecycleUserImpl<T
    *                              dependencies
    * @return The added node
    */
-  public LifecycleUser<T> prependDependency(LifecycleUser<T> newSoleRootDependency) {
+  public <L extends LifecycleUser<T>> L prependDependency(L newSoleRootDependency) {
     var soleRootDependency = rootNode;
     rootNode = new Node<T>();
     soleRootDependency.setContent(newSoleRootDependency);
@@ -341,7 +341,7 @@ public class Transformation<T extends JobParameters> extends LifecycleUserImpl<T
    * @param dependency The node to add as a dependency of the last added dependent
    * @return The added node
    */
-  public LifecycleUser<T> chainConcurrentDependency(LifecycleUser<T> dependency) {
+  public <L extends LifecycleUser<T>> L chainConcurrentDependency(L dependency) {
     addDependency(lastDependent, getNode(dependency));
     return dependency;
   }
@@ -353,7 +353,7 @@ public class Transformation<T extends JobParameters> extends LifecycleUserImpl<T
    * @param dependent The node to add as a dependent of the last added dependency
    * @return The added node
    */
-  public LifecycleUser<T> chainConcurrentDependent(LifecycleUser<T> dependent) {
+  public <L extends LifecycleUser<T>> L chainConcurrentDependent(L dependent) {
     addDependent(lastDependency, getNode(dependent));
     return dependent;
   }
@@ -369,7 +369,7 @@ public class Transformation<T extends JobParameters> extends LifecycleUserImpl<T
    *                between them
    * @return The added node
    */
-  public LifecycleUser<T> chainConcurrentSibling(LifecycleUser<T> sibling) {
+  public <L extends LifecycleUser<T>> L chainConcurrentSibling(L sibling) {
     var siblingNode = getNode(sibling);
     var lastDependencyLocal = lastDependency;
     addDependency(lastDependent, siblingNode);
