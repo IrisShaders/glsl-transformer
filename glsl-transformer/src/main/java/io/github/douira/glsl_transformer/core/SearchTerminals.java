@@ -86,6 +86,15 @@ public class SearchTerminals<T extends JobParameters> extends ConfigurableTransf
   }
 
   /**
+   * Overwrite to make type more specific
+   */
+  @Override
+  public SearchTerminals<T> activation(Supplier<Boolean> activation) {
+    super.activation(activation);
+    return this;
+  }
+
+  /**
    * Checks if the given content contains a needle. This should be overwritten if
    * the matching should be done differently, like using regex or case-insensitive
    * matching.

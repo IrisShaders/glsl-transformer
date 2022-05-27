@@ -62,6 +62,15 @@ public class WrapIdentifier<T extends JobParameters> extends ConfigurableTransfo
   }
 
   /**
+   * Overwrite to make type more specific
+   */
+  @Override
+  public WrapIdentifier<T> activation(Supplier<Boolean> activation) {
+    super.activation(activation);
+    return this;
+  }
+
+  /**
    * Adds a detection result to the list of static detection result to use. This
    * constitutes the default behavior of {@link #getDetectionResults()}.
    * 
