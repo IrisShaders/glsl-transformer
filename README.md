@@ -10,6 +10,8 @@ This is an actively being developed library that parses GLSL using an ANTLR4 gra
 
 ## Capabilities
 
+`glsl-transformer` is a library for GLSL program transformation. It uses a parser generated with ANTLR based on a custom GLSL grammar to turn shader code into a parse tree. In this tree each syntactic piece of the code is represented as a node with children. The API facilitates the creation of composable transformations that can be used to manipulate this parse tree. Transformations can iterate through the parse tree, insert or remove nodes, match patterns and extract information from it. An execution planner optimizes at what time each step of the whole transformation process is performed. After the parse tree has been changed, it is printed back into a string while preserving the original whitespace.
+
 - GLSL Lexing & Parsing
 - Composable parse tree transformations
 - Pattern matching and tree visitation
@@ -21,7 +23,7 @@ This is an actively being developed library that parses GLSL using an ANTLR4 gra
 
 ## What `glsl-transformer` is not
 
-Note that `glsl-transformer` is **not** a GLSL compiler or even a graphics card driver. It has no or only a very limited semantic understanding of the code. It's primarily intended as a syntactic transformation tool and as such the goal is not to parse the code into an abstract syntax tree (AST). In an AST the syntax is represented in a more abstract way and isn't bound to specific parsing rules. Such a representation requires a lot more work to implement and is not very useful in this case. There are AST-like features for specific pieces of syntax though. They are optional and built on top of the parse tree.
+Currently, `glsl-transformer` mostly operates only on the syntactic level. This means it only knows how the code looks and what structure it has to have, not what it means and which structures are legal or not. It has no or only a very limited semantic understanding of the code. Semantic processing of programs can be implemented by API users on a case-by-case basis for specific tasks. Building a simple AST that is abstracted far away from the actual GLSL spec is an interesting possibility for future development of this library. However, implementing full semantics would require building what basically amounts to a GLSL compiler which is way out of scope for this project. 
 
 `glsl-transformer` does not do semantic validation of the code and will not error on code that is actually invalid for semantic reasons. It will only error on syntax errors. In particular, it will not error on type errors like assigning a boolean to an integer. It supports GLSL 4.6 with some extensions such as explicit arithmetic types and some others. It won't error on modern syntax features even if your driver doesn't support them. Do not rely on `glsl-transformer` for shader validation, only for syntax transformation.
 
@@ -31,7 +33,7 @@ It also doesn't validate that features aren't used which may not be available in
 
 This project uses semver for versioning. If there are frequent breaking API changes then the major version will change frequently. This is the way.
 
-This library is written in Java 16 and using [jabel](https://github.com/bsideup/jabel) compiled to Java 8 compatible classes. This means it doesn't use any newer Java language APIs. The tests are not affected by this and will only be run on the latest Java version (because it's annoying only use Java 8 in the tests). If nobody needs Java 8 support anymore in the future, it will be dropped with a major release.
+This library is written in Java 16 and using [jabel](https://github.com/bsideup/jabel) compiled to Java 8 compatible classes. This means it doesn't use any newer Java language APIs. The tests are not affected by this and will only be run on the latest Java version (because it's annoying only use Java 8 in the tests). If nobody needs Java 8 support anymore in the future, it will be dropped with a major release. Currently, this is because Minecraft 1.16 uses Java 8.
 
 ## Credit
 
