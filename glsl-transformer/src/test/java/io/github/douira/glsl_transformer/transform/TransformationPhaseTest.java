@@ -40,7 +40,7 @@ public class TransformationPhaseTest extends TestWithTransformationManager<NonFi
             compilePath("/translationUnit/externalDeclaration")
                 .evaluate(ctx).size(),
             ctx.getChildCount() - 2,
-            "It should compile a functioning xpath");
+            "It should find the desired child with the xpath");
       }
     });
   }
@@ -54,10 +54,27 @@ public class TransformationPhaseTest extends TestWithTransformationManager<NonFi
             "varying <type:typeSpecifier> varyVec;",
             GLSLParser.RULE_externalDeclaration)
             .match(ctx.getChild(5));
-        assertTrue(match.succeeded(), "It should compile a functioning pattern");
+        assertTrue(match.succeeded(), "It should find a match");
         assertEquals(
             "vec2", match.get("type").getText(),
-            "It should compile a functioning pattern");
+            "It should match the correct type");
+      }
+    });
+  }
+
+  @Test
+  void testMatchFunctionDef() {
+    run("void main() { a=b; }", new RunPhase<>() {
+      @Override
+      protected void run(TranslationUnitContext ctx) {
+        var match = compilePattern(
+            "void main() <body:compoundStatement>",
+            GLSLParser.RULE_functionDefinition)
+            .match(ctx.getChild(0).getChild(0));
+        assertTrue(match.succeeded(), "It should find a match");
+        assertEquals(
+            "{a=b;}", match.get("body").getText(),
+            "It should find the correct function body");
       }
     });
   }
