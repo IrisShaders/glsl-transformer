@@ -9,18 +9,17 @@ channels {
 //GLSL token utilities
 fragment DECIMAL_DIGITS: '0' | ('1' ..'9' DIGIT*);
 fragment OCTAL_DIGITS: '0' '0' ..'7'+;
-fragment HEX_DIGITS:
-	'0x' (DIGIT | 'a' ..'f' | 'A' ..'F')+;
+fragment HEX_DIGITS: '0x' (DIGIT | 'a' ..'f' | 'A' ..'F')+;
 fragment DIGIT: '0' ..'9';
-fragment FLOAT_DIGITS: (
-		(DIGIT+ ('.' DIGIT*)?)
-		| ('.' DIGIT+)
-	) (('e' | 'E') ('+' | '-')? DIGIT*)?;
-fragment IDENTIFIER_frag: (
-		'a' ..'z'
+fragment FLOAT_DIGITS: ((DIGIT+ ('.' DIGIT*)?) | ('.' DIGIT+)) (
+		('e' | 'E') ('+' | '-')? DIGIT*
+	)?;
+fragment IDENTIFIER_frag: ('a' ..'z' | 'A' ..'Z' | '_') (
+		DIGIT
+		| 'a' ..'z'
 		| 'A' ..'Z'
 		| '_'
-	) (DIGIT | 'a' ..'z' | 'A' ..'Z' | '_')*;
+	)*;
 fragment WS_frag: [\t\r\u000C ]+;
 fragment NEWLINE: '\r'? '\n';
 fragment NO_NEWLINE: ~('\r' | '\n');
@@ -78,32 +77,25 @@ RETURN: 'return';
 DISCARD: 'discard';
 DEMOTE: 'demote';
 
-fragment INTCONSTANT_frag:
-	DECIMAL_DIGITS
-	| OCTAL_DIGITS
-	| HEX_DIGITS;
+fragment INTCONSTANT_frag: DECIMAL_DIGITS | OCTAL_DIGITS | HEX_DIGITS;
 fragment SINGLE_SUFFIX: 'f' | 'F';
 fragment HALF_SUFFIX: 'h' | 'H';
 fragment DOUBLE_SUFFIX: 'l' | 'L';
 fragment UNSIGNED_SUFFIX: 'u' | 'U';
 fragment SHORT_SUFFIX: 's' | 'S';
 
-UINT16CONSTANT:
-	INTCONSTANT_frag UNSIGNED_SUFFIX SHORT_SUFFIX;
+UINT16CONSTANT: INTCONSTANT_frag UNSIGNED_SUFFIX SHORT_SUFFIX;
 INT16CONSTANT: INTCONSTANT_frag SHORT_SUFFIX;
 
 UINT32CONSTANT: INTCONSTANT_frag UNSIGNED_SUFFIX;
 INT32CONSTANT: INTCONSTANT_frag;
 
-UINT64CONSTANT:
-	INTCONSTANT_frag UNSIGNED_SUFFIX DOUBLE_SUFFIX;
+UINT64CONSTANT: INTCONSTANT_frag UNSIGNED_SUFFIX DOUBLE_SUFFIX;
 INT64CONSTANT: INTCONSTANT_frag DOUBLE_SUFFIX;
 
-FLOAT16CONSTANT:
-	FLOAT_DIGITS HALF_SUFFIX SINGLE_SUFFIX;
+FLOAT16CONSTANT: FLOAT_DIGITS HALF_SUFFIX SINGLE_SUFFIX;
 FLOAT32CONSTANT: FLOAT_DIGITS SINGLE_SUFFIX?;
-FLOAT64CONSTANT:
-	FLOAT_DIGITS DOUBLE_SUFFIX SINGLE_SUFFIX;
+FLOAT64CONSTANT: FLOAT_DIGITS DOUBLE_SUFFIX SINGLE_SUFFIX;
 BOOLCONSTANT: 'true' | 'false';
 
 BOOL: 'bool';
@@ -165,53 +157,29 @@ FLOAT32: 'float32_t' | 'float';
 F32VEC2: 'f32vec2' | 'vec2';
 F32VEC3: 'f32vec3' | 'vec3';
 F32VEC4: 'f32vec4' | 'vec4';
-F32MAT2X2:
-	'f32mat2x2'
-	| 'f32mat2'
-	| 'mat2'
-	| 'mat2x2';
+F32MAT2X2: 'f32mat2x2' | 'f32mat2' | 'mat2' | 'mat2x2';
 F32MAT2X3: 'f32mat2x3' | 'mat2x3';
 F32MAT2X4: 'f32mat2x4' | 'mat2x4';
 F32MAT3X2: 'f32mat3x2' | 'mat3x2';
-F32MAT3X3:
-	'f32mat3x3'
-	| 'f32mat3'
-	| 'mat3'
-	| 'mat3x3';
+F32MAT3X3: 'f32mat3x3' | 'f32mat3' | 'mat3' | 'mat3x3';
 F32MAT3X4: 'f32mat3x4' | 'mat3x4';
 F32MAT4X2: 'f32mat4x2' | 'mat4x2';
 F32MAT4X3: 'f32mat4x3' | 'mat4x3';
-F32MAT4X4:
-	'f32mat4x4'
-	| 'f32mat4'
-	| 'mat4'
-	| 'mat4x4';
+F32MAT4X4: 'f32mat4x4' | 'f32mat4' | 'mat4' | 'mat4x4';
 
 FLOAT64: 'float64_t' | 'double';
 F64VEC2: 'f64vec2' | 'dvec2';
 F64VEC3: 'f64vec3' | 'dvec3';
 F64VEC4: 'f64vec4' | 'dvec4';
-F64MAT2X2:
-	'f64mat2x2'
-	| 'f64mat2'
-	| 'dmat2'
-	| 'dmat2x2';
+F64MAT2X2: 'f64mat2x2' | 'f64mat2' | 'dmat2' | 'dmat2x2';
 F64MAT2X3: 'f64mat2x3' | 'dmat2x3';
 F64MAT2X4: 'f64mat2x4' | 'dmat2x4';
 F64MAT3X2: 'f64mat3x2' | 'dmat3x2';
-F64MAT3X3:
-	'f64mat3x3'
-	| 'f64mat3'
-	| 'dmat3'
-	| 'dmat3x3';
+F64MAT3X3: 'f64mat3x3' | 'f64mat3' | 'dmat3' | 'dmat3x3';
 F64MAT3X4: 'f64mat3x4' | 'dmat3x4';
 F64MAT4X2: 'f64mat4x2' | 'dmat4x2';
 F64MAT4X3: 'f64mat4x3' | 'dmat4x3';
-F64MAT4X4:
-	'f64mat4x4'
-	| 'f64mat4'
-	| 'dmat4'
-	| 'dmat4x4';
+F64MAT4X4: 'f64mat4x4' | 'f64mat4' | 'dmat4' | 'dmat4x4';
 
 IMAGE1D: 'image1D';
 IMAGE2D: 'image2D';
@@ -361,12 +329,8 @@ NR: '#' -> pushMode(NR_Mode);
 IDENTIFIER: IDENTIFIER_frag;
 
 //hidden comment and whitespace tokens
-LINE_CONTINUATION:
-	LINE_CONTINUE -> channel(WHITESPACE);
-COMMENT: (
-		'//' NO_NEWLINE* NEWLINE
-		| '/*' (.)*? '*/'
-	) -> channel(COMMENTS);
+LINE_CONTINUATION: LINE_CONTINUE -> channel(WHITESPACE);
+COMMENT: ('//' NO_NEWLINE* NEWLINE | '/*' (.)*? '*/') -> channel(COMMENTS);
 WS: WS_frag -> channel(WHITESPACE);
 EOL: NEWLINE -> channel(WHITESPACE);
 
@@ -393,15 +357,12 @@ NR_STDGL: 'STDGL';
 NR_INTCONSTANT: INTCONSTANT_frag;
 NR_IDENTIFIER: IDENTIFIER_frag;
 NR_WS: WS_frag -> channel(WHITESPACE);
-NR_LINE_CONTINUATION:
-	LINE_CONTINUE -> channel(WHITESPACE);
+NR_LINE_CONTINUATION: LINE_CONTINUE -> channel(WHITESPACE);
 NR_EOL: NEWLINE -> popMode;
 
 //gobble the preprocessor content only if started a preprocessor directive
 mode Preprocessor;
-PP_LINE_CONTINUE:
-	LINE_CONTINUE -> channel(WHITESPACE);
-PP_EOL:
-	NEWLINE -> channel(PREPROCESSOR), popMode;
+PP_LINE_CONTINUE: LINE_CONTINUE -> channel(WHITESPACE);
+PP_EOL: NEWLINE -> channel(PREPROCESSOR), popMode;
 PP_CONTENT:
 	NO_NEWLINE* ~('\r' | '\n' | '\\') -> channel(PREPROCESSOR);
