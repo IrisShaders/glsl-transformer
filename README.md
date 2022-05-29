@@ -29,6 +29,8 @@ Currently, `glsl-transformer` mostly operates only on the syntactic level. This 
 
 It also doesn't validate that features aren't used which may not be available in a older GLSL versions. The `#version` directive is not semantically interpreted. It may also fail to parse code that is technically legal in old GLSL version where certain tokens weren't declared as reserved words yet. Just don't use reserved words as tokens in this case. If it's really necessary, preprocess the code by simply replacing the reserved words with some placeholder before parsing.
 
+Further reading on [Abstract vs Concise (Parse) Syntax Trees](https://eli.thegreenplace.net/2009/02/16/abstract-vs-concrete-syntax-trees/)
+
 ## Versioning
 
 This project uses semver for versioning. If there are frequent breaking API changes then the major version will change frequently. This is the way.
