@@ -102,6 +102,11 @@ public abstract class TransformationPhase<T extends JobParameters>
         || walkIntoRules != null && !walkIntoRules.contains(node.getClass());
   }
 
+  @Override
+  public boolean canStop() {
+    return maximumWalkDepth >= 0 || walkIntoRules != null;
+  }
+
   /**
    * Sets the class of rules that this phase should walk into. It will signal
    * "deep enough" to the parse tree walker for all other nodes.

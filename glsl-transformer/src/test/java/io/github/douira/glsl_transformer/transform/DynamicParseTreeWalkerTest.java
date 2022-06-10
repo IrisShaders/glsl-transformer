@@ -61,7 +61,7 @@ public class DynamicParseTreeWalkerTest {
       }
     };
 
-    DynamicParseTreeWalker.DEFAULT.walk(listener, tree);
+    DynamicParseTreeWalker.walkTree(listener, tree);
 
     assertEquals(4, tree.children.size(), "It should remove empty terminal nodes during walking");
     assertEquals(3, listener.terminalVisits, "It should visit each terminal but not the removed one");
@@ -75,7 +75,7 @@ public class DynamicParseTreeWalkerTest {
       var tree = new ExtendedContext(null, 0) {
       };
 
-      DynamicParseTreeWalker.DEFAULT.walk(new WalkPhase<>() {
+      DynamicParseTreeWalker.walkTree(new WalkPhase<>() {
       }, tree);
       assertNull(tree.children, "The child array should be null");
     }, "It should not throw when a parent has a null child array");
@@ -88,7 +88,7 @@ public class DynamicParseTreeWalkerTest {
       };
       tree.children = new ArrayList<>();
 
-      DynamicParseTreeWalker.DEFAULT.walk(new WalkPhase<>() {
+      DynamicParseTreeWalker.walkTree(new WalkPhase<>() {
       }, tree);
       assertEquals(0, tree.children.size(), "The child array should be not null but empty");
     }, "It should not throw when a parent has an empty child array");

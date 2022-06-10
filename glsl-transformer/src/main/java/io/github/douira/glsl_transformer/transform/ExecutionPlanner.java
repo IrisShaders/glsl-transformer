@@ -286,7 +286,7 @@ public abstract class ExecutionPlanner<T extends JobParameters> {
           }
         }
         if (proxyListener.needsWalk()) {
-          DynamicParseTreeWalker.DEFAULT.walk(proxyListener, rootNode);
+          DynamicParseTreeWalker.walkTree(proxyListener, rootNode);
         }
         for (var walkPhase : level.walkPhases()) {
           walkPhase.runAfterWalk(rootNode);
