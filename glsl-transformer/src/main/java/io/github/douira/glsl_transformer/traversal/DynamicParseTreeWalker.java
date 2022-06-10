@@ -16,6 +16,8 @@ public class DynamicParseTreeWalker extends ParseTreeWalker {
    */
   public static final DynamicParseTreeWalker DEFAULT = new DynamicParseTreeWalker();
 
+  private int depth = -1;
+
   /**
    * {@inheritDoc}
    * 
@@ -37,6 +39,8 @@ public class DynamicParseTreeWalker extends ParseTreeWalker {
    */
   @Override
   public void walk(ParseTreeListener listener, ParseTree tree) {
+    depth++;
+
     if (tree instanceof ErrorNode errorNode) {
       listener.visitErrorNode(errorNode);
       return;
@@ -49,7 +53,7 @@ public class DynamicParseTreeWalker extends ParseTreeWalker {
     enterRule(listener, node);
 
     if (!(listener instanceof PartialParseTreeListener partialListener
-        && (partialListener.isFinished() || partialListener.isDeepEnough(node)))) {
+        && (partialListener.isFinished(depth) || partialListener.isDeepEnough(node, depth)))) {
       for (var i = 0; i < node.getChildCount(); i++) {
         var child = node.getChild(i);
         if (child instanceof EmptyTerminalNode) {
@@ -64,7 +68,7 @@ public class DynamicParseTreeWalker extends ParseTreeWalker {
           i++;
         }
 
-        if (listener instanceof PartialParseTreeListener partialListener && partialListener.isFinished()) {
+        if (listener instanceof PartialParseTreeListener partialListener && partialListener.isFinished(depth)) {
           break;
         }
       }
@@ -76,5 +80,6 @@ public class DynamicParseTreeWalker extends ParseTreeWalker {
     }
 
     exitRule(listener, node);
+    depth--;
   }
 }
