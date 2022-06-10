@@ -1,9 +1,11 @@
 package io.github.douira.glsl_transformer.transform;
 
+import java.util.*;
 import java.util.function.Supplier;
 
 import io.github.douira.glsl_transformer.GLSLParser.TranslationUnitContext;
 import io.github.douira.glsl_transformer.traversal.PartialParseTreeListener;
+import io.github.douira.glsl_transformer.tree.ExtendedContext;
 
 /**
  * The transformations phase is the smallest unit of the transformation process.
@@ -13,6 +15,12 @@ public abstract class TransformationPhase<T extends JobParameters>
     extends TransformationPhaseBase<T>
     implements PartialParseTreeListener {
   private boolean walkFinishedNotified = false;
+
+  /**
+   * If not null, the transformation phase will only walk into a rule context's
+   * children if it's an instance of these given classes.
+   */
+  protected Set<Class<? extends ExtendedContext>> walkIntoRules;
 
   /**
    * Called during planning in order to determine if this phase does any
@@ -78,5 +86,32 @@ public abstract class TransformationPhase<T extends JobParameters>
 
   void resetWalkFinishState() {
     walkFinishedNotified = false;
+  }
+
+  @Override
+  public boolean isDeepEnough(ExtendedContext node, int depth) {
+    return walkIntoRules != null && !walkIntoRules.contains(node.getClass());
+  }
+
+  /**
+   * Sets the class of rules that this phase should walk into. It will signal
+   * "deep enough" to the parse tree walker for all other nodes.
+   * 
+   * @param walkIntoRules The class of rules that this phase should walk into
+   */
+  public void setWalkIntoRules(Set<Class<? extends ExtendedContext>> walkIntoRules) {
+    this.walkIntoRules = walkIntoRules;
+  }
+
+  /**
+   * Adds a class to the set of allowed rules for the walk.
+   * 
+   * @param walkIntoRule The class of a rule to allow deeper walking into
+   */
+  public void addWalkIntoRule(Class<? extends ExtendedContext> walkIntoRule) {
+    if (walkIntoRules == null) {
+      walkIntoRules = new HashSet<>();
+    }
+    walkIntoRules.add(walkIntoRule);
   }
 }
