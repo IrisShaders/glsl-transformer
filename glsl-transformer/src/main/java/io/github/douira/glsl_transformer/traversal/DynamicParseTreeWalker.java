@@ -15,6 +15,13 @@ public class DynamicParseTreeWalker extends ParseTreeWalker {
 
   private int depth = -1;
 
+  /**
+   * Walks the given tree with the given walker. This uses the default walker
+   * instance.
+   * 
+   * @param listener The listener to use
+   * @param tree     The tree to walk
+   */
   public static void walkTree(ParseTreeListener listener, ParseTree tree) {
     DEFAULT.walk(listener, tree);
   }
