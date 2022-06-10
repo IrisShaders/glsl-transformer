@@ -11,12 +11,11 @@ import io.github.douira.glsl_transformer.tree.ExtendedContext;
  * such modifications to happen during tree walking.
  */
 public class DynamicParseTreeWalker extends ParseTreeWalker {
-  /**
-   * The default instance of the dynamic parse tree walker.
-   */
-  public static final DynamicParseTreeWalker DEFAULT = new DynamicParseTreeWalker();
-
   private int depth = -1;
+
+  public static void walkTree(ParseTreeListener listener, ParseTree tree) {
+    new DynamicParseTreeWalker().walk(listener, tree);
+  }
 
   /**
    * {@inheritDoc}
