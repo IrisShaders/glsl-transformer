@@ -23,6 +23,12 @@ public abstract class TransformationPhase<T extends JobParameters>
   protected Set<Class<? extends ExtendedContext>> walkIntoRules;
 
   /**
+   * Limits how deep into the parse tree this transformation phase will walk
+   * before it signals deep enough.
+   */
+  protected int maximumWalkDepth = -1;
+
+  /**
    * Called during planning in order to determine if this phase does any
    * walking at all or if it just runs some code, like a RunPhase. This doesn't
    * exclude or include this phase from walking but rather helps the execution
@@ -90,7 +96,8 @@ public abstract class TransformationPhase<T extends JobParameters>
 
   @Override
   public boolean isDeepEnough(ExtendedContext node, int depth) {
-    return walkIntoRules != null && !walkIntoRules.contains(node.getClass());
+    return maximumWalkDepth != -1 && depth >= maximumWalkDepth
+        || walkIntoRules != null && !walkIntoRules.contains(node.getClass());
   }
 
   /**
@@ -113,5 +120,20 @@ public abstract class TransformationPhase<T extends JobParameters>
       walkIntoRules = new HashSet<>();
     }
     walkIntoRules.add(walkIntoRule);
+  }
+
+  /**
+   * Sets the maximum walk depth.
+   * @param maximumWalkDepth The maximum walk depth
+   */
+  public void setMaximumWalkDepth(int maximumWalkDepth) {
+    this.maximumWalkDepth = maximumWalkDepth;
+  }
+
+  /**
+   * Sets the maximum walk depth to -1 which means it's not limited.
+   */
+  public void unlimitedWalkDepth() {
+    maximumWalkDepth = Integer.MAX_VALUE;
   }
 }

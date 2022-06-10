@@ -62,14 +62,14 @@ public class ProxyParseTreeListenerTest {
 
   class DeepEnoughListener extends CanStopListener {
     @Override
-    public boolean isDeepEnough(ExtendedContext node) {
+    public boolean isDeepEnough(ExtendedContext node, int depth) {
       return true;
     }
   }
 
   class NotDeepEnoughListener extends CanStopListener {
     @Override
-    public boolean isDeepEnough(ExtendedContext node) {
+    public boolean isDeepEnough(ExtendedContext node, int depth) {
       return false;
     }
   }
@@ -78,12 +78,12 @@ public class ProxyParseTreeListenerTest {
   void testIsDeepEnough() {
     proxyListener.add(new DeepEnoughListener());
     proxyListener.add(new DeepEnoughListener());
-    assertTrue(proxyListener.isDeepEnough(null), "It should signal deep enough if all listeners are deep enough");
+    assertTrue(proxyListener.isDeepEnough(null, 0), "It should signal deep enough if all listeners are deep enough");
     proxyListener.add(new NotDeepEnoughListener());
-    assertFalse(proxyListener.isDeepEnough(null),
+    assertFalse(proxyListener.isDeepEnough(null, 0),
         "It should signal not deep enough if any listener is not deep enough");
     proxyListener.add(new TreeListener());
-    assertFalse(proxyListener.isDeepEnough(null),
+    assertFalse(proxyListener.isDeepEnough(null,0),
         "It should signal not deep enough also when an additional non stoppable listener is added");
   }
 
@@ -91,23 +91,23 @@ public class ProxyParseTreeListenerTest {
   void testIsDeepEnoughNonStopping() {
     proxyListener.add(new TreeListener());
     proxyListener.add(new TreeListener());
-    assertFalse(proxyListener.isDeepEnough(null),
+    assertFalse(proxyListener.isDeepEnough(null,0),
         "It should signal not deep enough when listeners are non-stopping");
     proxyListener.add(new DeepEnoughListener());
-    assertFalse(proxyListener.isDeepEnough(null),
+    assertFalse(proxyListener.isDeepEnough(null,0),
         "It should not signal deep enough when a stoppable listener with the deep enough signal is added");
   }
 
   class FinishedListener extends CanStopListener {
     @Override
-    public boolean isFinished() {
+    public boolean isFinished(int depth) {
       return true;
     }
   }
 
   class NotFinishedListener extends CanStopListener {
     @Override
-    public boolean isFinished() {
+    public boolean isFinished(int depth) {
       return false;
     }
   }
@@ -116,12 +116,12 @@ public class ProxyParseTreeListenerTest {
   void testIsFinished() {
     proxyListener.add(new FinishedListener());
     proxyListener.add(new FinishedListener());
-    assertTrue(proxyListener.isFinished(), "It should signal finished if all listeners are finished");
+    assertTrue(proxyListener.isFinished(0), "It should signal finished if all listeners are finished");
     proxyListener.add(new NotFinishedListener());
-    assertFalse(proxyListener.isFinished(),
+    assertFalse(proxyListener.isFinished(0),
         "It should signal not finished if any listener is not finished");
     proxyListener.add(new TreeListener());
-    assertFalse(proxyListener.isFinished(),
+    assertFalse(proxyListener.isFinished(0),
         "It should signal not finished also when an additional non stoppable listener is added");
   }
 
@@ -129,9 +129,9 @@ public class ProxyParseTreeListenerTest {
   void testIsFinishedNonStopping() {
     proxyListener.add(new TreeListener());
     proxyListener.add(new TreeListener());
-    assertFalse(proxyListener.isFinished(), "It should not signal finished when listeners are non-stopping");
+    assertFalse(proxyListener.isFinished(0), "It should not signal finished when listeners are non-stopping");
     proxyListener.add(new FinishedListener());
-    assertFalse(proxyListener.isFinished(),
+    assertFalse(proxyListener.isFinished(0),
         "It should not signal finished when a stoppable listener with the finished signal is added");
   }
 
