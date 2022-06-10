@@ -69,8 +69,8 @@ public class TransformationPhaseTest extends TestWithTransformationManager<NonFi
       protected void run(TranslationUnitContext ctx) {
         var match = compilePattern(
             "void main() <body:compoundStatement>",
-            GLSLParser.RULE_functionDefinition)
-            .match(ctx.getChild(0).getChild(0));
+            GLSLParser.RULE_externalDeclaration)
+            .match(ctx.getChild(0));
         assertTrue(match.succeeded(), "It should find a match");
         assertEquals(
             "{a=b;}", match.get("body").getText(),
