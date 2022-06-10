@@ -96,6 +96,8 @@ public abstract class TransformationPhase<T extends JobParameters>
 
   @Override
   public boolean isDeepEnough(ExtendedContext node, int depth) {
+    var maximumWalkDepth = getMaximumWalkDepth();
+    var walkIntoRules = getWalkIntoRules();
     return maximumWalkDepth != -1 && depth >= maximumWalkDepth
         || walkIntoRules != null && !walkIntoRules.contains(node.getClass());
   }
@@ -111,6 +113,15 @@ public abstract class TransformationPhase<T extends JobParameters>
   }
 
   /**
+   * Returns the walk into rules.
+   * 
+   * @return The walk into rules
+   */
+  protected Set<Class<? extends ExtendedContext>> getWalkIntoRules() {
+    return walkIntoRules;
+  }
+
+  /**
    * Adds a class to the set of allowed rules for the walk.
    * 
    * @param walkIntoRule The class of a rule to allow deeper walking into
@@ -123,7 +134,17 @@ public abstract class TransformationPhase<T extends JobParameters>
   }
 
   /**
+   * Returns the maximum walk depth.
+   * 
+   * @return The maximum walk depth
+   */
+  protected int getMaximumWalkDepth() {
+    return maximumWalkDepth;
+  }
+
+  /**
    * Sets the maximum walk depth.
+   * 
    * @param maximumWalkDepth The maximum walk depth
    */
   public void setMaximumWalkDepth(int maximumWalkDepth) {
