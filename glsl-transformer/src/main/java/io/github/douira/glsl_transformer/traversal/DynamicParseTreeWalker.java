@@ -11,10 +11,12 @@ import io.github.douira.glsl_transformer.tree.ExtendedContext;
  * such modifications to happen during tree walking.
  */
 public class DynamicParseTreeWalker extends ParseTreeWalker {
+  private static final DynamicParseTreeWalker DEFAULT = new DynamicParseTreeWalker();
+
   private int depth = -1;
 
   public static void walkTree(ParseTreeListener listener, ParseTree tree) {
-    new DynamicParseTreeWalker().walk(listener, tree);
+    DEFAULT.walk(listener, tree);
   }
 
   /**
@@ -38,47 +40,50 @@ public class DynamicParseTreeWalker extends ParseTreeWalker {
    */
   @Override
   public void walk(ParseTreeListener listener, ParseTree tree) {
-    depth++;
+    try {
+      depth++;
 
-    if (tree instanceof ErrorNode errorNode) {
-      listener.visitErrorNode(errorNode);
-      return;
-    } else if (tree instanceof TerminalNode terminalNode) {
-      listener.visitTerminal(terminalNode);
-      return;
-    }
+      if (tree instanceof ErrorNode errorNode) {
+        listener.visitErrorNode(errorNode);
+        return;
+      } else if (tree instanceof TerminalNode terminalNode) {
+        listener.visitTerminal(terminalNode);
+        return;
+      }
 
-    var node = (ExtendedContext) tree;
-    enterRule(listener, node);
+      var node = (ExtendedContext) tree;
+      enterRule(listener, node);
 
-    if (!(listener instanceof PartialParseTreeListener partialListener
-        && (partialListener.isFinished(depth) || partialListener.isDeepEnough(node, depth)))) {
-      for (var i = 0; i < node.getChildCount(); i++) {
-        var child = node.getChild(i);
-        if (child instanceof EmptyTerminalNode) {
-          continue;
-        }
+      if (!(listener instanceof PartialParseTreeListener partialListener
+          && (partialListener.isFinished(depth) || partialListener.isDeepEnough(node, depth)))) {
+        for (var i = 0; i < node.getChildCount(); i++) {
+          var child = node.getChild(i);
+          if (child instanceof EmptyTerminalNode) {
+            continue;
+          }
 
-        walk(listener, child);
+          walk(listener, child);
 
-        // if the walk added items before the current index
-        // then the current item was moved forwards.
-        while (!MoveCheckable.replaces(child, node.getChild(i))) {
-          i++;
-        }
+          // if the walk added items before the current index
+          // then the current item was moved forwards.
+          while (!MoveCheckable.replaces(child, node.getChild(i))) {
+            i++;
+          }
 
-        if (listener instanceof PartialParseTreeListener partialListener && partialListener.isFinished(depth)) {
-          break;
+          if (listener instanceof PartialParseTreeListener partialListener && partialListener.isFinished(depth)) {
+            break;
+          }
         }
       }
-    }
 
-    // compact the tree by removing empty terminal nodes after walking
-    if (node.children != null) {
-      node.children.removeIf(child -> child instanceof EmptyTerminalNode);
-    }
+      // compact the tree by removing empty terminal nodes after walking
+      if (node.children != null) {
+        node.children.removeIf(child -> child instanceof EmptyTerminalNode);
+      }
 
-    exitRule(listener, node);
-    depth--;
+      exitRule(listener, node);
+    } finally {
+      depth--;
+    }
   }
 }
