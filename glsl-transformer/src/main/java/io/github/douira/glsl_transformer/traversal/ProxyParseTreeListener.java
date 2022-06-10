@@ -77,12 +77,12 @@ public class ProxyParseTreeListener implements PartialParseTreeListener {
   }
 
   @Override
-  public boolean isDeepEnough(ExtendedContext node) {
+  public boolean isDeepEnough(ExtendedContext node, int depth) {
     if (hasNonStoppingListeners()) {
       return false;
     }
     for (var listener : stoppableListeners) {
-      if (!listener.isDeepEnough(node)) {
+      if (!listener.isDeepEnough(node, depth)) {
         return false;
       }
     }
@@ -90,7 +90,7 @@ public class ProxyParseTreeListener implements PartialParseTreeListener {
   }
 
   @Override
-  public boolean isFinished() {
+  public boolean isFinished(int depth) {
     if (hasNonStoppingListeners()) {
       return false;
     }
@@ -98,7 +98,7 @@ public class ProxyParseTreeListener implements PartialParseTreeListener {
     var stoppableListenerIterator = stoppableListeners.iterator();
     while (stoppableListenerIterator.hasNext()) {
       var listener = stoppableListenerIterator.next();
-      if (listener.isFinished()) {
+      if (listener.isFinished(depth)) {
         listeners.remove(listener);
         stoppableListenerIterator.remove();
       } else {
