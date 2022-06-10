@@ -87,4 +87,21 @@ public class WrapIdentifierTest extends TestForExecutionOrder {
         manager.transform("void main() { bar(); }\n"),
         "It should wrap the identifier main, replace it with prevMain and add a wrapper function that calls prevMain.");
   }
+
+  /**
+   * Test that it properly deactivates all components.
+   */
+  @Test
+  void testActivation() {
+    manager.addConcurrent(new WrapIdentifier<NonFixedJobParameters>()
+        .wrapTarget("foo")
+        .detectionResult("bar")
+        .injectionExternalDeclaration("int snap = 0;")
+        .injectionLocation(InjectionPoint.BEFORE_EOF)
+        .activation(() -> false));
+    assertEquals(
+        "int bar = foo;",
+        manager.transform("int bar = foo;"),
+        "It should not do anything since it's deactivated");
+  }
 }

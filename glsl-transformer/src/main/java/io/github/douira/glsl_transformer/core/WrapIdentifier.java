@@ -56,9 +56,9 @@ public class WrapIdentifier<T extends JobParameters> extends ConfigurableTransfo
    */
   @Override
   protected void setupGraph() {
-    chainDependent(getWrapResultDetector());
-    chainDependent(getWrappingReplacer());
-    chainDependent(getInjector());
+    chainDependent(wrapResultDetector());
+    chainDependent(wrappingReplacer());
+    chainDependent(injector());
   }
 
   /**
