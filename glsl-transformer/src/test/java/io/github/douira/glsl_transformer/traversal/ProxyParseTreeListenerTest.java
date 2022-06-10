@@ -83,7 +83,7 @@ public class ProxyParseTreeListenerTest {
     assertFalse(proxyListener.isDeepEnough(null, 0),
         "It should signal not deep enough if any listener is not deep enough");
     proxyListener.add(new TreeListener());
-    assertFalse(proxyListener.isDeepEnough(null,0),
+    assertFalse(proxyListener.isDeepEnough(null, 0),
         "It should signal not deep enough also when an additional non stoppable listener is added");
   }
 
@@ -91,10 +91,10 @@ public class ProxyParseTreeListenerTest {
   void testIsDeepEnoughNonStopping() {
     proxyListener.add(new TreeListener());
     proxyListener.add(new TreeListener());
-    assertFalse(proxyListener.isDeepEnough(null,0),
+    assertFalse(proxyListener.isDeepEnough(null, 0),
         "It should signal not deep enough when listeners are non-stopping");
     proxyListener.add(new DeepEnoughListener());
-    assertFalse(proxyListener.isDeepEnough(null,0),
+    assertFalse(proxyListener.isDeepEnough(null, 0),
         "It should not signal deep enough when a stoppable listener with the deep enough signal is added");
   }
 
