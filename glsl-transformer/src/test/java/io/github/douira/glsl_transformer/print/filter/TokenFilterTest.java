@@ -14,7 +14,7 @@ public class TokenFilterTest extends TestWithResource {
   private int nextIndex;
 
   @BeforeEach
-  void setup() {
+  void setupManager() {
     manager = new TransformationManager<>();
   }
 

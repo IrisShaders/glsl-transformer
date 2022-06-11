@@ -9,7 +9,7 @@ public class TestWithTransformationManager<T extends JobParameters> {
   protected Transformation<T> transformation;
 
   @BeforeEach
-  void setup() {
+  void setupManagerOnly() {
     manager = new TransformationManager<T>();
     transformation = manager.getRootTransformation();
   }

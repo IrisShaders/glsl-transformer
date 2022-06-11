@@ -24,7 +24,7 @@ public class TransformationManagerTest extends TestWithResource {
   private Exception storeException;
 
   @BeforeEach
-  void setup() {
+  void setupManager() {
     manager = new TransformationManager<>();
     manager.addConcurrent(new Transformation<>(new RunPhase<>() {
       @Override
