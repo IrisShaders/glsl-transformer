@@ -23950,10 +23950,7 @@ void main () {
 }
 
 <><><><><><><><><><><><><><><><><><><><><><><><><>
-4:47; <no symbol>; token recognition error at: '/'; LexerNoViableAltException:null
-4:48; <no symbol>; token recognition error at: '/'; LexerNoViableAltException:null
-4:49; [@24,113:121='according',<NR_IDENTIFIER>,4:49]; mismatched input 'according' expecting NR_EOL; InputMismatchException:null
-4:85; <no symbol>; token recognition error at: ','; LexerNoViableAltException:null
+
 ]
 
 
