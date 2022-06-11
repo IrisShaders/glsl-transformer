@@ -192,12 +192,10 @@ public class TransformationManager<T extends JobParameters> extends ExecutionPla
   }
 
   /**
-   * Parses a string using a parser method reference into a parse tree.
+   * Parses a string as a translation unit.
    * 
-   * @param <RuleType>  The type of the resulting parsed node
-   * @param str         The string to parse
-   * @param parseMethod The parser method reference to use for parsing
-   * @return The parsed string as a parse tree that has the given type
+   * @param str The string to parse
+   * @return The parsed string as a translation unit parse tree
    */
   public TranslationUnitContext parse(String str) {
     return parse(str, GLSLParser::translationUnit);
