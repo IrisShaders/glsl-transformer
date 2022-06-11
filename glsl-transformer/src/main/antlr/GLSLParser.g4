@@ -76,7 +76,7 @@ methodCall: variableIdentifier callParameterList;
 
 //assignment expressions
 callParameterList:
-	LPAREN (| VOID | expression (COMMA expression)*) RPAREN;
+	LPAREN ( | VOID | expression (COMMA expression)*) RPAREN;
 
 //Note: diverges from the spec by not allowing a prefixExpression as an identifier
 //array-type function identfiers are handled by typeSpecifier
