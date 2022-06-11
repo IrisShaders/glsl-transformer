@@ -13,6 +13,11 @@ import io.github.douira.glsl_transformer.transform.*;
  * This test is only enabled for debugging purposes.
  */
 public class GrammarDebugTest {
+  @AfterEach
+  void flushOutput() {
+    System.out.flush();
+  }
+
   @Test
   @Disabled
   void testParseTree() {
@@ -29,10 +34,5 @@ public class GrammarDebugTest {
           System.out.println(content);
           System.out.println(builder.toString());
         });
-  }
-
-  @AfterEach
-  void flushOutput() {
-    System.out.flush();
   }
 }

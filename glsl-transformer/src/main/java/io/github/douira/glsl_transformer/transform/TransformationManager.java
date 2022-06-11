@@ -6,6 +6,7 @@ import org.antlr.v4.runtime.*;
 import org.antlr.v4.runtime.misc.ParseCancellationException;
 
 import io.github.douira.glsl_transformer.*;
+import io.github.douira.glsl_transformer.GLSLParser.TranslationUnitContext;
 import io.github.douira.glsl_transformer.print.PrintVisitor;
 import io.github.douira.glsl_transformer.print.filter.TokenFilter;
 import io.github.douira.glsl_transformer.tree.ExtendedContext;
@@ -188,6 +189,18 @@ public class TransformationManager<T extends JobParameters> extends ExecutionPla
   public void setParseTokenFilter(TokenFilter<T> parseTokenFilter) {
     this.parseTokenFilter = parseTokenFilter;
     this.tokenSource.setTokenFilter(parseTokenFilter);
+  }
+
+  /**
+   * Parses a string using a parser method reference into a parse tree.
+   * 
+   * @param <RuleType>  The type of the resulting parsed node
+   * @param str         The string to parse
+   * @param parseMethod The parser method reference to use for parsing
+   * @return The parsed string as a parse tree that has the given type
+   */
+  public TranslationUnitContext parse(String str) {
+    return parse(str, GLSLParser::translationUnit);
   }
 
   /**

@@ -20,15 +20,26 @@ public class TestResourceManager {
     DIRECTIVE_TEST("/directiveTest.glsl"),
     SHADER("/shader.glsl"),
     EXTERNAL_DECLARATIONS("/externalDeclarations.glsl"),
-    KAPPA("/unlicensed/composite3.glsl"),
-    BENCHMARK1("/unlicensed/benchmark1.glsl"),
-    BENCHMARK2("/unlicensed/benchmark2.glsl"),
-    TEST("/unlicensed/test.glsl"),
     TYPE_TEST("/typeTest.glsl"),
     UNIFORM_TEST("/uniformTest.glsl"),
     MATRIX_PARSE_TEST("/glslang-test/matrix.frag"),
     DEEP_EXPRESSION_TEST("/deepExpressionTest.glsl"),
-    GRAMMAR_DEBUG("/grammarDebug.glsl");
+    GRAMMAR_DEBUG("/grammarDebug.glsl"),
+    LONG_EXPRESSION_TEST("/longExpressionTest.glsl"),
+
+    TEST_OTHER("/unlicensed/test.glsl"),
+
+    BENCHMARK_KAPPA_SHORT("/unlicensed/composite3.glsl"),
+    BENCHMARK_RRE("/unlicensed/rre.glsl"),
+    BENCHMARK_SILDURS("/unlicensed/sildurs.glsl"),
+    BENCHMARK_APOLLO_RT("/unlicensed/ApolloRT.glsl"),
+    BENCHMARK_COMPLEMENTARY("/unlicensed/complementary.glsl"),
+    BENCHMARK_SoftVoxels("/unlicensed/SoftVoxels.glsl"),
+    BENCHMARK_UNKNOWN("/unlicensed/unknown.glsl"),
+    BENCHMARK_MOLLYVX("/unlicensed/MollyVX.glsl"),
+    BENCHMARK_SEUS_PTGI_HRR("/unlicensed/SEUS_PTGI_HRR.glsl"),
+    BENCHMARK_SEUS_RENEWED("/unlicensed/SEUS_Renewed.glsl"),
+    BENCHMARK_NOSTALGIAVX("/unlicensed/NostalgiaVX.glsl");
 
     Path path;
 

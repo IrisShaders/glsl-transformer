@@ -23,7 +23,7 @@ import io.github.douira.glsl_transformer.tree.TreeMember;
  * TODO: test node removal, replacement and injection in local roots
  */
 @ExtendWith({ SnapshotExtension.class })
-public class TransformationPhaseTest extends TestWithTransformationManager<NonFixedJobParameters> {
+public class TransformationPhaseTest extends TestWithResource {
   private Expect expect;
 
   @BeforeAll
