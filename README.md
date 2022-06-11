@@ -118,7 +118,12 @@ See [publish-on-central](https://github.com/DanySK/publish-on-central) for docs 
 
 ## Other
 
-All files in a directory can be joined using `find . -type f -exec cat {} \; `. The output is printed to the terminal. Some cleanup maybe required. (this is sometimes useful when working with external test files)
+Commands for combinding all files in a directory and subdiretories:
+```bash
+NAME=the_shader_name; cat ./$NAME/**/*.{vsh,fsh,gsh,glsl} > $NAME.glsl
+```
+
+Some cleanup maybe required. (this is sometimes useful when working with external test files)
 
 Setup signing: (secrets are kept in `~/.gradle/gradle.properties`)
 
