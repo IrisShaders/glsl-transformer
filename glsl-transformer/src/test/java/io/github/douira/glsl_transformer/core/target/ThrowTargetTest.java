@@ -4,12 +4,12 @@ import static org.junit.jupiter.api.Assertions.*;
 
 import org.junit.jupiter.api.Test;
 
-import io.github.douira.glsl_transformer.TestWithTransformationManager;
+import io.github.douira.glsl_transformer.TestWithResource;
 import io.github.douira.glsl_transformer.core.*;
 import io.github.douira.glsl_transformer.transform.NonFixedJobParameters;
 import io.github.douira.glsl_transformer.tree.TreeMember;
 
-public class ThrowTargetTest extends TestWithTransformationManager<NonFixedJobParameters> {
+public class ThrowTargetTest extends TestWithResource {
   private int nextIndex;
 
   @Test

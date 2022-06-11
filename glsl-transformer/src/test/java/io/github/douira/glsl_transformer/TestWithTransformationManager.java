@@ -2,38 +2,15 @@ package io.github.douira.glsl_transformer;
 
 import org.junit.jupiter.api.BeforeEach;
 
-import io.github.douira.glsl_transformer.TestResourceManager.FileLocation;
 import io.github.douira.glsl_transformer.transform.*;
 
-/**
- * Handles setup of all the things required to run a transformation.
- */
-public abstract class TestWithTransformationManager<T extends JobParameters> {
-  private static String testResourceInput;
-
-  private static String testCode;
+public class TestWithTransformationManager<T extends JobParameters> {
   protected TransformationManager<T> manager;
-
-  public static void loadResource(FileLocation location) {
-    testResourceInput = TestResourceManager.getResource(location).content();
-  }
-
-  public static void setTestCode(String code) {
-    testCode = code;
-  }
+  protected Transformation<T> transformation;
 
   @BeforeEach
-  public void setupParsing() {
-    setTestCode(testResourceInput);
-  }
-
-  public String run(String code, LifecycleUser<T> activity) {
+  void setup() {
     manager = new TransformationManager<T>();
-    manager.addConcurrent(activity);
-    return manager.transform(code);
-  }
-
-  public String run(LifecycleUser<T> activity) {
-    return run(testCode, activity);
+    transformation = manager.getRootTransformation();
   }
 }

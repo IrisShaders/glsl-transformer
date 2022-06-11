@@ -5,11 +5,11 @@ import static org.junit.jupiter.api.Assertions.*;
 import org.antlr.v4.runtime.Token;
 import org.junit.jupiter.api.Test;
 
-import io.github.douira.glsl_transformer.TestWithTransformationManager;
+import io.github.douira.glsl_transformer.TestWithResource;
 import io.github.douira.glsl_transformer.transform.*;
 import io.github.douira.glsl_transformer.util.CompatUtil;
 
-public class MultiFilterTest extends TestWithTransformationManager<NonFixedJobParameters> {
+public class MultiFilterTest extends TestWithResource {
   int nextIndex;
 
   static <T extends JobParameters> TransformationManager<T> assertPrintFilterResult(

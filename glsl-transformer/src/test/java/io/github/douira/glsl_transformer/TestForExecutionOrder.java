@@ -11,16 +11,12 @@ import io.github.douira.glsl_transformer.transform.*;
  * Handles the setup of a transformation manager and an index for tracking the
  * execution of phases.
  */
-public abstract class TestForExecutionOrder {
-  protected TransformationManager<NonFixedJobParameters> manager;
-  protected Transformation<NonFixedJobParameters> transformation;
+public abstract class TestForExecutionOrder extends TestWithBareTransformationManager {
   protected int nextIndex;
   protected boolean useWalk;
 
   @BeforeEach
   void setup() {
-    manager = new TransformationManager<>();
-    transformation = manager.getRootTransformation();
     nextIndex = 0;
   }
 

@@ -19,7 +19,7 @@ import io.github.douira.glsl_transformer.GLSLParser.TranslationUnitContext;
 import io.github.douira.glsl_transformer.TestResourceManager.DirectoryLocation;
 
 @ExtendWith({ SnapshotExtension.class })
-public class TransformationManagerTest extends TestWithTransformationManager<NonFixedJobParameters> {
+public class TransformationManagerTest extends TestWithResource {
   private Expect expect;
   private Exception storeException;
 

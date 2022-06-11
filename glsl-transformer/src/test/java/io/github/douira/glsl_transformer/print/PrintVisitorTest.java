@@ -10,7 +10,7 @@ import io.github.douira.glsl_transformer.GLSLParser.TranslationUnitContext;
 import io.github.douira.glsl_transformer.ast.*;
 import io.github.douira.glsl_transformer.transform.*;
 
-public class PrintVisitorTest extends TestWithTransformationManager<NonFixedJobParameters> {
+public class PrintVisitorTest extends TestWithResource {
   @Test
   void testEmptyLiteral() {
     assertEquals(

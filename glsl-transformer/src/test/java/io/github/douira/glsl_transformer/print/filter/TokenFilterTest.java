@@ -7,10 +7,10 @@ import java.util.function.Consumer;
 import org.antlr.v4.runtime.Token;
 import org.junit.jupiter.api.*;
 
-import io.github.douira.glsl_transformer.TestWithTransformationManager;
+import io.github.douira.glsl_transformer.TestWithResource;
 import io.github.douira.glsl_transformer.transform.*;
 
-public class TokenFilterTest extends TestWithTransformationManager<NonFixedJobParameters> {
+public class TokenFilterTest extends TestWithResource {
   private int nextIndex;
 
   @BeforeEach
