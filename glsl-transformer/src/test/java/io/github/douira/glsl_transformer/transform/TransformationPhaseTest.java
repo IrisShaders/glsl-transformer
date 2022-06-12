@@ -135,6 +135,7 @@ public class TransformationPhaseTest extends TestWithResource {
   @TestCaseSource
   @SnapshotName("testInjectNode")
   void testInjectNode(String scenario, String input) {
+    manager.setSLLOnly();
     for (var location : InjectionPoint.values()) {
       setTestCode(input);
       var output = run(new RunPhase<>() {
@@ -154,6 +155,7 @@ public class TransformationPhaseTest extends TestWithResource {
   @TestCaseSource("testInjectNode")
   @SnapshotName("testInjectDefine")
   void testInjectDefine(String scenario, String input) {
+    manager.setSLLOnly();
     for (var location : InjectionPoint.values()) {
       setTestCode(input);
       var output = run(new RunPhase<>() {

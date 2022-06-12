@@ -114,6 +114,7 @@ public class TransformationManagerTest extends TestWithResource {
         .getDirectoryResources(DirectoryLocation.GLSLANG_TESTS)
         .forEach(resource -> {
           manager = new TransformationManager<>(false);
+          manager.setSLLOnly();
           var collectingListener = new CollectingErrorListener();
           manager.getLexer().addErrorListener(collectingListener);
           manager.getParser().addErrorListener(collectingListener);
@@ -157,6 +158,7 @@ public class TransformationManagerTest extends TestWithResource {
    * - add const declarations
    * - add uniform blocks
    */
+  @Disabled
   @Test
   @SnapshotName("testUniformTransform")
   void testUniformTransform() {
