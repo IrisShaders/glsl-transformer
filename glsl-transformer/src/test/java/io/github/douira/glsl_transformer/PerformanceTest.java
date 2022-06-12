@@ -36,7 +36,7 @@ public class PerformanceTest extends TestWithBareTransformationManager {
     var input = TestResourceManager.getResource(FileLocation.LONG_EXPRESSION_TEST).content();
     man.parse(input);
 
-    assertTimeout(Duration.ofMillis(50),
+    assertTimeout(Duration.ofMillis(300),
         () -> man.parse(input));
   }
 }
