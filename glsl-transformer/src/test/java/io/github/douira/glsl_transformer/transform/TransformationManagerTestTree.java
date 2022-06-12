@@ -19,6 +19,7 @@ public class TransformationManagerTestTree {
   @SnapshotName("testParseTree")
   void testParseTree() {
     var man = new TransformationManager<WrappedParameters<StringBuilder>>(false);
+    man.setSLLOnly();
     man.addConcurrent(new PrintTreeSnapshot());
 
     Stream.concat(Stream.of(
