@@ -52,7 +52,8 @@ public class ParsingPerformanceTest extends TestWithBareTransformationManager {
   @Test
   void testParsingPerformanceSingle() {
     assertFilePerformance(Duration.ofMillis(600), FileLocation.DEEP_STATEMENT_TEST);
-    assertFilePerformance(Duration.ofMillis(600), FileLocation.DEEP_EXPRESSION_TEST);
+    assertFilePerformance(Duration.ofMillis(1200), FileLocation.DEEP_PAREN_EXPRESSION_TEST);
+    assertFilePerformance(Duration.ofMillis(300), FileLocation.DEEP_EXPRESSION_TEST);
     assertFilePerformance(Duration.ofMillis(300), FileLocation.LONG_EXPRESSION_TEST);
     assertFilePerformance(Duration.ofMillis(300), FileLocation.COMMENT_TEST);
   }
