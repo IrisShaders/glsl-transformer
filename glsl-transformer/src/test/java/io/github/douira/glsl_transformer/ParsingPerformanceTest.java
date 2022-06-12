@@ -45,12 +45,13 @@ public class ParsingPerformanceTest extends TestWithBareTransformationManager {
   }
 
   @Test
-  void testParsingPerformance() {
+  void testParsingPerformanceGLSLang() {
     assertDirectoryPerformance(Duration.ofMillis(1000), DirectoryLocation.GLSLANG_TESTS);
   }
 
   @Test
   void testParsingPerformanceSingle() {
+    assertFilePerformance(Duration.ofMillis(600), FileLocation.DEEP_STATEMENT_TEST);
     assertFilePerformance(Duration.ofMillis(600), FileLocation.DEEP_EXPRESSION_TEST);
     assertFilePerformance(Duration.ofMillis(300), FileLocation.LONG_EXPRESSION_TEST);
     assertFilePerformance(Duration.ofMillis(300), FileLocation.COMMENT_TEST);
