@@ -26,6 +26,7 @@ public class TestResourceManager {
     GRAMMAR_DEBUG("/grammarDebug.glsl"),
     LONG_EXPRESSION_TEST("/longExpressionTest.glsl"),
     DEEP_EXPRESSION_TEST("/deepExpressionTest.glsl"),
+    DEEP_PAREN_EXPRESSION_TEST("/deepParenExpressionTest.glsl"),
     DEEP_STATEMENT_TEST("/deepStatementTest.glsl"),
 
     TEST_1("/unlicensed/test.glsl"),
