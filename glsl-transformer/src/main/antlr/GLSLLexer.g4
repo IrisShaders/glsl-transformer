@@ -328,9 +328,14 @@ PP_EMPTY:
 NR: '#' -> pushMode(NR_Mode);
 IDENTIFIER: IDENTIFIER_frag;
 
+//performance testing suggests that using the .*? here is fine, alternatives were slower
+fragment LINE_COMMENT_frag: '//' NO_NEWLINE*;
+fragment BLOCK_COMMENT_frag: '/*' .*? '*/';
+
 //hidden comment and whitespace tokens
 LINE_CONTINUATION: LINE_CONTINUE -> channel(WHITESPACE);
-COMMENT: ('//' NO_NEWLINE* NEWLINE | '/*' .*? '*/') -> channel(COMMENTS);
+LINE_COMMENT: LINE_COMMENT_frag NEWLINE -> channel(COMMENTS);
+BLOCK_COMMENT: BLOCK_COMMENT_frag -> channel(COMMENTS);
 WS: WS_frag -> channel(WHITESPACE);
 EOL: NEWLINE -> channel(WHITESPACE);
 
@@ -356,7 +361,8 @@ NR_STDGL: 'STDGL';
 
 NR_INTCONSTANT: INTCONSTANT_frag;
 NR_IDENTIFIER: IDENTIFIER_frag;
-NR_COMMENT: ('//' NO_NEWLINE* | '/*' .*? '*/') -> channel(COMMENTS);
+NR_LINE_COMMENT: LINE_COMMENT_frag -> channel(COMMENTS);
+NR_BLOCK_COMMENT: BLOCK_COMMENT_frag -> channel(COMMENTS);
 NR_WS: WS_frag -> channel(WHITESPACE);
 NR_LINE_CONTINUATION: LINE_CONTINUE -> channel(WHITESPACE);
 NR_EOL: NEWLINE -> popMode;
@@ -364,7 +370,8 @@ NR_EOL: NEWLINE -> popMode;
 //gobble the preprocessor content only if started a preprocessor directive
 mode Preprocessor;
 PP_LINE_CONTINUE: LINE_CONTINUE -> channel(WHITESPACE);
-PP_COMMENT: ('//' NO_NEWLINE* | '/*' .*? '*/') -> channel(COMMENTS);
+PP_LINE_COMMENT: LINE_COMMENT_frag -> channel(COMMENTS);
+PP_BLOCK_COMMENT: BLOCK_COMMENT_frag -> channel(COMMENTS);
 PP_EOL: NEWLINE -> channel(PREPROCESSOR), popMode;
 PP_CONTENT:
 	NO_NEWLINE* ~('\r' | '\n' | '\\') -> channel(PREPROCESSOR);
