@@ -23,9 +23,10 @@ public class TestResourceManager {
     TYPE_TEST("/typeTest.glsl"),
     UNIFORM_TEST("/uniformTest.glsl"),
     MATRIX_PARSE_TEST("/glslang-test/matrix.frag"),
-    DEEP_EXPRESSION_TEST("/deepExpressionTest.glsl"),
     GRAMMAR_DEBUG("/grammarDebug.glsl"),
     LONG_EXPRESSION_TEST("/longExpressionTest.glsl"),
+    DEEP_EXPRESSION_TEST("/deepExpressionTest.glsl"),
+    DEEP_STATEMENT_TEST("/deepStatementTest.glsl"),
 
     TEST_1("/unlicensed/test.glsl"),
     TEST_2("/unlicensed/test2.glsl"),
