@@ -29,6 +29,7 @@ public class TestResourceManager {
 
     TEST_1("/unlicensed/test.glsl"),
     TEST_2("/unlicensed/test2.glsl"),
+    COMMENT_TEST("/commentTest.glsl"),
 
     BENCHMARK_KAPPA_SHORT("/unlicensed/composite3.glsl"),
     BENCHMARK_RRE("/unlicensed/rre.glsl"),
