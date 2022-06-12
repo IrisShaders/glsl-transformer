@@ -5,7 +5,7 @@ import static org.junit.jupiter.api.Assertions.*;
 import java.nio.charset.*;
 import java.nio.file.*;
 import java.util.*;
-import java.util.stream.Stream;
+import java.util.stream.*;
 
 import io.github.douira.glsl_transformer.util.CompatUtil;
 
@@ -27,14 +27,15 @@ public class TestResourceManager {
     GRAMMAR_DEBUG("/grammarDebug.glsl"),
     LONG_EXPRESSION_TEST("/longExpressionTest.glsl"),
 
-    TEST_OTHER("/unlicensed/test.glsl"),
+    TEST_1("/unlicensed/test.glsl"),
+    TEST_2("/unlicensed/test2.glsl"),
 
     BENCHMARK_KAPPA_SHORT("/unlicensed/composite3.glsl"),
     BENCHMARK_RRE("/unlicensed/rre.glsl"),
     BENCHMARK_SILDURS("/unlicensed/sildurs.glsl"),
     BENCHMARK_APOLLO_RT("/unlicensed/ApolloRT.glsl"),
     BENCHMARK_COMPLEMENTARY("/unlicensed/complementary.glsl"),
-    BENCHMARK_SoftVoxels("/unlicensed/SoftVoxels.glsl"),
+    BENCHMARK_SOFTVOXELS("/unlicensed/SoftVoxels.glsl"),
     BENCHMARK_UNKNOWN("/unlicensed/unknown.glsl"),
     BENCHMARK_MOLLYVX("/unlicensed/MollyVX.glsl"),
     BENCHMARK_SEUS_PTGI_HRR("/unlicensed/SEUS_PTGI_HRR.glsl"),
