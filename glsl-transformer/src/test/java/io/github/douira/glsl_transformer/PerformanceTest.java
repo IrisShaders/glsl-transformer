@@ -3,21 +3,27 @@ package io.github.douira.glsl_transformer;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.time.Duration;
+import java.util.stream.*;
 
-import org.antlr.v4.runtime.atn.PredictionMode;
-import org.junit.jupiter.api.*;
+import org.junit.jupiter.api.Test;
 
-import io.github.douira.glsl_transformer.TestResourceManager.FileLocation;
+import io.github.douira.glsl_transformer.TestResourceManager.DirectoryLocation;
+import io.github.douira.glsl_transformer.transform.*;
 
 public class PerformanceTest extends TestWithBareTransformationManager {
-  @Disabled
   @Test
   void testParsingPerformance() {
-    // manager.getParser().getInterpreter().setPredictionMode(PredictionMode.SLL);
-    var input = TestResourceManager.getResource(FileLocation.EXTERNAL_DECLARATIONS).content();
+    var man = new TransformationManager<NonFixedJobParameters>(false);
+    man.setSLLOnly();
 
-    // warmup
-    manager.parse(input);
-    // assertTimeout(Duration.ofSeconds(0), () -> manager.parse(input));
+    // warmup the JVM and the parser's DFA cache
+    var resources = TestResourceManager
+        .getDirectoryResources(DirectoryLocation.GLSLANG_TESTS)
+        .collect(Collectors.toList());
+    resources.forEach(resource -> man.parse(resource.content()));
+
+    assertTimeout(Duration.ofMillis(1000),
+        () -> resources.forEach(
+            resource -> man.parse(resource.content())));
   }
 }
