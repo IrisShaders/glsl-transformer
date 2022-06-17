@@ -1,4 +1,4 @@
-package io.github.douira.glsl_transformer.ast;
+package io.github.douira.glsl_transformer.parse_ast;
 
 import io.github.douira.glsl_transformer.tree.ExtendedTerminalNode;
 

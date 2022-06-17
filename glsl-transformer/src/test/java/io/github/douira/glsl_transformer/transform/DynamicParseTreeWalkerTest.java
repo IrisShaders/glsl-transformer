@@ -8,7 +8,7 @@ import org.antlr.v4.runtime.ParserRuleContext;
 import org.antlr.v4.runtime.tree.*;
 import org.junit.jupiter.api.Test;
 
-import io.github.douira.glsl_transformer.ast.StringNode;
+import io.github.douira.glsl_transformer.parse_ast.StringNode;
 import io.github.douira.glsl_transformer.print.EmptyTerminalNode;
 import io.github.douira.glsl_transformer.traversal.DynamicParseTreeWalker;
 import io.github.douira.glsl_transformer.tree.*;

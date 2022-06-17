@@ -7,7 +7,7 @@ import org.junit.jupiter.api.Test;
 
 import io.github.douira.glsl_transformer.*;
 import io.github.douira.glsl_transformer.GLSLParser.TranslationUnitContext;
-import io.github.douira.glsl_transformer.ast.*;
+import io.github.douira.glsl_transformer.parse_ast.*;
 import io.github.douira.glsl_transformer.transform.*;
 
 public class PrintVisitorTest extends TestWithResource {

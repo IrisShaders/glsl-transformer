@@ -1,4 +1,4 @@
-package io.github.douira.glsl_transformer.ast;
+package io.github.douira.glsl_transformer.parse_ast;
 
 /**
  * The unparsable AST node is basically just a wrapper around a terminal node
