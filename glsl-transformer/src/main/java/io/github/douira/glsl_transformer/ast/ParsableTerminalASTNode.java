@@ -11,7 +11,7 @@ import io.github.douira.glsl_transformer.tree.ExtendedContext;
  * parse tree nodes are handled. The construction of AST nodes can vary a lot
  * and is not defined here.
  */
-public abstract class ParsableASTNode extends ASTNode {
+public abstract class ParsableTerminalASTNode extends TerminalASTNode {
   /**
    * This method is overwritten by the implementing class to specify with which
    * parser method the generated string should be parsed.

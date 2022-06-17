@@ -9,7 +9,7 @@ package io.github.douira.glsl_transformer.ast;
  * roots system. Parse tree search doesn't work inside string nodes as they are
  * not parsed.
  * 
- * @see ASTNode
+ * @see TerminalASTNode
  */
 public class StringNode extends UnparsableASTNode {
   private final String content;
