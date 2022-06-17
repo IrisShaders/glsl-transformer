@@ -1,9 +1,11 @@
-package io.github.douira.glsl_transformer.ast.node;
-
-import io.github.douira.glsl_transformer.ast.GeneralASTVisitor;
+package io.github.douira.glsl_transformer.ast;
 
 public abstract class ASTNode {
   private ASTNode parent;
+
+  public abstract void enterNode();
+
+  public abstract void exitNode();
 
   public ASTNode getParent() {
     return parent;
