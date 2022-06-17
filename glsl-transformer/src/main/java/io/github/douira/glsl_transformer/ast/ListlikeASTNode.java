@@ -1,4 +1,4 @@
-package io.github.douira.glsl_transformer.ast.node;
+package io.github.douira.glsl_transformer.ast;
 
 import java.util.List;
 

@@ -1,8 +1,6 @@
-package io.github.douira.glsl_transformer.ast.node;
+package io.github.douira.glsl_transformer.ast;
 
 import java.util.List;
-
-import io.github.douira.glsl_transformer.ast.GeneralASTVisitor;
 
 public abstract class InnerASTNode extends ASTNode {
   public abstract List<InnerASTNode> getChildren();
