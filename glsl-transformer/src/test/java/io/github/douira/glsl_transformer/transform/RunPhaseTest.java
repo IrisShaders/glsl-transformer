@@ -5,7 +5,7 @@ import static org.junit.jupiter.api.Assertions.*;
 import org.junit.jupiter.api.Test;
 
 import io.github.douira.glsl_transformer.TestForExecutionOrder;
-import io.github.douira.glsl_transformer.ast.StringNode;
+import io.github.douira.glsl_transformer.parse_ast.StringNode;
 
 public class RunPhaseTest extends TestForExecutionOrder {
   @Test

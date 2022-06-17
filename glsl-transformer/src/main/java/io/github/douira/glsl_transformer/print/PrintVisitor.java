@@ -8,7 +8,7 @@ import org.antlr.v4.runtime.*;
 import org.antlr.v4.runtime.misc.Interval;
 import org.antlr.v4.runtime.tree.*;
 
-import io.github.douira.glsl_transformer.ast.UnparsableASTNode;
+import io.github.douira.glsl_transformer.parse_ast.UnparsableASTNode;
 import io.github.douira.glsl_transformer.print.filter.TokenFilter;
 import io.github.douira.glsl_transformer.tree.ExtendedContext;
 

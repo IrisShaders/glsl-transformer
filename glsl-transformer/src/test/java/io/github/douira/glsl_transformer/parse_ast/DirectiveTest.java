@@ -1,10 +1,11 @@
-package io.github.douira.glsl_transformer.ast;
+package io.github.douira.glsl_transformer.parse_ast;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 import org.junit.jupiter.api.Test;
 
-import io.github.douira.glsl_transformer.ast.Directive.Type;
+import io.github.douira.glsl_transformer.parse_ast.Directive;
+import io.github.douira.glsl_transformer.parse_ast.Directive.Type;
 
 /**
  * Directive injection and printing is already handled in the

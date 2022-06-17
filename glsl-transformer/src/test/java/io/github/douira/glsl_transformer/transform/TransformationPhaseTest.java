@@ -16,7 +16,7 @@ import au.com.origin.snapshots.junit5.SnapshotExtension;
 import io.github.douira.glsl_transformer.*;
 import io.github.douira.glsl_transformer.GLSLParser.TranslationUnitContext;
 import io.github.douira.glsl_transformer.TestResourceManager.FileLocation;
-import io.github.douira.glsl_transformer.ast.StringNode;
+import io.github.douira.glsl_transformer.parse_ast.StringNode;
 import io.github.douira.glsl_transformer.tree.TreeMember;
 
 /**

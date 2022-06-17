@@ -1,4 +1,4 @@
-package io.github.douira.glsl_transformer.ast;
+package io.github.douira.glsl_transformer.parse_ast;
 
 /**
  * This class models unparsed directives with the # sign. Parsed directives are

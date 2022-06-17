@@ -1,4 +1,4 @@
-package io.github.douira.glsl_transformer.ast;
+package io.github.douira.glsl_transformer.parse_ast;
 
 /**
  * String node provides a terminal node with arbitrary contents. This is useful

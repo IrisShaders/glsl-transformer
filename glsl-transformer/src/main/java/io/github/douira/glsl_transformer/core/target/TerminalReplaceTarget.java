@@ -1,6 +1,6 @@
 package io.github.douira.glsl_transformer.core.target;
 
-import io.github.douira.glsl_transformer.ast.StringNode;
+import io.github.douira.glsl_transformer.parse_ast.StringNode;
 import io.github.douira.glsl_transformer.transform.JobParameters;
 import io.github.douira.glsl_transformer.tree.TreeMember;
 
