@@ -8,7 +8,7 @@ import io.github.douira.glsl_transformer.tree.ExtendedTerminalNode;
  * classes to re-insert the result of an AST manipulation back into the parse
  * tree.
  */
-public abstract class ASTNode extends ExtendedTerminalNode {
+public abstract class TerminalASTNode extends ExtendedTerminalNode {
   /**
    * Generates the string representation of this AST object as it would be in the
    * generated code.

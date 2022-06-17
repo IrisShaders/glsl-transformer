@@ -15,7 +15,7 @@ import io.github.douira.glsl_transformer.tree.ExtendedContext;
  * vectors and matrices as n-dimensional and also taking the bit depth into
  * account.
  */
-public class Tensor extends ParsableASTNode {
+public class Tensor extends ParsableTerminalASTNode {
   private Type type;
 
   /**

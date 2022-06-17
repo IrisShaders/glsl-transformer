@@ -7,7 +7,7 @@ package io.github.douira.glsl_transformer.ast;
  * is directly inserted instead of being passed through the print interval
  * system as a token.
  */
-public abstract class UnparsableASTNode extends ASTNode {
+public abstract class UnparsableASTNode extends TerminalASTNode {
   @Override
   public String getText() {
     return getPrinted();
