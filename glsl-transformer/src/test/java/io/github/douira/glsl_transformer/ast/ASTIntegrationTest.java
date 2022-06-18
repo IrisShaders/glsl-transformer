@@ -27,5 +27,9 @@ public class ASTIntegrationTest {
     assertReprint("#pragma optimize(off)\n");
     assertReprint("#pragma invariant(all)\n");
     assertReprint("#pragma foobar\n");
+    assertReprint("#extension foobar: require\n");
+    assertReprint("#extension foobar: enable\n");
+    assertReprint("#extension foobar: warn\n");
+    assertReprint("#extension foobar: disable\n");
   }
 }

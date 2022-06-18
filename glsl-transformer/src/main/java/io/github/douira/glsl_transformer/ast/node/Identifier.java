@@ -11,8 +11,8 @@ public class Identifier extends ASTNode {
     this.name = name;
   }
 
-  public static Identifier from(TerminalNode node) {
-    return new Identifier(node.getText());
+  public static Identifier from(TerminalNode ctx) {
+    return new Identifier(ctx.getText());
   }
 
   @Override

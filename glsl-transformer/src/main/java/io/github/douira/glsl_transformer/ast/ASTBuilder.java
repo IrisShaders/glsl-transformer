@@ -41,6 +41,11 @@ public class ASTBuilder extends GLSLParserBaseVisitor<ASTNode> {
   }
 
   @Override
+  public ASTNode visitExtensionStatement(ExtensionStatementContext ctx) {
+    return ExtensionStatement.from(ctx);
+  }
+
+  @Override
   public ASTNode visitTerminal(TerminalNode node) {
     var type = node.getSymbol().getType();
     if (type == GLSLLexer.IDENTIFIER) {
