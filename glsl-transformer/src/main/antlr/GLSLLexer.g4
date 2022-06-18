@@ -359,7 +359,7 @@ NR_LPAREN: '(';
 NR_RPAREN: ')';
 NR_STDGL: 'STDGL';
 NR_CORE: 'core';
-NR_COMPATABILITY: 'compatibility';
+NR_COMPATIBILITY: 'compatibility';
 NR_ES: 'es';
 
 NR_INTCONSTANT: INTCONSTANT_frag;
