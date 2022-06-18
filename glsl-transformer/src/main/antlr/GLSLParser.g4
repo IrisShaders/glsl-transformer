@@ -37,7 +37,7 @@ translationUnit: versionStatement? externalDeclaration* EOF;
 versionStatement:
 	NR VERSION version = NR_INTCONSTANT profile = (
 		NR_CORE
-		| NR_COMPATABILITY
+		| NR_COMPATIBILITY
 		| NR_ES
 	)? NR_EOL;
 

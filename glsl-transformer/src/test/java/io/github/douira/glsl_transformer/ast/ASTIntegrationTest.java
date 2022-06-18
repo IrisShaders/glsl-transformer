@@ -21,5 +21,6 @@ public class ASTIntegrationTest {
   @Test
   public void testASTIntegration() {
     assertReprint("#version 330 core\n;");
+    // assertReprint("#pragma STDGL debug(on)\n");
   }
 }

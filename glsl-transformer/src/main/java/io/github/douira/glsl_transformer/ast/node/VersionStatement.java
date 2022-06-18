@@ -12,9 +12,9 @@ public class VersionStatement extends ASTNode {
 
   public enum Profile implements TokenAssociatedEnum {
     CORE(GLSLLexer.NR_CORE),
-    COMPATIBILITY(GLSLLexer.NR_COMPATABILITY),
+    COMPATIBILITY(GLSLLexer.NR_COMPATIBILITY),
     ES(GLSLLexer.NR_ES);
-    
+
     public int tokenType;
 
     private Profile(int tokenType) {
