@@ -9,5 +9,9 @@ public interface GeneralASTVisitor<R> {
 
   R initialResult();
 
+  R superNodeTypeResult();
+
   R defaultResult();
+
+  R aggregateResult(R aggregate, R nextResult);
 }

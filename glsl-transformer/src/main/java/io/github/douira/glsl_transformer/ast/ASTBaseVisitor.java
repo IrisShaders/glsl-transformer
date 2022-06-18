@@ -22,10 +22,16 @@ public class ASTBaseVisitor<R> implements ASTVisitor<R> {
   }
 
   @Override
+  public R superNodeTypeResult() {
+    return defaultResult();
+  }
+
+  @Override
   public R defaultResult() {
     return null;
   }
 
+  @Override
   public R aggregateResult(R aggregate, R nextResult) {
     return nextResult;
   }
