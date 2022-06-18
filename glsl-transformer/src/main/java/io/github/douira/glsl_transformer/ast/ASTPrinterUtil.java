@@ -67,5 +67,4 @@ public abstract class ASTPrinterUtil extends ASTListenerVisitor<Void> {
   public Void defaultResult() {
     throw new IllegalStateException("The default value should never be used and all nodes should be printed properly!");
   }
-
 }
