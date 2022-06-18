@@ -26,6 +26,10 @@ public interface ASTVisitor<R> extends GeneralASTVisitor<R> {
     return defaultResult();
   }
 
+  default R visitPragmaStatement(PragmaStatement node) {
+    return defaultResult();
+  }
+
   default R visitIdentifier(Identifier node) {
     return defaultResult();
   }

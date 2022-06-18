@@ -10,25 +10,24 @@ public class VersionStatement extends ASTNode {
   public int version;
   public Profile profile;
 
-  public enum Profile {
+  public enum Profile implements TokenAssociatedEnum {
     CORE(GLSLLexer.NR_CORE),
     COMPATIBILITY(GLSLLexer.NR_COMPATABILITY),
     ES(GLSLLexer.NR_ES);
-
+    
     public int tokenType;
 
     private Profile(int tokenType) {
       this.tokenType = tokenType;
     }
 
+    @Override
+    public int getTokenType() {
+      return tokenType;
+    }
+
     public static Profile fromToken(Token token) {
-      // not optimal but there are only three values
-      for (Profile profile : Profile.values()) {
-        if (profile.tokenType == token.getType()) {
-          return profile;
-        }
-      }
-      throw new IllegalArgumentException("Unknown profile: " + token.getText());
+      return TypeUtil.enumFromToken(Profile.values(), token);
     }
   }
 
