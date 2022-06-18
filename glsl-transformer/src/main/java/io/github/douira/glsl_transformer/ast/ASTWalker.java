@@ -1,18 +1,26 @@
 package io.github.douira.glsl_transformer.ast;
 
-public class ASTWalker {
-  private static final ASTWalker DEFAULT = new ASTWalker();
+public class ASTWalker extends ASTBaseVisitor<Void> {
+  private ASTListener listener;
 
-  public static void walkAST(ASTListener listener, ASTNode node) {
-    DEFAULT.walk(listener, node);
+  public ASTWalker(ASTListener listener) {
+    this.listener = listener;
   }
 
-  protected void walk(ASTListener listener, ASTNode node) {
+  public static void walkAST(ASTListener listener, ASTNode node) {
+    new ASTWalker(listener).visit(node);
+  }
+
+  @Override
+  public Void visit(ASTNode node) {
     if (node instanceof InnerASTNode innerNode) {
       enterNode(listener, innerNode);
-      innerNode.visitDefault(this, listener);
+      super.visit(node);
       exitNode(listener, innerNode);
+    } else {
+      super.visit(node);
     }
+    return null;
   }
 
   protected void enterNode(ASTListener listener, InnerASTNode node) {

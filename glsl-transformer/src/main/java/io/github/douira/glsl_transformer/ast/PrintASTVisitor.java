@@ -44,8 +44,10 @@ public abstract class PrintASTVisitor extends ASTBaseVisitor<Void> {
 
   @Override
   public Void visitTranslationUnit(TranslationUnit node) {
-    
-    emitType(node, GLSLLexer.EOF);
+    visit(node.versionStatement);
+    for (ExternalDeclaration externalDeclaration : node.children) {
+      visit(externalDeclaration);
+    }
     emitType(node, GLSLLexer.EOF);
     return null;
   }
