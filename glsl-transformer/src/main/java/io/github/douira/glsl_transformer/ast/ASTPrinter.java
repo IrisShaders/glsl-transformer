@@ -5,18 +5,22 @@ import io.github.douira.glsl_transformer.ast.node.*;
 import io.github.douira.glsl_transformer.print.filter.TokenChannel;
 
 public abstract class ASTPrinter extends ASTListenerVisitor<Void> {
-  private ASTPrinter() {
+  protected ASTPrinter() {
     super();
   }
 
   protected abstract String generateString();
+
+  protected abstract void emitToken(PrintToken token);
 
   public static String printAST(ASTPrinter printer, ASTNode node) {
     printer.visit(node);
     return printer.generateString();
   }
 
-  protected abstract void emitToken(PrintToken token);
+  public static String printSimple(ASTNode node) {
+    return printAST(new SimpleASTPrinter(), node);
+  }
 
   protected void emitTokens(PrintToken... token) {
     for (PrintToken t : token) {
@@ -68,12 +72,12 @@ public abstract class ASTPrinter extends ASTListenerVisitor<Void> {
 
   @Override
   public void exitTranslationUnit(TranslationUnit node) {
-    emitType(node, GLSLLexer.EOF);
+    emitToken(new EOFToken(node));
   }
 
   @Override
   public Void visitVersionStatement(VersionStatement node) {
-    emitType(node, GLSLLexer.VERSION);
+    emitType(node, GLSLLexer.NR, GLSLLexer.VERSION);
     emitSpace(node);
     emitLiteral(node, Integer.toString(node.version));
     if (node.profile != null) {
