@@ -56,7 +56,7 @@ pragmaStatement:
 		type = (PRAGMA_DEBUG | PRAGMA_OPTIMIZE) NR_LPAREN state = (
 			NR_ON
 			| NR_OFF
-		) RPAREN
+		) NR_RPAREN
 		| type = PRAGMA_INVARIANT NR_LPAREN state = NR_ALL NR_RPAREN
 		| type = NR_IDENTIFIER
 	) NR_EOL;
