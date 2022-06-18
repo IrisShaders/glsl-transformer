@@ -2,13 +2,17 @@ package io.github.douira.glsl_transformer.ast;
 
 import java.util.stream.Collectors;
 
-import org.antlr.v4.runtime.tree.TerminalNode;
+import org.antlr.v4.runtime.tree.*;
 
 import io.github.douira.glsl_transformer.*;
 import io.github.douira.glsl_transformer.GLSLParser.*;
 import io.github.douira.glsl_transformer.ast.node.*;
 
 public class ASTBuilder extends GLSLParserBaseVisitor<ASTNode> {
+  public static ASTNode build(ParseTree ctx) {
+    return new ASTBuilder().visit(ctx);
+  }
+
   @Override
   public TranslationUnit visitTranslationUnit(TranslationUnitContext ctx) {
     var versionStatement = visitVersionStatement(ctx.versionStatement());

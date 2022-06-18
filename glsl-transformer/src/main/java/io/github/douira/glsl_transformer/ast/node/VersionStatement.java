@@ -45,7 +45,7 @@ public class VersionStatement extends ASTNode {
     var version = Integer.parseInt(node.version.getText());
     return node.profile == null
         ? new VersionStatement(version)
-        : new VersionStatement(version, Profile.valueOf(node.profile.getText()));
+        : new VersionStatement(version, Profile.fromToken(node.profile));
   }
 
   @Override
