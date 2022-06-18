@@ -43,6 +43,16 @@ public abstract class PrintASTVisitor extends ASTBaseVisitor<Void> {
   }
 
   @Override
+  public Void initialResult() {
+    return null;
+  }
+
+  @Override
+  public Void defaultResult() {
+    throw new IllegalStateException("The default value should never be used and all nodes should be printed properly!");
+  }
+
+  @Override
   public Void visitTranslationUnit(TranslationUnit node) {
     visit(node.versionStatement);
     for (ExternalDeclaration externalDeclaration : node.children) {
@@ -50,6 +60,12 @@ public abstract class PrintASTVisitor extends ASTBaseVisitor<Void> {
     }
     emitType(node, GLSLLexer.EOF);
     return null;
+  }
+
+  @Override
+  public Void visitVersionStatement(VersionStatement node) {
+    // TODO Auto-generated method stub
+    return super.visitVersionStatement(node);
   }
 
   @Override
