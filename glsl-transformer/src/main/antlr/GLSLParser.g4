@@ -62,14 +62,12 @@ pragmaStatement:
 	) NR_EOL;
 
 extensionStatement:
-	NR EXTENSION extensionName = NR_IDENTIFIER (
-		NR_COLON extensionState = (
-			NR_REQUIRE
-			| NR_ENABLE
-			| NR_WARN
-			| NR_DISABLE
-		)
-	)? NR_EOL;
+	NR EXTENSION extensionName = NR_IDENTIFIER NR_COLON extensionBehavior = (
+		NR_REQUIRE
+		| NR_ENABLE
+		| NR_WARN
+		| NR_DISABLE
+	) NR_EOL;
 
 layoutDefaults:
 	layoutQualifier layoutMode = (UNIFORM | IN | OUT | BUFFER) SEMICOLON;
