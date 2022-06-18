@@ -28,36 +28,36 @@ public abstract class ASTPrinterUtil extends ASTListenerVisitor<Void> {
     }
   }
 
-  protected void emitLiteral(ASTNode source, String literal) {
-    emitToken(new LiteralToken(source, literal));
+  protected void emitLiteral(ASTNode node, String literal) {
+    emitToken(new LiteralToken(node, literal));
   }
 
-  protected void emitLiterals(ASTNode source, String... literal) {
+  protected void emitLiterals(ASTNode node, String... literal) {
     for (String l : literal) {
-      emitLiteral(source, l);
+      emitLiteral(node, l);
     }
   }
 
-  protected void emitType(ASTNode source, int type) {
-    emitToken(new ParserToken(source, type));
+  protected void emitType(ASTNode node, int type) {
+    emitToken(new ParserToken(node, type));
   }
 
-  protected void emitType(ASTNode source, int... type) {
+  protected void emitType(ASTNode node, int... type) {
     for (int t : type) {
-      emitType(source, t);
+      emitType(node, t);
     }
   }
 
-  protected void emitWhitespace(ASTNode source, String whitespace) {
-    emitToken(new LiteralToken(source, TokenChannel.WHITESPACE, whitespace));
+  protected void emitWhitespace(ASTNode node, String whitespace) {
+    emitToken(new LiteralToken(node, TokenChannel.WHITESPACE, whitespace));
   }
 
-  protected void emitSpace(ASTNode source) {
-    emitWhitespace(source, " ");
+  protected void emitSpace(ASTNode node) {
+    emitWhitespace(node, " ");
   }
 
-  protected void emitNewline(ASTNode source) {
-    emitWhitespace(source, "\n");
+  protected void emitNewline(ASTNode node) {
+    emitWhitespace(node, "\n");
   }
 
   @Override
