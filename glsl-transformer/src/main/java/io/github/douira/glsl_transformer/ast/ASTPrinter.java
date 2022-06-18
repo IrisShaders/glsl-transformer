@@ -6,13 +6,14 @@ import io.github.douira.glsl_transformer.print.filter.TokenChannel;
 
 public abstract class ASTPrinter extends ASTListenerVisitor<Void> {
   private ASTPrinter() {
+    super();
   }
 
   protected abstract String generateString();
 
-  public static String printAST(ASTPrinter visitor, ASTNode node) {
-    node.accept(visitor);
-    return visitor.generateString();
+  public static String printAST(ASTPrinter printer, ASTNode node) {
+    printer.visit(node);
+    return printer.generateString();
   }
 
   protected abstract void emitToken(PrintToken token);
