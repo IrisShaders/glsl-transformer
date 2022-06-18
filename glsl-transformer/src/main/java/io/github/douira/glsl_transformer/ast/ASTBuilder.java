@@ -20,17 +20,24 @@ public class ASTBuilder extends GLSLParserBaseVisitor<ASTNode> {
         .stream()
         .map((declaration) -> (ExternalDeclaration) visitExternalDeclaration(declaration))
         .collect(Collectors.toList());
-    return new TranslationUnit(versionStatement, externalDeclarations);
+    return versionStatement == null
+        ? new TranslationUnit(externalDeclarations)
+        : new TranslationUnit(versionStatement, externalDeclarations);
   }
 
   @Override
   public VersionStatement visitVersionStatement(VersionStatementContext ctx) {
-    return VersionStatement.from(ctx);
+    return ctx == null ? null : VersionStatement.from(ctx);
   }
 
   @Override
   public ASTNode visitEmptyDeclaration(EmptyDeclarationContext ctx) {
     return new EmptyDeclaration();
+  }
+
+  @Override
+  public ASTNode visitPragmaStatement(PragmaStatementContext ctx) {
+    return PragmaStatement.from(ctx);
   }
 
   @Override
