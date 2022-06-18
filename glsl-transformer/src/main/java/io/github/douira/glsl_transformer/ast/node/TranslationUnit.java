@@ -26,15 +26,4 @@ public class TranslationUnit extends ListASTNode<ExternalDeclaration> {
   public <R> R accept(ASTVisitor<R> visitor) {
     return visitor.visitTranslationUnit(this);
   }
-
-  public <R> R visitChildren(ASTVisitor<R> visitor) {
-    var result = visitor.defaultResult();
-    if (versionStatement != null) {
-      result = visitor.visit(result, versionStatement);
-    }
-    for (var child : children) {
-      result = visitor.visit(result, child);
-    }
-    return result;
-  }
 }

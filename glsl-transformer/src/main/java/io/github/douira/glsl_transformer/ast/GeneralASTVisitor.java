@@ -7,5 +7,7 @@ public interface GeneralASTVisitor<R> {
 
   R visit(R previousResult, ASTNode node);
 
+  R initialResult();
+
   R defaultResult();
 }

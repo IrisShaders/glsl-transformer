@@ -4,6 +4,4 @@ public abstract class InnerASTNode extends ASTNode {
   public abstract void enterNode(ASTListener listener);
 
   public abstract void exitNode(ASTListener listener);
-
-  public abstract <R> R visitChildren(ASTVisitor<R> visitor);
 }

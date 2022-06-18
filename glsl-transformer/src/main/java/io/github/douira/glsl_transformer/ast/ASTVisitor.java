@@ -4,18 +4,25 @@ import io.github.douira.glsl_transformer.ast.node.*;
 
 public interface ASTVisitor<R> extends GeneralASTVisitor<R> {
   default R visitTranslationUnit(TranslationUnit node) {
-    return visit(node);
+    var result = initialResult();
+    if (node.versionStatement != null) {
+      result = visit(result, node.versionStatement);
+    }
+    for (var child : node.children) {
+      result = visit(result, child);
+    }
+    return result;
   }
 
   default R visitVersionStatement(VersionStatement node) {
-    return visit(node);
+    return defaultResult();
   }
 
   default R visitEmptyDeclaration(EmptyDeclaration node) {
-    return visit(node);
+    return defaultResult();
   }
 
   default R visitIdentifier(Identifier node) {
-    return visit(node);
+    return defaultResult();
   }
 }
