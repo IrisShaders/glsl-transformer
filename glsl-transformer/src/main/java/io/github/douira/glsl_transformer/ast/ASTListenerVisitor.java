@@ -1,4 +1,11 @@
 package io.github.douira.glsl_transformer.ast;
 
-public abstract class ASTListenerVisitor<R> extends ASTBaseVisitor<R> implements ASTListener {
+public class ASTListenerVisitor<R> extends ASTWalker<R> implements ASTListener {
+  public ASTListenerVisitor() {
+    this.listener = this;
+  }
+
+  public static <T> T walkAndListen(ASTNode node) {
+    return new ASTListenerVisitor<T>().visit(node);
+  }
 }
