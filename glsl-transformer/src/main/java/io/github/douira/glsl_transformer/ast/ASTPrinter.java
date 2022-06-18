@@ -2,14 +2,15 @@ package io.github.douira.glsl_transformer.ast;
 
 import io.github.douira.glsl_transformer.GLSLLexer;
 import io.github.douira.glsl_transformer.ast.node.*;
+import io.github.douira.glsl_transformer.print.filter.TokenChannel;
 
-public abstract class PrintASTVisitor extends ASTBaseVisitor<Void> {
-  private PrintASTVisitor() {
+public abstract class ASTPrinter extends ASTListenerVisitor<Void> {
+  private ASTPrinter() {
   }
 
   protected abstract String generateString();
 
-  public static String printAST(PrintASTVisitor visitor, ASTNode node) {
+  public static String printAST(ASTPrinter visitor, ASTNode node) {
     node.accept(visitor);
     return visitor.generateString();
   }
@@ -42,6 +43,18 @@ public abstract class PrintASTVisitor extends ASTBaseVisitor<Void> {
     }
   }
 
+  protected void emitWhitespace(ASTNode source, String whitespace) {
+    emitToken(new LiteralToken(source, TokenChannel.WHITESPACE, whitespace));
+  }
+
+  protected void emitSpace(ASTNode source) {
+    emitWhitespace(source, " ");
+  }
+
+  protected void emitNewline(ASTNode source) {
+    emitWhitespace(source, "\n");
+  }
+
   @Override
   public Void initialResult() {
     return null;
@@ -53,19 +66,21 @@ public abstract class PrintASTVisitor extends ASTBaseVisitor<Void> {
   }
 
   @Override
-  public Void visitTranslationUnit(TranslationUnit node) {
-    visit(node.versionStatement);
-    for (ExternalDeclaration externalDeclaration : node.children) {
-      visit(externalDeclaration);
-    }
+  public void exitTranslationUnit(TranslationUnit node) {
     emitType(node, GLSLLexer.EOF);
-    return null;
   }
 
   @Override
   public Void visitVersionStatement(VersionStatement node) {
-    // TODO Auto-generated method stub
-    return super.visitVersionStatement(node);
+    emitType(node, GLSLLexer.VERSION);
+    emitSpace(node);
+    emitLiteral(node, Integer.toString(node.version));
+    if (node.profile != null) {
+      emitSpace(node);
+      emitType(node, node.profile.tokenType);
+    }
+    emitNewline(node);
+    return null;
   }
 
   @Override

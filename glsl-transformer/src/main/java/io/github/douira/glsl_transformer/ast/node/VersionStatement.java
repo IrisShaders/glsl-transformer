@@ -11,21 +11,24 @@ public class VersionStatement extends ASTNode {
   public Profile profile;
 
   public enum Profile {
-    CORE,
-    COMPATIBILITY,
-    ES;
+    CORE(GLSLLexer.NR_CORE),
+    COMPATIBILITY(GLSLLexer.NR_COMPATABILITY),
+    ES(GLSLLexer.NR_ES);
+
+    public int tokenType;
+
+    private Profile(int tokenType) {
+      this.tokenType = tokenType;
+    }
 
     public static Profile fromToken(Token token) {
-      switch (token.getType()) {
-        case GLSLLexer.NR_CORE:
-          return CORE;
-        case GLSLLexer.NR_COMPATABILITY:
-          return COMPATIBILITY;
-        case GLSLLexer.NR_ES:
-          return ES;
-        default:
-          throw new IllegalArgumentException("Unknown profile: " + token.getText());
+      // not optimal but there are only three values
+      for (Profile profile : Profile.values()) {
+        if (profile.tokenType == token.getType()) {
+          return profile;
+        }
       }
+      throw new IllegalArgumentException("Unknown profile: " + token.getText());
     }
   }
 
