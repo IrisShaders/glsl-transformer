@@ -11,7 +11,5 @@ public abstract class ASTNode {
     this.parent = parent;
   }
 
-  public <R> R accept(GeneralASTVisitor<? extends R> visitor) {
-    return visitor.visitDefault(this);
-  }
+  public abstract <R> R accept(ASTVisitor<? extends R> visitor);
 }
