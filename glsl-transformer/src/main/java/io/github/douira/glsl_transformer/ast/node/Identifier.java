@@ -2,7 +2,7 @@ package io.github.douira.glsl_transformer.ast.node;
 
 import org.antlr.v4.runtime.tree.TerminalNode;
 
-import io.github.douira.glsl_transformer.ast.ASTNode;
+import io.github.douira.glsl_transformer.ast.*;
 
 public class Identifier extends ASTNode {
   public String name;
@@ -13,5 +13,10 @@ public class Identifier extends ASTNode {
 
   public static Identifier from(TerminalNode node) {
     return new Identifier(node.getText());
+  }
+
+  @Override
+  public <R> R accept(ASTVisitor<? extends R> visitor) {
+    return visitor.visitIdentifier(this);
   }
 }

@@ -1,6 +1,17 @@
 package io.github.douira.glsl_transformer.ast;
 
-import io.github.douira.glsl_transformer.ast.node.Identifier;
+public class ASTBaseVisitor<R> implements ASTVisitor<R> {
+  @Override
+  public R startVisit(ASTNode node) {
+    return node.accept(this);
+  }
 
-public class ASTBaseVisitor<R> extends AbstractASTVisitor<R> implements ASTVisitor<R> {
+  @Override
+  public R visit(ASTNode node) {
+    return defaultResult();
+  }
+
+  protected R defaultResult() {
+    return null;
+  }
 }

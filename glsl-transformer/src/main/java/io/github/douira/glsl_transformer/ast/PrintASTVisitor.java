@@ -1,5 +1,6 @@
 package io.github.douira.glsl_transformer.ast;
 
+import io.github.douira.glsl_transformer.GLSLLexer;
 import io.github.douira.glsl_transformer.ast.node.*;
 
 public abstract class PrintASTVisitor extends ASTBaseVisitor<Void> {
@@ -30,7 +31,7 @@ public abstract class PrintASTVisitor extends ASTBaseVisitor<Void> {
       emitLiteral(source, l);
     }
   }
-  
+
   protected void emitType(ASTNode source, int type) {
     emitToken(new ParserToken(source, type));
   }
@@ -42,8 +43,22 @@ public abstract class PrintASTVisitor extends ASTBaseVisitor<Void> {
   }
 
   @Override
-  public Void visitIdentifier(Identifier identifier) {
-    emitLiteral(identifier, identifier.name);
+  public Void visitTranslationUnit(TranslationUnit node) {
+    
+    emitType(node, GLSLLexer.EOF);
+    emitType(node, GLSLLexer.EOF);
+    return null;
+  }
+
+  @Override
+  public Void visitEmptyDeclaration(EmptyDeclaration node) {
+    emitType(node, GLSLLexer.SEMICOLON);
+    return null;
+  }
+
+  @Override
+  public Void visitIdentifier(Identifier node) {
+    emitLiteral(node, node.name);
     return null;
   }
 }
