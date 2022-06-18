@@ -8,4 +8,10 @@ public interface ASTListener extends GeneralASTListener {
 
   default void exitTranslationUnit(TranslationUnit node) {
   }
+
+  default void enterExternalDeclaration(ExternalDeclaration node) {
+  }
+
+  default void exitExternalDeclaration(ExternalDeclaration node) {
+  }
 }
