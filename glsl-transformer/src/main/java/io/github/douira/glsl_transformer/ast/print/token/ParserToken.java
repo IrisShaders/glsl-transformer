@@ -1,4 +1,4 @@
-package io.github.douira.glsl_transformer.ast.token;
+package io.github.douira.glsl_transformer.ast.print.token;
 
 import io.github.douira.glsl_transformer.GLSLLexer;
 import io.github.douira.glsl_transformer.ast.ASTNode;

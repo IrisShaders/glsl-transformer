@@ -1,6 +1,7 @@
-package io.github.douira.glsl_transformer.ast;
+package io.github.douira.glsl_transformer.ast.print;
 
-import io.github.douira.glsl_transformer.ast.token.*;
+import io.github.douira.glsl_transformer.ast.*;
+import io.github.douira.glsl_transformer.ast.print.token.*;
 import io.github.douira.glsl_transformer.print.filter.TokenChannel;
 
 public abstract class ASTPrinterUtil extends ASTListenerVisitor<Void> {

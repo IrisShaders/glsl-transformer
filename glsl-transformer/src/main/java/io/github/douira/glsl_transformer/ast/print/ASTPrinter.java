@@ -1,8 +1,8 @@
-package io.github.douira.glsl_transformer.ast;
+package io.github.douira.glsl_transformer.ast.print;
 
 import io.github.douira.glsl_transformer.GLSLLexer;
 import io.github.douira.glsl_transformer.ast.node.*;
-import io.github.douira.glsl_transformer.ast.token.EOFToken;
+import io.github.douira.glsl_transformer.ast.print.token.EOFToken;
 
 public abstract class ASTPrinter extends ASTPrinterUtil {
   @Override
