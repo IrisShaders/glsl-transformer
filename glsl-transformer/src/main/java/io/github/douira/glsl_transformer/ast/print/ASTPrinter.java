@@ -52,6 +52,18 @@ public abstract class ASTPrinter extends ASTPrinterUtil {
   }
 
   @Override
+  public Void visitExtensionStatement(ExtensionStatement node) {
+    emitType(node, GLSLLexer.NR, GLSLLexer.EXTENSION);
+    emitSpace(node);
+    emitLiteral(node, node.name);
+    emitType(node, GLSLLexer.NR_COLON);
+    emitSpace(node);
+    emitType(node, node.behavior.tokenType);
+    emitNewline(node);
+    return null;
+  }
+
+  @Override
   public Void visitIdentifier(Identifier node) {
     emitLiteral(node, node.name);
     return null;

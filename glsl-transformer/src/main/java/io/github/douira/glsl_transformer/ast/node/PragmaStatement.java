@@ -67,12 +67,12 @@ public class PragmaStatement extends ExternalDeclaration {
     this.state = state;
   }
 
-  public static PragmaStatement from(PragmaStatementContext node) {
-    var stdGL = node.stdGL != null;
-    var type = PragmaType.fromToken(node.type);
+  public static PragmaStatement from(PragmaStatementContext ctx) {
+    var stdGL = ctx.stdGL != null;
+    var type = PragmaType.fromToken(ctx.type);
     return type == PragmaType.CUSTOM
-        ? new PragmaStatement(stdGL, node.type.getText())
-        : new PragmaStatement(stdGL, type, PragmaState.fromToken(node.state));
+        ? new PragmaStatement(stdGL, ctx.type.getText())
+        : new PragmaStatement(stdGL, type, PragmaState.fromToken(ctx.state));
   }
 
   @Override

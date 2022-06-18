@@ -30,6 +30,10 @@ public interface ASTVisitor<R> extends GeneralASTVisitor<R> {
     return defaultResult();
   }
 
+  default R visitExtensionStatement(ExtensionStatement node) {
+    return superNodeTypeResult();
+  }
+
   default R visitIdentifier(Identifier node) {
     return defaultResult();
   }
