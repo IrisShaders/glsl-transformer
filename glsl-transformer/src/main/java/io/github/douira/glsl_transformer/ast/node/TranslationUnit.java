@@ -12,6 +12,10 @@ public class TranslationUnit extends ListASTNode<ExternalDeclaration> {
     this.versionStatement = versionStatement;
   }
 
+  public TranslationUnit(List<ExternalDeclaration> externalDeclarations) {
+    super(externalDeclarations);
+  }
+
   @Override
   public void enterNode(ASTListener listener) {
     listener.enterTranslationUnit(this);

@@ -20,7 +20,12 @@ public class ASTIntegrationTest {
 
   @Test
   public void testASTIntegration() {
+    assertReprint(";");
+    assertReprint("");
     assertReprint("#version 330 core\n;");
-    // assertReprint("#pragma STDGL debug(on)\n");
+    assertReprint("#pragma STDGL debug(on)\n");
+    assertReprint("#pragma optimize(off)\n");
+    assertReprint("#pragma invariant(all)\n");
+    assertReprint("#pragma foobar\n");
   }
 }
