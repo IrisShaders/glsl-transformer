@@ -1,6 +1,7 @@
-package io.github.douira.glsl_transformer.ast;
+package io.github.douira.glsl_transformer.ast.token;
 
 import io.github.douira.glsl_transformer.GLSLLexer;
+import io.github.douira.glsl_transformer.ast.ASTNode;
 import io.github.douira.glsl_transformer.print.filter.TokenChannel;
 
 public class ParserToken extends PrintToken {
