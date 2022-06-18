@@ -52,7 +52,7 @@ externalDeclaration:
 emptyDeclaration: SEMICOLON;
 
 pragmaStatement:
-	NR PRAGMA NR_STDGL? (
+	NR PRAGMA stdGL = NR_STDGL? (
 		type = (PRAGMA_DEBUG | PRAGMA_OPTIMIZE) NR_LPAREN state = (
 			NR_ON
 			| NR_OFF
