@@ -34,7 +34,12 @@ options {
 translationUnit: versionStatement? externalDeclaration* EOF;
 
 //allows for EXT_null_initializer
-versionStatement: NR VERSION NR_INTCONSTANT NR_IDENTIFIER? NR_EOL;
+versionStatement:
+	NR VERSION version = NR_INTCONSTANT profile = (
+		NR_CORE
+		| NR_COMPATABILITY
+		| NR_ES
+	)? NR_EOL;
 
 externalDeclaration:
 	functionDefinition
@@ -48,13 +53,16 @@ emptyDeclaration: SEMICOLON;
 
 pragmaStatement:
 	NR PRAGMA NR_STDGL? (
-		(PRAGMA_DEBUG | PRAGMA_OPTIMIZE) NR_LPAREN (NR_ON | NR_OFF) RPAREN
-		| PRAGMA_INVARIANT NR_LPAREN NR_ALL NR_RPAREN
-		| NR_IDENTIFIER
+		type = (PRAGMA_DEBUG | PRAGMA_OPTIMIZE) NR_LPAREN state = (
+			NR_ON
+			| NR_OFF
+		) RPAREN
+		| type = PRAGMA_INVARIANT NR_LPAREN state = NR_ALL NR_RPAREN
+		| type = NR_IDENTIFIER
 	) NR_EOL;
 
 extensionStatement:
-	NR EXTENSION NR_IDENTIFIER (
+	NR EXTENSION extensionName = NR_IDENTIFIER (
 		NR_COLON extensionState = (
 			NR_REQUIRE
 			| NR_ENABLE
