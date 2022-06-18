@@ -18,6 +18,10 @@ public interface ASTVisitor<R> extends GeneralASTVisitor<R> {
     return defaultResult();
   }
 
+  default R visitExternalDeclaration(ExternalDeclaration node) {
+    return superNodeTypeResult();
+  }
+
   default R visitEmptyDeclaration(EmptyDeclaration node) {
     return defaultResult();
   }

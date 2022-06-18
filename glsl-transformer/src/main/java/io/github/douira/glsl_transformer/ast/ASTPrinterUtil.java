@@ -64,6 +64,11 @@ public abstract class ASTPrinterUtil extends ASTListenerVisitor<Void> {
   }
 
   @Override
+  public Void superNodeTypeResult() {
+    return null;
+  }
+
+  @Override
   public Void defaultResult() {
     throw new IllegalStateException("The default value should never be used and all nodes should be printed properly!");
   }
