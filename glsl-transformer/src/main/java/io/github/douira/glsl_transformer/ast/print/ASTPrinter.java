@@ -2,7 +2,8 @@ package io.github.douira.glsl_transformer.ast.print;
 
 import io.github.douira.glsl_transformer.GLSLLexer;
 import io.github.douira.glsl_transformer.ast.node.*;
-import io.github.douira.glsl_transformer.ast.node.PragmaStatement.PragmaType;
+import io.github.douira.glsl_transformer.ast.node.external_declaration.*;
+import io.github.douira.glsl_transformer.ast.node.external_declaration.PragmaStatement.PragmaType;
 import io.github.douira.glsl_transformer.ast.print.token.EOFToken;
 
 public abstract class ASTPrinter extends ASTPrinterUtil {
