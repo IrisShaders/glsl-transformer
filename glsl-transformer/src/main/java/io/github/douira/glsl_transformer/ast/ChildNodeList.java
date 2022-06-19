@@ -2,6 +2,7 @@ package io.github.douira.glsl_transformer.ast;
 
 import java.util.Collection;
 import java.util.function.Consumer;
+import java.util.stream.*;
 
 public class ChildNodeList<Child extends ASTNode> extends ProxyArrayList<Child> {
   private Consumer<Child> childConsumer;
@@ -39,5 +40,13 @@ public class ChildNodeList<Child extends ASTNode> extends ProxyArrayList<Child> 
   @Override
   protected void notifyAddition(Child added) {
     childConsumer.accept(added);
+  }
+
+  public static <Child extends ASTNode> Collector<Child, ?, ChildNodeList<Child>> getCollector(InnerASTNode parent) {
+    return Collectors.toCollection(() -> new ChildNodeList<Child>(parent));
+  }
+
+  public static <Child extends ASTNode> ChildNodeList<Child> collect(Stream<Child> stream, InnerASTNode parent) {
+    return stream.collect(getCollector(parent));
   }
 }

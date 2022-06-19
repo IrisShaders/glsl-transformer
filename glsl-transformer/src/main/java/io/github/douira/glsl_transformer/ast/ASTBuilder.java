@@ -1,13 +1,12 @@
 package io.github.douira.glsl_transformer.ast;
 
-import java.util.stream.Collectors;
-
 import org.antlr.v4.runtime.tree.*;
 
 import io.github.douira.glsl_transformer.*;
 import io.github.douira.glsl_transformer.GLSLParser.*;
 import io.github.douira.glsl_transformer.ast.node.*;
 import io.github.douira.glsl_transformer.ast.node.external_declaration.*;
+import io.github.douira.glsl_transformer.ast.node.statement.*;
 
 public class ASTBuilder extends GLSLParserBaseVisitor<ASTNode> {
   public static ASTNode build(ParseTree ctx) {
@@ -17,10 +16,8 @@ public class ASTBuilder extends GLSLParserBaseVisitor<ASTNode> {
   @Override
   public TranslationUnit visitTranslationUnit(TranslationUnitContext ctx) {
     var versionStatement = visitVersionStatement(ctx.versionStatement());
-    var externalDeclarations = ctx.externalDeclaration()
-        .stream()
-        .map((declaration) -> (ExternalDeclaration) visitExternalDeclaration(declaration))
-        .collect(Collectors.toList());
+    var externalDeclarations = ctx.externalDeclaration().stream().map(
+        (declaration) -> (ExternalDeclaration) visitExternalDeclaration(declaration));
     return versionStatement == null
         ? new TranslationUnit(externalDeclarations)
         : new TranslationUnit(versionStatement, externalDeclarations);
@@ -54,7 +51,13 @@ public class ASTBuilder extends GLSLParserBaseVisitor<ASTNode> {
   @Override
   public InnerASTNode visitLayoutQualifier(LayoutQualifierContext ctx) {
     // TODO: LayoutQualifier
-    return (InnerASTNode)super.visitLayoutQualifier(ctx);
+    return (InnerASTNode) super.visitLayoutQualifier(ctx);
+  }
+
+  @Override
+  public CompoundStatement visitCompoundStatement(CompoundStatementContext ctx) {
+    return new CompoundStatement(ctx.statement().stream().map(
+        (statement) -> (Statement) visitStatement(statement)));
   }
 
   @Override

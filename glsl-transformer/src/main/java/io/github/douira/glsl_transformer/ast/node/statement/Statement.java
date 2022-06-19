@@ -5,29 +5,24 @@ import io.github.douira.glsl_transformer.ast.traversal.*;
 
 public abstract class Statement extends InnerASTNode {
   public enum StatementType {
-    COMPOUND, //TODO
-    DECLARATION, //TODO
-    EXPRESSION, //TODO
-    EMPTY, //TODO
-    SELECTION, //TODO
-    SWITCH, //TODO
-    CASE_LABEL, //TODO
-    FOR_LOOP, //TODO
-    WHILE_LOOP, //TODO
-    DO_WHILE_LOOP, //TODO
-    CONTINUE, //TODO
-    BREAK, //TODO
-    RETURN, //TODO
-    DISCARD, //TODO
-    DEMOTE //TODO
+    COMPOUND, // TODO
+    DECLARATION, // TODO
+    EXPRESSION, // TODO
+    EMPTY,
+    SELECTION, // TODO
+    SWITCH, // TODO
+    CASE_LABEL, // TODO
+    FOR_LOOP, // TODO
+    WHILE_LOOP, // TODO
+    DO_WHILE_LOOP, // TODO
+    CONTINUE, // TODO
+    BREAK, // TODO
+    RETURN, // TODO
+    DISCARD, // TODO
+    DEMOTE // TODO
   }
 
   public abstract StatementType getStatementType();
-
-  @Override
-  public <R> R accept(ASTVisitor<R> visitor) {
-    return visitor.visitStatement(this);
-  }
 
   @Override
   public void enterNode(ASTListener listener) {
@@ -37,5 +32,10 @@ public abstract class Statement extends InnerASTNode {
   @Override
   public void exitNode(ASTListener listener) {
     listener.exitStatement(this);
+  }
+
+  @Override
+  public <R> R accept(ASTVisitor<R> visitor) {
+    return visitor.visitStatement(this);
   }
 }
