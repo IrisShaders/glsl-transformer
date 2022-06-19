@@ -59,9 +59,11 @@ public abstract class ASTPrinter extends ASTPrinterUtil {
     emitType(node, GLSLLexer.NR, GLSLLexer.EXTENSION);
     emitExtendableSpace(node);
     emitLiteral(node, node.name);
-    emitType(node, GLSLLexer.NR_COLON);
-    emitExtendableSpace(node);
-    emitType(node, node.behavior.tokenType);
+    if (node.behavior != null) {
+      emitType(node, GLSLLexer.NR_COLON);
+      emitExtendableSpace(node);
+      emitType(node, node.behavior.tokenType);
+    }
     emitExactNewline(node);
     return null;
   }
