@@ -9,7 +9,7 @@ import io.github.douira.glsl_transformer.ast.traversal.ASTVisitor;
 
 public class ExtensionStatement extends ExternalDeclaration {
   public String name;
-  public ExtensionBehavior behavior;
+  public ExtensionBehavior behavior; //TODO: nullable
 
   public enum ExtensionBehavior implements TokenAssociatedEnum {
     DEBUG(GLSLLexer.NR_REQUIRE),
@@ -38,10 +38,16 @@ public class ExtensionStatement extends ExternalDeclaration {
     this.behavior = behavior;
   }
 
+  public ExtensionStatement(String name) {
+    this.name = name;
+  }
+
   public static ExtensionStatement from(ExtensionStatementContext ctx) {
-    return new ExtensionStatement(
-        ctx.extensionName.getText(),
-        ExtensionBehavior.fromToken(ctx.extensionBehavior));
+    var extensionName = ctx.extensionName.getText();
+    return ctx.extensionBehavior == null
+        ? new ExtensionStatement(extensionName)
+        : new ExtensionStatement(
+            extensionName, ExtensionBehavior.fromToken(ctx.extensionBehavior));
   }
 
   @Override
