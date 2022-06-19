@@ -3,6 +3,12 @@ package io.github.douira.glsl_transformer.ast;
 import java.util.Collection;
 import java.util.function.*;
 
+/**
+ * A further extension of {@link ProxyArrayList} that also calls a notification
+ * method whenever an element is removed. This is considerably more expensive.
+ * The removal notification method should be idempotent and reversible with the
+ * addition notification method.
+ */
 public abstract class RemovalProxyArrayList<T> extends ProxyArrayList<T> {
   public RemovalProxyArrayList() {
   }
@@ -68,7 +74,7 @@ public abstract class RemovalProxyArrayList<T> extends ProxyArrayList<T> {
   public void replaceAll(UnaryOperator<T> operator) {
     notifyRemovalInternal(this);
     super.replaceAll(operator);
-    notifyAdditionInternal(this);
+    // addition is notified by {@link ProxyArrayList}
   }
 
   @Override
