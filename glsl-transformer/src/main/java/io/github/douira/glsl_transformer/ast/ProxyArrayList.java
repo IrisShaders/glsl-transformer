@@ -1,7 +1,13 @@
 package io.github.douira.glsl_transformer.ast;
 
 import java.util.*;
+import java.util.function.UnaryOperator;
 
+/**
+ * An array list extension that calls a notification method whenever an element
+ * is added. The addition notification method should be idempotent and
+ * reversible with the removal notification method.
+ */
 public abstract class ProxyArrayList<T> extends ArrayList<T> {
   public ProxyArrayList() {
   }
@@ -67,5 +73,11 @@ public abstract class ProxyArrayList<T> extends ArrayList<T> {
       notifyAdditionInternal(element);
     }
     return prev;
+  }
+
+  @Override
+  public void replaceAll(UnaryOperator<T> operator) {
+    super.replaceAll(operator);
+    notifyAdditionInternal(this);
   }
 }
