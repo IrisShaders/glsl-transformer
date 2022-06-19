@@ -5,7 +5,6 @@ import org.antlr.v4.runtime.Token;
 import io.github.douira.glsl_transformer.GLSLLexer;
 import io.github.douira.glsl_transformer.GLSLParser.ExtensionStatementContext;
 import io.github.douira.glsl_transformer.ast.*;
-import io.github.douira.glsl_transformer.ast.node.PragmaStatement.*;
 import io.github.douira.glsl_transformer.ast.traversal.ASTVisitor;
 
 public class ExtensionStatement extends ExternalDeclaration {
