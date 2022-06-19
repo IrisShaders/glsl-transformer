@@ -20,9 +20,9 @@ public class ASTIntegrationTest {
 
   @Test
   public void testASTIntegration() {
-    assertReprint(";");
+    assertReprint(";\n");
     assertReprint("");
-    assertReprint("#version 330 core\n;");
+    assertReprint("#version 330 core\n;\n");
     assertReprint("#pragma STDGL debug(on)\n");
     assertReprint("#pragma optimize(off)\n");
     assertReprint("#pragma invariant(all)\n");
