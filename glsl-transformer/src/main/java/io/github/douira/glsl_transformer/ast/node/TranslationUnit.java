@@ -3,6 +3,7 @@ package io.github.douira.glsl_transformer.ast.node;
 import java.util.List;
 
 import io.github.douira.glsl_transformer.ast.*;
+import io.github.douira.glsl_transformer.ast.traversal.*;
 
 public class TranslationUnit extends ListASTNode<ExternalDeclaration> {
   public VersionStatement versionStatement;

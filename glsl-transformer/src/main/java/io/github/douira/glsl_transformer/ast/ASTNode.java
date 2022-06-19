@@ -1,5 +1,7 @@
 package io.github.douira.glsl_transformer.ast;
 
+import io.github.douira.glsl_transformer.ast.traversal.ASTVisitor;
+
 public abstract class ASTNode {
   private ASTNode parent;
 
