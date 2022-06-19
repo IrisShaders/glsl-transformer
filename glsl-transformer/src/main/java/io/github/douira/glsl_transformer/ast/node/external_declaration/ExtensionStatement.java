@@ -45,6 +45,11 @@ public class ExtensionStatement extends ExternalDeclaration {
   }
 
   @Override
+  public ExternalDeclarationType getExternalDeclarationType() {
+    return ExternalDeclarationType.EXTENSION_STATEMENT;
+  }
+
+  @Override
   public <R> R accept(ASTVisitor<R> visitor) {
     return visitor.visitExtensionStatement(this);
   }
