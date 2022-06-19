@@ -9,6 +9,8 @@ public abstract class BinaryExpression extends Expression {
   public BinaryExpression(Expression left, Expression right) {
     this.left = left;
     this.right = right;
+    left.setParent(this);
+    right.setParent(this);
   }
 
   @Override

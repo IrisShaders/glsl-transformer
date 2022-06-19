@@ -3,6 +3,7 @@ package io.github.douira.glsl_transformer.ast.traversal;
 import io.github.douira.glsl_transformer.ast.node.*;
 import io.github.douira.glsl_transformer.ast.node.expression.*;
 import io.github.douira.glsl_transformer.ast.node.external_declaration.*;
+import io.github.douira.glsl_transformer.ast.node.statement.Statement;
 
 public interface ASTVisitor<R> extends GeneralASTVisitor<R> {
   default R visitTranslationUnit(TranslationUnit node) {
@@ -49,6 +50,10 @@ public interface ASTVisitor<R> extends GeneralASTVisitor<R> {
   }
 
   default R visitBinaryExpression(BinaryExpression node) {
+    return superNodeTypeResult();
+  }
+
+  default R visitStatement(Statement node) {
     return superNodeTypeResult();
   }
 
