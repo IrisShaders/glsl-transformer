@@ -51,6 +51,8 @@ public class ExtensionStatement extends ExternalDeclaration {
 
   @Override
   public <R> R accept(ASTVisitor<R> visitor) {
-    return visitor.visitExtensionStatement(this);
+    return visitor.aggregateResult(
+        super.accept(visitor),
+        visitor.visitExtensionStatement(this));
   }
 }

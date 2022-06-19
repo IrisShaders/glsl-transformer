@@ -60,6 +60,8 @@ public class LayoutDefaults extends ExternalDeclaration {
 
   @Override
   public <R> R accept(ASTVisitor<R> visitor) {
-    return visitor.visitLayoutDefaults(this);
+    return visitor.aggregateResult(
+        super.accept(visitor),
+        visitor.visitLayoutDefaults(this));
   }
 }
