@@ -34,6 +34,10 @@ public interface ASTVisitor<R> extends GeneralASTVisitor<R> {
     return superNodeTypeResult();
   }
 
+  default R visitLayoutDefaults(LayoutDefaults node) {
+    return visit(node.qualifier); // TODO: LayoutQualifier
+  }
+
   default R visitIdentifier(Identifier node) {
     return defaultResult();
   }

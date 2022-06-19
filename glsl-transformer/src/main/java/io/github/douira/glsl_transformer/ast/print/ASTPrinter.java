@@ -64,6 +64,13 @@ public abstract class ASTPrinter extends ASTPrinterUtil {
   }
 
   @Override
+  public void exitLayoutDefaults(LayoutDefaults node) {
+    emitType(node, node.mode.tokenType);
+    emitSpace(node);
+    emitType(node, GLSLLexer.SEMICOLON);
+  }
+
+  @Override
   public Void visitIdentifier(Identifier node) {
     emitLiteral(node, node.name);
     return null;

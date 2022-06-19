@@ -31,18 +31,29 @@ public class ASTBuilder extends GLSLParserBaseVisitor<ASTNode> {
   }
 
   @Override
-  public ASTNode visitEmptyDeclaration(EmptyDeclarationContext ctx) {
+  public EmptyDeclaration visitEmptyDeclaration(EmptyDeclarationContext ctx) {
     return new EmptyDeclaration();
   }
 
   @Override
-  public ASTNode visitPragmaStatement(PragmaStatementContext ctx) {
+  public PragmaStatement visitPragmaStatement(PragmaStatementContext ctx) {
     return PragmaStatement.from(ctx);
   }
 
   @Override
-  public ASTNode visitExtensionStatement(ExtensionStatementContext ctx) {
+  public ExtensionStatement visitExtensionStatement(ExtensionStatementContext ctx) {
     return ExtensionStatement.from(ctx);
+  }
+
+  @Override
+  public LayoutDefaults visitLayoutDefaults(LayoutDefaultsContext ctx) {
+    return LayoutDefaults.from(visitLayoutQualifier(ctx.layoutQualifier()), ctx);
+  }
+
+  @Override
+  public InnerASTNode visitLayoutQualifier(LayoutQualifierContext ctx) {
+    // TODO: LayoutQualifier
+    return (InnerASTNode)super.visitLayoutQualifier(ctx);
   }
 
   @Override
