@@ -4,6 +4,7 @@ import io.github.douira.glsl_transformer.GLSLLexer;
 import io.github.douira.glsl_transformer.ast.node.*;
 import io.github.douira.glsl_transformer.ast.node.external_declaration.*;
 import io.github.douira.glsl_transformer.ast.node.external_declaration.PragmaStatement.PragmaType;
+import io.github.douira.glsl_transformer.ast.node.statement.EmptyStatement;
 import io.github.douira.glsl_transformer.ast.print.token.EOFToken;
 
 public abstract class ASTPrinter extends ASTPrinterUtil {
@@ -69,6 +70,12 @@ public abstract class ASTPrinter extends ASTPrinterUtil {
     emitType(node, node.mode.tokenType);
     emitSpace(node);
     emitType(node, GLSLLexer.SEMICOLON);
+  }
+
+  @Override
+  public Void visitEmptyStatement(EmptyStatement node) {
+    emitType(node, GLSLLexer.SEMICOLON);
+    return null;
   }
 
   @Override
