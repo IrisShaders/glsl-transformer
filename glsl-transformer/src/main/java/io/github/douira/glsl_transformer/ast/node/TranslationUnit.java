@@ -12,6 +12,7 @@ public class TranslationUnit extends ListASTNode<ExternalDeclaration> {
   public TranslationUnit(VersionStatement versionStatement, List<ExternalDeclaration> externalDeclarations) {
     super(externalDeclarations);
     this.versionStatement = versionStatement;
+    versionStatement.setParent(this);
   }
 
   public TranslationUnit(List<ExternalDeclaration> externalDeclarations) {
