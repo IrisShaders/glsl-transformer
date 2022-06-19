@@ -1,4 +1,4 @@
-package io.github.douira.glsl_transformer.ast.node;
+package io.github.douira.glsl_transformer.ast.node.external_declaration;
 
 import org.antlr.v4.runtime.Token;
 

@@ -7,6 +7,7 @@ import org.antlr.v4.runtime.tree.*;
 import io.github.douira.glsl_transformer.*;
 import io.github.douira.glsl_transformer.GLSLParser.*;
 import io.github.douira.glsl_transformer.ast.node.*;
+import io.github.douira.glsl_transformer.ast.node.external_declaration.*;
 
 public class ASTBuilder extends GLSLParserBaseVisitor<ASTNode> {
   public static ASTNode build(ParseTree ctx) {

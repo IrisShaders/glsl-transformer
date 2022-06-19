@@ -1,4 +1,4 @@
-package io.github.douira.glsl_transformer.ast.node;
+package io.github.douira.glsl_transformer.ast.node.external_declaration;
 
 import io.github.douira.glsl_transformer.ast.*;
 import io.github.douira.glsl_transformer.ast.traversal.*;
