@@ -3,6 +3,8 @@ package io.github.douira.glsl_transformer.ast.node.statement;
 import io.github.douira.glsl_transformer.ast.traversal.ASTVisitor;
 
 public class EmptyStatement extends Statement {
+  public EmptyStatement() {
+  }
 
   @Override
   public StatementType getStatementType() {
