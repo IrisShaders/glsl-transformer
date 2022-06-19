@@ -1,6 +1,7 @@
 package io.github.douira.glsl_transformer.ast.traversal;
 
 import io.github.douira.glsl_transformer.ast.node.*;
+import io.github.douira.glsl_transformer.ast.node.expression.*;
 import io.github.douira.glsl_transformer.ast.node.external_declaration.*;
 
 public interface ASTVisitor<R> extends GeneralASTVisitor<R> {
@@ -37,6 +38,18 @@ public interface ASTVisitor<R> extends GeneralASTVisitor<R> {
 
   default R visitLayoutDefaults(LayoutDefaults node) {
     return visit(node.qualifier); // TODO: LayoutQualifier
+  }
+
+  default R visitExpression(Expression node) {
+    return superNodeTypeResult();
+  }
+
+  default R visitUnaryExpression(UnaryExpression node) {
+    return superNodeTypeResult();
+  }
+
+  default R visitBinaryExpression(BinaryExpression node) {
+    return superNodeTypeResult();
   }
 
   default R visitIdentifier(Identifier node) {
