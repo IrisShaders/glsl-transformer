@@ -12,7 +12,8 @@ See [publish-on-central](https://github.com/DanySK/publish-on-central) for docs 
 
 # Other
 
-Commands for combinding all files in a directory and subdiretories:
+Commands for combining all files in a directory and subdirectories:
+
 ```bash
 NAME=the_shader_name; cat ./$NAME/**/*.{vsh,fsh,gsh,glsl} > $NAME.glsl
 ```
@@ -25,3 +26,14 @@ Setup signing: (secrets are kept in `~/.gradle/gradle.properties`)
 gpg --keyring secring.gpg --export-secret-keys > ~/.gnupg/secring.gpg
 gpg --list-keys --keyid-format short
 ```
+
+# Development Notes
+
+## AST Development
+
+Locations in which a new AST node class `Foo` has to be registered:
+
+- `ASTVisitor`: method `default R visitFoo(Foo node)` that can be called by `Foo`'s `accept` method and visits all nested members of a `Foo` instance
+- `ASTListener`: if `Foo` is a `InnerASTNode`, empty methods `default void enterFoo(Foo node)` and `default void exitFoo(Foo node)` that can be called by `Foo`'s `enterNode` and `exitNode` methods
+- `ASTPrinter`: if `Foo` isn't just a superclass, a visitor and/or listener method implementation that emits tokens for printing a `Foo` instance
+- `ASTBuilder`: if `Foo` isn't just a superclass, a parse tree visitor method implementation that constructs a new `Foo` instance from the parse tree
