@@ -23,7 +23,7 @@ This is an actively being developed library that parses GLSL using an ANTLR4 gra
 
 ## What `glsl-transformer` is not
 
-Currently, `glsl-transformer` mostly operates only on the syntactic level. This means it only knows how the code looks and what structure it has to have, not what it means and which structures are legal or not. It has no or only a very limited semantic understanding of the code. Semantic processing of programs can be implemented by API users on a case-by-case basis for specific tasks. Building a simple AST that is abstracted far away from the actual GLSL spec is an interesting possibility for future development of this library. However, implementing full semantics would require building what basically amounts to a GLSL compiler which is way out of scope for this project. 
+Currently, `glsl-transformer` mostly operates only on the syntactic level. This means it only knows how the code looks and what structure it has to have, not what it means and which structures are legal or not. It has no or only a very limited semantic understanding of the code. Semantic processing of programs can be implemented by API users on a case-by-case basis for specific tasks. Building a simple AST that is abstracted far away from the actual GLSL spec is an interesting possibility for future development of this library. However, implementing full semantics would require building what basically amounts to a GLSL compiler which is way out of scope for this project.
 
 `glsl-transformer` does not do semantic validation of the code and will not error on code that is actually invalid for semantic reasons. It will only error on syntax errors. In particular, it will not error on type errors like assigning a boolean to an integer. It supports GLSL 4.6 with some extensions such as explicit arithmetic types and some others. It won't error on modern syntax features even if your driver doesn't support them. Do not rely on `glsl-transformer` for shader validation, only for syntax transformation.
 
@@ -98,36 +98,6 @@ System.out.println(manager.transform(string));
 
 See the Javadocs for API documentation and some API-specific notes. See [the documentation overview](docs/overview.md) for detailed documentation. The tests also illustrate the usage of each individual feature. The `core` package uses `glsl-transformer`'s features and extends them to provide structures for common tasks.
 
-# Notes
-
 ## Todo
 
 See the planned features and other work items in `TODO.md`.
-
-## Releasing Publishing
-
-See [publish-on-central](https://github.com/DanySK/publish-on-central) for docs on how it works.
-
-1. Make sure the javadocs are up to date and mostly complete `gradle javadoc`
-2. Test that everything builds ok `gradle build --warning-mode all`
-3. Run the tests `gradle test`
-4. Bump the version in `build.gradle` and commit it
-5. Make a tag `git tag vX.Y.Z`
-6. Upload the tag `git push --tags`
-7. Release the build `gradle releaseJavaMavenOnMavenCentralNexus`
-
-## Other
-
-Commands for combinding all files in a directory and subdiretories:
-```bash
-NAME=the_shader_name; cat ./$NAME/**/*.{vsh,fsh,gsh,glsl} > $NAME.glsl
-```
-
-Some cleanup maybe required. (this is sometimes useful when working with external test files)
-
-Setup signing: (secrets are kept in `~/.gradle/gradle.properties`)
-
-```
-gpg --keyring secring.gpg --export-secret-keys > ~/.gnupg/secring.gpg
-gpg --list-keys --keyid-format short
-```
