@@ -5,7 +5,7 @@ import io.github.douira.glsl_transformer.ast.traversal.*;
 
 public abstract class Statement extends InnerASTNode {
   public enum StatementType {
-    COMPOUND, // TODO
+    COMPOUND,
     DECLARATION, // TODO
     EXPRESSION, // TODO
     EMPTY,
