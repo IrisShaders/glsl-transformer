@@ -1,8 +1,9 @@
 package io.github.douira.glsl_transformer.ast.node;
 
 import java.util.List;
+import java.util.stream.Stream;
 
-import io.github.douira.glsl_transformer.ast.*;
+import io.github.douira.glsl_transformer.ast.ListASTNode;
 import io.github.douira.glsl_transformer.ast.node.external_declaration.ExternalDeclaration;
 import io.github.douira.glsl_transformer.ast.traversal.*;
 
@@ -17,6 +18,15 @@ public class TranslationUnit extends ListASTNode<ExternalDeclaration> {
 
   public TranslationUnit(List<ExternalDeclaration> externalDeclarations) {
     super(externalDeclarations);
+  }
+
+  public TranslationUnit(VersionStatement versionStatement, Stream<ExternalDeclaration> children) {
+    super(children);
+    this.versionStatement = versionStatement;
+  }
+
+  public TranslationUnit(Stream<ExternalDeclaration> children) {
+    super(children);
   }
 
   @Override
