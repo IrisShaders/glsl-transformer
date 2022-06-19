@@ -1,6 +1,7 @@
 package io.github.douira.glsl_transformer.ast.node;
 
 import io.github.douira.glsl_transformer.ast.*;
+import io.github.douira.glsl_transformer.ast.traversal.*;
 
 public abstract class ExternalDeclaration extends InnerASTNode {
   @Override

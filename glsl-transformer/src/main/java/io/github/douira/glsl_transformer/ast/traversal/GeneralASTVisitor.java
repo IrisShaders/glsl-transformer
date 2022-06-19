@@ -1,4 +1,6 @@
-package io.github.douira.glsl_transformer.ast;
+package io.github.douira.glsl_transformer.ast.traversal;
+
+import io.github.douira.glsl_transformer.ast.ASTNode;
 
 public interface GeneralASTVisitor<R> {
   R startVisit(ASTNode node);

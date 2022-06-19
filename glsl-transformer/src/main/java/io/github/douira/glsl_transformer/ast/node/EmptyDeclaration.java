@@ -1,6 +1,6 @@
 package io.github.douira.glsl_transformer.ast.node;
 
-import io.github.douira.glsl_transformer.ast.ASTVisitor;
+import io.github.douira.glsl_transformer.ast.traversal.ASTVisitor;
 
 public class EmptyDeclaration extends ExternalDeclaration {
   @Override

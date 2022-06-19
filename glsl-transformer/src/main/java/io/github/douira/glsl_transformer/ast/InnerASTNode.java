@@ -1,5 +1,7 @@
 package io.github.douira.glsl_transformer.ast;
 
+import io.github.douira.glsl_transformer.ast.traversal.ASTListener;
+
 public abstract class InnerASTNode extends ASTNode {
   public abstract void enterNode(ASTListener listener);
 
