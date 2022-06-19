@@ -1,6 +1,6 @@
 package io.github.douira.glsl_transformer.ast.print;
 
-import io.github.douira.glsl_transformer.ast.*;
+import io.github.douira.glsl_transformer.ast.ASTNode;
 import io.github.douira.glsl_transformer.ast.print.token.*;
 import io.github.douira.glsl_transformer.ast.traversal.ASTListenerVisitor;
 import io.github.douira.glsl_transformer.print.filter.TokenChannel;
@@ -23,42 +23,82 @@ public abstract class ASTPrinterUtil extends ASTListenerVisitor<Void> {
     return printAST(new SimpleASTPrinter(), node);
   }
 
-  protected void emitTokens(PrintToken... token) {
-    for (PrintToken t : token) {
+  protected void emitTokens(PrintToken... tokens) {
+    for (PrintToken t : tokens) {
       emitToken(t);
     }
   }
 
-  protected void emitLiteral(ASTNode node, String literal) {
-    emitToken(new LiteralToken(node, literal));
+  protected void emitLiteral(ASTNode node, TokenRole role, String literal) {
+    emitToken(new LiteralToken(node, role, literal));
   }
 
-  protected void emitLiterals(ASTNode node, String... literal) {
-    for (String l : literal) {
-      emitLiteral(node, l);
+  protected void emitLiteral(ASTNode node, String literal) {
+    emitLiteral(node, TokenRole.DEFAULT, literal);
+  }
+
+  protected void emitLiterals(ASTNode node, TokenRole role, String... literals) {
+    for (String l : literals) {
+      emitLiteral(node, role, l);
     }
+  }
+
+  protected void emitLiterals(ASTNode node, String... literals) {
+    emitLiterals(node, TokenRole.DEFAULT, literals);
+  }
+
+  protected void emitType(ASTNode node, TokenRole role, int type) {
+    emitToken(new ParserToken(node, role, type));
   }
 
   protected void emitType(ASTNode node, int type) {
-    emitToken(new ParserToken(node, type));
+    emitType(node, TokenRole.DEFAULT, type);
   }
 
-  protected void emitType(ASTNode node, int... type) {
-    for (int t : type) {
-      emitType(node, t);
+  protected void emitType(ASTNode node, TokenRole role, int... types) {
+    for (int t : types) {
+      emitType(node, role, t);
     }
   }
 
-  protected void emitWhitespace(ASTNode node, String whitespace) {
-    emitToken(new LiteralToken(node, TokenChannel.WHITESPACE, whitespace));
+  protected void emitType(ASTNode node, int... types) {
+    emitType(node, TokenRole.DEFAULT, types);
   }
 
-  protected void emitSpace(ASTNode node) {
-    emitWhitespace(node, " ");
+  protected void emitWhitespace(ASTNode node, TokenRole role, String whitespace) {
+    emitToken(new LiteralToken(node, TokenChannel.WHITESPACE, role, whitespace));
   }
 
-  protected void emitNewline(ASTNode node) {
-    emitWhitespace(node, "\n");
+  protected void emitExactWhitespace(ASTNode node, String whitespace) {
+    emitWhitespace(node, TokenRole.EXACT, whitespace);
+  }
+
+  private void emitSpace(ASTNode node, TokenRole role) {
+    emitWhitespace(node, role, " ");
+  }
+
+  protected void emitExactSpace(ASTNode node) {
+    emitSpace(node, TokenRole.EXACT);
+  }
+
+  protected void emitExtendableSpace(ASTNode node) {
+    emitSpace(node, TokenRole.EXTENDABLE_SPACE);
+  }
+
+  protected void emitBreakableSpace(ASTNode node) {
+    emitSpace(node, TokenRole.BREAKABLE_SPACE);
+  }
+
+  private void emitNewline(ASTNode node, TokenRole role) {
+    emitWhitespace(node, role, "\n");
+  }
+
+  protected void emitExactNewline(ASTNode node) {
+    emitNewline(node, TokenRole.EXACT);
+  }
+
+  protected void emitCommonNewline(ASTNode node) {
+    emitNewline(node, TokenRole.COMMON_FORMATTING);
   }
 
   @Override

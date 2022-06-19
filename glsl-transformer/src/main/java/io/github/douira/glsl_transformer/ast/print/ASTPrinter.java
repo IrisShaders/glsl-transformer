@@ -16,30 +16,30 @@ public abstract class ASTPrinter extends ASTPrinterUtil {
   @Override
   public Void visitVersionStatement(VersionStatement node) {
     emitType(node, GLSLLexer.NR, GLSLLexer.VERSION);
-    emitSpace(node);
+    emitExtendableSpace(node);
     emitLiteral(node, Integer.toString(node.version));
     if (node.profile != null) {
-      emitSpace(node);
+      emitExtendableSpace(node);
       emitType(node, node.profile.tokenType);
     }
-    emitNewline(node);
+    emitExactNewline(node);
     return null;
   }
 
   @Override
   public Void visitEmptyDeclaration(EmptyDeclaration node) {
     emitType(node, GLSLLexer.SEMICOLON);
-    emitNewline(node); // optional
+    emitCommonNewline(node);
     return null;
   }
 
   @Override
   public Void visitPragmaStatement(PragmaStatement node) {
     emitType(node, GLSLLexer.NR, GLSLLexer.PRAGMA);
-    emitSpace(node);
+    emitExtendableSpace(node);
     if (node.stdGL) {
       emitType(node, GLSLLexer.NR_STDGL);
-      emitSpace(node);
+      emitExtendableSpace(node);
     }
     if (node.type == PragmaType.CUSTOM) {
       emitLiteral(node, node.customName);
@@ -50,47 +50,47 @@ public abstract class ASTPrinter extends ASTPrinterUtil {
           node.state.tokenType,
           GLSLLexer.NR_RPAREN);
     }
-    emitNewline(node);
+    emitExactNewline(node);
     return null;
   }
 
   @Override
   public Void visitExtensionStatement(ExtensionStatement node) {
     emitType(node, GLSLLexer.NR, GLSLLexer.EXTENSION);
-    emitSpace(node);
+    emitExtendableSpace(node);
     emitLiteral(node, node.name);
     emitType(node, GLSLLexer.NR_COLON);
-    emitSpace(node);
+    emitExtendableSpace(node);
     emitType(node, node.behavior.tokenType);
-    emitNewline(node);
+    emitExactNewline(node);
     return null;
   }
 
   @Override
   public void exitLayoutDefaults(LayoutDefaults node) {
     emitType(node, node.mode.tokenType);
-    emitSpace(node);
+    emitBreakableSpace(node);
     emitType(node, GLSLLexer.SEMICOLON);
-    emitNewline(node); // optional
+    emitCommonNewline(node);
   }
 
   @Override
   public Void visitEmptyStatement(EmptyStatement node) {
     emitType(node, GLSLLexer.SEMICOLON);
-    emitNewline(node); // optional
+    emitCommonNewline(node);
     return null;
   }
 
   @Override
   public void enterCompoundStatement(CompoundStatement node) {
     emitType(node, GLSLLexer.LBRACE);
-    emitNewline(node); // optional
+    emitCommonNewline(node);
   }
 
   @Override
   public void exitCompoundStatement(CompoundStatement node) {
     emitType(node, GLSLLexer.RBRACE);
-    emitNewline(node); // optional
+    emitCommonNewline(node);
   }
 
   @Override
