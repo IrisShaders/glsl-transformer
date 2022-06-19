@@ -77,6 +77,11 @@ public class PragmaStatement extends ExternalDeclaration {
   }
 
   @Override
+  public ExternalDeclarationType getExternalDeclarationType() {
+    return ExternalDeclarationType.PRAGMA_STATEMENT;
+  }
+
+  @Override
   public <R> R accept(ASTVisitor<R> visitor) {
     return visitor.visitPragmaStatement(this);
   }

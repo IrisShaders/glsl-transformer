@@ -7,7 +7,7 @@ import io.github.douira.glsl_transformer.GLSLParser.LayoutDefaultsContext;
 import io.github.douira.glsl_transformer.ast.*;
 import io.github.douira.glsl_transformer.ast.traversal.*;
 
-public class LayoutDefaults extends InnerASTNode {
+public class LayoutDefaults extends ExternalDeclaration {
   public InnerASTNode qualifier; // TODO: LayoutQualifier
   public LayoutMode mode;
 
@@ -40,6 +40,11 @@ public class LayoutDefaults extends InnerASTNode {
 
   public static LayoutDefaults from(InnerASTNode qualifier, LayoutDefaultsContext ctx) {
     return new LayoutDefaults(qualifier, LayoutMode.fromToken(ctx.layoutMode));
+  }
+
+  @Override
+  public ExternalDeclarationType getExternalDeclarationType() {
+    return ExternalDeclarationType.LAYOUT_DEFAULTS;
   }
 
   @Override
