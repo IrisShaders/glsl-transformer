@@ -42,6 +42,12 @@ public interface ASTListener extends GeneralASTListener {
   default void exitBinaryExpression(BinaryExpression node) {
   }
 
+  default void enterTernaryExpression(TernaryExpression node) {
+  }
+
+  default void exitTernaryExpression(TernaryExpression node) {
+  }
+
   default void enterStatement(Statement node) {
   }
 

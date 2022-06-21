@@ -49,6 +49,14 @@ public interface ASTVisitor<R> extends GeneralASTVisitor<R> {
     return superNodeTypeResult();
   }
 
+  default R visitTernaryExpression(TernaryExpression node) {
+    return superNodeTypeResult();
+  }
+
+  default R visitTerminalExpression(TerminalExpression node) {
+    return superNodeTypeResult();
+  }
+
   default R visitStatement(Statement node) {
     return superNodeTypeResult();
   }
