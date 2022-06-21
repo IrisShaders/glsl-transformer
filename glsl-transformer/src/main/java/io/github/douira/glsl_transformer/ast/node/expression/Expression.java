@@ -7,18 +7,18 @@ public abstract class Expression extends InnerASTNode {
   public enum ExpressionType {
     REFERENCE, // TODO identifier
     LITERAL, // TODO literal
-    GROUPING, // TODO unary
+    GROUPING, // unary
     ARRAY_ACCESS, // TODO binary
-    METHOD_CALL, // TODO unary + method + parameters
-    FUNCTION_CALL, // TODO unary + parameters
-    MEMBER_ACCESS, // TODO unary + identifier
-    INCREMENT_POSTFIX, // TODO unary
-    DECREMENT_POSTFIX, // TODO unary
-    INCREMENT_PREFIX, // TODO unary
-    DECREMENT_PREFIX, // TODO unary
-    NEGATION, // TODO unary
-    BOOLEAN_NOT, // TODO unary
-    BITWISE_NOT, // TODO unary
+    METHOD_CALL, // TODO (incomplete) unary + method + parameters
+    FUNCTION_CALL, // TODO (incomplete) unary + parameters
+    MEMBER_ACCESS, //  unary + identifier
+    INCREMENT_POSTFIX, //  unary
+    DECREMENT_POSTFIX, //  unary
+    INCREMENT_PREFIX, //  unary
+    DECREMENT_PREFIX, //  unary
+    NEGATION, //  unary
+    BOOLEAN_NOT, //  unary
+    BITWISE_NOT, //  unary
     MULTIPLICATION, // TODO binary
     DIVISION, // TODO binary
     MODULO, // TODO binary
@@ -38,7 +38,7 @@ public abstract class Expression extends InnerASTNode {
     BOOLEAN_AND, // TODO binary
     BOOLEAN_XOR, // TODO binary
     BOOLEAN_OR, // TODO binary
-    CONDITION,
+    CONDITION, // ternary
     ASSIGNMENT, // TODO binary
     MULTIPLICATION_ASSIGNMENT, // TODO binary
     DIVISION_ASSIGNMENT, // TODO binary
