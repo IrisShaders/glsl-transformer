@@ -5,61 +5,63 @@ import io.github.douira.glsl_transformer.ast.traversal.*;
 
 public abstract class Expression extends InnerASTNode {
   public enum ExpressionType {
-    REFERENCE, // TODO
-    LITERAL, // TODO
-    GROUPING, // TODO
-    ARRAY_ACCESS, // TODO
-    METHOD_CALL, // TODO
-    FUNCTION_CALL, // TODO
-    MEMBER_ACCESS, // TODO
-    POSTFIX, // TODO
-    INCREMENT_POSTFIX, // TODO
-    DECREMENT_POSTFIX, // TODO
-    INCREMENT_PREFIX, // TODO
-    DECREMENT_PREFIX, // TODO
-    NEGATION, // TODO
-    BOOLEAN_NOT, // TODO
-    BITWISE_NOT, // TODO
-    MULTIPLICATION, // TODO
-    DIVISION, // TODO
-    MODULO, // TODO
-    ADDITION, // TODO
-    SUBTRACTION, // TODO
-    SHIFT_LEFT, // TODO
-    SHIFT_RIGHT, // TODO
-    LESS_THAN, // TODO
-    GREATER_THAN, // TODO
-    LESS_THAN_EQUAL, // TODO
-    GREATER_THAN_EQUAL, // TODO
-    EQUAL, // TODO
-    NOT_EQUAL, // TODO
-    BITWISE_AND, // TODO
-    BITWISE_XOR, // TODO
-    BITWISE_OR, // TODO
-    BOOLEAN_AND, // TODO
-    BOOLEAN_XOR, // TODO
-    BOOLEAN_OR, // TODO
-    TERNARY, // TODO
-    ASSIGNMENT, // TODO
-    MULTIPLICATION_ASSIGNMENT, // TODO
-    DIVISION_ASSIGNMENT, // TODO
-    MODULO_ASSIGNMENT, // TODO
-    ADDITION_ASSIGNMENT, // TODO
-    SUBTRACTION_ASSIGNMENT, // TODO
-    LEFT_SHIFT_ASSIGNMENT, // TODO
-    RIGHT_SHIFT_ASSIGNMENT, // TODO
-    BITWISE_AND_ASSIGNMENT, // TODO
-    BITWISE_XOR_ASSIGNMENT, // TODO
-    BITWISE_OR_ASSIGNMENT, // TODO
-    SEQUENCE // TODO
+    REFERENCE, // TODO identifier
+    LITERAL, // TODO unary
+    GROUPING, // TODO unary
+    ARRAY_ACCESS, // TODO binary
+    METHOD_CALL, // TODO unary + method + parameters
+    FUNCTION_CALL, // TODO unary + parameters
+    MEMBER_ACCESS, // TODO unary + identifier
+    POSTFIX, // TODO unary
+    INCREMENT_POSTFIX, // TODO unary
+    DECREMENT_POSTFIX, // TODO unary
+    INCREMENT_PREFIX, // TODO unary
+    DECREMENT_PREFIX, // TODO unary
+    NEGATION, // TODO unary
+    BOOLEAN_NOT, // TODO unary
+    BITWISE_NOT, // TODO unary
+    MULTIPLICATION, // TODO binary
+    DIVISION, // TODO binary
+    MODULO, // TODO binary
+    ADDITION, // TODO binary
+    SUBTRACTION, // TODO binary
+    SHIFT_LEFT, // TODO binary
+    SHIFT_RIGHT, // TODO binary
+    LESS_THAN, // TODO binary
+    GREATER_THAN, // TODO binary
+    LESS_THAN_EQUAL, // TODO binary
+    GREATER_THAN_EQUAL, // TODO binary
+    EQUAL, // TODO binary
+    NOT_EQUAL, // TODO binary
+    BITWISE_AND, // TODO binary
+    BITWISE_XOR, // TODO binary
+    BITWISE_OR, // TODO binary
+    BOOLEAN_AND, // TODO binary
+    BOOLEAN_XOR, // TODO binary
+    BOOLEAN_OR, // TODO binary
+    TERNARY, // TODO ternary
+    ASSIGNMENT, // TODO binary
+    MULTIPLICATION_ASSIGNMENT, // TODO binary
+    DIVISION_ASSIGNMENT, // TODO binary
+    MODULO_ASSIGNMENT, // TODO binary
+    ADDITION_ASSIGNMENT, // TODO binary
+    SUBTRACTION_ASSIGNMENT, // TODO binary
+    LEFT_SHIFT_ASSIGNMENT, // TODO binary
+    RIGHT_SHIFT_ASSIGNMENT, // TODO binary
+    BITWISE_AND_ASSIGNMENT, // TODO binary
+    BITWISE_XOR_ASSIGNMENT, // TODO binary
+    BITWISE_OR_ASSIGNMENT, // TODO binary
+    SEQUENCE // TODO many-ary
   }
 
   public abstract ExpressionType getExpressionType();
 
   public enum OperandStructure {
+    NONE,
     UNARY,
     BINARY,
-    TERNARY
+    TERNARY,
+    MANY
   }
 
   public abstract OperandStructure getOperandStructure();
