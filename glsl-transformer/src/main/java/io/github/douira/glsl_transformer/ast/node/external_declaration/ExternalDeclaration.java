@@ -15,9 +15,13 @@ public abstract class ExternalDeclaration extends InnerASTNode {
 
   public abstract ExternalDeclarationType getExternalDeclarationType();
 
+  public abstract <R> R externalDeclarationAccept(ASTVisitor<R> visitor);
+
   @Override
   public <R> R accept(ASTVisitor<R> visitor) {
-    return visitor.visitExternalDeclaration(this);
+    return visitor.aggregateResult(
+        visitor.visitExternalDeclaration(this),
+        externalDeclarationAccept(visitor));
   }
 
   @Override
