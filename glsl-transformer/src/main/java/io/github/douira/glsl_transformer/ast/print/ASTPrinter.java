@@ -2,6 +2,7 @@ package io.github.douira.glsl_transformer.ast.print;
 
 import io.github.douira.glsl_transformer.GLSLLexer;
 import io.github.douira.glsl_transformer.ast.node.*;
+import io.github.douira.glsl_transformer.ast.node.expression.ConditionExpression;
 import io.github.douira.glsl_transformer.ast.node.external_declaration.*;
 import io.github.douira.glsl_transformer.ast.node.external_declaration.PragmaStatement.PragmaType;
 import io.github.douira.glsl_transformer.ast.node.statement.*;
@@ -74,6 +75,20 @@ public abstract class ASTPrinter extends ASTPrinterUtil {
     emitBreakableSpace(node);
     emitType(node, GLSLLexer.SEMICOLON);
     emitCommonNewline(node);
+  }
+
+  @Override
+  public Void visitConditionExpression(ConditionExpression node) {
+    visit(node.getCondition());
+    emitBreakableSpace(node);
+    emitType(node, GLSLLexer.QUERY_OP);
+    emitExtendableSpace(node);
+    visit(node.getTrueExpression());
+    emitBreakableSpace(node);
+    emitType(node, GLSLLexer.COLON);
+    emitExtendableSpace(node);
+    visit(node.getFalseExpression());
+    return null;
   }
 
   @Override

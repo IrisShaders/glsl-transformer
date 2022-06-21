@@ -39,7 +39,7 @@ public abstract class Expression extends InnerASTNode {
     BOOLEAN_AND, // TODO binary
     BOOLEAN_XOR, // TODO binary
     BOOLEAN_OR, // TODO binary
-    TERNARY, // TODO ternary
+    CONDITION,
     ASSIGNMENT, // TODO binary
     MULTIPLICATION_ASSIGNMENT, // TODO binary
     DIVISION_ASSIGNMENT, // TODO binary
