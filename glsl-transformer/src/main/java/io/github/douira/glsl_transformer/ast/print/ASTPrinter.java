@@ -6,7 +6,7 @@ import io.github.douira.glsl_transformer.ast.node.expression.*;
 import io.github.douira.glsl_transformer.ast.node.external_declaration.*;
 import io.github.douira.glsl_transformer.ast.node.external_declaration.PragmaStatement.PragmaType;
 import io.github.douira.glsl_transformer.ast.node.statement.*;
-import io.github.douira.glsl_transformer.ast.print.token.EOFToken;
+import io.github.douira.glsl_transformer.ast.print.token.*;
 
 public abstract class ASTPrinter extends ASTPrinterUtil {
   @Override
@@ -133,6 +133,14 @@ public abstract class ASTPrinter extends ASTPrinterUtil {
   public void exitMemberAccessExpression(MemberAccessExpression node) {
     emitType(node, GLSLLexer.DOT);
     emitLiteral(node, node.memberName);
+  }
+
+  @Override
+  public Void visitMethodCallExpression(MethodCallExpression node) {
+    visit(node.operand);
+    emitType(node, GLSLLexer.DOT);
+    visit(node.methodCall);
+    return null;
   }
 
   @Override
