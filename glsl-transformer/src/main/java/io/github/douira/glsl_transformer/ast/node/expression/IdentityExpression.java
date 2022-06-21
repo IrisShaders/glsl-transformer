@@ -2,8 +2,8 @@ package io.github.douira.glsl_transformer.ast.node.expression;
 
 import io.github.douira.glsl_transformer.ast.traversal.*;
 
-public class IncrementPostfixExpression extends UnaryExpression {
-  public IncrementPostfixExpression(Expression expression) {
+public class IdentityExpression extends UnaryExpression {
+  public IdentityExpression(Expression expression) {
     super(expression);
   }
 
@@ -14,16 +14,16 @@ public class IncrementPostfixExpression extends UnaryExpression {
 
   @Override
   public <R> R expressionAccept(ASTVisitor<R> visitor) {
-    return visitor.visitIncrementPostfixExpression(this);
+    return visitor.visitIdentityExpression(this);
   }
 
   @Override
   public void enterNode(ASTListener listener) {
-    listener.enterIncrementPostfixExpression(this);
+    listener.enterIdentityExpression(this);
   }
 
   @Override
   public void exitNode(ASTListener listener) {
-    listener.exitIncrementPostfixExpression(this);
+    listener.exitIdentityExpression(this);
   }
 }

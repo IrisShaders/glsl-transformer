@@ -10,7 +10,10 @@ public abstract class TerminalExpression extends Expression {
 
   @Override
   public <R> R accept(ASTVisitor<R> visitor) {
-    return visitor.visitTerminalExpression(this);
+    return visitor.aggregateResult(
+        super.accept(visitor),
+        visitor.visitTerminalExpression(this),
+        expressionAccept(visitor));
   }
 
   @Override

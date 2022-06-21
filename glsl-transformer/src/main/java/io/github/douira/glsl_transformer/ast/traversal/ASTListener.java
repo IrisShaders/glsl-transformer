@@ -36,6 +36,78 @@ public interface ASTListener extends GeneralASTListener {
   default void exitUnaryExpression(UnaryExpression node) {
   }
 
+  default void enterBitwiseNotExpression(BitwiseNotExpression node) {
+  }
+
+  default void exitBitwiseNotExpression(BitwiseNotExpression node) {
+  }
+
+  default void enterBooleanNotExpression(BooleanNotExpression node) {
+  }
+
+  default void exitBooleanNotExpression(BooleanNotExpression node) {
+  }
+
+  default void enterDecrementPostfixExpression(DecrementPostfixExpression node) {
+  }
+
+  default void exitDecrementPostfixExpression(DecrementPostfixExpression node) {
+  }
+
+  default void enterDecrementPrefixExpression(DecrementPrefixExpression node) {
+  }
+
+  default void exitDecrementPrefixExpression(DecrementPrefixExpression node) {
+  }
+
+  default void enterFunctionCallExpression(FunctionCallExpression node) {
+  }
+
+  default void exitFunctionCallExpression(FunctionCallExpression node) {
+  }
+
+  default void enterGroupingExpression(GroupingExpression node) {
+  }
+
+  default void exitGroupingExpression(GroupingExpression node) {
+  }
+
+  default void enterIncrementPostfixExpression(IncrementPostfixExpression node) {
+  }
+
+  default void exitIncrementPostfixExpression(IncrementPostfixExpression node) {
+  }
+
+  default void enterIncrementPrefixExpression(IncrementPrefixExpression node) {
+  }
+
+  default void exitIncrementPrefixExpression(IncrementPrefixExpression node) {
+  }
+
+  default void enterMemberAccessExpression(MemberAccessExpression node) {
+  }
+
+  default void exitMemberAccessExpression(MemberAccessExpression node) {
+  }
+
+  default void enterMethodCallExpression(MethodCallExpression node) {
+  }
+
+  default void exitMethodCallExpression(MethodCallExpression node) {
+  }
+
+  default void enterNegationExpression(NegationExpression node) {
+  }
+
+  default void exitNegationExpression(NegationExpression node) {
+  }
+
+  default void enterIdentityExpression(IdentityExpression node) {
+  }
+
+  default void exitIdentityExpression(IdentityExpression node) {
+  }
+
   default void enterBinaryExpression(BinaryExpression node) {
   }
 

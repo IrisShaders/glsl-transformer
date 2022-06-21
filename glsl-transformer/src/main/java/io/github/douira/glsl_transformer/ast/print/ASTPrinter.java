@@ -2,7 +2,7 @@ package io.github.douira.glsl_transformer.ast.print;
 
 import io.github.douira.glsl_transformer.GLSLLexer;
 import io.github.douira.glsl_transformer.ast.node.*;
-import io.github.douira.glsl_transformer.ast.node.expression.ConditionExpression;
+import io.github.douira.glsl_transformer.ast.node.expression.*;
 import io.github.douira.glsl_transformer.ast.node.external_declaration.*;
 import io.github.douira.glsl_transformer.ast.node.external_declaration.PragmaStatement.PragmaType;
 import io.github.douira.glsl_transformer.ast.node.statement.*;
@@ -75,6 +75,64 @@ public abstract class ASTPrinter extends ASTPrinterUtil {
     emitBreakableSpace(node);
     emitType(node, GLSLLexer.SEMICOLON);
     emitCommonNewline(node);
+  }
+
+  @Override
+  public void enterBitwiseNotExpression(BitwiseNotExpression node) {
+    emitType(node, GLSLLexer.BNEG_OP);
+  }
+
+  @Override
+  public void enterBooleanNotExpression(BooleanNotExpression node) {
+    emitType(node, GLSLLexer.NOT_OP);
+  }
+
+  @Override
+  public void enterDecrementPrefixExpression(DecrementPrefixExpression node) {
+    emitType(node, GLSLLexer.MINUS_OP, GLSLLexer.MINUS_OP);
+  }
+
+  @Override
+  public void enterGroupingExpression(GroupingExpression node) {
+    emitType(node, GLSLLexer.LPAREN);
+  }
+
+  @Override
+  public void exitGroupingExpression(GroupingExpression node) {
+    emitType(node, GLSLLexer.RPAREN);
+  }
+
+  @Override
+  public void enterIncrementPrefixExpression(IncrementPrefixExpression node) {
+    emitType(node, GLSLLexer.PLUS_OP, GLSLLexer.PLUS_OP);
+  }
+
+  @Override
+  public void enterNegationExpression(NegationExpression node) {
+    emitType(node, GLSLLexer.MINUS_OP);
+  }
+
+  @Override
+  public void enterIdentityExpression(IdentityExpression node) {
+    emitType(node, GLSLLexer.PLUS_OP);
+  }
+
+  @Override
+  public void exitDecrementPostfixExpression(DecrementPostfixExpression node) {
+    emitType(node, GLSLLexer.MINUS_OP, GLSLLexer.MINUS_OP);
+  }
+
+  @Override
+  public void exitIncrementPostfixExpression(IncrementPostfixExpression node) {
+    emitType(node, GLSLLexer.PLUS_OP, GLSLLexer.PLUS_OP);
+  }
+
+  // FunctionCall expression is just a function call (no extra visit needed)
+
+  @Override
+  public void exitMemberAccessExpression(MemberAccessExpression node) {
+    emitType(node, GLSLLexer.DOT);
+    emitLiteral(node, node.memberName);
   }
 
   @Override
