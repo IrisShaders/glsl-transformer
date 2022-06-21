@@ -26,7 +26,9 @@ public class ConditionExpression extends TernaryExpression {
 
   @Override
   public <R> R accept(ASTVisitor<R> visitor) {
-    return visitor.visitConditionExpression(this);
+    return visitor.aggregateResult(
+        super.accept(visitor),
+        visitor.visitConditionExpression(this));
   }
 
   @Override

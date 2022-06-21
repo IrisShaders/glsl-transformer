@@ -82,9 +82,7 @@ public class PragmaStatement extends ExternalDeclaration {
   }
 
   @Override
-  public <R> R accept(ASTVisitor<R> visitor) {
-    return visitor.aggregateResult(
-        super.accept(visitor),
-        visitor.visitPragmaStatement(this));
+  public <R> R externalDeclarationAccept(ASTVisitor<R> visitor) {
+    return visitor.visitPragmaStatement(this);
   }
 }

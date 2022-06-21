@@ -6,7 +6,7 @@ import io.github.douira.glsl_transformer.ast.traversal.*;
 public abstract class Expression extends InnerASTNode {
   public enum ExpressionType {
     REFERENCE, // TODO identifier
-    LITERAL, // TODO unary
+    LITERAL, // TODO literal
     GROUPING, // TODO unary
     ARRAY_ACCESS, // TODO binary
     METHOD_CALL, // TODO unary + method + parameters

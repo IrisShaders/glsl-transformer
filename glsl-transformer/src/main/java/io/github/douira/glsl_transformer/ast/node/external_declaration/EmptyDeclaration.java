@@ -9,9 +9,7 @@ public class EmptyDeclaration extends ExternalDeclaration {
   }
 
   @Override
-  public <R> R accept(ASTVisitor<R> visitor) {
-    return visitor.aggregateResult(
-        super.accept(visitor),
-        visitor.visitEmptyDeclaration(this));
+  public <R> R externalDeclarationAccept(ASTVisitor<R> visitor) {
+    return visitor.visitEmptyDeclaration(this);
   }
 }
