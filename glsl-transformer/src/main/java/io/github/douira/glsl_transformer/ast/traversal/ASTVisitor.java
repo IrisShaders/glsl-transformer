@@ -57,6 +57,13 @@ public interface ASTVisitor<R> extends GeneralASTVisitor<R> {
     return superNodeTypeResult();
   }
 
+  default R visitConditionExpression(ConditionExpression node) {
+    return visitThreeChildren(
+        node.getCondition(),
+        node.getTrueExpression(),
+        node.getFalseExpression());
+  }
+
   default R visitStatement(Statement node) {
     return superNodeTypeResult();
   }

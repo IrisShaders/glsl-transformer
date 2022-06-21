@@ -7,6 +7,11 @@ public abstract class TernaryExpression extends Expression {
   public Expression second;
   public Expression third;
 
+  public TernaryExpression(Expression first, Expression second, Expression third) {
+    this.first = first;
+    this.second = second;
+    this.third = third;
+  }
 
   @Override
   public OperandStructure getOperandStructure() {

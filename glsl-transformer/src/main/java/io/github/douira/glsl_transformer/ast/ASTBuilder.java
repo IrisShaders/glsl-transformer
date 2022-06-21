@@ -5,6 +5,7 @@ import org.antlr.v4.runtime.tree.*;
 import io.github.douira.glsl_transformer.*;
 import io.github.douira.glsl_transformer.GLSLParser.*;
 import io.github.douira.glsl_transformer.ast.node.*;
+import io.github.douira.glsl_transformer.ast.node.expression.*;
 import io.github.douira.glsl_transformer.ast.node.external_declaration.*;
 import io.github.douira.glsl_transformer.ast.node.statement.*;
 
@@ -46,6 +47,14 @@ public class ASTBuilder extends GLSLParserBaseVisitor<ASTNode> {
   @Override
   public LayoutDefaults visitLayoutDefaults(LayoutDefaultsContext ctx) {
     return LayoutDefaults.from(visitLayoutQualifier(ctx.layoutQualifier()), ctx);
+  }
+
+  @Override
+  public ConditionExpression visitConditionalExpression(ConditionalExpressionContext ctx) {
+    return new ConditionExpression(
+        (Expression) visit(ctx.condition),
+        (Expression) visit(ctx.trueAlternative),
+        (Expression) visit(ctx.falseAlternative));
   }
 
   @Override

@@ -48,6 +48,12 @@ public interface ASTListener extends GeneralASTListener {
   default void exitTernaryExpression(TernaryExpression node) {
   }
 
+  default void enterConditionExpression(ConditionExpression node) {
+  }
+
+  default void exitConditionExpression(ConditionExpression node) {
+  }
+
   default void enterStatement(Statement node) {
   }
 
