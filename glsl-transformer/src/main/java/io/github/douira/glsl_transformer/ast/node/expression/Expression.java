@@ -11,14 +11,14 @@ public abstract class Expression extends InnerASTNode {
     ARRAY_ACCESS, // TODO binary
     METHOD_CALL, // TODO (incomplete) unary + method + parameters
     FUNCTION_CALL, // TODO (incomplete) unary + parameters
-    MEMBER_ACCESS, //  unary + identifier
-    INCREMENT_POSTFIX, //  unary
-    DECREMENT_POSTFIX, //  unary
-    INCREMENT_PREFIX, //  unary
-    DECREMENT_PREFIX, //  unary
-    NEGATION, //  unary
-    BOOLEAN_NOT, //  unary
-    BITWISE_NOT, //  unary
+    MEMBER_ACCESS, // unary + identifier
+    INCREMENT_POSTFIX, // unary
+    DECREMENT_POSTFIX, // unary
+    INCREMENT_PREFIX, // unary
+    DECREMENT_PREFIX, // unary
+    NEGATION, // unary
+    BOOLEAN_NOT, // unary
+    BITWISE_NOT, // unary
     MULTIPLICATION, // TODO binary
     DIVISION, // TODO binary
     MODULO, // TODO binary
