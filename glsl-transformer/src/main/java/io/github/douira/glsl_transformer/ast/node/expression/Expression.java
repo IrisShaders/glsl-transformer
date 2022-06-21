@@ -12,7 +12,6 @@ public abstract class Expression extends InnerASTNode {
     METHOD_CALL, // TODO unary + method + parameters
     FUNCTION_CALL, // TODO unary + parameters
     MEMBER_ACCESS, // TODO unary + identifier
-    POSTFIX, // TODO unary
     INCREMENT_POSTFIX, // TODO unary
     DECREMENT_POSTFIX, // TODO unary
     INCREMENT_PREFIX, // TODO unary
@@ -65,6 +64,8 @@ public abstract class Expression extends InnerASTNode {
   }
 
   public abstract OperandStructure getOperandStructure();
+
+  public abstract <R> R expressionAccept(ASTVisitor<R> visitor);
 
   @Override
   public <R> R accept(ASTVisitor<R> visitor) {

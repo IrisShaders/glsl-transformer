@@ -20,7 +20,10 @@ public abstract class TernaryExpression extends Expression {
 
   @Override
   public <R> R accept(ASTVisitor<R> visitor) {
-    return visitor.visitTernaryExpression(this);
+    return visitor.aggregateResult(
+        super.accept(visitor),
+        visitor.visitTernaryExpression(this),
+        expressionAccept(visitor));
   }
 
   @Override

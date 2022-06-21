@@ -20,7 +20,10 @@ public abstract class BinaryExpression extends Expression {
 
   @Override
   public <R> R accept(ASTVisitor<R> visitor) {
-    return visitor.visitBinaryExpression(this);
+    return visitor.aggregateResult(
+        super.accept(visitor),
+        visitor.visitBinaryExpression(this),
+        expressionAccept(visitor));
   }
 
   @Override

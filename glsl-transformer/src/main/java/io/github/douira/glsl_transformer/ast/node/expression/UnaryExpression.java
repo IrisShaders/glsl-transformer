@@ -17,7 +17,10 @@ public abstract class UnaryExpression extends Expression {
 
   @Override
   public <R> R accept(ASTVisitor<R> visitor) {
-    return visitor.visitUnaryExpression(this);
+    return visitor.aggregateResult(
+        super.accept(visitor),
+        visitor.visitUnaryExpression(this),
+        expressionAccept(visitor));
   }
 
   @Override

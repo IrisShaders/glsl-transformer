@@ -1,7 +1,6 @@
 package io.github.douira.glsl_transformer.ast.traversal;
 
 import io.github.douira.glsl_transformer.ast.*;
-import io.github.douira.glsl_transformer.ast.node.expression.Expression;
 
 public interface GeneralASTVisitor<R> {
   default R startVisit(ASTNode node) {
@@ -29,14 +28,14 @@ public interface GeneralASTVisitor<R> {
     return visitChildren(initialResult(), node);
   };
 
-  default R visitTwoChildren(Expression left, Expression right) {
+  default R visitTwoChildren(ASTNode left, ASTNode right) {
     var result = initialResult();
     result = visitSafe(result, left);
     result = visitSafe(result, right);
     return result;
   }
 
-  default R visitThreeChildren(Expression first, Expression second, Expression third) {
+  default R visitThreeChildren(ASTNode first, ASTNode second, ASTNode third) {
     var result = initialResult();
     result = visitSafe(result, first);
     result = visitSafe(result, second);
@@ -51,4 +50,8 @@ public interface GeneralASTVisitor<R> {
   R defaultResult();
 
   R aggregateResult(R aggregate, R nextResult);
+
+  default R aggregateResult(R aggregate, R firstResult, R secondResult) {
+    return aggregateResult(aggregateResult(aggregate, firstResult), secondResult);
+  }
 }

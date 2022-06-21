@@ -45,6 +45,54 @@ public interface ASTVisitor<R> extends GeneralASTVisitor<R> {
     return superNodeTypeResult();
   }
 
+  default R visitBitwiseNotExpression(BitwiseNotExpression node) {
+    return visit(node.operand);
+  }
+
+  default R visitBooleanNotExpression(BooleanNotExpression node) {
+    return visit(node.operand);
+  }
+
+  default R visitDecrementPostfixExpression(DecrementPostfixExpression node) {
+    return visit(node.operand);
+  }
+
+  default R visitDecrementPrefixExpression(DecrementPrefixExpression node) {
+    return visit(node.operand);
+  }
+
+  default R visitFunctionCallExpression(FunctionCallExpression node) {
+    return visit(node.functionCall);
+  }
+
+  default R visitGroupingExpression(GroupingExpression node) {
+    return visit(node.operand);
+  }
+
+  default R visitIncrementPostfixExpression(IncrementPostfixExpression node) {
+    return visit(node.operand);
+  }
+
+  default R visitIncrementPrefixExpression(IncrementPrefixExpression node) {
+    return visit(node.operand);
+  }
+
+  default R visitMemberAccessExpression(MemberAccessExpression node) {
+    return visit(node.operand);
+  }
+
+  default R visitMethodCallExpression(MethodCallExpression node) {
+    return visit(node.operand);
+  }
+
+  default R visitNegationExpression(NegationExpression node) {
+    return visit(node.operand);
+  }
+
+  default R visitIdentityExpression(IdentityExpression node) {
+    return visit(node.operand);
+  }
+
   default R visitBinaryExpression(BinaryExpression node) {
     return superNodeTypeResult();
   }
@@ -53,15 +101,15 @@ public interface ASTVisitor<R> extends GeneralASTVisitor<R> {
     return superNodeTypeResult();
   }
 
-  default R visitTerminalExpression(TerminalExpression node) {
-    return superNodeTypeResult();
-  }
-
   default R visitConditionExpression(ConditionExpression node) {
     return visitThreeChildren(
         node.getCondition(),
         node.getTrueExpression(),
         node.getFalseExpression());
+  }
+
+  default R visitTerminalExpression(TerminalExpression node) {
+    return superNodeTypeResult();
   }
 
   default R visitStatement(Statement node) {

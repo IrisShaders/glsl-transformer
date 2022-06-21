@@ -58,9 +58,67 @@ public class ASTBuilder extends GLSLParserBaseVisitor<ASTNode> {
   }
 
   @Override
+  public ASTNode visitFunctionCallExpression(FunctionCallExpressionContext ctx) {
+    return new FunctionCallExpression(
+        (InnerASTNode) visit(ctx.functionCall())); // TODO: FunctionCall
+  }
+
+  @Override
+  public ASTNode visitGroupingExpression(GroupingExpressionContext ctx) {
+    return new GroupingExpression((Expression) visit(ctx.value));
+  }
+
+  @Override
+  public ASTNode visitMemberAccessExpression(MemberAccessExpressionContext ctx) {
+    return new MemberAccessExpression(
+        (Expression) visit(ctx.operand),
+        ctx.member.getText());
+  }
+
+  @Override
+  public ASTNode visitMethodCallExpression(MethodCallExpressionContext ctx) {
+    return new MethodCallExpression(
+        (Expression) visit(ctx.operand),
+        (InnerASTNode) visit(ctx.methodCall())); // TODO: MethodCall
+  }
+
+  @Override
+  public ASTNode visitPostfixExpression(PostfixExpressionContext ctx) {
+    var operand = (Expression) visit(ctx.operand);
+    switch (ctx.op.getType()) {
+      case GLSLParser.INC_OP:
+        return new IncrementPostfixExpression(operand);
+      case GLSLParser.DEC_OP:
+        return new DecrementPostfixExpression(operand);
+      default:
+        throw new IllegalArgumentException("Unknown postfix operator: " + ctx.op.getText());
+    }
+  }
+
+  @Override
+  public ASTNode visitPrefixExpression(PrefixExpressionContext ctx) {
+    var operand = (Expression) visit(ctx.operand);
+    switch (ctx.op.getType()) {
+      case GLSLLexer.INC_OP:
+        return new IncrementPrefixExpression(operand);
+      case GLSLLexer.DEC_OP:
+        return new DecrementPrefixExpression(operand);
+      case GLSLLexer.PLUS_OP:
+        return new IdentityExpression(operand);
+      case GLSLLexer.MINUS_OP:
+        return new NegationExpression(operand);
+      case GLSLLexer.NOT_OP:
+        return new BooleanNotExpression(operand);
+      case GLSLLexer.BNEG_OP:
+        return new BitwiseNotExpression(operand);
+      default:
+        throw new IllegalStateException("Unexpected prefix operator type" + ctx.op.getText());
+    }
+  }
+
+  @Override
   public InnerASTNode visitLayoutQualifier(LayoutQualifierContext ctx) {
-    // TODO: LayoutQualifier
-    return (InnerASTNode) super.visitLayoutQualifier(ctx);
+    return (InnerASTNode) super.visitLayoutQualifier(ctx); // TODO: LayoutQualifier
   }
 
   @Override
