@@ -51,7 +51,7 @@ public abstract class Expression extends InnerASTNode {
     BITWISE_AND_ASSIGNMENT, // TODO binary
     BITWISE_XOR_ASSIGNMENT, // TODO binary
     BITWISE_OR_ASSIGNMENT, // TODO binary
-    SEQUENCE // TODO many-ary
+    SEQUENCE // many-ary
   }
 
   public abstract ExpressionType getExpressionType();
