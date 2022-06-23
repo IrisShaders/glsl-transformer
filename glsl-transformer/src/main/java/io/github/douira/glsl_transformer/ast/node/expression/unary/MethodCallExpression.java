@@ -1,10 +1,11 @@
-package io.github.douira.glsl_transformer.ast.node.expression;
+package io.github.douira.glsl_transformer.ast.node.expression.unary;
 
 import io.github.douira.glsl_transformer.ast.InnerASTNode;
+import io.github.douira.glsl_transformer.ast.node.expression.Expression;
 import io.github.douira.glsl_transformer.ast.traversal.*;
 
 public class MethodCallExpression extends UnaryExpression {
-  public InnerASTNode methodCall; //TODO: MethodCall
+  public InnerASTNode methodCall; // TODO: MethodCall
 
   public MethodCallExpression(Expression operand, InnerASTNode methodCall) {
     super(operand);
@@ -13,7 +14,7 @@ public class MethodCallExpression extends UnaryExpression {
 
   @Override
   public ExpressionType getExpressionType() {
-    return ExpressionType.INCREMENT_POSTFIX;
+    return ExpressionType.METHOD_CALL;
   }
 
   @Override
