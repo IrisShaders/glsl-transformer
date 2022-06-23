@@ -3,10 +3,11 @@ package io.github.douira.glsl_transformer.ast.print;
 import io.github.douira.glsl_transformer.GLSLLexer;
 import io.github.douira.glsl_transformer.ast.node.*;
 import io.github.douira.glsl_transformer.ast.node.expression.*;
+import io.github.douira.glsl_transformer.ast.node.expression.unary.*;
 import io.github.douira.glsl_transformer.ast.node.external_declaration.*;
 import io.github.douira.glsl_transformer.ast.node.external_declaration.PragmaStatement.PragmaType;
 import io.github.douira.glsl_transformer.ast.node.statement.*;
-import io.github.douira.glsl_transformer.ast.print.token.*;
+import io.github.douira.glsl_transformer.ast.print.token.EOFToken;
 
 public abstract class ASTPrinter extends ASTPrinterUtil {
   @Override
@@ -154,6 +155,18 @@ public abstract class ASTPrinter extends ASTPrinterUtil {
     emitType(node, GLSLLexer.COLON);
     emitExtendableSpace(node);
     visit(node.getFalseExpression());
+    return null;
+  }
+
+  @Override
+  public Void visitSequenceExpression(SequenceExpression node) {
+    for (int i = 0, size = node.expressions.size(); i < size; i++) {
+      visit(node.expressions.get(i));
+      if (i < size - 1) {
+        emitType(node, GLSLLexer.COMMA);
+        emitBreakableSpace(node);
+      }
+    }
     return null;
   }
 

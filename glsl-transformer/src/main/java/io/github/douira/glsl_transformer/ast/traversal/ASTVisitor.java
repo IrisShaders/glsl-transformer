@@ -2,6 +2,8 @@ package io.github.douira.glsl_transformer.ast.traversal;
 
 import io.github.douira.glsl_transformer.ast.node.*;
 import io.github.douira.glsl_transformer.ast.node.expression.*;
+import io.github.douira.glsl_transformer.ast.node.expression.binary.BinaryExpression;
+import io.github.douira.glsl_transformer.ast.node.expression.unary.*;
 import io.github.douira.glsl_transformer.ast.node.external_declaration.*;
 import io.github.douira.glsl_transformer.ast.node.statement.*;
 
@@ -62,7 +64,7 @@ public interface ASTVisitor<R> extends GeneralASTVisitor<R> {
   }
 
   default R visitFunctionCallExpression(FunctionCallExpression node) {
-    return visit(node.functionCall);
+    return visit(node.functionCall); // TODO: FunctionCall
   }
 
   default R visitGroupingExpression(GroupingExpression node) {
@@ -82,7 +84,7 @@ public interface ASTVisitor<R> extends GeneralASTVisitor<R> {
   }
 
   default R visitMethodCallExpression(MethodCallExpression node) {
-    return visit(node.operand);
+    return visitTwoChildren(node.operand, node.methodCall); // TODO: MethodCall
   }
 
   default R visitNegationExpression(NegationExpression node) {
@@ -106,6 +108,14 @@ public interface ASTVisitor<R> extends GeneralASTVisitor<R> {
         node.getCondition(),
         node.getTrueExpression(),
         node.getFalseExpression());
+  }
+
+  default R visitManyExpression(ManyExpression node) {
+    return superNodeTypeResult();
+  }
+
+  default R visitSequenceExpression(SequenceExpression node) {
+    return visitChildren(node);
   }
 
   default R visitTerminalExpression(TerminalExpression node) {

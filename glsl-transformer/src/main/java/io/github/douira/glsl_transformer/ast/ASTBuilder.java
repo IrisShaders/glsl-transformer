@@ -1,11 +1,14 @@
 package io.github.douira.glsl_transformer.ast;
 
+import java.util.*;
+
 import org.antlr.v4.runtime.tree.*;
 
 import io.github.douira.glsl_transformer.*;
 import io.github.douira.glsl_transformer.GLSLParser.*;
 import io.github.douira.glsl_transformer.ast.node.*;
 import io.github.douira.glsl_transformer.ast.node.expression.*;
+import io.github.douira.glsl_transformer.ast.node.expression.unary.*;
 import io.github.douira.glsl_transformer.ast.node.external_declaration.*;
 import io.github.douira.glsl_transformer.ast.node.statement.*;
 
@@ -114,6 +117,27 @@ public class ASTBuilder extends GLSLParserBaseVisitor<ASTNode> {
       default:
         throw new IllegalStateException("Unexpected prefix operator type" + ctx.op.getText());
     }
+  }
+
+  @Override
+  public SequenceExpression visitSequenceExpression(SequenceExpressionContext ctx) {
+    // SequenceExpressions in the parse tree are nested in the left operand
+    ExpressionContext left = ctx;
+    var expressions = new ArrayList<Expression>();
+
+    // collect the nested sequence expressions
+    do {
+      var right = visit(ctx.right);
+      if (right instanceof SequenceExpression) {
+        throw new IllegalStateException("Sequence expressions should not be nested on the right operand!");
+      }
+      expressions.add((Expression) right);
+
+      left = ctx.left;
+    } while (left instanceof SequenceExpressionContext);
+    expressions.add((Expression) visit(left));
+    Collections.reverse(expressions);
+    return new SequenceExpression(expressions);
   }
 
   @Override
