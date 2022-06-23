@@ -1,5 +1,6 @@
-package io.github.douira.glsl_transformer.ast.node.expression;
+package io.github.douira.glsl_transformer.ast.node.expression.unary;
 
+import io.github.douira.glsl_transformer.ast.node.expression.Expression;
 import io.github.douira.glsl_transformer.ast.traversal.*;
 
 public class BooleanNotExpression extends UnaryExpression {
@@ -9,7 +10,7 @@ public class BooleanNotExpression extends UnaryExpression {
 
   @Override
   public ExpressionType getExpressionType() {
-    return ExpressionType.INCREMENT_POSTFIX;
+    return ExpressionType.BOOLEAN_NOT;
   }
 
   @Override

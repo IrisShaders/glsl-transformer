@@ -1,5 +1,6 @@
-package io.github.douira.glsl_transformer.ast.node.expression;
+package io.github.douira.glsl_transformer.ast.node.expression.binary;
 
+import io.github.douira.glsl_transformer.ast.node.expression.Expression;
 import io.github.douira.glsl_transformer.ast.traversal.*;
 
 public abstract class BinaryExpression extends Expression {

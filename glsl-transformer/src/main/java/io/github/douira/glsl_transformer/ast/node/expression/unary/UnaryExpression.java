@@ -1,5 +1,6 @@
-package io.github.douira.glsl_transformer.ast.node.expression;
+package io.github.douira.glsl_transformer.ast.node.expression.unary;
 
+import io.github.douira.glsl_transformer.ast.node.expression.Expression;
 import io.github.douira.glsl_transformer.ast.traversal.*;
 
 public abstract class UnaryExpression extends Expression {

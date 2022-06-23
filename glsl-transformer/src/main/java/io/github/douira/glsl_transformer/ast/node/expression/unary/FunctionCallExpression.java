@@ -1,6 +1,7 @@
-package io.github.douira.glsl_transformer.ast.node.expression;
+package io.github.douira.glsl_transformer.ast.node.expression.unary;
 
 import io.github.douira.glsl_transformer.ast.InnerASTNode;
+import io.github.douira.glsl_transformer.ast.node.expression.TerminalExpression;
 import io.github.douira.glsl_transformer.ast.traversal.*;
 
 public class FunctionCallExpression extends TerminalExpression {
@@ -13,7 +14,7 @@ public class FunctionCallExpression extends TerminalExpression {
 
   @Override
   public ExpressionType getExpressionType() {
-    return ExpressionType.INCREMENT_POSTFIX;
+    return ExpressionType.FUNCTION_CALL;
   }
 
   @Override

@@ -109,7 +109,7 @@ expression:
 	| left = expression LBRACKET right = expression RBRACKET	# arrayAccessExpression
 	| operand = expression DOT methodCall											# methodCallExpression
 	| functionCall																						# functionCallExpression
-	| operand = expression DOT member = IDENTIFIER											# memberAccessExpression
+	| operand = expression DOT member = IDENTIFIER						# memberAccessExpression
 	| operand = expression op = (INC_OP | DEC_OP)							# postfixExpression
 	| <assoc = right> op = (
 		INC_OP
