@@ -2,6 +2,8 @@ package io.github.douira.glsl_transformer.ast.traversal;
 
 import io.github.douira.glsl_transformer.ast.node.TranslationUnit;
 import io.github.douira.glsl_transformer.ast.node.expression.*;
+import io.github.douira.glsl_transformer.ast.node.expression.binary.BinaryExpression;
+import io.github.douira.glsl_transformer.ast.node.expression.unary.*;
 import io.github.douira.glsl_transformer.ast.node.external_declaration.*;
 import io.github.douira.glsl_transformer.ast.node.statement.*;
 
@@ -124,6 +126,18 @@ public interface ASTListener extends GeneralASTListener {
   }
 
   default void exitConditionExpression(ConditionExpression node) {
+  }
+
+  default void enterManyExpression(ManyExpression node) {
+  }
+
+  default void exitManyExpression(ManyExpression node) {
+  }
+
+  default void enterSequenceExpression(SequenceExpression node) {
+  }
+
+  default void exitSequenceExpression(SequenceExpression node) {
   }
 
   default void enterStatement(Statement node) {

@@ -16,6 +16,7 @@ public abstract class Expression extends InnerASTNode {
     DECREMENT_POSTFIX, // unary
     INCREMENT_PREFIX, // unary
     DECREMENT_PREFIX, // unary
+    IDENTITY, // unary
     NEGATION, // unary
     BOOLEAN_NOT, // unary
     BITWISE_NOT, // unary
