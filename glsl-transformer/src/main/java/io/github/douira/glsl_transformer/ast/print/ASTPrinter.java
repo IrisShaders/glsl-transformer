@@ -137,10 +137,9 @@ public abstract class ASTPrinter extends ASTPrinterUtil {
   }
 
   @Override
-  public Void visitMethodCallExpression(MethodCallExpression node) {
+  public Void visitLengthAccessExpression(LengthAccessExpression node) {
     visit(node.operand);
-    emitType(node, GLSLLexer.DOT);
-    visit(node.methodCall);
+    emitType(node, GLSLLexer.DOT, GLSLLexer.LENGTH, GLSLLexer.LPAREN, GLSLLexer.RPAREN);
     return null;
   }
 

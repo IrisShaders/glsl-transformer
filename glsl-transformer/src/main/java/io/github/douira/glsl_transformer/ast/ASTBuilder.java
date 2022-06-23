@@ -79,10 +79,8 @@ public class ASTBuilder extends GLSLParserBaseVisitor<ASTNode> {
   }
 
   @Override
-  public ASTNode visitMethodCallExpression(MethodCallExpressionContext ctx) {
-    return new MethodCallExpression(
-        (Expression) visit(ctx.operand),
-        (InnerASTNode) visit(ctx.methodCall())); // TODO: MethodCall
+  public ASTNode visitLengthAccessExpression(LengthAccessExpressionContext ctx) {
+    return new LengthAccessExpression((Expression) visit(ctx.operand));
   }
 
   @Override
