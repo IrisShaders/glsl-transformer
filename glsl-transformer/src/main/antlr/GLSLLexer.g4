@@ -60,6 +60,7 @@ WORKGROUPCOHERENT: 'workgroupcoherent';
 SUBGROUPCOHERENT: 'subgroupcoherent';
 NONPRIVATE: 'nonprivate';
 LAYOUT: 'layout';
+LENGTH: 'length';
 
 ATOMIC_UINT: 'atomic_uint';
 STRUCT: 'struct';

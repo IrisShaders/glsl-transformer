@@ -92,10 +92,10 @@ public interface ASTListener extends GeneralASTListener {
   default void exitMemberAccessExpression(MemberAccessExpression node) {
   }
 
-  default void enterMethodCallExpression(MethodCallExpression node) {
+  default void enterLengthAccessExpression(LengthAccessExpression node) {
   }
 
-  default void exitMethodCallExpression(MethodCallExpression node) {
+  default void exitLengthAccessExpression(LengthAccessExpression node) {
   }
 
   default void enterNegationExpression(NegationExpression node) {
@@ -138,6 +138,12 @@ public interface ASTListener extends GeneralASTListener {
   }
 
   default void exitSequenceExpression(SequenceExpression node) {
+  }
+
+  default void enterReferenceExpression(ReferenceExpression node) {
+  }
+
+  default void exitReferenceExpression(ReferenceExpression node) {
   }
 
   default void enterStatement(Statement node) {

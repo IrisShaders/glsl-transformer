@@ -9,7 +9,7 @@ public abstract class Expression extends InnerASTNode {
     LITERAL, // TODO literal
     GROUPING, // unary
     ARRAY_ACCESS, // TODO binary
-    METHOD_CALL, // TODO (incomplete) unary + method + parameters
+    LENGTH_ACCESS, // unary
     FUNCTION_CALL, // TODO (incomplete) unary + parameters
     MEMBER_ACCESS, // unary + identifier
     INCREMENT_POSTFIX, // unary

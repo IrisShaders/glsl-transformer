@@ -83,8 +83,8 @@ public interface ASTVisitor<R> extends GeneralASTVisitor<R> {
     return visit(node.operand);
   }
 
-  default R visitMethodCallExpression(MethodCallExpression node) {
-    return visitTwoChildren(node.operand, node.methodCall); // TODO: MethodCall
+  default R visitLengthAccessExpression(LengthAccessExpression node) {
+    return visit(node.operand);
   }
 
   default R visitNegationExpression(NegationExpression node) {
@@ -120,6 +120,10 @@ public interface ASTVisitor<R> extends GeneralASTVisitor<R> {
 
   default R visitTerminalExpression(TerminalExpression node) {
     return superNodeTypeResult();
+  }
+
+  default R visitReferenceExpression(ReferenceExpression node) {
+    return visit(node.identifier);
   }
 
   default R visitStatement(Statement node) {

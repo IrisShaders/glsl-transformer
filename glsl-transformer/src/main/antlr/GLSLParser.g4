@@ -80,8 +80,6 @@ variableIdentifier: IDENTIFIER;
 
 functionCall: functionIdentifier callParameterList;
 
-methodCall: variableIdentifier callParameterList;
-
 //assignment expressions
 callParameterList:
 	LPAREN ( | VOID | expression (COMMA expression)*) RPAREN;
@@ -107,7 +105,7 @@ expression:
 	)																													# literalExpression
 	| LPAREN value = expression RPAREN												# groupingExpression
 	| left = expression LBRACKET right = expression RBRACKET	# arrayAccessExpression
-	| operand = expression DOT methodCall											# methodCallExpression
+	| operand = expression DOT LENGTH LPAREN RPAREN						# lengthAccessExpression
 	| functionCall																						# functionCallExpression
 	| operand = expression DOT member = IDENTIFIER						# memberAccessExpression
 	| operand = expression op = (INC_OP | DEC_OP)							# postfixExpression
