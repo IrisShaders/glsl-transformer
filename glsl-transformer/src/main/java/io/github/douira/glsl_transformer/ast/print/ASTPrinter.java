@@ -170,6 +170,45 @@ public abstract class ASTPrinter extends ASTPrinterUtil {
   }
 
   @Override
+  public Void visitLiteralExpression(LiteralExpression node) {
+    switch (node.literalType) {
+      case BOOL:
+        emitLiteral(node, node.booleanValue ? "true" : "false");
+        break;
+      case INT16:
+        emitLiteral(node, Long.toString(node.integerValue) + "s");
+        break;
+      case UINT16:
+        emitLiteral(node, Long.toString(node.integerValue) + "us");
+        break;
+      case INT32:
+        emitLiteral(node, Long.toString(node.integerValue));
+        break;
+      case UINT32:
+        emitLiteral(node, Long.toString(node.integerValue) + "u");
+        break;
+      case INT64:
+        emitLiteral(node, Long.toString(node.integerValue) + "l");
+        break;
+      case UINT64:
+        emitLiteral(node, Long.toString(node.integerValue) + "ul");
+        break;
+      case FLOAT16:
+        emitLiteral(node, Double.toString(node.floatingValue) + "hf");
+        break;
+      case FLOAT32:
+        emitLiteral(node, Double.toString(node.floatingValue));
+        break;
+      case FLOAT64:
+        emitLiteral(node, Double.toString(node.floatingValue) + "lf");
+        break;
+      default:
+        throw new IllegalStateException("Unexpected literal type: " + node.literalType);
+    }
+    return null;
+  }
+
+  @Override
   public Void visitEmptyStatement(EmptyStatement node) {
     emitType(node, GLSLLexer.SEMICOLON);
     emitCommonNewline(node);

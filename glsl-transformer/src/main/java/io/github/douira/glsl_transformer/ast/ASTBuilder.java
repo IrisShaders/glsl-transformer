@@ -139,6 +139,12 @@ public class ASTBuilder extends GLSLParserBaseVisitor<ASTNode> {
   }
 
   @Override
+  public LiteralExpression visitLiteralExpression(LiteralExpressionContext ctx) {
+    // start and end token are the same as there is one token in this rule
+    return LiteralExpression.from(ctx.getStart());
+  }
+
+  @Override
   public InnerASTNode visitLayoutQualifier(LayoutQualifierContext ctx) {
     return (InnerASTNode) super.visitLayoutQualifier(ctx); // TODO: LayoutQualifier
   }

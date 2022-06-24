@@ -126,6 +126,10 @@ public interface ASTVisitor<R> extends GeneralASTVisitor<R> {
     return visit(node.identifier);
   }
 
+  default R visitLiteralExpression(LiteralExpression node) {
+    return defaultResult();
+  }
+
   default R visitStatement(Statement node) {
     return superNodeTypeResult();
   }
