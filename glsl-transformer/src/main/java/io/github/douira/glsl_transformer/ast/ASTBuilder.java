@@ -145,6 +145,89 @@ public class ASTBuilder extends GLSLParserBaseVisitor<ASTNode> {
   }
 
   @Override
+  public ASTNode visitAdditiveExpression(AdditiveExpressionContext ctx) {
+    // TODO Auto-generated method stub
+    return super.visitAdditiveExpression(ctx);
+  }
+
+  @Override
+  public ASTNode visitArrayAccessExpression(ArrayAccessExpressionContext ctx) {
+    // TODO Auto-generated method stub
+    return super.visitArrayAccessExpression(ctx);
+  }
+
+  @Override
+  public ASTNode visitAssignmentExpression(AssignmentExpressionContext ctx) {
+    // TODO Auto-generated method stub
+    return super.visitAssignmentExpression(ctx);
+  }
+
+  @Override
+  public ASTNode visitBitwiseAndExpression(BitwiseAndExpressionContext ctx) {
+    // TODO Auto-generated method stub
+    return super.visitBitwiseAndExpression(ctx);
+  }
+
+  @Override
+  public ASTNode visitBitwiseExclusiveOrExpression(BitwiseExclusiveOrExpressionContext ctx) {
+    // TODO Auto-generated method stub
+    return super.visitBitwiseExclusiveOrExpression(ctx);
+  }
+
+  @Override
+  public ASTNode visitBitwiseInclusiveOrExpression(BitwiseInclusiveOrExpressionContext ctx) {
+    // TODO Auto-generated method stub
+    return super.visitBitwiseInclusiveOrExpression(ctx);
+  }
+
+  @Override
+  public ASTNode visitEqualityExpression(EqualityExpressionContext ctx) {
+    // TODO Auto-generated method stub
+    return super.visitEqualityExpression(ctx);
+  }
+
+  @Override
+  public ASTNode visitLogicalAndExpression(LogicalAndExpressionContext ctx) {
+    // TODO Auto-generated method stub
+    return super.visitLogicalAndExpression(ctx);
+  }
+
+  @Override
+  public ASTNode visitLogicalExclusiveOrExpression(LogicalExclusiveOrExpressionContext ctx) {
+    // TODO Auto-generated method stub
+    return super.visitLogicalExclusiveOrExpression(ctx);
+  }
+
+  @Override
+  public ASTNode visitLogicalInclusiveOrExpression(LogicalInclusiveOrExpressionContext ctx) {
+    // TODO Auto-generated method stub
+    return super.visitLogicalInclusiveOrExpression(ctx);
+  }
+
+  @Override
+  public ASTNode visitRelationalExpression(RelationalExpressionContext ctx) {
+    // TODO Auto-generated method stub
+    return super.visitRelationalExpression(ctx);
+  }
+
+  @Override
+  public ASTNode visitShiftExpression(ShiftExpressionContext ctx) {
+    // TODO Auto-generated method stub
+    return super.visitShiftExpression(ctx);
+  }
+
+  @Override
+  public ASTNode visitMultiplicativeExpression(MultiplicativeExpressionContext ctx) {
+    // TODO Auto-generated method stub
+    return super.visitMultiplicativeExpression(ctx);
+  }
+
+  @Override
+  public ASTNode visitReferenceExpression(ReferenceExpressionContext ctx) {
+    return new ReferenceExpression((Identifier)visit(ctx.variableIdentifier()));
+  }
+
+  @Override
   public InnerASTNode visitLayoutQualifier(LayoutQualifierContext ctx) {
     return (InnerASTNode) super.visitLayoutQualifier(ctx); // TODO: LayoutQualifier
   }
