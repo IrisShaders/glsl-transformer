@@ -105,7 +105,7 @@ expression:
 	)																													# literalExpression
 	| LPAREN value = expression RPAREN												# groupingExpression
 	| left = expression LBRACKET right = expression RBRACKET	# arrayAccessExpression
-	| operand = expression DOT LENGTH LPAREN RPAREN						# lengthAccessExpression
+	| operand = expression DOT_LENGTH LPAREN RPAREN						# lengthAccessExpression
 	| functionCall																						# functionCallExpression
 	| operand = expression DOT member = IDENTIFIER						# memberAccessExpression
 	| operand = expression op = (INC_OP | DEC_OP)							# postfixExpression
