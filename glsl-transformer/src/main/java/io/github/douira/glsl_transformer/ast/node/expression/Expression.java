@@ -6,12 +6,8 @@ import io.github.douira.glsl_transformer.ast.traversal.*;
 public abstract class Expression extends InnerASTNode {
   public enum ExpressionType {
     REFERENCE, // identifier
-    LITERAL, // TODO literal
+    LITERAL, // literal
     GROUPING, // unary
-    ARRAY_ACCESS, // TODO binary
-    LENGTH_ACCESS, // unary
-    FUNCTION_CALL, // TODO (incomplete) unary + parameters
-    MEMBER_ACCESS, // unary + identifier
     INCREMENT_POSTFIX, // unary
     DECREMENT_POSTFIX, // unary
     INCREMENT_PREFIX, // unary
@@ -20,6 +16,11 @@ public abstract class Expression extends InnerASTNode {
     NEGATION, // unary
     BOOLEAN_NOT, // unary
     BITWISE_NOT, // unary
+    LENGTH_ACCESS, // unary
+    MEMBER_ACCESS, // unary + identifier
+    FUNCTION_CALL, // TODO (incomplete) unary + parameters
+
+    ARRAY_ACCESS, // TODO binary
     MULTIPLICATION, // TODO binary
     DIVISION, // TODO binary
     MODULO, // TODO binary
@@ -39,7 +40,6 @@ public abstract class Expression extends InnerASTNode {
     BOOLEAN_AND, // TODO binary
     BOOLEAN_XOR, // TODO binary
     BOOLEAN_OR, // TODO binary
-    CONDITION, // ternary
     ASSIGNMENT, // TODO binary
     MULTIPLICATION_ASSIGNMENT, // TODO binary
     DIVISION_ASSIGNMENT, // TODO binary
@@ -51,8 +51,44 @@ public abstract class Expression extends InnerASTNode {
     BITWISE_AND_ASSIGNMENT, // TODO binary
     BITWISE_XOR_ASSIGNMENT, // TODO binary
     BITWISE_OR_ASSIGNMENT, // TODO binary
+
+    CONDITION, // ternary
     SEQUENCE // many-ary
   }
+
+  /*
+   * ArrayAccessExpression
+   * MultiplicationExpression
+   * DivisionExpression
+   * ModuloExpression
+   * AdditionExpression
+   * SubtractionExpression
+   * ShiftLeftExpression
+   * ShiftRightExpression
+   * LessThanExpression
+   * GreaterThanExpression
+   * LessThanEqualExpression
+   * GreaterThanEqualExpression
+   * EqualExpression
+   * NotEqualExpression
+   * BitwiseAndExpression
+   * BitwiseXorExpression
+   * BitwiseOrExpression
+   * BooleanAndExpression
+   * BooleanXorExpression
+   * BooleanOrExpression
+   * AssignmentExpression
+   * MultiplicationAssignmentExpression
+   * DivisionAssignmentExpression
+   * ModuloAssignmentExpression
+   * AdditionAssignmentExpression
+   * SubtractionAssignmentExpression
+   * LeftShiftAssignmentExpression
+   * RightShiftAssignmentExpression
+   * BitwiseAndAssignmentExpression
+   * BitwiseXorAssignmentExpression
+   * BitwiseOrAssignmentExpression
+   */
 
   public abstract ExpressionType getExpressionType();
 

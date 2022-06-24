@@ -3,6 +3,7 @@ package io.github.douira.glsl_transformer.ast.print;
 import io.github.douira.glsl_transformer.GLSLLexer;
 import io.github.douira.glsl_transformer.ast.node.*;
 import io.github.douira.glsl_transformer.ast.node.expression.*;
+import io.github.douira.glsl_transformer.ast.node.expression.binary.*;
 import io.github.douira.glsl_transformer.ast.node.expression.unary.*;
 import io.github.douira.glsl_transformer.ast.node.external_declaration.*;
 import io.github.douira.glsl_transformer.ast.node.external_declaration.PragmaStatement.PragmaType;
@@ -205,6 +206,316 @@ public abstract class ASTPrinter extends ASTPrinterUtil {
       default:
         throw new IllegalStateException("Unexpected literal type: " + node.literalType);
     }
+    return null;
+  }
+
+  @Override
+  public Void visitArrayAccessExpression(ArrayAccessExpression node) {
+    visit(node.left);
+    emitBreakableSpace(node);
+    emitType(node, GLSLLexer.NR); // TODO operator or complete change
+    emitBreakableSpace(node);
+    visit(node.right);
+    return null;
+  }
+
+  @Override
+  public Void visitMultiplicationExpression(MultiplicationExpression node) {
+    visit(node.left);
+    emitBreakableSpace(node);
+    emitType(node, GLSLLexer.NR); // TODO operator or complete change
+    emitBreakableSpace(node);
+    visit(node.right);
+    return null;
+  }
+
+  @Override
+  public Void visitDivisionExpression(DivisionExpression node) {
+    visit(node.left);
+    emitBreakableSpace(node);
+    emitType(node, GLSLLexer.NR); // TODO operator or complete change
+    emitBreakableSpace(node);
+    visit(node.right);
+    return null;
+  }
+
+  @Override
+  public Void visitModuloExpression(ModuloExpression node) {
+    visit(node.left);
+    emitBreakableSpace(node);
+    emitType(node, GLSLLexer.NR); // TODO operator or complete change
+    emitBreakableSpace(node);
+    visit(node.right);
+    return null;
+  }
+
+  @Override
+  public Void visitAdditionExpression(AdditionExpression node) {
+    visit(node.left);
+    emitBreakableSpace(node);
+    emitType(node, GLSLLexer.NR); // TODO operator or complete change
+    emitBreakableSpace(node);
+    visit(node.right);
+    return null;
+  }
+
+  @Override
+  public Void visitSubtractionExpression(SubtractionExpression node) {
+    visit(node.left);
+    emitBreakableSpace(node);
+    emitType(node, GLSLLexer.NR); // TODO operator or complete change
+    emitBreakableSpace(node);
+    visit(node.right);
+    return null;
+  }
+
+  @Override
+  public Void visitShiftLeftExpression(ShiftLeftExpression node) {
+    visit(node.left);
+    emitBreakableSpace(node);
+    emitType(node, GLSLLexer.NR); // TODO operator or complete change
+    emitBreakableSpace(node);
+    visit(node.right);
+    return null;
+  }
+
+  @Override
+  public Void visitShiftRightExpression(ShiftRightExpression node) {
+    visit(node.left);
+    emitBreakableSpace(node);
+    emitType(node, GLSLLexer.NR); // TODO operator or complete change
+    emitBreakableSpace(node);
+    visit(node.right);
+    return null;
+  }
+
+  @Override
+  public Void visitLessThanExpression(LessThanExpression node) {
+    visit(node.left);
+    emitBreakableSpace(node);
+    emitType(node, GLSLLexer.NR); // TODO operator or complete change
+    emitBreakableSpace(node);
+    visit(node.right);
+    return null;
+  }
+
+  @Override
+  public Void visitGreaterThanExpression(GreaterThanExpression node) {
+    visit(node.left);
+    emitBreakableSpace(node);
+    emitType(node, GLSLLexer.NR); // TODO operator or complete change
+    emitBreakableSpace(node);
+    visit(node.right);
+    return null;
+  }
+
+  @Override
+  public Void visitLessThanEqualExpression(LessThanEqualExpression node) {
+    visit(node.left);
+    emitBreakableSpace(node);
+    emitType(node, GLSLLexer.NR); // TODO operator or complete change
+    emitBreakableSpace(node);
+    visit(node.right);
+    return null;
+  }
+
+  @Override
+  public Void visitGreaterThanEqualExpression(GreaterThanEqualExpression node) {
+    visit(node.left);
+    emitBreakableSpace(node);
+    emitType(node, GLSLLexer.NR); // TODO operator or complete change
+    emitBreakableSpace(node);
+    visit(node.right);
+    return null;
+  }
+
+  @Override
+  public Void visitEqualExpression(EqualExpression node) {
+    visit(node.left);
+    emitBreakableSpace(node);
+    emitType(node, GLSLLexer.NR); // TODO operator or complete change
+    emitBreakableSpace(node);
+    visit(node.right);
+    return null;
+  }
+
+  @Override
+  public Void visitNotEqualExpression(NotEqualExpression node) {
+    visit(node.left);
+    emitBreakableSpace(node);
+    emitType(node, GLSLLexer.NR); // TODO operator or complete change
+    emitBreakableSpace(node);
+    visit(node.right);
+    return null;
+  }
+
+  @Override
+  public Void visitBitwiseAndExpression(BitwiseAndExpression node) {
+    visit(node.left);
+    emitBreakableSpace(node);
+    emitType(node, GLSLLexer.NR); // TODO operator or complete change
+    emitBreakableSpace(node);
+    visit(node.right);
+    return null;
+  }
+
+  @Override
+  public Void visitBitwiseXorExpression(BitwiseXorExpression node) {
+    visit(node.left);
+    emitBreakableSpace(node);
+    emitType(node, GLSLLexer.NR); // TODO operator or complete change
+    emitBreakableSpace(node);
+    visit(node.right);
+    return null;
+  }
+
+  @Override
+  public Void visitBitwiseOrExpression(BitwiseOrExpression node) {
+    visit(node.left);
+    emitBreakableSpace(node);
+    emitType(node, GLSLLexer.NR); // TODO operator or complete change
+    emitBreakableSpace(node);
+    visit(node.right);
+    return null;
+  }
+
+  @Override
+  public Void visitBooleanAndExpression(BooleanAndExpression node) {
+    visit(node.left);
+    emitBreakableSpace(node);
+    emitType(node, GLSLLexer.NR); // TODO operator or complete change
+    emitBreakableSpace(node);
+    visit(node.right);
+    return null;
+  }
+
+  @Override
+  public Void visitBooleanXorExpression(BooleanXorExpression node) {
+    visit(node.left);
+    emitBreakableSpace(node);
+    emitType(node, GLSLLexer.NR); // TODO operator or complete change
+    emitBreakableSpace(node);
+    visit(node.right);
+    return null;
+  }
+
+  @Override
+  public Void visitBooleanOrExpression(BooleanOrExpression node) {
+    visit(node.left);
+    emitBreakableSpace(node);
+    emitType(node, GLSLLexer.NR); // TODO operator or complete change
+    emitBreakableSpace(node);
+    visit(node.right);
+    return null;
+  }
+
+  @Override
+  public Void visitAssignmentExpression(AssignmentExpression node) {
+    visit(node.left);
+    emitBreakableSpace(node);
+    emitType(node, GLSLLexer.NR); // TODO operator or complete change
+    emitBreakableSpace(node);
+    visit(node.right);
+    return null;
+  }
+
+  @Override
+  public Void visitMultiplicationAssignmentExpression(MultiplicationAssignmentExpression node) {
+    visit(node.left);
+    emitBreakableSpace(node);
+    emitType(node, GLSLLexer.NR); // TODO operator or complete change
+    emitBreakableSpace(node);
+    visit(node.right);
+    return null;
+  }
+
+  @Override
+  public Void visitDivisionAssignmentExpression(DivisionAssignmentExpression node) {
+    visit(node.left);
+    emitBreakableSpace(node);
+    emitType(node, GLSLLexer.NR); // TODO operator or complete change
+    emitBreakableSpace(node);
+    visit(node.right);
+    return null;
+  }
+
+  @Override
+  public Void visitModuloAssignmentExpression(ModuloAssignmentExpression node) {
+    visit(node.left);
+    emitBreakableSpace(node);
+    emitType(node, GLSLLexer.NR); // TODO operator or complete change
+    emitBreakableSpace(node);
+    visit(node.right);
+    return null;
+  }
+
+  @Override
+  public Void visitAdditionAssignmentExpression(AdditionAssignmentExpression node) {
+    visit(node.left);
+    emitBreakableSpace(node);
+    emitType(node, GLSLLexer.NR); // TODO operator or complete change
+    emitBreakableSpace(node);
+    visit(node.right);
+    return null;
+  }
+
+  @Override
+  public Void visitSubtractionAssignmentExpression(SubtractionAssignmentExpression node) {
+    visit(node.left);
+    emitBreakableSpace(node);
+    emitType(node, GLSLLexer.NR); // TODO operator or complete change
+    emitBreakableSpace(node);
+    visit(node.right);
+    return null;
+  }
+
+  @Override
+  public Void visitLeftShiftAssignmentExpression(LeftShiftAssignmentExpression node) {
+    visit(node.left);
+    emitBreakableSpace(node);
+    emitType(node, GLSLLexer.NR); // TODO operator or complete change
+    emitBreakableSpace(node);
+    visit(node.right);
+    return null;
+  }
+
+  @Override
+  public Void visitRightShiftAssignmentExpression(RightShiftAssignmentExpression node) {
+    visit(node.left);
+    emitBreakableSpace(node);
+    emitType(node, GLSLLexer.NR); // TODO operator or complete change
+    emitBreakableSpace(node);
+    visit(node.right);
+    return null;
+  }
+
+  @Override
+  public Void visitBitwiseAndAssignmentExpression(BitwiseAndAssignmentExpression node) {
+    visit(node.left);
+    emitBreakableSpace(node);
+    emitType(node, GLSLLexer.NR); // TODO operator or complete change
+    emitBreakableSpace(node);
+    visit(node.right);
+    return null;
+  }
+
+  @Override
+  public Void visitBitwiseXorAssignmentExpression(BitwiseXorAssignmentExpression node) {
+    visit(node.left);
+    emitBreakableSpace(node);
+    emitType(node, GLSLLexer.NR); // TODO operator or complete change
+    emitBreakableSpace(node);
+    visit(node.right);
+    return null;
+  }
+
+  @Override
+  public Void visitBitwiseOrAssignmentExpression(BitwiseOrAssignmentExpression node) {
+    visit(node.left);
+    emitBreakableSpace(node);
+    emitType(node, GLSLLexer.NR); // TODO operator or complete change
+    emitBreakableSpace(node);
+    visit(node.right);
     return null;
   }
 

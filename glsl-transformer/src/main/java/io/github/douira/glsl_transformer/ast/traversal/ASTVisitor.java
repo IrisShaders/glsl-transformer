@@ -2,7 +2,7 @@ package io.github.douira.glsl_transformer.ast.traversal;
 
 import io.github.douira.glsl_transformer.ast.node.*;
 import io.github.douira.glsl_transformer.ast.node.expression.*;
-import io.github.douira.glsl_transformer.ast.node.expression.binary.BinaryExpression;
+import io.github.douira.glsl_transformer.ast.node.expression.binary.*;
 import io.github.douira.glsl_transformer.ast.node.expression.unary.*;
 import io.github.douira.glsl_transformer.ast.node.external_declaration.*;
 import io.github.douira.glsl_transformer.ast.node.statement.*;
@@ -97,6 +97,130 @@ public interface ASTVisitor<R> extends GeneralASTVisitor<R> {
 
   default R visitBinaryExpression(BinaryExpression node) {
     return superNodeTypeResult();
+  }
+
+  default R visitArrayAccessExpression(ArrayAccessExpression node) {
+    return visitTwoChildren(node.left, node.right);
+  }
+
+  default R visitMultiplicationExpression(MultiplicationExpression node) {
+    return visitTwoChildren(node.left, node.right);
+  }
+
+  default R visitDivisionExpression(DivisionExpression node) {
+    return visitTwoChildren(node.left, node.right);
+  }
+
+  default R visitModuloExpression(ModuloExpression node) {
+    return visitTwoChildren(node.left, node.right);
+  }
+
+  default R visitAdditionExpression(AdditionExpression node) {
+    return visitTwoChildren(node.left, node.right);
+  }
+
+  default R visitSubtractionExpression(SubtractionExpression node) {
+    return visitTwoChildren(node.left, node.right);
+  }
+
+  default R visitShiftLeftExpression(ShiftLeftExpression node) {
+    return visitTwoChildren(node.left, node.right);
+  }
+
+  default R visitShiftRightExpression(ShiftRightExpression node) {
+    return visitTwoChildren(node.left, node.right);
+  }
+
+  default R visitLessThanExpression(LessThanExpression node) {
+    return visitTwoChildren(node.left, node.right);
+  }
+
+  default R visitGreaterThanExpression(GreaterThanExpression node) {
+    return visitTwoChildren(node.left, node.right);
+  }
+
+  default R visitLessThanEqualExpression(LessThanEqualExpression node) {
+    return visitTwoChildren(node.left, node.right);
+  }
+
+  default R visitGreaterThanEqualExpression(GreaterThanEqualExpression node) {
+    return visitTwoChildren(node.left, node.right);
+  }
+
+  default R visitEqualExpression(EqualExpression node) {
+    return visitTwoChildren(node.left, node.right);
+  }
+
+  default R visitNotEqualExpression(NotEqualExpression node) {
+    return visitTwoChildren(node.left, node.right);
+  }
+
+  default R visitBitwiseAndExpression(BitwiseAndExpression node) {
+    return visitTwoChildren(node.left, node.right);
+  }
+
+  default R visitBitwiseXorExpression(BitwiseXorExpression node) {
+    return visitTwoChildren(node.left, node.right);
+  }
+
+  default R visitBitwiseOrExpression(BitwiseOrExpression node) {
+    return visitTwoChildren(node.left, node.right);
+  }
+
+  default R visitBooleanAndExpression(BooleanAndExpression node) {
+    return visitTwoChildren(node.left, node.right);
+  }
+
+  default R visitBooleanXorExpression(BooleanXorExpression node) {
+    return visitTwoChildren(node.left, node.right);
+  }
+
+  default R visitBooleanOrExpression(BooleanOrExpression node) {
+    return visitTwoChildren(node.left, node.right);
+  }
+
+  default R visitAssignmentExpression(AssignmentExpression node) {
+    return visitTwoChildren(node.left, node.right);
+  }
+
+  default R visitMultiplicationAssignmentExpression(MultiplicationAssignmentExpression node) {
+    return visitTwoChildren(node.left, node.right);
+  }
+
+  default R visitDivisionAssignmentExpression(DivisionAssignmentExpression node) {
+    return visitTwoChildren(node.left, node.right);
+  }
+
+  default R visitModuloAssignmentExpression(ModuloAssignmentExpression node) {
+    return visitTwoChildren(node.left, node.right);
+  }
+
+  default R visitAdditionAssignmentExpression(AdditionAssignmentExpression node) {
+    return visitTwoChildren(node.left, node.right);
+  }
+
+  default R visitSubtractionAssignmentExpression(SubtractionAssignmentExpression node) {
+    return visitTwoChildren(node.left, node.right);
+  }
+
+  default R visitLeftShiftAssignmentExpression(LeftShiftAssignmentExpression node) {
+    return visitTwoChildren(node.left, node.right);
+  }
+
+  default R visitRightShiftAssignmentExpression(RightShiftAssignmentExpression node) {
+    return visitTwoChildren(node.left, node.right);
+  }
+
+  default R visitBitwiseAndAssignmentExpression(BitwiseAndAssignmentExpression node) {
+    return visitTwoChildren(node.left, node.right);
+  }
+
+  default R visitBitwiseXorAssignmentExpression(BitwiseXorAssignmentExpression node) {
+    return visitTwoChildren(node.left, node.right);
+  }
+
+  default R visitBitwiseOrAssignmentExpression(BitwiseOrAssignmentExpression node) {
+    return visitTwoChildren(node.left, node.right);
   }
 
   default R visitTernaryExpression(TernaryExpression node) {
