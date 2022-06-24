@@ -212,10 +212,9 @@ public abstract class ASTPrinter extends ASTPrinterUtil {
   @Override
   public Void visitArrayAccessExpression(ArrayAccessExpression node) {
     visit(node.left);
-    emitBreakableSpace(node);
-    emitType(node, GLSLLexer.NR); // TODO operator or complete change
-    emitBreakableSpace(node);
+    emitType(node, GLSLLexer.LBRACKET);
     visit(node.right);
+    emitType(node, GLSLLexer.RBRACKET);
     return null;
   }
 
@@ -223,7 +222,7 @@ public abstract class ASTPrinter extends ASTPrinterUtil {
   public Void visitMultiplicationExpression(MultiplicationExpression node) {
     visit(node.left);
     emitBreakableSpace(node);
-    emitType(node, GLSLLexer.NR); // TODO operator or complete change
+    emitType(node, GLSLLexer.TIMES_OP);
     emitBreakableSpace(node);
     visit(node.right);
     return null;
@@ -233,7 +232,7 @@ public abstract class ASTPrinter extends ASTPrinterUtil {
   public Void visitDivisionExpression(DivisionExpression node) {
     visit(node.left);
     emitBreakableSpace(node);
-    emitType(node, GLSLLexer.NR); // TODO operator or complete change
+    emitType(node, GLSLLexer.DIV_OP);
     emitBreakableSpace(node);
     visit(node.right);
     return null;
@@ -243,7 +242,7 @@ public abstract class ASTPrinter extends ASTPrinterUtil {
   public Void visitModuloExpression(ModuloExpression node) {
     visit(node.left);
     emitBreakableSpace(node);
-    emitType(node, GLSLLexer.NR); // TODO operator or complete change
+    emitType(node, GLSLLexer.MOD_OP);
     emitBreakableSpace(node);
     visit(node.right);
     return null;
@@ -253,7 +252,7 @@ public abstract class ASTPrinter extends ASTPrinterUtil {
   public Void visitAdditionExpression(AdditionExpression node) {
     visit(node.left);
     emitBreakableSpace(node);
-    emitType(node, GLSLLexer.NR); // TODO operator or complete change
+    emitType(node, GLSLLexer.PLUS_OP); 
     emitBreakableSpace(node);
     visit(node.right);
     return null;
@@ -263,7 +262,7 @@ public abstract class ASTPrinter extends ASTPrinterUtil {
   public Void visitSubtractionExpression(SubtractionExpression node) {
     visit(node.left);
     emitBreakableSpace(node);
-    emitType(node, GLSLLexer.NR); // TODO operator or complete change
+    emitType(node, GLSLLexer.MINUS_OP); 
     emitBreakableSpace(node);
     visit(node.right);
     return null;
@@ -273,7 +272,7 @@ public abstract class ASTPrinter extends ASTPrinterUtil {
   public Void visitShiftLeftExpression(ShiftLeftExpression node) {
     visit(node.left);
     emitBreakableSpace(node);
-    emitType(node, GLSLLexer.NR); // TODO operator or complete change
+    emitType(node, GLSLLexer.LEFT_OP);
     emitBreakableSpace(node);
     visit(node.right);
     return null;
@@ -283,7 +282,7 @@ public abstract class ASTPrinter extends ASTPrinterUtil {
   public Void visitShiftRightExpression(ShiftRightExpression node) {
     visit(node.left);
     emitBreakableSpace(node);
-    emitType(node, GLSLLexer.NR); // TODO operator or complete change
+    emitType(node, GLSLLexer.RIGHT_OP);
     emitBreakableSpace(node);
     visit(node.right);
     return null;
@@ -293,7 +292,7 @@ public abstract class ASTPrinter extends ASTPrinterUtil {
   public Void visitLessThanExpression(LessThanExpression node) {
     visit(node.left);
     emitBreakableSpace(node);
-    emitType(node, GLSLLexer.NR); // TODO operator or complete change
+    emitType(node, GLSLLexer.LT_OP); 
     emitBreakableSpace(node);
     visit(node.right);
     return null;
@@ -303,7 +302,7 @@ public abstract class ASTPrinter extends ASTPrinterUtil {
   public Void visitGreaterThanExpression(GreaterThanExpression node) {
     visit(node.left);
     emitBreakableSpace(node);
-    emitType(node, GLSLLexer.NR); // TODO operator or complete change
+    emitType(node, GLSLLexer.GT_OP);
     emitBreakableSpace(node);
     visit(node.right);
     return null;
@@ -313,7 +312,7 @@ public abstract class ASTPrinter extends ASTPrinterUtil {
   public Void visitLessThanEqualExpression(LessThanEqualExpression node) {
     visit(node.left);
     emitBreakableSpace(node);
-    emitType(node, GLSLLexer.NR); // TODO operator or complete change
+    emitType(node, GLSLLexer.LE_OP);
     emitBreakableSpace(node);
     visit(node.right);
     return null;
@@ -323,7 +322,7 @@ public abstract class ASTPrinter extends ASTPrinterUtil {
   public Void visitGreaterThanEqualExpression(GreaterThanEqualExpression node) {
     visit(node.left);
     emitBreakableSpace(node);
-    emitType(node, GLSLLexer.NR); // TODO operator or complete change
+    emitType(node, GLSLLexer.GE_OP);
     emitBreakableSpace(node);
     visit(node.right);
     return null;
@@ -333,7 +332,7 @@ public abstract class ASTPrinter extends ASTPrinterUtil {
   public Void visitEqualExpression(EqualExpression node) {
     visit(node.left);
     emitBreakableSpace(node);
-    emitType(node, GLSLLexer.NR); // TODO operator or complete change
+    emitType(node, GLSLLexer.EQ_OP);
     emitBreakableSpace(node);
     visit(node.right);
     return null;
@@ -343,7 +342,7 @@ public abstract class ASTPrinter extends ASTPrinterUtil {
   public Void visitNotEqualExpression(NotEqualExpression node) {
     visit(node.left);
     emitBreakableSpace(node);
-    emitType(node, GLSLLexer.NR); // TODO operator or complete change
+    emitType(node, GLSLLexer.NE_OP);
     emitBreakableSpace(node);
     visit(node.right);
     return null;
@@ -353,7 +352,7 @@ public abstract class ASTPrinter extends ASTPrinterUtil {
   public Void visitBitwiseAndExpression(BitwiseAndExpression node) {
     visit(node.left);
     emitBreakableSpace(node);
-    emitType(node, GLSLLexer.NR); // TODO operator or complete change
+    emitType(node, GLSLLexer.BAND_OP); 
     emitBreakableSpace(node);
     visit(node.right);
     return null;
@@ -363,7 +362,7 @@ public abstract class ASTPrinter extends ASTPrinterUtil {
   public Void visitBitwiseXorExpression(BitwiseXorExpression node) {
     visit(node.left);
     emitBreakableSpace(node);
-    emitType(node, GLSLLexer.NR); // TODO operator or complete change
+    emitType(node, GLSLLexer.BXOR_OP); 
     emitBreakableSpace(node);
     visit(node.right);
     return null;
@@ -373,7 +372,7 @@ public abstract class ASTPrinter extends ASTPrinterUtil {
   public Void visitBitwiseOrExpression(BitwiseOrExpression node) {
     visit(node.left);
     emitBreakableSpace(node);
-    emitType(node, GLSLLexer.NR); // TODO operator or complete change
+    emitType(node, GLSLLexer.BOR_OP);
     emitBreakableSpace(node);
     visit(node.right);
     return null;
@@ -383,7 +382,7 @@ public abstract class ASTPrinter extends ASTPrinterUtil {
   public Void visitBooleanAndExpression(BooleanAndExpression node) {
     visit(node.left);
     emitBreakableSpace(node);
-    emitType(node, GLSLLexer.NR); // TODO operator or complete change
+    emitType(node, GLSLLexer.AND_OP); 
     emitBreakableSpace(node);
     visit(node.right);
     return null;
@@ -393,7 +392,7 @@ public abstract class ASTPrinter extends ASTPrinterUtil {
   public Void visitBooleanXorExpression(BooleanXorExpression node) {
     visit(node.left);
     emitBreakableSpace(node);
-    emitType(node, GLSLLexer.NR); // TODO operator or complete change
+    emitType(node, GLSLLexer.XOR_OP);
     emitBreakableSpace(node);
     visit(node.right);
     return null;
@@ -403,7 +402,7 @@ public abstract class ASTPrinter extends ASTPrinterUtil {
   public Void visitBooleanOrExpression(BooleanOrExpression node) {
     visit(node.left);
     emitBreakableSpace(node);
-    emitType(node, GLSLLexer.NR); // TODO operator or complete change
+    emitType(node, GLSLLexer.OR_OP);
     emitBreakableSpace(node);
     visit(node.right);
     return null;
@@ -413,7 +412,7 @@ public abstract class ASTPrinter extends ASTPrinterUtil {
   public Void visitAssignmentExpression(AssignmentExpression node) {
     visit(node.left);
     emitBreakableSpace(node);
-    emitType(node, GLSLLexer.NR); // TODO operator or complete change
+    emitType(node, GLSLLexer.ASSIGN_OP); 
     emitBreakableSpace(node);
     visit(node.right);
     return null;
@@ -423,7 +422,7 @@ public abstract class ASTPrinter extends ASTPrinterUtil {
   public Void visitMultiplicationAssignmentExpression(MultiplicationAssignmentExpression node) {
     visit(node.left);
     emitBreakableSpace(node);
-    emitType(node, GLSLLexer.NR); // TODO operator or complete change
+    emitType(node, GLSLLexer.MUL_ASSIGN);
     emitBreakableSpace(node);
     visit(node.right);
     return null;
@@ -433,7 +432,7 @@ public abstract class ASTPrinter extends ASTPrinterUtil {
   public Void visitDivisionAssignmentExpression(DivisionAssignmentExpression node) {
     visit(node.left);
     emitBreakableSpace(node);
-    emitType(node, GLSLLexer.NR); // TODO operator or complete change
+    emitType(node, GLSLLexer.DIV_ASSIGN);
     emitBreakableSpace(node);
     visit(node.right);
     return null;
@@ -443,7 +442,7 @@ public abstract class ASTPrinter extends ASTPrinterUtil {
   public Void visitModuloAssignmentExpression(ModuloAssignmentExpression node) {
     visit(node.left);
     emitBreakableSpace(node);
-    emitType(node, GLSLLexer.NR); // TODO operator or complete change
+    emitType(node, GLSLLexer.MOD_ASSIGN);
     emitBreakableSpace(node);
     visit(node.right);
     return null;
@@ -453,7 +452,7 @@ public abstract class ASTPrinter extends ASTPrinterUtil {
   public Void visitAdditionAssignmentExpression(AdditionAssignmentExpression node) {
     visit(node.left);
     emitBreakableSpace(node);
-    emitType(node, GLSLLexer.NR); // TODO operator or complete change
+    emitType(node, GLSLLexer.ADD_ASSIGN);
     emitBreakableSpace(node);
     visit(node.right);
     return null;
@@ -463,7 +462,7 @@ public abstract class ASTPrinter extends ASTPrinterUtil {
   public Void visitSubtractionAssignmentExpression(SubtractionAssignmentExpression node) {
     visit(node.left);
     emitBreakableSpace(node);
-    emitType(node, GLSLLexer.NR); // TODO operator or complete change
+    emitType(node, GLSLLexer.SUB_ASSIGN); 
     emitBreakableSpace(node);
     visit(node.right);
     return null;
@@ -473,7 +472,7 @@ public abstract class ASTPrinter extends ASTPrinterUtil {
   public Void visitLeftShiftAssignmentExpression(LeftShiftAssignmentExpression node) {
     visit(node.left);
     emitBreakableSpace(node);
-    emitType(node, GLSLLexer.NR); // TODO operator or complete change
+    emitType(node, GLSLLexer.LEFT_ASSIGN); 
     emitBreakableSpace(node);
     visit(node.right);
     return null;
@@ -483,7 +482,7 @@ public abstract class ASTPrinter extends ASTPrinterUtil {
   public Void visitRightShiftAssignmentExpression(RightShiftAssignmentExpression node) {
     visit(node.left);
     emitBreakableSpace(node);
-    emitType(node, GLSLLexer.NR); // TODO operator or complete change
+    emitType(node, GLSLLexer.RIGHT_ASSIGN); 
     emitBreakableSpace(node);
     visit(node.right);
     return null;
@@ -493,7 +492,7 @@ public abstract class ASTPrinter extends ASTPrinterUtil {
   public Void visitBitwiseAndAssignmentExpression(BitwiseAndAssignmentExpression node) {
     visit(node.left);
     emitBreakableSpace(node);
-    emitType(node, GLSLLexer.NR); // TODO operator or complete change
+    emitType(node, GLSLLexer.AND_ASSIGN); 
     emitBreakableSpace(node);
     visit(node.right);
     return null;
@@ -503,7 +502,7 @@ public abstract class ASTPrinter extends ASTPrinterUtil {
   public Void visitBitwiseXorAssignmentExpression(BitwiseXorAssignmentExpression node) {
     visit(node.left);
     emitBreakableSpace(node);
-    emitType(node, GLSLLexer.NR); // TODO operator or complete change
+    emitType(node, GLSLLexer.XOR_ASSIGN); 
     emitBreakableSpace(node);
     visit(node.right);
     return null;
@@ -513,7 +512,7 @@ public abstract class ASTPrinter extends ASTPrinterUtil {
   public Void visitBitwiseOrAssignmentExpression(BitwiseOrAssignmentExpression node) {
     visit(node.left);
     emitBreakableSpace(node);
-    emitType(node, GLSLLexer.NR); // TODO operator or complete change
+    emitType(node, GLSLLexer.OR_ASSIGN); 
     emitBreakableSpace(node);
     visit(node.right);
     return null;
