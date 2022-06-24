@@ -108,9 +108,9 @@ public class ASTBuilder extends GLSLParserBaseVisitor<ASTNode> {
         return new IdentityExpression(operand);
       case GLSLLexer.MINUS_OP:
         return new NegationExpression(operand);
-      case GLSLLexer.NOT_OP:
+      case GLSLLexer.BOOL_NOT_OP:
         return new BooleanNotExpression(operand);
-      case GLSLLexer.BNEG_OP:
+      case GLSLLexer.BIT_NEG_OP:
         return new BitwiseNotExpression(operand);
       default:
         throw new IllegalStateException("Unexpected prefix operator type" + ctx.op.getText());
@@ -224,7 +224,7 @@ public class ASTBuilder extends GLSLParserBaseVisitor<ASTNode> {
 
   @Override
   public ASTNode visitReferenceExpression(ReferenceExpressionContext ctx) {
-    return new ReferenceExpression((Identifier)visit(ctx.variableIdentifier()));
+    return new ReferenceExpression((Identifier) visit(ctx.variableIdentifier()));
   }
 
   @Override

@@ -81,12 +81,12 @@ public abstract class ASTPrinter extends ASTPrinterUtil {
 
   @Override
   public void enterBitwiseNotExpression(BitwiseNotExpression node) {
-    emitType(node, GLSLLexer.BNEG_OP);
+    emitType(node, GLSLLexer.BIT_NEG_OP);
   }
 
   @Override
   public void enterBooleanNotExpression(BooleanNotExpression node) {
-    emitType(node, GLSLLexer.NOT_OP);
+    emitType(node, GLSLLexer.BOOL_NOT_OP);
   }
 
   @Override
@@ -252,7 +252,7 @@ public abstract class ASTPrinter extends ASTPrinterUtil {
   public Void visitAdditionExpression(AdditionExpression node) {
     visit(node.left);
     emitBreakableSpace(node);
-    emitType(node, GLSLLexer.PLUS_OP); 
+    emitType(node, GLSLLexer.PLUS_OP);
     emitBreakableSpace(node);
     visit(node.right);
     return null;
@@ -262,7 +262,7 @@ public abstract class ASTPrinter extends ASTPrinterUtil {
   public Void visitSubtractionExpression(SubtractionExpression node) {
     visit(node.left);
     emitBreakableSpace(node);
-    emitType(node, GLSLLexer.MINUS_OP); 
+    emitType(node, GLSLLexer.MINUS_OP);
     emitBreakableSpace(node);
     visit(node.right);
     return null;
@@ -292,7 +292,7 @@ public abstract class ASTPrinter extends ASTPrinterUtil {
   public Void visitLessThanExpression(LessThanExpression node) {
     visit(node.left);
     emitBreakableSpace(node);
-    emitType(node, GLSLLexer.LT_OP); 
+    emitType(node, GLSLLexer.LT_OP);
     emitBreakableSpace(node);
     visit(node.right);
     return null;
@@ -352,7 +352,7 @@ public abstract class ASTPrinter extends ASTPrinterUtil {
   public Void visitBitwiseAndExpression(BitwiseAndExpression node) {
     visit(node.left);
     emitBreakableSpace(node);
-    emitType(node, GLSLLexer.BAND_OP); 
+    emitType(node, GLSLLexer.BIT_AND_OP);
     emitBreakableSpace(node);
     visit(node.right);
     return null;
@@ -362,7 +362,7 @@ public abstract class ASTPrinter extends ASTPrinterUtil {
   public Void visitBitwiseXorExpression(BitwiseXorExpression node) {
     visit(node.left);
     emitBreakableSpace(node);
-    emitType(node, GLSLLexer.BXOR_OP); 
+    emitType(node, GLSLLexer.BIT_XOR_OP);
     emitBreakableSpace(node);
     visit(node.right);
     return null;
@@ -372,7 +372,7 @@ public abstract class ASTPrinter extends ASTPrinterUtil {
   public Void visitBitwiseOrExpression(BitwiseOrExpression node) {
     visit(node.left);
     emitBreakableSpace(node);
-    emitType(node, GLSLLexer.BOR_OP);
+    emitType(node, GLSLLexer.BIT_OR_OP);
     emitBreakableSpace(node);
     visit(node.right);
     return null;
@@ -382,7 +382,7 @@ public abstract class ASTPrinter extends ASTPrinterUtil {
   public Void visitBooleanAndExpression(BooleanAndExpression node) {
     visit(node.left);
     emitBreakableSpace(node);
-    emitType(node, GLSLLexer.AND_OP); 
+    emitType(node, GLSLLexer.BOOL_AND_OP);
     emitBreakableSpace(node);
     visit(node.right);
     return null;
@@ -392,7 +392,7 @@ public abstract class ASTPrinter extends ASTPrinterUtil {
   public Void visitBooleanXorExpression(BooleanXorExpression node) {
     visit(node.left);
     emitBreakableSpace(node);
-    emitType(node, GLSLLexer.XOR_OP);
+    emitType(node, GLSLLexer.BOOL_XOR_OP);
     emitBreakableSpace(node);
     visit(node.right);
     return null;
@@ -402,7 +402,7 @@ public abstract class ASTPrinter extends ASTPrinterUtil {
   public Void visitBooleanOrExpression(BooleanOrExpression node) {
     visit(node.left);
     emitBreakableSpace(node);
-    emitType(node, GLSLLexer.OR_OP);
+    emitType(node, GLSLLexer.BOOL_OR_OP);
     emitBreakableSpace(node);
     visit(node.right);
     return null;
@@ -412,7 +412,7 @@ public abstract class ASTPrinter extends ASTPrinterUtil {
   public Void visitAssignmentExpression(AssignmentExpression node) {
     visit(node.left);
     emitBreakableSpace(node);
-    emitType(node, GLSLLexer.ASSIGN_OP); 
+    emitType(node, GLSLLexer.ASSIGN_OP);
     emitBreakableSpace(node);
     visit(node.right);
     return null;
@@ -462,7 +462,7 @@ public abstract class ASTPrinter extends ASTPrinterUtil {
   public Void visitSubtractionAssignmentExpression(SubtractionAssignmentExpression node) {
     visit(node.left);
     emitBreakableSpace(node);
-    emitType(node, GLSLLexer.SUB_ASSIGN); 
+    emitType(node, GLSLLexer.SUB_ASSIGN);
     emitBreakableSpace(node);
     visit(node.right);
     return null;
@@ -472,7 +472,7 @@ public abstract class ASTPrinter extends ASTPrinterUtil {
   public Void visitLeftShiftAssignmentExpression(LeftShiftAssignmentExpression node) {
     visit(node.left);
     emitBreakableSpace(node);
-    emitType(node, GLSLLexer.LEFT_ASSIGN); 
+    emitType(node, GLSLLexer.LEFT_ASSIGN);
     emitBreakableSpace(node);
     visit(node.right);
     return null;
@@ -482,7 +482,7 @@ public abstract class ASTPrinter extends ASTPrinterUtil {
   public Void visitRightShiftAssignmentExpression(RightShiftAssignmentExpression node) {
     visit(node.left);
     emitBreakableSpace(node);
-    emitType(node, GLSLLexer.RIGHT_ASSIGN); 
+    emitType(node, GLSLLexer.RIGHT_ASSIGN);
     emitBreakableSpace(node);
     visit(node.right);
     return null;
@@ -492,7 +492,7 @@ public abstract class ASTPrinter extends ASTPrinterUtil {
   public Void visitBitwiseAndAssignmentExpression(BitwiseAndAssignmentExpression node) {
     visit(node.left);
     emitBreakableSpace(node);
-    emitType(node, GLSLLexer.AND_ASSIGN); 
+    emitType(node, GLSLLexer.AND_ASSIGN);
     emitBreakableSpace(node);
     visit(node.right);
     return null;
@@ -502,7 +502,7 @@ public abstract class ASTPrinter extends ASTPrinterUtil {
   public Void visitBitwiseXorAssignmentExpression(BitwiseXorAssignmentExpression node) {
     visit(node.left);
     emitBreakableSpace(node);
-    emitType(node, GLSLLexer.XOR_ASSIGN); 
+    emitType(node, GLSLLexer.XOR_ASSIGN);
     emitBreakableSpace(node);
     visit(node.right);
     return null;
@@ -512,7 +512,7 @@ public abstract class ASTPrinter extends ASTPrinterUtil {
   public Void visitBitwiseOrAssignmentExpression(BitwiseOrAssignmentExpression node) {
     visit(node.left);
     emitBreakableSpace(node);
-    emitType(node, GLSLLexer.OR_ASSIGN); 
+    emitType(node, GLSLLexer.OR_ASSIGN);
     emitBreakableSpace(node);
     visit(node.right);
     return null;
