@@ -2,6 +2,8 @@ package io.github.douira.glsl_transformer.parse_ast;
 
 import java.util.*;
 
+import org.antlr.runtime.Token;
+
 import io.github.douira.glsl_transformer.GLSLLexer;
 
 /**
@@ -11,10 +13,10 @@ import io.github.douira.glsl_transformer.GLSLLexer;
  * the tensor.
  */
 public enum Type {
-  BOOL(GLSLLexer.BOOL, NumberType.BOOLEAN, "bool", 1),
-  BVEC2(GLSLLexer.BVEC2, NumberType.BOOLEAN, "bvec2", 1, 2),
-  BVEC3(GLSLLexer.BVEC3, NumberType.BOOLEAN, "bvec3", 1, 3),
-  BVEC4(GLSLLexer.BVEC4, NumberType.BOOLEAN, "bvec4", 1, 4),
+  BOOL(GLSLLexer.BOOL, GLSLLexer.BOOLCONSTANT, NumberType.BOOLEAN, "bool", "bool", 1),
+  BVEC2(GLSLLexer.BVEC2, NumberType.BOOLEAN, "bvec2", "bvec2", 1, 2),
+  BVEC3(GLSLLexer.BVEC3, NumberType.BOOLEAN, "bvec3", "bvec3", 1, 3),
+  BVEC4(GLSLLexer.BVEC4, NumberType.BOOLEAN, "bvec4", "bvec4", 1, 4),
 
   INT8(GLSLLexer.INT8, NumberType.SIGNED_INTEGER, null, "int8_t", 8),
   I8VEC2(GLSLLexer.I8VEC2, NumberType.SIGNED_INTEGER, null, "i8vec2", 8, 2),
@@ -25,34 +27,34 @@ public enum Type {
   UI8VEC3(GLSLLexer.UI8VEC3, NumberType.UNSIGNED_INTEGER, null, "ui8vec3", 8, 3),
   UI8VEC4(GLSLLexer.UI8VEC4, NumberType.UNSIGNED_INTEGER, null, "ui8vec4", 8, 4),
 
-  INT16(GLSLLexer.INT16, NumberType.SIGNED_INTEGER, null, "int16_t", 16),
+  INT16(GLSLLexer.INT16, GLSLLexer.INT16CONSTANT, NumberType.SIGNED_INTEGER, null, "int16_t", 16),
   I16VEC2(GLSLLexer.I16VEC2, NumberType.SIGNED_INTEGER, null, "i16vec2", 16, 2),
   I16VEC3(GLSLLexer.I16VEC3, NumberType.SIGNED_INTEGER, null, "i16vec3", 16, 3),
   I16VEC4(GLSLLexer.I16VEC4, NumberType.SIGNED_INTEGER, null, "i16vec4", 16, 4),
-  UINT16(GLSLLexer.UINT16, NumberType.UNSIGNED_INTEGER, null, "uint16_t", 16),
+  UINT16(GLSLLexer.UINT16, GLSLLexer.UINT16CONSTANT, NumberType.UNSIGNED_INTEGER, null, "uint16_t", 16),
   UI16VEC2(GLSLLexer.UI16VEC2, NumberType.UNSIGNED_INTEGER, null, "ui16vec2", 16, 2),
   UI16VEC3(GLSLLexer.UI16VEC3, NumberType.UNSIGNED_INTEGER, null, "ui16vec3", 16, 3),
   UI16VEC4(GLSLLexer.UI16VEC4, NumberType.UNSIGNED_INTEGER, null, "ui16vec4", 16, 4),
 
-  INT32(GLSLLexer.INT32, NumberType.SIGNED_INTEGER, "int", "int32_t", 32),
+  INT32(GLSLLexer.INT32, GLSLLexer.INT32CONSTANT, NumberType.SIGNED_INTEGER, "int", "int32_t", 32),
   I32VEC2(GLSLLexer.I32VEC2, NumberType.SIGNED_INTEGER, "ivec2", "i32vec2", 32, 2),
   I32VEC3(GLSLLexer.I32VEC3, NumberType.SIGNED_INTEGER, "ivec3", "i32vec3", 32, 3),
   I32VEC4(GLSLLexer.I32VEC4, NumberType.SIGNED_INTEGER, "ivec4", "i32vec4", 32, 4),
-  UINT32(GLSLLexer.UINT32, NumberType.UNSIGNED_INTEGER, "uint", "uint32_t", 32),
+  UINT32(GLSLLexer.UINT32, GLSLLexer.UINT32CONSTANT, NumberType.UNSIGNED_INTEGER, "uint", "uint32_t", 32),
   UI32VEC2(GLSLLexer.UI32VEC2, NumberType.UNSIGNED_INTEGER, "uvec2", "u32vec2", 32, 2),
   UI32VEC3(GLSLLexer.UI32VEC3, NumberType.UNSIGNED_INTEGER, "uvec3", "u32vec3", 32, 3),
   UI32VEC4(GLSLLexer.UI32VEC4, NumberType.UNSIGNED_INTEGER, "uvec4", "u32vec4", 32, 4),
 
-  INT64(GLSLLexer.INT64, NumberType.SIGNED_INTEGER, null, "int64_t", 64),
+  INT64(GLSLLexer.INT64, GLSLLexer.INT64CONSTANT, NumberType.SIGNED_INTEGER, null, "int64_t", 64),
   I64VEC2(GLSLLexer.I64VEC2, NumberType.SIGNED_INTEGER, null, "i64vec2", 64, 2),
   I64VEC3(GLSLLexer.I64VEC3, NumberType.SIGNED_INTEGER, null, "i64vec3", 64, 3),
   I64VEC4(GLSLLexer.I64VEC4, NumberType.SIGNED_INTEGER, null, "i64vec4", 64, 4),
-  UINT64(GLSLLexer.UINT64, NumberType.UNSIGNED_INTEGER, null, "uint64_t", 64),
+  UINT64(GLSLLexer.UINT64, GLSLLexer.UINT64CONSTANT, NumberType.UNSIGNED_INTEGER, null, "uint64_t", 64),
   UI64VEC2(GLSLLexer.UI64VEC2, NumberType.UNSIGNED_INTEGER, null, "ui64vec2", 64, 2),
   UI64VEC3(GLSLLexer.UI64VEC3, NumberType.UNSIGNED_INTEGER, null, "ui64vec3", 64, 3),
   UI64VEC4(GLSLLexer.UI64VEC4, NumberType.UNSIGNED_INTEGER, null, "ui64vec4", 64, 4),
 
-  FLOAT16(GLSLLexer.FLOAT16, NumberType.FLOATING_POINT, null, "float16_t", 16),
+  FLOAT16(GLSLLexer.FLOAT16, GLSLLexer.FLOAT16CONSTANT, NumberType.FLOATING_POINT, null, "float16_t", 16),
   F16VEC2(GLSLLexer.F16VEC2, NumberType.FLOATING_POINT, null, "f16vec2", 16, 2),
   F16VEC3(GLSLLexer.F16VEC3, NumberType.FLOATING_POINT, null, "f16vec3", 16, 3),
   F16VEC4(GLSLLexer.F16VEC4, NumberType.FLOATING_POINT, null, "f16vec4", 16, 4),
@@ -66,7 +68,7 @@ public enum Type {
   F16MAT4X3(GLSLLexer.F16MAT4X3, NumberType.FLOATING_POINT, null, "f16mat4x3", 16, 4, 3),
   F16MAT4X4(GLSLLexer.F16MAT4X4, NumberType.FLOATING_POINT, "f16mat4", "f16mat4x4", 16, 4, 4),
 
-  FLOAT32(GLSLLexer.FLOAT32, NumberType.FLOATING_POINT, "float", "float32_t", 32),
+  FLOAT32(GLSLLexer.FLOAT32, GLSLLexer.FLOAT32CONSTANT, NumberType.FLOATING_POINT, "float", "float32_t", 32),
   F32VEC2(GLSLLexer.F32VEC2, NumberType.FLOATING_POINT, "vec2", "f32vec2", 32, 2),
   F32VEC3(GLSLLexer.F32VEC3, NumberType.FLOATING_POINT, "vec3", "f32vec3", 32, 3),
   F32VEC4(GLSLLexer.F32VEC4, NumberType.FLOATING_POINT, "vec4", "f32vec4", 32, 4),
@@ -80,7 +82,7 @@ public enum Type {
   F32MAT4X3(GLSLLexer.F32MAT4X3, NumberType.FLOATING_POINT, "mat4x3", "f32mat4x3", 32, 4, 3),
   F32MAT4X4(GLSLLexer.F32MAT4X4, NumberType.FLOATING_POINT, "mat4", "f32mat4x4", 32, 4, 4),
 
-  FLOAT64(GLSLLexer.FLOAT64, NumberType.FLOATING_POINT, "double", "float64_t", 64),
+  FLOAT64(GLSLLexer.FLOAT64, GLSLLexer.FLOAT64CONSTANT, NumberType.FLOATING_POINT, "double", "float64_t", 64),
   F64VEC2(GLSLLexer.F64VEC2, NumberType.FLOATING_POINT, "dvec2", "f64vec2", 64, 2),
   F64VEC3(GLSLLexer.F64VEC3, NumberType.FLOATING_POINT, "dvec3", "f64vec3", 64, 3),
   F64VEC4(GLSLLexer.F64VEC4, NumberType.FLOATING_POINT, "dvec4", "f64vec4", 64, 4),
@@ -146,6 +148,7 @@ public enum Type {
   }
 
   private final int tokenType;
+  private final int literalTokenType;
   private final NumberType numberType;
   private final int[] dimensions;
   private final int bitDepth;
@@ -158,22 +161,13 @@ public enum Type {
   // can't be static
   private final int[] SCALAR_DIMENSIONS = { 1 };
 
-  /**
-   * Creates a new type with the given token type, number type, name, bit depth
-   * and dimensions. The given name is used as both the compact and explicit name.
-   * 
-   * @param tokenType  The token type in the parser
-   * @param numberType The number type
-   * @param name       The name
-   * @param bitDepth   The bit depth
-   * @param dimensions The size of each dimension
-   */
   Type(int tokenType,
       NumberType numberType,
-      String name,
+      String compactName,
+      String explicitName,
       int bitDepth,
       int... dimensions) {
-    this(tokenType, numberType, name, name, bitDepth, dimensions);
+    this(tokenType, Token.INVALID_TOKEN_TYPE, numberType, compactName, explicitName, bitDepth, dimensions);
   }
 
   /**
@@ -189,6 +183,7 @@ public enum Type {
    * @param dimensions   The size of each dimension
    */
   Type(int tokenType,
+      int literalTokenType,
       NumberType numberType,
       String compactName,
       String explicitName,
@@ -218,10 +213,11 @@ public enum Type {
       }
     }
 
+    this.tokenType = tokenType;
+    this.literalTokenType = literalTokenType;
+    this.numberType = numberType;
     this.dimensions = dimensions;
     this.bitDepth = bitDepth;
-    this.tokenType = tokenType;
-    this.numberType = numberType;
     this.compactName = compactName;
     this.explicitName = explicitName;
   }
@@ -294,7 +290,8 @@ public enum Type {
     return implicitCastTypes;
   }
 
-  private static final Type[] tokensTypesToValues;
+  private static final Type[] tokenTypesToValues;
+  private static final Map<Integer, Type> literalTokenTypesToValues;
   private static final int minIndex;
 
   static {
@@ -314,6 +311,7 @@ public enum Type {
     // create a mapping array between the token types and the type enum
     minIndex = localMinIndex;
     Type[] localTokensTypesToValues = new Type[localMaxIndex - localMinIndex + 1];
+    literalTokenTypesToValues = new HashMap<>();
     for (Type entry : values()) {
       int index = entry.tokenType - minIndex;
       if (localTokensTypesToValues[index] != null) {
@@ -321,8 +319,12 @@ public enum Type {
             "A type was registered multiple times for the same token. Fix the Tensor class' initialization!");
       }
       localTokensTypesToValues[index] = entry;
+
+      if (entry.literalTokenType != Token.INVALID_TOKEN_TYPE) {
+        literalTokenTypesToValues.put(entry.literalTokenType, entry);
+      }
     }
-    tokensTypesToValues = localTokensTypesToValues;
+    tokenTypesToValues = localTokensTypesToValues;
 
     // register the types to enum sets for each of the number types
     // (inverse mapping)
@@ -368,6 +370,20 @@ public enum Type {
    * @return The type for the given token type index
    */
   public static Type ofTokenType(int tokenType) {
-    return tokensTypesToValues[tokenType - minIndex];
+    return tokenTypesToValues[tokenType - minIndex];
+  }
+
+  /**
+   * Returns the type for the given literal token type.
+   *
+   * @param literalTokenType The literal token type
+   * @return The type for the given literal token type
+   */
+  public static Type ofLiteralTokenType(int literalTokenType) {
+    var type = literalTokenTypesToValues.get(literalTokenType);
+    if (type == null) {
+      throw new IllegalArgumentException("Token type has no literal type: " + literalTokenType);
+    }
+    return type;
   }
 }

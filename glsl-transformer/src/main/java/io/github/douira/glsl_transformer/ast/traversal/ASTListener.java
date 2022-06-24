@@ -146,6 +146,12 @@ public interface ASTListener extends GeneralASTListener {
   default void exitReferenceExpression(ReferenceExpression node) {
   }
 
+  default void enterLiteralExpression(LiteralExpression node) {
+  }
+
+  default void exitLiteralExpression(LiteralExpression node) {
+  }
+
   default void enterStatement(Statement node) {
   }
 
