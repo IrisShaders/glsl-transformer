@@ -62,7 +62,7 @@ test {
     // report is always generated after tests run
     finalizedBy jacocoTestReport
     testLogging.showStandardStreams = true
-    maxParallelForks = Runtime.runtime.availableProcessors() - 1
+    maxParallelForks = Runtime.runtime.availableProcessors() - 2
 }
 
 jacocoTestReport {
