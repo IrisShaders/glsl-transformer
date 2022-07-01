@@ -397,14 +397,12 @@ public class ASTBuilder extends GLSLParserBaseVisitor<ASTNode> {
   @Override
   public SwitchStatement visitSwitchStatement(SwitchStatementContext ctx) {
     // TODO
-    // return super.visitSwitchStatement(ctx);
     return null;
   }
 
   @Override
   public ForLoopStatement visitForStatement(ForStatementContext ctx) {
     // TODO
-    // return super.visitForStatement(ctx);
     return null;
   }
 
@@ -427,6 +425,18 @@ public class ASTBuilder extends GLSLParserBaseVisitor<ASTNode> {
     return new DoWhileLoopStatement(
         (Statement) visit(ctx.loopBody),
         (Expression) visit(ctx.condition));
+  }
+
+  @Override
+  public ASTNode visitAttribute(AttributeContext ctx) {
+    // TODO
+    return null;
+  }
+
+  @Override
+  public ASTNode visitSingleAttribute(SingleAttributeContext ctx) {
+    // TODO
+    return null;
   }
 
   @Override
