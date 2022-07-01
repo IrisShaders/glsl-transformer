@@ -3,6 +3,8 @@ package io.github.douira.glsl_transformer.ast.node.statement.selection;
 import java.util.List;
 import java.util.stream.Stream;
 
+import com.github.bsideup.jabel.Desugar;
+
 import io.github.douira.glsl_transformer.ast.ChildNodeList;
 import io.github.douira.glsl_transformer.ast.node.ControlFlowAttributes;
 import io.github.douira.glsl_transformer.ast.node.expression.Expression;
@@ -13,6 +15,7 @@ public class SelectionStatement extends ManyStatement implements BranchingStatem
 	public ControlFlowAttributes controlFlowAttributes; // TODO: nullable
 	public List<Expression> conditions;
 
+	@Desugar
 	public record Section(Expression condition, Statement statement) {
 		public Section(Statement statement) {
 			this(null, statement);
