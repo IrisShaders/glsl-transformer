@@ -30,6 +30,11 @@ public class TranslationUnit extends ListASTNode<ExternalDeclaration> {
   }
 
   @Override
+  public <R> R accept(ASTVisitor<R> visitor) {
+    return visitor.visitTranslationUnit(this);
+  }
+
+  @Override
   public void enterNode(ASTListener listener) {
     listener.enterTranslationUnit(this);
   }
@@ -37,10 +42,5 @@ public class TranslationUnit extends ListASTNode<ExternalDeclaration> {
   @Override
   public void exitNode(ASTListener listener) {
     listener.exitTranslationUnit(this);
-  }
-
-  @Override
-  public <R> R accept(ASTVisitor<R> visitor) {
-    return visitor.visitTranslationUnit(this);
   }
 }

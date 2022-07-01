@@ -55,41 +55,7 @@ public abstract class Expression extends InnerASTNode {
     CONDITION, // ternary
     SEQUENCE // many-ary
   }
-
-  /*
-   * ArrayAccessExpression
-   * MultiplicationExpression
-   * DivisionExpression
-   * ModuloExpression
-   * AdditionExpression
-   * SubtractionExpression
-   * LeftShiftExpression
-   * RightShiftExpression
-   * LessThanExpression
-   * GreaterThanExpression
-   * LessThanEqualExpression
-   * GreaterThanEqualExpression
-   * EqualityExpression
-   * InequalityExpression
-   * BitwiseAndExpression
-   * BitwiseXorExpression
-   * BitwiseOrExpression
-   * BooleanAndExpression
-   * BooleanXorExpression
-   * BooleanOrExpression
-   * AssignmentExpression
-   * MultiplicationAssignmentExpression
-   * DivisionAssignmentExpression
-   * ModuloAssignmentExpression
-   * AdditionAssignmentExpression
-   * SubtractionAssignmentExpression
-   * LeftShiftAssignmentExpression
-   * RightShiftAssignmentExpression
-   * BitwiseAndAssignmentExpression
-   * BitwiseXorAssignmentExpression
-   * BitwiseOrAssignmentExpression
-   */
-
+  
   public abstract ExpressionType getExpressionType();
 
   public enum OperandStructure {
