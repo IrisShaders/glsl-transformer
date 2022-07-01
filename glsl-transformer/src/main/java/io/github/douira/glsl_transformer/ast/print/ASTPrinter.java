@@ -592,15 +592,11 @@ public abstract class ASTPrinter extends ASTPrinterUtil {
   @Override
   public Void visitSwitchStatement(SwitchStatement node) {
     throw new UnsupportedOperationException(); // TODO
-    emitCommonNewline();
-    return null;
   }
 
   @Override
   public Void visitCaseLabelStatement(CaseLabelStatement node) {
     throw new UnsupportedOperationException(); // TODO
-    emitCommonNewline();
-    return null;
   }
 
   /**
