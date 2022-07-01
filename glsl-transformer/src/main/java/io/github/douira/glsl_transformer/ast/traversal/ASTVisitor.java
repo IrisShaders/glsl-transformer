@@ -6,6 +6,9 @@ import io.github.douira.glsl_transformer.ast.node.expression.binary.*;
 import io.github.douira.glsl_transformer.ast.node.expression.unary.*;
 import io.github.douira.glsl_transformer.ast.node.external_declaration.*;
 import io.github.douira.glsl_transformer.ast.node.statement.*;
+import io.github.douira.glsl_transformer.ast.node.statement.loop.*;
+import io.github.douira.glsl_transformer.ast.node.statement.selection.*;
+import io.github.douira.glsl_transformer.ast.node.statement.terminal.*;
 
 public interface ASTVisitor<R> extends GeneralASTVisitor<R> {
   default R visitTranslationUnit(TranslationUnit node) {
@@ -263,6 +266,82 @@ public interface ASTVisitor<R> extends GeneralASTVisitor<R> {
   }
 
   default R visitCompoundStatement(CompoundStatement node) {
+    return visitChildren(node);
+  }
+
+  default R visitDeclarationStatement(DeclarationStatement node) {
+    throw new UnsupportedOperationException(); // TODO
+  }
+
+  default R visitExpressionStatement(ExpressionStatement node) {
+    throw new UnsupportedOperationException(); // TODO
+  }
+
+  default R visitSelectionStatement(SelectionStatement node) {
+    throw new UnsupportedOperationException(); // TODO
+  }
+
+  default R visitSwitchStatement(SwitchStatement node) {
+    throw new UnsupportedOperationException(); // TODO
+  }
+
+  default R visitCaseLabelStatement(CaseLabelStatement node) {
+    throw new UnsupportedOperationException(); // TODO
+  }
+
+  default R visitForLoopStatement(ForLoopStatement node) {
+    throw new UnsupportedOperationException(); // TODO
+  }
+
+  default R visitWhileLoopStatement(WhileLoopStatement node) {
+    throw new UnsupportedOperationException(); // TODO
+  }
+
+  default R visitDoWhileLoopStatement(DoWhileLoopStatement node) {
+    throw new UnsupportedOperationException(); // TODO
+  }
+
+  default R visitContinueStatement(ContinueStatement node) {
+    throw new UnsupportedOperationException(); // TODO
+  }
+
+  default R visitBreakStatement(BreakStatement node) {
+    throw new UnsupportedOperationException(); // TODO
+  }
+
+  default R visitReturnStatement(ReturnStatement node) {
+    throw new UnsupportedOperationException(); // TODO
+  }
+
+  default R visitDiscardStatement(DiscardStatement node) {
+    throw new UnsupportedOperationException(); // TODO
+  }
+
+  default R visitDemoteStatement(DemoteStatement node) {
+    throw new UnsupportedOperationException(); // TODO
+  }
+
+  default R visitManyStatement(ManyStatement node) {
+    throw new UnsupportedOperationException(); // TODO
+  }
+
+  default R visitLoopStatement(LoopStatement node) {
+    throw new UnsupportedOperationException(); // TODO
+  }
+
+  default R visitTerminalStatement(TerminalStatement node) {
+    throw new UnsupportedOperationException(); // TODO
+  }
+
+  default R visitSemiTerminalStatement(SemiTerminalStatement node) {
+    throw new UnsupportedOperationException(); // TODO
+  }
+
+  default R visitControlFlowAttribute(ControlFlowAttribute node) {
+    return visitThreeChildren(node.prefix, node.name, node.expression);
+  }
+
+  default R visitControlFlowAttributes(ControlFlowAttributes node) {
     return visitChildren(node);
   }
 

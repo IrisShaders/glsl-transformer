@@ -1,8 +1,9 @@
 package io.github.douira.glsl_transformer.ast.node.statement;
 
+import io.github.douira.glsl_transformer.ast.node.statement.terminal.SemiTerminalStatement;
 import io.github.douira.glsl_transformer.ast.traversal.ASTVisitor;
 
-public class EmptyStatement extends Statement {
+public class EmptyStatement extends SemiTerminalStatement {
   public EmptyStatement() {
   }
 
@@ -12,9 +13,7 @@ public class EmptyStatement extends Statement {
   }
 
   @Override
-  public <R> R accept(ASTVisitor<R> visitor) {
-    return visitor.aggregateResult(
-        super.accept(visitor),
-        visitor.visitEmptyStatement(this));
+  public <R> R statementAccept(ASTVisitor<R> visitor) {
+    return visitor.visitEmptyStatement(this);
   }
 }

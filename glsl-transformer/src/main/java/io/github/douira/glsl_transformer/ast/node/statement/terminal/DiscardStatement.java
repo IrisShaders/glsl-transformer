@@ -1,0 +1,18 @@
+package io.github.douira.glsl_transformer.ast.node.statement.terminal;
+
+import io.github.douira.glsl_transformer.ast.traversal.ASTVisitor;
+
+public class DiscardStatement extends TerminalStatement {
+  public DiscardStatement() {
+  }
+
+  @Override
+  public StatementType getStatementType() {
+    return StatementType.DISCARD;
+  }
+
+  @Override
+  public <R> R statementAccept(ASTVisitor<R> visitor) {
+    return visitor.visitDiscardStatement(this);
+  }
+}

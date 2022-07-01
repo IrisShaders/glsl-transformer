@@ -1,11 +1,14 @@
 package io.github.douira.glsl_transformer.ast.traversal;
 
-import io.github.douira.glsl_transformer.ast.node.TranslationUnit;
+import io.github.douira.glsl_transformer.ast.node.*;
 import io.github.douira.glsl_transformer.ast.node.expression.*;
 import io.github.douira.glsl_transformer.ast.node.expression.binary.*;
 import io.github.douira.glsl_transformer.ast.node.expression.unary.*;
 import io.github.douira.glsl_transformer.ast.node.external_declaration.*;
 import io.github.douira.glsl_transformer.ast.node.statement.*;
+import io.github.douira.glsl_transformer.ast.node.statement.loop.*;
+import io.github.douira.glsl_transformer.ast.node.statement.selection.*;
+import io.github.douira.glsl_transformer.ast.node.statement.terminal.*;
 
 public interface ASTListener extends GeneralASTListener {
   default void enterTranslationUnit(TranslationUnit node) {
@@ -348,5 +351,83 @@ public interface ASTListener extends GeneralASTListener {
   }
 
   default void exitCompoundStatement(CompoundStatement node) {
+  }
+
+  default void enterDeclarationStatement(DeclarationStatement node) {
+  }
+
+  default void exitDeclarationStatement(DeclarationStatement node) {
+  }
+
+  default void enterExpressionStatement(ExpressionStatement node) {
+  }
+
+  default void exitExpressionStatement(ExpressionStatement node) {
+  }
+
+  default void enterSelectionStatement(SelectionStatement node) {
+  }
+
+  default void exitSelectionStatement(SelectionStatement node) {
+  }
+
+  default void enterSwitchStatement(SwitchStatement node) {
+  }
+
+  default void exitSwitchStatement(SwitchStatement node) {
+  }
+
+  default void enterCaseLabelStatement(CaseLabelStatement node) {
+  }
+
+  default void exitCaseLabelStatement(CaseLabelStatement node) {
+  }
+
+  default void enterForLoopStatement(ForLoopStatement node) {
+  }
+
+  default void exitForLoopStatement(ForLoopStatement node) {
+  }
+
+  default void enterWhileLoopStatement(WhileLoopStatement node) {
+  }
+
+  default void exitWhileLoopStatement(WhileLoopStatement node) {
+  }
+
+  default void enterDoWhileLoopStatement(DoWhileLoopStatement node) {
+  }
+
+  default void exitDoWhileLoopStatement(DoWhileLoopStatement node) {
+  }
+
+  default void enterManyStatement(ManyStatement node) {
+  }
+
+  default void exitManyStatement(ManyStatement node) {
+  }
+
+  default void enterLoopStatement(LoopStatement node) {
+  }
+
+  default void exitLoopStatement(LoopStatement node) {
+  }
+
+  default void enterSemiTerminalStatement(SemiTerminalStatement node) {
+  }
+
+  default void exitSemiTerminalStatement(SemiTerminalStatement node) {
+  }
+
+  default void enterControlFlowAttributes(ControlFlowAttributes node) {
+  }
+
+  default void exitControlFlowAttributes(ControlFlowAttributes node) {
+  }
+
+  default void enterControlFlowAttribute(ControlFlowAttribute node) {
+  }
+
+  default void exitControlFlowAttribute(ControlFlowAttribute node) {
   }
 }

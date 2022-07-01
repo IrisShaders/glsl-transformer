@@ -1,6 +1,7 @@
 package io.github.douira.glsl_transformer.ast;
 
 import java.util.*;
+import java.util.stream.Stream;
 
 import org.antlr.v4.runtime.tree.*;
 
@@ -12,6 +13,10 @@ import io.github.douira.glsl_transformer.ast.node.expression.binary.*;
 import io.github.douira.glsl_transformer.ast.node.expression.unary.*;
 import io.github.douira.glsl_transformer.ast.node.external_declaration.*;
 import io.github.douira.glsl_transformer.ast.node.statement.*;
+import io.github.douira.glsl_transformer.ast.node.statement.loop.*;
+import io.github.douira.glsl_transformer.ast.node.statement.selection.*;
+import io.github.douira.glsl_transformer.ast.node.statement.selection.SelectionStatement.Section;
+import io.github.douira.glsl_transformer.ast.node.statement.terminal.*;
 
 public class ASTBuilder extends GLSLParserBaseVisitor<ASTNode> {
   public static ASTNode build(ParseTree ctx) {
@@ -314,9 +319,114 @@ public class ASTBuilder extends GLSLParserBaseVisitor<ASTNode> {
   }
 
   @Override
+  public Statement visitStatement(StatementContext ctx) {
+    return (Statement) super.visitStatement(ctx);
+  }
+
+  @Override
   public CompoundStatement visitCompoundStatement(CompoundStatementContext ctx) {
     return new CompoundStatement(ctx.statement().stream().map(
         (statement) -> (Statement) visitStatement(statement)));
+  }
+
+  @Override
+  public ContinueStatement visitContinueStatement(ContinueStatementContext ctx) {
+    return new ContinueStatement();
+  }
+
+  @Override
+  public BreakStatement visitBreakStatement(BreakStatementContext ctx) {
+    return new BreakStatement();
+  }
+
+  @Override
+  public ReturnStatement visitReturnStatement(ReturnStatementContext ctx) {
+    return new ReturnStatement((Expression) visit(ctx.expression()));
+  }
+
+  @Override
+  public DiscardStatement visitDiscardStatement(DiscardStatementContext ctx) {
+    return new DiscardStatement();
+  }
+
+  @Override
+  public DemoteStatement visitDemoteStatement(DemoteStatementContext ctx) {
+    return new DemoteStatement();
+  }
+
+  @Override
+  public DeclarationStatement visitDeclarationStatement(DeclarationStatementContext ctx) {
+    return new DeclarationStatement((InnerASTNode) visit(ctx.getChild(0))); // TODO: Declaration
+  }
+
+  @Override
+  public ExpressionStatement visitExpressionStatement(ExpressionStatementContext ctx) {
+    return new ExpressionStatement((Expression) visit(ctx.expression()));
+  }
+
+  @Override
+  public EmptyStatement visitEmptyStatement(EmptyStatementContext ctx) {
+    return new EmptyStatement();
+  }
+
+  @Override
+  public SelectionStatement visitSelectionStatement(SelectionStatementContext ctx) {
+    // unwrap the nested selection statements that are created through "else if"
+    // chains
+    var sections = Stream.<Section>builder();
+    SelectionStatementContext nextSelection = ctx;
+    do {
+      sections.add(new Section(
+          (Expression) visit(nextSelection.condition),
+          (Statement) visit(nextSelection.ifTrue)));
+      var ifFalse = nextSelection.ifFalse;
+      nextSelection = null;
+      if (ifFalse != null) {
+        var nestedSelectionStatement = ifFalse.selectionStatement();
+        if (nestedSelectionStatement != null) {
+          nextSelection = nestedSelectionStatement;
+        } else {
+          // add a regular else branch
+          sections.add(new Section((Statement) visit(ifFalse)));
+        }
+      }
+    } while (nextSelection != null);
+    return new SelectionStatement(sections.build());
+  }
+
+  @Override
+  public SwitchStatement visitSwitchStatement(SwitchStatementContext ctx) {
+    // TODO
+    // return super.visitSwitchStatement(ctx);
+    return null;
+  }
+
+  @Override
+  public ForLoopStatement visitForStatement(ForStatementContext ctx) {
+    // TODO
+    // return super.visitForStatement(ctx);
+    return null;
+  }
+
+  @Override
+  public WhileLoopStatement visitWhileStatement(WhileStatementContext ctx) {
+    var condition = ctx.condition;
+    var expression = condition.expression();
+    return expression != null
+        ? new WhileLoopStatement(
+            (Expression) visit(expression),
+            (Statement) visit(ctx.loopBody))
+        : new WhileLoopStatement(
+            // TODO visit IterationConditionInitializer properly
+            (IterationConditionInitializer) visit(condition),
+            (Statement) visit(ctx.loopBody));
+  }
+
+  @Override
+  public DoWhileLoopStatement visitDoWhileStatement(DoWhileStatementContext ctx) {
+    return new DoWhileLoopStatement(
+        (Statement) visit(ctx.loopBody),
+        (Expression) visit(ctx.condition));
   }
 
   @Override

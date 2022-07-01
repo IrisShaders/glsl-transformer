@@ -1,11 +1,15 @@
 package io.github.douira.glsl_transformer.ast.print;
 
+import java.util.List;
+
 import io.github.douira.glsl_transformer.ast.ASTNode;
 import io.github.douira.glsl_transformer.ast.print.token.*;
 import io.github.douira.glsl_transformer.ast.traversal.ASTListenerVisitor;
 import io.github.douira.glsl_transformer.print.filter.TokenChannel;
 
 public abstract class ASTPrinterUtil extends ASTListenerVisitor<Void> {
+  private ASTNode currentNode;
+
   protected ASTPrinterUtil() {
     super();
   }
@@ -29,76 +33,99 @@ public abstract class ASTPrinterUtil extends ASTListenerVisitor<Void> {
     }
   }
 
-  protected void emitLiteral(ASTNode node, TokenRole role, String literal) {
-    emitToken(new LiteralToken(node, role, literal));
+  protected void emitLiteral(TokenRole role, String literal) {
+    emitToken(new LiteralToken(currentNode, role, literal));
   }
 
-  protected void emitLiteral(ASTNode node, String literal) {
-    emitLiteral(node, TokenRole.DEFAULT, literal);
+  protected void emitLiteral(String literal) {
+    emitLiteral(TokenRole.DEFAULT, literal);
   }
 
-  protected void emitLiterals(ASTNode node, TokenRole role, String... literals) {
+  protected void emitLiterals(TokenRole role, String... literals) {
     for (String l : literals) {
-      emitLiteral(node, role, l);
+      emitLiteral(role, l);
     }
   }
 
-  protected void emitLiterals(ASTNode node, String... literals) {
-    emitLiterals(node, TokenRole.DEFAULT, literals);
+  protected void emitLiterals(String... literals) {
+    emitLiterals(TokenRole.DEFAULT, literals);
   }
 
-  protected void emitType(ASTNode node, TokenRole role, int type) {
-    emitToken(new ParserToken(node, role, type));
+  protected void emitType(TokenRole role, int type) {
+    emitToken(new ParserToken(currentNode, role, type));
   }
 
-  protected void emitType(ASTNode node, int type) {
-    emitType(node, TokenRole.DEFAULT, type);
+  protected void emitType(int type) {
+    emitType(TokenRole.DEFAULT, type);
   }
 
-  protected void emitType(ASTNode node, TokenRole role, int... types) {
+  protected void emitType(TokenRole role, int... types) {
     for (int t : types) {
-      emitType(node, role, t);
+      emitType(role, t);
     }
   }
 
-  protected void emitType(ASTNode node, int... types) {
-    emitType(node, TokenRole.DEFAULT, types);
+  protected void emitType(int... types) {
+    emitType(TokenRole.DEFAULT, types);
   }
 
-  protected void emitWhitespace(ASTNode node, TokenRole role, String whitespace) {
-    emitToken(new LiteralToken(node, TokenChannel.WHITESPACE, role, whitespace));
+  protected void emitWhitespace(TokenRole role, String whitespace) {
+    emitToken(new LiteralToken(currentNode, TokenChannel.WHITESPACE, role, whitespace));
   }
 
-  protected void emitExactWhitespace(ASTNode node, String whitespace) {
-    emitWhitespace(node, TokenRole.EXACT, whitespace);
+  protected void emitExactWhitespace(String whitespace) {
+    emitWhitespace(TokenRole.EXACT, whitespace);
   }
 
-  private void emitSpace(ASTNode node, TokenRole role) {
-    emitWhitespace(node, role, " ");
+  private void emitSpace(TokenRole role) {
+    emitWhitespace(role, " ");
   }
 
-  protected void emitExactSpace(ASTNode node) {
-    emitSpace(node, TokenRole.EXACT);
+  protected void emitExactSpace() {
+    emitSpace(TokenRole.EXACT);
   }
 
-  protected void emitExtendableSpace(ASTNode node) {
-    emitSpace(node, TokenRole.EXTENDABLE_SPACE);
+  protected void emitExtendableSpace() {
+    emitSpace(TokenRole.EXTENDABLE_SPACE);
   }
 
-  protected void emitBreakableSpace(ASTNode node) {
-    emitSpace(node, TokenRole.BREAKABLE_SPACE);
+  protected void emitBreakableSpace() {
+    emitSpace(TokenRole.BREAKABLE_SPACE);
   }
 
-  private void emitNewline(ASTNode node, TokenRole role) {
-    emitWhitespace(node, role, "\n");
+  private void emitNewline(TokenRole role) {
+    emitWhitespace(role, "\n");
   }
 
-  protected void emitExactNewline(ASTNode node) {
-    emitNewline(node, TokenRole.EXACT);
+  protected void emitExactNewline() {
+    emitNewline(TokenRole.EXACT);
   }
 
-  protected void emitCommonNewline(ASTNode node) {
-    emitNewline(node, TokenRole.COMMON_FORMATTING);
+  protected void emitCommonNewline() {
+    emitNewline(TokenRole.COMMON_FORMATTING);
+  }
+
+  protected void visitWithSeparator(List<? extends ASTNode> nodes, Runnable emitter) {
+    for (int i = 0, size = nodes.size(); i < size; i++) {
+      visit(nodes.get(i));
+      if (i < size - 1) {
+        emitter.run();
+      }
+    }
+  }
+
+  protected ASTNode getCurrentNode() {
+    return currentNode;
+  }
+
+  protected void setCurrentNode(ASTNode currentNode) {
+    this.currentNode = currentNode;
+  }
+
+  @Override
+  public Void visit(ASTNode node) {
+    currentNode = node;
+    return super.visit(node);
   }
 
   @Override

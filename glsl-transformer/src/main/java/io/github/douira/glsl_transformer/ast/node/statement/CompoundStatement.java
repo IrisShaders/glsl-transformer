@@ -3,18 +3,15 @@ package io.github.douira.glsl_transformer.ast.node.statement;
 import java.util.List;
 import java.util.stream.Stream;
 
-import io.github.douira.glsl_transformer.ast.*;
 import io.github.douira.glsl_transformer.ast.traversal.*;
 
-public class CompoundStatement extends Statement implements ListNode<Statement> {
-  public List<Statement> statements;
-
+public class CompoundStatement extends ManyStatement {
   public CompoundStatement(List<Statement> statements) {
-    this.statements = new ChildNodeList<>(statements, this);
+    super(statements);
   }
 
   public CompoundStatement(Stream<Statement> statements) {
-    this.statements = ChildNodeList.collect(statements, this);
+    super(statements);
   }
 
   @Override
@@ -23,8 +20,8 @@ public class CompoundStatement extends Statement implements ListNode<Statement> 
   }
 
   @Override
-  public List<Statement> getChildren() {
-    return statements;
+  public <R> R statementAccept(ASTVisitor<R> visitor) {
+    return visitor.visitCompoundStatement(this);
   }
 
   @Override
@@ -35,12 +32,5 @@ public class CompoundStatement extends Statement implements ListNode<Statement> 
   @Override
   public void exitNode(ASTListener listener) {
     listener.exitCompoundStatement(this);
-  }
-
-  @Override
-  public <R> R accept(ASTVisitor<R> visitor) {
-    return visitor.aggregateResult(
-        super.accept(visitor),
-        visitor.visitCompoundStatement(this));
   }
 }
