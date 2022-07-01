@@ -123,11 +123,11 @@ public interface ASTVisitor<R> extends GeneralASTVisitor<R> {
     return visitTwoChildren(node.left, node.right);
   }
 
-  default R visitShiftLeftExpression(ShiftLeftExpression node) {
+  default R visitLeftShiftExpression(LeftShiftExpression node) {
     return visitTwoChildren(node.left, node.right);
   }
 
-  default R visitShiftRightExpression(ShiftRightExpression node) {
+  default R visitRightShiftExpression(RightShiftExpression node) {
     return visitTwoChildren(node.left, node.right);
   }
 
@@ -147,11 +147,11 @@ public interface ASTVisitor<R> extends GeneralASTVisitor<R> {
     return visitTwoChildren(node.left, node.right);
   }
 
-  default R visitEqualExpression(EqualExpression node) {
+  default R visitEqualityExpression(EqualityExpression node) {
     return visitTwoChildren(node.left, node.right);
   }
 
-  default R visitNotEqualExpression(NotEqualExpression node) {
+  default R visitInequalityExpression(InequalityExpression node) {
     return visitTwoChildren(node.left, node.right);
   }
 

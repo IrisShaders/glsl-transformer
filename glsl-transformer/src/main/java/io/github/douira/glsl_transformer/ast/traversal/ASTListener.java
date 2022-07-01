@@ -152,16 +152,16 @@ public interface ASTListener extends GeneralASTListener {
   default void exitSubtractionExpression(SubtractionExpression node) {
   }
 
-  default void enterShiftLeftExpression(ShiftLeftExpression node) {
+  default void enterLeftShiftExpression(LeftShiftExpression node) {
   }
 
-  default void exitShiftLeftExpression(ShiftLeftExpression node) {
+  default void exitLeftShiftExpression(LeftShiftExpression node) {
   }
 
-  default void enterShiftRightExpression(ShiftRightExpression node) {
+  default void enterRightShiftExpression(RightShiftExpression node) {
   }
 
-  default void exitShiftRightExpression(ShiftRightExpression node) {
+  default void exitRightShiftExpression(RightShiftExpression node) {
   }
 
   default void enterLessThanExpression(LessThanExpression node) {
@@ -188,16 +188,16 @@ public interface ASTListener extends GeneralASTListener {
   default void exitGreaterThanEqualExpression(GreaterThanEqualExpression node) {
   }
 
-  default void enterEqualExpression(EqualExpression node) {
+  default void enterEqualityExpression(EqualityExpression node) {
   }
 
-  default void exitEqualExpression(EqualExpression node) {
+  default void exitEqualityExpression(EqualityExpression node) {
   }
 
-  default void enterNotEqualExpression(NotEqualExpression node) {
+  default void enterInequalityExpression(InequalityExpression node) {
   }
 
-  default void exitNotEqualExpression(NotEqualExpression node) {
+  default void exitInequalityExpression(InequalityExpression node) {
   }
 
   default void enterBitwiseAndExpression(BitwiseAndExpression node) {
