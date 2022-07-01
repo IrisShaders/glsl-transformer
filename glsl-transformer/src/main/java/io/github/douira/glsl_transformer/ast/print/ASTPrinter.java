@@ -269,7 +269,7 @@ public abstract class ASTPrinter extends ASTPrinterUtil {
   }
 
   @Override
-  public Void visitShiftLeftExpression(ShiftLeftExpression node) {
+  public Void visitLeftShiftExpression(LeftShiftExpression node) {
     visit(node.left);
     emitBreakableSpace(node);
     emitType(node, GLSLLexer.LEFT_OP);
@@ -279,7 +279,7 @@ public abstract class ASTPrinter extends ASTPrinterUtil {
   }
 
   @Override
-  public Void visitShiftRightExpression(ShiftRightExpression node) {
+  public Void visitRightShiftExpression(RightShiftExpression node) {
     visit(node.left);
     emitBreakableSpace(node);
     emitType(node, GLSLLexer.RIGHT_OP);
@@ -329,7 +329,7 @@ public abstract class ASTPrinter extends ASTPrinterUtil {
   }
 
   @Override
-  public Void visitEqualExpression(EqualExpression node) {
+  public Void visitEqualityExpression(EqualityExpression node) {
     visit(node.left);
     emitBreakableSpace(node);
     emitType(node, GLSLLexer.EQ_OP);
@@ -339,7 +339,7 @@ public abstract class ASTPrinter extends ASTPrinterUtil {
   }
 
   @Override
-  public Void visitNotEqualExpression(NotEqualExpression node) {
+  public Void visitInequalityExpression(InequalityExpression node) {
     visit(node.left);
     emitBreakableSpace(node);
     emitType(node, GLSLLexer.NE_OP);

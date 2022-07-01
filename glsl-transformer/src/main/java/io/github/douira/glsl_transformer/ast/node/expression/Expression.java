@@ -20,37 +20,37 @@ public abstract class Expression extends InnerASTNode {
     MEMBER_ACCESS, // unary + identifier
     FUNCTION_CALL, // TODO (incomplete) unary + parameters
 
-    ARRAY_ACCESS, // TODO binary
-    MULTIPLICATION, // TODO binary
-    DIVISION, // TODO binary
-    MODULO, // TODO binary
-    ADDITION, // TODO binary
-    SUBTRACTION, // TODO binary
-    SHIFT_LEFT, // TODO binary
-    SHIFT_RIGHT, // TODO binary
-    LESS_THAN, // TODO binary
-    GREATER_THAN, // TODO binary
-    LESS_THAN_EQUAL, // TODO binary
-    GREATER_THAN_EQUAL, // TODO binary
-    EQUAL, // TODO binary
-    NOT_EQUAL, // TODO binary
-    BITWISE_AND, // TODO binary
-    BITWISE_XOR, // TODO binary
-    BITWISE_OR, // TODO binary
-    BOOLEAN_AND, // TODO binary
-    BOOLEAN_XOR, // TODO binary
-    BOOLEAN_OR, // TODO binary
-    ASSIGNMENT, // TODO binary
-    MULTIPLICATION_ASSIGNMENT, // TODO binary
-    DIVISION_ASSIGNMENT, // TODO binary
-    MODULO_ASSIGNMENT, // TODO binary
-    ADDITION_ASSIGNMENT, // TODO binary
-    SUBTRACTION_ASSIGNMENT, // TODO binary
-    LEFT_SHIFT_ASSIGNMENT, // TODO binary
-    RIGHT_SHIFT_ASSIGNMENT, // TODO binary
-    BITWISE_AND_ASSIGNMENT, // TODO binary
-    BITWISE_XOR_ASSIGNMENT, // TODO binary
-    BITWISE_OR_ASSIGNMENT, // TODO binary
+    ARRAY_ACCESS, // binary
+    MULTIPLICATION, // binary
+    DIVISION, // binary
+    MODULO, // binary
+    ADDITION, // binary
+    SUBTRACTION, // binary
+    SHIFT_LEFT, // binary
+    SHIFT_RIGHT, // binary
+    LESS_THAN, // binary
+    GREATER_THAN, // binary
+    LESS_THAN_EQUAL, // binary
+    GREATER_THAN_EQUAL, // binary
+    EQUAL, // binary
+    NOT_EQUAL, // binary
+    BITWISE_AND, // binary
+    BITWISE_XOR, // binary
+    BITWISE_OR, // binary
+    BOOLEAN_AND, // binary
+    BOOLEAN_XOR, // binary
+    BOOLEAN_OR, // binary
+    ASSIGNMENT, // binary
+    MULTIPLICATION_ASSIGNMENT, // binary
+    DIVISION_ASSIGNMENT, // binary
+    MODULO_ASSIGNMENT, // binary
+    ADDITION_ASSIGNMENT, // binary
+    SUBTRACTION_ASSIGNMENT, // binary
+    LEFT_SHIFT_ASSIGNMENT, // binary
+    RIGHT_SHIFT_ASSIGNMENT, // binary
+    BITWISE_AND_ASSIGNMENT, // binary
+    BITWISE_XOR_ASSIGNMENT, // binary
+    BITWISE_OR_ASSIGNMENT, // binary
 
     CONDITION, // ternary
     SEQUENCE // many-ary
@@ -63,14 +63,14 @@ public abstract class Expression extends InnerASTNode {
    * ModuloExpression
    * AdditionExpression
    * SubtractionExpression
-   * ShiftLeftExpression
-   * ShiftRightExpression
+   * LeftShiftExpression
+   * RightShiftExpression
    * LessThanExpression
    * GreaterThanExpression
    * LessThanEqualExpression
    * GreaterThanEqualExpression
-   * EqualExpression
-   * NotEqualExpression
+   * EqualityExpression
+   * InequalityExpression
    * BitwiseAndExpression
    * BitwiseXorExpression
    * BitwiseOrExpression

@@ -8,6 +8,7 @@ import io.github.douira.glsl_transformer.*;
 import io.github.douira.glsl_transformer.GLSLParser.*;
 import io.github.douira.glsl_transformer.ast.node.*;
 import io.github.douira.glsl_transformer.ast.node.expression.*;
+import io.github.douira.glsl_transformer.ast.node.expression.binary.*;
 import io.github.douira.glsl_transformer.ast.node.expression.unary.*;
 import io.github.douira.glsl_transformer.ast.node.external_declaration.*;
 import io.github.douira.glsl_transformer.ast.node.statement.*;
@@ -133,6 +134,7 @@ public class ASTBuilder extends GLSLParserBaseVisitor<ASTNode> {
 
       left = ctx.left;
     } while (left instanceof SequenceExpressionContext);
+
     expressions.add((Expression) visit(left));
     Collections.reverse(expressions);
     return new SequenceExpression(expressions);
@@ -146,80 +148,159 @@ public class ASTBuilder extends GLSLParserBaseVisitor<ASTNode> {
 
   @Override
   public ASTNode visitAdditiveExpression(AdditiveExpressionContext ctx) {
-    // TODO Auto-generated method stub
-    return super.visitAdditiveExpression(ctx);
+    var left = (Expression) visit(ctx.left);
+    var right = (Expression) visit(ctx.right);
+    switch (ctx.op.getType()) {
+      case GLSLLexer.PLUS_OP:
+        return new AdditionExpression(left, right);
+      case GLSLLexer.MINUS_OP:
+        return new SubtractionExpression(left, right);
+      default:
+        throw new IllegalArgumentException("Unknown additive operator: " + ctx.op.getText());
+    }
   }
 
   @Override
   public ASTNode visitArrayAccessExpression(ArrayAccessExpressionContext ctx) {
-    // TODO Auto-generated method stub
-    return super.visitArrayAccessExpression(ctx);
+    return new ArrayAccessExpression(
+        (Expression) visit(ctx.left),
+        (Expression) visit(ctx.right));
   }
 
   @Override
   public ASTNode visitAssignmentExpression(AssignmentExpressionContext ctx) {
-    // TODO Auto-generated method stub
-    return super.visitAssignmentExpression(ctx);
+    var left = (Expression) visit(ctx.left);
+    var right = (Expression) visit(ctx.right);
+    switch (ctx.op.getType()) {
+      case GLSLLexer.ASSIGN_OP:
+        return new AssignmentExpression(left, right);
+      case GLSLLexer.MUL_ASSIGN:
+        return new MultiplicationAssignmentExpression(left, right);
+      case GLSLLexer.DIV_ASSIGN:
+        return new DivisionAssignmentExpression(left, right);
+      case GLSLLexer.MOD_ASSIGN:
+        return new ModuloAssignmentExpression(left, right);
+      case GLSLLexer.ADD_ASSIGN:
+        return new AdditionAssignmentExpression(left, right);
+      case GLSLLexer.SUB_ASSIGN:
+        return new SubtractionAssignmentExpression(left, right);
+      case GLSLLexer.AND_ASSIGN:
+        return new BitwiseAndAssignmentExpression(left, right);
+      case GLSLLexer.XOR_ASSIGN:
+        return new BitwiseXorAssignmentExpression(left, right);
+      case GLSLLexer.OR_ASSIGN:
+        return new BitwiseOrAssignmentExpression(left, right);
+      case GLSLLexer.LEFT_ASSIGN:
+        return new LeftShiftAssignmentExpression(left, right);
+      case GLSLLexer.RIGHT_ASSIGN:
+        return new RightShiftAssignmentExpression(left, right);
+      default:
+        throw new IllegalArgumentException("Unknown assignment operator: " + ctx.op.getText());
+    }
   }
 
   @Override
   public ASTNode visitBitwiseAndExpression(BitwiseAndExpressionContext ctx) {
-    // TODO Auto-generated method stub
-    return super.visitBitwiseAndExpression(ctx);
+    return new BitwiseAndExpression(
+        (Expression) visit(ctx.left),
+        (Expression) visit(ctx.right));
   }
 
   @Override
   public ASTNode visitBitwiseExclusiveOrExpression(BitwiseExclusiveOrExpressionContext ctx) {
-    // TODO Auto-generated method stub
-    return super.visitBitwiseExclusiveOrExpression(ctx);
+    return new BitwiseXorExpression(
+        (Expression) visit(ctx.left),
+        (Expression) visit(ctx.right));
   }
 
   @Override
   public ASTNode visitBitwiseInclusiveOrExpression(BitwiseInclusiveOrExpressionContext ctx) {
-    // TODO Auto-generated method stub
-    return super.visitBitwiseInclusiveOrExpression(ctx);
+    return new BitwiseOrExpression(
+        (Expression) visit(ctx.left),
+        (Expression) visit(ctx.right));
   }
 
   @Override
   public ASTNode visitEqualityExpression(EqualityExpressionContext ctx) {
-    // TODO Auto-generated method stub
-    return super.visitEqualityExpression(ctx);
+    var left = (Expression) visit(ctx.left);
+    var right = (Expression) visit(ctx.right);
+    switch (ctx.op.getType()) {
+      case GLSLLexer.EQ_OP:
+        return new EqualityExpression(left, right);
+      case GLSLLexer.NE_OP:
+        return new InequalityExpression(left, right);
+      default:
+        throw new IllegalArgumentException("Unknown equality operator: " + ctx.op.getText());
+    }
   }
 
   @Override
   public ASTNode visitLogicalAndExpression(LogicalAndExpressionContext ctx) {
-    // TODO Auto-generated method stub
-    return super.visitLogicalAndExpression(ctx);
+    return new BooleanAndExpression(
+        (Expression) visit(ctx.left),
+        (Expression) visit(ctx.right));
   }
 
   @Override
   public ASTNode visitLogicalExclusiveOrExpression(LogicalExclusiveOrExpressionContext ctx) {
-    // TODO Auto-generated method stub
-    return super.visitLogicalExclusiveOrExpression(ctx);
+    return new BooleanXorExpression(
+        (Expression) visit(ctx.left),
+        (Expression) visit(ctx.right));
   }
 
   @Override
   public ASTNode visitLogicalInclusiveOrExpression(LogicalInclusiveOrExpressionContext ctx) {
-    // TODO Auto-generated method stub
-    return super.visitLogicalInclusiveOrExpression(ctx);
+    return new BooleanOrExpression(
+        (Expression) visit(ctx.left),
+        (Expression) visit(ctx.right));
   }
 
   @Override
   public ASTNode visitRelationalExpression(RelationalExpressionContext ctx) {
-    // TODO Auto-generated method stub
-    return super.visitRelationalExpression(ctx);
+    var left = (Expression) visit(ctx.left);
+    var right = (Expression) visit(ctx.right);
+    switch (ctx.op.getType()) {
+      case GLSLLexer.LT_OP:
+        return new LessThanExpression(left, right);
+      case GLSLLexer.GT_OP:
+        return new GreaterThanExpression(left, right);
+      case GLSLLexer.LE_OP:
+        return new LessThanEqualExpression(left, right);
+      case GLSLLexer.GE_OP:
+        return new GreaterThanEqualExpression(left, right);
+      default:
+        throw new IllegalArgumentException("Unknown relational operator: " + ctx.op.getText());
+    }
   }
 
   @Override
   public ASTNode visitShiftExpression(ShiftExpressionContext ctx) {
-    // TODO Auto-generated method stub
-    return super.visitShiftExpression(ctx);
+    var left = (Expression) visit(ctx.left);
+    var right = (Expression) visit(ctx.right);
+    switch (ctx.op.getType()) {
+      case GLSLLexer.LEFT_OP:
+        return new LeftShiftExpression(left, right);
+      case GLSLLexer.RIGHT_OP:
+        return new RightShiftExpression(left, right);
+      default:
+        throw new IllegalArgumentException("Unknown shift operator: " + ctx.op.getText());
+    }
   }
 
   @Override
   public ASTNode visitMultiplicativeExpression(MultiplicativeExpressionContext ctx) {
-    // TODO Auto-generated method stub
-    return super.visitMultiplicativeExpression(ctx);
+    var left = (Expression) visit(ctx.left);
+    var right = (Expression) visit(ctx.right);
+    switch (ctx.op.getType()) {
+      case GLSLLexer.TIMES_OP:
+        return new MultiplicationExpression(left, right);
+      case GLSLLexer.DIV_OP:
+        return new DivisionExpression(left, right);
+      case GLSLLexer.MOD_OP:
+        return new ModuloExpression(left, right);
+      default:
+        throw new IllegalArgumentException("Unknown multiplicative operator: " + ctx.op.getText());
+    }
   }
 
   @Override
