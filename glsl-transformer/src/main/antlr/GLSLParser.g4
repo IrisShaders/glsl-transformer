@@ -429,7 +429,6 @@ structMember:
 
 structDeclarator: IDENTIFIER arraySpecifier?;
 
-//assignment epxression
 initializer:
 	expression
 	| LBRACE (
@@ -459,7 +458,7 @@ expressionStatement: expression SEMICOLON;
 emptyStatement: SEMICOLON;
 
 selectionStatement:
-	attribute? IF LPAREN expression RPAREN ifTrue = statement (
+	attribute? IF LPAREN condition = expression RPAREN ifTrue = statement (
 		ELSE ifFalse = statement
 	)?;
 
@@ -468,24 +467,24 @@ iterationCondition:
 	| fullySpecifiedType IDENTIFIER ASSIGN_OP initializer;
 
 switchStatement:
-	attribute? SWITCH LPAREN expression RPAREN compoundStatement;
+	attribute? SWITCH LPAREN condition = expression RPAREN compoundStatement;
 
 caseLabel:
 	CASE expression COLON	# valuedCaseLabel
 	| DEFAULT COLON				# defaultCaseLabel;
 
 whileStatement:
-	attribute? WHILE LPAREN iterationCondition RPAREN loopBody = statement;
+	attribute? WHILE LPAREN condition = iterationCondition RPAREN loopBody = statement;
 
 doWhileStatement:
-	attribute? DO loopBody = statement WHILE LPAREN expression RPAREN SEMICOLON;
+	attribute? DO loopBody = statement WHILE LPAREN condition = expression RPAREN SEMICOLON;
 
 forStatement:
 	attribute? FOR LPAREN (
 		emptyStatement
 		| expressionStatement
 		| declarationStatement
-	) iterationCondition? SEMICOLON expression? RPAREN loopBody = statement;
+	) condition = iterationCondition? SEMICOLON incrementer = expression? RPAREN loopBody = statement;
 
 jumpStatement:
 	CONTINUE SEMICOLON							# continueStatement
