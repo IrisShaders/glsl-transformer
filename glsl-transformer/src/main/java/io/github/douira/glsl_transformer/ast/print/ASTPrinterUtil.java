@@ -125,9 +125,9 @@ public abstract class ASTPrinterUtil extends ASTListenerVisitor<Void> {
   protected boolean visitSafe(ASTNode node) {
     if (node != null) {
       visit(node);
-      return false;
+      return true;
     }
-    return true;
+    return false;
   }
 
   @Override

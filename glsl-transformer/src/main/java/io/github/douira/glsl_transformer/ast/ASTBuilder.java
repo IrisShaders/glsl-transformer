@@ -373,11 +373,12 @@ public class ASTBuilder extends GLSLParserBaseVisitor<ASTNode> {
   public SelectionStatement visitSelectionStatement(SelectionStatementContext ctx) {
     // unwrap the nested selection statements that are created through "else if"
     // chains
-    var attribute = ctx.attribute();
     var sections = Stream.<Section>builder();
     SelectionStatementContext nextSelection = ctx;
     do {
+      var attribute = ctx.attribute();
       sections.add(new Section(
+          attribute == null ? null : visitAttribute(attribute),
           (Expression) visit(nextSelection.condition),
           (Statement) visit(nextSelection.ifTrue)));
       var ifFalse = nextSelection.ifFalse;
@@ -387,16 +388,13 @@ public class ASTBuilder extends GLSLParserBaseVisitor<ASTNode> {
         if (nestedSelectionStatement != null) {
           nextSelection = nestedSelectionStatement;
         } else {
-          // add a regular else branch
+          // add a regular else branch, has no control flow attribute
+          // since they are only present on the whole selection statement
           sections.add(new Section((Statement) visit(ifFalse)));
         }
       }
     } while (nextSelection != null);
-    return attribute == null
-        ? new SelectionStatement(sections.build())
-        : new SelectionStatement(
-            visitAttribute(attribute),
-            sections.build());
+    return new SelectionStatement(sections.build());
   }
 
   @Override
@@ -452,37 +450,25 @@ public class ASTBuilder extends GLSLParserBaseVisitor<ASTNode> {
   @Override
   public WhileLoopStatement visitWhileStatement(WhileStatementContext ctx) {
     var attribute = ctx.attribute();
-    var condition = ctx.condition;
-    return condition != null
-        ? attribute == null
-            ? new WhileLoopStatement(
-                visitAttribute(attribute),
-                (Expression) visit(condition),
-                (Statement) visit(ctx.loopBody))
-            : new WhileLoopStatement(
-                (Expression) visit(condition),
-                (Statement) visit(ctx.loopBody))
-        : attribute == null
-            ? new WhileLoopStatement(
-                visitIterationCondition(ctx.initCondition),
-                (Statement) visit(ctx.loopBody))
-            : new WhileLoopStatement(
-                visitAttribute(attribute),
-                visitIterationCondition(ctx.initCondition),
-                (Statement) visit(ctx.loopBody));
+    var controlFlowAttributes = attribute == null ? null : visitAttribute(attribute);
+    return ctx.condition != null
+        ? new WhileLoopStatement(
+            controlFlowAttributes,
+            (Expression) visit(ctx.condition),
+            (Statement) visit(ctx.loopBody))
+        : new WhileLoopStatement(
+            controlFlowAttributes,
+            visitIterationCondition(ctx.initCondition),
+            (Statement) visit(ctx.loopBody));
   }
 
   @Override
   public DoWhileLoopStatement visitDoWhileStatement(DoWhileStatementContext ctx) {
     var attribute = ctx.attribute();
-    return attribute == null
-        ? new DoWhileLoopStatement(
-            (Statement) visit(ctx.loopBody),
-            (Expression) visit(ctx.condition))
-        : new DoWhileLoopStatement(
-            visitAttribute(attribute),
-            (Statement) visit(ctx.loopBody),
-            (Expression) visit(ctx.condition));
+    return new DoWhileLoopStatement(
+        attribute == null ? null : visitAttribute(attribute),
+        (Statement) visit(ctx.loopBody),
+        (Expression) visit(ctx.condition));
   }
 
   @Override
