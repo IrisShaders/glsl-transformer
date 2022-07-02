@@ -1,6 +1,6 @@
 package io.github.douira.glsl_transformer.ast.print.token;
 
-import io.github.douira.glsl_transformer.ast.ASTNode;
+import io.github.douira.glsl_transformer.ast.node.basic.ASTNode;
 import io.github.douira.glsl_transformer.ast.print.TokenRole;
 import io.github.douira.glsl_transformer.print.filter.TokenChannel;
 

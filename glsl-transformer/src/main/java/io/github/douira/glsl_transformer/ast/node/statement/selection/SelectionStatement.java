@@ -12,7 +12,7 @@ import io.github.douira.glsl_transformer.ast.traversal.*;
 import io.github.douira.glsl_transformer.util.CompatUtil;
 
 public class SelectionStatement extends ManyStatement {
-	public List<Expression> conditions; // TODO: last one may be null
+	public final List<Expression> conditions; // TODO: last one may be null
 
 	@Desugar
 	public record Section(

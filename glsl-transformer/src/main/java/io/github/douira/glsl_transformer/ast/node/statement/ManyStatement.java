@@ -4,10 +4,11 @@ import java.util.List;
 import java.util.stream.Stream;
 
 import io.github.douira.glsl_transformer.ast.*;
+import io.github.douira.glsl_transformer.ast.node.basic.ListNode;
 import io.github.douira.glsl_transformer.ast.traversal.*;
 
 public abstract class ManyStatement extends Statement implements ListNode<Statement> {
-	public List<Statement> statements;
+	public final List<Statement> statements;
 
 	public ManyStatement(List<Statement> statements) {
 		this.statements = new ChildNodeList<>(statements, this);

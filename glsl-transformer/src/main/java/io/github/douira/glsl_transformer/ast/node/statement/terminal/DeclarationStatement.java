@@ -1,6 +1,6 @@
 package io.github.douira.glsl_transformer.ast.node.statement.terminal;
 
-import io.github.douira.glsl_transformer.ast.InnerASTNode;
+import io.github.douira.glsl_transformer.ast.node.basic.InnerASTNode;
 import io.github.douira.glsl_transformer.ast.traversal.*;
 
 public class DeclarationStatement extends SemiTerminalStatement {

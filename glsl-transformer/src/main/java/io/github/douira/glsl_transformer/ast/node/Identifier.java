@@ -3,7 +3,7 @@ package io.github.douira.glsl_transformer.ast.node;
 import org.antlr.v4.runtime.Token;
 import org.antlr.v4.runtime.tree.TerminalNode;
 
-import io.github.douira.glsl_transformer.ast.ASTNode;
+import io.github.douira.glsl_transformer.ast.node.basic.ASTNode;
 import io.github.douira.glsl_transformer.ast.traversal.ASTVisitor;
 
 public class Identifier extends ASTNode {
