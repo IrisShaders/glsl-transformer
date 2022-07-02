@@ -1,10 +1,11 @@
 package io.github.douira.glsl_transformer.ast.node.basic;
 
+import io.github.douira.glsl_transformer.ast.Root;
 import io.github.douira.glsl_transformer.ast.traversal.ASTVisitor;
 
 public abstract class ASTNode {
   private ASTNode parent;
-  
+  private Root root;
 
   public abstract <R> R accept(ASTVisitor<R> visitor);
 
@@ -13,11 +14,11 @@ public abstract class ASTNode {
   }
 
   public void registerChild(ASTNode child) {
-    // TODO: registration
+    root.registerChild(child);
   }
 
   public void unregisterChild(ASTNode child) {
-    // TODO: unregistration
+    root.unregisterChild(child);
   }
 
   /**
