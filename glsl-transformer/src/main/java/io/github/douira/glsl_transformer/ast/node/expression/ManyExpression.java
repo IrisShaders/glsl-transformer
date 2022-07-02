@@ -4,10 +4,11 @@ import java.util.List;
 import java.util.stream.Stream;
 
 import io.github.douira.glsl_transformer.ast.*;
+import io.github.douira.glsl_transformer.ast.node.basic.ListNode;
 import io.github.douira.glsl_transformer.ast.traversal.*;
 
 public abstract class ManyExpression extends Expression implements ListNode<Expression> {
-  public List<Expression> expressions;
+  public final List<Expression> expressions;
 
   public ManyExpression(List<Expression> expressions) {
     this.expressions = new ChildNodeList<>(expressions, this);

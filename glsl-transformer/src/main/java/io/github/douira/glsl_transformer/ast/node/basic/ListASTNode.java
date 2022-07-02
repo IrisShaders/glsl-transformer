@@ -1,12 +1,14 @@
-package io.github.douira.glsl_transformer.ast;
+package io.github.douira.glsl_transformer.ast.node.basic;
 
 import java.util.List;
-import java.util.stream.*;
+import java.util.stream.Stream;
+
+import io.github.douira.glsl_transformer.ast.*;
 
 public abstract class ListASTNode<Child extends ASTNode>
     extends InnerASTNode
     implements ListNode<Child> {
-  public List<Child> children;
+  public final List<Child> children;
 
   public ListASTNode(List<Child> children) {
     this.children = new ChildNodeList<>(children, this);

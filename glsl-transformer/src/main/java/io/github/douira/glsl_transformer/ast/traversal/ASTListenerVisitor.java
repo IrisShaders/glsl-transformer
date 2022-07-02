@@ -1,6 +1,6 @@
 package io.github.douira.glsl_transformer.ast.traversal;
 
-import io.github.douira.glsl_transformer.ast.ASTNode;
+import io.github.douira.glsl_transformer.ast.node.basic.ASTNode;
 
 public class ASTListenerVisitor<R> extends ASTWalker<R> implements ASTListener {
   public ASTListenerVisitor() {
