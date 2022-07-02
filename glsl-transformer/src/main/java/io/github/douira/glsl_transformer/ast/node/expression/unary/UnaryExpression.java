@@ -7,8 +7,7 @@ public abstract class UnaryExpression extends Expression {
   public Expression operand;
 
   public UnaryExpression(Expression operand) {
-    this.operand = operand;
-    operand.setParent(this);
+    this.operand = setup(operand);
   }
 
   @Override

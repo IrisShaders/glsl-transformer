@@ -3,7 +3,7 @@ package io.github.douira.glsl_transformer.ast;
 import io.github.douira.glsl_transformer.ast.node.Identifier;
 import io.github.douira.glsl_transformer.ast.node.basic.ASTNode;
 
-public class Root {
+public class Root implements NodeTracker {
   public ASTNode rootNode;
   public final NodeIndex nodeIndex = new NodeIndex();
   public final IdentifierIndex identifierIndex = new IdentifierIndex();

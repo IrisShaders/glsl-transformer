@@ -8,9 +8,9 @@ public abstract class TernaryExpression extends Expression {
   public Expression third;
 
   public TernaryExpression(Expression first, Expression second, Expression third) {
-    this.first = first;
-    this.second = second;
-    this.third = third;
+    this.first = setup(first);
+    this.second = setup(second);
+    this.third = setup(third);
   }
 
   @Override

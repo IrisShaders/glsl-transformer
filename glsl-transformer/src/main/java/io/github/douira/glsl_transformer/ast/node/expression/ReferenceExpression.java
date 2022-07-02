@@ -7,7 +7,7 @@ public class ReferenceExpression extends TerminalExpression {
   public Identifier identifier;
 
   public ReferenceExpression(Identifier identifier) {
-    this.identifier = identifier;
+    this.identifier = setup(identifier);
   }
 
   @Override

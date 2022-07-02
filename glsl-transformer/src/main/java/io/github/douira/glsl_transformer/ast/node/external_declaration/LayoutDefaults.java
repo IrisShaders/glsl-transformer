@@ -35,9 +35,8 @@ public class LayoutDefaults extends ExternalDeclaration {
   }
 
   public LayoutDefaults(InnerASTNode qualifier, LayoutMode mode) {
-    this.qualifier = qualifier;
+    this.qualifier = setup(qualifier);
     this.mode = mode;
-    qualifier.setParent(this);
   }
 
   public static LayoutDefaults from(InnerASTNode qualifier, LayoutDefaultsContext ctx) {

@@ -1,11 +1,14 @@
 package io.github.douira.glsl_transformer.ast.node.basic;
 
-import io.github.douira.glsl_transformer.ast.Root;
+import io.github.douira.glsl_transformer.ast.*;
 import io.github.douira.glsl_transformer.ast.traversal.ASTVisitor;
 
-public abstract class ASTNode {
+public abstract class ASTNode implements NodeTracker {
   private ASTNode parent;
-  private Root root;
+  private Root root; //TODO: make this be the collector root during a build
+
+  public ASTNode() {
+  }
 
   public abstract <R> R accept(ASTVisitor<R> visitor);
 
@@ -13,10 +16,12 @@ public abstract class ASTNode {
     return parent;
   }
 
+  @Override
   public void registerChild(ASTNode child) {
     root.registerChild(child);
   }
 
+  @Override
   public void unregisterChild(ASTNode child) {
     root.unregisterChild(child);
   }
@@ -46,5 +51,10 @@ public abstract class ASTNode {
 
   public boolean unsetParent() {
     return setParent(null);
+  }
+
+  public <T extends ASTNode> T setup(T node) {
+    node.setParent(this);
+    return node;
   }
 }

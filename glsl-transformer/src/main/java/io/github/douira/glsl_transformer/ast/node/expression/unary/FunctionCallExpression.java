@@ -9,7 +9,7 @@ public class FunctionCallExpression extends TerminalExpression {
 
   public FunctionCallExpression(InnerASTNode functionCall) {
     super();
-    this.functionCall = functionCall;
+    this.functionCall = setup(functionCall);
   }
 
   @Override

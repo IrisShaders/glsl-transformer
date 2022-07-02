@@ -4,13 +4,13 @@ import io.github.douira.glsl_transformer.ast.node.expression.Expression;
 import io.github.douira.glsl_transformer.ast.traversal.ASTVisitor;
 
 public class ReturnStatement extends SemiTerminalStatement {
-  public Expression expression; //TODO: nullable
+  public Expression expression; // TODO: nullable
 
   public ReturnStatement() {
   }
 
   public ReturnStatement(Expression expression) {
-    this.expression = expression;
+    this.expression = setup(expression);
   }
 
   @Override
