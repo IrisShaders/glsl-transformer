@@ -181,7 +181,9 @@ attribute:
 
 //constant expression
 singleAttribute:
-	(IDENTIFIER COLON COLON)? IDENTIFIER (LPAREN expression RPAREN)?;
+	(prefix = IDENTIFIER COLON COLON)? name = IDENTIFIER (
+		LPAREN content = expression RPAREN
+	)?;
 
 initDeclaratorList:
 	fullySpecifiedType (
@@ -463,8 +465,7 @@ selectionStatement:
 	)?;
 
 iterationCondition:
-	expression
-	| fullySpecifiedType IDENTIFIER ASSIGN_OP initializer;
+	fullySpecifiedType IDENTIFIER ASSIGN_OP initializer;
 
 switchStatement:
 	attribute? SWITCH LPAREN condition = expression RPAREN compoundStatement;
@@ -474,7 +475,10 @@ caseLabel:
 	| DEFAULT COLON				# defaultCaseLabel;
 
 whileStatement:
-	attribute? WHILE LPAREN condition = iterationCondition RPAREN loopBody = statement;
+	attribute? WHILE LPAREN (
+		condition = expression
+		| initCondition = iterationCondition
+	) RPAREN loopBody = statement;
 
 doWhileStatement:
 	attribute? DO loopBody = statement WHILE LPAREN condition = expression RPAREN SEMICOLON;
@@ -484,7 +488,8 @@ forStatement:
 		emptyStatement
 		| expressionStatement
 		| declarationStatement
-	) condition = iterationCondition? SEMICOLON incrementer = expression? RPAREN loopBody = statement;
+	) (condition = expression | initCondition = iterationCondition)? SEMICOLON incrementer = expression? RPAREN
+		loopBody = statement;
 
 jumpStatement:
 	CONTINUE SEMICOLON							# continueStatement
