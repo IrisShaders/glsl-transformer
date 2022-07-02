@@ -22,7 +22,7 @@ public class WhileLoopStatement extends ConditionLoopStatement {
 	public WhileLoopStatement(
 			IterationConditionInitializer iterationConditionInitializer,
 			Statement statement) {
-		super(statement, (Expression) null);
+		super(statement, null);
 		this.iterationConditionInitializer = iterationConditionInitializer;
 	}
 
@@ -30,7 +30,7 @@ public class WhileLoopStatement extends ConditionLoopStatement {
 			ControlFlowAttributes controlFlowAttributes,
 			IterationConditionInitializer iterationConditionInitializer,
 			Statement statement) {
-		super(controlFlowAttributes, statement, (Expression) null);
+		super(controlFlowAttributes, statement, null);
 		this.iterationConditionInitializer = iterationConditionInitializer;
 	}
 
