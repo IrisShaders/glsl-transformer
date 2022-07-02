@@ -3,13 +3,11 @@ package io.github.douira.glsl_transformer.ast.node.statement.selection;
 import java.util.List;
 import java.util.stream.Stream;
 
-import io.github.douira.glsl_transformer.ast.node.ControlFlowAttributes;
 import io.github.douira.glsl_transformer.ast.node.statement.*;
 import io.github.douira.glsl_transformer.ast.traversal.*;
 
 //TODO: implement, add control flow attributes
-public class SwitchStatement extends ManyStatement implements BranchingStatement {
-	public ControlFlowAttributes controlFlowAttributes; // TODO: nullable
+public class SwitchStatement extends ManyStatement {
 
 	public SwitchStatement(List<Statement> statements) {
 		super(statements); // TODO
@@ -17,11 +15,6 @@ public class SwitchStatement extends ManyStatement implements BranchingStatement
 
 	public SwitchStatement(Stream<Statement> statements) {
 		super(statements); // TODO
-	}
-
-	@Override
-	public ControlFlowAttributes getControlFlowAttributes() {
-		return controlFlowAttributes;
 	}
 
 	@Override

@@ -378,7 +378,6 @@ public class ASTBuilder extends GLSLParserBaseVisitor<ASTNode> {
     do {
       var attribute = ctx.attribute();
       sections.add(new Section(
-          attribute == null ? null : visitAttribute(attribute),
           (Expression) visit(nextSelection.condition),
           (Statement) visit(nextSelection.ifTrue)));
       var ifFalse = nextSelection.ifFalse;
@@ -405,17 +404,11 @@ public class ASTBuilder extends GLSLParserBaseVisitor<ASTNode> {
 
   @Override
   public ForLoopStatement visitForStatement(ForStatementContext ctx) {
-    ControlFlowAttributes controlFlowAttributes = null;
     Expression initExpression = null;
     InnerASTNode initDeclaration = null; // TODO: Declaration
     Expression condition = null;
     IterationConditionInitializer iterationConditionInitializer = null;
     Expression incrementer = null;
-
-    var attribute = ctx.attribute();
-    if (attribute != null) {
-      controlFlowAttributes = visitAttribute(attribute);
-    }
 
     var initExpressionStatement = ctx.expressionStatement();
     if (initExpressionStatement != null) {
@@ -438,7 +431,6 @@ public class ASTBuilder extends GLSLParserBaseVisitor<ASTNode> {
     }
 
     return new ForLoopStatement(
-        controlFlowAttributes,
         initExpression,
         initDeclaration,
         condition,
@@ -449,24 +441,18 @@ public class ASTBuilder extends GLSLParserBaseVisitor<ASTNode> {
 
   @Override
   public WhileLoopStatement visitWhileStatement(WhileStatementContext ctx) {
-    var attribute = ctx.attribute();
-    var controlFlowAttributes = attribute == null ? null : visitAttribute(attribute);
     return ctx.condition != null
         ? new WhileLoopStatement(
-            controlFlowAttributes,
             (Expression) visit(ctx.condition),
             (Statement) visit(ctx.loopBody))
         : new WhileLoopStatement(
-            controlFlowAttributes,
             visitIterationCondition(ctx.initCondition),
             (Statement) visit(ctx.loopBody));
   }
 
   @Override
   public DoWhileLoopStatement visitDoWhileStatement(DoWhileStatementContext ctx) {
-    var attribute = ctx.attribute();
     return new DoWhileLoopStatement(
-        attribute == null ? null : visitAttribute(attribute),
         (Statement) visit(ctx.loopBody),
         (Expression) visit(ctx.condition));
   }
@@ -477,26 +463,6 @@ public class ASTBuilder extends GLSLParserBaseVisitor<ASTNode> {
     return new IterationConditionInitializer(
         (InnerASTNode) visit(ctx.fullySpecifiedType()),
         (InnerASTNode) visit(ctx.initializer()));
-  }
-
-  @Override
-  public ControlFlowAttributes visitAttribute(AttributeContext ctx) {
-    return new ControlFlowAttributes(ctx.attributes.stream().map(
-        (attr) -> visitSingleAttribute(attr)));
-  }
-
-  @Override
-  public ControlFlowAttribute visitSingleAttribute(SingleAttributeContext ctx) {
-    var prefix = ctx.prefix != null ? Identifier.from(ctx.prefix) : null;
-    var name = Identifier.from(ctx.name);
-    var content = ctx.prefix != null ? (Expression) visit(ctx.content) : null;
-    return prefix == null
-        ? content == null
-            ? new ControlFlowAttribute(name)
-            : new ControlFlowAttribute(name, content)
-        : content == null
-            ? new ControlFlowAttribute(prefix, name)
-            : new ControlFlowAttribute(prefix, name, content);
   }
 
   @Override
