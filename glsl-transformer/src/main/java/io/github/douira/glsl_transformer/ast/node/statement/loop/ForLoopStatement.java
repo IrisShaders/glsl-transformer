@@ -105,6 +105,32 @@ public class ForLoopStatement extends LoopStatement {
 		this.incrementer = incrementer;
 	}
 
+	public ForLoopStatement(Statement statement) {
+		super(statement);
+	}
+
+	public ForLoopStatement(
+			ControlFlowAttributes controlFlowAttributes,
+			Statement statement) {
+		super(controlFlowAttributes, statement);
+	}
+
+	public ForLoopStatement(
+			ControlFlowAttributes controlFlowAttributes,
+			Expression initExpression,
+			InnerASTNode initDeclaration,
+			Expression condition,
+			IterationConditionInitializer iterationConditionInitializer,
+			Expression incrementer,
+			Statement statement) {
+		super(controlFlowAttributes, statement);
+		this.initExpression = initExpression;
+		this.initDeclaration = initDeclaration;
+		this.condition = condition;
+		this.iterationConditionInitializer = iterationConditionInitializer;
+		this.incrementer = incrementer;
+	}
+
 	@Override
 	public StatementType getStatementType() {
 		return StatementType.FOR_LOOP;

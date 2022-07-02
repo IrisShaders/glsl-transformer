@@ -67,30 +67,30 @@ public class ASTBuilder extends GLSLParserBaseVisitor<ASTNode> {
   }
 
   @Override
-  public ASTNode visitFunctionCallExpression(FunctionCallExpressionContext ctx) {
+  public FunctionCallExpression visitFunctionCallExpression(FunctionCallExpressionContext ctx) {
     return new FunctionCallExpression(
         (InnerASTNode) visit(ctx.functionCall())); // TODO: FunctionCall
   }
 
   @Override
-  public ASTNode visitGroupingExpression(GroupingExpressionContext ctx) {
+  public GroupingExpression visitGroupingExpression(GroupingExpressionContext ctx) {
     return new GroupingExpression((Expression) visit(ctx.value));
   }
 
   @Override
-  public ASTNode visitMemberAccessExpression(MemberAccessExpressionContext ctx) {
+  public MemberAccessExpression visitMemberAccessExpression(MemberAccessExpressionContext ctx) {
     return new MemberAccessExpression(
         (Expression) visit(ctx.operand),
         ctx.member.getText());
   }
 
   @Override
-  public ASTNode visitLengthAccessExpression(LengthAccessExpressionContext ctx) {
+  public LengthAccessExpression visitLengthAccessExpression(LengthAccessExpressionContext ctx) {
     return new LengthAccessExpression((Expression) visit(ctx.operand));
   }
 
   @Override
-  public ASTNode visitPostfixExpression(PostfixExpressionContext ctx) {
+  public UnaryExpression visitPostfixExpression(PostfixExpressionContext ctx) {
     var operand = (Expression) visit(ctx.operand);
     switch (ctx.op.getType()) {
       case GLSLParser.INC_OP:
@@ -103,7 +103,7 @@ public class ASTBuilder extends GLSLParserBaseVisitor<ASTNode> {
   }
 
   @Override
-  public ASTNode visitPrefixExpression(PrefixExpressionContext ctx) {
+  public UnaryExpression visitPrefixExpression(PrefixExpressionContext ctx) {
     var operand = (Expression) visit(ctx.operand);
     switch (ctx.op.getType()) {
       case GLSLLexer.INC_OP:
@@ -152,7 +152,7 @@ public class ASTBuilder extends GLSLParserBaseVisitor<ASTNode> {
   }
 
   @Override
-  public ASTNode visitAdditiveExpression(AdditiveExpressionContext ctx) {
+  public BinaryExpression visitAdditiveExpression(AdditiveExpressionContext ctx) {
     var left = (Expression) visit(ctx.left);
     var right = (Expression) visit(ctx.right);
     switch (ctx.op.getType()) {
@@ -166,14 +166,14 @@ public class ASTBuilder extends GLSLParserBaseVisitor<ASTNode> {
   }
 
   @Override
-  public ASTNode visitArrayAccessExpression(ArrayAccessExpressionContext ctx) {
+  public ArrayAccessExpression visitArrayAccessExpression(ArrayAccessExpressionContext ctx) {
     return new ArrayAccessExpression(
         (Expression) visit(ctx.left),
         (Expression) visit(ctx.right));
   }
 
   @Override
-  public ASTNode visitAssignmentExpression(AssignmentExpressionContext ctx) {
+  public BinaryExpression visitAssignmentExpression(AssignmentExpressionContext ctx) {
     var left = (Expression) visit(ctx.left);
     var right = (Expression) visit(ctx.right);
     switch (ctx.op.getType()) {
@@ -205,28 +205,28 @@ public class ASTBuilder extends GLSLParserBaseVisitor<ASTNode> {
   }
 
   @Override
-  public ASTNode visitBitwiseAndExpression(BitwiseAndExpressionContext ctx) {
+  public BitwiseAndExpression visitBitwiseAndExpression(BitwiseAndExpressionContext ctx) {
     return new BitwiseAndExpression(
         (Expression) visit(ctx.left),
         (Expression) visit(ctx.right));
   }
 
   @Override
-  public ASTNode visitBitwiseExclusiveOrExpression(BitwiseExclusiveOrExpressionContext ctx) {
+  public BitwiseXorExpression visitBitwiseExclusiveOrExpression(BitwiseExclusiveOrExpressionContext ctx) {
     return new BitwiseXorExpression(
         (Expression) visit(ctx.left),
         (Expression) visit(ctx.right));
   }
 
   @Override
-  public ASTNode visitBitwiseInclusiveOrExpression(BitwiseInclusiveOrExpressionContext ctx) {
+  public BitwiseOrExpression visitBitwiseInclusiveOrExpression(BitwiseInclusiveOrExpressionContext ctx) {
     return new BitwiseOrExpression(
         (Expression) visit(ctx.left),
         (Expression) visit(ctx.right));
   }
 
   @Override
-  public ASTNode visitEqualityExpression(EqualityExpressionContext ctx) {
+  public BinaryExpression visitEqualityExpression(EqualityExpressionContext ctx) {
     var left = (Expression) visit(ctx.left);
     var right = (Expression) visit(ctx.right);
     switch (ctx.op.getType()) {
@@ -240,28 +240,28 @@ public class ASTBuilder extends GLSLParserBaseVisitor<ASTNode> {
   }
 
   @Override
-  public ASTNode visitLogicalAndExpression(LogicalAndExpressionContext ctx) {
+  public BooleanAndExpression visitLogicalAndExpression(LogicalAndExpressionContext ctx) {
     return new BooleanAndExpression(
         (Expression) visit(ctx.left),
         (Expression) visit(ctx.right));
   }
 
   @Override
-  public ASTNode visitLogicalExclusiveOrExpression(LogicalExclusiveOrExpressionContext ctx) {
+  public BooleanXorExpression visitLogicalExclusiveOrExpression(LogicalExclusiveOrExpressionContext ctx) {
     return new BooleanXorExpression(
         (Expression) visit(ctx.left),
         (Expression) visit(ctx.right));
   }
 
   @Override
-  public ASTNode visitLogicalInclusiveOrExpression(LogicalInclusiveOrExpressionContext ctx) {
+  public BooleanOrExpression visitLogicalInclusiveOrExpression(LogicalInclusiveOrExpressionContext ctx) {
     return new BooleanOrExpression(
         (Expression) visit(ctx.left),
         (Expression) visit(ctx.right));
   }
 
   @Override
-  public ASTNode visitRelationalExpression(RelationalExpressionContext ctx) {
+  public BinaryExpression visitRelationalExpression(RelationalExpressionContext ctx) {
     var left = (Expression) visit(ctx.left);
     var right = (Expression) visit(ctx.right);
     switch (ctx.op.getType()) {
@@ -279,7 +279,7 @@ public class ASTBuilder extends GLSLParserBaseVisitor<ASTNode> {
   }
 
   @Override
-  public ASTNode visitShiftExpression(ShiftExpressionContext ctx) {
+  public BinaryExpression visitShiftExpression(ShiftExpressionContext ctx) {
     var left = (Expression) visit(ctx.left);
     var right = (Expression) visit(ctx.right);
     switch (ctx.op.getType()) {
@@ -293,7 +293,7 @@ public class ASTBuilder extends GLSLParserBaseVisitor<ASTNode> {
   }
 
   @Override
-  public ASTNode visitMultiplicativeExpression(MultiplicativeExpressionContext ctx) {
+  public BinaryExpression visitMultiplicativeExpression(MultiplicativeExpressionContext ctx) {
     var left = (Expression) visit(ctx.left);
     var right = (Expression) visit(ctx.right);
     switch (ctx.op.getType()) {
@@ -373,6 +373,7 @@ public class ASTBuilder extends GLSLParserBaseVisitor<ASTNode> {
   public SelectionStatement visitSelectionStatement(SelectionStatementContext ctx) {
     // unwrap the nested selection statements that are created through "else if"
     // chains
+    var attribute = ctx.attribute();
     var sections = Stream.<Section>builder();
     SelectionStatementContext nextSelection = ctx;
     do {
@@ -391,7 +392,11 @@ public class ASTBuilder extends GLSLParserBaseVisitor<ASTNode> {
         }
       }
     } while (nextSelection != null);
-    return new SelectionStatement(sections.build());
+    return attribute == null
+        ? new SelectionStatement(sections.build())
+        : new SelectionStatement(
+            visitAttribute(attribute),
+            sections.build());
   }
 
   @Override
@@ -402,41 +407,110 @@ public class ASTBuilder extends GLSLParserBaseVisitor<ASTNode> {
 
   @Override
   public ForLoopStatement visitForStatement(ForStatementContext ctx) {
-    // TODO
-    return null;
+    ControlFlowAttributes controlFlowAttributes = null;
+    Expression initExpression = null;
+    InnerASTNode initDeclaration = null; // TODO: Declaration
+    Expression condition = null;
+    IterationConditionInitializer iterationConditionInitializer = null;
+    Expression incrementer = null;
+
+    var attribute = ctx.attribute();
+    if (attribute != null) {
+      controlFlowAttributes = visitAttribute(attribute);
+    }
+
+    var initExpressionStatement = ctx.expressionStatement();
+    if (initExpressionStatement != null) {
+      initExpression = (Expression) visit(initExpressionStatement.expression());
+    } else {
+      var initDeclarationStatement = ctx.declarationStatement();
+      if (initDeclarationStatement != null) {
+        initDeclaration = (InnerASTNode) visit(initDeclarationStatement.declaration());
+      }
+    }
+
+    if (ctx.condition != null) {
+      condition = (Expression) visit(ctx.condition);
+    } else if (ctx.initCondition != null) {
+      iterationConditionInitializer = visitIterationCondition(ctx.initCondition);
+    }
+
+    if (ctx.incrementer != null) {
+      incrementer = (Expression) visit(ctx.incrementer);
+    }
+
+    return new ForLoopStatement(
+        controlFlowAttributes,
+        initExpression,
+        initDeclaration,
+        condition,
+        iterationConditionInitializer,
+        incrementer,
+        (Statement) visit(ctx.statement()));
   }
 
   @Override
   public WhileLoopStatement visitWhileStatement(WhileStatementContext ctx) {
+    var attribute = ctx.attribute();
     var condition = ctx.condition;
-    var expression = condition.expression();
-    return expression != null
-        ? new WhileLoopStatement(
-            (Expression) visit(expression),
-            (Statement) visit(ctx.loopBody))
-        : new WhileLoopStatement(
-            // TODO visit IterationConditionInitializer properly
-            (IterationConditionInitializer) visit(condition),
-            (Statement) visit(ctx.loopBody));
+    return condition != null
+        ? attribute == null
+            ? new WhileLoopStatement(
+                visitAttribute(attribute),
+                (Expression) visit(condition),
+                (Statement) visit(ctx.loopBody))
+            : new WhileLoopStatement(
+                (Expression) visit(condition),
+                (Statement) visit(ctx.loopBody))
+        : attribute == null
+            ? new WhileLoopStatement(
+                visitIterationCondition(ctx.initCondition),
+                (Statement) visit(ctx.loopBody))
+            : new WhileLoopStatement(
+                visitAttribute(attribute),
+                visitIterationCondition(ctx.initCondition),
+                (Statement) visit(ctx.loopBody));
   }
 
   @Override
   public DoWhileLoopStatement visitDoWhileStatement(DoWhileStatementContext ctx) {
-    return new DoWhileLoopStatement(
-        (Statement) visit(ctx.loopBody),
-        (Expression) visit(ctx.condition));
+    var attribute = ctx.attribute();
+    return attribute == null
+        ? new DoWhileLoopStatement(
+            (Statement) visit(ctx.loopBody),
+            (Expression) visit(ctx.condition))
+        : new DoWhileLoopStatement(
+            visitAttribute(attribute),
+            (Statement) visit(ctx.loopBody),
+            (Expression) visit(ctx.condition));
   }
 
   @Override
-  public ASTNode visitAttribute(AttributeContext ctx) {
-    // TODO
-    return null;
+  public IterationConditionInitializer visitIterationCondition(IterationConditionContext ctx) {
+    // TODO: FullySpecifiedType and Initalizer
+    return new IterationConditionInitializer(
+        (InnerASTNode) visit(ctx.fullySpecifiedType()),
+        (InnerASTNode) visit(ctx.initializer()));
   }
 
   @Override
-  public ASTNode visitSingleAttribute(SingleAttributeContext ctx) {
-    // TODO
-    return null;
+  public ControlFlowAttributes visitAttribute(AttributeContext ctx) {
+    return new ControlFlowAttributes(ctx.attributes.stream().map(
+        (attr) -> visitSingleAttribute(attr)));
+  }
+
+  @Override
+  public ControlFlowAttribute visitSingleAttribute(SingleAttributeContext ctx) {
+    var prefix = ctx.prefix != null ? Identifier.from(ctx.prefix) : null;
+    var name = Identifier.from(ctx.name);
+    var content = ctx.prefix != null ? (Expression) visit(ctx.content) : null;
+    return prefix == null
+        ? content == null
+            ? new ControlFlowAttribute(name)
+            : new ControlFlowAttribute(name, content)
+        : content == null
+            ? new ControlFlowAttribute(prefix, name)
+            : new ControlFlowAttribute(prefix, name, content);
   }
 
   @Override
