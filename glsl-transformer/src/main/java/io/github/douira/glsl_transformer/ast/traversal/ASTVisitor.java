@@ -270,15 +270,20 @@ public interface ASTVisitor<R> extends GeneralASTVisitor<R> {
   }
 
   default R visitDeclarationStatement(DeclarationStatement node) {
-    throw new UnsupportedOperationException(); // TODO
+    return visit(node.declaration);
   }
 
   default R visitExpressionStatement(ExpressionStatement node) {
-    throw new UnsupportedOperationException(); // TODO
+    return visit(node.expression);
   }
 
   default R visitSelectionStatement(SelectionStatement node) {
-    throw new UnsupportedOperationException(); // TODO
+    var result = visitSafe(initialResult(), node.controlFlowAttributes);
+    for (int i = 0, size = node.statements.size(); i < size; i++) {
+      result = visitSafe(result, node.conditions.get(i));
+      result = visitSafe(result, node.statements.get(i));
+    }
+    return result;
   }
 
   default R visitSwitchStatement(SwitchStatement node) {
@@ -290,51 +295,63 @@ public interface ASTVisitor<R> extends GeneralASTVisitor<R> {
   }
 
   default R visitForLoopStatement(ForLoopStatement node) {
-    throw new UnsupportedOperationException(); // TODO
+    var result = visitSafe(initialResult(), node.controlFlowAttributes);
+    result = visitSafe(result, node.initExpression);
+    result = visitSafe(result, node.initDeclaration);
+    result = visitSafe(result, node.condition);
+    result = visitSafe(result, node.iterationConditionInitializer);
+    result = visitSafe(result, node.incrementer);
+    return visit(result, node.statement);
   }
 
   default R visitWhileLoopStatement(WhileLoopStatement node) {
-    throw new UnsupportedOperationException(); // TODO
+    return visitThreeChildren(
+        node.controlFlowAttributes,
+        node.condition,
+        node.statement);
   }
 
   default R visitDoWhileLoopStatement(DoWhileLoopStatement node) {
-    throw new UnsupportedOperationException(); // TODO
+    return visitThreeChildren(
+        node.controlFlowAttributes,
+        node.statement,
+        node.condition);
   }
 
   default R visitContinueStatement(ContinueStatement node) {
-    throw new UnsupportedOperationException(); // TODO
+    return defaultResult();
   }
 
   default R visitBreakStatement(BreakStatement node) {
-    throw new UnsupportedOperationException(); // TODO
+    return defaultResult();
   }
 
   default R visitReturnStatement(ReturnStatement node) {
-    throw new UnsupportedOperationException(); // TODO
+    return visit(node.expression);
   }
 
   default R visitDiscardStatement(DiscardStatement node) {
-    throw new UnsupportedOperationException(); // TODO
+    return defaultResult();
   }
 
   default R visitDemoteStatement(DemoteStatement node) {
-    throw new UnsupportedOperationException(); // TODO
+    return defaultResult();
   }
 
   default R visitManyStatement(ManyStatement node) {
-    throw new UnsupportedOperationException(); // TODO
+    return superNodeTypeResult();
   }
 
   default R visitLoopStatement(LoopStatement node) {
-    throw new UnsupportedOperationException(); // TODO
+    return superNodeTypeResult();
   }
 
   default R visitTerminalStatement(TerminalStatement node) {
-    throw new UnsupportedOperationException(); // TODO
+    return superNodeTypeResult();
   }
 
   default R visitSemiTerminalStatement(SemiTerminalStatement node) {
-    throw new UnsupportedOperationException(); // TODO
+    return superNodeTypeResult();
   }
 
   default R visitControlFlowAttribute(ControlFlowAttribute node) {
