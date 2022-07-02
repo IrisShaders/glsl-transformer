@@ -376,7 +376,6 @@ public class ASTBuilder extends GLSLParserBaseVisitor<ASTNode> {
     var sections = Stream.<Section>builder();
     SelectionStatementContext nextSelection = ctx;
     do {
-      var attribute = ctx.attribute();
       sections.add(new Section(
           (Expression) visit(nextSelection.condition),
           (Statement) visit(nextSelection.ifTrue)));
