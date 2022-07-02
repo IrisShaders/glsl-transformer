@@ -8,10 +8,8 @@ public abstract class BinaryExpression extends Expression {
   public Expression right;
 
   public BinaryExpression(Expression left, Expression right) {
-    this.left = left;
-    this.right = right;
-    left.setParent(this);
-    right.setParent(this);
+    this.left = setup(left);
+    this.right = setup(right);
   }
 
   @Override
