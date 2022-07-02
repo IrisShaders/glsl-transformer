@@ -616,26 +616,21 @@ public abstract class ASTPrinter extends ASTPrinterUtil {
    */
   @Override
   public Void visitForLoopStatement(ForLoopStatement node) {
+    visitSafe(node.controlFlowAttributes);
     emitType(GLSLLexer.FOR);
     emitBreakableSpace();
     emitType(GLSLLexer.LPAREN);
-    if (node.initExpression != null) {
-      visit(node.initExpression);
-    } else if (node.initDeclaration != null) {
-      visit(node.initDeclaration);
+    if (visitSafe(node.initExpression)) {
+      visitSafe(node.initDeclaration);
     }
     emitType(GLSLLexer.SEMICOLON);
     emitBreakableSpace();
-    if (node.condition != null) {
-      visit(node.condition);
-    } else {
-      visit(node.iterationConditionInitializer);
+    if (visitSafe(node.condition)) {
+      visitSafe(node.iterationConditionInitializer);
     }
     emitType(GLSLLexer.SEMICOLON);
     emitBreakableSpace();
-    if (node.incrementer != null) {
-      visit(node.incrementer);
-    }
+    visitSafe(node.incrementer);
     emitType(GLSLLexer.RPAREN);
     emitBreakableSpace();
     visit(node.statement);
@@ -653,10 +648,8 @@ public abstract class ASTPrinter extends ASTPrinterUtil {
     emitType(GLSLLexer.WHILE);
     emitBreakableSpace();
     emitType(GLSLLexer.LPAREN);
-    if (node.condition != null) {
-      visit(node.condition);
-    } else {
-      visit(node.iterationConditionInitializer);
+    if (visitSafe(node.condition)) {
+      visitSafe(node.iterationConditionInitializer);
     }
     emitType(GLSLLexer.RPAREN);
     emitBreakableSpace();

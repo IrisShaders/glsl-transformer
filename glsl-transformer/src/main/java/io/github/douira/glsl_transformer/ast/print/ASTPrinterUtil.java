@@ -122,6 +122,14 @@ public abstract class ASTPrinterUtil extends ASTListenerVisitor<Void> {
     this.currentNode = currentNode;
   }
 
+  protected boolean visitSafe(ASTNode node) {
+    if (node != null) {
+      visit(node);
+      return false;
+    }
+    return true;
+  }
+
   @Override
   public Void visit(ASTNode node) {
     currentNode = node;
