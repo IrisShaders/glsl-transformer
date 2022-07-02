@@ -1,6 +1,5 @@
 package io.github.douira.glsl_transformer.ast.node.statement.loop;
 
-import io.github.douira.glsl_transformer.ast.node.ControlFlowAttributes;
 import io.github.douira.glsl_transformer.ast.node.expression.Expression;
 import io.github.douira.glsl_transformer.ast.node.statement.Statement;
 import io.github.douira.glsl_transformer.ast.traversal.*;
@@ -8,13 +7,6 @@ import io.github.douira.glsl_transformer.ast.traversal.*;
 public class DoWhileLoopStatement extends ConditionLoopStatement {
 	public DoWhileLoopStatement(Statement statement, Expression condition) {
 		super(statement, condition);
-	}
-
-	public DoWhileLoopStatement(
-			ControlFlowAttributes controlFlowAttributes,
-			Statement statement,
-			Expression condition) {
-		super(controlFlowAttributes, statement, condition);
 	}
 
 	@Override

@@ -418,16 +418,4 @@ public interface ASTListener extends GeneralASTListener {
 
   default void exitSemiTerminalStatement(SemiTerminalStatement node) {
   }
-
-  default void enterControlFlowAttributes(ControlFlowAttributes node) {
-  }
-
-  default void exitControlFlowAttributes(ControlFlowAttributes node) {
-  }
-
-  default void enterControlFlowAttribute(ControlFlowAttribute node) {
-  }
-
-  default void exitControlFlowAttribute(ControlFlowAttribute node) {
-  }
 }

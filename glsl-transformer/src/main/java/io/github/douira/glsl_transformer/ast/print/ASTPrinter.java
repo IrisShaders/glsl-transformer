@@ -571,11 +571,6 @@ public abstract class ASTPrinter extends ASTPrinterUtil {
       }
       var condition = node.conditions.get(i);
       if (condition != null) {
-        var controlFlowAttributes = node.controlFlowAttributes.get(i);
-        if (controlFlowAttributes != null) {
-          emitBreakableSpace();
-          visit(controlFlowAttributes);
-        }
         emitExtendableSpace();
         emitType(GLSLLexer.IF);
         emitExtendableSpace();
@@ -596,9 +591,6 @@ public abstract class ASTPrinter extends ASTPrinterUtil {
    */
   @Override
   public Void visitSwitchStatement(SwitchStatement node) {
-    if (!visitSafe(node.controlFlowAttributes)) {
-      emitBreakableSpace();
-    }
     throw new UnsupportedOperationException(); // TODO
   }
 
@@ -624,9 +616,6 @@ public abstract class ASTPrinter extends ASTPrinterUtil {
    */
   @Override
   public Void visitForLoopStatement(ForLoopStatement node) {
-    if (!visitSafe(node.controlFlowAttributes)) {
-      emitBreakableSpace();
-    }
     emitType(GLSLLexer.FOR);
     emitBreakableSpace();
     emitType(GLSLLexer.LPAREN);
@@ -655,9 +644,6 @@ public abstract class ASTPrinter extends ASTPrinterUtil {
    */
   @Override
   public Void visitWhileLoopStatement(WhileLoopStatement node) {
-    if (!visitSafe(node.controlFlowAttributes)) {
-      emitBreakableSpace();
-    }
     emitType(GLSLLexer.WHILE);
     emitBreakableSpace();
     emitType(GLSLLexer.LPAREN);
@@ -678,9 +664,6 @@ public abstract class ASTPrinter extends ASTPrinterUtil {
    */
   @Override
   public Void visitDoWhileLoopStatement(DoWhileLoopStatement node) {
-    if (!visitSafe(node.controlFlowAttributes)) {
-      emitBreakableSpace();
-    }
     emitType(GLSLLexer.DO);
     emitBreakableSpace();
     visit(node.statement);
@@ -731,45 +714,6 @@ public abstract class ASTPrinter extends ASTPrinterUtil {
   public Void visitDemoteStatement(DemoteStatement node) {
     emitType(GLSLLexer.DEMOTE, GLSLLexer.SEMICOLON);
     emitCommonNewline();
-    return null;
-  }
-
-  /**
-   * ANTLR grammar rule:
-   * attribute:
-   * LBRACKET LBRACKET attributes += singleAttribute (
-   * COMMA attributes += singleAttribute
-   * )* RBRACKET RBRACKET;
-   */
-  @Override
-  public Void visitControlFlowAttribute(ControlFlowAttribute node) {
-    if (node.prefix != null) {
-      visit(node.prefix);
-      emitType(GLSLLexer.COLON);
-      emitType(GLSLLexer.COLON);
-    }
-    visit(node.name);
-    if (node.expression != null) {
-      emitType(GLSLLexer.LPAREN);
-      visit(node.expression);
-      emitType(GLSLLexer.RPAREN);
-    }
-    return null;
-  }
-
-  /**
-   * ANTLR grammar rule:
-   * singleAttribute:
-   * (IDENTIFIER COLON COLON)? IDENTIFIER (LPAREN expression RPAREN)?;
-   */
-  @Override
-  public Void visitControlFlowAttributes(ControlFlowAttributes node) {
-    emitType(GLSLLexer.LBRACKET, GLSLLexer.LBRACKET);
-    visitWithSeparator(node.children, () -> {
-      emitType(GLSLLexer.COMMA);
-      emitBreakableSpace();
-    });
-    emitType(GLSLLexer.RBRACKET, GLSLLexer.RBRACKET);
     return null;
   }
 

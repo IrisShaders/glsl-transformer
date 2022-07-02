@@ -278,7 +278,7 @@ public interface ASTVisitor<R> extends GeneralASTVisitor<R> {
   }
 
   default R visitSelectionStatement(SelectionStatement node) {
-    var result = visitSafe(initialResult(), node.controlFlowAttributes);
+    var result = initialResult();
     for (int i = 0, size = node.statements.size(); i < size; i++) {
       result = visitSafe(result, node.conditions.get(i));
       result = visitSafe(result, node.statements.get(i));
@@ -295,7 +295,7 @@ public interface ASTVisitor<R> extends GeneralASTVisitor<R> {
   }
 
   default R visitForLoopStatement(ForLoopStatement node) {
-    var result = visitSafe(initialResult(), node.controlFlowAttributes);
+    var result = initialResult();
     result = visitSafe(result, node.initExpression);
     result = visitSafe(result, node.initDeclaration);
     result = visitSafe(result, node.condition);
@@ -305,17 +305,11 @@ public interface ASTVisitor<R> extends GeneralASTVisitor<R> {
   }
 
   default R visitWhileLoopStatement(WhileLoopStatement node) {
-    return visitThreeChildren(
-        node.controlFlowAttributes,
-        node.condition,
-        node.statement);
+    return visitTwoChildren(node.condition, node.statement);
   }
 
   default R visitDoWhileLoopStatement(DoWhileLoopStatement node) {
-    return visitThreeChildren(
-        node.controlFlowAttributes,
-        node.statement,
-        node.condition);
+    return visitTwoChildren(node.statement, node.condition);
   }
 
   default R visitContinueStatement(ContinueStatement node) {
@@ -352,14 +346,6 @@ public interface ASTVisitor<R> extends GeneralASTVisitor<R> {
 
   default R visitSemiTerminalStatement(SemiTerminalStatement node) {
     return superNodeTypeResult();
-  }
-
-  default R visitControlFlowAttribute(ControlFlowAttribute node) {
-    return visitThreeChildren(node.prefix, node.name, node.expression);
-  }
-
-  default R visitControlFlowAttributes(ControlFlowAttributes node) {
-    return visitChildren(node);
   }
 
   default R visitIdentifier(Identifier node) {

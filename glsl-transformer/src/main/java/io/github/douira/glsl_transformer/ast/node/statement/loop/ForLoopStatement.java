@@ -1,7 +1,7 @@
 package io.github.douira.glsl_transformer.ast.node.statement.loop;
 
 import io.github.douira.glsl_transformer.ast.InnerASTNode;
-import io.github.douira.glsl_transformer.ast.node.*;
+import io.github.douira.glsl_transformer.ast.node.IterationConditionInitializer;
 import io.github.douira.glsl_transformer.ast.node.expression.Expression;
 import io.github.douira.glsl_transformer.ast.node.statement.Statement;
 import io.github.douira.glsl_transformer.ast.traversal.*;
@@ -25,35 +25,11 @@ public class ForLoopStatement extends LoopStatement {
 	}
 
 	public ForLoopStatement(
-			ControlFlowAttributes controlFlowAttributes,
-			Statement statement,
-			Expression initExpression,
-			Expression condition,
-			Expression incrementer) {
-		super(controlFlowAttributes, statement);
-		this.initExpression = initExpression;
-		this.condition = condition;
-		this.incrementer = incrementer;
-	}
-
-	public ForLoopStatement(
 			Statement statement,
 			InnerASTNode initDeclaration,
 			Expression condition,
 			Expression incrementer) {
 		super(statement);
-		this.initDeclaration = initDeclaration;
-		this.condition = condition;
-		this.incrementer = incrementer;
-	}
-
-	public ForLoopStatement(
-			ControlFlowAttributes controlFlowAttributes,
-			Statement statement,
-			InnerASTNode initDeclaration,
-			Expression condition,
-			Expression incrementer) {
-		super(controlFlowAttributes, statement);
 		this.initDeclaration = initDeclaration;
 		this.condition = condition;
 		this.incrementer = incrementer;
@@ -71,35 +47,11 @@ public class ForLoopStatement extends LoopStatement {
 	}
 
 	public ForLoopStatement(
-			ControlFlowAttributes controlFlowAttributes,
-			Statement statement,
-			Expression initExpression,
-			IterationConditionInitializer iterationConditionInitializer,
-			Expression incrementer) {
-		super(controlFlowAttributes, statement);
-		this.initExpression = initExpression;
-		this.iterationConditionInitializer = iterationConditionInitializer;
-		this.incrementer = incrementer;
-	}
-
-	public ForLoopStatement(
 			Statement statement,
 			InnerASTNode initDeclaration,
 			IterationConditionInitializer iterationConditionInitializer,
 			Expression incrementer) {
 		super(statement);
-		this.initDeclaration = initDeclaration;
-		this.iterationConditionInitializer = iterationConditionInitializer;
-		this.incrementer = incrementer;
-	}
-
-	public ForLoopStatement(
-			ControlFlowAttributes controlFlowAttributes,
-			Statement statement,
-			InnerASTNode initDeclaration,
-			IterationConditionInitializer iterationConditionInitializer,
-			Expression incrementer) {
-		super(controlFlowAttributes, statement);
 		this.initDeclaration = initDeclaration;
 		this.iterationConditionInitializer = iterationConditionInitializer;
 		this.incrementer = incrementer;
@@ -110,20 +62,13 @@ public class ForLoopStatement extends LoopStatement {
 	}
 
 	public ForLoopStatement(
-			ControlFlowAttributes controlFlowAttributes,
-			Statement statement) {
-		super(controlFlowAttributes, statement);
-	}
-
-	public ForLoopStatement(
-			ControlFlowAttributes controlFlowAttributes,
 			Expression initExpression,
 			InnerASTNode initDeclaration,
 			Expression condition,
 			IterationConditionInitializer iterationConditionInitializer,
 			Expression incrementer,
 			Statement statement) {
-		super(controlFlowAttributes, statement);
+		super(statement);
 		this.initExpression = initExpression;
 		this.initDeclaration = initDeclaration;
 		this.condition = condition;
