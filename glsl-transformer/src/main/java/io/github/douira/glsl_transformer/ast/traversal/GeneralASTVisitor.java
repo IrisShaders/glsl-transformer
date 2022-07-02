@@ -1,6 +1,5 @@
 package io.github.douira.glsl_transformer.ast.traversal;
 
-import io.github.douira.glsl_transformer.ast.*;
 import io.github.douira.glsl_transformer.ast.node.basic.*;
 
 public interface GeneralASTVisitor<R> {
