@@ -4,8 +4,6 @@ import static org.junit.jupiter.api.Assertions.*;
 
 import org.junit.jupiter.api.Test;
 
-import io.github.douira.glsl_transformer.parse_ast.StringNode;
-
 /**
  * String node injection tests are performed through directive injection tests
  * in TransformationPhaseTest as it uses StringNode internally.

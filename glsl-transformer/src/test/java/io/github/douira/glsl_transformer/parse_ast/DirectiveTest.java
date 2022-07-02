@@ -4,7 +4,6 @@ import static org.junit.jupiter.api.Assertions.*;
 
 import org.junit.jupiter.api.Test;
 
-import io.github.douira.glsl_transformer.parse_ast.Directive;
 import io.github.douira.glsl_transformer.parse_ast.Directive.Type;
 
 /**
