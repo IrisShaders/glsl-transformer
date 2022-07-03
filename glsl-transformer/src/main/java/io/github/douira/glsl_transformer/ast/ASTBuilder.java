@@ -136,13 +136,14 @@ public class ASTBuilder extends GLSLParserBaseVisitor<ASTNode> {
 
     // collect the nested sequence expressions
     do {
-      var right = visit(ctx.right);
-      if (right instanceof SequenceExpression) {
+      var sequence = (SequenceExpressionContext) left;
+      if (sequence.right instanceof SequenceExpressionContext) {
         throw new IllegalStateException("Sequence expressions should not be nested on the right operand!");
       }
-      expressions.add((Expression) right);
+      var right = (Expression) visit(sequence.right);
+      expressions.add(right);
 
-      left = ctx.left;
+      left = sequence.left;
     } while (left instanceof SequenceExpressionContext);
 
     expressions.add((Expression) visit(left));

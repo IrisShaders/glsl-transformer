@@ -1,11 +1,18 @@
 package io.github.douira.glsl_transformer.ast.node.expression;
 
+import java.util.regex.Pattern;
+
 import org.antlr.v4.runtime.Token;
 
 import io.github.douira.glsl_transformer.ast.traversal.*;
 import io.github.douira.glsl_transformer.parse_ast.Type;
 
 public class LiteralExpression extends TerminalExpression {
+  private static final Pattern intExtractor = Pattern.compile(
+      "(.*?)(?:us|ul|u|s)?$", Pattern.CASE_INSENSITIVE);
+  private static final Pattern floatExtractor = Pattern.compile(
+      "(.*?)(?:f|hf|lf)?$", Pattern.CASE_INSENSITIVE);
+
   public Type literalType;
   public boolean booleanValue;
   public long integerValue;
@@ -63,11 +70,17 @@ public class LiteralExpression extends TerminalExpression {
             literalType, tokenContent.equals("true"));
       case SIGNED_INTEGER:
       case UNSIGNED_INTEGER:
+        var intMatcher = intExtractor.matcher(tokenContent);
+        intMatcher.matches();
+        tokenContent = intMatcher.group(1);
         return new LiteralExpression(
-            literalType, Long.parseLong(tokenContent));
+            literalType, Long.parseLong(tokenContent, 10));
       case FLOATING_POINT:
+        var floatMatcher = floatExtractor.matcher(tokenContent);
+        floatMatcher.matches();
+        tokenContent = floatMatcher.group(1);
         return new LiteralExpression(
-            literalType, Float.parseFloat(tokenContent));
+            literalType, Double.parseDouble(tokenContent));
       default:
         throw new IllegalArgumentException("Unsupported literal type: " + literalType);
     }
