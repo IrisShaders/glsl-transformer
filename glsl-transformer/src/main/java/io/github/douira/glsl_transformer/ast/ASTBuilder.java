@@ -16,16 +16,23 @@ import io.github.douira.glsl_transformer.ast.node.external_declaration.*;
 import io.github.douira.glsl_transformer.ast.node.statement.*;
 import io.github.douira.glsl_transformer.ast.node.statement.loop.*;
 import io.github.douira.glsl_transformer.ast.node.statement.selection.*;
-import io.github.douira.glsl_transformer.ast.node.statement.selection.SelectionStatement.Section;
 import io.github.douira.glsl_transformer.ast.node.statement.terminal.*;
 
 public class ASTBuilder extends GLSLParserBaseVisitor<ASTNode> {
   public static ASTNode build(ParseTree ctx) {
-    return Root.indexNodes(() -> new ASTBuilder().visit(ctx));
+    return Root.indexNodes(() -> doBuild(ctx));
   }
 
   public static ASTNode buildSubtreeFor(ASTNode parentTreeMember, ParseTree ctx) {
-    return Root.indexNodes(parentTreeMember, () -> new ASTBuilder().visit(ctx));
+    return Root.indexNodes(parentTreeMember, () -> doBuild(ctx));
+  }
+
+  private static ASTNode doBuild(ParseTree ctx) {
+    // try {
+    return new ASTBuilder().visit(ctx);
+    // } catch (Exception e) {
+    // throw new Exception("Failed to build AST for " + ctx.getText(), e);
+    // }
   }
 
   @Override
@@ -379,12 +386,12 @@ public class ASTBuilder extends GLSLParserBaseVisitor<ASTNode> {
   public SelectionStatement visitSelectionStatement(SelectionStatementContext ctx) {
     // unwrap the nested selection statements that are created through "else if"
     // chains
-    var sections = Stream.<Section>builder();
+    var conditions = Stream.<Expression>builder();
+    var statements = Stream.<Statement>builder();
     SelectionStatementContext nextSelection = ctx;
     do {
-      sections.add(new Section(
-          (Expression) visit(nextSelection.condition),
-          (Statement) visit(nextSelection.ifTrue)));
+      conditions.add((Expression) visit(nextSelection.condition));
+      statements.add((Statement) visit(nextSelection.ifTrue));
       var ifFalse = nextSelection.ifFalse;
       nextSelection = null;
       if (ifFalse != null) {
@@ -394,11 +401,12 @@ public class ASTBuilder extends GLSLParserBaseVisitor<ASTNode> {
         } else {
           // add a regular else branch, has no control flow attribute
           // since they are only present on the whole selection statement
-          sections.add(new Section((Statement) visit(ifFalse)));
+          conditions.add(null);
+          statements.add((Statement) visit(ifFalse));
         }
       }
     } while (nextSelection != null);
-    return new SelectionStatement(sections.build());
+    return new SelectionStatement(conditions.build(), statements.build());
   }
 
   @Override
