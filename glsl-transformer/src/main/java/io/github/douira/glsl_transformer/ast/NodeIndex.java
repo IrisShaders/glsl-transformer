@@ -45,4 +45,16 @@ public class NodeIndex implements Index<ASTNode> {
   public <T extends ASTNode> Set<T> get(T node) {
     return (Set<T>) get(node.getClass());
   }
+
+  @SuppressWarnings("unchecked")
+  public void merge(NodeIndex other) {
+    for (var entry : other.index.entrySet()) {
+      var set = (Set<ASTNode>) index.get(entry.getKey());
+      if (set == null) {
+        set = new HashSet<>();
+        index.put(entry.getKey(), set);
+      }
+      set.addAll(entry.getValue());
+    }
+  }
 }
