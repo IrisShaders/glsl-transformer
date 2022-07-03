@@ -70,8 +70,7 @@ public class TestCaseProvider implements ArgumentsProvider, AnnotationConsumer<T
         var segments = rawCase.split(" |:", 3);
 
         // ensure there is a trailing newline or parsing will break
-        testCases.add(new TestCase(
-            segments[0], segments[1], segments[2].trim() + "\n"));
+        testCases.add(new TestCase(segments[0], segments[1], segments[2]));
       }
 
       TEST_CASE_CACHE.put(file, testCases);

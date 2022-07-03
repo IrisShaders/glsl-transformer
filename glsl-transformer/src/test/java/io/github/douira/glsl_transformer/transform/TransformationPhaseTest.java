@@ -132,9 +132,10 @@ public class TransformationPhaseTest extends TestWithResource {
    *           there are just two newlines.
    */
   @ParameterizedTest
-  @TestCaseSource
+  @TestCaseSource("testInjectNode")
   @SnapshotName("testInjectNode")
   void testInjectNode(String scenario, String input) {
+    input = input.trim() + "\n";
     manager.setSLLOnly();
     for (var location : InjectionPoint.values()) {
       setTestCode(input);
@@ -155,6 +156,7 @@ public class TransformationPhaseTest extends TestWithResource {
   @TestCaseSource("testInjectNode")
   @SnapshotName("testInjectDefine")
   void testInjectDefine(String scenario, String input) {
+    input = input.trim() + "\n";
     manager.setSLLOnly();
     for (var location : InjectionPoint.values()) {
       setTestCode(input);
