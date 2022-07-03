@@ -4,15 +4,16 @@ import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.function.Function;
 
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
 
-import io.github.douira.glsl_transformer.GLSLParser;
+import io.github.douira.glsl_transformer.*;
+import io.github.douira.glsl_transformer.TestCaseProvider.Spacing;
 import io.github.douira.glsl_transformer.ast.print.ASTPrinter;
 import io.github.douira.glsl_transformer.transform.TransformationManager;
 import io.github.douira.glsl_transformer.tree.ExtendedContext;
 
 public class ASTIntegrationTest {
-  public void assertReprint(
+  void assertReprint(
       Function<GLSLParser, ? extends ExtendedContext> parseMethod,
       String expected,
       String input) {
@@ -23,77 +24,55 @@ public class ASTIntegrationTest {
     assertEquals(expected, reprinted);
   }
 
-  public void assertReprint(
+  void assertReprint(
       Function<GLSLParser, ? extends ExtendedContext> parseMethod,
       String input) {
     assertReprint(parseMethod, input, input);
   }
 
-  public void assertReprint(String expected, String input) {
+  void assertReprint(String expected, String input) {
     assertReprint(GLSLParser::translationUnit, expected, input);
   }
 
-  public void assertReprint(String input) {
+  void assertReprint(String input) {
     assertReprint(input, input);
   }
 
-  public void assertReprintExpression(String expected, String input) {
+  void assertReprintExpression(String expected, String input) {
     assertReprint(GLSLParser::expression, expected, input);
   }
 
-  public void assertReprintExpression(String input) {
+  void assertReprintExpression(String input) {
     assertReprintExpression(input, input);
   }
 
-  public void assertReprintStatement(String expected, String input) {
+  void assertReprintStatement(String expected, String input) {
     assertReprint(GLSLParser::statement, expected, input);
   }
 
-  public void assertReprintStatement(String input) {
+  void assertReprintStatement(String input) {
     assertReprintStatement(input, input);
   }
 
-  @Test
-  public void testASTIntegration() {
-    assertReprint(";\n");
-    assertReprint("");
-    assertReprint("#version 330 core\n;\n");
-    assertReprint("#pragma STDGL debug(on)\n");
-    assertReprint("#pragma optimize(off)\n");
-    assertReprint("#pragma invariant(all)\n");
-    assertReprint("#pragma foobar\n");
-    assertReprint("#extension foobar: require\n");
-    assertReprint("#extension foobar: enable\n");
-    assertReprint("#extension foobar: warn\n");
-    assertReprint("#extension foobar: disable\n");
+  @ParameterizedTest
+  @TestCaseSource(caseSet = "testReprint", spacing = Spacing.TRIM_SINGLE_BOTH)
+  void testASTIntegration(String type, String input, String output) {
+    switch (type) {
+      case "translationUnit":
+        assertReprint(output, input);
+        break;
+      case "expression":
+        assertReprintExpression(output, input);
+        break;
+      case "statement":
+        assertReprintStatement(output, input);
+        break;
+      default:
+        throw new IllegalArgumentException("Unknown type");
+    }
 
-    assertReprintExpression("1 + 2");
-    assertReprintExpression("1 | 2");
-    assertReprintExpression("((a + b) * c)");
-    assertReprintExpression("true ? 1.0 : bar.length()");
-    assertReprintExpression("a, b, c");
-    assertReprintExpression("(a, b, c, d)");
-    assertReprintExpression(
-        "1 + 2us + 3ul + 4u + 5s + 0.1 + 0.2 + 0.3hf + 0.4lf",
-        "1 + 2us + 3ul + 4u + 5s + 0.1 + 0.2f + 0.3hf + 0.4lf");
-    assertReprintExpression("++1, --1, 1++, 1--, +1, -1, ~1, !1");
-    assertReprintExpression("a.b, b.foo, a.b.c.d");
-    assertReprintExpression("a.b.c.d.e.f.g.h.i.j.k.l.m.n.o.p.q.r.s");
-    assertReprintExpression("a ? b ? c : d : e");
-    assertReprintExpression("a - b * c / d % e ^ d & c | b ^ c");
-    assertReprintExpression("a.c[4 + b[c]]");
-    assertReprintExpression("a == b != c < d <= e > f >= g");
-    assertReprintExpression("a && b || c ^^ c");
-    assertReprintExpression("a << b >> c");
-    assertReprintExpression("a = b += b -= b *= b /= a");
-    assertReprintExpression("a %= b &= b |= b ^= b <<= c <<= d");
-
-    assertReprintStatement(";\n");
-    assertReprintStatement("1;\n");
-    assertReprintStatement("a + b;\n");
-    assertReprintStatement("a = c;\n");
-    assertReprintStatement("{\n1;\n2;\n3;\n}\n");
-    assertReprintStatement("{\n;\n;\n;\n}\n");
-    assertReprintStatement("if (a && b) {\n1;\n}\n");
+    // assertReprint(";\n");
+    // assertReprintExpression("1 + 2");
+    // assertReprintStatement("if (a && b) {\n1;\n}\n");
   }
 }

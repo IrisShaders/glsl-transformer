@@ -354,7 +354,10 @@ public class ASTBuilder extends GLSLParserBaseVisitor<ASTNode> {
 
   @Override
   public ReturnStatement visitReturnStatement(ReturnStatementContext ctx) {
-    return new ReturnStatement((Expression) visit(ctx.expression()));
+    var expression = ctx.expression();
+    return expression == null
+        ? new ReturnStatement()
+        : new ReturnStatement((Expression) visit(expression));
   }
 
   @Override

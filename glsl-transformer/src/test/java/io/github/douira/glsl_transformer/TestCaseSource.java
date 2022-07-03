@@ -4,6 +4,8 @@ import java.lang.annotation.*;
 
 import org.junit.jupiter.params.provider.ArgumentsSource;
 
+import io.github.douira.glsl_transformer.TestCaseProvider.Spacing;
+
 /**
  * Provides parameterized test arguments from a .cases test case file. The test
  * cases with the given name are read. If no name is provided, the name of the
@@ -20,5 +22,12 @@ public @interface TestCaseSource {
    * 
    * @return The name of the test case set
    */
-  String value() default "";
+  String caseSet() default "";
+
+  /**
+   * The spacing type to use when parsing test cases from the file.
+   * 
+   * @return The spacing type
+   */
+  Spacing spacing() default Spacing.NONE;
 }
