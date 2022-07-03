@@ -17,8 +17,14 @@ public abstract class ProxyArrayList<T> extends ArrayList<T> {
   }
 
   public ProxyArrayList(Collection<? extends T> c) {
+    this(c, true);
+  }
+
+  public ProxyArrayList(Collection<? extends T> c, boolean doNotification) {
     super(c);
-    notifyAdditionInternal(c);
+    if (doNotification) {
+      notifyAdditionInternal(c);
+    }
   }
 
   protected abstract void notifyAddition(T added);
