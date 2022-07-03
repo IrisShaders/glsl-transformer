@@ -162,22 +162,22 @@ public class ProxyParseTreeListenerTest {
   class ThrowOnAllVisits extends TreeListener {
     @Override
     public void enterEveryRule(ParserRuleContext ctx) {
-      throw new RuntimeException("Should not be called");
+      throw new AssertionError("Should not be called");
     }
 
     @Override
     public void exitEveryRule(ParserRuleContext ctx) {
-      throw new RuntimeException("Should not be called");
+      throw new AssertionError("Should not be called");
     }
 
     @Override
     public void visitErrorNode(ErrorNode node) {
-      throw new RuntimeException("Should not be called");
+      throw new AssertionError("Should not be called");
     }
 
     @Override
     public void visitTerminal(TerminalNode node) {
-      throw new RuntimeException("Should not be called");
+      throw new AssertionError("Should not be called");
     }
   }
 
