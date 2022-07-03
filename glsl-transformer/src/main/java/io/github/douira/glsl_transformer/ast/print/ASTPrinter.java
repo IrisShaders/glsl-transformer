@@ -566,11 +566,13 @@ public abstract class ASTPrinter extends ASTPrinterUtil {
   @Override
   public Void visitSelectionStatement(SelectionStatement node) {
     for (int i = 0, size = node.statements.size(); i < size; i++) {
+      var condition = node.conditions.get(i);
       if (i > 0) {
         emitType(GLSLLexer.ELSE);
-        emitExtendableSpace();
+        if (condition != null) {
+          emitExactSpace();
+        }
       }
-      var condition = node.conditions.get(i);
       if (condition != null) {
         emitType(GLSLLexer.IF);
         emitExtendableSpace();
@@ -620,7 +622,9 @@ public abstract class ASTPrinter extends ASTPrinterUtil {
     emitBreakableSpace();
     emitType(GLSLLexer.LPAREN);
     if (!visitSafe(node.initExpression)) {
-      visitSafe(node.initDeclaration);
+      if (!visitSafe(node.initDeclaration)) {
+        emitExactSpace();
+      }
     }
     emitType(GLSLLexer.SEMICOLON);
     emitBreakableSpace();

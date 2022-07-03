@@ -13,12 +13,36 @@ import org.junit.jupiter.params.support.AnnotationConsumer;
 import au.com.origin.snapshots.annotations.SnapshotName;
 
 public class TestCaseProvider implements ArgumentsProvider, AnnotationConsumer<TestCaseSource> {
-  private static record TestCase(String testCaseSet, String scenario, String content) {
+  public static enum Spacing {
+    TRIMMED_TRAILING_NEWLINE {
+      @Override
+      public String process(String input) {
+        return input.trim() + '\n';
+      }
+    },
+    TRIM_SINGLE_BOTH {
+      @Override
+      public String process(String input) {
+        return input.substring(1, input.length() - 1);
+      }
+    },
+    NONE {
+      @Override
+      public String process(String input) {
+        return input;
+      }
+    };
+
+    public abstract String process(String input);
+  }
+
+  private static record TestCase(String testCaseSet, String scenario, String content, String output) {
   };
 
   private static final Map<Path, List<TestCase>> TEST_CASE_CACHE = new HashMap<>();
 
   private String testCaseSet;
+  private Spacing spacing;
 
   @Override
   public Stream<? extends Arguments> provideArguments(ExtensionContext context) throws Exception {
@@ -47,14 +71,16 @@ public class TestCaseProvider implements ArgumentsProvider, AnnotationConsumer<T
     return testCases
         .stream()
         .filter(testCase -> testCase.testCaseSet().equals(useSetName))
-        .map(testCase -> Arguments.of(testCase.scenario(), testCase.content()));
+        .map(testCase -> Arguments.of(
+            testCase.scenario(), testCase.content(), testCase.output()));
   }
 
   @Override
-  public void accept(TestCaseSource t) {
-    if (!t.value().isBlank()) {
-      testCaseSet = t.value();
+  public void accept(TestCaseSource source) {
+    if (!source.caseSet().isBlank()) {
+      testCaseSet = source.caseSet();
     }
+    spacing = source.spacing();
   }
 
   private List<TestCase> getTestCases(Path file) throws IOException {
@@ -63,14 +89,19 @@ public class TestCaseProvider implements ArgumentsProvider, AnnotationConsumer<T
       var content = Files.readString(file);
 
       // parse the testcases
-      var rawCases = content.trim().split("§");
+      var rawCases = content.split("§");
       testCases = new ArrayList<>(rawCases.length - 1);
       for (var i = 1; i < rawCases.length; i++) {
         var rawCase = rawCases[i];
         var segments = rawCase.split(" |:", 3);
-
-        // ensure there is a trailing newline or parsing will break
-        testCases.add(new TestCase(segments[0], segments[1], segments[2]));
+        var input = segments[2];
+        var inputSegments = input.split("===", 2);
+        testCases.add(new TestCase(
+            segments[0],
+            segments[1],
+            spacing.process(inputSegments[0]),
+            spacing.process(
+                inputSegments.length > 1 ? inputSegments[1] : inputSegments[0])));
       }
 
       TEST_CASE_CACHE.put(file, testCases);

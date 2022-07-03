@@ -15,6 +15,7 @@ import au.com.origin.snapshots.annotations.SnapshotName;
 import au.com.origin.snapshots.junit5.SnapshotExtension;
 import io.github.douira.glsl_transformer.*;
 import io.github.douira.glsl_transformer.GLSLParser.TranslationUnitContext;
+import io.github.douira.glsl_transformer.TestCaseProvider.Spacing;
 import io.github.douira.glsl_transformer.TestResourceManager.FileLocation;
 import io.github.douira.glsl_transformer.parse_ast.StringNode;
 import io.github.douira.glsl_transformer.tree.TreeMember;
@@ -132,10 +133,9 @@ public class TransformationPhaseTest extends TestWithResource {
    *           there are just two newlines.
    */
   @ParameterizedTest
-  @TestCaseSource("testInjectNode")
+  @TestCaseSource(caseSet = "testInjectNode", spacing = Spacing.TRIMMED_TRAILING_NEWLINE)
   @SnapshotName("testInjectNode")
   void testInjectNode(String scenario, String input) {
-    input = input.trim() + "\n";
     manager.setSLLOnly();
     for (var location : InjectionPoint.values()) {
       setTestCode(input);
@@ -153,10 +153,9 @@ public class TransformationPhaseTest extends TestWithResource {
   }
 
   @ParameterizedTest
-  @TestCaseSource("testInjectNode")
+  @TestCaseSource(caseSet = "testInjectNode", spacing = Spacing.TRIMMED_TRAILING_NEWLINE)
   @SnapshotName("testInjectDefine")
   void testInjectDefine(String scenario, String input) {
-    input = input.trim() + "\n";
     manager.setSLLOnly();
     for (var location : InjectionPoint.values()) {
       setTestCode(input);
