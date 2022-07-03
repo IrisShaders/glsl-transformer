@@ -568,10 +568,10 @@ public abstract class ASTPrinter extends ASTPrinterUtil {
     for (int i = 0, size = node.statements.size(); i < size; i++) {
       if (i > 0) {
         emitType(GLSLLexer.ELSE);
+        emitExtendableSpace();
       }
       var condition = node.conditions.get(i);
       if (condition != null) {
-        emitExtendableSpace();
         emitType(GLSLLexer.IF);
         emitExtendableSpace();
         emitType(GLSLLexer.LPAREN);

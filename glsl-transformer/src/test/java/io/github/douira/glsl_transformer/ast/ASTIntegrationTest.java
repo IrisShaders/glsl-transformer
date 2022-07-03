@@ -45,6 +45,14 @@ public class ASTIntegrationTest {
     assertReprintExpression(input, input);
   }
 
+  public void assertReprintStatement(String expected, String input) {
+    assertReprint(GLSLParser::statement, expected, input);
+  }
+
+  public void assertReprintStatement(String input) {
+    assertReprintStatement(input, input);
+  }
+
   @Test
   public void testASTIntegration() {
     assertReprint(";\n");
@@ -58,6 +66,7 @@ public class ASTIntegrationTest {
     assertReprint("#extension foobar: enable\n");
     assertReprint("#extension foobar: warn\n");
     assertReprint("#extension foobar: disable\n");
+
     assertReprintExpression("1 + 2");
     assertReprintExpression("1 | 2");
     assertReprintExpression("((a + b) * c)");
@@ -67,5 +76,24 @@ public class ASTIntegrationTest {
     assertReprintExpression(
         "1 + 2us + 3ul + 4u + 5s + 0.1 + 0.2 + 0.3hf + 0.4lf",
         "1 + 2us + 3ul + 4u + 5s + 0.1 + 0.2f + 0.3hf + 0.4lf");
+    assertReprintExpression("++1, --1, 1++, 1--, +1, -1, ~1, !1");
+    assertReprintExpression("a.b, b.foo, a.b.c.d");
+    assertReprintExpression("a.b.c.d.e.f.g.h.i.j.k.l.m.n.o.p.q.r.s");
+    assertReprintExpression("a ? b ? c : d : e");
+    assertReprintExpression("a - b * c / d % e ^ d & c | b ^ c");
+    assertReprintExpression("a.c[4 + b[c]]");
+    assertReprintExpression("a == b != c < d <= e > f >= g");
+    assertReprintExpression("a && b || c ^^ c");
+    assertReprintExpression("a << b >> c");
+    assertReprintExpression("a = b += b -= b *= b /= a");
+    assertReprintExpression("a %= b &= b |= b ^= b <<= c <<= d");
+
+    assertReprintStatement(";\n");
+    assertReprintStatement("1;\n");
+    assertReprintStatement("a + b;\n");
+    assertReprintStatement("a = c;\n");
+    assertReprintStatement("{\n1;\n2;\n3;\n}\n");
+    assertReprintStatement("{\n;\n;\n;\n}\n");
+    assertReprintStatement("if (a && b) {\n1;\n}\n");
   }
 }

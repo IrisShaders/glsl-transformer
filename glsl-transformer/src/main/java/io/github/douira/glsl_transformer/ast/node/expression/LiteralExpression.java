@@ -43,7 +43,7 @@ public class LiteralExpression extends TerminalExpression {
       case FLOATING_POINT:
         return floatingValue;
       default:
-        throw new RuntimeException("Unsupported literal type: " + literalType);
+        throw new IllegalArgumentException("Unsupported literal type: " + literalType);
     }
   }
 
@@ -57,7 +57,7 @@ public class LiteralExpression extends TerminalExpression {
       case FLOATING_POINT:
         return floatingValue > 0;
       default:
-        throw new RuntimeException("Unsupported literal type: " + literalType);
+        throw new IllegalArgumentException("Unsupported literal type: " + literalType);
     }
   }
 
