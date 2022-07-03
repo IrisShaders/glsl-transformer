@@ -4,10 +4,10 @@ import java.util.List;
 
 import io.github.douira.glsl_transformer.ast.node.basic.ASTNode;
 import io.github.douira.glsl_transformer.ast.print.token.*;
-import io.github.douira.glsl_transformer.ast.traversal.ASTListenerVisitor;
+import io.github.douira.glsl_transformer.ast.traversal.*;
 import io.github.douira.glsl_transformer.print.filter.TokenChannel;
 
-public abstract class ASTPrinterUtil extends ASTListenerVisitor<Void> {
+public abstract class ASTPrinterUtil extends ASTListenerVisitor<Void> implements ASTVoidVisitor {
   private ASTNode currentNode;
 
   protected ASTPrinterUtil() {
@@ -131,9 +131,8 @@ public abstract class ASTPrinterUtil extends ASTListenerVisitor<Void> {
   }
 
   @Override
-  public Void visit(ASTNode node) {
+  public void visitVoid(ASTNode node) {
     currentNode = node;
-    return super.visit(node);
   }
 
   @Override

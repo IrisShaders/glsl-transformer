@@ -21,7 +21,11 @@ import io.github.douira.glsl_transformer.ast.node.statement.terminal.*;
 
 public class ASTBuilder extends GLSLParserBaseVisitor<ASTNode> {
   public static ASTNode build(ParseTree ctx) {
-    return new ASTBuilder().visit(ctx);
+    return Root.indexNodes(() -> new ASTBuilder().visit(ctx));
+  }
+
+  public static ASTNode buildSubtreeFor(ASTNode parentTreeMember, ParseTree ctx) {
+    return Root.indexNodes(parentTreeMember, () -> new ASTBuilder().visit(ctx));
   }
 
   @Override
