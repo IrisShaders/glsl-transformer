@@ -137,11 +137,11 @@ public class PermutermTrieTest {
     trie.put("aac", c);
     trie.put("abc", d);
     trie.put("fdsfds", e);
-    assertQuery(Set.of(a, c, d), trie.suffixQuery("a"));
-    assertQuery(Set.of(a, c), trie.suffixQuery("aa"));
-    assertQuery(Set.of(d), trie.suffixQuery("ab"));
-    assertTrue(trie.suffixQuery("ac").count() == 0);
-    assertTrue(trie.suffixQuery("ds").count() == 0);
+    assertQuery(Set.of(c,d), trie.suffixQuery("c"));
+    assertQuery(Set.of(a), trie.suffixQuery("aa"));
+    assertQuery(Set.of(b), trie.suffixQuery("tat"));
+    assertTrue(trie.suffixQuery("ta").count() == 0);
     assertTrue(trie.suffixQuery("aaaa").count() == 0);
+    assertTrue(trie.suffixQuery("fsd").count() == 0);
   }
 }
