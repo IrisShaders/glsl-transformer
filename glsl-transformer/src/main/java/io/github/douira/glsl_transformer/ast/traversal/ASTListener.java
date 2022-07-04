@@ -1,6 +1,6 @@
 package io.github.douira.glsl_transformer.ast.traversal;
 
-import io.github.douira.glsl_transformer.ast.node.*;
+import io.github.douira.glsl_transformer.ast.node.TranslationUnit;
 import io.github.douira.glsl_transformer.ast.node.expression.*;
 import io.github.douira.glsl_transformer.ast.node.expression.binary.*;
 import io.github.douira.glsl_transformer.ast.node.expression.unary.*;
@@ -10,6 +10,10 @@ import io.github.douira.glsl_transformer.ast.node.statement.loop.*;
 import io.github.douira.glsl_transformer.ast.node.statement.selection.*;
 import io.github.douira.glsl_transformer.ast.node.statement.terminal.*;
 
+/**
+ * The AST listener interface has a method for entering and exiting each
+ * non-terminal AST node.
+ */
 public interface ASTListener extends GeneralASTListener {
   default void enterTranslationUnit(TranslationUnit node) {
   }

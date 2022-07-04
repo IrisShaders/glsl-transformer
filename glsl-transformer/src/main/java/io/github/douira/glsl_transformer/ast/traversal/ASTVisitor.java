@@ -10,6 +10,11 @@ import io.github.douira.glsl_transformer.ast.node.statement.loop.*;
 import io.github.douira.glsl_transformer.ast.node.statement.selection.*;
 import io.github.douira.glsl_transformer.ast.node.statement.terminal.*;
 
+/**
+ * The AST visitor knows how to traverse the AST and visit each node.
+ * Information about the order and structure of each node is encoded in this
+ * visitor.
+ */
 public interface ASTVisitor<R> extends GeneralASTVisitor<R> {
   default R visitTranslationUnit(TranslationUnit node) {
     var result = initialResult();
