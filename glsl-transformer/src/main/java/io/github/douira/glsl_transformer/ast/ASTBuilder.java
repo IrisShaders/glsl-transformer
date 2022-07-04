@@ -31,6 +31,10 @@ public class ASTBuilder extends GLSLParserBaseVisitor<ASTNode> {
     return Root.indexNodes(() -> doBuild(ctx));
   }
 
+  public static ASTNode build(Root rootInstance, ParseTree ctx) {
+    return Root.indexNodes(rootInstance, () -> doBuild(ctx));
+  }
+
   public static ASTNode buildSubtreeFor(ASTNode parentTreeMember, ParseTree ctx) {
     return Root.indexNodes(parentTreeMember, () -> doBuild(ctx));
   }

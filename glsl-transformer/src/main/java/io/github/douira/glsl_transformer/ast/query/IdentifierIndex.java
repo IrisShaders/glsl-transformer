@@ -45,4 +45,8 @@ public class IdentifierIndex implements Index<Identifier> {
       set.addAll(entry.getValue());
     }
   }
+
+  public SortedMap<String, Set<Identifier>> prefixQuery(String prefix) {
+    return index.prefixMap(prefix);
+  }
 }
