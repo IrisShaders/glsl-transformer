@@ -566,6 +566,7 @@ public abstract class ASTPrinter extends ASTPrinterUtil {
   @Override
   public Void visitSelectionStatement(SelectionStatement node) {
     for (int i = 0, size = node.statements.size(); i < size; i++) {
+      compactCommonNewline(CompoundStatement.class);
       var condition = node.conditions.get(i);
       if (i > 0) {
         emitType(GLSLLexer.ELSE);
@@ -671,6 +672,7 @@ public abstract class ASTPrinter extends ASTPrinterUtil {
     emitType(GLSLLexer.DO);
     emitBreakableSpace();
     visit(node.statement);
+    compactCommonNewline(CompoundStatement.class);
     emitType(GLSLLexer.WHILE);
     emitBreakableSpace();
     emitType(GLSLLexer.LPAREN);

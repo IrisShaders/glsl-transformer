@@ -33,7 +33,7 @@ public abstract class ASTNode {
     root.unregisterChild(this);
   }
 
-  class ChangeRootVisitor implements ASTVoidVisitor {
+  class ChangeRootVisitor extends ASTVoidVisitor {
     private Root root;
 
     public ChangeRootVisitor(Root root) {
@@ -80,7 +80,7 @@ public abstract class ASTNode {
     return true;
   }
 
-  class UnregisterVisitor implements ASTVoidVisitor {
+  class UnregisterVisitor extends ASTVoidVisitor {
     @Override
     public void visitVoid(ASTNode node) {
       node.unregister();

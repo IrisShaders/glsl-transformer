@@ -8,4 +8,10 @@ public interface GeneralASTListener {
 
   default void exitEveryNode(InnerASTNode node) {
   }
+
+  default void afterEnterEveryNode(InnerASTNode node) {
+  }
+
+  default void beforeExitEveryNode(InnerASTNode node) {
+  }
 }
