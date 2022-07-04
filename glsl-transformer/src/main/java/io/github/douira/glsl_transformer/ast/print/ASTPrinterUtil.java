@@ -2,12 +2,13 @@ package io.github.douira.glsl_transformer.ast.print;
 
 import java.util.List;
 
-import io.github.douira.glsl_transformer.ast.node.basic.ASTNode;
+import io.github.douira.glsl_transformer.ast.node.basic.*;
 import io.github.douira.glsl_transformer.ast.print.token.*;
-import io.github.douira.glsl_transformer.ast.traversal.*;
+import io.github.douira.glsl_transformer.ast.traversal.ASTListenerVisitor;
 import io.github.douira.glsl_transformer.print.filter.TokenChannel;
 
-public abstract class ASTPrinterUtil extends ASTListenerVisitor<Void> implements ASTVoidVisitor {
+public abstract class ASTPrinterUtil extends ASTListenerVisitor<Void> {
+  private PrintToken lastToken;
   private ASTNode currentNode;
 
   protected ASTPrinterUtil() {
@@ -16,10 +17,37 @@ public abstract class ASTPrinterUtil extends ASTListenerVisitor<Void> implements
 
   protected abstract String generateString();
 
-  protected abstract void emitToken(PrintToken token);
+  protected abstract void appendToken(PrintToken token);
+
+  public void replaceToken(PrintToken replacement) {
+    lastToken = replacement;
+  }
+
+  protected void emitToken(PrintToken token) {
+    if (token instanceof ReplaceToken) {
+      if (lastToken == null) {
+        return;
+      }
+      ((ReplaceToken) token).replace(lastToken, this);
+      return;
+    }
+
+    if (lastToken != null) {
+      appendToken(lastToken);
+    }
+    lastToken = token;
+  }
+
+  protected void finalizePrinting() {
+    if (lastToken != null) {
+      appendToken(lastToken);
+      lastToken = null;
+    }
+  }
 
   public static String printAST(ASTPrinter printer, ASTNode node) {
     printer.visit(node);
+    printer.finalizePrinting();
     return printer.generateString();
   }
 
@@ -105,6 +133,18 @@ public abstract class ASTPrinterUtil extends ASTListenerVisitor<Void> implements
     emitNewline(TokenRole.COMMON_FORMATTING);
   }
 
+  protected void compactCommonNewline() {
+    compactCommonNewline(ASTNode.class);
+  }
+
+  protected void compactCommonNewline(Class<? extends ASTNode> sourceClass) {
+    emitToken(ReplaceToken.fromMatchAndNodeCondition(
+        currentNode,
+        new LiteralToken(currentNode, TokenRole.COMMON_FORMATTING, " "),
+        "\n",
+        node -> sourceClass.isAssignableFrom(node.getClass())));
+  }
+
   protected void visitWithSeparator(List<? extends ASTNode> nodes, Runnable emitter) {
     for (int i = 0, size = nodes.size(); i < size; i++) {
       visit(nodes.get(i));
@@ -131,8 +171,20 @@ public abstract class ASTPrinterUtil extends ASTListenerVisitor<Void> implements
   }
 
   @Override
-  public void visitVoid(ASTNode node) {
+  public void enterEveryNode(InnerASTNode node) {
     currentNode = node;
+  }
+
+  @Override
+  public void beforeExitEveryNode(InnerASTNode node) {
+    currentNode = node;
+  }
+
+  @Override
+  public Void visit(ASTNode node) {
+    currentNode = node;
+    super.visit(node);
+    return null;
   }
 
   @Override

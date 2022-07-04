@@ -31,9 +31,11 @@ public class ASTWalker<R> extends ASTBaseVisitor<R> {
   protected void enterNode(ASTListener listener, InnerASTNode node) {
     listener.enterEveryNode(node);
     node.enterNode(listener);
+    listener.afterEnterEveryNode(node);
   }
 
   protected void exitNode(ASTListener listener, InnerASTNode node) {
+    listener.beforeExitEveryNode(node);
     node.exitNode(listener);
     listener.exitEveryNode(node);
   }

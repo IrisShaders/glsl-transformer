@@ -143,27 +143,23 @@ else 4;
 §testReprint statement:
 if (a) {
 1;
-}
-else if (b) {
+} else if (b) {
 2;
-}
-else {
+} else {
 3;
 }
 
 §testReprint statement:
 if (a) {
 1;
-}
-else {
+} else {
 3;
 }
 
 §testReprint statement:
 if (a) {
 1;
-}
-else if (b) {
+} else if (b) {
 3;
 }
 
@@ -187,8 +183,7 @@ if (true) {
 §testReprint statement:
 do {
 1;
-}
-while (true);
+} while (true);
 
 §testReprint statement:
 do 1;
