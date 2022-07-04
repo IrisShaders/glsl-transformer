@@ -27,7 +27,7 @@ public class ReplaceToken extends PrintToken {
     return null;
   }
 
-  public void replace(PrintToken other, ASTPrinterUtil printer) {
+  public void replace(PrintToken other, ASTPrinterBase printer) {
     if (other.getRole() == TokenRole.COMMON_FORMATTING && condition.apply(other)) {
       printer.replaceToken(replacement);
     }

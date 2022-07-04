@@ -18,7 +18,7 @@ import io.github.douira.glsl_transformer.ast.print.token.EOFToken;
  * help of a few other utility classes. Information encoded about the string
  * content and printed structure of each node is encoded in this printer.
  */
-public abstract class ASTPrinter extends ASTPrinterUtil {
+public abstract class ASTPrinter extends ASTPrinterBase {
   @Override
   public void exitTranslationUnit(TranslationUnit node) {
     emitToken(new EOFToken(node));

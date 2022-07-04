@@ -7,11 +7,11 @@ import io.github.douira.glsl_transformer.ast.print.token.*;
 import io.github.douira.glsl_transformer.ast.traversal.ASTListenerVisitor;
 import io.github.douira.glsl_transformer.print.filter.TokenChannel;
 
-public abstract class ASTPrinterUtil extends ASTListenerVisitor<Void> {
+public abstract class ASTPrinterBase extends ASTListenerVisitor<Void> {
   private PrintToken lastToken;
   private ASTNode currentNode;
 
-  protected ASTPrinterUtil() {
+  protected ASTPrinterBase() {
     super();
   }
 
