@@ -3,7 +3,7 @@ package io.github.douira.glsl_transformer.ast.node.expression;
 import java.util.List;
 import java.util.stream.Stream;
 
-import io.github.douira.glsl_transformer.ast.*;
+import io.github.douira.glsl_transformer.ast.data.ChildNodeList;
 import io.github.douira.glsl_transformer.ast.node.basic.ListNode;
 import io.github.douira.glsl_transformer.ast.traversal.*;
 

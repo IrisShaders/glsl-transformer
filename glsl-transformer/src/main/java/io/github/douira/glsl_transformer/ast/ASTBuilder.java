@@ -17,6 +17,7 @@ import io.github.douira.glsl_transformer.ast.node.statement.*;
 import io.github.douira.glsl_transformer.ast.node.statement.loop.*;
 import io.github.douira.glsl_transformer.ast.node.statement.selection.*;
 import io.github.douira.glsl_transformer.ast.node.statement.terminal.*;
+import io.github.douira.glsl_transformer.ast.query.Root;
 
 /**
  * The AST builder is a visitor of the parse tree (not an AST visitor) that

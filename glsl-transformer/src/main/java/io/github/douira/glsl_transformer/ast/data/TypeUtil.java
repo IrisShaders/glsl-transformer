@@ -1,4 +1,4 @@
-package io.github.douira.glsl_transformer.ast;
+package io.github.douira.glsl_transformer.ast.data;
 
 import org.antlr.v4.runtime.Token;
 

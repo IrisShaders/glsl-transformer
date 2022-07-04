@@ -3,7 +3,7 @@ package io.github.douira.glsl_transformer.ast.node.basic;
 import java.util.List;
 import java.util.stream.Stream;
 
-import io.github.douira.glsl_transformer.ast.*;
+import io.github.douira.glsl_transformer.ast.data.ChildNodeList;
 
 public abstract class ListASTNode<Child extends ASTNode>
     extends InnerASTNode

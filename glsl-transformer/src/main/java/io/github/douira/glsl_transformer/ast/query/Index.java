@@ -1,4 +1,4 @@
-package io.github.douira.glsl_transformer.ast;
+package io.github.douira.glsl_transformer.ast.query;
 
 import io.github.douira.glsl_transformer.ast.node.basic.ASTNode;
 

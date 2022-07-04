@@ -4,7 +4,7 @@ import org.antlr.v4.runtime.Token;
 
 import io.github.douira.glsl_transformer.GLSLLexer;
 import io.github.douira.glsl_transformer.GLSLParser.PragmaStatementContext;
-import io.github.douira.glsl_transformer.ast.*;
+import io.github.douira.glsl_transformer.ast.data.*;
 import io.github.douira.glsl_transformer.ast.traversal.ASTVisitor;
 
 public class PragmaStatement extends ExternalDeclaration {
