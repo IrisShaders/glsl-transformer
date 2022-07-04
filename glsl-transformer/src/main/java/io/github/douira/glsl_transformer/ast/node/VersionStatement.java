@@ -4,13 +4,13 @@ import org.antlr.v4.runtime.Token;
 
 import io.github.douira.glsl_transformer.GLSLLexer;
 import io.github.douira.glsl_transformer.GLSLParser.VersionStatementContext;
-import io.github.douira.glsl_transformer.ast.*;
+import io.github.douira.glsl_transformer.ast.data.*;
 import io.github.douira.glsl_transformer.ast.node.basic.ASTNode;
 import io.github.douira.glsl_transformer.ast.traversal.ASTVisitor;
 
 public class VersionStatement extends ASTNode {
   public int version;
-  public Profile profile; //TODO: nullable
+  public Profile profile; // TODO: nullable
 
   public enum Profile implements TokenAssociatedEnum {
     CORE(GLSLLexer.NR_CORE),

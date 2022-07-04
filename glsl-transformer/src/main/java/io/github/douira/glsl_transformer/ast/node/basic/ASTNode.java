@@ -1,6 +1,6 @@
 package io.github.douira.glsl_transformer.ast.node.basic;
 
-import io.github.douira.glsl_transformer.ast.Root;
+import io.github.douira.glsl_transformer.ast.query.Root;
 import io.github.douira.glsl_transformer.ast.traversal.*;
 
 public abstract class ASTNode {

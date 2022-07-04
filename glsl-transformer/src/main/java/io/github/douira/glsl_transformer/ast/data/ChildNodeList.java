@@ -1,4 +1,4 @@
-package io.github.douira.glsl_transformer.ast;
+package io.github.douira.glsl_transformer.ast.data;
 
 import java.util.*;
 import java.util.stream.*;
