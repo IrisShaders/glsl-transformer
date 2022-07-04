@@ -13,6 +13,11 @@ import io.github.douira.glsl_transformer.ast.node.statement.selection.*;
 import io.github.douira.glsl_transformer.ast.node.statement.terminal.*;
 import io.github.douira.glsl_transformer.ast.print.token.EOFToken;
 
+/**
+ * The AST printer emits tokens to convert an AST node into a string with the
+ * help of a few other utility classes. Information encoded about the string
+ * content and printed structure of each node is encoded in this printer.
+ */
 public abstract class ASTPrinter extends ASTPrinterUtil {
   @Override
   public void exitTranslationUnit(TranslationUnit node) {
