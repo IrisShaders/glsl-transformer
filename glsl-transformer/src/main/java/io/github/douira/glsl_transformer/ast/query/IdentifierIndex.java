@@ -2,7 +2,6 @@ package io.github.douira.glsl_transformer.ast.query;
 
 import java.util.*;
 
-import org.apache.commons.collections4.Trie;
 import org.apache.commons.collections4.trie.PatriciaTrie;
 
 import io.github.douira.glsl_transformer.ast.node.Identifier;
@@ -11,7 +10,7 @@ import io.github.douira.glsl_transformer.ast.node.Identifier;
  * Indexes identifiers based on their content and enabled fast string queries.
  */
 public class IdentifierIndex implements Index<Identifier> {
-  public final Trie<String, Set<Identifier>> index = new PatriciaTrie<>();
+  public final PatriciaTrie<Set<Identifier>> index = new PrefixTrie<>();
 
   @Override
   public void add(Identifier node) {
@@ -44,9 +43,5 @@ public class IdentifierIndex implements Index<Identifier> {
       }
       set.addAll(entry.getValue());
     }
-  }
-
-  public SortedMap<String, Set<Identifier>> prefixQuery(String prefix) {
-    return index.prefixMap(prefix);
   }
 }
