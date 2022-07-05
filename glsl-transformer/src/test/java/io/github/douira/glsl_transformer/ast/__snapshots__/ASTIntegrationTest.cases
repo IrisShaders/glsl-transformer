@@ -83,21 +83,21 @@ a = c;
 
 §testReprint statement:
 {
-1;
-2;
-3;
+	1;
+	2;
+	3;
 }
 
 §testReprint statement:
 {
-;
-;
-;
+	;
+	;
+	;
 }
 
 §testReprint statement:
 if (a && b) {
-1;
+	1;
 }
 
 §testReprint statement:
@@ -142,25 +142,25 @@ else 4;
 
 §testReprint statement:
 if (a) {
-1;
+	1;
 } else if (b) {
-2;
+	2;
 } else {
-3;
+	3;
 }
 
 §testReprint statement:
 if (a) {
-1;
+	1;
 } else {
-3;
+	3;
 }
 
 §testReprint statement:
 if (a) {
-1;
+	1;
 } else if (b) {
-3;
+	3;
 }
 
 §testReprint statement:
@@ -168,21 +168,21 @@ while (true) 1;
 
 §testReprint statement:
 while (true) {
-1;
+	1;
 }
 
 §testReprint statement:
 while (a && b) {
-5;
-if (true) {
-4;
-}
-4;
+	5;
+	if (true) {
+		4;
+	}
+	4;
 }
 
 §testReprint statement:
 do {
-1;
+	1;
 } while (true);
 
 §testReprint statement:
@@ -191,7 +191,7 @@ while (true);
 
 §testReprint statement:
 for (i = 0; i < 10; i++) {
-1;
+	1;
 }
 
 §testReprint statement:
@@ -235,6 +235,6 @@ demote;
 
 §testReprint statement:
 {
-return;
+	return;
 }
 

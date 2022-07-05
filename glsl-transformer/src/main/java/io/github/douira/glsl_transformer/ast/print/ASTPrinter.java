@@ -11,7 +11,7 @@ import io.github.douira.glsl_transformer.ast.node.statement.*;
 import io.github.douira.glsl_transformer.ast.node.statement.loop.*;
 import io.github.douira.glsl_transformer.ast.node.statement.selection.*;
 import io.github.douira.glsl_transformer.ast.node.statement.terminal.*;
-import io.github.douira.glsl_transformer.ast.print.token.EOFToken;
+import io.github.douira.glsl_transformer.ast.print.token.*;
 
 /**
  * The AST printer emits tokens to convert an AST node into a string with the
@@ -21,7 +21,7 @@ import io.github.douira.glsl_transformer.ast.print.token.EOFToken;
 public abstract class ASTPrinter extends ASTPrinterBase {
   @Override
   public void exitTranslationUnit(TranslationUnit node) {
-    emitToken(new EOFToken(node));
+    emitToken(new EOFToken());
   }
 
   @Override
@@ -538,10 +538,12 @@ public abstract class ASTPrinter extends ASTPrinterBase {
   public void enterCompoundStatement(CompoundStatement node) {
     emitType(GLSLLexer.LBRACE);
     emitCommonNewline();
+    emitToken(IndentMarker.indent());
   }
-
+  
   @Override
   public void exitCompoundStatement(CompoundStatement node) {
+    emitToken(IndentMarker.unindent());
     emitType(GLSLLexer.RBRACE);
     emitCommonNewline();
   }

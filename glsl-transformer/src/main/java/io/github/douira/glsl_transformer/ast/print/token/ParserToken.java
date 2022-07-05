@@ -3,7 +3,6 @@ package io.github.douira.glsl_transformer.ast.print.token;
 import java.util.*;
 
 import io.github.douira.glsl_transformer.GLSLLexer;
-import io.github.douira.glsl_transformer.ast.node.basic.ASTNode;
 import io.github.douira.glsl_transformer.ast.print.TokenRole;
 import io.github.douira.glsl_transformer.print.filter.TokenChannel;
 
@@ -24,23 +23,23 @@ public class ParserToken extends PrintToken {
 
   public int tokenType;
 
-  public ParserToken(ASTNode source, TokenChannel channel, TokenRole role, int tokenType) {
-    super(source, channel, role);
+  public ParserToken(TokenChannel channel, TokenRole role, int tokenType) {
+    super(channel, role);
     this.tokenType = tokenType;
   }
 
-  public ParserToken(ASTNode source, TokenRole role, int tokenType) {
-    super(source, role);
+  public ParserToken(TokenRole role, int tokenType) {
+    super(role);
     this.tokenType = tokenType;
   }
 
-  public ParserToken(ASTNode source, TokenChannel channel, int tokenType) {
-    super(source, channel);
+  public ParserToken(TokenChannel channel, int tokenType) {
+    super(channel);
     this.tokenType = tokenType;
   }
 
-  public ParserToken(ASTNode source, int tokenType) {
-    super(source);
+  public ParserToken(int tokenType) {
+    super();
     this.tokenType = tokenType;
   }
 

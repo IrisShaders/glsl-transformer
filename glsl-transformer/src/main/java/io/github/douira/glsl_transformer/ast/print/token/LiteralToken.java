@@ -1,29 +1,27 @@
 package io.github.douira.glsl_transformer.ast.print.token;
 
-import io.github.douira.glsl_transformer.ast.node.basic.ASTNode;
 import io.github.douira.glsl_transformer.ast.print.TokenRole;
 import io.github.douira.glsl_transformer.print.filter.TokenChannel;
 
 public class LiteralToken extends PrintToken {
   public String content;
 
-  public LiteralToken(ASTNode source, TokenChannel channel, TokenRole role, String content) {
-    super(source, channel, role);
+  public LiteralToken(TokenChannel channel, TokenRole role, String content) {
+    super(channel, role);
     this.content = content;
   }
 
-  public LiteralToken(ASTNode source, TokenRole role, String content) {
-    super(source, role);
+  public LiteralToken(TokenRole role, String content) {
+    super(role);
     this.content = content;
   }
 
-  public LiteralToken(ASTNode source, TokenChannel channel, String content) {
-    super(source, channel);
+  public LiteralToken(TokenChannel channel, String content) {
+    super(channel);
     this.content = content;
   }
 
-  public LiteralToken(ASTNode source, String content) {
-    super(source);
+  public LiteralToken(String content) {
     this.content = content;
   }
 
