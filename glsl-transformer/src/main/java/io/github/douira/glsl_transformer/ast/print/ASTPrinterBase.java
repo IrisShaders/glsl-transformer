@@ -24,6 +24,7 @@ public abstract class ASTPrinterBase extends ASTListenerVisitor<Void> {
   }
 
   protected void emitToken(PrintToken token) {
+    token.setSource(currentNode);
     if (token instanceof ReplaceToken) {
       if (lastToken == null) {
         return;
@@ -55,6 +56,10 @@ public abstract class ASTPrinterBase extends ASTListenerVisitor<Void> {
     return printAST(new SimpleASTPrinter(), node);
   }
 
+  public static String printedIndented(ASTNode node) {
+    return printAST(new IndentingASTPrinter(), node);
+  }
+
   protected void emitTokens(PrintToken... tokens) {
     for (PrintToken t : tokens) {
       emitToken(t);
@@ -62,7 +67,7 @@ public abstract class ASTPrinterBase extends ASTListenerVisitor<Void> {
   }
 
   protected void emitLiteral(TokenRole role, String literal) {
-    emitToken(new LiteralToken(currentNode, role, literal));
+    emitToken(new LiteralToken(role, literal));
   }
 
   protected void emitLiteral(String literal) {
@@ -80,7 +85,7 @@ public abstract class ASTPrinterBase extends ASTListenerVisitor<Void> {
   }
 
   protected void emitType(TokenRole role, int type) {
-    emitToken(new ParserToken(currentNode, role, type));
+    emitToken(new ParserToken(role, type));
   }
 
   protected void emitType(int type) {
@@ -98,7 +103,7 @@ public abstract class ASTPrinterBase extends ASTListenerVisitor<Void> {
   }
 
   protected void emitWhitespace(TokenRole role, String whitespace) {
-    emitToken(new LiteralToken(currentNode, TokenChannel.WHITESPACE, role, whitespace));
+    emitToken(new LiteralToken(TokenChannel.WHITESPACE, role, whitespace));
   }
 
   protected void emitExactWhitespace(String whitespace) {
@@ -139,8 +144,7 @@ public abstract class ASTPrinterBase extends ASTListenerVisitor<Void> {
 
   protected void compactCommonNewline(Class<? extends ASTNode> sourceClass) {
     emitToken(ReplaceToken.fromMatchAndNodeCondition(
-        currentNode,
-        new LiteralToken(currentNode, TokenRole.COMMON_FORMATTING, " "),
+        new LiteralToken(TokenRole.COMMON_FORMATTING, " "),
         "\n",
         node -> sourceClass.isAssignableFrom(node.getClass())));
   }

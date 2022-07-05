@@ -5,29 +5,33 @@ import io.github.douira.glsl_transformer.ast.print.TokenRole;
 import io.github.douira.glsl_transformer.print.filter.TokenChannel;
 
 public abstract class PrintToken {
-  private final ASTNode source;
+  private ASTNode source;
+
   private final TokenChannel channel;
   private final TokenRole role;
 
-  public PrintToken(ASTNode source, TokenChannel channel, TokenRole role) {
-    this.source = source;
+  public PrintToken(TokenChannel channel, TokenRole role) {
     this.channel = channel;
     this.role = role;
   }
 
-  public PrintToken(ASTNode source, TokenRole role) {
-    this(source, TokenChannel.DEFAULT, role);
+  public PrintToken(TokenRole role) {
+    this(TokenChannel.DEFAULT, role);
   }
 
-  public PrintToken(ASTNode source, TokenChannel channel) {
-    this(source, channel, TokenRole.DEFAULT);
+  public PrintToken(TokenChannel channel) {
+    this(channel, TokenRole.DEFAULT);
   }
 
-  public PrintToken(ASTNode source) {
-    this(source, TokenChannel.DEFAULT);
+  public PrintToken() {
+    this(TokenChannel.DEFAULT);
   }
 
   public abstract String getContent();
+
+  public void setSource(ASTNode source) {
+    this.source = source;
+  }
 
   public ASTNode getSource() {
     return source;

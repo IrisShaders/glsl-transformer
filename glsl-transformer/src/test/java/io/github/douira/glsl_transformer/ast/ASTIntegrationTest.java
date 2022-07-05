@@ -20,7 +20,7 @@ public class ASTIntegrationTest {
     var manager = new TransformationManager<>();
     var parseTree = manager.parse(input, parseMethod);
     var ast = ASTBuilder.build(parseTree);
-    var reprinted = ASTPrinter.printSimple(ast);
+    var reprinted = ASTPrinter.printedIndented(ast);
     assertEquals(expected, reprinted);
   }
 

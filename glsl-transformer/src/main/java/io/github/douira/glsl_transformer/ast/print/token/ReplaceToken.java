@@ -9,14 +9,12 @@ public class ReplaceToken extends PrintToken {
   private PrintToken replacement;
   private Function<PrintToken, Boolean> condition;
 
-  public ReplaceToken(ASTNode source, PrintToken replacement, Function<PrintToken, Boolean> condition) {
-    super(source);
+  public ReplaceToken(PrintToken replacement, Function<PrintToken, Boolean> condition) {
     this.replacement = replacement;
     this.condition = condition;
   }
 
-  public ReplaceToken(ASTNode source, PrintToken replacement, String match, Function<ASTNode, Boolean> condition) {
-    super(source);
+  public ReplaceToken(PrintToken replacement, String match, Function<ASTNode, Boolean> condition) {
     this.replacement = replacement;
     this.condition = (token) -> match.equals(token.getContent())
         && condition.apply(token.getSource());
@@ -34,22 +32,21 @@ public class ReplaceToken extends PrintToken {
   }
 
   public static ReplaceToken fromMatch(
-      ASTNode source, PrintToken replacement, String match) {
+      PrintToken replacement, String match) {
     return new ReplaceToken(
-        source, replacement,
-        (token) -> match.equals(token.getContent()));
+        replacement, (token) -> match.equals(token.getContent()));
   }
 
   public static ReplaceToken fromNodeCondition(
-      ASTNode source, PrintToken replacement, Function<ASTNode, Boolean> condition) {
+      PrintToken replacement, Function<ASTNode, Boolean> condition) {
     return new ReplaceToken(
-        source, replacement, (node) -> condition.apply(node.getSource()));
+        replacement, (node) -> condition.apply(node.getSource()));
   }
 
   public static ReplaceToken fromMatchAndNodeCondition(
-      ASTNode source, PrintToken replacement, String match, Function<ASTNode, Boolean> condition) {
+      PrintToken replacement, String match, Function<ASTNode, Boolean> condition) {
     return new ReplaceToken(
-        source, replacement, (token) -> match.equals(token.getContent())
+        replacement, (token) -> match.equals(token.getContent())
             && condition.apply(token.getSource()));
   }
 }
