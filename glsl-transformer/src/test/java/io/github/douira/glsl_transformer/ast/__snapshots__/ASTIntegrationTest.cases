@@ -90,6 +90,28 @@ a = c;
 
 §testReprint statement:
 {
+	{
+		1;
+		2;
+		{
+			1;
+			2;
+			{
+				1;
+				2;
+				{
+					1;
+					2;
+				}
+			}
+		}
+	}
+	2;
+	3;
+}
+
+§testReprint statement:
+{
 	;
 	;
 	;
