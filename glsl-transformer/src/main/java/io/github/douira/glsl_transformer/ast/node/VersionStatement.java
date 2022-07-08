@@ -3,7 +3,6 @@ package io.github.douira.glsl_transformer.ast.node;
 import org.antlr.v4.runtime.Token;
 
 import io.github.douira.glsl_transformer.GLSLLexer;
-import io.github.douira.glsl_transformer.GLSLParser.VersionStatementContext;
 import io.github.douira.glsl_transformer.ast.data.*;
 import io.github.douira.glsl_transformer.ast.node.basic.ASTNode;
 import io.github.douira.glsl_transformer.ast.traversal.ASTVisitor;
@@ -40,13 +39,6 @@ public class VersionStatement extends ASTNode {
 
   public VersionStatement(int version) {
     this(version, Profile.CORE);
-  }
-
-  public static VersionStatement from(VersionStatementContext ctx) {
-    var version = Integer.parseInt(ctx.version.getText());
-    return ctx.profile == null
-        ? new VersionStatement(version)
-        : new VersionStatement(version, Profile.fromToken(ctx.profile));
   }
 
   @Override

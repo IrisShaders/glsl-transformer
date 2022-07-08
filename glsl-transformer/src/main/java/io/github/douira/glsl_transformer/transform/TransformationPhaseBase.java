@@ -12,7 +12,7 @@ import org.antlr.v4.runtime.tree.xpath.XPath;
 import io.github.douira.glsl_transformer.*;
 import io.github.douira.glsl_transformer.GLSLParser.*;
 import io.github.douira.glsl_transformer.parse_ast.Directive;
-import io.github.douira.glsl_transformer.parse_ast.Directive.Type;
+import io.github.douira.glsl_transformer.parse_ast.Directive.DirectiveType;
 import io.github.douira.glsl_transformer.print.EmptyTerminalNode;
 import io.github.douira.glsl_transformer.tree.*;
 
@@ -354,7 +354,8 @@ public abstract class TransformationPhaseBase<T extends JobParameters> extends G
   /**
    * Injects a new {@code #define} statement at the specified location. This
    * method is for convenience since injecting defines is a common operation. For
-   * other directives the {@link io.github.douira.glsl_transformer.parse_ast.Directive }
+   * other directives the
+   * {@link io.github.douira.glsl_transformer.parse_ast.Directive }
    * class should be used.
    * 
    * @apiNote This method should be avoided if a direct replacement of identifiers
@@ -364,6 +365,6 @@ public abstract class TransformationPhaseBase<T extends JobParameters> extends G
    * @param content  The content after the #define prefix
    */
   protected void injectDefine(InjectionPoint location, String content) {
-    injectNode(location, new Directive(Type.DEFINE, content));
+    injectNode(location, new Directive(DirectiveType.DEFINE, content));
   }
 }

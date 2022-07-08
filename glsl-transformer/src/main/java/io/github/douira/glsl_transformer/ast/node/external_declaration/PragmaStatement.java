@@ -3,7 +3,6 @@ package io.github.douira.glsl_transformer.ast.node.external_declaration;
 import org.antlr.v4.runtime.Token;
 
 import io.github.douira.glsl_transformer.GLSLLexer;
-import io.github.douira.glsl_transformer.GLSLParser.PragmaStatementContext;
 import io.github.douira.glsl_transformer.ast.data.*;
 import io.github.douira.glsl_transformer.ast.traversal.ASTVisitor;
 
@@ -66,14 +65,6 @@ public class PragmaStatement extends ExternalDeclaration {
     this.stdGL = stdGL;
     this.type = type;
     this.state = state;
-  }
-
-  public static PragmaStatement from(PragmaStatementContext ctx) {
-    var stdGL = ctx.stdGL != null;
-    var type = PragmaType.fromToken(ctx.type);
-    return type == PragmaType.CUSTOM
-        ? new PragmaStatement(stdGL, ctx.type.getText())
-        : new PragmaStatement(stdGL, type, PragmaState.fromToken(ctx.state));
   }
 
   @Override

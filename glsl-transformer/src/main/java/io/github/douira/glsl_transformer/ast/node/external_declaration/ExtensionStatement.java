@@ -3,7 +3,6 @@ package io.github.douira.glsl_transformer.ast.node.external_declaration;
 import org.antlr.v4.runtime.Token;
 
 import io.github.douira.glsl_transformer.GLSLLexer;
-import io.github.douira.glsl_transformer.GLSLParser.ExtensionStatementContext;
 import io.github.douira.glsl_transformer.ast.data.*;
 import io.github.douira.glsl_transformer.ast.traversal.ASTVisitor;
 
@@ -40,14 +39,6 @@ public class ExtensionStatement extends ExternalDeclaration {
 
   public ExtensionStatement(String name) {
     this.name = name;
-  }
-
-  public static ExtensionStatement from(ExtensionStatementContext ctx) {
-    var extensionName = ctx.extensionName.getText();
-    return ctx.extensionBehavior == null
-        ? new ExtensionStatement(extensionName)
-        : new ExtensionStatement(
-            extensionName, ExtensionBehavior.fromToken(ctx.extensionBehavior));
   }
 
   @Override

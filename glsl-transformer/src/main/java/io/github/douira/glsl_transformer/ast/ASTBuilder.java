@@ -1,6 +1,7 @@
 package io.github.douira.glsl_transformer.ast;
 
 import java.util.*;
+import java.util.regex.Pattern;
 import java.util.stream.Stream;
 
 import org.antlr.v4.runtime.tree.*;
@@ -8,16 +9,22 @@ import org.antlr.v4.runtime.tree.*;
 import io.github.douira.glsl_transformer.*;
 import io.github.douira.glsl_transformer.GLSLParser.*;
 import io.github.douira.glsl_transformer.ast.node.*;
+import io.github.douira.glsl_transformer.ast.node.VersionStatement.Profile;
 import io.github.douira.glsl_transformer.ast.node.basic.*;
 import io.github.douira.glsl_transformer.ast.node.expression.*;
+import io.github.douira.glsl_transformer.ast.node.expression.LiteralExpression.IntegerFormat;
 import io.github.douira.glsl_transformer.ast.node.expression.binary.*;
 import io.github.douira.glsl_transformer.ast.node.expression.unary.*;
 import io.github.douira.glsl_transformer.ast.node.external_declaration.*;
+import io.github.douira.glsl_transformer.ast.node.external_declaration.ExtensionStatement.ExtensionBehavior;
+import io.github.douira.glsl_transformer.ast.node.external_declaration.LayoutDefaults.LayoutMode;
+import io.github.douira.glsl_transformer.ast.node.external_declaration.PragmaStatement.*;
 import io.github.douira.glsl_transformer.ast.node.statement.*;
 import io.github.douira.glsl_transformer.ast.node.statement.loop.*;
 import io.github.douira.glsl_transformer.ast.node.statement.selection.*;
 import io.github.douira.glsl_transformer.ast.node.statement.terminal.*;
 import io.github.douira.glsl_transformer.ast.query.Root;
+import io.github.douira.glsl_transformer.parse_ast.Type;
 
 /**
  * The AST builder is a visitor of the parse tree (not an AST visitor) that
@@ -59,7 +66,13 @@ public class ASTBuilder extends GLSLParserBaseVisitor<ASTNode> {
 
   @Override
   public VersionStatement visitVersionStatement(VersionStatementContext ctx) {
-    return ctx == null ? null : VersionStatement.from(ctx);
+    if (ctx == null) {
+      return null;
+    }
+    var version = Integer.parseInt(ctx.version.getText());
+    return ctx.profile == null
+        ? new VersionStatement(version)
+        : new VersionStatement(version, Profile.fromToken(ctx.profile));
   }
 
   @Override
@@ -69,17 +82,27 @@ public class ASTBuilder extends GLSLParserBaseVisitor<ASTNode> {
 
   @Override
   public PragmaStatement visitPragmaStatement(PragmaStatementContext ctx) {
-    return PragmaStatement.from(ctx);
+    var stdGL = ctx.stdGL != null;
+    var type = PragmaType.fromToken(ctx.type);
+    return type == PragmaType.CUSTOM
+        ? new PragmaStatement(stdGL, ctx.type.getText())
+        : new PragmaStatement(stdGL, type, PragmaState.fromToken(ctx.state));
   }
 
   @Override
   public ExtensionStatement visitExtensionStatement(ExtensionStatementContext ctx) {
-    return ExtensionStatement.from(ctx);
+    var extensionName = ctx.extensionName.getText();
+    return ctx.extensionBehavior == null
+        ? new ExtensionStatement(extensionName)
+        : new ExtensionStatement(
+            extensionName, ExtensionBehavior.fromToken(ctx.extensionBehavior));
   }
 
   @Override
   public LayoutDefaults visitLayoutDefaults(LayoutDefaultsContext ctx) {
-    return LayoutDefaults.from(visitLayoutQualifier(ctx.layoutQualifier()), ctx);
+    return new LayoutDefaults(
+        visitLayoutQualifier(ctx.layoutQualifier()),
+        LayoutMode.fromToken(ctx.layoutMode));
   }
 
   @Override
@@ -170,10 +193,54 @@ public class ASTBuilder extends GLSLParserBaseVisitor<ASTNode> {
     return new SequenceExpression(expressions);
   }
 
+  private static final Pattern intExtractor = Pattern.compile(
+      "(.*?)(?:us|ul|u|s)?$", Pattern.CASE_INSENSITIVE);
+  private static final Pattern floatExtractor = Pattern.compile(
+      "(.*?)(?:f|hf|lf)?$", Pattern.CASE_INSENSITIVE);
+
   @Override
   public LiteralExpression visitLiteralExpression(LiteralExpressionContext ctx) {
     // start and end token are the same as there is one token in this rule
-    return LiteralExpression.from(ctx.getStart());
+    var content = ctx.getStart();
+    var literalType = Type.ofLiteralTokenType(content.getType());
+    var tokenContent = content.getText();
+    switch (literalType.getNumberType()) {
+      case BOOLEAN:
+        return new LiteralExpression(
+            literalType, tokenContent.equals("true"));
+      case SIGNED_INTEGER:
+      case UNSIGNED_INTEGER:
+        var intMatcher = intExtractor.matcher(tokenContent);
+        intMatcher.matches();
+        tokenContent = intMatcher.group(1);
+        if (tokenContent.equals("0")) {
+          return new LiteralExpression(
+              literalType, 0);
+        }
+        if (tokenContent.startsWith("0x")) {
+          return new LiteralExpression(
+              literalType,
+              Long.parseLong(tokenContent.substring(2), 16),
+              IntegerFormat.HEXADECIMAL);
+        } else if (tokenContent.startsWith("0")) {
+          return new LiteralExpression(
+              literalType,
+              Long.parseLong(tokenContent.substring(1), 8),
+              IntegerFormat.OCTAL);
+        } else {
+          return new LiteralExpression(
+              literalType,
+              Long.parseLong(tokenContent, 10), IntegerFormat.DECIMAL);
+        }
+      case FLOATING_POINT:
+        var floatMatcher = floatExtractor.matcher(tokenContent);
+        floatMatcher.matches();
+        tokenContent = floatMatcher.group(1);
+        return new LiteralExpression(
+            literalType, Double.parseDouble(tokenContent));
+      default:
+        throw new IllegalArgumentException("Unsupported literal type: " + literalType);
+    }
   }
 
   @Override
@@ -507,7 +574,7 @@ public class ASTBuilder extends GLSLParserBaseVisitor<ASTNode> {
   public ASTNode visitTerminal(TerminalNode node) {
     var type = node.getSymbol().getType();
     if (type == GLSLLexer.IDENTIFIER) {
-      return Identifier.from(node);
+      return new Identifier(node.getText());
     }
     throw new IllegalStateException("Unhandled terminal node: " + node.getText());
   }
