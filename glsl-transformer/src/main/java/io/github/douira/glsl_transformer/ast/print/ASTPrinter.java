@@ -140,9 +140,11 @@ public abstract class ASTPrinter extends ASTPrinterBase {
   // FunctionCall expression is just a function call (no extra visit needed)
 
   @Override
-  public void exitMemberAccessExpression(MemberAccessExpression node) {
+  public Void visitMemberAccessExpression(MemberAccessExpression node) {
+    visit(node.getOperand());
     emitType(GLSLLexer.DOT);
-    emitLiteral(node.memberName);
+    visit(node.getMember());
+    return null;
   }
 
   @Override
@@ -234,310 +236,310 @@ public abstract class ASTPrinter extends ASTPrinterBase {
 
   @Override
   public Void visitArrayAccessExpression(ArrayAccessExpression node) {
-    visit(node.left);
+    visit(node.getLeft());
     emitType(GLSLLexer.LBRACKET);
-    visit(node.right);
+    visit(node.getRight());
     emitType(GLSLLexer.RBRACKET);
     return null;
   }
 
   @Override
   public Void visitMultiplicationExpression(MultiplicationExpression node) {
-    visit(node.left);
+    visit(node.getLeft());
     emitBreakableSpace();
     emitType(GLSLLexer.TIMES_OP);
     emitBreakableSpace();
-    visit(node.right);
+    visit(node.getRight());
     return null;
   }
 
   @Override
   public Void visitDivisionExpression(DivisionExpression node) {
-    visit(node.left);
+    visit(node.getLeft());
     emitBreakableSpace();
     emitType(GLSLLexer.DIV_OP);
     emitBreakableSpace();
-    visit(node.right);
+    visit(node.getRight());
     return null;
   }
 
   @Override
   public Void visitModuloExpression(ModuloExpression node) {
-    visit(node.left);
+    visit(node.getLeft());
     emitBreakableSpace();
     emitType(GLSLLexer.MOD_OP);
     emitBreakableSpace();
-    visit(node.right);
+    visit(node.getRight());
     return null;
   }
 
   @Override
   public Void visitAdditionExpression(AdditionExpression node) {
-    visit(node.left);
+    visit(node.getLeft());
     emitBreakableSpace();
     emitType(GLSLLexer.PLUS_OP);
     emitBreakableSpace();
-    visit(node.right);
+    visit(node.getRight());
     return null;
   }
 
   @Override
   public Void visitSubtractionExpression(SubtractionExpression node) {
-    visit(node.left);
+    visit(node.getLeft());
     emitBreakableSpace();
     emitType(GLSLLexer.MINUS_OP);
     emitBreakableSpace();
-    visit(node.right);
+    visit(node.getRight());
     return null;
   }
 
   @Override
   public Void visitLeftShiftExpression(LeftShiftExpression node) {
-    visit(node.left);
+    visit(node.getLeft());
     emitBreakableSpace();
     emitType(GLSLLexer.LEFT_OP);
     emitBreakableSpace();
-    visit(node.right);
+    visit(node.getRight());
     return null;
   }
 
   @Override
   public Void visitRightShiftExpression(RightShiftExpression node) {
-    visit(node.left);
+    visit(node.getLeft());
     emitBreakableSpace();
     emitType(GLSLLexer.RIGHT_OP);
     emitBreakableSpace();
-    visit(node.right);
+    visit(node.getRight());
     return null;
   }
 
   @Override
   public Void visitLessThanExpression(LessThanExpression node) {
-    visit(node.left);
+    visit(node.getLeft());
     emitBreakableSpace();
     emitType(GLSLLexer.LT_OP);
     emitBreakableSpace();
-    visit(node.right);
+    visit(node.getRight());
     return null;
   }
 
   @Override
   public Void visitGreaterThanExpression(GreaterThanExpression node) {
-    visit(node.left);
+    visit(node.getLeft());
     emitBreakableSpace();
     emitType(GLSLLexer.GT_OP);
     emitBreakableSpace();
-    visit(node.right);
+    visit(node.getRight());
     return null;
   }
 
   @Override
   public Void visitLessThanEqualExpression(LessThanEqualExpression node) {
-    visit(node.left);
+    visit(node.getLeft());
     emitBreakableSpace();
     emitType(GLSLLexer.LE_OP);
     emitBreakableSpace();
-    visit(node.right);
+    visit(node.getRight());
     return null;
   }
 
   @Override
   public Void visitGreaterThanEqualExpression(GreaterThanEqualExpression node) {
-    visit(node.left);
+    visit(node.getLeft());
     emitBreakableSpace();
     emitType(GLSLLexer.GE_OP);
     emitBreakableSpace();
-    visit(node.right);
+    visit(node.getRight());
     return null;
   }
 
   @Override
   public Void visitEqualityExpression(EqualityExpression node) {
-    visit(node.left);
+    visit(node.getLeft());
     emitBreakableSpace();
     emitType(GLSLLexer.EQ_OP);
     emitBreakableSpace();
-    visit(node.right);
+    visit(node.getRight());
     return null;
   }
 
   @Override
   public Void visitInequalityExpression(InequalityExpression node) {
-    visit(node.left);
+    visit(node.getLeft());
     emitBreakableSpace();
     emitType(GLSLLexer.NE_OP);
     emitBreakableSpace();
-    visit(node.right);
+    visit(node.getRight());
     return null;
   }
 
   @Override
   public Void visitBitwiseAndExpression(BitwiseAndExpression node) {
-    visit(node.left);
+    visit(node.getLeft());
     emitBreakableSpace();
     emitType(GLSLLexer.BIT_AND_OP);
     emitBreakableSpace();
-    visit(node.right);
+    visit(node.getRight());
     return null;
   }
 
   @Override
   public Void visitBitwiseXorExpression(BitwiseXorExpression node) {
-    visit(node.left);
+    visit(node.getLeft());
     emitBreakableSpace();
     emitType(GLSLLexer.BIT_XOR_OP);
     emitBreakableSpace();
-    visit(node.right);
+    visit(node.getRight());
     return null;
   }
 
   @Override
   public Void visitBitwiseOrExpression(BitwiseOrExpression node) {
-    visit(node.left);
+    visit(node.getLeft());
     emitBreakableSpace();
     emitType(GLSLLexer.BIT_OR_OP);
     emitBreakableSpace();
-    visit(node.right);
+    visit(node.getRight());
     return null;
   }
 
   @Override
   public Void visitBooleanAndExpression(BooleanAndExpression node) {
-    visit(node.left);
+    visit(node.getLeft());
     emitBreakableSpace();
     emitType(GLSLLexer.BOOL_AND_OP);
     emitBreakableSpace();
-    visit(node.right);
+    visit(node.getRight());
     return null;
   }
 
   @Override
   public Void visitBooleanXorExpression(BooleanXorExpression node) {
-    visit(node.left);
+    visit(node.getLeft());
     emitBreakableSpace();
     emitType(GLSLLexer.BOOL_XOR_OP);
     emitBreakableSpace();
-    visit(node.right);
+    visit(node.getRight());
     return null;
   }
 
   @Override
   public Void visitBooleanOrExpression(BooleanOrExpression node) {
-    visit(node.left);
+    visit(node.getLeft());
     emitBreakableSpace();
     emitType(GLSLLexer.BOOL_OR_OP);
     emitBreakableSpace();
-    visit(node.right);
+    visit(node.getRight());
     return null;
   }
 
   @Override
   public Void visitAssignmentExpression(AssignmentExpression node) {
-    visit(node.left);
+    visit(node.getLeft());
     emitBreakableSpace();
     emitType(GLSLLexer.ASSIGN_OP);
     emitBreakableSpace();
-    visit(node.right);
+    visit(node.getRight());
     return null;
   }
 
   @Override
   public Void visitMultiplicationAssignmentExpression(MultiplicationAssignmentExpression node) {
-    visit(node.left);
+    visit(node.getLeft());
     emitBreakableSpace();
     emitType(GLSLLexer.MUL_ASSIGN);
     emitBreakableSpace();
-    visit(node.right);
+    visit(node.getRight());
     return null;
   }
 
   @Override
   public Void visitDivisionAssignmentExpression(DivisionAssignmentExpression node) {
-    visit(node.left);
+    visit(node.getLeft());
     emitBreakableSpace();
     emitType(GLSLLexer.DIV_ASSIGN);
     emitBreakableSpace();
-    visit(node.right);
+    visit(node.getRight());
     return null;
   }
 
   @Override
   public Void visitModuloAssignmentExpression(ModuloAssignmentExpression node) {
-    visit(node.left);
+    visit(node.getLeft());
     emitBreakableSpace();
     emitType(GLSLLexer.MOD_ASSIGN);
     emitBreakableSpace();
-    visit(node.right);
+    visit(node.getRight());
     return null;
   }
 
   @Override
   public Void visitAdditionAssignmentExpression(AdditionAssignmentExpression node) {
-    visit(node.left);
+    visit(node.getLeft());
     emitBreakableSpace();
     emitType(GLSLLexer.ADD_ASSIGN);
     emitBreakableSpace();
-    visit(node.right);
+    visit(node.getRight());
     return null;
   }
 
   @Override
   public Void visitSubtractionAssignmentExpression(SubtractionAssignmentExpression node) {
-    visit(node.left);
+    visit(node.getLeft());
     emitBreakableSpace();
     emitType(GLSLLexer.SUB_ASSIGN);
     emitBreakableSpace();
-    visit(node.right);
+    visit(node.getRight());
     return null;
   }
 
   @Override
   public Void visitLeftShiftAssignmentExpression(LeftShiftAssignmentExpression node) {
-    visit(node.left);
+    visit(node.getLeft());
     emitBreakableSpace();
     emitType(GLSLLexer.LEFT_ASSIGN);
     emitBreakableSpace();
-    visit(node.right);
+    visit(node.getRight());
     return null;
   }
 
   @Override
   public Void visitRightShiftAssignmentExpression(RightShiftAssignmentExpression node) {
-    visit(node.left);
+    visit(node.getLeft());
     emitBreakableSpace();
     emitType(GLSLLexer.RIGHT_ASSIGN);
     emitBreakableSpace();
-    visit(node.right);
+    visit(node.getRight());
     return null;
   }
 
   @Override
   public Void visitBitwiseAndAssignmentExpression(BitwiseAndAssignmentExpression node) {
-    visit(node.left);
+    visit(node.getLeft());
     emitBreakableSpace();
     emitType(GLSLLexer.AND_ASSIGN);
     emitBreakableSpace();
-    visit(node.right);
+    visit(node.getRight());
     return null;
   }
 
   @Override
   public Void visitBitwiseXorAssignmentExpression(BitwiseXorAssignmentExpression node) {
-    visit(node.left);
+    visit(node.getLeft());
     emitBreakableSpace();
     emitType(GLSLLexer.XOR_ASSIGN);
     emitBreakableSpace();
-    visit(node.right);
+    visit(node.getRight());
     return null;
   }
 
   @Override
   public Void visitBitwiseOrAssignmentExpression(BitwiseOrAssignmentExpression node) {
-    visit(node.left);
+    visit(node.getLeft());
     emitBreakableSpace();
     emitType(GLSLLexer.OR_ASSIGN);
     emitBreakableSpace();
-    visit(node.right);
+    visit(node.getRight());
     return null;
   }
 
@@ -624,10 +626,10 @@ public abstract class ASTPrinter extends ASTPrinterBase {
     emitType(GLSLLexer.SWITCH);
     emitExtendableSpace();
     emitType(GLSLLexer.LPAREN);
-    visit(node.expression);
+    visit(node.getExpression());
     emitType(GLSLLexer.RPAREN);
     emitBreakableSpace();
-    visit(node.statement);
+    visit(node.getStatement());
     return null;
   }
 
@@ -645,7 +647,7 @@ public abstract class ASTPrinter extends ASTPrinterBase {
   public Void visitCaseStatement(CaseStatement node) {
     emitType(GLSLLexer.CASE);
     emitBreakableSpace();
-    visit(node.expression);
+    visit(node.getExpression());
     emitType(GLSLLexer.COLON);
     emitCommonNewline();
     return null;
@@ -678,22 +680,22 @@ public abstract class ASTPrinter extends ASTPrinterBase {
     emitType(GLSLLexer.FOR);
     emitBreakableSpace();
     emitType(GLSLLexer.LPAREN);
-    if (!visitSafe(node.initExpression)) {
-      if (!visitSafe(node.initDeclaration)) {
+    if (!visitSafe(node.getInitExpression())) {
+      if (!visitSafe(node.getInitDeclaration())) {
         emitExactSpace();
       }
     }
     emitType(GLSLLexer.SEMICOLON);
     emitBreakableSpace();
-    if (!visitSafe(node.condition)) {
-      visitSafe(node.iterationConditionInitializer);
+    if (!visitSafe(node.getCondition())) {
+      visitSafe(node.getIterationConditionInitializer());
     }
     emitType(GLSLLexer.SEMICOLON);
     emitBreakableSpace();
-    visitSafe(node.incrementer);
+    visitSafe(node.getIncrementer());
     emitType(GLSLLexer.RPAREN);
     emitBreakableSpace();
-    visit(node.statement);
+    visit(node.getStatement());
     return null;
   }
 
@@ -708,12 +710,12 @@ public abstract class ASTPrinter extends ASTPrinterBase {
     emitType(GLSLLexer.WHILE);
     emitBreakableSpace();
     emitType(GLSLLexer.LPAREN);
-    if (!visitSafe(node.condition)) {
-      visitSafe(node.iterationConditionInitializer);
+    if (!visitSafe(node.getCondition())) {
+      visitSafe(node.getIterationConditionInitializer());
     }
     emitType(GLSLLexer.RPAREN);
     emitBreakableSpace();
-    visit(node.statement);
+    visit(node.getStatement());
     return null;
   }
 
@@ -727,12 +729,12 @@ public abstract class ASTPrinter extends ASTPrinterBase {
   public Void visitDoWhileLoopStatement(DoWhileLoopStatement node) {
     emitType(GLSLLexer.DO);
     emitBreakableSpace();
-    visit(node.statement);
+    visit(node.getStatement());
     compactCommonNewline(CompoundStatement.class);
     emitType(GLSLLexer.WHILE);
     emitBreakableSpace();
     emitType(GLSLLexer.LPAREN);
-    visit(node.condition);
+    visit(node.getCondition());
     emitType(GLSLLexer.RPAREN);
     emitType(GLSLLexer.SEMICOLON);
     emitCommonNewline();
@@ -756,9 +758,9 @@ public abstract class ASTPrinter extends ASTPrinterBase {
   @Override
   public Void visitReturnStatement(ReturnStatement node) {
     emitType(GLSLLexer.RETURN);
-    if (node.expression != null) {
+    if (node.getExpression() != null) {
       emitBreakableSpace();
-      visit(node.expression);
+      visit(node.getExpression());
     }
     emitType(GLSLLexer.SEMICOLON);
     emitCommonNewline();

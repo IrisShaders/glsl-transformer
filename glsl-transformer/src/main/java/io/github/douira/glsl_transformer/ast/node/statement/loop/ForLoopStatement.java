@@ -7,11 +7,11 @@ import io.github.douira.glsl_transformer.ast.node.statement.Statement;
 import io.github.douira.glsl_transformer.ast.traversal.*;
 
 public class ForLoopStatement extends LoopStatement {
-  public Expression initExpression; // TODO: nullable
-  public InnerASTNode initDeclaration; // TODO: nullable, Declaration
-  public Expression condition; // TODO: nullable
-  public IterationConditionInitializer iterationConditionInitializer; // TODO: nullable
-  public Expression incrementer; // TODO: nullable
+  protected Expression initExpression; // TODO: nullable
+  protected InnerASTNode initDeclaration; // TODO: nullable, Declaration
+  protected Expression condition; // TODO: nullable
+  protected IterationConditionInitializer iterationConditionInitializer; // TODO: nullable
+  protected Expression incrementer; // TODO: nullable
 
   public ForLoopStatement(
       Statement statement,
@@ -19,9 +19,9 @@ public class ForLoopStatement extends LoopStatement {
       Expression condition,
       Expression incrementer) {
     super(statement);
-    this.initExpression = initExpression;
-    this.condition = condition;
-    this.incrementer = incrementer;
+    this.initExpression = setup(initExpression);
+    this.condition = setup(condition);
+    this.incrementer = setup(incrementer);
   }
 
   public ForLoopStatement(
@@ -30,9 +30,9 @@ public class ForLoopStatement extends LoopStatement {
       Expression condition,
       Expression incrementer) {
     super(statement);
-    this.initDeclaration = initDeclaration;
-    this.condition = condition;
-    this.incrementer = incrementer;
+    this.initDeclaration = setup(initDeclaration);
+    this.condition = setup(condition);
+    this.incrementer = setup(incrementer);
   }
 
   public ForLoopStatement(
@@ -41,9 +41,9 @@ public class ForLoopStatement extends LoopStatement {
       IterationConditionInitializer iterationConditionInitializer,
       Expression incrementer) {
     super(statement);
-    this.initExpression = initExpression;
-    this.iterationConditionInitializer = iterationConditionInitializer;
-    this.incrementer = incrementer;
+    this.initExpression = setup(initExpression);
+    this.iterationConditionInitializer = setup(iterationConditionInitializer);
+    this.incrementer = setup(incrementer);
   }
 
   public ForLoopStatement(
@@ -52,9 +52,9 @@ public class ForLoopStatement extends LoopStatement {
       IterationConditionInitializer iterationConditionInitializer,
       Expression incrementer) {
     super(statement);
-    this.initDeclaration = initDeclaration;
-    this.iterationConditionInitializer = iterationConditionInitializer;
-    this.incrementer = incrementer;
+    this.initDeclaration = setup(initDeclaration);
+    this.iterationConditionInitializer = setup(iterationConditionInitializer);
+    this.incrementer = setup(incrementer);
   }
 
   public ForLoopStatement(Statement statement) {
@@ -69,10 +69,55 @@ public class ForLoopStatement extends LoopStatement {
       Expression incrementer,
       Statement statement) {
     super(statement);
+    this.initExpression = setup(initExpression);
+    this.initDeclaration = setup(initDeclaration);
+    this.condition = setup(condition);
+    this.iterationConditionInitializer = setup(iterationConditionInitializer);
+    this.incrementer = setup(incrementer);
+  }
+
+  public Expression getInitExpression() {
+    return initExpression;
+  }
+
+  public void setInitExpression(Expression initExpression) {
+    updateParents(this.initExpression, initExpression);
     this.initExpression = initExpression;
+  }
+
+  public InnerASTNode getInitDeclaration() {
+    return initDeclaration;
+  }
+
+  public void setInitDeclaration(InnerASTNode initDeclaration) {
+    updateParents(this.initDeclaration, initDeclaration);
     this.initDeclaration = initDeclaration;
+  }
+
+  public Expression getCondition() {
+    return condition;
+  }
+
+  public void setCondition(Expression condition) {
+    updateParents(this.condition, condition);
     this.condition = condition;
+  }
+
+  public IterationConditionInitializer getIterationConditionInitializer() {
+    return iterationConditionInitializer;
+  }
+
+  public void setIterationConditionInitializer(IterationConditionInitializer iterationConditionInitializer) {
+    updateParents(this.iterationConditionInitializer, iterationConditionInitializer);
     this.iterationConditionInitializer = iterationConditionInitializer;
+  }
+
+  public Expression getIncrementer() {
+    return incrementer;
+  }
+
+  public void setIncrementer(Expression incrementer) {
+    updateParents(this.incrementer, incrementer);
     this.incrementer = incrementer;
   }
 

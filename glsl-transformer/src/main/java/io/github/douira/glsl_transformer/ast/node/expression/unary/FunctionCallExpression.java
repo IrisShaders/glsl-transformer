@@ -5,11 +5,19 @@ import io.github.douira.glsl_transformer.ast.node.expression.TerminalExpression;
 import io.github.douira.glsl_transformer.ast.traversal.*;
 
 public class FunctionCallExpression extends TerminalExpression {
-  public InnerASTNode functionCall; // TODO: FunctionCall
+  protected InnerASTNode functionCall; // TODO: FunctionCall
 
   public FunctionCallExpression(InnerASTNode functionCall) {
-    super();
     this.functionCall = setup(functionCall);
+  }
+
+  public InnerASTNode getFunctionCall() {
+    return functionCall;
+  }
+
+  public void setFunctionCall(InnerASTNode functionCall) {
+    updateParents(this.functionCall, functionCall);
+    this.functionCall = functionCall;
   }
 
   @Override

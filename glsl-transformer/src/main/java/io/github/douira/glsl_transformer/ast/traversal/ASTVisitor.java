@@ -18,7 +18,7 @@ import io.github.douira.glsl_transformer.ast.node.statement.terminal.*;
 public interface ASTVisitor<R> extends GeneralASTVisitor<R> {
   default R visitTranslationUnit(TranslationUnit node) {
     var result = initialResult();
-    result = visitSafe(result, node.versionStatement);
+    result = visitSafe(result, node.getVersionStatement());
     visitChildren(result, node);
     return result;
   }
@@ -44,7 +44,7 @@ public interface ASTVisitor<R> extends GeneralASTVisitor<R> {
   }
 
   default R visitLayoutDefaults(LayoutDefaults node) {
-    return visit(node.qualifier); // TODO: LayoutQualifier
+    return visit(node.getQualifier()); // TODO: LayoutQualifier
   }
 
   default R visitExpression(Expression node) {
@@ -56,51 +56,51 @@ public interface ASTVisitor<R> extends GeneralASTVisitor<R> {
   }
 
   default R visitBitwiseNotExpression(BitwiseNotExpression node) {
-    return visit(node.operand);
+    return visit(node.getOperand());
   }
 
   default R visitBooleanNotExpression(BooleanNotExpression node) {
-    return visit(node.operand);
+    return visit(node.getOperand());
   }
 
   default R visitDecrementPostfixExpression(DecrementPostfixExpression node) {
-    return visit(node.operand);
+    return visit(node.getOperand());
   }
 
   default R visitDecrementPrefixExpression(DecrementPrefixExpression node) {
-    return visit(node.operand);
+    return visit(node.getOperand());
   }
 
   default R visitFunctionCallExpression(FunctionCallExpression node) {
-    return visit(node.functionCall); // TODO: FunctionCall
+    return visit(node.getFunctionCall()); // TODO: FunctionCall
   }
 
   default R visitGroupingExpression(GroupingExpression node) {
-    return visit(node.operand);
+    return visit(node.getOperand());
   }
 
   default R visitIncrementPostfixExpression(IncrementPostfixExpression node) {
-    return visit(node.operand);
+    return visit(node.getOperand());
   }
 
   default R visitIncrementPrefixExpression(IncrementPrefixExpression node) {
-    return visit(node.operand);
+    return visit(node.getOperand());
   }
 
   default R visitMemberAccessExpression(MemberAccessExpression node) {
-    return visit(node.operand);
+    return visitTwoChildren(node.getOperand(), node.getMember());
   }
 
   default R visitLengthAccessExpression(LengthAccessExpression node) {
-    return visit(node.operand);
+    return visit(node.getOperand());
   }
 
   default R visitNegationExpression(NegationExpression node) {
-    return visit(node.operand);
+    return visit(node.getOperand());
   }
 
   default R visitIdentityExpression(IdentityExpression node) {
-    return visit(node.operand);
+    return visit(node.getOperand());
   }
 
   default R visitBinaryExpression(BinaryExpression node) {
@@ -108,127 +108,127 @@ public interface ASTVisitor<R> extends GeneralASTVisitor<R> {
   }
 
   default R visitArrayAccessExpression(ArrayAccessExpression node) {
-    return visitTwoChildren(node.left, node.right);
+    return visitTwoChildren(node.getLeft(), node.getRight());
   }
 
   default R visitMultiplicationExpression(MultiplicationExpression node) {
-    return visitTwoChildren(node.left, node.right);
+    return visitTwoChildren(node.getLeft(), node.getRight());
   }
 
   default R visitDivisionExpression(DivisionExpression node) {
-    return visitTwoChildren(node.left, node.right);
+    return visitTwoChildren(node.getLeft(), node.getRight());
   }
 
   default R visitModuloExpression(ModuloExpression node) {
-    return visitTwoChildren(node.left, node.right);
+    return visitTwoChildren(node.getLeft(), node.getRight());
   }
 
   default R visitAdditionExpression(AdditionExpression node) {
-    return visitTwoChildren(node.left, node.right);
+    return visitTwoChildren(node.getLeft(), node.getRight());
   }
 
   default R visitSubtractionExpression(SubtractionExpression node) {
-    return visitTwoChildren(node.left, node.right);
+    return visitTwoChildren(node.getLeft(), node.getRight());
   }
 
   default R visitLeftShiftExpression(LeftShiftExpression node) {
-    return visitTwoChildren(node.left, node.right);
+    return visitTwoChildren(node.getLeft(), node.getRight());
   }
 
   default R visitRightShiftExpression(RightShiftExpression node) {
-    return visitTwoChildren(node.left, node.right);
+    return visitTwoChildren(node.getLeft(), node.getRight());
   }
 
   default R visitLessThanExpression(LessThanExpression node) {
-    return visitTwoChildren(node.left, node.right);
+    return visitTwoChildren(node.getLeft(), node.getRight());
   }
 
   default R visitGreaterThanExpression(GreaterThanExpression node) {
-    return visitTwoChildren(node.left, node.right);
+    return visitTwoChildren(node.getLeft(), node.getRight());
   }
 
   default R visitLessThanEqualExpression(LessThanEqualExpression node) {
-    return visitTwoChildren(node.left, node.right);
+    return visitTwoChildren(node.getLeft(), node.getRight());
   }
 
   default R visitGreaterThanEqualExpression(GreaterThanEqualExpression node) {
-    return visitTwoChildren(node.left, node.right);
+    return visitTwoChildren(node.getLeft(), node.getRight());
   }
 
   default R visitEqualityExpression(EqualityExpression node) {
-    return visitTwoChildren(node.left, node.right);
+    return visitTwoChildren(node.getLeft(), node.getRight());
   }
 
   default R visitInequalityExpression(InequalityExpression node) {
-    return visitTwoChildren(node.left, node.right);
+    return visitTwoChildren(node.getLeft(), node.getRight());
   }
 
   default R visitBitwiseAndExpression(BitwiseAndExpression node) {
-    return visitTwoChildren(node.left, node.right);
+    return visitTwoChildren(node.getLeft(), node.getRight());
   }
 
   default R visitBitwiseXorExpression(BitwiseXorExpression node) {
-    return visitTwoChildren(node.left, node.right);
+    return visitTwoChildren(node.getLeft(), node.getRight());
   }
 
   default R visitBitwiseOrExpression(BitwiseOrExpression node) {
-    return visitTwoChildren(node.left, node.right);
+    return visitTwoChildren(node.getLeft(), node.getRight());
   }
 
   default R visitBooleanAndExpression(BooleanAndExpression node) {
-    return visitTwoChildren(node.left, node.right);
+    return visitTwoChildren(node.getLeft(), node.getRight());
   }
 
   default R visitBooleanXorExpression(BooleanXorExpression node) {
-    return visitTwoChildren(node.left, node.right);
+    return visitTwoChildren(node.getLeft(), node.getRight());
   }
 
   default R visitBooleanOrExpression(BooleanOrExpression node) {
-    return visitTwoChildren(node.left, node.right);
+    return visitTwoChildren(node.getLeft(), node.getRight());
   }
 
   default R visitAssignmentExpression(AssignmentExpression node) {
-    return visitTwoChildren(node.left, node.right);
+    return visitTwoChildren(node.getLeft(), node.getRight());
   }
 
   default R visitMultiplicationAssignmentExpression(MultiplicationAssignmentExpression node) {
-    return visitTwoChildren(node.left, node.right);
+    return visitTwoChildren(node.getLeft(), node.getRight());
   }
 
   default R visitDivisionAssignmentExpression(DivisionAssignmentExpression node) {
-    return visitTwoChildren(node.left, node.right);
+    return visitTwoChildren(node.getLeft(), node.getRight());
   }
 
   default R visitModuloAssignmentExpression(ModuloAssignmentExpression node) {
-    return visitTwoChildren(node.left, node.right);
+    return visitTwoChildren(node.getLeft(), node.getRight());
   }
 
   default R visitAdditionAssignmentExpression(AdditionAssignmentExpression node) {
-    return visitTwoChildren(node.left, node.right);
+    return visitTwoChildren(node.getLeft(), node.getRight());
   }
 
   default R visitSubtractionAssignmentExpression(SubtractionAssignmentExpression node) {
-    return visitTwoChildren(node.left, node.right);
+    return visitTwoChildren(node.getLeft(), node.getRight());
   }
 
   default R visitLeftShiftAssignmentExpression(LeftShiftAssignmentExpression node) {
-    return visitTwoChildren(node.left, node.right);
+    return visitTwoChildren(node.getLeft(), node.getRight());
   }
 
   default R visitRightShiftAssignmentExpression(RightShiftAssignmentExpression node) {
-    return visitTwoChildren(node.left, node.right);
+    return visitTwoChildren(node.getLeft(), node.getRight());
   }
 
   default R visitBitwiseAndAssignmentExpression(BitwiseAndAssignmentExpression node) {
-    return visitTwoChildren(node.left, node.right);
+    return visitTwoChildren(node.getLeft(), node.getRight());
   }
 
   default R visitBitwiseXorAssignmentExpression(BitwiseXorAssignmentExpression node) {
-    return visitTwoChildren(node.left, node.right);
+    return visitTwoChildren(node.getLeft(), node.getRight());
   }
 
   default R visitBitwiseOrAssignmentExpression(BitwiseOrAssignmentExpression node) {
-    return visitTwoChildren(node.left, node.right);
+    return visitTwoChildren(node.getLeft(), node.getRight());
   }
 
   default R visitTernaryExpression(TernaryExpression node) {
@@ -255,7 +255,7 @@ public interface ASTVisitor<R> extends GeneralASTVisitor<R> {
   }
 
   default R visitReferenceExpression(ReferenceExpression node) {
-    return visit(node.identifier);
+    return visit(node.getIdentifier());
   }
 
   default R visitLiteralExpression(LiteralExpression node) {
@@ -275,11 +275,11 @@ public interface ASTVisitor<R> extends GeneralASTVisitor<R> {
   }
 
   default R visitDeclarationStatement(DeclarationStatement node) {
-    return visit(node.declaration);
+    return visit(node.getDeclaration());
   }
 
   default R visitExpressionStatement(ExpressionStatement node) {
-    return visit(node.expression);
+    return visit(node.getExpression());
   }
 
   default R visitSelectionStatement(SelectionStatement node) {
@@ -292,11 +292,11 @@ public interface ASTVisitor<R> extends GeneralASTVisitor<R> {
   }
 
   default R visitSwitchStatement(SwitchStatement node) {
-    return visitTwoChildren(node.expression, node.statement);
+    return visitTwoChildren(node.getExpression(), node.getStatement());
   }
 
   default R visitCaseStatement(CaseStatement node) {
-    return visit(node.expression);
+    return visit(node.getExpression());
   }
 
   default R visitDefaultStatement(DefaultStatement node) {
@@ -309,20 +309,20 @@ public interface ASTVisitor<R> extends GeneralASTVisitor<R> {
 
   default R visitForLoopStatement(ForLoopStatement node) {
     var result = initialResult();
-    result = visitSafe(result, node.initExpression);
-    result = visitSafe(result, node.initDeclaration);
-    result = visitSafe(result, node.condition);
-    result = visitSafe(result, node.iterationConditionInitializer);
-    result = visitSafe(result, node.incrementer);
-    return visit(result, node.statement);
+    result = visitSafe(result, node.getInitExpression());
+    result = visitSafe(result, node.getInitDeclaration());
+    result = visitSafe(result, node.getCondition());
+    result = visitSafe(result, node.getIterationConditionInitializer());
+    result = visitSafe(result, node.getIncrementer());
+    return visit(result, node.getStatement());
   }
 
   default R visitWhileLoopStatement(WhileLoopStatement node) {
-    return visitTwoChildren(node.condition, node.statement);
+    return visitTwoChildren(node.getCondition(), node.getStatement());
   }
 
   default R visitDoWhileLoopStatement(DoWhileLoopStatement node) {
-    return visitTwoChildren(node.statement, node.condition);
+    return visitTwoChildren(node.getStatement(), node.getCondition());
   }
 
   default R visitContinueStatement(ContinueStatement node) {
@@ -334,7 +334,7 @@ public interface ASTVisitor<R> extends GeneralASTVisitor<R> {
   }
 
   default R visitReturnStatement(ReturnStatement node) {
-    return visit(node.expression);
+    return visit(node.getExpression());
   }
 
   default R visitDiscardStatement(DiscardStatement node) {

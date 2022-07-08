@@ -4,9 +4,18 @@ import io.github.douira.glsl_transformer.ast.node.basic.InnerASTNode;
 import io.github.douira.glsl_transformer.ast.traversal.*;
 
 public class DeclarationStatement extends SemiTerminalStatement {
-  public InnerASTNode declaration; // TODO: Declaration
+  protected InnerASTNode declaration; // TODO: Declaration
 
   public DeclarationStatement(InnerASTNode declaration) {
+    this.declaration = setup(declaration);
+  }
+
+  public InnerASTNode getDeclaration() {
+    return declaration;
+  }
+
+  public void setDeclaration(InnerASTNode declaration) {
+    updateParents(this.declaration, declaration);
     this.declaration = declaration;
   }
 

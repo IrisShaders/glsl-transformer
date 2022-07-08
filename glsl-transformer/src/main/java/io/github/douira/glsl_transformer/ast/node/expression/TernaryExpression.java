@@ -3,14 +3,41 @@ package io.github.douira.glsl_transformer.ast.node.expression;
 import io.github.douira.glsl_transformer.ast.traversal.*;
 
 public abstract class TernaryExpression extends Expression {
-  public Expression first;
-  public Expression second;
-  public Expression third;
+  protected Expression first;
+  protected Expression second;
+  protected Expression third;
 
   public TernaryExpression(Expression first, Expression second, Expression third) {
     this.first = setup(first);
     this.second = setup(second);
     this.third = setup(third);
+  }
+
+  public Expression getFirst() {
+    return first;
+  }
+
+  public void setFirst(Expression first) {
+    updateParents(this.first, first);
+    this.first = first;
+  }
+
+  public Expression getSecond() {
+    return second;
+  }
+
+  public void setSecond(Expression second) {
+    updateParents(this.second, second);
+    this.second = second;
+  }
+
+  public Expression getThird() {
+    return third;
+  }
+
+  public void setThird(Expression third) {
+    updateParents(this.third, third);
+    this.third = third;
   }
 
   @Override

@@ -4,9 +4,18 @@ import io.github.douira.glsl_transformer.ast.node.expression.Expression;
 import io.github.douira.glsl_transformer.ast.traversal.*;
 
 public class ExpressionStatement extends SemiTerminalStatement {
-  public Expression expression;
+  protected Expression expression;
 
   public ExpressionStatement(Expression expression) {
+    this.expression = setup(expression);
+  }
+
+  public Expression getExpression() {
+    return expression;
+  }
+
+  public void setExpression(Expression expression) {
+    updateParents(this.expression, expression);
     this.expression = expression;
   }
 

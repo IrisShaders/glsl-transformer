@@ -4,9 +4,18 @@ import io.github.douira.glsl_transformer.ast.node.statement.Statement;
 import io.github.douira.glsl_transformer.ast.traversal.*;
 
 public abstract class LoopStatement extends Statement {
-  public Statement statement;
+  protected Statement statement;
 
   public LoopStatement(Statement statement) {
+    this.statement = setup(statement);
+  }
+
+  public Statement getStatement() {
+    return statement;
+  }
+
+  public void setStatement(Statement statement) {
+    updateParents(this.statement, statement);
     this.statement = statement;
   }
 

@@ -128,7 +128,7 @@ public class ASTBuilder extends GLSLParserBaseVisitor<ASTNode> {
   public MemberAccessExpression visitMemberAccessExpression(MemberAccessExpressionContext ctx) {
     return new MemberAccessExpression(
         (Expression) visit(ctx.operand),
-        ctx.member.getText());
+        new Identifier(ctx.member.getText()));
   }
 
   @Override

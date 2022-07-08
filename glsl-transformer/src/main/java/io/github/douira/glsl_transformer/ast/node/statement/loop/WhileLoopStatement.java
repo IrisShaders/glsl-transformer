@@ -6,7 +6,7 @@ import io.github.douira.glsl_transformer.ast.node.statement.Statement;
 import io.github.douira.glsl_transformer.ast.traversal.*;
 
 public class WhileLoopStatement extends ConditionLoopStatement {
-  public IterationConditionInitializer iterationConditionInitializer;
+  protected IterationConditionInitializer iterationConditionInitializer;
 
   public WhileLoopStatement(Expression condition, Statement statement) {
     super(statement, condition);
@@ -16,6 +16,15 @@ public class WhileLoopStatement extends ConditionLoopStatement {
       IterationConditionInitializer iterationConditionInitializer,
       Statement statement) {
     super(statement, null);
+    this.iterationConditionInitializer = setup(iterationConditionInitializer);
+  }
+
+  public IterationConditionInitializer getIterationConditionInitializer() {
+    return iterationConditionInitializer;
+  }
+
+  public void setIterationConditionInitializer(IterationConditionInitializer iterationConditionInitializer) {
+    updateParents(this.iterationConditionInitializer, iterationConditionInitializer);
     this.iterationConditionInitializer = iterationConditionInitializer;
   }
 
