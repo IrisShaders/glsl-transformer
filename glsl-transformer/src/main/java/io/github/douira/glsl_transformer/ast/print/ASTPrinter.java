@@ -11,7 +11,7 @@ import io.github.douira.glsl_transformer.ast.node.statement.*;
 import io.github.douira.glsl_transformer.ast.node.statement.loop.*;
 import io.github.douira.glsl_transformer.ast.node.statement.selection.*;
 import io.github.douira.glsl_transformer.ast.node.statement.terminal.*;
-import io.github.douira.glsl_transformer.ast.print.token.*;
+import io.github.douira.glsl_transformer.ast.print.token.EOFToken;
 
 /**
  * The AST printer emits tokens to convert an AST node into a string with the
@@ -146,10 +146,8 @@ public abstract class ASTPrinter extends ASTPrinterBase {
   }
 
   @Override
-  public Void visitLengthAccessExpression(LengthAccessExpression node) {
-    visit(node.operand);
+  public void exitLengthAccessExpression(LengthAccessExpression node) {
     emitType(GLSLLexer.DOT_LENGTH, GLSLLexer.LPAREN, GLSLLexer.RPAREN);
-    return null;
   }
 
   @Override
@@ -538,29 +536,31 @@ public abstract class ASTPrinter extends ASTPrinterBase {
   public void enterCompoundStatement(CompoundStatement node) {
     emitType(GLSLLexer.LBRACE);
     emitCommonNewline();
-    emitToken(IndentMarker.indent());
+    indent();
+    if (node.getParent() instanceof SwitchStatement) {
+      indent();
+    }
   }
-  
+
   @Override
   public void exitCompoundStatement(CompoundStatement node) {
-    emitToken(IndentMarker.unindent());
+    unindent();
+    if (node.getParent() instanceof SwitchStatement) {
+      unindent();
+    }
     emitType(GLSLLexer.RBRACE);
     emitCommonNewline();
   }
 
   @Override
-  public Void visitDeclarationStatement(DeclarationStatement node) {
-    visit(node.declaration);
+  public void exitDeclarationStatement(DeclarationStatement node) {
     emitCommonNewline();
-    return null;
   }
 
   @Override
-  public Void visitExpressionStatement(ExpressionStatement node) {
-    visit(node.expression);
+  public void exitExpressionStatement(ExpressionStatement node) {
     emitType(GLSLLexer.SEMICOLON);
     emitCommonNewline();
-    return null;
   }
 
   /**
@@ -601,12 +601,41 @@ public abstract class ASTPrinter extends ASTPrinterBase {
    */
   @Override
   public Void visitSwitchStatement(SwitchStatement node) {
-    throw new UnsupportedOperationException(); // TODO
+    emitType(GLSLLexer.SWITCH);
+    emitExtendableSpace();
+    emitType(GLSLLexer.LPAREN);
+    visit(node.expression);
+    emitType(GLSLLexer.RPAREN);
+    emitBreakableSpace();
+    visit(node.statement);
+    return null;
   }
 
   @Override
-  public Void visitCaseLabelStatement(CaseLabelStatement node) {
-    throw new UnsupportedOperationException(); // TODO
+  public void enterCaseLabelStatement(CaseLabelStatement node) {
+    unindent();
+  }
+
+  @Override
+  public void exitCaseLabelStatement(CaseLabelStatement node) {
+    indent();
+  }
+
+  @Override
+  public Void visitCaseStatement(CaseStatement node) {
+    emitType(GLSLLexer.CASE);
+    emitBreakableSpace();
+    visit(node.expression);
+    emitType(GLSLLexer.COLON);
+    emitCommonNewline();
+    return null;
+  }
+
+  @Override
+  public Void visitDefaultStatement(DefaultStatement node) {
+    emitType(GLSLLexer.DEFAULT, GLSLLexer.COLON);
+    emitCommonNewline();
+    return null;
   }
 
   /**

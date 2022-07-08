@@ -292,11 +292,19 @@ public interface ASTVisitor<R> extends GeneralASTVisitor<R> {
   }
 
   default R visitSwitchStatement(SwitchStatement node) {
-    throw new UnsupportedOperationException(); // TODO
+    return visitTwoChildren(node.expression, node.statement);
+  }
+
+  default R visitCaseStatement(CaseStatement node) {
+    return visit(node.expression);
+  }
+
+  default R visitDefaultStatement(DefaultStatement node) {
+    return defaultResult();
   }
 
   default R visitCaseLabelStatement(CaseLabelStatement node) {
-    throw new UnsupportedOperationException(); // TODO
+    return superNodeTypeResult();
   }
 
   default R visitForLoopStatement(ForLoopStatement node) {

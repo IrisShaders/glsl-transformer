@@ -2,7 +2,7 @@ package io.github.douira.glsl_transformer.ast.print;
 
 import java.util.List;
 
-import io.github.douira.glsl_transformer.ast.node.basic.*;
+import io.github.douira.glsl_transformer.ast.node.basic.ASTNode;
 import io.github.douira.glsl_transformer.ast.print.token.*;
 import io.github.douira.glsl_transformer.ast.traversal.ASTListenerVisitor;
 import io.github.douira.glsl_transformer.print.filter.TokenChannel;
@@ -47,7 +47,7 @@ public abstract class ASTPrinterBase extends ASTListenerVisitor<Void> {
   }
 
   public static String printAST(ASTPrinter printer, ASTNode node) {
-    printer.visit(node);
+    printer.startVisit(node);
     printer.finalizePrinting();
     return printer.generateString();
   }
@@ -138,6 +138,14 @@ public abstract class ASTPrinterBase extends ASTListenerVisitor<Void> {
     emitNewline(TokenRole.COMMON_FORMATTING);
   }
 
+  protected void indent() {
+    emitToken(IndentMarker.indent());
+  }
+
+  protected void unindent() {
+    emitToken(IndentMarker.unindent());
+  }
+
   protected void compactCommonNewline() {
     compactCommonNewline(ASTNode.class);
   }
@@ -175,18 +183,12 @@ public abstract class ASTPrinterBase extends ASTListenerVisitor<Void> {
   }
 
   @Override
-  public void enterEveryNode(InnerASTNode node) {
-    currentNode = node;
-  }
-
-  @Override
-  public void beforeExitEveryNode(InnerASTNode node) {
-    currentNode = node;
+  public void enterContext(ASTNode node) {
+    setCurrentNode(node);
   }
 
   @Override
   public Void visit(ASTNode node) {
-    currentNode = node;
     super.visit(node);
     return null;
   }

@@ -13,15 +13,18 @@ public class ASTWalker<R> extends ASTBaseVisitor<R> {
   }
 
   public static <T> T walk(ASTListener listener, ASTNode node) {
-    return new ASTWalker<T>(listener).visit(node);
+    return new ASTWalker<T>(listener).startVisit(node);
   }
 
   @Override
   public R visit(ASTNode node) {
     if (node instanceof InnerASTNode innerNode) {
+      var previousContext = context;
+      setContext(node);
       enterNode(listener, innerNode);
-      var result = super.visit(node);
+      var result = visitRaw(node);
       exitNode(listener, innerNode);
+      enterContext(previousContext);
       return result;
     } else {
       return super.visit(node);
@@ -39,4 +42,9 @@ public class ASTWalker<R> extends ASTBaseVisitor<R> {
     node.exitNode(listener);
     listener.exitEveryNode(node);
   }
+
+	@Override
+	public void enterContext(ASTNode node) {
+    listener.enterContext(node);
+	}
 }
