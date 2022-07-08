@@ -8,7 +8,7 @@ import io.github.douira.glsl_transformer.ast.node.external_declaration.ExternalD
 import io.github.douira.glsl_transformer.ast.traversal.*;
 
 public class TranslationUnit extends ListASTNode<ExternalDeclaration> {
-  public VersionStatement versionStatement;
+  protected VersionStatement versionStatement;
 
   public TranslationUnit(VersionStatement versionStatement, List<ExternalDeclaration> externalDeclarations) {
     super(externalDeclarations);
@@ -26,6 +26,15 @@ public class TranslationUnit extends ListASTNode<ExternalDeclaration> {
 
   public TranslationUnit(Stream<ExternalDeclaration> children) {
     super(children);
+  }
+
+  public VersionStatement getVersionStatement() {
+    return versionStatement;
+  }
+
+  public void setVersionStatement(VersionStatement versionStatement) {
+    updateParents(this.versionStatement, versionStatement);
+    this.versionStatement = versionStatement;
   }
 
   @Override

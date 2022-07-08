@@ -4,12 +4,30 @@ import io.github.douira.glsl_transformer.ast.node.expression.Expression;
 import io.github.douira.glsl_transformer.ast.traversal.*;
 
 public abstract class BinaryExpression extends Expression {
-  public Expression left;
-  public Expression right;
+  protected Expression left;
+  protected Expression right;
 
   public BinaryExpression(Expression left, Expression right) {
     this.left = setup(left);
     this.right = setup(right);
+  }
+
+  public Expression getLeft() {
+    return left;
+  }
+
+  public void setLeft(Expression left) {
+    updateParents(this.left, left);
+    this.left = left;
+  }
+
+  public Expression getRight() {
+    return right;
+  }
+
+  public void setRight(Expression right) {
+    updateParents(this.right, right);
+    this.right = right;
   }
 
   @Override

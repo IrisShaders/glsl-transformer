@@ -4,10 +4,19 @@ import io.github.douira.glsl_transformer.ast.node.expression.Expression;
 import io.github.douira.glsl_transformer.ast.traversal.*;
 
 public abstract class UnaryExpression extends Expression {
-  public Expression operand;
+  protected Expression operand;
 
   public UnaryExpression(Expression operand) {
     this.operand = setup(operand);
+  }
+
+  public Expression getOperand() {
+    return operand;
+  }
+
+  public void setOperand(Expression operand) {
+    updateParents(this.operand, operand);
+    this.operand = operand;
   }
 
   @Override

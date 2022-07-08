@@ -8,7 +8,7 @@ import io.github.douira.glsl_transformer.ast.node.basic.InnerASTNode;
 import io.github.douira.glsl_transformer.ast.traversal.*;
 
 public class LayoutDefaults extends ExternalDeclaration {
-  public InnerASTNode qualifier; // TODO: LayoutQualifier
+  protected InnerASTNode qualifier; // TODO: LayoutQualifier
   public LayoutMode mode;
 
   public enum LayoutMode implements TokenAssociatedEnum {
@@ -36,6 +36,15 @@ public class LayoutDefaults extends ExternalDeclaration {
   public LayoutDefaults(InnerASTNode qualifier, LayoutMode mode) {
     this.qualifier = setup(qualifier);
     this.mode = mode;
+  }
+
+  public InnerASTNode getQualifier() {
+    return qualifier;
+  }
+
+  public void setQualifier(InnerASTNode qualifier) {
+    updateParents(this.qualifier, qualifier);
+    this.qualifier = qualifier;
   }
 
   @Override

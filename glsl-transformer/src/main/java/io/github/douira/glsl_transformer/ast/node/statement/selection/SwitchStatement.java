@@ -5,12 +5,30 @@ import io.github.douira.glsl_transformer.ast.node.statement.*;
 import io.github.douira.glsl_transformer.ast.traversal.*;
 
 public class SwitchStatement extends Statement {
-  public Expression expression;
-  public CompoundStatement statement;
+  protected Expression expression;
+  protected CompoundStatement statement;
 
   public SwitchStatement(Expression expression, CompoundStatement statement) {
     this.expression = setup(expression);
     this.statement = setup(statement);
+  }
+
+  public Expression getExpression() {
+    return expression;
+  }
+
+  public void setExpression(Expression expression) {
+    updateParents(this.expression, expression);
+    this.expression = expression;
+  }
+
+  public CompoundStatement getStatement() {
+    return statement;
+  }
+
+  public void setStatement(CompoundStatement statement) {
+    updateParents(this.statement, statement);
+    this.statement = statement;
   }
 
   @Override

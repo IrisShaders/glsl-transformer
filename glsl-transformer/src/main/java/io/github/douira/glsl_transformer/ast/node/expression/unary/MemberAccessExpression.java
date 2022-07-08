@@ -1,14 +1,24 @@
 package io.github.douira.glsl_transformer.ast.node.expression.unary;
 
+import io.github.douira.glsl_transformer.ast.node.Identifier;
 import io.github.douira.glsl_transformer.ast.node.expression.Expression;
 import io.github.douira.glsl_transformer.ast.traversal.*;
 
 public class MemberAccessExpression extends UnaryExpression {
-  public String memberName;
+  protected Identifier member;
 
-  public MemberAccessExpression(Expression expression, String member) {
+  public MemberAccessExpression(Expression expression, Identifier member) {
     super(expression);
-    this.memberName = member;
+    this.member = setup(member);
+  }
+
+  public Identifier getMember() {
+    return member;
+  }
+
+  public void setMember(Identifier member) {
+    updateParents(this.member, member);
+    this.member = member;
   }
 
   @Override

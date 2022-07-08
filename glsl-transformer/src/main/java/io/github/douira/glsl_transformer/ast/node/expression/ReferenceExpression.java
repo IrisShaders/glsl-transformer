@@ -4,10 +4,19 @@ import io.github.douira.glsl_transformer.ast.node.Identifier;
 import io.github.douira.glsl_transformer.ast.traversal.*;
 
 public class ReferenceExpression extends TerminalExpression {
-  public Identifier identifier;
+  protected Identifier identifier;
 
   public ReferenceExpression(Identifier identifier) {
     this.identifier = setup(identifier);
+  }
+
+  public Identifier getIdentifier() {
+    return identifier;
+  }
+
+  public void setIdentifier(Identifier identifier) {
+    updateParents(this.identifier, identifier);
+    this.identifier = identifier;
   }
 
   @Override

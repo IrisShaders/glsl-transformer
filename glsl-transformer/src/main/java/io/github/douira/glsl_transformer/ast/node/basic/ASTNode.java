@@ -5,7 +5,7 @@ import io.github.douira.glsl_transformer.ast.traversal.*;
 
 public abstract class ASTNode {
   // is only null for the root node or before being added to a parent
-  // invariant: if this is set it must contain the same root as this node
+  // invariant: the parent of this node has to share the same root as this node
   private ASTNode parent;
 
   // should never be null
@@ -126,16 +126,32 @@ public abstract class ASTNode {
    * {@link ASTNode#setParent(ASTNode)} to move a subtree from one node to the
    * other.
    */
-  public void unregisterFromParent() {
+  public void detachFromParent() {
     if (parent == null) {
       return;
     }
     new UnregisterVisitor().visit(this);
+    parent = null;
   }
 
   public <T extends ASTNode> T setup(T node) {
-    node.setParent(this);
+    if (node != null) {
+      node.setParent(this);
+    }
     return node;
   }
 
+  public void updateParents(ASTNode currentNode, ASTNode newNode) {
+    if (currentNode == newNode) {
+      return;
+    }
+
+    if (currentNode != null) {
+      currentNode.detachFromParent();
+    }
+
+    if (newNode != null) {
+      newNode.setParent(this);
+    }
+  }
 }
