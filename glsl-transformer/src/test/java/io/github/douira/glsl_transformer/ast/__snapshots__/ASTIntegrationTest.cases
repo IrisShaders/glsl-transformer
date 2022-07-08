@@ -69,6 +69,10 @@ a %= b &= b |= b ^= b <<= c <<= d
 1 + 2us + 3ul + 4u + 5s + 0.1 + 0.2f + 0.3hf + 0.4lf
 ===
 1 + 2us + 3ul + 4u + 5s + 0.1 + 0.2 + 0.3hf + 0.4lf
+§testReprint expression:
+0x54ae + 06453543 + 1.6e10 + 50.1e-10 + 1e+10
+===
+0x54ae + 06453543 + 1.6E10 + 5.01E-9 + 1.0E10
 §testReprint statement:
 ;
 

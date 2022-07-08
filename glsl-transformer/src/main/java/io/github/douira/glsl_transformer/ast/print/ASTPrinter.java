@@ -175,39 +175,59 @@ public abstract class ASTPrinter extends ASTPrinterBase {
 
   @Override
   public Void visitLiteralExpression(LiteralExpression node) {
-    switch (node.literalType) {
-      case BOOL:
+    // literal expressions are always positive, negation is handled with a negation
+    // expression
+    switch (node.literalType.getNumberType()) {
+      case BOOLEAN:
         emitLiteral(node.booleanValue ? "true" : "false");
         break;
-      case INT16:
-        emitLiteral(Long.toString(node.integerValue) + "s");
+      case SIGNED_INTEGER:
+      case UNSIGNED_INTEGER:
+        int radix = node.getIntegerRadix();
+        var intString = Long.toString(node.integerValue, radix);
+        if (radix == 16) {
+          intString = "0x" + intString;
+        } else if (radix == 8) {
+          intString = "0" + intString;
+        }
+        switch (node.literalType) {
+          case INT16:
+            emitLiteral(intString + "s");
+            break;
+          case UINT16:
+            emitLiteral(intString + "us");
+            break;
+          case INT32:
+            emitLiteral(intString);
+            break;
+          case UINT32:
+            emitLiteral(intString + "u");
+            break;
+          case INT64:
+            emitLiteral(intString + "l");
+            break;
+          case UINT64:
+            emitLiteral(intString + "ul");
+            break;
+          default:
+            throw new IllegalStateException("Unexpected int type: " + node.literalType);
+        }
         break;
-      case UINT16:
-        emitLiteral(Long.toString(node.integerValue) + "us");
+      case FLOATING_POINT:
+        switch (node.literalType) {
+          case FLOAT16:
+            emitLiteral(Double.toString(node.floatingValue) + "hf");
+            break;
+          case FLOAT32:
+            emitLiteral(Double.toString(node.floatingValue));
+            break;
+          case FLOAT64:
+            emitLiteral(Double.toString(node.floatingValue) + "lf");
+            break;
+          default:
+            throw new IllegalStateException("Unexpected float type: " + node.literalType);
+        }
         break;
-      case INT32:
-        emitLiteral(Long.toString(node.integerValue));
-        break;
-      case UINT32:
-        emitLiteral(Long.toString(node.integerValue) + "u");
-        break;
-      case INT64:
-        emitLiteral(Long.toString(node.integerValue) + "l");
-        break;
-      case UINT64:
-        emitLiteral(Long.toString(node.integerValue) + "ul");
-        break;
-      case FLOAT16:
-        emitLiteral(Double.toString(node.floatingValue) + "hf");
-        break;
-      case FLOAT32:
-        emitLiteral(Double.toString(node.floatingValue));
-        break;
-      case FLOAT64:
-        emitLiteral(Double.toString(node.floatingValue) + "lf");
-        break;
-      default:
-        throw new IllegalStateException("Unexpected literal type: " + node.literalType);
     }
     return null;
   }

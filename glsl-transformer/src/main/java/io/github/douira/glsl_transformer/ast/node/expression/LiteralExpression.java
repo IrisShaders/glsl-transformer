@@ -16,7 +16,14 @@ public class LiteralExpression extends TerminalExpression {
   public Type literalType;
   public boolean booleanValue;
   public long integerValue;
+  public IntegerFormat integerFormat;
   public double floatingValue;
+
+  public enum IntegerFormat {
+    DECIMAL,
+    HEXADECIMAL,
+    OCTAL
+  }
 
   public LiteralExpression(Type literalType, boolean booleanValue) {
     this.literalType = literalType;
@@ -24,8 +31,13 @@ public class LiteralExpression extends TerminalExpression {
   }
 
   public LiteralExpression(Type literalType, long integerValue) {
+    this(literalType, integerValue, IntegerFormat.DECIMAL);
+  }
+
+  public LiteralExpression(Type literalType, long integerValue, IntegerFormat integerFormat) {
     this.literalType = literalType;
     this.integerValue = integerValue;
+    this.integerFormat = integerFormat;
   }
 
   public LiteralExpression(Type literalType, double floatingValue) {
@@ -61,6 +73,14 @@ public class LiteralExpression extends TerminalExpression {
     }
   }
 
+  public int getIntegerRadix() {
+    return integerFormat == IntegerFormat.HEXADECIMAL
+        ? 16
+        : integerFormat == IntegerFormat.OCTAL
+            ? 8
+            : 10;
+  }
+
   public static LiteralExpression from(Token content) {
     var literalType = Type.ofLiteralTokenType(content.getType());
     var tokenContent = content.getText();
@@ -73,8 +93,25 @@ public class LiteralExpression extends TerminalExpression {
         var intMatcher = intExtractor.matcher(tokenContent);
         intMatcher.matches();
         tokenContent = intMatcher.group(1);
-        return new LiteralExpression(
-            literalType, Long.parseLong(tokenContent, 10));
+        if (tokenContent.equals("0")) {
+          return new LiteralExpression(
+              literalType, 0);
+        }
+        if (tokenContent.startsWith("0x")) {
+          return new LiteralExpression(
+              literalType,
+              Long.parseLong(tokenContent.substring(2), 16),
+              IntegerFormat.HEXADECIMAL);
+        } else if (tokenContent.startsWith("0")) {
+          return new LiteralExpression(
+              literalType,
+              Long.parseLong(tokenContent.substring(1), 8),
+              IntegerFormat.OCTAL);
+        } else {
+          return new LiteralExpression(
+              literalType,
+              Long.parseLong(tokenContent, 10), IntegerFormat.DECIMAL);
+        }
       case FLOATING_POINT:
         var floatMatcher = floatExtractor.matcher(tokenContent);
         floatMatcher.matches();
