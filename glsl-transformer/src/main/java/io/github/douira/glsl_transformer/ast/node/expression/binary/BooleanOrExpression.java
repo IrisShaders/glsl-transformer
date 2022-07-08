@@ -20,11 +20,13 @@ public class BooleanOrExpression extends BinaryExpression {
 
   @Override
   public void enterNode(ASTListener listener) {
+    super.enterNode(listener);
     listener.enterBooleanOrExpression(this);
   }
 
   @Override
   public void exitNode(ASTListener listener) {
+    super.exitNode(listener);
     listener.exitBooleanOrExpression(this);
   }
 }

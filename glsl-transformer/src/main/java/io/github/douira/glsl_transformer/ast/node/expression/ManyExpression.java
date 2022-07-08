@@ -38,11 +38,13 @@ public abstract class ManyExpression extends Expression implements ListNode<Expr
 
   @Override
   public void enterNode(ASTListener listener) {
+    super.enterNode(listener);
     listener.enterManyExpression(this);
   }
 
   @Override
   public void exitNode(ASTListener listener) {
+    super.exitNode(listener);
     listener.exitManyExpression(this);
   }
 }

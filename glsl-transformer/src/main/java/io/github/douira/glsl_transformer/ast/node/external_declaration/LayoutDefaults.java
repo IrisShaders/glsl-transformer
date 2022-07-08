@@ -50,11 +50,13 @@ public class LayoutDefaults extends ExternalDeclaration {
 
   @Override
   public void enterNode(ASTListener listener) {
+    super.enterNode(listener);
     listener.enterLayoutDefaults(this);
   }
 
   @Override
   public void exitNode(ASTListener listener) {
+    super.exitNode(listener);
     listener.exitLayoutDefaults(this);
   }
 

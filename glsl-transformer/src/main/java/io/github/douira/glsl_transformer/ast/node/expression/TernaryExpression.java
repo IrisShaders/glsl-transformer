@@ -28,11 +28,13 @@ public abstract class TernaryExpression extends Expression {
 
   @Override
   public void enterNode(ASTListener listener) {
+    super.enterNode(listener);
     listener.enterTernaryExpression(this);
   }
 
   @Override
   public void exitNode(ASTListener listener) {
+    super.exitNode(listener);
     listener.exitTernaryExpression(this);
   }
 }

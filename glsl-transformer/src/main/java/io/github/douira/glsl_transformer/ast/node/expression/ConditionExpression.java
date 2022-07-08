@@ -31,11 +31,13 @@ public class ConditionExpression extends TernaryExpression {
 
   @Override
   public void enterNode(ASTListener listener) {
+    super.enterNode(listener);
     listener.enterConditionExpression(this);
   }
 
   @Override
   public void exitNode(ASTListener listener) {
+    super.exitNode(listener);
     listener.exitConditionExpression(this);
   }
 }

@@ -26,11 +26,13 @@ public class CompoundStatement extends ManyStatement {
 
   @Override
   public void enterNode(ASTListener listener) {
+    super.enterNode(listener);
     listener.enterCompoundStatement(this);
   }
 
   @Override
   public void exitNode(ASTListener listener) {
+    super.exitNode(listener);
     listener.exitCompoundStatement(this);
   }
 }

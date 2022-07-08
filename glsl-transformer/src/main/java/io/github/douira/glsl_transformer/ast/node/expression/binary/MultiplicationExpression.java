@@ -20,11 +20,13 @@ public class MultiplicationExpression extends BinaryExpression {
 
   @Override
   public void enterNode(ASTListener listener) {
+    super.enterNode(listener);
     listener.enterMultiplicationExpression(this);
   }
 
   @Override
   public void exitNode(ASTListener listener) {
+    super.exitNode(listener);
     listener.exitMultiplicationExpression(this);
   }
 }

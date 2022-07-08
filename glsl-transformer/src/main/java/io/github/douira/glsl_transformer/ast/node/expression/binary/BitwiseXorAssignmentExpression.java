@@ -20,11 +20,13 @@ public class BitwiseXorAssignmentExpression extends BinaryExpression {
 
   @Override
   public void enterNode(ASTListener listener) {
+    super.enterNode(listener);
     listener.enterBitwiseXorAssignmentExpression(this);
   }
 
   @Override
   public void exitNode(ASTListener listener) {
+    super.exitNode(listener);
     listener.exitBitwiseXorAssignmentExpression(this);
   }
 }

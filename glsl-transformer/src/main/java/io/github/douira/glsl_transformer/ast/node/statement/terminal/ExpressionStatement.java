@@ -4,15 +4,15 @@ import io.github.douira.glsl_transformer.ast.node.expression.Expression;
 import io.github.douira.glsl_transformer.ast.traversal.*;
 
 public class ExpressionStatement extends SemiTerminalStatement {
-	public Expression expression;
+  public Expression expression;
 
   public ExpressionStatement(Expression expression) {
-		this.expression = expression;
-	}
+    this.expression = expression;
+  }
 
   @Override
   public StatementType getStatementType() {
-		return StatementType.EXPRESSION;
+    return StatementType.EXPRESSION;
   }
 
   @Override
@@ -20,13 +20,15 @@ public class ExpressionStatement extends SemiTerminalStatement {
     return visitor.visitExpressionStatement(this);
   }
 
-	@Override
-	public void enterNode(ASTListener listener) {
-		listener.enterExpressionStatement(this);
-	}
+  @Override
+  public void enterNode(ASTListener listener) {
+    super.enterNode(listener);
+    listener.enterExpressionStatement(this);
+  }
 
-	@Override
-	public void exitNode(ASTListener listener) {
-		listener.exitExpressionStatement(this);
-	}
+  @Override
+  public void exitNode(ASTListener listener) {
+    super.exitNode(listener);
+    listener.exitExpressionStatement(this);
+  }
 }

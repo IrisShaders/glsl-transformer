@@ -20,11 +20,13 @@ public class LengthAccessExpression extends UnaryExpression {
 
   @Override
   public void enterNode(ASTListener listener) {
+    super.enterNode(listener);
     listener.enterLengthAccessExpression(this);
   }
 
   @Override
   public void exitNode(ASTListener listener) {
+    super.exitNode(listener);
     listener.exitLengthAccessExpression(this);
   }
 }

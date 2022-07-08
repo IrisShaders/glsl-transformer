@@ -20,11 +20,13 @@ public class LessThanEqualExpression extends BinaryExpression {
 
   @Override
   public void enterNode(ASTListener listener) {
+    super.enterNode(listener);
     listener.enterLessThanEqualExpression(this);
   }
 
   @Override
   public void exitNode(ASTListener listener) {
+    super.exitNode(listener);
     listener.exitLessThanEqualExpression(this);
   }
 }

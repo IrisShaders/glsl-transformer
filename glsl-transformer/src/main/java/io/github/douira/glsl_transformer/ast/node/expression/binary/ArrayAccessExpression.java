@@ -20,11 +20,13 @@ public class ArrayAccessExpression extends BinaryExpression {
 
   @Override
   public void enterNode(ASTListener listener) {
+    super.enterNode(listener);
     listener.enterArrayAccessExpression(this);
   }
 
   @Override
   public void exitNode(ASTListener listener) {
+    super.exitNode(listener);
     listener.exitArrayAccessExpression(this);
   }
 }
