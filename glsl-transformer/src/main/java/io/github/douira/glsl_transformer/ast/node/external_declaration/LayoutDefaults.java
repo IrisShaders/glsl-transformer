@@ -3,7 +3,6 @@ package io.github.douira.glsl_transformer.ast.node.external_declaration;
 import org.antlr.v4.runtime.Token;
 
 import io.github.douira.glsl_transformer.GLSLLexer;
-import io.github.douira.glsl_transformer.GLSLParser.LayoutDefaultsContext;
 import io.github.douira.glsl_transformer.ast.data.*;
 import io.github.douira.glsl_transformer.ast.node.basic.InnerASTNode;
 import io.github.douira.glsl_transformer.ast.traversal.*;
@@ -37,10 +36,6 @@ public class LayoutDefaults extends ExternalDeclaration {
   public LayoutDefaults(InnerASTNode qualifier, LayoutMode mode) {
     this.qualifier = setup(qualifier);
     this.mode = mode;
-  }
-
-  public static LayoutDefaults from(InnerASTNode qualifier, LayoutDefaultsContext ctx) {
-    return new LayoutDefaults(qualifier, LayoutMode.fromToken(ctx.layoutMode));
   }
 
   @Override
