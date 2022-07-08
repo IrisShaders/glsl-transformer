@@ -4,7 +4,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 import org.junit.jupiter.api.Test;
 
-import io.github.douira.glsl_transformer.parse_ast.Directive.Type;
+import io.github.douira.glsl_transformer.parse_ast.Directive.DirectiveType;
 
 /**
  * Directive injection and printing is already handled in the
@@ -15,7 +15,7 @@ public class DirectiveTest {
   void testConstructor() {
     assertThrows(
         IllegalArgumentException.class,
-        () -> new Directive(Type.DEFINE, null),
+        () -> new Directive(DirectiveType.DEFINE, null),
         "It should throw on a null content");
     assertThrows(
         IllegalArgumentException.class,
@@ -23,7 +23,7 @@ public class DirectiveTest {
         "It should throw on a null type");
     assertThrows(
         IllegalArgumentException.class,
-        () -> new Directive(Type.EMPTY, "fds"),
+        () -> new Directive(DirectiveType.EMPTY, "fds"),
         "It should refuse to construct an empty directive with content");
   }
 
@@ -31,36 +31,36 @@ public class DirectiveTest {
   void testGetPrinted() {
     assertEquals(
         "#define foo\n",
-        new Directive(Type.DEFINE, "foo").getPrinted(),
+        new Directive(DirectiveType.DEFINE, "foo").getPrinted(),
         "It should print a define with content");
     assertEquals(
         "#define\n",
-        new Directive(Type.DEFINE, "").getPrinted(),
+        new Directive(DirectiveType.DEFINE, "").getPrinted(),
         "It should print a define with no content");
     assertEquals(
         "#define\n",
-        new Directive(Type.DEFINE, " ").getPrinted(),
+        new Directive(DirectiveType.DEFINE, " ").getPrinted(),
         "It should print a define with blank content");
     assertEquals(
         "#define\n",
-        new Directive(Type.DEFINE, " \n").getPrinted(),
+        new Directive(DirectiveType.DEFINE, " \n").getPrinted(),
         "It should print a define with blank and newline content");
     assertEquals(
         "#define foo\\\nbar\n",
-        new Directive(Type.DEFINE, " foo\nbar").getPrinted(),
+        new Directive(DirectiveType.DEFINE, " foo\nbar").getPrinted(),
         "It should print a define with content using newline escapes if there are non-blank newlines");
     assertEquals(
         "#define foo\n",
-        new Directive(Type.DEFINE, " foo\n").getPrinted(),
+        new Directive(DirectiveType.DEFINE, " foo\n").getPrinted(),
         "It should print a define with content that has trailing newlines");
     assertEquals(
         "#define foo\n",
-        new Directive(Type.DEFINE, " \n foo").getPrinted(),
+        new Directive(DirectiveType.DEFINE, " \n foo").getPrinted(),
         "It should print a define with content that has a blank prefix");
 
     assertEquals(
         "#ifdef foo\n",
-        new Directive(Type.IFDEF, "foo").getPrinted(),
+        new Directive(DirectiveType.IFDEF, "foo").getPrinted(),
         "It should print a ifdef with content");
 
     assertEquals(
