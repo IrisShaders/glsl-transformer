@@ -2,7 +2,7 @@ package io.github.douira.glsl_transformer.ast.traversal;
 
 import io.github.douira.glsl_transformer.ast.node.basic.InnerASTNode;
 
-public interface GeneralASTListener {
+public interface GeneralASTListener extends ContextTracker {
   default void enterEveryNode(InnerASTNode node) {
   }
 

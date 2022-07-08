@@ -350,8 +350,7 @@ public class ASTBuilder extends GLSLParserBaseVisitor<ASTNode> {
 
   @Override
   public CompoundStatement visitCompoundStatement(CompoundStatementContext ctx) {
-    return new CompoundStatement(ctx.statement().stream().map(
-        (statement) -> (Statement) visitStatement(statement)));
+    return new CompoundStatement(ctx.statement().stream().map(this::visitStatement));
   }
 
   @Override
@@ -406,7 +405,7 @@ public class ASTBuilder extends GLSLParserBaseVisitor<ASTNode> {
     SelectionStatementContext nextSelection = ctx;
     do {
       conditions.add((Expression) visit(nextSelection.condition));
-      statements.add((Statement) visit(nextSelection.ifTrue));
+      statements.add(visitStatement(nextSelection.ifTrue));
       var ifFalse = nextSelection.ifFalse;
       nextSelection = null;
       if (ifFalse != null) {
@@ -417,7 +416,7 @@ public class ASTBuilder extends GLSLParserBaseVisitor<ASTNode> {
           // add a regular else branch, has no control flow attribute
           // since they are only present on the whole selection statement
           conditions.add(null);
-          statements.add((Statement) visit(ifFalse));
+          statements.add(visitStatement(ifFalse));
         }
       }
     } while (nextSelection != null);
@@ -426,8 +425,19 @@ public class ASTBuilder extends GLSLParserBaseVisitor<ASTNode> {
 
   @Override
   public SwitchStatement visitSwitchStatement(SwitchStatementContext ctx) {
-    // TODO
-    return null;
+    return new SwitchStatement(
+        (Expression) visit(ctx.condition),
+        visitCompoundStatement(ctx.compoundStatement()));
+  }
+
+  @Override
+  public DefaultStatement visitDefaultCaseLabel(DefaultCaseLabelContext ctx) {
+    return new DefaultStatement();
+  }
+
+  @Override
+  public CaseStatement visitValuedCaseLabel(ValuedCaseLabelContext ctx) {
+    return new CaseStatement((Expression) visit(ctx.expression()));
   }
 
   @Override
@@ -464,7 +474,7 @@ public class ASTBuilder extends GLSLParserBaseVisitor<ASTNode> {
         condition,
         iterationConditionInitializer,
         incrementer,
-        (Statement) visit(ctx.statement()));
+        visitStatement(ctx.statement()));
   }
 
   @Override
@@ -472,16 +482,16 @@ public class ASTBuilder extends GLSLParserBaseVisitor<ASTNode> {
     return ctx.condition != null
         ? new WhileLoopStatement(
             (Expression) visit(ctx.condition),
-            (Statement) visit(ctx.loopBody))
+            visitStatement(ctx.loopBody))
         : new WhileLoopStatement(
             visitIterationCondition(ctx.initCondition),
-            (Statement) visit(ctx.loopBody));
+            visitStatement(ctx.loopBody));
   }
 
   @Override
   public DoWhileLoopStatement visitDoWhileStatement(DoWhileStatementContext ctx) {
     return new DoWhileLoopStatement(
-        (Statement) visit(ctx.loopBody),
+        visitStatement(ctx.loopBody),
         (Expression) visit(ctx.condition));
   }
 

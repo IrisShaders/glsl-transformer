@@ -260,3 +260,50 @@ demote;
 	return;
 }
 
+§testReprint statement:
+{
+	1;
+	switch (a) {
+		case 1:
+			1;
+			break;
+	}
+}
+
+§testReprint statement:
+switch (a) {
+	case 1:
+		1;
+		break;
+}
+
+§testReprint statement:
+switch (a) {
+	case 1:
+	case 2:
+		break;
+	default:
+		1;
+		break;
+}
+
+§testReprint statement:
+switch (a) {
+	case 1:
+		switch (b) {
+			case 1:
+				1;
+				break;
+		}
+	default:
+}
+
+§testReprint statement:
+switch (a) {
+}
+
+§testReprint statement:
+switch (a) {
+	case 2:
+}
+

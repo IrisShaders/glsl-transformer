@@ -6,19 +6,20 @@ import io.github.douira.glsl_transformer.ast.traversal.*;
 public abstract class Statement extends InnerASTNode {
   public enum StatementType {
     COMPOUND, // many-ary
-    DECLARATION, // TODO (incomplete) terminal
-    EXPRESSION, // terminal
+    DECLARATION, // TODO (incomplete) semi-terminal
+    EXPRESSION, // semi-terminal
     EMPTY, // terminal
-    SELECTION, // TODO many-ary (if-else)
-    SWITCH, // TODO many-ary but complicated
-    CASE_LABEL, // TODO special
-    FOR_LOOP, // TODO unary
-    WHILE_LOOP, // TODO unary
-    DO_WHILE_LOOP, // TODO unary
+    SELECTION, // many-ary (if-else)
+    SWITCH, // unary (nested compound statement)
+    CASE, // semi-terminal
+    DEFAULT, // terminal
+    FOR_LOOP, // unary
+    WHILE_LOOP, // unary
+    DO_WHILE_LOOP, // unary
 
     CONTINUE, // terminal
     BREAK, // terminal
-    RETURN, // terminal
+    RETURN, // semi-terminal
     DISCARD, // terminal
     DEMOTE // terminal
   }
@@ -29,8 +30,7 @@ public abstract class Statement extends InnerASTNode {
     SEMI_TERMINAL, // no nested statements but not a terminal AST node
     TERMINAL, // no nested statements or AST nodes
     UNARY, // one nested statement
-    MANY, // a list of nested statements
-    SPECIAL // something else (case-label), TODO the handling of this
+    MANY // a list of nested statements
   }
 
   public abstract StructureType getStructureType();

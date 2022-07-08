@@ -422,4 +422,10 @@ public interface ASTListener extends GeneralASTListener {
 
   default void exitSemiTerminalStatement(SemiTerminalStatement node) {
   }
+
+  default void enterCaseStatement(CaseStatement node) {
+  }
+
+  default void exitCaseStatement(CaseStatement node) {
+  }
 }

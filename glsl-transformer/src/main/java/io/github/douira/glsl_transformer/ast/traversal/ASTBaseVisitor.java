@@ -2,9 +2,30 @@ package io.github.douira.glsl_transformer.ast.traversal;
 
 import io.github.douira.glsl_transformer.ast.node.basic.ASTNode;
 
-public class ASTBaseVisitor<R> implements ASTVisitor<R> {
+public abstract class ASTBaseVisitor<R> implements ASTVisitor<R>, ContextTracker {
+  protected ASTNode context;
+
+  @Override
+  public R startVisit(ASTNode node) {
+    context = node;
+    return ASTVisitor.super.startVisit(node);
+  }
+
   @Override
   public R visit(ASTNode node) {
+    var previousContext = context;
+    setContext(node);
+    var result = visitRaw(node);
+    enterContext(previousContext);
+    return result;
+  }
+
+  protected void setContext(ASTNode node) {
+    context = node;
+    enterContext(node);
+  }
+
+  protected R visitRaw(ASTNode node) {
     return node.accept(this);
   }
 

@@ -20,6 +20,38 @@ public abstract class ASTNode {
     return parent;
   }
 
+  public ASTNode getNthParent(int n) {
+    ASTNode node = this;
+    for (int i = 0; i < n; i++) {
+      if (node == null) {
+        return null;
+      }
+      node = node.getParent();
+    }
+    return node;
+  }
+
+  public ASTNode getFirstOfType(int limit, Class<? extends ASTNode> type) {
+    if (this.getClass() == type) {
+      return this;
+    }
+    return getFirstOfType(limit, type);
+  }
+
+  public ASTNode getFirstParentOfType(int limit, Class<? extends ASTNode> type) {
+    ASTNode node = this;
+    for (int i = 0; i < limit; i++) {
+      if (node == null) {
+        return null;
+      }
+      node = node.getParent();
+      if (node.getClass() == type) {
+        return node;
+      }
+    }
+    return null;
+  }
+
   public Root getRoot() {
     return root;
   }
@@ -64,6 +96,7 @@ public abstract class ASTNode {
     }
 
     // if the roots are the same nothing important happens
+    // this is the normal case for building the AST or moving nodes around
     if (root == parent.root) {
       this.parent = parent;
       return true;
@@ -104,4 +137,5 @@ public abstract class ASTNode {
     node.setParent(this);
     return node;
   }
+
 }
