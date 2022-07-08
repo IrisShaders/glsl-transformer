@@ -8,7 +8,7 @@ public class Directive extends StringNode {
   /**
    * The types of directives that can be generated.
    */
-  public static enum Type {
+  public static enum DirectiveType {
     /**
      * #define
      */
@@ -70,7 +70,7 @@ public class Directive extends StringNode {
     EMPTY
   }
 
-  private final Type type;
+  private final DirectiveType type;
 
   /**
    * Crates a new directive with the given directive type and content after the
@@ -80,14 +80,14 @@ public class Directive extends StringNode {
    * @param type    The type of the directive.
    * @param content The content to put after the directive name
    */
-  public Directive(Type type, String content) {
+  public Directive(DirectiveType type, String content) {
     super(cleanContent(content));
 
     if (type == null) {
       throw new IllegalArgumentException("Non-null type must be used to construct a directive!");
     }
 
-    if (type == Type.EMPTY) {
+    if (type == DirectiveType.EMPTY) {
       throw new IllegalArgumentException("The EMPTY type may only be used with the corresponding constructor!");
     }
 
@@ -100,7 +100,7 @@ public class Directive extends StringNode {
    */
   public Directive() {
     super("");
-    this.type = Type.EMPTY;
+    this.type = DirectiveType.EMPTY;
   }
 
   private static String cleanContent(String content) {
@@ -109,7 +109,7 @@ public class Directive extends StringNode {
 
   @Override
   protected String getPrinted() {
-    if (type == Type.EMPTY) {
+    if (type == DirectiveType.EMPTY) {
       return "#\n";
     }
 
