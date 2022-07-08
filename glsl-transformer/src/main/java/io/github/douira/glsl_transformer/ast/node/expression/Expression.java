@@ -55,7 +55,7 @@ public abstract class Expression extends InnerASTNode {
     CONDITION, // ternary
     SEQUENCE // many-ary
   }
-  
+
   public abstract ExpressionType getExpressionType();
 
   public enum OperandStructure {

@@ -26,11 +26,13 @@ public class SequenceExpression extends ManyExpression {
 
   @Override
   public void enterNode(ASTListener listener) {
+    super.enterNode(listener);
     listener.enterSequenceExpression(this);
   }
 
   @Override
   public void exitNode(ASTListener listener) {
+    super.exitNode(listener);
     listener.exitSequenceExpression(this);
   }
 }

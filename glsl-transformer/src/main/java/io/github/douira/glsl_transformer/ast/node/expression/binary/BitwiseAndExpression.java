@@ -20,11 +20,13 @@ public class BitwiseAndExpression extends BinaryExpression {
 
   @Override
   public void enterNode(ASTListener listener) {
+    super.enterNode(listener);
     listener.enterBitwiseAndExpression(this);
   }
 
   @Override
   public void exitNode(ASTListener listener) {
+    super.exitNode(listener);
     listener.exitBitwiseAndExpression(this);
   }
 }

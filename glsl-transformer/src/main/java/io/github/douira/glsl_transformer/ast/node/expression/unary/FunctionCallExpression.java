@@ -24,11 +24,13 @@ public class FunctionCallExpression extends TerminalExpression {
 
   @Override
   public void enterNode(ASTListener listener) {
+    super.enterNode(listener);
     listener.enterFunctionCallExpression(this);
   }
 
   @Override
   public void exitNode(ASTListener listener) {
+    super.exitNode(listener);
     listener.exitFunctionCallExpression(this);
   }
 }

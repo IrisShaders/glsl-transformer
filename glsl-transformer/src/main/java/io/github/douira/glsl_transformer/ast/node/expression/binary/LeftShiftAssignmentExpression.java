@@ -20,11 +20,13 @@ public class LeftShiftAssignmentExpression extends BinaryExpression {
 
   @Override
   public void enterNode(ASTListener listener) {
+    super.enterNode(listener);
     listener.enterLeftShiftAssignmentExpression(this);
   }
 
   @Override
   public void exitNode(ASTListener listener) {
+    super.exitNode(listener);
     listener.exitLeftShiftAssignmentExpression(this);
   }
 }

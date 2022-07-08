@@ -38,11 +38,13 @@ public abstract class ManyStatement extends Statement implements ListNode<Statem
 
   @Override
   public void enterNode(ASTListener listener) {
+    super.enterNode(listener);
     listener.enterManyStatement(this);
   }
 
   @Override
   public void exitNode(ASTListener listener) {
+    super.exitNode(listener);
     listener.exitManyStatement(this);
   }
 }

@@ -20,11 +20,13 @@ public class NegationExpression extends UnaryExpression {
 
   @Override
   public void enterNode(ASTListener listener) {
+    super.enterNode(listener);
     listener.enterNegationExpression(this);
   }
 
   @Override
   public void exitNode(ASTListener listener) {
+    super.exitNode(listener);
     listener.exitNegationExpression(this);
   }
 }

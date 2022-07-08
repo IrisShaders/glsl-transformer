@@ -20,11 +20,13 @@ public class GroupingExpression extends UnaryExpression {
 
   @Override
   public void enterNode(ASTListener listener) {
+    super.enterNode(listener);
     listener.enterGroupingExpression(this);
   }
 
   @Override
   public void exitNode(ASTListener listener) {
+    super.exitNode(listener);
     listener.exitGroupingExpression(this);
   }
 }

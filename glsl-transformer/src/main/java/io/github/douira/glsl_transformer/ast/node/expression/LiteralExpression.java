@@ -98,11 +98,13 @@ public class LiteralExpression extends TerminalExpression {
 
   @Override
   public void enterNode(ASTListener listener) {
+    super.enterNode(listener);
     listener.enterLiteralExpression(this);
   }
 
   @Override
   public void exitNode(ASTListener listener) {
+    super.exitNode(listener);
     listener.exitLiteralExpression(this);
   }
 }

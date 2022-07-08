@@ -20,11 +20,13 @@ public class IncrementPostfixExpression extends UnaryExpression {
 
   @Override
   public void enterNode(ASTListener listener) {
+    super.enterNode(listener);
     listener.enterIncrementPostfixExpression(this);
   }
 
   @Override
   public void exitNode(ASTListener listener) {
+    super.exitNode(listener);
     listener.exitIncrementPostfixExpression(this);
   }
 }

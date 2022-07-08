@@ -20,11 +20,13 @@ public class AssignmentExpression extends BinaryExpression {
 
   @Override
   public void enterNode(ASTListener listener) {
+    super.enterNode(listener);
     listener.enterAssignmentExpression(this);
   }
 
   @Override
   public void exitNode(ASTListener listener) {
+    super.exitNode(listener);
     listener.exitAssignmentExpression(this);
   }
 }

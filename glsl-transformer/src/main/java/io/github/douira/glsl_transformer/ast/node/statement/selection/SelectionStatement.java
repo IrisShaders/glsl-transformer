@@ -61,11 +61,13 @@ public class SelectionStatement extends ManyStatement {
 
   @Override
   public void enterNode(ASTListener listener) {
+    super.enterNode(listener);
     listener.enterSelectionStatement(this);
   }
 
   @Override
   public void exitNode(ASTListener listener) {
+    super.exitNode(listener);
     listener.exitSelectionStatement(this);
   }
 }

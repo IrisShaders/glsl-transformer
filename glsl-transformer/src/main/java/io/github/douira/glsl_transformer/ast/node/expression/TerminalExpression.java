@@ -18,11 +18,13 @@ public abstract class TerminalExpression extends Expression {
 
   @Override
   public void enterNode(ASTListener listener) {
+    super.enterNode(listener);
     // terminal expressions have no children
   }
 
   @Override
   public void exitNode(ASTListener listener) {
+    super.exitNode(listener);
     // terminal expressions have no children
   }
 }
