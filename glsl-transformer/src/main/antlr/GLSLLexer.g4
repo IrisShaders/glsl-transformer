@@ -7,17 +7,17 @@ channels {
 }
 
 //GLSL token utilities
-fragment DECIMAL_DIGITS: '0' | ('1' ..'9' DIGIT*);
-fragment OCTAL_DIGITS: '0' '0' ..'7'+;
-fragment HEX_DIGITS: '0x' (DIGIT | 'a' ..'f' | 'A' ..'F')+;
-fragment DIGIT: '0' ..'9';
+fragment DECIMAL_DIGITS: '0' | ('1' .. '9' DIGIT*); //no leading 0
+fragment OCTAL_DIGITS: '0' ('0' .. '7')+;
+fragment HEX_DIGITS: '0x' (DIGIT | 'a' .. 'f' | 'A' .. 'F')+;
+fragment DIGIT: '0' .. '9';
 fragment FLOAT_DIGITS: ((DIGIT+ ('.' DIGIT*)?) | ('.' DIGIT+)) (
 		('e' | 'E') ('+' | '-')? DIGIT*
 	)?;
-fragment IDENTIFIER_frag: ('a' ..'z' | 'A' ..'Z' | '_') (
+fragment IDENTIFIER_frag: ('a' .. 'z' | 'A' .. 'Z' | '_') (
 		DIGIT
-		| 'a' ..'z'
-		| 'A' ..'Z'
+		| 'a' .. 'z'
+		| 'A' .. 'Z'
 		| '_'
 	)*;
 fragment WS_frag: [\t\r\u000C ]+;
