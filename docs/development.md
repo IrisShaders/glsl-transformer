@@ -31,12 +31,30 @@ gpg --list-keys --keyid-format short
 
 ## AST Development
 
+### AST Node Registration
+
 Locations in which a new AST node class `Foo` has to be registered:
 
 - `ASTVisitor`: method `default R visitFoo(Foo node)` that can be called by `Foo`'s `accept` method and visits all nested members of a `Foo` instance
 - `ASTListener`: if `Foo` is a `InnerASTNode`, empty methods `default void enterFoo(Foo node)` and `default void exitFoo(Foo node)` that can be called by `Foo`'s `enterNode` and `exitNode` methods
 - `ASTPrinter`: if `Foo` isn't just a superclass, a visitor and/or listener method implementation that emits tokens for printing a `Foo` instance
 - `ASTBuilder`: if `Foo` isn't just a superclass, a parse tree visitor method implementation that constructs a new `Foo` instance from the parse tree
+
+### AST Node Class Structure
+
+Each `ASTNode` extending class has the following parts, some of which are optional:
+
+- `public (abstract) class Foo extends ASTNode` or other subclass
+- An internal enum and the corresponding abstract get method (repeat 0..n times)
+- public static fields
+- protected fields
+- private fields
+- constructors
+- own abstract methods
+- public non-inherited methods (like getters/setters)
+- implementations of enum getters
+- other inherited methods of the closest subclass
+- inherited methods: `accept` or `footypeAccept`, optionally `enterFoo` and `exitFoo`
 
 ### Mass file generation
 

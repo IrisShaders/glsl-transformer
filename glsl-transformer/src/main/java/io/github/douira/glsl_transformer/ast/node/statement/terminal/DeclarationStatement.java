@@ -1,20 +1,20 @@
 package io.github.douira.glsl_transformer.ast.node.statement.terminal;
 
-import io.github.douira.glsl_transformer.ast.node.basic.InnerASTNode;
+import io.github.douira.glsl_transformer.ast.declaration.Declaration;
 import io.github.douira.glsl_transformer.ast.traversal.*;
 
 public class DeclarationStatement extends SemiTerminalStatement {
-  protected InnerASTNode declaration; // TODO: Declaration
+  protected Declaration declaration;
 
-  public DeclarationStatement(InnerASTNode declaration) {
+  public DeclarationStatement(Declaration declaration) {
     this.declaration = setup(declaration);
   }
 
-  public InnerASTNode getDeclaration() {
+  public Declaration getDeclaration() {
     return declaration;
   }
 
-  public void setDeclaration(InnerASTNode declaration) {
+  public void setDeclaration(Declaration declaration) {
     updateParents(this.declaration, declaration);
     this.declaration = declaration;
   }

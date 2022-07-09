@@ -8,9 +8,6 @@ import io.github.douira.glsl_transformer.ast.node.basic.ASTNode;
 import io.github.douira.glsl_transformer.ast.traversal.ASTVisitor;
 
 public class VersionStatement extends ASTNode {
-  public int version;
-  public Profile profile; // TODO: nullable
-
   public enum Profile implements TokenAssociatedEnum {
     CORE(GLSLLexer.NR_CORE),
     COMPATIBILITY(GLSLLexer.NR_COMPATIBILITY),
@@ -31,6 +28,9 @@ public class VersionStatement extends ASTNode {
       return TypeUtil.enumFromToken(Profile.values(), token);
     }
   }
+
+  public int version;
+  public Profile profile; // TODO: nullable
 
   public VersionStatement(int version, Profile profile) {
     this.version = version;

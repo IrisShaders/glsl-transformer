@@ -8,9 +8,10 @@ import org.antlr.v4.runtime.tree.*;
 
 import io.github.douira.glsl_transformer.*;
 import io.github.douira.glsl_transformer.GLSLParser.*;
+import io.github.douira.glsl_transformer.ast.declaration.Declaration;
 import io.github.douira.glsl_transformer.ast.node.*;
 import io.github.douira.glsl_transformer.ast.node.VersionStatement.Profile;
-import io.github.douira.glsl_transformer.ast.node.basic.*;
+import io.github.douira.glsl_transformer.ast.node.basic.ASTNode;
 import io.github.douira.glsl_transformer.ast.node.expression.*;
 import io.github.douira.glsl_transformer.ast.node.expression.LiteralExpression.IntegerFormat;
 import io.github.douira.glsl_transformer.ast.node.expression.binary.*;
@@ -23,6 +24,9 @@ import io.github.douira.glsl_transformer.ast.node.statement.*;
 import io.github.douira.glsl_transformer.ast.node.statement.loop.*;
 import io.github.douira.glsl_transformer.ast.node.statement.selection.*;
 import io.github.douira.glsl_transformer.ast.node.statement.terminal.*;
+import io.github.douira.glsl_transformer.ast.node.type.FullySpecifiedType;
+import io.github.douira.glsl_transformer.ast.node.type.initializer.Initializer;
+import io.github.douira.glsl_transformer.ast.node.type.qualifier.LayoutQualifier;
 import io.github.douira.glsl_transformer.ast.query.Root;
 import io.github.douira.glsl_transformer.parse_ast.Type;
 
@@ -115,8 +119,8 @@ public class ASTBuilder extends GLSLParserBaseVisitor<ASTNode> {
 
   @Override
   public FunctionCallExpression visitFunctionCallExpression(FunctionCallExpressionContext ctx) {
-    return new FunctionCallExpression(
-        (InnerASTNode) visit(ctx.functionCall())); // TODO: FunctionCall
+    // TODO: actual function call building
+    return null;
   }
 
   @Override
@@ -406,8 +410,8 @@ public class ASTBuilder extends GLSLParserBaseVisitor<ASTNode> {
   }
 
   @Override
-  public InnerASTNode visitLayoutQualifier(LayoutQualifierContext ctx) {
-    return (InnerASTNode) super.visitLayoutQualifier(ctx); // TODO: LayoutQualifier
+  public LayoutQualifier visitLayoutQualifier(LayoutQualifierContext ctx) {
+    return (LayoutQualifier) super.visitLayoutQualifier(ctx); // TODO: LayoutQualifier
   }
 
   @Override
@@ -450,7 +454,7 @@ public class ASTBuilder extends GLSLParserBaseVisitor<ASTNode> {
 
   @Override
   public DeclarationStatement visitDeclarationStatement(DeclarationStatementContext ctx) {
-    return new DeclarationStatement((InnerASTNode) visit(ctx.getChild(0))); // TODO: Declaration
+    return new DeclarationStatement((Declaration) visit(ctx.getChild(0))); // TODO: Declaration
   }
 
   @Override
@@ -510,7 +514,7 @@ public class ASTBuilder extends GLSLParserBaseVisitor<ASTNode> {
   @Override
   public ForLoopStatement visitForStatement(ForStatementContext ctx) {
     Expression initExpression = null;
-    InnerASTNode initDeclaration = null; // TODO: Declaration
+    Declaration initDeclaration = null; // TODO: Declaration
     Expression condition = null;
     IterationConditionInitializer iterationConditionInitializer = null;
     Expression incrementer = null;
@@ -521,7 +525,7 @@ public class ASTBuilder extends GLSLParserBaseVisitor<ASTNode> {
     } else {
       var initDeclarationStatement = ctx.declarationStatement();
       if (initDeclarationStatement != null) {
-        initDeclaration = (InnerASTNode) visit(initDeclarationStatement.declaration());
+        initDeclaration = (Declaration) visit(initDeclarationStatement.declaration());
       }
     }
 
@@ -566,8 +570,8 @@ public class ASTBuilder extends GLSLParserBaseVisitor<ASTNode> {
   public IterationConditionInitializer visitIterationCondition(IterationConditionContext ctx) {
     // TODO: FullySpecifiedType and Initalizer
     return new IterationConditionInitializer(
-        (InnerASTNode) visit(ctx.fullySpecifiedType()),
-        (InnerASTNode) visit(ctx.initializer()));
+        (FullySpecifiedType) visit(ctx.fullySpecifiedType()),
+        (Initializer) visit(ctx.initializer()));
   }
 
   @Override

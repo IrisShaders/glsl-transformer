@@ -1,14 +1,14 @@
 package io.github.douira.glsl_transformer.ast.node.statement.loop;
 
+import io.github.douira.glsl_transformer.ast.declaration.Declaration;
 import io.github.douira.glsl_transformer.ast.node.IterationConditionInitializer;
-import io.github.douira.glsl_transformer.ast.node.basic.InnerASTNode;
 import io.github.douira.glsl_transformer.ast.node.expression.Expression;
 import io.github.douira.glsl_transformer.ast.node.statement.Statement;
 import io.github.douira.glsl_transformer.ast.traversal.*;
 
 public class ForLoopStatement extends LoopStatement {
   protected Expression initExpression; // TODO: nullable
-  protected InnerASTNode initDeclaration; // TODO: nullable, Declaration
+  protected Declaration initDeclaration; // TODO: nullable
   protected Expression condition; // TODO: nullable
   protected IterationConditionInitializer iterationConditionInitializer; // TODO: nullable
   protected Expression incrementer; // TODO: nullable
@@ -26,7 +26,7 @@ public class ForLoopStatement extends LoopStatement {
 
   public ForLoopStatement(
       Statement statement,
-      InnerASTNode initDeclaration,
+      Declaration initDeclaration,
       Expression condition,
       Expression incrementer) {
     super(statement);
@@ -48,7 +48,7 @@ public class ForLoopStatement extends LoopStatement {
 
   public ForLoopStatement(
       Statement statement,
-      InnerASTNode initDeclaration,
+      Declaration initDeclaration,
       IterationConditionInitializer iterationConditionInitializer,
       Expression incrementer) {
     super(statement);
@@ -63,7 +63,7 @@ public class ForLoopStatement extends LoopStatement {
 
   public ForLoopStatement(
       Expression initExpression,
-      InnerASTNode initDeclaration,
+      Declaration initDeclaration,
       Expression condition,
       IterationConditionInitializer iterationConditionInitializer,
       Expression incrementer,
@@ -85,11 +85,11 @@ public class ForLoopStatement extends LoopStatement {
     this.initExpression = initExpression;
   }
 
-  public InnerASTNode getInitDeclaration() {
+  public Declaration getInitDeclaration() {
     return initDeclaration;
   }
 
-  public void setInitDeclaration(InnerASTNode initDeclaration) {
+  public void setInitDeclaration(Declaration initDeclaration) {
     updateParents(this.initDeclaration, initDeclaration);
     this.initDeclaration = initDeclaration;
   }

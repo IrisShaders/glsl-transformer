@@ -4,13 +4,10 @@ import org.antlr.v4.runtime.Token;
 
 import io.github.douira.glsl_transformer.GLSLLexer;
 import io.github.douira.glsl_transformer.ast.data.*;
-import io.github.douira.glsl_transformer.ast.node.basic.InnerASTNode;
+import io.github.douira.glsl_transformer.ast.node.type.qualifier.LayoutQualifier;
 import io.github.douira.glsl_transformer.ast.traversal.*;
 
 public class LayoutDefaults extends ExternalDeclaration {
-  protected InnerASTNode qualifier; // TODO: LayoutQualifier
-  public LayoutMode mode;
-
   public enum LayoutMode implements TokenAssociatedEnum {
     UNIFORM(GLSLLexer.UNIFORM),
     IN(GLSLLexer.IN),
@@ -33,16 +30,19 @@ public class LayoutDefaults extends ExternalDeclaration {
     }
   }
 
-  public LayoutDefaults(InnerASTNode qualifier, LayoutMode mode) {
+  protected LayoutQualifier qualifier;
+  public LayoutMode mode;
+
+  public LayoutDefaults(LayoutQualifier qualifier, LayoutMode mode) {
     this.qualifier = setup(qualifier);
     this.mode = mode;
   }
 
-  public InnerASTNode getQualifier() {
+  public LayoutQualifier getQualifier() {
     return qualifier;
   }
 
-  public void setQualifier(InnerASTNode qualifier) {
+  public void setQualifier(LayoutQualifier qualifier) {
     updateParents(this.qualifier, qualifier);
     this.qualifier = qualifier;
   }

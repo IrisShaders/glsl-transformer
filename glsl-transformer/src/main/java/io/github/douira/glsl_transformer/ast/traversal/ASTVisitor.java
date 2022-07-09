@@ -44,7 +44,7 @@ public interface ASTVisitor<R> extends GeneralASTVisitor<R> {
   }
 
   default R visitLayoutDefaults(LayoutDefaults node) {
-    return visit(node.getQualifier()); // TODO: LayoutQualifier
+    return visit(node.getQualifier());
   }
 
   default R visitExpression(Expression node) {
@@ -72,7 +72,11 @@ public interface ASTVisitor<R> extends GeneralASTVisitor<R> {
   }
 
   default R visitFunctionCallExpression(FunctionCallExpression node) {
-    return visit(node.getFunctionCall()); // TODO: FunctionCall
+    return visitChildren(
+        visitTwoChildren(
+            node.getFunctionName(),
+            node.getFunctionSpecifier()),
+        node.getParameters());
   }
 
   default R visitGroupingExpression(GroupingExpression node) {
