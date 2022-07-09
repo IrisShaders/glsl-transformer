@@ -179,7 +179,6 @@ attribute:
 		COMMA attributes += singleAttribute
 	)* RBRACKET RBRACKET;
 
-//constant expression
 singleAttribute:
 	(prefix = IDENTIFIER COLON COLON)? name = IDENTIFIER (
 		LPAREN content = expression RPAREN

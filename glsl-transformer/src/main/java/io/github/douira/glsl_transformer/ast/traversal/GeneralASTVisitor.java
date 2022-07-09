@@ -1,11 +1,13 @@
 package io.github.douira.glsl_transformer.ast.traversal;
 
+import java.util.List;
+
 import io.github.douira.glsl_transformer.ast.node.basic.*;
 
 public interface GeneralASTVisitor<R> {
   default R startVisit(ASTNode node) {
     return visit(node);
-  };
+  }
 
   R visit(ASTNode node);
 
@@ -15,18 +17,28 @@ public interface GeneralASTVisitor<R> {
 
   default R visitSafe(R previousResult, ASTNode node) {
     return node == null ? previousResult : visit(previousResult, node);
-  };
+  }
 
-  default R visitChildren(R previousResult, ListNode<? extends ASTNode> node) {
-    for (var child : node.getChildren()) {
-      previousResult = visitSafe(previousResult, child);
+  default R visitChildren(R previousResult, List<? extends ASTNode> children) {
+    if (children != null) {
+      for (var child : children) {
+        previousResult = visitSafe(previousResult, child);
+      }
     }
     return previousResult;
-  };
+  }
+
+  default R visitChildren(R previousResult, ListNode<? extends ASTNode> node) {
+    return visitChildren(previousResult, node.getChildren());
+  }
+
+  default R visitChildren(List<? extends ASTNode> children) {
+    return visitChildren(initialResult(), children);
+  }
 
   default R visitChildren(ListNode<? extends ASTNode> node) {
-    return visitChildren(initialResult(), node);
-  };
+    return visitChildren(node.getChildren());
+  }
 
   default R visitTwoChildren(ASTNode left, ASTNode right) {
     var result = initialResult();

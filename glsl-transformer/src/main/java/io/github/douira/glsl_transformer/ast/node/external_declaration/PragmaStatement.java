@@ -7,11 +7,6 @@ import io.github.douira.glsl_transformer.ast.data.*;
 import io.github.douira.glsl_transformer.ast.traversal.ASTVisitor;
 
 public class PragmaStatement extends ExternalDeclaration {
-  public boolean stdGL;
-  public PragmaType type;
-  public String customName;
-  public PragmaState state;
-
   public enum PragmaType implements TokenAssociatedEnum {
     DEBUG(GLSLLexer.PRAGMA_DEBUG),
     OPTIMIZE(GLSLLexer.PRAGMA_OPTIMIZE),
@@ -54,6 +49,11 @@ public class PragmaStatement extends ExternalDeclaration {
       return TypeUtil.enumFromToken(PragmaState.values(), token);
     }
   }
+
+  public boolean stdGL;
+  public PragmaType type;
+  public String customName;
+  public PragmaState state;
 
   public PragmaStatement(boolean stdGL, String customPragmaName) {
     this.stdGL = stdGL;
