@@ -1,6 +1,6 @@
-package io.github.douira.glsl_transformer.ast.declaration;
+package io.github.douira.glsl_transformer.ast.node.declaration;
 
-import io.github.douira.glsl_transformer.ast.declaration.Declaration.DeclarationType;
+import io.github.douira.glsl_transformer.ast.node.declaration.Declaration.DeclarationType;
 import io.github.douira.glsl_transformer.ast.node.type.FullySpecifiedType;
 import io.github.douira.glsl_transformer.ast.traversal.*;
 

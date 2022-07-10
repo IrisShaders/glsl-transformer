@@ -8,10 +8,10 @@ import org.antlr.v4.runtime.tree.*;
 
 import io.github.douira.glsl_transformer.*;
 import io.github.douira.glsl_transformer.GLSLParser.*;
-import io.github.douira.glsl_transformer.ast.declaration.Declaration;
 import io.github.douira.glsl_transformer.ast.node.*;
 import io.github.douira.glsl_transformer.ast.node.VersionStatement.Profile;
 import io.github.douira.glsl_transformer.ast.node.basic.ASTNode;
+import io.github.douira.glsl_transformer.ast.node.declaration.Declaration;
 import io.github.douira.glsl_transformer.ast.node.expression.*;
 import io.github.douira.glsl_transformer.ast.node.expression.LiteralExpression.IntegerFormat;
 import io.github.douira.glsl_transformer.ast.node.expression.binary.*;

@@ -1,4 +1,4 @@
-package io.github.douira.glsl_transformer.ast.declaration;
+package io.github.douira.glsl_transformer.ast.node.declaration;
 
 import io.github.douira.glsl_transformer.ast.node.type.qualifier.PrecisionQualifier;
 import io.github.douira.glsl_transformer.ast.node.type.specifier.TypeSpecifier;
