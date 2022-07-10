@@ -661,6 +661,17 @@ public class ASTBuilder extends GLSLParserBaseVisitor<ASTNode> {
   }
 
   @Override
+  public SharedLayoutQualifierPart visitSharedLayoutQualifier(SharedLayoutQualifierContext ctx) {
+    // TODO Auto-generated method stub
+    // return super.visitSharedLayoutQualifier(ctx);
+    return null;
+  }
+
+  public LayoutQualifierPart visitLayoutQualifierPart(LayoutQualifierIdContext ctx) {
+    return (LayoutQualifierPart) visit(ctx);
+  }
+
+  @Override
   public FunctionParameter visitParameterDeclaration(ParameterDeclarationContext ctx) {
     // TODO Auto-generated method stub
     // return super.visitParameterDeclaration(ctx);
@@ -685,13 +696,6 @@ public class ASTBuilder extends GLSLParserBaseVisitor<ASTNode> {
   public PrecisionQualifier visitPrecisionQualifier(PrecisionQualifierContext ctx) {
     // TODO Auto-generated method stub
     // return super.visitPrecisionQualifier(ctx);
-    return null;
-  }
-
-  @Override
-  public SharedLayoutQualifierPart visitSharedLayoutQualifier(SharedLayoutQualifierContext ctx) {
-    // TODO Auto-generated method stub
-    // return super.visitSharedLayoutQualifier(ctx);
     return null;
   }
 
@@ -732,9 +736,23 @@ public class ASTBuilder extends GLSLParserBaseVisitor<ASTNode> {
   }
 
   @Override
-  public ASTNode visitStructSpecifierType(StructSpecifierTypeContext ctx) {
+  public ASTNode visitBuiltinTypeSpecifierFixed(BuiltinTypeSpecifierFixedContext ctx) {
     // TODO Auto-generated method stub
-    // return super.visitStructSpecifierType(ctx);
+    // return super.visitBuiltinTypeSpecifierFixed(ctx);
+    return null;
+  }
+
+  @Override
+  public ASTNode visitBuiltinTypeSpecifierParseable(BuiltinTypeSpecifierParseableContext ctx) {
+    // TODO Auto-generated method stub
+    // return super.visitBuiltinTypeSpecifierParseable(ctx);
+    return null;
+  }
+
+  @Override
+  public ASTNode visitTypeSpecifierNonarray(TypeSpecifierNonarrayContext ctx) {
+    // TODO Auto-generated method stub
+    // return super.visitTypeSpecifierNonarray(ctx);
     return null;
   }
 
@@ -767,7 +785,7 @@ public class ASTBuilder extends GLSLParserBaseVisitor<ASTNode> {
   }
 
   public Declaration visitDeclaration(DeclarationContext ctx) {
-    return (Declaration) ctx.accept(this);
+    return (Declaration) visit(ctx);
   }
 
   // TODO visits

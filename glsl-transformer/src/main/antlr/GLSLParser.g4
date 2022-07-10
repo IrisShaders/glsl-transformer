@@ -253,164 +253,164 @@ arraySpecifierSegment: (LBRACKET expression? RBRACKET);
 
 //TYPE_NAME instead of IDENTIFIER in the spec
 typeSpecifierNonarray:
-	builtinTypeSpecifierFixed				# builtinType
-	| builtinTypeSpecifierParseable	# builtinType
-	| structSpecifier								# structSpecifierType
-	| IDENTIFIER										# referencedType;
+	builtinTypeSpecifierFixed
+	| builtinTypeSpecifierParseable
+	| structSpecifier
+	| IDENTIFIER;
 
 builtinTypeSpecifierParseable:
-	BOOL				# booleanType
-	| BVEC2			# booleanVectorType
-	| BVEC3			# booleanVectorType
-	| BVEC4			# booleanVectorType
-	| FLOAT16		# floatType
-	| F16VEC2		# floatVectorType
-	| F16VEC3		# floatVectorType
-	| F16VEC4		# floatVectorType
-	| F16MAT2X2	# floatMatrixType
-	| F16MAT2X3	# floatMatrixType
-	| F16MAT2X4	# floatMatrixType
-	| F16MAT3X2	# floatMatrixType
-	| F16MAT3X3	# floatMatrixType
-	| F16MAT3X4	# floatMatrixType
-	| F16MAT4X2	# floatMatrixType
-	| F16MAT4X3	# floatMatrixType
-	| F16MAT4X4	# floatMatrixType
-	| FLOAT32		# floatType
-	| F32VEC2		# floatVectorType
-	| F32VEC3		# floatVectorType
-	| F32VEC4		# floatVectorType
-	| F32MAT2X2	# floatMatrixType
-	| F32MAT2X3	# floatMatrixType
-	| F32MAT2X4	# floatMatrixType
-	| F32MAT3X2	# floatMatrixType
-	| F32MAT3X3	# floatMatrixType
-	| F32MAT3X4	# floatMatrixType
-	| F32MAT4X2	# floatMatrixType
-	| F32MAT4X3	# floatMatrixType
-	| F32MAT4X4	# floatMatrixType
-	| FLOAT64		# floatType
-	| F64VEC2		# floatVectorType
-	| F64VEC3		# floatVectorType
-	| F64VEC4		# floatVectorType
-	| F64MAT2X2	# floatMatrixType
-	| F64MAT2X3	# floatMatrixType
-	| F64MAT2X4	# floatMatrixType
-	| F64MAT3X2	# floatMatrixType
-	| F64MAT3X3	# floatMatrixType
-	| F64MAT3X4	# floatMatrixType
-	| F64MAT4X2	# floatMatrixType
-	| F64MAT4X3	# floatMatrixType
-	| F64MAT4X4	# floatMatrixType
-	| INT8			# integerType
-	| I8VEC2		# integerVectorType
-	| I8VEC3		# integerVectorType
-	| I8VEC4		# integerVectorType
-	| UINT8			# integerType
-	| UI8VEC2		# integerVectorType
-	| UI8VEC3		# integerVectorType
-	| UI8VEC4		# integerVectorType
-	| INT16			# integerType
-	| I16VEC2		# integerVectorType
-	| I16VEC3		# integerVectorType
-	| I16VEC4		# integerVectorType
-	| UINT16		# integerType
-	| UI16VEC2	# integerVectorType
-	| UI16VEC3	# integerVectorType
-	| UI16VEC4	# integerVectorType
-	| INT32			# integerType
-	| I32VEC2		# integerVectorType
-	| I32VEC3		# integerVectorType
-	| I32VEC4		# integerVectorType
-	| UINT32		# integerType
-	| UI32VEC2	# integerVectorType
-	| UI32VEC3	# integerVectorType
-	| UI32VEC4	# integerVectorType
-	| INT64			# integerType
-	| I64VEC2		# integerVectorType
-	| I64VEC3		# integerVectorType
-	| I64VEC4		# integerVectorType
-	| UINT64		# integerType
-	| UI64VEC2	# integerVectorType
-	| UI64VEC3	# integerVectorType
-	| UI64VEC4	# integerVectorType;
+	BOOL
+	| BVEC2
+	| BVEC3
+	| BVEC4
+	| FLOAT16
+	| F16VEC2
+	| F16VEC3
+	| F16VEC4
+	| F16MAT2X2
+	| F16MAT2X3
+	| F16MAT2X4
+	| F16MAT3X2
+	| F16MAT3X3
+	| F16MAT3X4
+	| F16MAT4X2
+	| F16MAT4X3
+	| F16MAT4X4
+	| FLOAT32
+	| F32VEC2
+	| F32VEC3
+	| F32VEC4
+	| F32MAT2X2
+	| F32MAT2X3
+	| F32MAT2X4
+	| F32MAT3X2
+	| F32MAT3X3
+	| F32MAT3X4
+	| F32MAT4X2
+	| F32MAT4X3
+	| F32MAT4X4
+	| FLOAT64
+	| F64VEC2
+	| F64VEC3
+	| F64VEC4
+	| F64MAT2X2
+	| F64MAT2X3
+	| F64MAT2X4
+	| F64MAT3X2
+	| F64MAT3X3
+	| F64MAT3X4
+	| F64MAT4X2
+	| F64MAT4X3
+	| F64MAT4X4
+	| INT8
+	| I8VEC2
+	| I8VEC3
+	| I8VEC4
+	| UINT8
+	| UI8VEC2
+	| UI8VEC3
+	| UI8VEC4
+	| INT16
+	| I16VEC2
+	| I16VEC3
+	| I16VEC4
+	| UINT16
+	| UI16VEC2
+	| UI16VEC3
+	| UI16VEC4
+	| INT32
+	| I32VEC2
+	| I32VEC3
+	| I32VEC4
+	| UINT32
+	| UI32VEC2
+	| UI32VEC3
+	| UI32VEC4
+	| INT64
+	| I64VEC2
+	| I64VEC3
+	| I64VEC4
+	| UINT64
+	| UI64VEC2
+	| UI64VEC3
+	| UI64VEC4;
 
 builtinTypeSpecifierFixed:
-	VOID											# voidType
-	| ATOMIC_UINT							# atomicUnitType
-	| SAMPLER2D								# samplerType
-	| SAMPLER3D								# samplerType
-	| SAMPLERCUBE							# samplerType
-	| SAMPLER2DSHADOW					# samplerType
-	| SAMPLERCUBESHADOW				# samplerType
-	| SAMPLER2DARRAY					# samplerType
-	| SAMPLER2DARRAYSHADOW		# samplerType
-	| SAMPLERCUBEARRAY				# samplerType
-	| SAMPLERCUBEARRAYSHADOW	# samplerType
-	| ISAMPLER2D							# samplerType
-	| ISAMPLER3D							# samplerType
-	| ISAMPLERCUBE						# samplerType
-	| ISAMPLER2DARRAY					# samplerType
-	| ISAMPLERCUBEARRAY				# samplerType
-	| USAMPLER2D							# samplerType
-	| USAMPLER3D							# samplerType
-	| USAMPLERCUBE						# samplerType
-	| USAMPLER2DARRAY					# samplerType
-	| USAMPLERCUBEARRAY				# samplerType
-	| SAMPLER1D								# samplerType
-	| SAMPLER1DSHADOW					# samplerType
-	| SAMPLER1DARRAY					# samplerType
-	| SAMPLER1DARRAYSHADOW		# samplerType
-	| ISAMPLER1D							# samplerType
-	| ISAMPLER1DARRAY					# samplerType
-	| USAMPLER1D							# samplerType
-	| USAMPLER1DARRAY					# samplerType
-	| SAMPLER2DRECT						# samplerType
-	| SAMPLER2DRECTSHADOW			# samplerType
-	| ISAMPLER2DRECT					# samplerType
-	| USAMPLER2DRECT					# samplerType
-	| SAMPLERBUFFER						# samplerType
-	| ISAMPLERBUFFER					# samplerType
-	| USAMPLERBUFFER					# samplerType
-	| SAMPLER2DMS							# samplerType
-	| ISAMPLER2DMS						# samplerType
-	| USAMPLER2DMS						# samplerType
-	| SAMPLER2DMSARRAY				# samplerType
-	| ISAMPLER2DMSARRAY				# samplerType
-	| USAMPLER2DMSARRAY				# samplerType
-	| IMAGE2D									# imageType
-	| IIMAGE2D								# imageType
-	| UIMAGE2D								# imageType
-	| IMAGE3D									# imageType
-	| IIMAGE3D								# imageType
-	| UIMAGE3D								# imageType
-	| IMAGECUBE								# imageType
-	| IIMAGECUBE							# imageType
-	| UIMAGECUBE							# imageType
-	| IMAGEBUFFER							# imageType
-	| IIMAGEBUFFER						# imageType
-	| UIMAGEBUFFER						# imageType
-	| IMAGE1D									# imageType
-	| IIMAGE1D								# imageType
-	| UIMAGE1D								# imageType
-	| IMAGE1DARRAY						# imageType
-	| IIMAGE1DARRAY						# imageType
-	| UIMAGE1DARRAY						# imageType
-	| IMAGE2DRECT							# imageType
-	| IIMAGE2DRECT						# imageType
-	| UIMAGE2DRECT						# imageType
-	| IMAGE2DARRAY						# imageType
-	| IIMAGE2DARRAY						# imageType
-	| UIMAGE2DARRAY						# imageType
-	| IMAGECUBEARRAY					# imageType
-	| IIMAGECUBEARRAY					# imageType
-	| UIMAGECUBEARRAY					# imageType
-	| IMAGE2DMS								# imageType
-	| IIMAGE2DMS							# imageType
-	| UIMAGE2DMS							# imageType
-	| IMAGE2DMSARRAY					# imageType
-	| IIMAGE2DMSARRAY					# imageType
-	| UIMAGE2DMSARRAY					# imageType;
+	VOID
+	| ATOMIC_UINT
+	| SAMPLER2D
+	| SAMPLER3D
+	| SAMPLERCUBE
+	| SAMPLER2DSHADOW
+	| SAMPLERCUBESHADOW
+	| SAMPLER2DARRAY
+	| SAMPLER2DARRAYSHADOW
+	| SAMPLERCUBEARRAY
+	| SAMPLERCUBEARRAYSHADOW
+	| ISAMPLER2D
+	| ISAMPLER3D
+	| ISAMPLERCUBE
+	| ISAMPLER2DARRAY
+	| ISAMPLERCUBEARRAY
+	| USAMPLER2D
+	| USAMPLER3D
+	| USAMPLERCUBE
+	| USAMPLER2DARRAY
+	| USAMPLERCUBEARRAY
+	| SAMPLER1D
+	| SAMPLER1DSHADOW
+	| SAMPLER1DARRAY
+	| SAMPLER1DARRAYSHADOW
+	| ISAMPLER1D
+	| ISAMPLER1DARRAY
+	| USAMPLER1D
+	| USAMPLER1DARRAY
+	| SAMPLER2DRECT
+	| SAMPLER2DRECTSHADOW
+	| ISAMPLER2DRECT
+	| USAMPLER2DRECT
+	| SAMPLERBUFFER
+	| ISAMPLERBUFFER
+	| USAMPLERBUFFER
+	| SAMPLER2DMS
+	| ISAMPLER2DMS
+	| USAMPLER2DMS
+	| SAMPLER2DMSARRAY
+	| ISAMPLER2DMSARRAY
+	| USAMPLER2DMSARRAY
+	| IMAGE2D
+	| IIMAGE2D
+	| UIMAGE2D
+	| IMAGE3D
+	| IIMAGE3D
+	| UIMAGE3D
+	| IMAGECUBE
+	| IIMAGECUBE
+	| UIMAGECUBE
+	| IMAGEBUFFER
+	| IIMAGEBUFFER
+	| UIMAGEBUFFER
+	| IMAGE1D
+	| IIMAGE1D
+	| UIMAGE1D
+	| IMAGE1DARRAY
+	| IIMAGE1DARRAY
+	| UIMAGE1DARRAY
+	| IMAGE2DRECT
+	| IIMAGE2DRECT
+	| UIMAGE2DRECT
+	| IMAGE2DARRAY
+	| IIMAGE2DARRAY
+	| UIMAGE2DARRAY
+	| IMAGECUBEARRAY
+	| IIMAGECUBEARRAY
+	| UIMAGECUBEARRAY
+	| IMAGE2DMS
+	| IIMAGE2DMS
+	| UIMAGE2DMS
+	| IMAGE2DMSARRAY
+	| IIMAGE2DMSARRAY
+	| UIMAGE2DMSARRAY;
 
 structSpecifier: STRUCT IDENTIFIER? structBody;
 
