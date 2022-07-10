@@ -1,6 +1,7 @@
 package io.github.douira.glsl_transformer.ast.traversal;
 
-import io.github.douira.glsl_transformer.ast.node.TranslationUnit;
+import io.github.douira.glsl_transformer.ast.node.*;
+import io.github.douira.glsl_transformer.ast.node.declaration.*;
 import io.github.douira.glsl_transformer.ast.node.expression.*;
 import io.github.douira.glsl_transformer.ast.node.expression.binary.*;
 import io.github.douira.glsl_transformer.ast.node.expression.unary.*;
@@ -9,6 +10,11 @@ import io.github.douira.glsl_transformer.ast.node.statement.*;
 import io.github.douira.glsl_transformer.ast.node.statement.loop.*;
 import io.github.douira.glsl_transformer.ast.node.statement.selection.*;
 import io.github.douira.glsl_transformer.ast.node.statement.terminal.*;
+import io.github.douira.glsl_transformer.ast.node.type.FullySpecifiedType;
+import io.github.douira.glsl_transformer.ast.node.type.initializer.*;
+import io.github.douira.glsl_transformer.ast.node.type.qualifier.*;
+import io.github.douira.glsl_transformer.ast.node.type.specifier.*;
+import io.github.douira.glsl_transformer.ast.node.type.struct.*;
 
 /**
  * The AST listener interface has a method for entering and exiting each
@@ -428,4 +434,173 @@ public interface ASTListener extends GeneralASTListener {
 
   default void exitCaseStatement(CaseStatement node) {
   }
+
+  default void enterDeclaration(Declaration node) {
+  }
+
+  default void exitDeclaration(Declaration node) {
+  }
+
+  default void enterDeclarationMember(DeclarationMember node) {
+  }
+
+  default void exitDeclarationMember(DeclarationMember node) {
+  }
+
+  default void enterFullTypeParameter(FullTypeParameter node) {
+  }
+
+  default void exitFullTypeParameter(FullTypeParameter node) {
+  }
+
+  default void enterFunctionDeclaration(FunctionDeclaration node) {
+  }
+
+  default void exitFunctionDeclaration(FunctionDeclaration node) {
+  }
+
+  default void enterFunctionParameter(FunctionParameter node) {
+  }
+
+  default void exitFunctionParameter(FunctionParameter node) {
+  }
+
+  default void enterInterfaceBlockDeclaration(InterfaceBlockDeclaration node) {
+  }
+
+  default void exitInterfaceBlockDeclaration(InterfaceBlockDeclaration node) {
+  }
+
+  default void enterNamedParameter(NamedParameter node) {
+  }
+
+  default void exitNamedParameter(NamedParameter node) {
+  }
+
+  default void enterPrecisionDeclaration(PrecisionDeclaration node) {
+  }
+
+  default void exitPrecisionDeclaration(PrecisionDeclaration node) {
+  }
+
+  default void enterTypeAndInitDeclaration(TypeAndInitDeclaration node) {
+  }
+
+  default void exitTypeAndInitDeclaration(TypeAndInitDeclaration node) {
+  }
+
+  default void enterVariableDeclaration(VariableDeclaration node) {
+  }
+
+  default void exitVariableDeclaration(VariableDeclaration node) {
+  }
+
+  default void enterExpressionInitializer(ExpressionInitializer node) {
+  }
+
+  default void exitExpressionInitializer(ExpressionInitializer node) {
+  }
+
+  default void enterInitializer(Initializer node) {
+  }
+
+  default void exitInitializer(Initializer node) {
+  }
+
+  default void enterNestedInitializer(NestedInitializer node) {
+  }
+
+  default void exitNestedInitializer(NestedInitializer node) {
+  }
+
+  default void enterLayoutQualifier(LayoutQualifier node) {
+  }
+
+  default void exitLayoutQualifier(LayoutQualifier node) {
+  }
+
+  default void enterLayoutQualifierPart(LayoutQualifierPart node) {
+  }
+
+  default void exitLayoutQualifierPart(LayoutQualifierPart node) {
+  }
+
+  default void enterNamedLayoutQualifierPart(NamedLayoutQualifierPart node) {
+  }
+
+  default void exitNamedLayoutQualifierPart(NamedLayoutQualifierPart node) {
+  }
+
+  default void enterStorageQualifier(StorageQualifier node) {
+  }
+
+  default void exitStorageQualifier(StorageQualifier node) {
+  }
+
+  default void enterTypeQualifier(TypeQualifier node) {
+  }
+
+  default void exitTypeQualifier(TypeQualifier node) {
+  }
+
+  default void enterTypeQualifierPart(TypeQualifierPart node) {
+  }
+
+  default void exitTypeQualifierPart(TypeQualifierPart node) {
+  }
+
+  default void enterArraySpecifier(ArraySpecifier node) {
+  }
+
+  default void exitArraySpecifier(ArraySpecifier node) {
+  }
+
+  default void enterTypeReference(TypeReference node) {
+  }
+
+  default void exitTypeReference(TypeReference node) {
+  }
+
+  default void enterTypeSpecifier(TypeSpecifier node) {
+  }
+
+  default void exitTypeSpecifier(TypeSpecifier node) {
+  }
+
+  default void enterStructBody(StructBody node) {
+  }
+
+  default void exitStructBody(StructBody node) {
+  }
+
+  default void enterStructDeclarator(StructDeclarator node) {
+  }
+
+  default void exitStructDeclarator(StructDeclarator node) {
+  }
+
+  default void enterStructMember(StructMember node) {
+  }
+
+  default void exitStructMember(StructMember node) {
+  }
+
+  default void enterStructSpecifier(StructSpecifier node) {
+  }
+
+  default void exitStructSpecifier(StructSpecifier node) {
+  }
+
+  default void enterFullySpecifiedType(FullySpecifiedType node) {
+  }
+
+  default void exitFullySpecifiedType(FullySpecifiedType node) {
+  }
+
+  default void enterIterationConditionInitializer(IterationConditionInitializer node) {
+  }
+
+  default void exitIterationConditionInitializer(IterationConditionInitializer node) {
+  }
+
 }
