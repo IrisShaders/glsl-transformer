@@ -372,143 +372,143 @@ public interface ASTVisitor<R> extends GeneralASTVisitor<R> {
   }
 
   default R visitDeclaration(Declaration node) {
-    throw new UnsupportedOperationException();
+    throw new UnsupportedOperationException(); // TODO
   }
 
   default R visitDeclarationMember(DeclarationMember node) {
-    throw new UnsupportedOperationException();
+    throw new UnsupportedOperationException(); // TODO
   }
 
   default R visitFullTypeParameter(FullTypeParameter node) {
-    throw new UnsupportedOperationException();
+    throw new UnsupportedOperationException(); // TODO
   }
 
   default R visitFunctionDeclaration(FunctionDeclaration node) {
-    throw new UnsupportedOperationException();
+    throw new UnsupportedOperationException(); // TODO
   }
 
   default R visitFunctionParameter(FunctionParameter node) {
-    throw new UnsupportedOperationException();
+    throw new UnsupportedOperationException(); // TODO
   }
 
   default R visitInterfaceBlockDeclaration(InterfaceBlockDeclaration node) {
-    throw new UnsupportedOperationException();
+    throw new UnsupportedOperationException(); // TODO
   }
 
   default R visitNamedParameter(NamedParameter node) {
-    throw new UnsupportedOperationException();
+    throw new UnsupportedOperationException(); // TODO
   }
 
   default R visitPrecisionDeclaration(PrecisionDeclaration node) {
-    throw new UnsupportedOperationException();
+    throw new UnsupportedOperationException(); // TODO
   }
 
   default R visitTypeAndInitDeclaration(TypeAndInitDeclaration node) {
-    throw new UnsupportedOperationException();
+    throw new UnsupportedOperationException(); // TODO
   }
 
   default R visitVariableDeclaration(VariableDeclaration node) {
-    throw new UnsupportedOperationException();
+    throw new UnsupportedOperationException(); // TODO
   }
 
   default R visitExpressionInitializer(ExpressionInitializer node) {
-    throw new UnsupportedOperationException();
+    throw new UnsupportedOperationException(); // TODO
   }
 
   default R visitInitializer(Initializer node) {
-    throw new UnsupportedOperationException();
+    throw new UnsupportedOperationException(); // TODO
   }
 
   default R visitNestedInitializer(NestedInitializer node) {
-    throw new UnsupportedOperationException();
+    throw new UnsupportedOperationException(); // TODO
   }
 
   default R visitInterpolationQualifier(InterpolationQualifier node) {
-    throw new UnsupportedOperationException();
+    throw new UnsupportedOperationException(); // TODO
   }
 
   default R visitInvariantQualifier(InvariantQualifier node) {
-    throw new UnsupportedOperationException();
+    throw new UnsupportedOperationException(); // TODO
   }
 
   default R visitLayoutQualifier(LayoutQualifier node) {
-    throw new UnsupportedOperationException();
+    throw new UnsupportedOperationException(); // TODO
   }
 
   default R visitLayoutQualifierPart(LayoutQualifierPart node) {
-    throw new UnsupportedOperationException();
+    throw new UnsupportedOperationException(); // TODO
   }
 
   default R visitNamedLayoutQualifierPart(NamedLayoutQualifierPart node) {
-    throw new UnsupportedOperationException();
+    throw new UnsupportedOperationException(); // TODO
   }
 
   default R visitPreciseQualifier(PreciseQualifier node) {
-    throw new UnsupportedOperationException();
+    throw new UnsupportedOperationException(); // TODO
   }
 
   default R visitPrecisionQualifier(PrecisionQualifier node) {
-    throw new UnsupportedOperationException();
+    throw new UnsupportedOperationException(); // TODO
   }
 
   default R visitSharedLayoutQualifierPart(SharedLayoutQualifierPart node) {
-    throw new UnsupportedOperationException();
+    throw new UnsupportedOperationException(); // TODO
   }
 
   default R visitStorageQualifier(StorageQualifier node) {
-    throw new UnsupportedOperationException();
+    throw new UnsupportedOperationException(); // TODO
   }
 
   default R visitTypeQualifier(TypeQualifier node) {
-    throw new UnsupportedOperationException();
+    throw new UnsupportedOperationException(); // TODO
   }
 
   default R visitTypeQualifierPart(TypeQualifierPart node) {
-    throw new UnsupportedOperationException();
+    throw new UnsupportedOperationException(); // TODO
   }
 
   default R visitArraySpecifier(ArraySpecifier node) {
-    throw new UnsupportedOperationException();
+    throw new UnsupportedOperationException(); // TODO
   }
 
   default R visitBuiltinFixedTypeSpecifier(BuiltinFixedTypeSpecifier node) {
-    throw new UnsupportedOperationException();
+    throw new UnsupportedOperationException(); // TODO
   }
 
   default R visitBuiltinNumericTypeSpecifier(BuiltinNumericTypeSpecifier node) {
-    throw new UnsupportedOperationException();
+    throw new UnsupportedOperationException(); // TODO
   }
 
   default R visitTypeReference(TypeReference node) {
-    throw new UnsupportedOperationException();
+    throw new UnsupportedOperationException(); // TODO
   }
 
   default R visitTypeSpecifier(TypeSpecifier node) {
-    throw new UnsupportedOperationException();
+    throw new UnsupportedOperationException(); // TODO
   }
 
   default R visitStructBody(StructBody node) {
-    throw new UnsupportedOperationException();
+    throw new UnsupportedOperationException(); // TODO
   }
 
   default R visitStructDeclarator(StructDeclarator node) {
-    throw new UnsupportedOperationException();
+    throw new UnsupportedOperationException(); // TODO
   }
 
   default R visitStructMember(StructMember node) {
-    throw new UnsupportedOperationException();
+    throw new UnsupportedOperationException(); // TODO
   }
 
   default R visitStructSpecifier(StructSpecifier node) {
-    throw new UnsupportedOperationException();
+    throw new UnsupportedOperationException(); // TODO
   }
 
   default R visitFullySpecifiedType(FullySpecifiedType node) {
-    throw new UnsupportedOperationException();
+    throw new UnsupportedOperationException(); // TODO
   }
 
   default R visitIterationConditionInitializer(IterationConditionInitializer node) {
-    throw new UnsupportedOperationException();
+    throw new UnsupportedOperationException(); // TODO
   }
 
   default R visitIdentifier(Identifier node) {
