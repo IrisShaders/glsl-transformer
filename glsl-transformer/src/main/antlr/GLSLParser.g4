@@ -146,8 +146,12 @@ expression:
 	| left = expression COMMA right = expression	# sequenceExpression;
 
 declaration:
-	functionPrototype SEMICOLON															# functionDeclaration
-	| initDeclaratorList SEMICOLON													# typeAndInitDeclaration
+	functionPrototype SEMICOLON # functionDeclaration
+	| fullySpecifiedType (
+		declarationMembers += declarationMember (
+			COMMA declarationMembers += declarationMember
+		)*
+	)? SEMICOLON																						# typeAndInitDeclaration
 	| PRECISION precisionQualifier typeSpecifier SEMICOLON	# precisionDeclaration
 	| typeQualifier blockName = IDENTIFIER structBody (
 		variableName = IDENTIFIER arraySpecifier?
@@ -166,12 +170,8 @@ functionParameterList: (
 
 functionHeader: fullySpecifiedType IDENTIFIER;
 
-parameterDeclarator:
-	typeSpecifier parameterName = IDENTIFIER arraySpecifier?;
-
 parameterDeclaration:
-	typeQualifier? parameterDeclarator
-	| fullySpecifiedType;
+	fullySpecifiedType (parameterName = IDENTIFIER arraySpecifier?)?;
 
 //part of GL_EXT_control_flow_attributes
 attribute:
@@ -182,13 +182,6 @@ attribute:
 singleAttribute:
 	(prefix = IDENTIFIER COLON COLON)? name = IDENTIFIER (
 		LPAREN content = expression RPAREN
-	)?;
-
-initDeclaratorList:
-	fullySpecifiedType (
-		declarationMembers += declarationMember (
-			COMMA declarationMembers += declarationMember
-		)*
 	)?;
 
 declarationMember: IDENTIFIER arraySpecifier? (ASSIGN_OP initializer)?;
@@ -214,7 +207,7 @@ storageQualifier:
 	| COHERENT
 	| READONLY
 	| WRITEONLY
-	| SUBROUTINE (LPAREN typeNameList RPAREN)?
+	| SUBROUTINE (LPAREN typeNames = typeNameList RPAREN)?
 	| DEVICECOHERENT
 	| QUEUEFAMILYCOHERENT
 	| WORKGROUPCOHERENT
@@ -464,7 +457,7 @@ selectionStatement:
 	)?;
 
 iterationCondition:
-	fullySpecifiedType IDENTIFIER ASSIGN_OP initializer;
+	fullySpecifiedType name = IDENTIFIER ASSIGN_OP initializer;
 
 switchStatement:
 	attribute? SWITCH LPAREN condition = expression RPAREN compoundStatement;
