@@ -11,7 +11,7 @@ import io.github.douira.glsl_transformer.GLSLParser.*;
 import io.github.douira.glsl_transformer.ast.node.*;
 import io.github.douira.glsl_transformer.ast.node.VersionStatement.Profile;
 import io.github.douira.glsl_transformer.ast.node.basic.ASTNode;
-import io.github.douira.glsl_transformer.ast.node.declaration.Declaration;
+import io.github.douira.glsl_transformer.ast.node.declaration.*;
 import io.github.douira.glsl_transformer.ast.node.expression.*;
 import io.github.douira.glsl_transformer.ast.node.expression.LiteralExpression.IntegerFormat;
 import io.github.douira.glsl_transformer.ast.node.expression.binary.*;
@@ -26,7 +26,10 @@ import io.github.douira.glsl_transformer.ast.node.statement.selection.*;
 import io.github.douira.glsl_transformer.ast.node.statement.terminal.*;
 import io.github.douira.glsl_transformer.ast.node.type.FullySpecifiedType;
 import io.github.douira.glsl_transformer.ast.node.type.initializer.Initializer;
-import io.github.douira.glsl_transformer.ast.node.type.qualifier.LayoutQualifier;
+import io.github.douira.glsl_transformer.ast.node.type.qualifier.*;
+import io.github.douira.glsl_transformer.ast.node.type.qualifier.StorageQualifier.StorageType;
+import io.github.douira.glsl_transformer.ast.node.type.specifier.*;
+import io.github.douira.glsl_transformer.ast.node.type.struct.*;
 import io.github.douira.glsl_transformer.ast.query.Root;
 import io.github.douira.glsl_transformer.parse_ast.Type;
 
@@ -61,8 +64,8 @@ public class ASTBuilder extends GLSLParserBaseVisitor<ASTNode> {
   @Override
   public TranslationUnit visitTranslationUnit(TranslationUnitContext ctx) {
     var versionStatement = visitVersionStatement(ctx.versionStatement());
-    var externalDeclarations = ctx.externalDeclaration().stream().map(
-        (declaration) -> (ExternalDeclaration) visitExternalDeclaration(declaration));
+    var externalDeclarations = ctx.externalDeclaration()
+        .stream().map(this::visitExternalDeclaration);
     return versionStatement == null
         ? new TranslationUnit(externalDeclarations)
         : new TranslationUnit(versionStatement, externalDeclarations);
@@ -132,7 +135,7 @@ public class ASTBuilder extends GLSLParserBaseVisitor<ASTNode> {
   public MemberAccessExpression visitMemberAccessExpression(MemberAccessExpressionContext ctx) {
     return new MemberAccessExpression(
         (Expression) visit(ctx.operand),
-        new Identifier(ctx.member.getText()));
+        new Identifier(ctx.member));
   }
 
   @Override
@@ -568,13 +571,206 @@ public class ASTBuilder extends GLSLParserBaseVisitor<ASTNode> {
 
   @Override
   public IterationConditionInitializer visitIterationCondition(IterationConditionContext ctx) {
-    // TODO: FullySpecifiedType and Initalizer
+    // TODO: FullySpecifiedType
     return new IterationConditionInitializer(
         (FullySpecifiedType) visit(ctx.fullySpecifiedType()),
-        (Initializer) visit(ctx.initializer()));
+        new Identifier(ctx.name),
+        visitInitializer(ctx.initializer()));
   }
 
-  //TODO visits
+  @Override
+  public ArraySpecifier visitArraySpecifier(ArraySpecifierContext ctx) {
+    // TODO Auto-generated method stub
+    // return super.visitArraySpecifier(ctx);
+    return null;
+  }
+
+  @Override
+  public DeclarationMember visitDeclarationMember(DeclarationMemberContext ctx) {
+    // TODO Auto-generated method stub
+    // return super.visitDeclarationMember(ctx);
+    return null;
+  }
+
+  @Override
+  public ExternalDeclaration visitExternalDeclaration(ExternalDeclarationContext ctx) {
+    return (ExternalDeclaration) super.visitExternalDeclaration(ctx);
+  }
+
+  @Override
+  public FullySpecifiedType visitFullySpecifiedType(FullySpecifiedTypeContext ctx) {
+    // TODO Auto-generated method stub
+    // return super.visitFullySpecifiedType(ctx);
+    return null;
+  }
+
+  @Override
+  public FunctionDeclaration visitFunctionDeclaration(FunctionDeclarationContext ctx) {
+    // TODO Auto-generated method stub
+    // return super.visitFunctionDeclaration(ctx);
+    return null;
+  }
+
+  @Override
+  public FunctionDefinition visitFunctionDefinition(FunctionDefinitionContext ctx) {
+    // TODO Auto-generated method stub
+    // return super.visitFunctionDefinition(ctx);
+    return null;
+  }
+
+  @Override
+  public FunctionPrototype visitFunctionPrototype(FunctionPrototypeContext ctx) {
+    // TODO Auto-generated method stub
+    // return super.visitFunctionPrototype(ctx);
+    return null;
+  }
+
+  @Override
+  public Initializer visitInitializer(InitializerContext ctx) {
+    // TODO Auto-generated method stub
+    // return super.visitInitializer(ctx);
+    return null;
+  }
+
+  @Override
+  public InterfaceBlockDeclaration visitInterfaceBlockDeclaration(InterfaceBlockDeclarationContext ctx) {
+    // TODO Auto-generated method stub
+    // return super.visitInterfaceBlockDeclaration(ctx);
+    return null;
+  }
+
+  @Override
+  public InterpolationQualifier visitInterpolationQualifier(InterpolationQualifierContext ctx) {
+    // TODO Auto-generated method stub
+    // return super.visitInterpolationQualifier(ctx);
+    return null;
+  }
+
+  @Override
+  public InvariantQualifier visitInvariantQualifier(InvariantQualifierContext ctx) {
+    // TODO Auto-generated method stub
+    // return super.visitInvariantQualifier(ctx);
+    return null;
+  }
+
+  @Override
+  public NamedLayoutQualifierPart visitNamedLayoutQualifier(NamedLayoutQualifierContext ctx) {
+    // TODO Auto-generated method stub
+    // return super.visitNamedLayoutQualifier(ctx);
+    return null;
+  }
+
+  @Override
+  public FunctionParameter visitParameterDeclaration(ParameterDeclarationContext ctx) {
+    // TODO Auto-generated method stub
+    // return super.visitParameterDeclaration(ctx);
+    return null;
+  }
+
+  @Override
+  public PreciseQualifier visitPreciseQualifier(PreciseQualifierContext ctx) {
+    // TODO Auto-generated method stub
+    // return super.visitPreciseQualifier(ctx);
+    return null;
+  }
+
+  @Override
+  public PrecisionDeclaration visitPrecisionDeclaration(PrecisionDeclarationContext ctx) {
+    // TODO Auto-generated method stub
+    // return super.visitPrecisionDeclaration(ctx);
+    return null;
+  }
+
+  @Override
+  public PrecisionQualifier visitPrecisionQualifier(PrecisionQualifierContext ctx) {
+    // TODO Auto-generated method stub
+    // return super.visitPrecisionQualifier(ctx);
+    return null;
+  }
+
+  @Override
+  public SharedLayoutQualifierPart visitSharedLayoutQualifier(SharedLayoutQualifierContext ctx) {
+    // TODO Auto-generated method stub
+    // return super.visitSharedLayoutQualifier(ctx);
+    return null;
+  }
+
+  @Override
+  public ASTNode visitStorageQualifier(StorageQualifierContext ctx) {
+    return ctx.typeNames == null
+        ? new StorageQualifier(StorageType.fromToken(ctx.getStart()))
+        : new StorageQualifier(
+            ctx.typeNames.names.stream().map(Identifier::new));
+  }
+
+  @Override
+  public StructBody visitStructBody(StructBodyContext ctx) {
+    // TODO Auto-generated method stub
+    // return super.visitStructBody(ctx);
+    return null;
+  }
+
+  @Override
+  public StructDeclarator visitStructDeclarator(StructDeclaratorContext ctx) {
+    // TODO Auto-generated method stub
+    // return super.visitStructDeclarator(ctx);
+    return null;
+  }
+
+  @Override
+  public StructMember visitStructMember(StructMemberContext ctx) {
+    // TODO Auto-generated method stub
+    // return super.visitStructMember(ctx);
+    return null;
+  }
+
+  @Override
+  public ASTNode visitStructSpecifier(StructSpecifierContext ctx) {
+    // TODO Auto-generated method stub
+    // return super.visitStructSpecifier(ctx);
+    return null;
+  }
+
+  @Override
+  public ASTNode visitStructSpecifierType(StructSpecifierTypeContext ctx) {
+    // TODO Auto-generated method stub
+    // return super.visitStructSpecifierType(ctx);
+    return null;
+  }
+
+  @Override
+  public TypeAndInitDeclaration visitTypeAndInitDeclaration(TypeAndInitDeclarationContext ctx) {
+    // TODO Auto-generated method stub
+    // return super.visitTypeAndInitDeclaration(ctx);
+    return null;
+  }
+
+  @Override
+  public TypeQualifier visitTypeQualifier(TypeQualifierContext ctx) {
+    // TODO Auto-generated method stub
+    // return super.visitTypeQualifier(ctx);
+    return null;
+  }
+
+  @Override
+  public TypeSpecifier visitTypeSpecifier(TypeSpecifierContext ctx) {
+    // TODO Auto-generated method stub
+    // return super.visitTypeSpecifier(ctx);
+    return null;
+  }
+
+  @Override
+  public VariableDeclaration visitVariableDeclaration(VariableDeclarationContext ctx) {
+    // TODO Auto-generated method stub
+    // return super.visitVariableDeclaration(ctx);
+    return null;
+  }
+
+  public Declaration visitDeclaration(DeclarationContext ctx) {
+    return (Declaration) ctx.accept(this);
+  }
+
+  // TODO visits
   /**
    * Declaration
    * DeclarationMember
@@ -617,7 +813,7 @@ public class ASTBuilder extends GLSLParserBaseVisitor<ASTNode> {
   public ASTNode visitTerminal(TerminalNode node) {
     var type = node.getSymbol().getType();
     if (type == GLSLLexer.IDENTIFIER) {
-      return new Identifier(node.getText());
+      return new Identifier(node.getSymbol());
     }
     throw new IllegalStateException("Unhandled terminal node: " + node.getText());
   }
