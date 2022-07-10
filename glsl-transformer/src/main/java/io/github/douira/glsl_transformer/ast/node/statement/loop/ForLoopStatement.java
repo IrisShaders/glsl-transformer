@@ -1,7 +1,7 @@
 package io.github.douira.glsl_transformer.ast.node.statement.loop;
 
-import io.github.douira.glsl_transformer.ast.declaration.Declaration;
 import io.github.douira.glsl_transformer.ast.node.IterationConditionInitializer;
+import io.github.douira.glsl_transformer.ast.node.declaration.Declaration;
 import io.github.douira.glsl_transformer.ast.node.expression.Expression;
 import io.github.douira.glsl_transformer.ast.node.statement.Statement;
 import io.github.douira.glsl_transformer.ast.traversal.*;

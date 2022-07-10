@@ -1,4 +1,4 @@
-package io.github.douira.glsl_transformer.ast.declaration;
+package io.github.douira.glsl_transformer.ast.node.declaration;
 
 import java.util.List;
 import java.util.stream.Stream;
