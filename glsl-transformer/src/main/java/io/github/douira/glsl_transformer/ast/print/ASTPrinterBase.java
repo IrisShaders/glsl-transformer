@@ -2,6 +2,7 @@ package io.github.douira.glsl_transformer.ast.print;
 
 import java.util.List;
 
+import io.github.douira.glsl_transformer.GLSLLexer;
 import io.github.douira.glsl_transformer.ast.node.basic.ASTNode;
 import io.github.douira.glsl_transformer.ast.print.token.*;
 import io.github.douira.glsl_transformer.ast.traversal.ASTListenerVisitor;
@@ -138,6 +139,11 @@ public abstract class ASTPrinterBase extends ASTListenerVisitor<Void> {
     emitNewline(TokenRole.COMMON_FORMATTING);
   }
 
+  protected void emitStatementEnd() {
+    emitType(GLSLLexer.SEMICOLON);
+    emitCommonNewline();
+  }
+
   protected void indent() {
     emitToken(IndentMarker.indent());
   }
@@ -164,6 +170,13 @@ public abstract class ASTPrinterBase extends ASTListenerVisitor<Void> {
         emitter.run();
       }
     }
+  }
+
+  protected void visitCommaSpaced(List<? extends ASTNode> nodes) {
+    visitWithSeparator(nodes, () -> {
+      emitType(GLSLLexer.COMMA);
+      emitBreakableSpace();
+    });
   }
 
   protected ASTNode getCurrentNode() {
