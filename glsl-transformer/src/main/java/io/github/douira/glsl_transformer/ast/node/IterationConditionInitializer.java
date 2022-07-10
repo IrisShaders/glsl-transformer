@@ -7,10 +7,12 @@ import io.github.douira.glsl_transformer.ast.traversal.*;
 
 public class IterationConditionInitializer extends InnerASTNode {
   protected FullySpecifiedType type;
+  protected Identifier name;
   protected Initializer initializer;
 
-  public IterationConditionInitializer(FullySpecifiedType type, Initializer initializer) {
+  public IterationConditionInitializer(FullySpecifiedType type, Identifier name, Initializer initializer) {
     this.type = setup(type);
+    this.name = setup(name);
     this.initializer = setup(initializer);
   }
 
@@ -21,6 +23,15 @@ public class IterationConditionInitializer extends InnerASTNode {
   public void setType(FullySpecifiedType type) {
     updateParents(this.type, type);
     this.type = type;
+  }
+
+  public Identifier getName() {
+    return name;
+  }
+
+  public void setName(Identifier name) {
+    updateParents(this.name, name);
+    this.name = name;
   }
 
   public Initializer getInitializer() {
