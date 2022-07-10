@@ -17,6 +17,10 @@ public class ArraySpecifier extends ListASTNode<Expression> {
     super(children);
   }
 
+  public List<Expression> getDimensions() {
+    return getChildren();
+  }
+
   @Override
   public <R> R accept(ASTVisitor<R> visitor) {
     return visitor.visitArraySpecifier(this);

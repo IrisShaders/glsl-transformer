@@ -13,7 +13,7 @@ public class VersionStatement extends ASTNode {
     COMPATIBILITY(GLSLLexer.NR_COMPATIBILITY),
     ES(GLSLLexer.NR_ES);
 
-    public int tokenType;
+    public final int tokenType;
 
     private Profile(int tokenType) {
       this.tokenType = tokenType;

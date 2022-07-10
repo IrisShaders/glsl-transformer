@@ -14,7 +14,7 @@ public class LayoutDefaults extends ExternalDeclaration {
     OUT(GLSLLexer.OUT),
     BUFFER(GLSLLexer.BUFFER);
 
-    public int tokenType;
+    public final int tokenType;
 
     private LayoutMode(int tokenType) {
       this.tokenType = tokenType;

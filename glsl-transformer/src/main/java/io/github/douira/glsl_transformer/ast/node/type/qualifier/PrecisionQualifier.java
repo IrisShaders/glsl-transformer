@@ -12,7 +12,7 @@ public class PrecisionQualifier extends TypeQualifierPart {
     MEDIUM(GLSLLexer.MEDIUMP),
     LOW(GLSLLexer.LOWP);
 
-    public int tokenType;
+    public final int tokenType;
 
     private PrecisionLevel(int tokenType) {
       this.tokenType = tokenType;
@@ -28,10 +28,10 @@ public class PrecisionQualifier extends TypeQualifierPart {
     }
   }
 
-  public PrecisionLevel storageType;
+  public PrecisionLevel precisionLevel;
 
   public PrecisionQualifier(PrecisionLevel storageType) {
-    this.storageType = storageType;
+    this.precisionLevel = storageType;
   }
 
   @Override

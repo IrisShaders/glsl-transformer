@@ -11,15 +11,18 @@ public class TypeAndInitDeclaration extends Declaration {
   protected FullySpecifiedType type;
   public final List<DeclarationMember> members;
 
-  public TypeAndInitDeclaration(List<DeclarationMember> members) {
+  public TypeAndInitDeclaration(FullySpecifiedType type, List<DeclarationMember> members) {
+    this.type = setup(type);
     this.members = new ChildNodeList<>(members, this);
   }
 
-  public TypeAndInitDeclaration(Stream<DeclarationMember> members) {
+  public TypeAndInitDeclaration(FullySpecifiedType type, Stream<DeclarationMember> members) {
+    this.type = setup(type);
     this.members = ChildNodeList.collect(members, this);
   }
 
-  public TypeAndInitDeclaration() {
+  public TypeAndInitDeclaration(FullySpecifiedType type) {
+    this.type = setup(type);
     this.members = new ChildNodeList<>(this);
   }
 
@@ -44,11 +47,13 @@ public class TypeAndInitDeclaration extends Declaration {
 
   @Override
   public void enterNode(ASTListener listener) {
+    super.enterNode(listener);
     listener.enterTypeAndInitDeclaration(this);
   }
 
   @Override
   public void exitNode(ASTListener listener) {
+    super.exitNode(listener);
     listener.exitTypeAndInitDeclaration(this);
   }
 }

@@ -36,7 +36,7 @@ public class StorageQualifier extends TypeQualifierPart {
     SUBGROUPCOHERENT(GLSLLexer.SUBGROUPCOHERENT),
     NONPRIVATE(GLSLLexer.NONPRIVATE);
 
-    public int tokenType;
+    public final int tokenType;
 
     private StorageType(int tokenType) {
       this.tokenType = tokenType;
@@ -82,11 +82,13 @@ public class StorageQualifier extends TypeQualifierPart {
 
   @Override
   public void enterNode(ASTListener listener) {
+    super.enterNode(listener);
     listener.enterStorageQualifier(this);
   }
 
   @Override
   public void exitNode(ASTListener listener) {
+    super.exitNode(listener);
     listener.exitStorageQualifier(this);
   }
 }

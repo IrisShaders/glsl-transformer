@@ -15,6 +15,10 @@ public class StructBody extends ListASTNode<StructMember> {
     super(children);
   }
 
+  public List<StructMember> getMembers() {
+    return getChildren();
+  }
+
   @Override
   public <R> R accept(ASTVisitor<R> visitor) {
     return visitor.visitStructBody(this);

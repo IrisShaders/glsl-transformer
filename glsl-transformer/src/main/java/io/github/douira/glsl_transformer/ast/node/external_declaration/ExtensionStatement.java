@@ -13,7 +13,7 @@ public class ExtensionStatement extends ExternalDeclaration {
     WARN(GLSLLexer.NR_WARN),
     DISABLE(GLSLLexer.NR_DISABLE);
 
-    public int tokenType;
+    public final int tokenType;
 
     private ExtensionBehavior(int tokenType) {
       this.tokenType = tokenType;

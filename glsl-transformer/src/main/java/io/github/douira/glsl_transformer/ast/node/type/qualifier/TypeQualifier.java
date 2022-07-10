@@ -15,6 +15,10 @@ public class TypeQualifier extends ListASTNode<TypeQualifierPart> {
     super(children);
   }
 
+  public List<TypeQualifierPart> getParts() {
+    return getChildren();
+  }
+
   @Override
   public <R> R accept(ASTVisitor<R> visitor) {
     return visitor.visitTypeQualifier(this);
