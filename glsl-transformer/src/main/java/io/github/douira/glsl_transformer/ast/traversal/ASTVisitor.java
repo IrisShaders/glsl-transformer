@@ -1,6 +1,7 @@
 package io.github.douira.glsl_transformer.ast.traversal;
 
 import io.github.douira.glsl_transformer.ast.node.*;
+import io.github.douira.glsl_transformer.ast.node.declaration.*;
 import io.github.douira.glsl_transformer.ast.node.expression.*;
 import io.github.douira.glsl_transformer.ast.node.expression.binary.*;
 import io.github.douira.glsl_transformer.ast.node.expression.unary.*;
@@ -9,6 +10,11 @@ import io.github.douira.glsl_transformer.ast.node.statement.*;
 import io.github.douira.glsl_transformer.ast.node.statement.loop.*;
 import io.github.douira.glsl_transformer.ast.node.statement.selection.*;
 import io.github.douira.glsl_transformer.ast.node.statement.terminal.*;
+import io.github.douira.glsl_transformer.ast.node.type.FullySpecifiedType;
+import io.github.douira.glsl_transformer.ast.node.type.initializer.*;
+import io.github.douira.glsl_transformer.ast.node.type.qualifier.*;
+import io.github.douira.glsl_transformer.ast.node.type.specifier.*;
+import io.github.douira.glsl_transformer.ast.node.type.struct.*;
 
 /**
  * The AST visitor knows how to traverse the AST and visit each node.
@@ -363,6 +369,146 @@ public interface ASTVisitor<R> extends GeneralASTVisitor<R> {
 
   default R visitSemiTerminalStatement(SemiTerminalStatement node) {
     return superNodeTypeResult();
+  }
+
+  default R visitDeclaration(Declaration node) {
+    throw new UnsupportedOperationException();
+  }
+
+  default R visitDeclarationMember(DeclarationMember node) {
+    throw new UnsupportedOperationException();
+  }
+
+  default R visitFullTypeParameter(FullTypeParameter node) {
+    throw new UnsupportedOperationException();
+  }
+
+  default R visitFunctionDeclaration(FunctionDeclaration node) {
+    throw new UnsupportedOperationException();
+  }
+
+  default R visitFunctionParameter(FunctionParameter node) {
+    throw new UnsupportedOperationException();
+  }
+
+  default R visitInterfaceBlockDeclaration(InterfaceBlockDeclaration node) {
+    throw new UnsupportedOperationException();
+  }
+
+  default R visitNamedParameter(NamedParameter node) {
+    throw new UnsupportedOperationException();
+  }
+
+  default R visitPrecisionDeclaration(PrecisionDeclaration node) {
+    throw new UnsupportedOperationException();
+  }
+
+  default R visitTypeAndInitDeclaration(TypeAndInitDeclaration node) {
+    throw new UnsupportedOperationException();
+  }
+
+  default R visitVariableDeclaration(VariableDeclaration node) {
+    throw new UnsupportedOperationException();
+  }
+
+  default R visitExpressionInitializer(ExpressionInitializer node) {
+    throw new UnsupportedOperationException();
+  }
+
+  default R visitInitializer(Initializer node) {
+    throw new UnsupportedOperationException();
+  }
+
+  default R visitNestedInitializer(NestedInitializer node) {
+    throw new UnsupportedOperationException();
+  }
+
+  default R visitInterpolationQualifier(InterpolationQualifier node) {
+    throw new UnsupportedOperationException();
+  }
+
+  default R visitInvariantQualifier(InvariantQualifier node) {
+    throw new UnsupportedOperationException();
+  }
+
+  default R visitLayoutQualifier(LayoutQualifier node) {
+    throw new UnsupportedOperationException();
+  }
+
+  default R visitLayoutQualifierPart(LayoutQualifierPart node) {
+    throw new UnsupportedOperationException();
+  }
+
+  default R visitNamedLayoutQualifierPart(NamedLayoutQualifierPart node) {
+    throw new UnsupportedOperationException();
+  }
+
+  default R visitPreciseQualifier(PreciseQualifier node) {
+    throw new UnsupportedOperationException();
+  }
+
+  default R visitPrecisionQualifier(PrecisionQualifier node) {
+    throw new UnsupportedOperationException();
+  }
+
+  default R visitSharedLayoutQualifierPart(SharedLayoutQualifierPart node) {
+    throw new UnsupportedOperationException();
+  }
+
+  default R visitStorageQualifier(StorageQualifier node) {
+    throw new UnsupportedOperationException();
+  }
+
+  default R visitTypeQualifier(TypeQualifier node) {
+    throw new UnsupportedOperationException();
+  }
+
+  default R visitTypeQualifierPart(TypeQualifierPart node) {
+    throw new UnsupportedOperationException();
+  }
+
+  default R visitArraySpecifier(ArraySpecifier node) {
+    throw new UnsupportedOperationException();
+  }
+
+  default R visitBuiltinFixedTypeSpecifier(BuiltinFixedTypeSpecifier node) {
+    throw new UnsupportedOperationException();
+  }
+
+  default R visitBuiltinNumericTypeSpecifier(BuiltinNumericTypeSpecifier node) {
+    throw new UnsupportedOperationException();
+  }
+
+  default R visitTypeReference(TypeReference node) {
+    throw new UnsupportedOperationException();
+  }
+
+  default R visitTypeSpecifier(TypeSpecifier node) {
+    throw new UnsupportedOperationException();
+  }
+
+  default R visitStructBody(StructBody node) {
+    throw new UnsupportedOperationException();
+  }
+
+  default R visitStructDeclarator(StructDeclarator node) {
+    throw new UnsupportedOperationException();
+  }
+
+  default R visitStructMember(StructMember node) {
+    throw new UnsupportedOperationException();
+  }
+
+  default R visitStructSpecifier(StructSpecifier node) {
+    throw new UnsupportedOperationException();
+  }
+
+  default R visitFullySpecifiedType(FullySpecifiedType node) {
+    throw new UnsupportedOperationException();
+  }
+
+  default R visitIterationConditionInitializer(IterationConditionInitializer node) {
+    throw new UnsupportedOperationException();
   }
 
   default R visitIdentifier(Identifier node) {
