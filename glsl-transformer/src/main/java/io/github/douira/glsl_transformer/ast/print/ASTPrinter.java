@@ -13,7 +13,7 @@ import io.github.douira.glsl_transformer.ast.node.statement.loop.*;
 import io.github.douira.glsl_transformer.ast.node.statement.selection.*;
 import io.github.douira.glsl_transformer.ast.node.statement.terminal.*;
 import io.github.douira.glsl_transformer.ast.node.type.FullySpecifiedType;
-import io.github.douira.glsl_transformer.ast.node.type.initializer.*;
+import io.github.douira.glsl_transformer.ast.node.type.initializer.NestedInitializer;
 import io.github.douira.glsl_transformer.ast.node.type.qualifier.*;
 import io.github.douira.glsl_transformer.ast.node.type.specifier.*;
 import io.github.douira.glsl_transformer.ast.node.type.struct.*;
@@ -44,9 +44,16 @@ public abstract class ASTPrinter extends ASTPrinterBase {
   }
 
   @Override
-  public Void visitEmptyDeclaration(EmptyDeclaration node) {
+  public Void visitFunctionDefinition(FunctionDefinition node) {
+    visit(node.getFunctionPrototype());
+    emitBreakableSpace();
     emitType(GLSLLexer.SEMICOLON);
-    emitCommonNewline();
+    return null;
+  }
+
+  @Override
+  public Void visitEmptyDeclaration(EmptyDeclaration node) {
+    emitStatementEnd();
     return null;
   }
 
@@ -89,8 +96,7 @@ public abstract class ASTPrinter extends ASTPrinterBase {
   public void exitLayoutDefaults(LayoutDefaults node) {
     emitType(node.mode.tokenType);
     emitBreakableSpace();
-    emitType(GLSLLexer.SEMICOLON);
-    emitCommonNewline();
+    emitStatementEnd();
   }
 
   @Override
@@ -174,10 +180,7 @@ public abstract class ASTPrinter extends ASTPrinterBase {
 
   @Override
   public Void visitSequenceExpression(SequenceExpression node) {
-    visitWithSeparator(node.expressions, () -> {
-      emitType(GLSLLexer.COMMA);
-      emitBreakableSpace();
-    });
+    visitCommaSpaced(node.expressions);
     return null;
   }
 
@@ -551,8 +554,7 @@ public abstract class ASTPrinter extends ASTPrinterBase {
 
   @Override
   public Void visitEmptyStatement(EmptyStatement node) {
-    emitType(GLSLLexer.SEMICOLON);
-    emitCommonNewline();
+    emitStatementEnd();
     return null;
   }
 
@@ -587,8 +589,7 @@ public abstract class ASTPrinter extends ASTPrinterBase {
 
   @Override
   public void exitExpressionStatement(ExpressionStatement node) {
-    emitType(GLSLLexer.SEMICOLON);
-    emitCommonNewline();
+    emitStatementEnd();
   }
 
   /**
@@ -742,22 +743,21 @@ public abstract class ASTPrinter extends ASTPrinterBase {
     emitType(GLSLLexer.LPAREN);
     visit(node.getCondition());
     emitType(GLSLLexer.RPAREN);
-    emitType(GLSLLexer.SEMICOLON);
-    emitCommonNewline();
+    emitStatementEnd();
     return null;
   }
 
   @Override
   public Void visitContinueStatement(ContinueStatement node) {
-    emitType(GLSLLexer.CONTINUE, GLSLLexer.SEMICOLON);
-    emitCommonNewline();
+    emitType(GLSLLexer.CONTINUE);
+    emitStatementEnd();
     return null;
   }
 
   @Override
   public Void visitBreakStatement(BreakStatement node) {
-    emitType(GLSLLexer.BREAK, GLSLLexer.SEMICOLON);
-    emitCommonNewline();
+    emitType(GLSLLexer.BREAK);
+    emitStatementEnd();
     return null;
   }
 
@@ -768,198 +768,294 @@ public abstract class ASTPrinter extends ASTPrinterBase {
       emitBreakableSpace();
       visit(node.getExpression());
     }
-    emitType(GLSLLexer.SEMICOLON);
-    emitCommonNewline();
+    emitStatementEnd();
     return null;
   }
 
   @Override
   public Void visitDiscardStatement(DiscardStatement node) {
-    emitType(GLSLLexer.DISCARD, GLSLLexer.SEMICOLON);
-    emitCommonNewline();
+    emitType(GLSLLexer.DISCARD);
+    emitStatementEnd();
     return null;
   }
 
   @Override
   public Void visitDemoteStatement(DemoteStatement node) {
-    emitType(GLSLLexer.DEMOTE, GLSLLexer.SEMICOLON);
-    emitCommonNewline();
+    emitType(GLSLLexer.DEMOTE);
+    emitStatementEnd();
     return null;
   }
 
   @Override
-  public Void visitDeclaration(Declaration node) {
-    throw new UnsupportedOperationException(); // TODO
-  }
-
-  @Override
   public Void visitDeclarationMember(DeclarationMember node) {
-    throw new UnsupportedOperationException(); // TODO
+    visit(node.getName());
+    visitSafe(node.getArraySpecifier());
+    if (node.getInitializer() != null) {
+      emitType(GLSLLexer.ASSIGN_OP);
+      visit(node.getInitializer());
+    }
+    return null;
   }
 
   @Override
-  public Void visitFullTypeParameter(FullTypeParameter node) {
-    throw new UnsupportedOperationException(); // TODO
-  }
-
-  @Override
-  public Void visitFunctionDeclaration(FunctionDeclaration node) {
-    throw new UnsupportedOperationException(); // TODO
+  public Void visitFunctionPrototype(FunctionPrototype node) {
+    visit(node.getReturnType());
+    emitBreakableSpace();
+    visit(node.getName());
+    emitType(GLSLLexer.LPAREN);
+    visitCommaSpaced(node.getParameters());
+    emitType(GLSLLexer.RPAREN);
+    return null;
   }
 
   @Override
   public Void visitFunctionParameter(FunctionParameter node) {
-    throw new UnsupportedOperationException(); // TODO
+    visit(node.getType());
+    if (node.getName() != null) {
+      emitBreakableSpace();
+      visit(node.getName());
+      if (node.getArraySpecifier() != null) {
+        emitBreakableSpace();
+        visit(node.getArraySpecifier());
+      }
+    }
+    return null;
+  }
+
+  /**
+   * ANTLR grammar rule:
+   * declaration:
+   * functionPrototype SEMICOLON # functionDeclaration
+   * | fullySpecifiedType (
+   * declarationMembers += declarationMember (
+   * COMMA declarationMembers += declarationMember
+   * )*
+   * )? SEMICOLON # typeAndInitDeclaration
+   * | PRECISION precisionQualifier typeSpecifier SEMICOLON # precisionDeclaration
+   * | typeQualifier blockName = IDENTIFIER structBody (
+   * variableName = IDENTIFIER arraySpecifier?
+   * )? SEMICOLON # interfaceBlockDeclaration
+   * | typeQualifier (
+   * variableNames += IDENTIFIER (COMMA variableNames += IDENTIFIER)*
+   * )? SEMICOLON # variableDeclaration;
+   */
+
+  @Override
+  public void exitFunctionDeclaration(FunctionDeclaration node) {
+    emitStatementEnd();
   }
 
   @Override
   public Void visitInterfaceBlockDeclaration(InterfaceBlockDeclaration node) {
-    throw new UnsupportedOperationException(); // TODO
-  }
-
-  @Override
-  public Void visitNamedParameter(NamedParameter node) {
-    throw new UnsupportedOperationException(); // TODO
+    visit(node.getTypeQualifier());
+    emitBreakableSpace();
+    visit(node.getBlockName());
+    emitBreakableSpace();
+    visit(node.getStructBody());
+    if (node.getVariableName() != null) {
+      emitBreakableSpace();
+      visit(node.getVariableName());
+      visitSafe(node.getArraySpecifier());
+    }
+    emitStatementEnd();
+    return null;
   }
 
   @Override
   public Void visitPrecisionDeclaration(PrecisionDeclaration node) {
-    throw new UnsupportedOperationException(); // TODO
+    emitType(GLSLLexer.PRECISION);
+    emitBreakableSpace();
+    visit(node.getPrecisionQualifier());
+    emitBreakableSpace();
+    visit(node.getTypeSpecifier());
+    emitStatementEnd();
+    return null;
   }
 
   @Override
   public Void visitTypeAndInitDeclaration(TypeAndInitDeclaration node) {
-    throw new UnsupportedOperationException(); // TODO
+    visit(node.getType());
+    emitBreakableSpace();
+    visitCommaSpaced(node.members);
+    emitStatementEnd();
+    return null;
   }
 
   @Override
   public Void visitVariableDeclaration(VariableDeclaration node) {
-    throw new UnsupportedOperationException(); // TODO
+    visit(node.getTypeQualifier());
+    emitBreakableSpace();
+    visitCommaSpaced(node.names);
+    emitStatementEnd();
+    return null;
   }
 
-  @Override
-  public Void visitExpressionInitializer(ExpressionInitializer node) {
-    throw new UnsupportedOperationException(); // TODO
-  }
-
-  @Override
-  public Void visitInitializer(Initializer node) {
-    throw new UnsupportedOperationException(); // TODO
-  }
+  // ExpressionInitializer is just an expression
 
   @Override
   public Void visitNestedInitializer(NestedInitializer node) {
-    throw new UnsupportedOperationException(); // TODO
+    emitType(GLSLLexer.LBRACE);
+    visitCommaSpaced(node.initializers);
+    emitType(GLSLLexer.RBRACE);
+    return null;
   }
 
   @Override
   public Void visitInterpolationQualifier(InterpolationQualifier node) {
-    throw new UnsupportedOperationException(); // TODO
+    emitType(node.interpolationType.tokenType);
+    return null;
   }
 
   @Override
   public Void visitInvariantQualifier(InvariantQualifier node) {
-    throw new UnsupportedOperationException(); // TODO
+    emitType(GLSLLexer.INVARIANT);
+    return null;
   }
 
   @Override
   public Void visitLayoutQualifier(LayoutQualifier node) {
-    throw new UnsupportedOperationException(); // TODO
-  }
-
-  @Override
-  public Void visitLayoutQualifierPart(LayoutQualifierPart node) {
-    throw new UnsupportedOperationException(); // TODO
+    emitType(GLSLLexer.LAYOUT, GLSLLexer.LPAREN);
+    emitBreakableSpace();
+    visitCommaSpaced(node.parts);
+    emitType(GLSLLexer.RPAREN);
+    return null;
   }
 
   @Override
   public Void visitNamedLayoutQualifierPart(NamedLayoutQualifierPart node) {
-    throw new UnsupportedOperationException(); // TODO
-  }
-
-  @Override
-  public Void visitPreciseQualifier(PreciseQualifier node) {
-    throw new UnsupportedOperationException(); // TODO
-  }
-
-  @Override
-  public Void visitPrecisionQualifier(PrecisionQualifier node) {
-    throw new UnsupportedOperationException(); // TODO
+    visit(node.getName());
+    if (node.getName() != null) {
+      emitBreakableSpace();
+      emitType(GLSLLexer.ASSIGN_OP);
+      emitBreakableSpace();
+      visit(node.getName());
+    }
+    return null;
   }
 
   @Override
   public Void visitSharedLayoutQualifierPart(SharedLayoutQualifierPart node) {
-    throw new UnsupportedOperationException(); // TODO
+    emitType(GLSLLexer.SHARED);
+    return null;
+  }
+
+  @Override
+  public Void visitPreciseQualifier(PreciseQualifier node) {
+    emitType(GLSLLexer.PRECISE);
+    return null;
+  }
+
+  @Override
+  public Void visitPrecisionQualifier(PrecisionQualifier node) {
+    emitType(node.precisionLevel.tokenType);
+    return null;
   }
 
   @Override
   public Void visitStorageQualifier(StorageQualifier node) {
-    throw new UnsupportedOperationException(); // TODO
+    emitType(node.storageType.tokenType);
+    if (node.typeNames != null) {
+      emitType(GLSLLexer.LPAREN);
+      visitCommaSpaced(node.typeNames);
+      emitType(GLSLLexer.RPAREN);
+    }
+    return null;
   }
 
   @Override
   public Void visitTypeQualifier(TypeQualifier node) {
-    throw new UnsupportedOperationException(); // TODO
-  }
-
-  @Override
-  public Void visitTypeQualifierPart(TypeQualifierPart node) {
-    throw new UnsupportedOperationException(); // TODO
+    visitWithSeparator(node.getParts(), this::emitBreakableSpace);
+    return null;
   }
 
   @Override
   public Void visitArraySpecifier(ArraySpecifier node) {
-    throw new UnsupportedOperationException(); // TODO
+    for (var dimension : node.getDimensions()) {
+      emitType(GLSLLexer.LBRACKET);
+      visitSafe(dimension);
+      emitType(GLSLLexer.RBRACKET);
+    }
+    return null;
+  }
+
+  @Override
+  public void exitTypeSpecifier(TypeSpecifier node) {
+    visitSafe(node.getArraySpecifier());
   }
 
   @Override
   public Void visitBuiltinFixedTypeSpecifier(BuiltinFixedTypeSpecifier node) {
-    throw new UnsupportedOperationException(); // TODO
+    emitType(node.type.tokenType);
+    return null;
   }
 
   @Override
   public Void visitBuiltinNumericTypeSpecifier(BuiltinNumericTypeSpecifier node) {
-    throw new UnsupportedOperationException(); // TODO
+    emitType(node.type.getTokenType());
+    return null;
   }
 
-  @Override
-  public Void visitTypeReference(TypeReference node) {
-    throw new UnsupportedOperationException(); // TODO
-  }
-
-  @Override
-  public Void visitTypeSpecifier(TypeSpecifier node) {
-    throw new UnsupportedOperationException(); // TODO
-  }
+  // TypeReference is just an Identifier
 
   @Override
   public Void visitStructBody(StructBody node) {
-    throw new UnsupportedOperationException(); // TODO
+    emitType(GLSLLexer.LBRACE);
+    emitCommonNewline();
+    indent();
+    visitWithSeparator(node.getMembers(), this::emitCommonNewline);
+    unindent();
+    emitType(GLSLLexer.RBRACE);
+    return null;
   }
 
   @Override
   public Void visitStructDeclarator(StructDeclarator node) {
-    throw new UnsupportedOperationException(); // TODO
+    visit(node.getName());
+    visitSafe(node.getArraySpecifier());
+    return null;
   }
 
   @Override
   public Void visitStructMember(StructMember node) {
-    throw new UnsupportedOperationException(); // TODO
+    visit(node.getType());
+    emitBreakableSpace();
+    visitCommaSpaced(node.declarators);
+    emitType(GLSLLexer.SEMICOLON);
+    return null;
   }
 
   @Override
   public Void visitStructSpecifier(StructSpecifier node) {
-    throw new UnsupportedOperationException(); // TODO
+    emitType(GLSLLexer.STRUCT);
+    emitBreakableSpace();
+    if (node.getName() != null) {
+      visit(node.getName());
+      emitBreakableSpace();
+    }
+    visit(node.getStructBody());
+    return null;
   }
 
   @Override
   public Void visitFullySpecifiedType(FullySpecifiedType node) {
-    throw new UnsupportedOperationException(); // TODO
+    if (node.getTypeQualifier() != null) {
+      visit(node.getTypeQualifier());
+      emitBreakableSpace();
+    }
+    visit(node.getTypeSpecifier());
+    return null;
   }
 
   @Override
   public Void visitIterationConditionInitializer(IterationConditionInitializer node) {
-    throw new UnsupportedOperationException(); // TODO
+    visit(node.getType());
+    emitBreakableSpace();
+    visit(node.getName());
+    emitBreakableSpace();
+    emitType(GLSLLexer.ASSIGN_OP);
+    emitBreakableSpace();
+    visit(node.getInitializer());
+    return null;
   }
 
   @Override
