@@ -37,6 +37,10 @@ public interface ASTVisitor<R> extends GeneralASTVisitor<R> {
     return superNodeTypeResult();
   }
 
+  default R visitFunctionDefinition(FunctionDefinition node) {
+    return visitTwoChildren(node.getFunctionPrototype(), node.getBody());
+  }
+
   default R visitEmptyDeclaration(EmptyDeclaration node) {
     return defaultResult();
   }
@@ -372,143 +376,143 @@ public interface ASTVisitor<R> extends GeneralASTVisitor<R> {
   }
 
   default R visitDeclaration(Declaration node) {
-    throw new UnsupportedOperationException(); // TODO
+    return superNodeTypeResult();
   }
 
   default R visitDeclarationMember(DeclarationMember node) {
-    throw new UnsupportedOperationException(); // TODO
-  }
-
-  default R visitFullTypeParameter(FullTypeParameter node) {
-    throw new UnsupportedOperationException(); // TODO
+    return visitTwoChildren(node.getArraySpecifier(), node.getInitializer());
   }
 
   default R visitFunctionDeclaration(FunctionDeclaration node) {
-    throw new UnsupportedOperationException(); // TODO
+    return visit(node.getFunctionPrototype());
   }
 
   default R visitFunctionParameter(FunctionParameter node) {
-    throw new UnsupportedOperationException(); // TODO
+    return visitThreeChildren(node.getType(), node.getName(), node.getArraySpecifier());
   }
 
   default R visitInterfaceBlockDeclaration(InterfaceBlockDeclaration node) {
-    throw new UnsupportedOperationException(); // TODO
-  }
-
-  default R visitNamedParameter(NamedParameter node) {
-    throw new UnsupportedOperationException(); // TODO
+    var result = visit(node.getTypeQualifier());
+    result = visit(result, node.getBlockName());
+    result = visit(result, node.getStructBody());
+    result = visitSafe(result, node.getVariableName());
+    return visitSafe(result, node.getArraySpecifier());
   }
 
   default R visitPrecisionDeclaration(PrecisionDeclaration node) {
-    throw new UnsupportedOperationException(); // TODO
+    return visitTwoChildren(node.getPrecisionQualifier(), node.getTypeSpecifier());
   }
 
   default R visitTypeAndInitDeclaration(TypeAndInitDeclaration node) {
-    throw new UnsupportedOperationException(); // TODO
+    return visitChildren(visit(node.getType()), node.members);
   }
 
   default R visitVariableDeclaration(VariableDeclaration node) {
-    throw new UnsupportedOperationException(); // TODO
+    return visitChildren(visit(node.getTypeQualifier()), node.names);
   }
 
   default R visitExpressionInitializer(ExpressionInitializer node) {
-    throw new UnsupportedOperationException(); // TODO
+    return visit(node.getExpression());
   }
 
   default R visitInitializer(Initializer node) {
-    throw new UnsupportedOperationException(); // TODO
+    return defaultResult();
   }
 
   default R visitNestedInitializer(NestedInitializer node) {
-    throw new UnsupportedOperationException(); // TODO
+    return visitChildren(node.initializers);
   }
 
   default R visitInterpolationQualifier(InterpolationQualifier node) {
-    throw new UnsupportedOperationException(); // TODO
+    return defaultResult();
   }
 
   default R visitInvariantQualifier(InvariantQualifier node) {
-    throw new UnsupportedOperationException(); // TODO
+    return defaultResult();
   }
 
   default R visitLayoutQualifier(LayoutQualifier node) {
-    throw new UnsupportedOperationException(); // TODO
+    return visitChildren(node.parts);
   }
 
   default R visitLayoutQualifierPart(LayoutQualifierPart node) {
-    throw new UnsupportedOperationException(); // TODO
+    return defaultResult();
   }
 
   default R visitNamedLayoutQualifierPart(NamedLayoutQualifierPart node) {
-    throw new UnsupportedOperationException(); // TODO
+    return visitTwoChildren(node.getName(), node.getExpression());
   }
 
   default R visitPreciseQualifier(PreciseQualifier node) {
-    throw new UnsupportedOperationException(); // TODO
+    return defaultResult();
   }
 
   default R visitPrecisionQualifier(PrecisionQualifier node) {
-    throw new UnsupportedOperationException(); // TODO
+    return defaultResult();
   }
 
   default R visitSharedLayoutQualifierPart(SharedLayoutQualifierPart node) {
-    throw new UnsupportedOperationException(); // TODO
+    return defaultResult();
   }
 
   default R visitStorageQualifier(StorageQualifier node) {
-    throw new UnsupportedOperationException(); // TODO
+    return visitChildren(node.typeNames);
   }
 
   default R visitTypeQualifier(TypeQualifier node) {
-    throw new UnsupportedOperationException(); // TODO
+    return visitChildren(node);
   }
 
   default R visitTypeQualifierPart(TypeQualifierPart node) {
-    throw new UnsupportedOperationException(); // TODO
+    return superNodeTypeResult();
   }
 
   default R visitArraySpecifier(ArraySpecifier node) {
-    throw new UnsupportedOperationException(); // TODO
+    return visitChildren(node);
   }
 
   default R visitBuiltinFixedTypeSpecifier(BuiltinFixedTypeSpecifier node) {
-    throw new UnsupportedOperationException(); // TODO
+    return defaultResult();
   }
 
   default R visitBuiltinNumericTypeSpecifier(BuiltinNumericTypeSpecifier node) {
-    throw new UnsupportedOperationException(); // TODO
+    return defaultResult();
   }
 
   default R visitTypeReference(TypeReference node) {
-    throw new UnsupportedOperationException(); // TODO
+    return visit(node.getReference());
   }
 
   default R visitTypeSpecifier(TypeSpecifier node) {
-    throw new UnsupportedOperationException(); // TODO
+    return superNodeTypeResult();
   }
 
   default R visitStructBody(StructBody node) {
-    throw new UnsupportedOperationException(); // TODO
+    return visitChildren(node);
   }
 
   default R visitStructDeclarator(StructDeclarator node) {
-    throw new UnsupportedOperationException(); // TODO
+    return visitTwoChildren(node.getName(), node.getArraySpecifier());
   }
 
   default R visitStructMember(StructMember node) {
-    throw new UnsupportedOperationException(); // TODO
+    return visitChildren(visit(node.getType()), node.declarators);
   }
 
   default R visitStructSpecifier(StructSpecifier node) {
-    throw new UnsupportedOperationException(); // TODO
+    return visitTwoChildren(node.getName(), node.getStructBody());
   }
 
   default R visitFullySpecifiedType(FullySpecifiedType node) {
-    throw new UnsupportedOperationException(); // TODO
+    return visitTwoChildren(node.getTypeQualifier(), node.getTypeSpecifier());
   }
 
   default R visitIterationConditionInitializer(IterationConditionInitializer node) {
-    throw new UnsupportedOperationException(); // TODO
+    return visitThreeChildren(node.getType(), node.getName(), node.getInitializer());
+  }
+
+  default R visitFunctionPrototype(FunctionPrototype node) {
+    return visitChildren(visitTwoChildren(node.getReturnType(), node.getName()), node);
   }
 
   default R visitIdentifier(Identifier node) {
