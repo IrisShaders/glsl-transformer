@@ -602,5 +602,4 @@ public interface ASTListener extends GeneralASTListener {
 
   default void exitIterationConditionInitializer(IterationConditionInitializer node) {
   }
-
 }
