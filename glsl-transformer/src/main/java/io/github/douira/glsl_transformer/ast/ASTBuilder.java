@@ -574,6 +574,45 @@ public class ASTBuilder extends GLSLParserBaseVisitor<ASTNode> {
         (Initializer) visit(ctx.initializer()));
   }
 
+  //TODO visits
+  /**
+   * Declaration
+   * DeclarationMember
+   * FullTypeParameter
+   * FunctionDeclaration
+   * FunctionParameter
+   * InterfaceBlockDeclaration
+   * NamedParameter
+   * PrecisionDeclaration
+   * TypeAndInitDeclaration
+   * VariableDeclaration
+   * ExpressionInitializer
+   * Initializer
+   * NestedInitializer
+   * InterpolationQualifier
+   * InvariantQualifier
+   * LayoutQualifier
+   * LayoutQualifierPart
+   * NamedLayoutQualifierPart
+   * PreciseQualifier
+   * PrecisionQualifier
+   * SharedLayoutQualifierPart
+   * StorageQualifier
+   * TypeQualifier
+   * TypeQualifierPart
+   * ArraySpecifier
+   * BuiltinFixedTypeSpecifier
+   * BuiltinNumericTypeSpecifier
+   * TypeReference
+   * TypeSpecifier
+   * StructBody
+   * StructDeclarator
+   * StructMember
+   * StructSpecifier
+   * FullySpecifiedType
+   * IterationConditionInitializer
+   */
+
   @Override
   public ASTNode visitTerminal(TerminalNode node) {
     var type = node.getSymbol().getType();

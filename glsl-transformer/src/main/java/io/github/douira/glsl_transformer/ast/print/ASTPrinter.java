@@ -2,6 +2,7 @@ package io.github.douira.glsl_transformer.ast.print;
 
 import io.github.douira.glsl_transformer.GLSLLexer;
 import io.github.douira.glsl_transformer.ast.node.*;
+import io.github.douira.glsl_transformer.ast.node.declaration.*;
 import io.github.douira.glsl_transformer.ast.node.expression.*;
 import io.github.douira.glsl_transformer.ast.node.expression.binary.*;
 import io.github.douira.glsl_transformer.ast.node.expression.unary.*;
@@ -11,6 +12,11 @@ import io.github.douira.glsl_transformer.ast.node.statement.*;
 import io.github.douira.glsl_transformer.ast.node.statement.loop.*;
 import io.github.douira.glsl_transformer.ast.node.statement.selection.*;
 import io.github.douira.glsl_transformer.ast.node.statement.terminal.*;
+import io.github.douira.glsl_transformer.ast.node.type.FullySpecifiedType;
+import io.github.douira.glsl_transformer.ast.node.type.initializer.*;
+import io.github.douira.glsl_transformer.ast.node.type.qualifier.*;
+import io.github.douira.glsl_transformer.ast.node.type.specifier.*;
+import io.github.douira.glsl_transformer.ast.node.type.struct.*;
 import io.github.douira.glsl_transformer.ast.print.token.EOFToken;
 
 /**
@@ -779,6 +785,181 @@ public abstract class ASTPrinter extends ASTPrinterBase {
     emitType(GLSLLexer.DEMOTE, GLSLLexer.SEMICOLON);
     emitCommonNewline();
     return null;
+  }
+
+  @Override
+  public Void visitDeclaration(Declaration node) {
+    throw new UnsupportedOperationException(); // TODO
+  }
+
+  @Override
+  public Void visitDeclarationMember(DeclarationMember node) {
+    throw new UnsupportedOperationException(); // TODO
+  }
+
+  @Override
+  public Void visitFullTypeParameter(FullTypeParameter node) {
+    throw new UnsupportedOperationException(); // TODO
+  }
+
+  @Override
+  public Void visitFunctionDeclaration(FunctionDeclaration node) {
+    throw new UnsupportedOperationException(); // TODO
+  }
+
+  @Override
+  public Void visitFunctionParameter(FunctionParameter node) {
+    throw new UnsupportedOperationException(); // TODO
+  }
+
+  @Override
+  public Void visitInterfaceBlockDeclaration(InterfaceBlockDeclaration node) {
+    throw new UnsupportedOperationException(); // TODO
+  }
+
+  @Override
+  public Void visitNamedParameter(NamedParameter node) {
+    throw new UnsupportedOperationException(); // TODO
+  }
+
+  @Override
+  public Void visitPrecisionDeclaration(PrecisionDeclaration node) {
+    throw new UnsupportedOperationException(); // TODO
+  }
+
+  @Override
+  public Void visitTypeAndInitDeclaration(TypeAndInitDeclaration node) {
+    throw new UnsupportedOperationException(); // TODO
+  }
+
+  @Override
+  public Void visitVariableDeclaration(VariableDeclaration node) {
+    throw new UnsupportedOperationException(); // TODO
+  }
+
+  @Override
+  public Void visitExpressionInitializer(ExpressionInitializer node) {
+    throw new UnsupportedOperationException(); // TODO
+  }
+
+  @Override
+  public Void visitInitializer(Initializer node) {
+    throw new UnsupportedOperationException(); // TODO
+  }
+
+  @Override
+  public Void visitNestedInitializer(NestedInitializer node) {
+    throw new UnsupportedOperationException(); // TODO
+  }
+
+  @Override
+  public Void visitInterpolationQualifier(InterpolationQualifier node) {
+    throw new UnsupportedOperationException(); // TODO
+  }
+
+  @Override
+  public Void visitInvariantQualifier(InvariantQualifier node) {
+    throw new UnsupportedOperationException(); // TODO
+  }
+
+  @Override
+  public Void visitLayoutQualifier(LayoutQualifier node) {
+    throw new UnsupportedOperationException(); // TODO
+  }
+
+  @Override
+  public Void visitLayoutQualifierPart(LayoutQualifierPart node) {
+    throw new UnsupportedOperationException(); // TODO
+  }
+
+  @Override
+  public Void visitNamedLayoutQualifierPart(NamedLayoutQualifierPart node) {
+    throw new UnsupportedOperationException(); // TODO
+  }
+
+  @Override
+  public Void visitPreciseQualifier(PreciseQualifier node) {
+    throw new UnsupportedOperationException(); // TODO
+  }
+
+  @Override
+  public Void visitPrecisionQualifier(PrecisionQualifier node) {
+    throw new UnsupportedOperationException(); // TODO
+  }
+
+  @Override
+  public Void visitSharedLayoutQualifierPart(SharedLayoutQualifierPart node) {
+    throw new UnsupportedOperationException(); // TODO
+  }
+
+  @Override
+  public Void visitStorageQualifier(StorageQualifier node) {
+    throw new UnsupportedOperationException(); // TODO
+  }
+
+  @Override
+  public Void visitTypeQualifier(TypeQualifier node) {
+    throw new UnsupportedOperationException(); // TODO
+  }
+
+  @Override
+  public Void visitTypeQualifierPart(TypeQualifierPart node) {
+    throw new UnsupportedOperationException(); // TODO
+  }
+
+  @Override
+  public Void visitArraySpecifier(ArraySpecifier node) {
+    throw new UnsupportedOperationException(); // TODO
+  }
+
+  @Override
+  public Void visitBuiltinFixedTypeSpecifier(BuiltinFixedTypeSpecifier node) {
+    throw new UnsupportedOperationException(); // TODO
+  }
+
+  @Override
+  public Void visitBuiltinNumericTypeSpecifier(BuiltinNumericTypeSpecifier node) {
+    throw new UnsupportedOperationException(); // TODO
+  }
+
+  @Override
+  public Void visitTypeReference(TypeReference node) {
+    throw new UnsupportedOperationException(); // TODO
+  }
+
+  @Override
+  public Void visitTypeSpecifier(TypeSpecifier node) {
+    throw new UnsupportedOperationException(); // TODO
+  }
+
+  @Override
+  public Void visitStructBody(StructBody node) {
+    throw new UnsupportedOperationException(); // TODO
+  }
+
+  @Override
+  public Void visitStructDeclarator(StructDeclarator node) {
+    throw new UnsupportedOperationException(); // TODO
+  }
+
+  @Override
+  public Void visitStructMember(StructMember node) {
+    throw new UnsupportedOperationException(); // TODO
+  }
+
+  @Override
+  public Void visitStructSpecifier(StructSpecifier node) {
+    throw new UnsupportedOperationException(); // TODO
+  }
+
+  @Override
+  public Void visitFullySpecifiedType(FullySpecifiedType node) {
+    throw new UnsupportedOperationException(); // TODO
+  }
+
+  @Override
+  public Void visitIterationConditionInitializer(IterationConditionInitializer node) {
+    throw new UnsupportedOperationException(); // TODO
   }
 
   @Override
