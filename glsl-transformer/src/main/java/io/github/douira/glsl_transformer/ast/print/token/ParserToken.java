@@ -21,7 +21,7 @@ public class ParserToken extends PrintToken {
     }
   };
 
-  public int tokenType;
+  public final int tokenType;
 
   public ParserToken(TokenChannel channel, TokenRole role, int tokenType) {
     super(channel, role);

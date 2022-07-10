@@ -91,8 +91,8 @@ public class BuiltinFixedTypeSpecifier extends TypeSpecifier {
     IIMAGE2DMSARRAY(GLSLLexer.IIMAGE2DMSARRAY, TypeKind.IMAGE),
     UIMAGE2DMSARRAY(GLSLLexer.UIMAGE2DMSARRAY, TypeKind.IMAGE);
 
-    public int tokenType;
-    public TypeKind kind;
+    public final int tokenType;
+    public final TypeKind kind;
 
     private BuiltinType(int tokenType, TypeKind kind) {
       this.tokenType = tokenType;

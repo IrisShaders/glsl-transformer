@@ -18,7 +18,7 @@ public abstract class Expression extends InnerASTNode {
     BITWISE_NOT, // unary
     LENGTH_ACCESS, // unary
     MEMBER_ACCESS, // unary + identifier
-    FUNCTION_CALL, // TODO (incomplete) unary + parameters
+    FUNCTION_CALL, // unary + parameters
 
     ARRAY_ACCESS, // binary
     MULTIPLICATION, // binary

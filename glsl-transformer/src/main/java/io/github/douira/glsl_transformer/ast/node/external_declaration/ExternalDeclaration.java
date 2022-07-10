@@ -5,11 +5,11 @@ import io.github.douira.glsl_transformer.ast.traversal.*;
 
 public abstract class ExternalDeclaration extends InnerASTNode {
   public enum ExternalDeclarationType {
-    FUNCTION_DEFINITION, // TODO
-    DECLARATION, // TODO
+    FUNCTION_DEFINITION,
+    DECLARATION,
     PRAGMA_STATEMENT,
     EXTENSION_STATEMENT,
-    LAYOUT_DEFAULTS, // TODO (unfinished)
+    LAYOUT_DEFAULTS,
     EMPTY_DECLARATION
   }
 

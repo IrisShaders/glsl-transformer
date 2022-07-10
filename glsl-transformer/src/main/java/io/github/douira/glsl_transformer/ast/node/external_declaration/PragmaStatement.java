@@ -13,7 +13,7 @@ public class PragmaStatement extends ExternalDeclaration {
     INVARIANT(GLSLLexer.PRAGMA_INVARIANT),
     CUSTOM(GLSLLexer.NR_IDENTIFIER);
 
-    public int tokenType;
+    public final int tokenType;
 
     private PragmaType(int tokenType) {
       this.tokenType = tokenType;
@@ -34,7 +34,7 @@ public class PragmaStatement extends ExternalDeclaration {
     OFF(GLSLLexer.NR_OFF),
     ALL(GLSLLexer.NR_ALL);
 
-    public int tokenType;
+    public final int tokenType;
 
     private PragmaState(int tokenType) {
       this.tokenType = tokenType;

@@ -98,11 +98,13 @@ public class InterfaceBlockDeclaration extends Declaration {
 
   @Override
   public void enterNode(ASTListener listener) {
+    super.enterNode(listener);
     listener.enterInterfaceBlockDeclaration(this);
   }
 
   @Override
   public void exitNode(ASTListener listener) {
+    super.exitNode(listener);
     listener.exitInterfaceBlockDeclaration(this);
   }
 }

@@ -12,7 +12,7 @@ public class InterpolationQualifier extends TypeQualifierPart {
     FLAT(GLSLLexer.FLAT),
     NOPERSPECTIVE(GLSLLexer.NOPERSPECTIVE);
 
-    public int tokenType;
+    public final int tokenType;
 
     private InterpolationType(int tokenType) {
       this.tokenType = tokenType;

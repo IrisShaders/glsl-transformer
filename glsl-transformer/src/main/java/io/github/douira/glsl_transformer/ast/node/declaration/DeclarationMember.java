@@ -1,28 +1,43 @@
 package io.github.douira.glsl_transformer.ast.node.declaration;
 
+import io.github.douira.glsl_transformer.ast.node.Identifier;
 import io.github.douira.glsl_transformer.ast.node.basic.InnerASTNode;
 import io.github.douira.glsl_transformer.ast.node.type.initializer.Initializer;
 import io.github.douira.glsl_transformer.ast.node.type.specifier.ArraySpecifier;
 import io.github.douira.glsl_transformer.ast.traversal.*;
 
 public class DeclarationMember extends InnerASTNode {
+  protected Identifier name;
   protected ArraySpecifier arraySpecifier; // TODO: nullable
   protected Initializer initializer; // TODO: nullable
 
-  public DeclarationMember(ArraySpecifier arraySpecifier, Initializer initializer) {
+  public DeclarationMember(Identifier name, ArraySpecifier arraySpecifier, Initializer initializer) {
+    this.name = setup(name);
     this.arraySpecifier = setup(arraySpecifier);
     this.initializer = setup(initializer);
   }
 
-  public DeclarationMember(ArraySpecifier arraySpecifier) {
-    this.arraySpecifier = setup(arraySpecifier);
-  }
-
-  public DeclarationMember(Initializer initializer) {
+  public DeclarationMember(Identifier name, Initializer initializer) {
+    this.name = setup(name);
     this.initializer = setup(initializer);
   }
 
-  public DeclarationMember() {
+  public DeclarationMember(Identifier name, ArraySpecifier arraySpecifier) {
+    this.name = setup(name);
+    this.arraySpecifier = setup(arraySpecifier);
+  }
+
+  public DeclarationMember(Identifier name) {
+    this.name = setup(name);
+  }
+
+  public Identifier getName() {
+    return name;
+  }
+
+  public void setName(Identifier name) {
+    updateParents(this.name, name);
+    this.name = name;
   }
 
   public ArraySpecifier getArraySpecifier() {
@@ -57,4 +72,5 @@ public class DeclarationMember extends InnerASTNode {
   public void exitNode(ASTListener listener) {
     listener.exitDeclarationMember(this);
   }
+
 }

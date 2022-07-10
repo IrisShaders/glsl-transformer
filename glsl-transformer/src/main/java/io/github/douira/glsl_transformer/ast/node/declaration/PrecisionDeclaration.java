@@ -15,6 +15,24 @@ public class PrecisionDeclaration extends Declaration {
     this.typeSpecifier = setup(typeSpecifier);
   }
 
+  public PrecisionQualifier getPrecisionQualifier() {
+    return precisionQualifier;
+  }
+
+  public void setPrecisionQualifier(PrecisionQualifier precisionQualifier) {
+    updateParents(this.precisionQualifier, precisionQualifier);
+    this.precisionQualifier = precisionQualifier;
+  }
+
+  public TypeSpecifier getTypeSpecifier() {
+    return typeSpecifier;
+  }
+
+  public void setTypeSpecifier(TypeSpecifier typeSpecifier) {
+    updateParents(this.typeSpecifier, typeSpecifier);
+    this.typeSpecifier = typeSpecifier;
+  }
+
   @Override
   public DeclarationType getDeclarationType() {
     return DeclarationType.PRECISION;
@@ -27,11 +45,13 @@ public class PrecisionDeclaration extends Declaration {
 
   @Override
   public void enterNode(ASTListener listener) {
+    super.enterNode(listener);
     listener.enterPrecisionDeclaration(this);
   }
 
   @Override
   public void exitNode(ASTListener listener) {
+    super.exitNode(listener);
     listener.exitPrecisionDeclaration(this);
   }
 }

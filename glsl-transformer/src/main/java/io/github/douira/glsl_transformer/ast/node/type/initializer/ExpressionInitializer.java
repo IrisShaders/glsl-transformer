@@ -31,11 +31,13 @@ public class ExpressionInitializer extends Initializer {
 
   @Override
   public void enterNode(ASTListener listener) {
+    super.enterNode(listener);
     listener.enterExpressionInitializer(this);
   }
 
   @Override
   public void exitNode(ASTListener listener) {
+    super.exitNode(listener);
     listener.exitExpressionInitializer(this);
   }
 }

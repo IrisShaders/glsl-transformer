@@ -33,11 +33,13 @@ public class NestedInitializer extends Initializer {
 
   @Override
   public void enterNode(ASTListener listener) {
+    super.enterNode(listener);
     listener.enterNestedInitializer(this);
   }
 
   @Override
   public void exitNode(ASTListener listener) {
+    super.exitNode(listener);
     listener.exitNestedInitializer(this);
   }
 }

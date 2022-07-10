@@ -36,11 +36,13 @@ public class TypeReference extends TypeSpecifier {
 
   @Override
   public void enterNode(ASTListener listener) {
+    super.enterNode(listener);
     listener.enterTypeReference(this);
   }
 
   @Override
   public void exitNode(ASTListener listener) {
+    super.exitNode(listener);
     listener.exitTypeReference(this);
   }
 }

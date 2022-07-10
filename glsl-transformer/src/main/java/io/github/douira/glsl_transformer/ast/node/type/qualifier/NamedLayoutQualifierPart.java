@@ -17,6 +17,24 @@ public class NamedLayoutQualifierPart extends LayoutQualifierPart {
     this.name = setup(name);
   }
 
+  public Identifier getName() {
+    return name;
+  }
+
+  public void setName(Identifier name) {
+    updateParents(this.name, name);
+    this.name = name;
+  }
+
+  public Expression getExpression() {
+    return expression;
+  }
+
+  public void setExpression(Expression expression) {
+    updateParents(this.expression, expression);
+    this.expression = expression;
+  }
+
   @Override
   public LayoutQualifierType getLayoutQualifierType() {
     return LayoutQualifierType.NAMED;
@@ -29,11 +47,13 @@ public class NamedLayoutQualifierPart extends LayoutQualifierPart {
 
   @Override
   public void enterNode(ASTListener listener) {
+    super.enterNode(listener);
     listener.enterNamedLayoutQualifierPart(this);
   }
 
   @Override
   public void exitNode(ASTListener listener) {
+    super.exitNode(listener);
     listener.exitNamedLayoutQualifierPart(this);
   }
 }
