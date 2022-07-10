@@ -1,50 +1,22 @@
 package io.github.douira.glsl_transformer.ast.node.declaration;
 
-import java.util.List;
-import java.util.stream.Stream;
-
-import io.github.douira.glsl_transformer.ast.data.ChildNodeList;
-import io.github.douira.glsl_transformer.ast.node.Identifier;
-import io.github.douira.glsl_transformer.ast.node.type.FullySpecifiedType;
+import io.github.douira.glsl_transformer.ast.node.type.specifier.FunctionPrototype;
 import io.github.douira.glsl_transformer.ast.traversal.*;
 
 public class FunctionDeclaration extends Declaration {
-  protected FullySpecifiedType returnType;
-  protected Identifier name;
-  public final List<FunctionParameter> parameters;
+  protected FunctionPrototype functionPrototype;
 
-  public FunctionDeclaration(FullySpecifiedType returnType, Identifier name, List<FunctionParameter> parameters) {
-    this.returnType = setup(returnType);
-    this.name = setup(name);
-    this.parameters = new ChildNodeList<>(parameters, this);
+  public FunctionDeclaration(FunctionPrototype functionPrototype) {
+    this.functionPrototype = setup(functionPrototype);
   }
 
-  public FunctionDeclaration(FullySpecifiedType returnType, Identifier name, Stream<FunctionParameter> parameters) {
-    this.returnType = setup(returnType);
-    this.name = setup(name);
-    this.parameters = ChildNodeList.collect(parameters, this);
+  public FunctionPrototype getFunctionPrototype() {
+    return functionPrototype;
   }
 
-  public FunctionDeclaration(FullySpecifiedType returnType, Identifier name) {
-    this(returnType, name, Stream.empty());
-  }
-
-  public FullySpecifiedType getReturnType() {
-    return returnType;
-  }
-
-  public void setReturnType(FullySpecifiedType returnType) {
-    updateParents(this.returnType, returnType);
-    this.returnType = returnType;
-  }
-
-  public Identifier getName() {
-    return name;
-  }
-
-  public void setName(Identifier name) {
-    updateParents(this.name, name);
-    this.name = name;
+  public void setFunctionPrototype(FunctionPrototype functionPrototype) {
+    updateParents(this.functionPrototype, functionPrototype);
+    this.functionPrototype = functionPrototype;
   }
 
   @Override
@@ -59,11 +31,13 @@ public class FunctionDeclaration extends Declaration {
 
   @Override
   public void enterNode(ASTListener listener) {
+    super.enterNode(listener);
     listener.enterFunctionDeclaration(this);
   }
 
   @Override
   public void exitNode(ASTListener listener) {
+    super.exitNode(listener);
     listener.exitFunctionDeclaration(this);
   }
 }

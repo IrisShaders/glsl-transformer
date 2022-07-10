@@ -33,6 +33,12 @@ public interface ASTListener extends GeneralASTListener {
   default void exitExternalDeclaration(ExternalDeclaration node) {
   }
 
+  default void enterFunctionDefinition(FunctionDefinition node) {
+  }
+
+  default void exitFunctionDefinition(FunctionDefinition node) {
+  }
+
   default void enterLayoutDefaults(LayoutDefaults node) {
   }
 
@@ -447,12 +453,6 @@ public interface ASTListener extends GeneralASTListener {
   default void exitDeclarationMember(DeclarationMember node) {
   }
 
-  default void enterFullTypeParameter(FullTypeParameter node) {
-  }
-
-  default void exitFullTypeParameter(FullTypeParameter node) {
-  }
-
   default void enterFunctionDeclaration(FunctionDeclaration node) {
   }
 
@@ -469,12 +469,6 @@ public interface ASTListener extends GeneralASTListener {
   }
 
   default void exitInterfaceBlockDeclaration(InterfaceBlockDeclaration node) {
-  }
-
-  default void enterNamedParameter(NamedParameter node) {
-  }
-
-  default void exitNamedParameter(NamedParameter node) {
   }
 
   default void enterPrecisionDeclaration(PrecisionDeclaration node) {
@@ -601,5 +595,11 @@ public interface ASTListener extends GeneralASTListener {
   }
 
   default void exitIterationConditionInitializer(IterationConditionInitializer node) {
+  }
+
+  default void enterFunctionPrototype(FunctionPrototype node) {
+  }
+
+  default void exitFunctionPrototype(FunctionPrototype node) {
   }
 }
