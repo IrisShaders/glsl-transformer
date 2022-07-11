@@ -7,10 +7,6 @@ import io.github.douira.glsl_transformer.ast.node.basic.ListASTNode;
 import io.github.douira.glsl_transformer.ast.traversal.*;
 
 public class TypeQualifier extends ListASTNode<TypeQualifierPart> {
-  public TypeQualifier(List<TypeQualifierPart> children) {
-    super(children);
-  }
-
   public TypeQualifier(Stream<TypeQualifierPart> children) {
     super(children);
   }

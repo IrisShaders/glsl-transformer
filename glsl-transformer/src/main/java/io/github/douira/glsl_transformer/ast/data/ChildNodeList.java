@@ -23,7 +23,7 @@ public class ChildNodeList<Child extends ASTNode> extends ProxyArrayList<Child> 
     this.parent = parent;
   }
 
-  public ChildNodeList(Collection<? extends Child> c, InnerASTNode parent) {
+  protected ChildNodeList(Collection<? extends Child> c, InnerASTNode parent) {
     super(c, false);
     this.parent = parent;
     notifyAdditionInternal(c);

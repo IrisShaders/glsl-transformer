@@ -13,12 +13,6 @@ public class FunctionPrototype extends ListASTNode<FunctionParameter> {
   protected FullySpecifiedType returnType;
   protected Identifier name;
 
-  public FunctionPrototype(FullySpecifiedType returnType, Identifier name, List<FunctionParameter> parameters) {
-    super(parameters);
-    this.returnType = setup(returnType);
-    this.name = setup(name);
-  }
-
   public FunctionPrototype(FullySpecifiedType returnType, Identifier name, Stream<FunctionParameter> parameters) {
     super(parameters);
     this.returnType = setup(returnType);

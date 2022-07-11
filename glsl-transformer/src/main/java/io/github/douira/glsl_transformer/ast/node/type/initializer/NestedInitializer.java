@@ -9,10 +9,6 @@ import io.github.douira.glsl_transformer.ast.traversal.*;
 public class NestedInitializer extends Initializer {
   public final List<Initializer> initializers;
 
-  public NestedInitializer(List<Initializer> initializers) {
-    this.initializers = new ChildNodeList<>(initializers, this);
-  }
-
   public NestedInitializer(Stream<Initializer> initializers) {
     this.initializers = ChildNodeList.collect(initializers, this);
   }

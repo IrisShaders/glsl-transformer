@@ -11,11 +11,6 @@ public class TypeAndInitDeclaration extends Declaration {
   protected FullySpecifiedType type;
   public final List<DeclarationMember> members;
 
-  public TypeAndInitDeclaration(FullySpecifiedType type, List<DeclarationMember> members) {
-    this.type = setup(type);
-    this.members = new ChildNodeList<>(members, this);
-  }
-
   public TypeAndInitDeclaration(FullySpecifiedType type, Stream<DeclarationMember> members) {
     this.type = setup(type);
     this.members = ChildNodeList.collect(members, this);

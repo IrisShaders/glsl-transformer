@@ -55,11 +55,6 @@ public class StorageQualifier extends TypeQualifierPart {
   public final List<Identifier> typeNames; // TODO: nullable (optional)
   public StorageType storageType;
 
-  public StorageQualifier(List<Identifier> typeNames) {
-    this.typeNames = new ChildNodeList<>(typeNames, this);
-    this.storageType = StorageType.SUBROUTINE;
-  }
-
   public StorageQualifier(Stream<Identifier> typeNames) {
     this.typeNames = ChildNodeList.collect(typeNames, this);
     this.storageType = StorageType.SUBROUTINE;

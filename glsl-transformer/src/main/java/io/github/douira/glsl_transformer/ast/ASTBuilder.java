@@ -200,7 +200,10 @@ public class ASTBuilder extends GLSLParserBaseVisitor<ASTNode> {
 
     expressions.add((Expression) visit(left));
     Collections.reverse(expressions);
-    return new SequenceExpression(expressions);
+
+    // converting to stream and back is fine
+    // since the child list has to copy anyways
+    return new SequenceExpression(expressions.stream());
   }
 
   private static final Pattern intExtractor = Pattern.compile(

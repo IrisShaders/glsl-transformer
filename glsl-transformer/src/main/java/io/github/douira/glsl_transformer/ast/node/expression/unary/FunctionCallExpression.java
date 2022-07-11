@@ -40,23 +40,9 @@ public class FunctionCallExpression extends TerminalExpression {
 
   public FunctionCallExpression(
       Identifier functionName,
-      List<Expression> parameters) {
-    this(functionName);
-    this.parameters = new ChildNodeList<>(parameters, this);
-  }
-
-  public FunctionCallExpression(
-      Identifier functionName,
       Stream<Expression> parameters) {
     this(functionName);
     this.parameters = ChildNodeList.collect(parameters, this);
-  }
-
-  public FunctionCallExpression(
-      TypeSpecifier functionSpecifier,
-      List<Expression> parameters) {
-    this(functionSpecifier);
-    this.parameters = new ChildNodeList<>(parameters, this);
   }
 
   public FunctionCallExpression(
@@ -118,11 +104,6 @@ public class FunctionCallExpression extends TerminalExpression {
 
   public List<Expression> getParameters() {
     return parameters;
-  }
-
-  public void useParameters(List<Expression> parameters) {
-    this.parameters = new ChildNodeList<>(parameters, this);
-    functionCallType = FunctionCallType.PARAMETERS;
   }
 
   public void useParameters(Stream<Expression> parameters) {

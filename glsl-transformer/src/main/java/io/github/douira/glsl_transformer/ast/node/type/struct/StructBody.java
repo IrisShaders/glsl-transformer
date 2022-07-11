@@ -7,10 +7,6 @@ import io.github.douira.glsl_transformer.ast.node.basic.ListASTNode;
 import io.github.douira.glsl_transformer.ast.traversal.*;
 
 public class StructBody extends ListASTNode<StructMember> {
-  public StructBody(List<StructMember> children) {
-    super(children);
-  }
-
   public StructBody(Stream<StructMember> children) {
     super(children);
   }

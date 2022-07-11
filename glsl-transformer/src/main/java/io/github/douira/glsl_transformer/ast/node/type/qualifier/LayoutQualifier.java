@@ -9,10 +9,6 @@ import io.github.douira.glsl_transformer.ast.traversal.*;
 public class LayoutQualifier extends TypeQualifierPart {
   public final List<LayoutQualifierPart> parts;
 
-  public LayoutQualifier(List<LayoutQualifierPart> parts) {
-    this.parts = new ChildNodeList<>(parts, this);
-  }
-
   public LayoutQualifier(Stream<LayoutQualifierPart> parts) {
     this.parts = ChildNodeList.collect(parts, this);
   }

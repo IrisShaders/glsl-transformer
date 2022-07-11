@@ -10,10 +10,6 @@ import io.github.douira.glsl_transformer.ast.traversal.*;
 public abstract class ManyStatement extends Statement implements ListNode<Statement> {
   public final List<Statement> statements;
 
-  public ManyStatement(List<Statement> statements) {
-    this.statements = new ChildNodeList<>(statements, this);
-  }
-
   public ManyStatement(Stream<Statement> statements) {
     this.statements = ChildNodeList.collect(statements, this);
   }
