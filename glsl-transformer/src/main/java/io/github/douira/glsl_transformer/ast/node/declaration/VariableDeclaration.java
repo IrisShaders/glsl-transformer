@@ -12,11 +12,6 @@ public class VariableDeclaration extends Declaration {
   protected TypeQualifier typeQualifier;
   public final List<Identifier> names;
 
-  public VariableDeclaration(TypeQualifier typeQualifier, List<Identifier> names) {
-    this.typeQualifier = typeQualifier;
-    this.names = new ChildNodeList<>(names, this);
-  }
-
   public VariableDeclaration(TypeQualifier typeQualifier, Stream<Identifier> names) {
     this.typeQualifier = typeQualifier;
     this.names = ChildNodeList.collect(names, this);

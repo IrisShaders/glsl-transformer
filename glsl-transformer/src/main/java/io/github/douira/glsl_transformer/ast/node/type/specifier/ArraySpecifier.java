@@ -9,10 +9,6 @@ import io.github.douira.glsl_transformer.ast.traversal.*;
 
 //TODO: any of these expressions can be null
 public class ArraySpecifier extends ListASTNode<Expression> {
-  public ArraySpecifier(List<Expression> children) {
-    super(children);
-  }
-
   public ArraySpecifier(Stream<Expression> children) {
     super(children);
   }

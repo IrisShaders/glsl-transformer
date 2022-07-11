@@ -10,10 +10,6 @@ import io.github.douira.glsl_transformer.ast.traversal.*;
 public abstract class ManyExpression extends Expression implements ListNode<Expression> {
   public final List<Expression> expressions;
 
-  public ManyExpression(List<Expression> expressions) {
-    this.expressions = new ChildNodeList<>(expressions, this);
-  }
-
   public ManyExpression(Stream<Expression> expressions) {
     this.expressions = ChildNodeList.collect(expressions, this);
   }

@@ -1,15 +1,10 @@
 package io.github.douira.glsl_transformer.ast.node.expression;
 
-import java.util.List;
 import java.util.stream.Stream;
 
 import io.github.douira.glsl_transformer.ast.traversal.*;
 
 public class SequenceExpression extends ManyExpression {
-  public SequenceExpression(List<Expression> expressions) {
-    super(expressions);
-  }
-
   public SequenceExpression(Stream<Expression> expressions) {
     super(expressions);
   }

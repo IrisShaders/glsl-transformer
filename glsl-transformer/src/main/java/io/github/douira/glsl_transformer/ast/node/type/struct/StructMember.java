@@ -12,11 +12,6 @@ public class StructMember extends InnerASTNode {
   protected FullySpecifiedType type;
   public final List<StructDeclarator> declarators;
 
-  public StructMember(FullySpecifiedType type, List<StructDeclarator> declarators) {
-    this.type = setup(type);
-    this.declarators = new ChildNodeList<>(declarators, this);
-  }
-
   public StructMember(FullySpecifiedType type, Stream<StructDeclarator> declarators) {
     this.type = setup(type);
     this.declarators = ChildNodeList.collect(declarators, this);
