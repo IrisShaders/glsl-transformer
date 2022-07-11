@@ -10,7 +10,7 @@ public class BuiltinNumericTypeSpecifier extends TypeSpecifier {
     this.type = type;
   }
 
-  public BuiltinNumericTypeSpecifier(ArraySpecifier arraySpecifier, Type type) {
+  public BuiltinNumericTypeSpecifier(Type type, ArraySpecifier arraySpecifier) {
     super(arraySpecifier);
     this.type = type;
   }

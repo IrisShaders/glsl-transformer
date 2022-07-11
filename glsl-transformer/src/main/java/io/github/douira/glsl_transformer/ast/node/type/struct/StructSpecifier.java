@@ -12,7 +12,7 @@ public class StructSpecifier extends TypeSpecifier {
     this.structBody = setup(structBody);
   }
 
-  public StructSpecifier(ArraySpecifier arraySpecifier, StructBody structBody) {
+  public StructSpecifier(StructBody structBody, ArraySpecifier arraySpecifier) {
     super(arraySpecifier);
     this.structBody = setup(structBody);
   }
@@ -23,9 +23,9 @@ public class StructSpecifier extends TypeSpecifier {
   }
 
   public StructSpecifier(
-      ArraySpecifier arraySpecifier,
       Identifier name,
-      StructBody structBody) {
+      StructBody structBody,
+      ArraySpecifier arraySpecifier) {
     super(arraySpecifier);
     this.name = setup(name);
     this.structBody = setup(structBody);
