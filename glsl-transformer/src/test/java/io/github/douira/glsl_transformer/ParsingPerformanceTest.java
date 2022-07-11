@@ -28,9 +28,9 @@ public class ParsingPerformanceTest extends TestWithBareTransformationManager {
         resources.map(Resource::content).collect(Collectors.toList()));
   }
 
-  private void assertPerformance(Duration expected, Resource... resources) {
-    assertPerformance(expected, Stream.of(resources));
-  }
+  // private void assertPerformance(Duration expected, Resource... resources) {
+  //   assertPerformance(expected, Stream.of(resources));
+  // }
 
   private void assertFilePerformance(Duration expected, Stream<FileLocation> files) {
     assertPerformance(expected, files.map(TestResourceManager::getResource));
