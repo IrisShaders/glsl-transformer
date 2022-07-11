@@ -25,10 +25,13 @@ import io.github.douira.glsl_transformer.ast.node.statement.loop.*;
 import io.github.douira.glsl_transformer.ast.node.statement.selection.*;
 import io.github.douira.glsl_transformer.ast.node.statement.terminal.*;
 import io.github.douira.glsl_transformer.ast.node.type.FullySpecifiedType;
-import io.github.douira.glsl_transformer.ast.node.type.initializer.Initializer;
+import io.github.douira.glsl_transformer.ast.node.type.initializer.*;
 import io.github.douira.glsl_transformer.ast.node.type.qualifier.*;
+import io.github.douira.glsl_transformer.ast.node.type.qualifier.InterpolationQualifier.InterpolationType;
+import io.github.douira.glsl_transformer.ast.node.type.qualifier.PrecisionQualifier.PrecisionLevel;
 import io.github.douira.glsl_transformer.ast.node.type.qualifier.StorageQualifier.StorageType;
 import io.github.douira.glsl_transformer.ast.node.type.specifier.*;
+import io.github.douira.glsl_transformer.ast.node.type.specifier.BuiltinFixedTypeSpecifier.BuiltinType;
 import io.github.douira.glsl_transformer.ast.node.type.struct.*;
 import io.github.douira.glsl_transformer.ast.query.Root;
 import io.github.douira.glsl_transformer.parse_ast.Type;
@@ -580,35 +583,12 @@ public class ASTBuilder extends GLSLParserBaseVisitor<ASTNode> {
 
   @Override
   public ArraySpecifier visitArraySpecifier(ArraySpecifierContext ctx) {
-    // TODO Auto-generated method stub
-    // return super.visitArraySpecifier(ctx);
-    return null;
-  }
-
-  @Override
-  public DeclarationMember visitDeclarationMember(DeclarationMemberContext ctx) {
-    // TODO Auto-generated method stub
-    // return super.visitDeclarationMember(ctx);
-    return null;
-  }
-
-  @Override
-  public ExternalDeclaration visitExternalDeclaration(ExternalDeclarationContext ctx) {
-    return (ExternalDeclaration) super.visitExternalDeclaration(ctx);
-  }
-
-  @Override
-  public FullySpecifiedType visitFullySpecifiedType(FullySpecifiedTypeContext ctx) {
-    // TODO Auto-generated method stub
-    // return super.visitFullySpecifiedType(ctx);
-    return null;
-  }
-
-  @Override
-  public FunctionDeclaration visitFunctionDeclaration(FunctionDeclarationContext ctx) {
-    // TODO Auto-generated method stub
-    // return super.visitFunctionDeclaration(ctx);
-    return null;
+    return new ArraySpecifier(ctx.arraySpecifierSegment().stream().<Expression>map(child -> {
+      var expressionContext = child.expression();
+      return expressionContext == null
+          ? null
+          : (Expression) visit(expressionContext);
+    }));
   }
 
   @Override
@@ -626,9 +606,42 @@ public class ASTBuilder extends GLSLParserBaseVisitor<ASTNode> {
   }
 
   @Override
-  public Initializer visitInitializer(InitializerContext ctx) {
+  public DeclarationMember visitDeclarationMember(DeclarationMemberContext ctx) {
+    var arraySpecifierContext = ctx.arraySpecifier();
+    var arraySpecifier = arraySpecifierContext == null
+        ? null
+        : visitArraySpecifier(arraySpecifierContext);
+    var name = (Identifier) visit(ctx.IDENTIFIER());
+    var initializer = ctx.initializer() == null
+        ? null
+        : visitInitializer(ctx.initializer());
+    return arraySpecifier == null
+        ? initializer == null
+            ? new DeclarationMember(name)
+            : new DeclarationMember(name, initializer)
+        : initializer == null
+            ? new DeclarationMember(name, arraySpecifier)
+            : new DeclarationMember(name, arraySpecifier, initializer);
+  }
+
+  @Override
+  public ExternalDeclaration visitExternalDeclaration(ExternalDeclarationContext ctx) {
+    return (ExternalDeclaration) super.visitExternalDeclaration(ctx);
+  }
+
+  @Override
+  public FullySpecifiedType visitFullySpecifiedType(FullySpecifiedTypeContext ctx) {
+    var typeQualifierContext = ctx.typeQualifier();
+    var typeSpecifier = visitTypeSpecifier(ctx.typeSpecifier());
+    return typeQualifierContext == null
+        ? new FullySpecifiedType(typeSpecifier)
+        : new FullySpecifiedType(visitTypeQualifier(typeQualifierContext), typeSpecifier);
+  }
+
+  @Override
+  public FunctionDeclaration visitFunctionDeclaration(FunctionDeclarationContext ctx) {
     // TODO Auto-generated method stub
-    // return super.visitInitializer(ctx);
+    // return super.visitFunctionDeclaration(ctx);
     return null;
   }
 
@@ -640,48 +653,9 @@ public class ASTBuilder extends GLSLParserBaseVisitor<ASTNode> {
   }
 
   @Override
-  public InterpolationQualifier visitInterpolationQualifier(InterpolationQualifierContext ctx) {
-    // TODO Auto-generated method stub
-    // return super.visitInterpolationQualifier(ctx);
-    return null;
-  }
-
-  @Override
-  public InvariantQualifier visitInvariantQualifier(InvariantQualifierContext ctx) {
-    // TODO Auto-generated method stub
-    // return super.visitInvariantQualifier(ctx);
-    return null;
-  }
-
-  @Override
-  public NamedLayoutQualifierPart visitNamedLayoutQualifier(NamedLayoutQualifierContext ctx) {
-    // TODO Auto-generated method stub
-    // return super.visitNamedLayoutQualifier(ctx);
-    return null;
-  }
-
-  @Override
-  public SharedLayoutQualifierPart visitSharedLayoutQualifier(SharedLayoutQualifierContext ctx) {
-    // TODO Auto-generated method stub
-    // return super.visitSharedLayoutQualifier(ctx);
-    return null;
-  }
-
-  public LayoutQualifierPart visitLayoutQualifierPart(LayoutQualifierIdContext ctx) {
-    return (LayoutQualifierPart) visit(ctx);
-  }
-
-  @Override
   public FunctionParameter visitParameterDeclaration(ParameterDeclarationContext ctx) {
     // TODO Auto-generated method stub
     // return super.visitParameterDeclaration(ctx);
-    return null;
-  }
-
-  @Override
-  public PreciseQualifier visitPreciseQualifier(PreciseQualifierContext ctx) {
-    // TODO Auto-generated method stub
-    // return super.visitPreciseQualifier(ctx);
     return null;
   }
 
@@ -693,87 +667,9 @@ public class ASTBuilder extends GLSLParserBaseVisitor<ASTNode> {
   }
 
   @Override
-  public PrecisionQualifier visitPrecisionQualifier(PrecisionQualifierContext ctx) {
-    // TODO Auto-generated method stub
-    // return super.visitPrecisionQualifier(ctx);
-    return null;
-  }
-
-  @Override
-  public ASTNode visitStorageQualifier(StorageQualifierContext ctx) {
-    return ctx.typeNames == null
-        ? new StorageQualifier(StorageType.fromToken(ctx.getStart()))
-        : new StorageQualifier(
-            ctx.typeNames.names.stream().map(Identifier::new));
-  }
-
-  @Override
-  public StructBody visitStructBody(StructBodyContext ctx) {
-    // TODO Auto-generated method stub
-    // return super.visitStructBody(ctx);
-    return null;
-  }
-
-  @Override
-  public StructDeclarator visitStructDeclarator(StructDeclaratorContext ctx) {
-    // TODO Auto-generated method stub
-    // return super.visitStructDeclarator(ctx);
-    return null;
-  }
-
-  @Override
-  public StructMember visitStructMember(StructMemberContext ctx) {
-    // TODO Auto-generated method stub
-    // return super.visitStructMember(ctx);
-    return null;
-  }
-
-  @Override
-  public ASTNode visitStructSpecifier(StructSpecifierContext ctx) {
-    // TODO Auto-generated method stub
-    // return super.visitStructSpecifier(ctx);
-    return null;
-  }
-
-  @Override
-  public ASTNode visitBuiltinTypeSpecifierFixed(BuiltinTypeSpecifierFixedContext ctx) {
-    // TODO Auto-generated method stub
-    // return super.visitBuiltinTypeSpecifierFixed(ctx);
-    return null;
-  }
-
-  @Override
-  public ASTNode visitBuiltinTypeSpecifierParseable(BuiltinTypeSpecifierParseableContext ctx) {
-    // TODO Auto-generated method stub
-    // return super.visitBuiltinTypeSpecifierParseable(ctx);
-    return null;
-  }
-
-  @Override
-  public ASTNode visitTypeSpecifierNonarray(TypeSpecifierNonarrayContext ctx) {
-    // TODO Auto-generated method stub
-    // return super.visitTypeSpecifierNonarray(ctx);
-    return null;
-  }
-
-  @Override
   public TypeAndInitDeclaration visitTypeAndInitDeclaration(TypeAndInitDeclarationContext ctx) {
     // TODO Auto-generated method stub
     // return super.visitTypeAndInitDeclaration(ctx);
-    return null;
-  }
-
-  @Override
-  public TypeQualifier visitTypeQualifier(TypeQualifierContext ctx) {
-    // TODO Auto-generated method stub
-    // return super.visitTypeQualifier(ctx);
-    return null;
-  }
-
-  @Override
-  public TypeSpecifier visitTypeSpecifier(TypeSpecifierContext ctx) {
-    // TODO Auto-generated method stub
-    // return super.visitTypeSpecifier(ctx);
     return null;
   }
 
@@ -786,6 +682,137 @@ public class ASTBuilder extends GLSLParserBaseVisitor<ASTNode> {
 
   public Declaration visitDeclaration(DeclarationContext ctx) {
     return (Declaration) visit(ctx);
+  }
+
+  @Override
+  public Initializer visitInitializer(InitializerContext ctx) {
+    var expressionContext = ctx.expression();
+    if (expressionContext != null) {
+      return new ExpressionInitializer((Expression) visit(expressionContext));
+    }
+    var initializers = ctx.initializers;
+    return initializers == null
+        ? new NestedInitializer()
+        : new NestedInitializer(initializers.stream().map(this::visitInitializer));
+
+  }
+
+  @Override
+  public NamedLayoutQualifierPart visitNamedLayoutQualifier(NamedLayoutQualifierContext ctx) {
+    var expressionContext = ctx.expression();
+    var identifier = new Identifier(ctx.getStart());
+    return expressionContext == null
+        ? new NamedLayoutQualifierPart(identifier)
+        : new NamedLayoutQualifierPart(identifier, (Expression) visit(expressionContext));
+  }
+
+  @Override
+  public SharedLayoutQualifierPart visitSharedLayoutQualifier(SharedLayoutQualifierContext ctx) {
+    return new SharedLayoutQualifierPart();
+  }
+
+  public LayoutQualifierPart visitLayoutQualifierPart(LayoutQualifierIdContext ctx) {
+    return (LayoutQualifierPart) visit(ctx);
+  }
+
+  @Override
+  public PreciseQualifier visitPreciseQualifier(PreciseQualifierContext ctx) {
+    return new PreciseQualifier();
+  }
+
+  @Override
+  public InvariantQualifier visitInvariantQualifier(InvariantQualifierContext ctx) {
+    return new InvariantQualifier();
+  }
+
+  @Override
+  public InterpolationQualifier visitInterpolationQualifier(InterpolationQualifierContext ctx) {
+    return new InterpolationQualifier(InterpolationType.fromToken(ctx.getStart()));
+  }
+
+  @Override
+  public PrecisionQualifier visitPrecisionQualifier(PrecisionQualifierContext ctx) {
+    return new PrecisionQualifier(PrecisionLevel.fromToken(ctx.getStart()));
+  }
+
+  @Override
+  public ASTNode visitStorageQualifier(StorageQualifierContext ctx) {
+    return ctx.typeNames == null
+        ? new StorageQualifier(StorageType.fromToken(ctx.getStart()))
+        : new StorageQualifier(
+            ctx.typeNames.names.stream().map(Identifier::new));
+  }
+
+  @Override
+  public StructBody visitStructBody(StructBodyContext ctx) {
+    return new StructBody(ctx.structMember().stream().map(this::visitStructMember));
+  }
+
+  @Override
+  public StructMember visitStructMember(StructMemberContext ctx) {
+    return new StructMember(
+        visitFullySpecifiedType(ctx.fullySpecifiedType()),
+        ctx.structDeclarators.stream().map(this::visitStructDeclarator));
+  }
+
+  @Override
+  public StructDeclarator visitStructDeclarator(StructDeclaratorContext ctx) {
+    var arraySpecifierContext = ctx.arraySpecifier();
+    var name = new Identifier(ctx.getStart());
+    return arraySpecifierContext == null
+        ? new StructDeclarator(name)
+        : new StructDeclarator(name, visitArraySpecifier(arraySpecifierContext));
+  }
+
+  @Override
+  public TypeSpecifier visitTypeSpecifier(TypeSpecifierContext ctx) {
+    var arraySpecifierContext = ctx.arraySpecifier();
+    var arraySpecifier = arraySpecifierContext == null
+        ? null
+        : visitArraySpecifier(arraySpecifierContext);
+
+    var builtinTypeFixed = ctx.builtinTypeSpecifierFixed();
+    if (builtinTypeFixed != null) {
+      var type = BuiltinType.fromToken(builtinTypeFixed.getStart());
+      return arraySpecifier == null
+          ? new BuiltinFixedTypeSpecifier(type)
+          : new BuiltinFixedTypeSpecifier(type, arraySpecifier);
+    }
+
+    var builtinNumericType = ctx.builtinTypeSpecifierParseable();
+    if (builtinNumericType != null) {
+      var type = Type.fromToken(builtinNumericType.getStart());
+      return arraySpecifier == null
+          ? new BuiltinNumericTypeSpecifier(type)
+          : new BuiltinNumericTypeSpecifier(type, arraySpecifier);
+    }
+
+    var structSpecifierContext = ctx.structSpecifier();
+    if (structSpecifierContext != null) {
+      var identifierNode = structSpecifierContext.IDENTIFIER();
+      var structBody = visitStructBody(structSpecifierContext.structBody());
+      if (identifierNode == null) {
+        return arraySpecifier == null
+            ? new StructSpecifier(structBody)
+            : new StructSpecifier(structBody, arraySpecifier);
+      } else {
+        var identifier = (Identifier) visit(identifierNode);
+        return arraySpecifier == null
+            ? new StructSpecifier(identifier, structBody)
+            : new StructSpecifier(identifier, structBody, arraySpecifier);
+      }
+    }
+
+    var identifier = (Identifier) visit(ctx.IDENTIFIER());
+    return arraySpecifier == null
+        ? new TypeReference(identifier)
+        : new TypeReference(identifier, arraySpecifier);
+  }
+
+  @Override
+  public TypeQualifier visitTypeQualifier(TypeQualifierContext ctx) {
+    return new TypeQualifier(
+        ctx.children.stream().map(child -> (TypeQualifierPart) visit(child)));
   }
 
   // TODO visits
