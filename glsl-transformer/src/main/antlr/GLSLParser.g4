@@ -165,7 +165,9 @@ functionPrototype:
 	attribute? functionHeader LPAREN functionParameterList RPAREN attribute?;
 
 functionParameterList: (
-		parameterDeclaration (COMMA parameterDeclaration)*
+		parameters += parameterDeclaration (
+			COMMA parameters += parameterDeclaration
+		)*
 	)?;
 
 functionHeader: fullySpecifiedType IDENTIFIER;
@@ -244,19 +246,18 @@ typeQualifier: (
 //TYPE_NAME instead of IDENTIFIER in the spec
 typeNameList: names += IDENTIFIER (COMMA names += IDENTIFIER)*;
 
-typeSpecifier: typeSpecifierNonarray arraySpecifier?;
+//TYPE_NAME instead of IDENTIFIER in the spec
+typeSpecifier: (
+		builtinTypeSpecifierFixed
+		| builtinTypeSpecifierParseable
+		| structSpecifier
+		| IDENTIFIER
+	) arraySpecifier?;
 
 //needs duplicated rule parts like this or it becomes mutually left-recursive
 //constant expressions
 arraySpecifier: arraySpecifierSegment+;
 arraySpecifierSegment: (LBRACKET expression? RBRACKET);
-
-//TYPE_NAME instead of IDENTIFIER in the spec
-typeSpecifierNonarray:
-	builtinTypeSpecifierFixed
-	| builtinTypeSpecifierParseable
-	| structSpecifier
-	| IDENTIFIER;
 
 builtinTypeSpecifierParseable:
 	BOOL
