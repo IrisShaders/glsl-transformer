@@ -10,7 +10,7 @@ public class TypeReference extends TypeSpecifier {
     this.reference = setup(reference);
   }
 
-  public TypeReference(ArraySpecifier arraySpecifier, Identifier reference) {
+  public TypeReference(Identifier reference, ArraySpecifier arraySpecifier) {
     super(arraySpecifier);
     this.reference = setup(reference);
   }

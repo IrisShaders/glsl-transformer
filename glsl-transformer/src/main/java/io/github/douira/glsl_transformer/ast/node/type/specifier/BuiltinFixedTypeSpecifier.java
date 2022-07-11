@@ -115,7 +115,7 @@ public class BuiltinFixedTypeSpecifier extends TypeSpecifier {
     this.type = type;
   }
 
-  public BuiltinFixedTypeSpecifier(ArraySpecifier arraySpecifier, BuiltinType type) {
+  public BuiltinFixedTypeSpecifier(BuiltinType type, ArraySpecifier arraySpecifier) {
     super(arraySpecifier);
     this.type = type;
   }
