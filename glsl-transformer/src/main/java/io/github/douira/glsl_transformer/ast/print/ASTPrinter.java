@@ -922,7 +922,6 @@ public abstract class ASTPrinter extends ASTPrinterBase {
   @Override
   public Void visitLayoutQualifier(LayoutQualifier node) {
     emitType(GLSLLexer.LAYOUT, GLSLLexer.LPAREN);
-    emitBreakableSpace();
     visitCommaSpaced(node.parts);
     emitType(GLSLLexer.RPAREN);
     return null;
@@ -935,7 +934,7 @@ public abstract class ASTPrinter extends ASTPrinterBase {
       emitBreakableSpace();
       emitType(GLSLLexer.ASSIGN_OP);
       emitBreakableSpace();
-      visit(node.getName());
+      visit(node.getExpression());
     }
     return null;
   }

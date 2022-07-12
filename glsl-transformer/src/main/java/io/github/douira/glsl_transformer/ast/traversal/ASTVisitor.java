@@ -440,7 +440,7 @@ public interface ASTVisitor<R> extends GeneralASTVisitor<R> {
   }
 
   default R visitLayoutQualifierPart(LayoutQualifierPart node) {
-    return defaultResult();
+    return superNodeTypeResult();
   }
 
   default R visitNamedLayoutQualifierPart(NamedLayoutQualifierPart node) {

@@ -626,8 +626,7 @@ public class ASTBuilder extends GLSLParserBaseVisitor<ASTNode> {
   public TypeAndInitDeclaration visitTypeAndInitDeclaration(TypeAndInitDeclarationContext ctx) {
     return new TypeAndInitDeclaration(
         visitFullySpecifiedType(ctx.fullySpecifiedType()),
-        applySafe(ctx.declarationMembers,
-            members -> members.stream().map(this::visitDeclarationMember)));
+        ctx.declarationMembers.stream().map(this::visitDeclarationMember));
   }
 
   @Override
@@ -690,6 +689,12 @@ public class ASTBuilder extends GLSLParserBaseVisitor<ASTNode> {
 
   public LayoutQualifierPart visitLayoutQualifierPart(LayoutQualifierIdContext ctx) {
     return (LayoutQualifierPart) visit(ctx);
+  }
+
+  @Override
+  public LayoutQualifier visitLayoutQualifier(LayoutQualifierContext ctx) {
+    return new LayoutQualifier(
+        ctx.layoutQualifiers.stream().map(this::visitLayoutQualifierPart));
   }
 
   @Override
@@ -771,11 +776,6 @@ public class ASTBuilder extends GLSLParserBaseVisitor<ASTNode> {
   public TypeQualifier visitTypeQualifier(TypeQualifierContext ctx) {
     return new TypeQualifier(
         ctx.children.stream().map(child -> (TypeQualifierPart) visit(child)));
-  }
-
-  @Override
-  public LayoutQualifier visitLayoutQualifier(LayoutQualifierContext ctx) {
-    return (LayoutQualifier) super.visit(ctx);
   }
 
   public Expression visitExpression(ExpressionContext ctx) {
