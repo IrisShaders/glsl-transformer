@@ -16,12 +16,12 @@ public class InvariantQualifier extends TypeQualifierPart {
   @Override
   public void enterNode(ASTListener listener) {
     super.enterNode(listener);
-    // terminal types have no children
+    // terminal nodes have no children
   }
 
   @Override
   public void exitNode(ASTListener listener) {
     super.exitNode(listener);
-    // terminal types have no children
+    // terminal nodes have no children
   }
 }

@@ -53,6 +53,11 @@ public class LayoutDefaults extends ExternalDeclaration {
   }
 
   @Override
+  public <R> R externalDeclarationAccept(ASTVisitor<R> visitor) {
+    return visitor.visitLayoutDefaults(this);
+  }
+
+  @Override
   public void enterNode(ASTListener listener) {
     super.enterNode(listener);
     listener.enterLayoutDefaults(this);
@@ -62,10 +67,5 @@ public class LayoutDefaults extends ExternalDeclaration {
   public void exitNode(ASTListener listener) {
     super.exitNode(listener);
     listener.exitLayoutDefaults(this);
-  }
-
-  @Override
-  public <R> R externalDeclarationAccept(ASTVisitor<R> visitor) {
-    return visitor.visitLayoutDefaults(this);
   }
 }
