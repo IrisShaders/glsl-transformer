@@ -998,7 +998,7 @@ public abstract class ASTPrinter extends ASTPrinterBase {
 
   @Override
   public Void visitBuiltinNumericTypeSpecifier(BuiltinNumericTypeSpecifier node) {
-    emitType(node.type.getTokenType());
+    emitLiteral(node.type.getMostCompactName());
     return null;
   }
 
