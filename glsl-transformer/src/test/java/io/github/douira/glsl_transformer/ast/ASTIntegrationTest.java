@@ -2,6 +2,7 @@ package io.github.douira.glsl_transformer.ast;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+import java.util.*;
 import java.util.function.Function;
 
 import org.junit.jupiter.params.ParameterizedTest;
@@ -54,22 +55,23 @@ public class ASTIntegrationTest {
     assertReprintStatement(input, input);
   }
 
+  static Map<String, Function<GLSLParser, ? extends ExtendedContext>> parseMethodNames = new HashMap<>() {
+    {
+      put("translationUnit", GLSLParser::translationUnit);
+      put("expression", GLSLParser::expression);
+      put("statement", GLSLParser::statement);
+      put("fullySpecifiedType", GLSLParser::fullySpecifiedType);
+    }
+  };
+
   @ParameterizedTest
   @TestCaseSource(caseSet = "testReprint", spacing = Spacing.TRIM_SINGLE_BOTH)
   void testASTIntegration(String type, String input, String output) {
-    switch (type) {
-      case "translationUnit":
-        assertReprint(output, input);
-        break;
-      case "expression":
-        assertReprintExpression(output, input);
-        break;
-      case "statement":
-        assertReprintStatement(output, input);
-        break;
-      default:
-        throw new IllegalArgumentException("Unknown type");
+    var parseMethod = parseMethodNames.get(type);
+    if (parseMethod == null) {
+      throw new IllegalArgumentException("Unknown parse method type: " + type);
     }
+    assertReprint(parseMethod, output, input);
 
     // assertReprint(";\n");
     // assertReprintExpression("1 + 2");

@@ -73,6 +73,22 @@ a %= b &= b |= b ^= b <<= c <<= d
 0x54ae + 06453543 + 1.6e10 + 50.1e-10 + 1e+10
 ===
 0x54ae + 06453543 + 1.6E10 + 5.01E-9 + 1.0E10
+§testReprint expression:
+foo(1, 2, 3)
+§testReprint expression:
+foo()
+§testReprint expression:
+foo() + bar()
+§testReprint expression:
+foo() + bar() + baz()
+§testReprint expression:
+foo(1, bar(), baz(1, 2))
+§testReprint expression:
+foo(bar(baz(bar)))
+§testReprint expression:
+vec3(1, 2, 3)
+§testReprint fullySpecifiedType:
+vec2
 §testReprint statement:
 ;
 
@@ -311,3 +327,33 @@ switch (a) {
 	case 2:
 }
 
+§testReprint statement:
+{
+	{
+		1;
+	}
+	2;
+}
+
+§testReprint translationUnit:
+void foo() {
+	1;
+}
+
+§testReprint translationUnit:
+void foo() {
+}
+
+§testReprint translationUnit:
+void foo(int foo) {
+}
+
+§testReprint translationUnit:
+const in float p;
+
+§testReprint translationUnit:
+void functionDef(const in float param) {
+	functionCall();
+}
+
+§

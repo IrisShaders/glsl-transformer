@@ -47,7 +47,7 @@ public abstract class ASTPrinter extends ASTPrinterBase {
   public Void visitFunctionDefinition(FunctionDefinition node) {
     visit(node.getFunctionPrototype());
     emitBreakableSpace();
-    emitType(GLSLLexer.SEMICOLON);
+    visit(node.getBody());
     return null;
   }
 
