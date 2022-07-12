@@ -270,6 +270,10 @@ public enum Type implements TokenAssociatedEnum {
     return compactName;
   }
 
+  public String getMostCompactName() {
+    return compactName != null ? compactName : explicitName;
+  }
+
   /**
    * Returns the explicit name of the type. This name uses an explicit arithmetic
    * type name that may not be compatible if the extension for these type names
