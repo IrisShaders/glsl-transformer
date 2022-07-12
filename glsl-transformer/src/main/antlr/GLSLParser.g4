@@ -76,21 +76,9 @@ layoutDefaults:
 
 functionDefinition: functionPrototype compoundStatement;
 
-variableIdentifier: IDENTIFIER;
-
-functionCall: functionIdentifier callParameterList;
-
-//assignment expressions
-callParameterList:
-	LPAREN ( | VOID | expression (COMMA expression)*) RPAREN;
-
-//Note: diverges from the spec by not allowing a prefixExpression as an identifier
-//array-type function identfiers are handled by typeSpecifier
-functionIdentifier: typeSpecifier | variableIdentifier;
-
 //Note: diverges from the spec by explicity adding a method call instead of handling it through postfixExpression in functionIdentifier
 expression:
-	variableIdentifier # referenceExpression
+	IDENTIFIER # referenceExpression
 	| (
 		INT16CONSTANT
 		| UINT16CONSTANT
@@ -106,9 +94,14 @@ expression:
 	| LPAREN value = expression RPAREN												# groupingExpression
 	| left = expression LBRACKET right = expression RBRACKET	# arrayAccessExpression
 	| operand = expression DOT_LENGTH LPAREN RPAREN						# lengthAccessExpression
-	| functionCall																						# functionCallExpression
-	| operand = expression DOT member = IDENTIFIER						# memberAccessExpression
-	| operand = expression op = (INC_OP | DEC_OP)							# postfixExpression
+	//Note: diverges from the spec by not allowing a prefixExpression as an identifier
+	//array-type function identfiers are handled by typeSpecifier
+	| (typeSpecifier | IDENTIFIER) LPAREN (
+		| VOID
+		| parameters += expression (COMMA parameters += expression)*
+	) RPAREN																				# functionCallExpression
+	| operand = expression DOT member = IDENTIFIER	# memberAccessExpression
+	| operand = expression op = (INC_OP | DEC_OP)		# postfixExpression
 	| <assoc = right> op = (
 		INC_OP
 		| DEC_OP
@@ -162,15 +155,13 @@ declaration:
 
 //allows for EXT_subgroup_uniform_control_flow
 functionPrototype:
-	attribute? functionHeader LPAREN functionParameterList RPAREN attribute?;
+	attribute? fullySpecifiedType IDENTIFIER LPAREN functionParameterList RPAREN attribute?;
 
 functionParameterList: (
 		parameters += parameterDeclaration (
 			COMMA parameters += parameterDeclaration
 		)*
 	)?;
-
-functionHeader: fullySpecifiedType IDENTIFIER;
 
 parameterDeclaration:
 	fullySpecifiedType (parameterName = IDENTIFIER arraySpecifier?)?;
@@ -209,7 +200,10 @@ storageQualifier:
 	| COHERENT
 	| READONLY
 	| WRITEONLY
-	| SUBROUTINE (LPAREN typeNames = typeNameList RPAREN)?
+	| SUBROUTINE (
+		//TYPE_NAME instead of IDENTIFIER in the spec
+		LPAREN typeNames += IDENTIFIER (COMMA typeNames += IDENTIFIER)* RPAREN
+	)?
 	| DEVICECOHERENT
 	| QUEUEFAMILYCOHERENT
 	| WORKGROUPCOHERENT
@@ -242,9 +236,6 @@ typeQualifier: (
 		| invariantQualifier
 		| preciseQualifier
 	)+;
-
-//TYPE_NAME instead of IDENTIFIER in the spec
-typeNameList: names += IDENTIFIER (COMMA names += IDENTIFIER)*;
 
 //TYPE_NAME instead of IDENTIFIER in the spec
 typeSpecifier: (
