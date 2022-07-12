@@ -6,7 +6,7 @@ import io.github.douira.glsl_transformer.ast.node.type.FullySpecifiedType;
 import io.github.douira.glsl_transformer.ast.node.type.specifier.ArraySpecifier;
 import io.github.douira.glsl_transformer.ast.traversal.*;
 
-public abstract class FunctionParameter extends InnerASTNode {
+public class FunctionParameter extends InnerASTNode {
   protected FullySpecifiedType type;
   protected Identifier name; // TODO: nullable
   protected ArraySpecifier arraySpecifier; // TODO: nullable

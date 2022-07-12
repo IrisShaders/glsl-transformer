@@ -149,7 +149,14 @@ public abstract class ASTPrinter extends ASTPrinterBase {
     emitType(GLSLLexer.PLUS_OP, GLSLLexer.PLUS_OP);
   }
 
-  // FunctionCall expression is just a function call (no extra visit needed)
+  @Override
+  public Void visitFunctionCallExpression(FunctionCallExpression node) {
+    visit(node.getReference());
+    emitType(GLSLLexer.LPAREN);
+    visitCommaSpaced(node.getParameters());
+    emitType(GLSLLexer.RPAREN);
+    return null;
+  }
 
   @Override
   public Void visitMemberAccessExpression(MemberAccessExpression node) {
