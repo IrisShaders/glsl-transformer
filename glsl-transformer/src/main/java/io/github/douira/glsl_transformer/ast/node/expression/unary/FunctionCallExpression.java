@@ -5,17 +5,12 @@ import java.util.stream.Stream;
 
 import io.github.douira.glsl_transformer.ast.data.ChildNodeList;
 import io.github.douira.glsl_transformer.ast.node.Identifier;
+import io.github.douira.glsl_transformer.ast.node.basic.ASTNode;
 import io.github.douira.glsl_transformer.ast.node.expression.*;
 import io.github.douira.glsl_transformer.ast.node.type.specifier.TypeSpecifier;
 import io.github.douira.glsl_transformer.ast.traversal.*;
 
 public class FunctionCallExpression extends TerminalExpression {
-  public enum FunctionCallType {
-    NONE,
-    VOID,
-    PARAMETERS
-  }
-
   public enum FunctionReferenceType {
     NAME,
     TYPE_SPECIFIER
@@ -26,16 +21,17 @@ public class FunctionCallExpression extends TerminalExpression {
   protected FunctionReferenceType referenceType;
 
   protected List<Expression> parameters;
-  protected FunctionCallType functionCallType;
 
   public FunctionCallExpression(Identifier functionName) {
     this.functionName = setup(functionName);
     referenceType = FunctionReferenceType.NAME;
+    parameters = new ChildNodeList<>(this);
   }
 
   public FunctionCallExpression(TypeSpecifier functionSpecifier) {
     this.functionSpecifier = setup(functionSpecifier);
     referenceType = FunctionReferenceType.TYPE_SPECIFIER;
+    parameters = new ChildNodeList<>(this);
   }
 
   public FunctionCallExpression(
@@ -50,22 +46,6 @@ public class FunctionCallExpression extends TerminalExpression {
       Stream<Expression> parameters) {
     this(functionSpecifier);
     this.parameters = ChildNodeList.collect(parameters, this);
-  }
-
-  public FunctionCallExpression(Identifier functionName, FunctionCallType functionCallType) {
-    this(functionName);
-    this.functionCallType = functionCallType;
-    if (functionCallType == FunctionCallType.PARAMETERS) {
-      parameters = new ChildNodeList<>(this);
-    }
-  }
-
-  public FunctionCallExpression(TypeSpecifier functionSpecifier, FunctionCallType functionCallType) {
-    this(functionSpecifier);
-    this.functionCallType = functionCallType;
-    if (functionCallType == FunctionCallType.PARAMETERS) {
-      parameters = new ChildNodeList<>(this);
-    }
   }
 
   public Identifier getFunctionName() {
@@ -102,27 +82,12 @@ public class FunctionCallExpression extends TerminalExpression {
     return referenceType;
   }
 
+  public ASTNode getReference() {
+    return referenceType == FunctionReferenceType.NAME ? functionName : functionSpecifier;
+  }
+
   public List<Expression> getParameters() {
     return parameters;
-  }
-
-  public void useParameters(Stream<Expression> parameters) {
-    this.parameters = ChildNodeList.collect(parameters, this);
-    functionCallType = FunctionCallType.PARAMETERS;
-  }
-
-  public void useNoParameters() {
-    this.parameters = null;
-    functionCallType = FunctionCallType.NONE;
-  }
-
-  public void useVoidParameters() {
-    this.parameters = null;
-    functionCallType = FunctionCallType.VOID;
-  }
-
-  public FunctionCallType getFunctionCallType() {
-    return functionCallType;
   }
 
   @Override
