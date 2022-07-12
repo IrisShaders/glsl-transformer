@@ -1,6 +1,7 @@
 package io.github.douira.glsl_transformer.ast;
 
 import java.util.*;
+import java.util.function.Function;
 import java.util.regex.Pattern;
 import java.util.stream.Stream;
 
@@ -64,6 +65,10 @@ public class ASTBuilder extends GLSLParserBaseVisitor<ASTNode> {
     // }
   }
 
+  private static <N, R> R applySafe(N ctx, Function<N, R> visitMethod) {
+    return ctx == null ? null : visitMethod.apply(ctx);
+  }
+
   @Override
   public TranslationUnit visitTranslationUnit(TranslationUnitContext ctx) {
     var versionStatement = visitVersionStatement(ctx.versionStatement());
@@ -80,9 +85,7 @@ public class ASTBuilder extends GLSLParserBaseVisitor<ASTNode> {
       return null;
     }
     var version = Integer.parseInt(ctx.version.getText());
-    return ctx.profile == null
-        ? new VersionStatement(version)
-        : new VersionStatement(version, Profile.fromToken(ctx.profile));
+    return new VersionStatement(version, applySafe(ctx.profile, Profile::fromToken));
   }
 
   @Override
@@ -102,10 +105,8 @@ public class ASTBuilder extends GLSLParserBaseVisitor<ASTNode> {
   @Override
   public ExtensionStatement visitExtensionStatement(ExtensionStatementContext ctx) {
     var extensionName = ctx.extensionName.getText();
-    return ctx.extensionBehavior == null
-        ? new ExtensionStatement(extensionName)
-        : new ExtensionStatement(
-            extensionName, ExtensionBehavior.fromToken(ctx.extensionBehavior));
+    return new ExtensionStatement(
+        extensionName, applySafe(ctx.extensionBehavior, ExtensionBehavior::fromToken));
   }
 
   @Override
@@ -134,16 +135,10 @@ public class ASTBuilder extends GLSLParserBaseVisitor<ASTNode> {
       functionType = visitTypeSpecifier(ctx.typeSpecifier());
     }
 
-    if (ctx.parameters != null) {
-      var parameters = ctx.parameters.stream().map(this::visitExpression);
-      return functionName != null
-          ? new FunctionCallExpression(functionName, parameters)
-          : new FunctionCallExpression(functionType, parameters);
-    } else {
-      return functionName != null
-          ? new FunctionCallExpression(functionName)
-          : new FunctionCallExpression(functionType);
-    }
+    var parameters = ctx.parameters.stream().map(this::visitExpression);
+    return functionName != null
+        ? new FunctionCallExpression(functionName, parameters)
+        : new FunctionCallExpression(functionType, parameters);
   }
 
   @Override
@@ -452,10 +447,7 @@ public class ASTBuilder extends GLSLParserBaseVisitor<ASTNode> {
 
   @Override
   public ReturnStatement visitReturnStatement(ReturnStatementContext ctx) {
-    var expression = ctx.expression();
-    return expression == null
-        ? new ReturnStatement()
-        : new ReturnStatement(visitExpression(expression));
+    return new ReturnStatement(applySafe(ctx.expression(), this::visitExpression));
   }
 
   @Override
@@ -531,9 +523,6 @@ public class ASTBuilder extends GLSLParserBaseVisitor<ASTNode> {
   public ForLoopStatement visitForStatement(ForStatementContext ctx) {
     Expression initExpression = null;
     Declaration initDeclaration = null;
-    Expression condition = null;
-    IterationConditionInitializer iterationConditionInitializer = null;
-    Expression incrementer = null;
 
     var initExpressionStatement = ctx.expressionStatement();
     if (initExpressionStatement != null) {
@@ -545,22 +534,12 @@ public class ASTBuilder extends GLSLParserBaseVisitor<ASTNode> {
       }
     }
 
-    if (ctx.condition != null) {
-      condition = visitExpression(ctx.condition);
-    } else if (ctx.initCondition != null) {
-      iterationConditionInitializer = visitIterationCondition(ctx.initCondition);
-    }
-
-    if (ctx.incrementer != null) {
-      incrementer = visitExpression(ctx.incrementer);
-    }
-
     return new ForLoopStatement(
         initExpression,
         initDeclaration,
-        condition,
-        iterationConditionInitializer,
-        incrementer,
+        applySafe(ctx.condition, this::visitExpression),
+        applySafe(ctx.initCondition, this::visitIterationCondition),
+        applySafe(ctx.incrementer, this::visitExpression),
         visitStatement(ctx.statement()));
   }
 
@@ -592,12 +571,8 @@ public class ASTBuilder extends GLSLParserBaseVisitor<ASTNode> {
 
   @Override
   public ArraySpecifier visitArraySpecifier(ArraySpecifierContext ctx) {
-    return new ArraySpecifier(ctx.arraySpecifierSegment().stream().<Expression>map(child -> {
-      var expressionContext = child.expression();
-      return expressionContext == null
-          ? null
-          : visitExpression(expressionContext);
-    }));
+    return new ArraySpecifier(ctx.arraySpecifierSegment().stream()
+        .<Expression>map(child -> applySafe(child.expression(), this::visitExpression)));
   }
 
   @Override
@@ -611,11 +586,9 @@ public class ASTBuilder extends GLSLParserBaseVisitor<ASTNode> {
   public FunctionPrototype visitFunctionPrototype(FunctionPrototypeContext ctx) {
     var returnType = visitFullySpecifiedType(ctx.fullySpecifiedType());
     var name = visitIdentifier(ctx.IDENTIFIER());
-    var parameterList = ctx.functionParameterList().parameters;
-    return parameterList == null
-        ? new FunctionPrototype(returnType, name)
-        : new FunctionPrototype(returnType, name,
-            parameterList.stream().map(this::visitParameterDeclaration));
+    return new FunctionPrototype(returnType, name,
+        applySafe(ctx.functionParameterList().parameters,
+            parameters -> parameters.stream().map(this::visitParameterDeclaration)));
   }
 
   @Override
@@ -625,33 +598,23 @@ public class ASTBuilder extends GLSLParserBaseVisitor<ASTNode> {
     var initializer = ctx.initializer();
     return new DeclarationMember(
         name,
-        visitArraySpecifier(arraySpecifier),
-        visitInitializer(initializer));
+        applySafe(arraySpecifier, this::visitArraySpecifier),
+        applySafe(initializer, this::visitInitializer));
   }
 
   @Override
   public FullySpecifiedType visitFullySpecifiedType(FullySpecifiedTypeContext ctx) {
-    var typeQualifierContext = ctx.typeQualifier();
-    var typeSpecifier = visitTypeSpecifier(ctx.typeSpecifier());
-    return typeQualifierContext == null
-        ? new FullySpecifiedType(typeSpecifier)
-        : new FullySpecifiedType(visitTypeQualifier(typeQualifierContext), typeSpecifier);
+    return new FullySpecifiedType(
+        applySafe(ctx.typeQualifier(), this::visitTypeQualifier),
+        visitTypeSpecifier(ctx.typeSpecifier()));
   }
 
   @Override
   public FunctionParameter visitParameterDeclaration(ParameterDeclarationContext ctx) {
-    var fullySpecifiedType = visitFullySpecifiedType(ctx.fullySpecifiedType());
-    if (ctx.parameterName != null) {
-      var name = new Identifier(ctx.parameterName);
-      var arraySpecifierContext = ctx.arraySpecifier();
-      if (arraySpecifierContext != null) {
-        var arraySpecifier = visitArraySpecifier(arraySpecifierContext);
-        return new FunctionParameter(fullySpecifiedType, name, arraySpecifier);
-      } else {
-        return new FunctionParameter(fullySpecifiedType, name);
-      }
-    }
-    return new FunctionParameter(fullySpecifiedType);
+    return new FunctionParameter(
+        visitFullySpecifiedType(ctx.fullySpecifiedType()),
+        applySafe(ctx.parameterName, Identifier::new),
+        applySafe(ctx.arraySpecifier(), this::visitArraySpecifier));
   }
 
   @Override
@@ -661,11 +624,10 @@ public class ASTBuilder extends GLSLParserBaseVisitor<ASTNode> {
 
   @Override
   public TypeAndInitDeclaration visitTypeAndInitDeclaration(TypeAndInitDeclarationContext ctx) {
-    var fullySpecifiedType = visitFullySpecifiedType(ctx.fullySpecifiedType());
-    return ctx.declarationMembers == null
-        ? new TypeAndInitDeclaration(fullySpecifiedType)
-        : new TypeAndInitDeclaration(fullySpecifiedType,
-            ctx.declarationMembers.stream().map(this::visitDeclarationMember));
+    return new TypeAndInitDeclaration(
+        visitFullySpecifiedType(ctx.fullySpecifiedType()),
+        applySafe(ctx.declarationMembers,
+            members -> members.stream().map(this::visitDeclarationMember)));
   }
 
   @Override
@@ -696,10 +658,9 @@ public class ASTBuilder extends GLSLParserBaseVisitor<ASTNode> {
 
   @Override
   public VariableDeclaration visitVariableDeclaration(VariableDeclarationContext ctx) {
-    var typeQualifier = visitTypeQualifier(ctx.typeQualifier());
-    return ctx.variableNames == null
-        ? new VariableDeclaration(typeQualifier)
-        : new VariableDeclaration(typeQualifier, ctx.variableNames.stream().map(Identifier::new));
+    return new VariableDeclaration(
+        visitTypeQualifier(ctx.typeQualifier()),
+        ctx.variableNames.stream().map(Identifier::new));
   }
 
   @Override
@@ -717,11 +678,9 @@ public class ASTBuilder extends GLSLParserBaseVisitor<ASTNode> {
 
   @Override
   public NamedLayoutQualifierPart visitNamedLayoutQualifier(NamedLayoutQualifierContext ctx) {
-    var expressionContext = ctx.expression();
-    var identifier = new Identifier(ctx.getStart());
-    return expressionContext == null
-        ? new NamedLayoutQualifierPart(identifier)
-        : new NamedLayoutQualifierPart(identifier, visitExpression(expressionContext));
+    return new NamedLayoutQualifierPart(
+        new Identifier(ctx.getStart()),
+        applySafe(ctx.expression(), this::visitExpression));
   }
 
   @Override
@@ -755,7 +714,7 @@ public class ASTBuilder extends GLSLParserBaseVisitor<ASTNode> {
 
   @Override
   public ASTNode visitStorageQualifier(StorageQualifierContext ctx) {
-    return ctx.typeNames == null
+    return ctx.typeNames.isEmpty()
         ? new StorageQualifier(StorageType.fromToken(ctx.getStart()))
         : new StorageQualifier(
             ctx.typeNames.stream().map(Identifier::new));
@@ -775,19 +734,14 @@ public class ASTBuilder extends GLSLParserBaseVisitor<ASTNode> {
 
   @Override
   public StructDeclarator visitStructDeclarator(StructDeclaratorContext ctx) {
-    var arraySpecifierContext = ctx.arraySpecifier();
-    var name = new Identifier(ctx.getStart());
-    return arraySpecifierContext == null
-        ? new StructDeclarator(name)
-        : new StructDeclarator(name, visitArraySpecifier(arraySpecifierContext));
+    return new StructDeclarator(
+        new Identifier(ctx.getStart()),
+        applySafe(ctx.arraySpecifier(), this::visitArraySpecifier));
   }
 
   @Override
   public TypeSpecifier visitTypeSpecifier(TypeSpecifierContext ctx) {
-    var arraySpecifierContext = ctx.arraySpecifier();
-    var arraySpecifier = arraySpecifierContext == null
-        ? null
-        : visitArraySpecifier(arraySpecifierContext);
+    var arraySpecifier = applySafe(ctx.arraySpecifier(), this::visitArraySpecifier);
 
     var builtinTypeFixed = ctx.builtinTypeSpecifierFixed();
     if (builtinTypeFixed != null) {
@@ -803,11 +757,10 @@ public class ASTBuilder extends GLSLParserBaseVisitor<ASTNode> {
 
     var structSpecifierContext = ctx.structSpecifier();
     if (structSpecifierContext != null) {
-      var identifierNode = structSpecifierContext.IDENTIFIER();
-      var structBody = visitStructBody(structSpecifierContext.structBody());
-      return identifierNode == null
-          ? new StructSpecifier(structBody, arraySpecifier)
-          : new StructSpecifier(visitIdentifier(identifierNode), structBody, arraySpecifier);
+      return new StructSpecifier(
+          applySafe(structSpecifierContext.IDENTIFIER(), this::visitIdentifier),
+          visitStructBody(structSpecifierContext.structBody()),
+          arraySpecifier);
     }
 
     var identifier = visitIdentifier(ctx.IDENTIFIER());
@@ -836,7 +789,11 @@ public class ASTBuilder extends GLSLParserBaseVisitor<ASTNode> {
 
   @Override
   public ExternalDeclaration visitExternalDeclaration(ExternalDeclarationContext ctx) {
-    return (ExternalDeclaration) super.visitExternalDeclaration(ctx);
+    var result = super.visitExternalDeclaration(ctx);
+    if (result instanceof Declaration) {
+      return new DeclarationExternalDeclaration((Declaration) result);
+    }
+    return (ExternalDeclaration) result;
   }
 
   public Declaration visitDeclaration(DeclarationContext ctx) {

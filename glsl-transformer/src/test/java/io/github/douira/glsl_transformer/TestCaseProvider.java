@@ -94,6 +94,9 @@ public class TestCaseProvider implements ArgumentsProvider, AnnotationConsumer<T
       for (var i = 1; i < rawCases.length; i++) {
         var rawCase = rawCases[i];
         var segments = rawCase.split(" |:", 3);
+        if (segments.length < 3) {
+          continue;
+        }
         var input = segments[2];
         var inputSegments = input.split("===", 2);
         testCases.add(new TestCase(

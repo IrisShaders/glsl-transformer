@@ -53,6 +53,10 @@ public interface ASTVisitor<R> extends GeneralASTVisitor<R> {
     return superNodeTypeResult();
   }
 
+  default R visitDeclarationExternalDeclaration(DeclarationExternalDeclaration node) {
+    return visit(node.getDeclaration());
+  }
+
   default R visitLayoutDefaults(LayoutDefaults node) {
     return visit(node.getQualifier());
   }
