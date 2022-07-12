@@ -1,6 +1,6 @@
 package io.github.douira.glsl_transformer.ast.node.external_declaration;
 
-import io.github.douira.glsl_transformer.ast.traversal.ASTVisitor;
+import io.github.douira.glsl_transformer.ast.traversal.*;
 
 public class EmptyDeclaration extends ExternalDeclaration {
   @Override
@@ -11,5 +11,17 @@ public class EmptyDeclaration extends ExternalDeclaration {
   @Override
   public <R> R externalDeclarationAccept(ASTVisitor<R> visitor) {
     return visitor.visitEmptyDeclaration(this);
+  }
+
+  @Override
+  public void enterNode(ASTListener listener) {
+    super.enterNode(listener);
+    // terminal nodes have no children
+  }
+
+  @Override
+  public void exitNode(ASTListener listener) {
+    super.enterNode(listener);
+    // terminal nodes have no children
   }
 }

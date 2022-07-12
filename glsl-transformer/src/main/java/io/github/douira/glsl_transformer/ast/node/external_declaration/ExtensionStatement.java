@@ -4,7 +4,7 @@ import org.antlr.v4.runtime.Token;
 
 import io.github.douira.glsl_transformer.GLSLLexer;
 import io.github.douira.glsl_transformer.ast.data.*;
-import io.github.douira.glsl_transformer.ast.traversal.ASTVisitor;
+import io.github.douira.glsl_transformer.ast.traversal.*;
 
 public class ExtensionStatement extends ExternalDeclaration {
   public enum ExtensionBehavior implements TokenAssociatedEnum {
@@ -49,5 +49,17 @@ public class ExtensionStatement extends ExternalDeclaration {
   @Override
   public <R> R externalDeclarationAccept(ASTVisitor<R> visitor) {
     return visitor.visitExtensionStatement(this);
+  }
+
+  @Override
+  public void enterNode(ASTListener listener) {
+    super.enterNode(listener);
+    // terminal nodes have no children
+  }
+
+  @Override
+  public void exitNode(ASTListener listener) {
+    super.enterNode(listener);
+    // terminal nodes have no children
   }
 }
