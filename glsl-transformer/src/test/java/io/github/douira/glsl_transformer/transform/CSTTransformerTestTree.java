@@ -12,15 +12,15 @@ import io.github.douira.glsl_transformer.*;
 import io.github.douira.glsl_transformer.TestResourceManager.*;
 
 @ExtendWith({ SnapshotExtension.class })
-public class TransformationManagerTestTree {
+public class CSTTransformerTestTree {
   private Expect expect;
 
   @Test
   @SnapshotName("testParseTree")
   void testParseTree() {
-    var man = new TransformationManager<WrappedParameters<StringBuilder>>(false);
-    man.setSLLOnly();
-    man.addConcurrent(new PrintTreeSnapshot());
+    var transformer = new CSTTransformer<WrappedParameters<StringBuilder>>(false);
+    transformer.setSLLOnly();
+    transformer.addConcurrent(new PrintTreeSnapshot());
 
     Stream.concat(Stream.of(
         TestResourceManager.getResource(FileLocation.UNIFORM_TEST),
@@ -30,7 +30,7 @@ public class TransformationManagerTestTree {
         .forEach(resource -> {
           var content = resource.content();
           var builder = new StringBuilder();
-          man.transform(content, new WrappedParameters<>(builder));
+          transformer.transform(content, new WrappedParameters<>(builder));
           expect.scenario(resource.getScenarioName())
               .toMatchSnapshot(SnapshotUtil.inputOutputSnapshot(content, builder.toString()));
         });

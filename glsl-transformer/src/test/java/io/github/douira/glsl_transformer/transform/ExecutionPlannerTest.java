@@ -209,34 +209,34 @@ public class ExecutionPlannerTest extends TestForExecutionOrder {
 
   @Test
   void testNotCachedParameters() {
-    var man = new TransformationManager<>();
-    man.addConcurrent(new Transformation<>() {
+    var transformer = new CSTTransformer<>();
+    transformer.addConcurrent(new Transformation<>() {
       @Override
       protected void setupGraph() {
         nextIndex++;
       }
     });
 
-    man.planExecutionFor(new FullyFixedJobParameters());
-    man.planExecutionFor(new FullyFixedJobParameters());
-    man.planExecutionFor(new FullyFixedJobParameters());
+    transformer.planExecutionFor(new FullyFixedJobParameters());
+    transformer.planExecutionFor(new FullyFixedJobParameters());
+    transformer.planExecutionFor(new FullyFixedJobParameters());
 
     assertEquals(3, nextIndex, "It should run the graph setup method during each planning run.");
   }
 
   @Test
   void testFullyCachedParameters() {
-    var man = new TransformationManager<>();
-    man.addConcurrent(new Transformation<>() {
+    var transformer = new CSTTransformer<>();
+    transformer.addConcurrent(new Transformation<>() {
       @Override
       protected void setupGraph() {
         nextIndex++;
       }
     });
 
-    man.planExecutionFor(new NonFixedJobParameters());
-    man.planExecutionFor(new NonFixedJobParameters());
-    man.planExecutionFor(new NonFixedJobParameters());
+    transformer.planExecutionFor(new NonFixedJobParameters());
+    transformer.planExecutionFor(new NonFixedJobParameters());
+    transformer.planExecutionFor(new NonFixedJobParameters());
 
     assertEquals(1, nextIndex, "It should run the graph setup method only once.");
   }
@@ -336,13 +336,13 @@ public class ExecutionPlannerTest extends TestForExecutionOrder {
 
   @Test
   void testCustomRootTransformation() {
-    var man = new TransformationManager<>(new Transformation<>() {
+    var transformer = new CSTTransformer<>(new Transformation<>() {
       @Override
       protected void setupGraph() {
         nextIndex++;
       }
     });
-    man.planExecutionFor(null);
+    transformer.planExecutionFor(null);
     assertEquals(1, nextIndex, "It should run the custom transformation's graph setup");
 
   }
@@ -379,7 +379,7 @@ public class ExecutionPlannerTest extends TestForExecutionOrder {
   private void setupMultipleTimes(int count,
       BiConsumer<TransformationPhase<JobParameters>, Transformation<JobParameters>> setupOne) {
     var phase = incrementRunPhase();
-    var localManager = new TransformationManager<>();
+    var localManager = new CSTTransformer<>();
     var localTransformation = localManager.getRootTransformation();
     for (var j = 0; j < count; j++) {
       setupOne.accept(phase, localTransformation);

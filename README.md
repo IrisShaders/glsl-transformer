@@ -71,13 +71,13 @@ gradle javadoc
 
 ```java
 // setup a manager
-var manager = new TransformationManager<>();
+var transformer = new CSTTransformer<>();
 
 // register a transformation
 manager.addConcurrent(transformation);
 
 // after transformation
-System.out.println(manager.transform(string));
+System.out.println(transformer.transform(string));
 ```
 
 ## Permitted Parse Tree Operations

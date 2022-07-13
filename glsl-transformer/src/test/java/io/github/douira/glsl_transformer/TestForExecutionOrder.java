@@ -11,7 +11,7 @@ import io.github.douira.glsl_transformer.transform.*;
  * Handles the setup of a transformation manager and an index for tracking the
  * execution of phases.
  */
-public abstract class TestForExecutionOrder extends TestWithBareTransformationManager {
+public abstract class TestForExecutionOrder extends TestWithBareCSTTransformer {
   protected int nextIndex;
   protected boolean useWalk;
 

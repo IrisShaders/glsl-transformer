@@ -15,7 +15,7 @@ public class TokenFilterTest extends TestWithResource {
 
   @BeforeEach
   void setupManager() {
-    manager = new TransformationManager<>();
+    manager = new CSTTransformer<>();
   }
 
   @Test
@@ -78,14 +78,14 @@ public class TokenFilterTest extends TestWithResource {
 
   @Test
   void testResetState() {
-    var manager = new TransformationManager<NonFixedJobParameters>();
-    testResetStateOnce(manager, manager::setParseTokenFilter);
-    manager = new TransformationManager<NonFixedJobParameters>();
-    testResetStateOnce(manager, manager::setPrintTokenFilter);
+    var transformer = new CSTTransformer<NonFixedJobParameters>();
+    testResetStateOnce(transformer, transformer::setParseTokenFilter);
+    transformer = new CSTTransformer<NonFixedJobParameters>();
+    testResetStateOnce(transformer, transformer::setPrintTokenFilter);
   }
 
   void testResetStateOnce(
-      TransformationManager<NonFixedJobParameters> man,
+      CSTTransformer<NonFixedJobParameters> man,
       Consumer<TokenFilter<NonFixedJobParameters>> setMethod) {
     setMethod.accept(new TokenFilter<>() {
       @Override
@@ -108,14 +108,14 @@ public class TokenFilterTest extends TestWithResource {
 
   @Test
   void testJobParameters() {
-    var manager = new TransformationManager<NonFixedJobParameters>();
-    testJobParametersOnce(manager, manager::setParseTokenFilter);
-    manager = new TransformationManager<NonFixedJobParameters>();
-    testJobParametersOnce(manager, manager::setPrintTokenFilter);
+    var transformer = new CSTTransformer<NonFixedJobParameters>();
+    testJobParametersOnce(transformer, transformer::setParseTokenFilter);
+    transformer = new CSTTransformer<NonFixedJobParameters>();
+    testJobParametersOnce(transformer, transformer::setPrintTokenFilter);
   }
 
   void testJobParametersOnce(
-      TransformationManager<NonFixedJobParameters> man,
+      CSTTransformer<NonFixedJobParameters> man,
       Consumer<TokenFilter<NonFixedJobParameters>> setMethod) {
     var parameters = new NonFixedJobParameters();
     setMethod.accept(new TokenFilter<>() {
