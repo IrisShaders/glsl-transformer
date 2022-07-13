@@ -1,6 +1,6 @@
 package io.github.douira.glsl_transformer.ast.data;
 
-import java.util.*;
+import java.util.Collection;
 import java.util.stream.*;
 
 import io.github.douira.glsl_transformer.ast.node.basic.*;

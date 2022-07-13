@@ -8,6 +8,7 @@ import org.antlr.v4.runtime.ParserRuleContext;
 import org.antlr.v4.runtime.tree.*;
 import org.junit.jupiter.api.*;
 
+import io.github.douira.glsl_transformer.cst.traversal.*;
 import io.github.douira.glsl_transformer.tree.ExtendedContext;
 
 public class ProxyParseTreeListenerTest {

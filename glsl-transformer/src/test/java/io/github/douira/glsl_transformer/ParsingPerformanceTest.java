@@ -8,8 +8,9 @@ import java.util.stream.*;
 
 import org.junit.jupiter.api.Test;
 
-import io.github.douira.glsl_transformer.TestResourceManager.*;
-import io.github.douira.glsl_transformer.transform.*;
+import io.github.douira.glsl_transformer.basic.EnhancedParser;
+import io.github.douira.glsl_transformer.test_util.*;
+import io.github.douira.glsl_transformer.test_util.TestResourceManager.*;
 
 public class ParsingPerformanceTest extends TestWithBareCSTTransformer {
   private void assertPerformance(Duration expected, Collection<String> inputs) {

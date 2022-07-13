@@ -7,10 +7,12 @@ import java.util.function.Function;
 
 import org.junit.jupiter.params.ParameterizedTest;
 
-import io.github.douira.glsl_transformer.*;
-import io.github.douira.glsl_transformer.TestCaseProvider.Spacing;
+import io.github.douira.glsl_transformer.GLSLParser;
 import io.github.douira.glsl_transformer.ast.print.ASTPrinter;
-import io.github.douira.glsl_transformer.transform.*;
+import io.github.douira.glsl_transformer.ast.transform.ASTBuilder;
+import io.github.douira.glsl_transformer.basic.EnhancedParser;
+import io.github.douira.glsl_transformer.test_util.TestCaseProvider.Spacing;
+import io.github.douira.glsl_transformer.test_util.TestCaseSource;
 import io.github.douira.glsl_transformer.tree.ExtendedContext;
 
 public class ASTReprintTest {

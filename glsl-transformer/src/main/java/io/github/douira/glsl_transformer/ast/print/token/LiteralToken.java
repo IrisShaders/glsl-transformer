@@ -1,7 +1,7 @@
 package io.github.douira.glsl_transformer.ast.print.token;
 
 import io.github.douira.glsl_transformer.ast.print.TokenRole;
-import io.github.douira.glsl_transformer.print.filter.TokenChannel;
+import io.github.douira.glsl_transformer.cst.token_filter.TokenChannel;
 
 public class LiteralToken extends PrintToken {
   public String content;

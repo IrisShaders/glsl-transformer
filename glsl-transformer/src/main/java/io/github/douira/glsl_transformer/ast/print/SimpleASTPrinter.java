@@ -1,6 +1,6 @@
 package io.github.douira.glsl_transformer.ast.print;
 
-import io.github.douira.glsl_transformer.ast.print.token.*;
+import io.github.douira.glsl_transformer.ast.print.token.PrintToken;
 
 public class SimpleASTPrinter extends ASTPrinter {
   protected StringBuilder builder = new StringBuilder();
