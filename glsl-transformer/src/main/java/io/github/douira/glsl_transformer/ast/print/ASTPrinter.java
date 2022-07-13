@@ -813,7 +813,19 @@ public abstract class ASTPrinter extends ASTPrinterBase {
     emitBreakableSpace();
     visit(node.getName());
     emitType(GLSLLexer.LPAREN);
-    visitCommaSpaced(node.getParameters());
+    var large = node.getParameters().size() >= 7;
+    if (large) {
+      emitCommonNewline();
+      indent();
+      visitWithSeparator(node.getParameters(), () -> {
+        emitType(GLSLLexer.COMMA);
+        emitCommonNewline();
+      });
+      emitCommonNewline();
+      unindent();
+    } else {
+      visitCommaSpaced(node.getParameters());
+    }
     emitType(GLSLLexer.RPAREN);
     return null;
   }
