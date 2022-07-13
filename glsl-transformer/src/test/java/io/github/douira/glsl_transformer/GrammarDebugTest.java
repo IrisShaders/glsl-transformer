@@ -6,8 +6,10 @@ import java.util.stream.Stream;
 
 import org.junit.jupiter.api.*;
 
-import io.github.douira.glsl_transformer.TestResourceManager.FileLocation;
-import io.github.douira.glsl_transformer.transform.*;
+import io.github.douira.glsl_transformer.cst.transform.*;
+import io.github.douira.glsl_transformer.job_parameter.WrappedParameters;
+import io.github.douira.glsl_transformer.test_util.*;
+import io.github.douira.glsl_transformer.test_util.TestResourceManager.FileLocation;
 
 /**
  * This test is only enabled for debugging purposes.

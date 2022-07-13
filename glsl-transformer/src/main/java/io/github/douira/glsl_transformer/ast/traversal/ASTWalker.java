@@ -43,8 +43,8 @@ public class ASTWalker<R> extends ASTBaseVisitor<R> {
     listener.exitEveryNode(node);
   }
 
-	@Override
-	public void enterContext(ASTNode node) {
+  @Override
+  public void enterContext(ASTNode node) {
     listener.enterContext(node);
-	}
+  }
 }

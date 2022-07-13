@@ -1,7 +1,7 @@
 package io.github.douira.glsl_transformer.ast.node.type.specifier;
 
 import io.github.douira.glsl_transformer.ast.traversal.*;
-import io.github.douira.glsl_transformer.parse_ast.Type;
+import io.github.douira.glsl_transformer.util.Type;
 
 public class BuiltinNumericTypeSpecifier extends TypeSpecifier {
   public Type type;

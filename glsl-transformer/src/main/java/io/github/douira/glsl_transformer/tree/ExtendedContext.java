@@ -2,13 +2,13 @@ package io.github.douira.glsl_transformer.tree;
 
 import java.util.*;
 
-import com.github.bsideup.jabel.Desugar;
-
 import org.antlr.v4.runtime.*;
 import org.antlr.v4.runtime.misc.Interval;
 import org.antlr.v4.runtime.tree.ParseTree;
 
-import io.github.douira.glsl_transformer.print.CachingIntervalSet;
+import com.github.bsideup.jabel.Desugar;
+
+import io.github.douira.glsl_transformer.cst.print.CachingIntervalSet;
 
 /**
  * Implements custom behavior in parse rule contexts. This class is used as the
