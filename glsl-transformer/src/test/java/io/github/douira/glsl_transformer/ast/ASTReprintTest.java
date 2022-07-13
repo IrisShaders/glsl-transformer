@@ -13,7 +13,7 @@ import io.github.douira.glsl_transformer.ast.print.ASTPrinter;
 import io.github.douira.glsl_transformer.transform.TransformationManager;
 import io.github.douira.glsl_transformer.tree.ExtendedContext;
 
-public class ASTIntegrationTest {
+public class ASTReprintTest {
   void assertReprint(
       Function<GLSLParser, ? extends ExtendedContext> parseMethod,
       String expected,
