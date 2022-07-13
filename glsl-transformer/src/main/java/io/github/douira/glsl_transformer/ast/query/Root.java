@@ -23,9 +23,11 @@ public class Root {
     }
 
     activeBuildRoot = instance;
-    var rootNode = builder.get();
-    activeBuildRoot = null;
-    return rootNode;
+    try {
+      return builder.get();
+    } finally {
+      activeBuildRoot = null;
+    }
   }
 
   public static ASTNode indexNodes(Root instance, Supplier<ASTNode> builder) {
