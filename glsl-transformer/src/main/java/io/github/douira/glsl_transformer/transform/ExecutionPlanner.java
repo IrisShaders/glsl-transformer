@@ -1,23 +1,23 @@
 package io.github.douira.glsl_transformer.transform;
 
 import java.util.*;
-import java.util.function.*;
+import java.util.function.Supplier;
+
+import org.antlr.v4.runtime.BufferedTokenStream;
 
 import com.github.bsideup.jabel.Desugar;
-
-import org.antlr.v4.runtime.*;
 
 import io.github.douira.glsl_transformer.*;
 import io.github.douira.glsl_transformer.GLSLParser.TranslationUnitContext;
 import io.github.douira.glsl_transformer.traversal.*;
-import io.github.douira.glsl_transformer.tree.ExtendedContext;
 
 /**
  * The execution planner finds a valid way of satisfying the root
  * transformation's dependencies. All other transformations and phases are added
  * as dependencies to the root transformation.
  */
-public abstract class ExecutionPlanner<T extends JobParameters> {
+public abstract class ExecutionPlanner<T extends JobParameters>
+    implements ParameterHolder<T> {
   private Map<T, ExecutionPlan> executionPlanCache = new HashMap<>();
   private Transformation<T> rootTransformation;
   private TranslationUnitContext rootNode;
@@ -329,29 +329,14 @@ public abstract class ExecutionPlanner<T extends JobParameters> {
    * 
    * @return The job parameters
    */
-  T getJobParameters() {
+  @Override
+  public T getJobParameters() {
     return jobParameters;
   }
 
-  /**
-   * Runs a function while this transformation manager has the given job
-   * parameters set. It returns the value that the function returns.
-   * This can be used together with non-standard ways of using a transformation
-   * manager like using
-   * {@link TransformationManager#parse(IntStream, ExtendedContext, Function)}
-   * directly.
-   * 
-   * @param <R>        The return type of the function
-   * @param parameters The job parameters to set
-   * @param run        The function to run while the transformation manager has
-   *                   job parameters
-   * @return The value returned by the supplier function
-   */
-  public <R> R withJobParameters(T parameters, Supplier<R> run) {
-    jobParameters = parameters;
-    var value = run.get();
-    jobParameters = null;
-    return value;
+  @Override
+  public void setJobParameters(T jobParameters) {
+    this.jobParameters = jobParameters;
   }
 
   /**

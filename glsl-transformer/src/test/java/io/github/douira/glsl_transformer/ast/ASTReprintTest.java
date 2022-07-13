@@ -10,7 +10,7 @@ import org.junit.jupiter.params.ParameterizedTest;
 import io.github.douira.glsl_transformer.*;
 import io.github.douira.glsl_transformer.TestCaseProvider.Spacing;
 import io.github.douira.glsl_transformer.ast.print.ASTPrinter;
-import io.github.douira.glsl_transformer.transform.TransformationManager;
+import io.github.douira.glsl_transformer.transform.*;
 import io.github.douira.glsl_transformer.tree.ExtendedContext;
 
 public class ASTReprintTest {
@@ -18,8 +18,8 @@ public class ASTReprintTest {
       Function<GLSLParser, ? extends ExtendedContext> parseMethod,
       String expected,
       String input) {
-    var manager = new TransformationManager<>();
-    var parseTree = manager.parse(input, parseMethod);
+    var parser = new EnhancedParser();
+    var parseTree = parser.parse(input, parseMethod);
     var ast = ASTBuilder.build(parseTree);
     var reprinted = ASTPrinter.printedIndented(ast);
     assertEquals(expected, reprinted);
