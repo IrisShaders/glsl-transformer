@@ -420,7 +420,7 @@ public interface ASTVisitor<R> extends GeneralASTVisitor<R> {
   }
 
   default R visitInitializer(Initializer node) {
-    return defaultResult();
+    return superNodeTypeResult();
   }
 
   default R visitNestedInitializer(NestedInitializer node) {
