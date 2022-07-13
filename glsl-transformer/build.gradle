@@ -8,132 +8,132 @@
  */
 
 plugins {
-    // Apply the java-library plugin for API and implementation separation.
-    id 'java-library'
-    id 'antlr'
-    id 'maven-publish'
-    id 'signing'
-    id 'org.danilopianini.publish-on-central' version '0.7.5'
-    id 'jacoco'
+	// Apply the java-library plugin for API and implementation separation.
+	id 'java-library'
+	id 'antlr'
+	id 'maven-publish'
+	id 'signing'
+	id 'org.danilopianini.publish-on-central' version '0.7.5'
+	id 'jacoco'
 }
 
 group = 'io.github.douira'
 version = '0.27.0'
 
 repositories {
-    // Use Maven Central for resolving dependencies.
-    mavenCentral()
+	// Use Maven Central for resolving dependencies.
+	mavenCentral()
 }
 
 def antlrVersion = '4.10.1'
 def jabelVersion = '0.4.2'
 
 dependencies {
-    antlr group: 'org.antlr', name: 'antlr4', version: antlrVersion
-    api group: 'org.antlr', name: 'antlr4-runtime', version: antlrVersion
+	antlr group: 'org.antlr', name: 'antlr4', version: antlrVersion
+	api group: 'org.antlr', name: 'antlr4-runtime', version: antlrVersion
 
-    testImplementation group: 'io.github.origin-energy', name:'java-snapshot-testing-junit5', version: '3.2.+'
-    testImplementation group: 'org.slf4j', name: 'slf4j-simple', version: '2.0.0-alpha5'
-    testImplementation group: 'org.fusesource.jansi', name:'jansi', version:'2.4.0'
+	testImplementation group: 'io.github.origin-energy', name:'java-snapshot-testing-junit5', version: '3.2.+'
+	testImplementation group: 'org.slf4j', name: 'slf4j-simple', version: '2.0.0-alpha5'
+	testImplementation group: 'org.fusesource.jansi', name:'jansi', version:'2.4.0'
 
-    annotationProcessor group: 'com.github.bsideup.jabel', name:'jabel-javac-plugin', version: jabelVersion
-    compileOnly group: 'com.github.bsideup.jabel', name:'jabel-javac-plugin', version: jabelVersion
+	annotationProcessor group: 'com.github.bsideup.jabel', name:'jabel-javac-plugin', version: jabelVersion
+	compileOnly group: 'com.github.bsideup.jabel', name:'jabel-javac-plugin', version: jabelVersion
 }
 
 generateGrammarSource {
-    maxHeapSize = "128m"
-    arguments += ['-package', 'io.github.douira.glsl_transformer', '-visitor']
-    outputDirectory = new File(buildDir.toString() + "/generated-src/antlr/main/io/github/douira/glsl_transformer/")
+	maxHeapSize = "128m"
+	arguments += ['-package', 'io.github.douira.glsl_transformer', '-visitor']
+	outputDirectory = new File(buildDir.toString() + "/generated-src/antlr/main/io/github/douira/glsl_transformer/")
 }
 compileJava.dependsOn generateGrammarSource
 sourcesJar.dependsOn generateGrammarSource
 
 testing {
-    suites {
-        // Configure the built-in test suite
-        test {
-            // Use JUnit Jupiter test framework
-            useJUnitJupiter('5.7.2')
-        }
-    }
+	suites {
+		// Configure the built-in test suite
+		test {
+			// Use JUnit Jupiter test framework
+			useJUnitJupiter('5.7.2')
+		}
+	}
 }
 
 test {
-    // report is always generated after tests run
-    finalizedBy jacocoTestReport
-    testLogging.showStandardStreams = true
-    maxParallelForks = Runtime.runtime.availableProcessors() - 1
+	// report is always generated after tests run
+	finalizedBy jacocoTestReport
+	testLogging.showStandardStreams = true
+	maxParallelForks = Runtime.runtime.availableProcessors() - 1
 }
 
 jacocoTestReport {
-    // tests are required to run before generating the report
-    dependsOn test
-    reports {
-        xml.required = true
-        html.required = true
-    }
+	// tests are required to run before generating the report
+	dependsOn test
+	reports {
+		xml.required = true
+		html.required = true
+	}
 
-    // doesn't actually seem to exclude the files
-    afterEvaluate {
-        classDirectories.setFrom(files(classDirectories.files.collect {
-            fileTree(dir: it, exclude: [
-                '**/GLSLParser*.java',
-                '**/GLSLLexer*.java'
-            ])
-        }))
-    }
+	// doesn't actually seem to exclude the files
+	afterEvaluate {
+		classDirectories.setFrom(files(classDirectories.files.collect {
+			fileTree(dir: it, exclude: [
+				'**/GLSLParser*.java',
+				'**/GLSLLexer*.java'
+			])
+		}))
+	}
 }
 
 configure([tasks.compileJava]) {
-    sourceCompatibility = 16 // for the IDE support
-    options.release = 8
+	sourceCompatibility = 16 // for the IDE support
+	options.release = 8
 
-    javaCompiler = javaToolchains.compilerFor {
-        languageVersion = JavaLanguageVersion.of(16)
-    }
+	javaCompiler = javaToolchains.compilerFor {
+		languageVersion = JavaLanguageVersion.of(16)
+	}
 }
 
 clean {
-    delete "generated-src"
+	delete "generated-src"
 }
 
 publishOnCentral {
-    configureMavenCentral.set(true)
-    projectDescription.set("GLSL Parsing, Program Transformation and Printing with ANTLR4")
-    projectLongName.set("glsl-transformer")
-    projectUrl.set("https://github.com/IrisShaders/glsl-transformer")
-    scmConnection.set("git@github.com:IrisShaders/glsl-transformer.git")
-    licenseName.set("GNU Affero General Public License v3.0")
-    licenseUrl.set("https://www.gnu.org/licenses/agpl-3.0.en.html")
+	configureMavenCentral.set(true)
+	projectDescription.set("GLSL Parsing, Program Transformation and Printing with ANTLR4")
+	projectLongName.set("glsl-transformer")
+	projectUrl.set("https://github.com/IrisShaders/glsl-transformer")
+	scmConnection.set("git@github.com:IrisShaders/glsl-transformer.git")
+	licenseName.set("GNU Affero General Public License v3.0")
+	licenseUrl.set("https://www.gnu.org/licenses/agpl-3.0.en.html")
 }
 
 publishing {
-    publications {
-        javaMaven(MavenPublication) {
-            pom {
-                developers {
-                    developer {
-                        name.set("douira")
-                        email.set("douira100@gmail.com")
-                        url.set("https://douira.github.io")
-                    }
-                }
-            }
-        }
-    }
+	publications {
+		javaMaven(MavenPublication) {
+			pom {
+				developers {
+					developer {
+						name.set("douira")
+						email.set("douira100@gmail.com")
+						url.set("https://douira.github.io")
+					}
+				}
+			}
+		}
+	}
 }
 
 javadoc {
-    configure(options) {
-        tags(
-            'implSpec:a:Implementation Requirements:',
-            'implNote:a:Implementation Note:',
-            'apiNote:a:API Usage Note:'
-        )
-        links "https://javadoc.io/doc/org.antlr/antlr4-runtime/$antlrVersion/"
-        links "https://javadoc.io/doc/com.github.bsideup.jabel/jabel-javac-plugin/$jabelVersion/"
-    }
-    exclude '**/GLSLParser*.java'
-    exclude '**/GLSLLexer*.java'
-    exclude '**/ast/Type.java'
+	configure(options) {
+		tags(
+			'implSpec:a:Implementation Requirements:',
+			'implNote:a:Implementation Note:',
+			'apiNote:a:API Usage Note:'
+		)
+		links "https://javadoc.io/doc/org.antlr/antlr4-runtime/$antlrVersion/"
+		links "https://javadoc.io/doc/com.github.bsideup.jabel/jabel-javac-plugin/$jabelVersion/"
+	}
+	exclude '**/GLSLParser*.java'
+	exclude '**/GLSLLexer*.java'
+	exclude '**/ast/Type.java'
 }
