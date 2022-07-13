@@ -38,13 +38,14 @@ import io.github.douira.glsl_transformer.transform.EnhancedParser.ParsingStrateg
  * 
  * @param <T> The job parameters type
  */
-public class TransformationManager<T extends JobParameters> extends ExecutionPlanner<T>
-    implements ParameterizedTransformer<T> {
+public class CSTTransformer<T extends JobParameters> extends ExecutionPlanner<T>
+    implements ParameterizedTransformer<T>, ParserInterface {
   /**
    * Optionally a token filter for printing a tree. Can be {@code null} if no
    * filter is to be used.
    */
   private TokenFilter<T> printTokenFilter;
+  private TokenFilter<T> parseTokenFilter;
 
   private final EnhancedParser parser;
 
@@ -55,7 +56,7 @@ public class TransformationManager<T extends JobParameters> extends ExecutionPla
    * @param rootTransformation The root transformation to use
    * @param throwParseErrors   If parse errors should be thrown
    */
-  public TransformationManager(Transformation<T> rootTransformation, boolean throwParseErrors) {
+  public CSTTransformer(Transformation<T> rootTransformation, boolean throwParseErrors) {
     super(rootTransformation);
     parser = new EnhancedParser(throwParseErrors);
   }
@@ -66,15 +67,15 @@ public class TransformationManager<T extends JobParameters> extends ExecutionPla
    * 
    * @param rootTransformation The root transformation to use
    */
-  public TransformationManager(Transformation<T> rootTransformation) {
+  public CSTTransformer(Transformation<T> rootTransformation) {
     this(rootTransformation, true);
   }
 
-  public TransformationManager() {
+  public CSTTransformer() {
     parser = new EnhancedParser();
   }
 
-  public TransformationManager(boolean throwParseErrors) {
+  public CSTTransformer(boolean throwParseErrors) {
     parser = new EnhancedParser(throwParseErrors);
   }
 
@@ -88,18 +89,22 @@ public class TransformationManager<T extends JobParameters> extends ExecutionPla
     return parser.getParser();
   }
 
+  @Override
   public EnhancedParser getInternalParser() {
     return parser;
   }
 
+  @Override
   public void setParsingStrategy(ParsingStrategy parsingStrategy) {
     parser.setParsingStrategy(parsingStrategy);
   }
 
+  @Override
   public void setSLLOnly() {
     parser.setSLLOnly();
   }
 
+  @Override
   public void setLLOnly() {
     parser.setLLOnly();
   }
@@ -113,15 +118,21 @@ public class TransformationManager<T extends JobParameters> extends ExecutionPla
     this.printTokenFilter = printTokenFilter;
   }
 
-  public void setParseTokenFilter(TokenFilter<?> parseTokenFilter) {
+  public void setParseTokenFilter(TokenFilter<T> parseTokenFilter) {
     parser.setParseTokenFilter(parseTokenFilter);
+    this.parseTokenFilter = parseTokenFilter;
+  }
+
+  private void setTokenFilterPlanner(TokenFilter<T> tokenFilter) {
+    if (tokenFilter != null) {
+      tokenFilter.setPlanner(this);
+    }
   }
 
   @Override
   public String transformStreamBare(IntStream charStream) throws RecognitionException {
-    if (printTokenFilter != null) {
-      printTokenFilter.setPlanner(this);
-    }
+    setTokenFilterPlanner(printTokenFilter);
+    setTokenFilterPlanner(parseTokenFilter);
     var tree = parser.parse(charStream, null, GLSLParser::translationUnit);
     var tokenStream = parser.getTokenStream();
     transformTree(tree, tokenStream);

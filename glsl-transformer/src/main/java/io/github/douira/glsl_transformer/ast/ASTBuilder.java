@@ -58,11 +58,7 @@ public class ASTBuilder extends GLSLParserBaseVisitor<ASTNode> {
   }
 
   private static ASTNode doBuild(ParseTree ctx) {
-    // try {
     return new ASTBuilder().visit(ctx);
-    // } catch (Exception e) {
-    // throw new Exception("Failed to build AST for " + ctx.getText(), e);
-    // }
   }
 
   private static <N, R> R applySafe(N ctx, Function<N, R> visitMethod) {

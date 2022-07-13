@@ -8,7 +8,7 @@ import io.github.douira.glsl_transformer.transform.*;
 /**
  * Handles setup of all the things required to run a transformation.
  */
-public abstract class TestWithResource extends TestWithBareTransformationManager {
+public abstract class TestWithResource extends TestWithBareCSTTransformer {
   private static String testResourceInput;
 
   private static String testCode;
@@ -27,7 +27,7 @@ public abstract class TestWithResource extends TestWithBareTransformationManager
   }
 
   public String run(String code, LifecycleUser<NonFixedJobParameters> activity) {
-    manager = new TransformationManager<NonFixedJobParameters>();
+    manager = new CSTTransformer<NonFixedJobParameters>();
     manager.addConcurrent(activity);
     return manager.transform(code);
   }

@@ -16,7 +16,7 @@ import io.github.douira.glsl_transformer.tree.ExtendedContext;
  * token filtering and switching between parsing modes on demand. It also
  * handles error listeners.
  */
-public class EnhancedParser {
+public class EnhancedParser implements ParserInterface {
   private static class ThrowingErrorListener extends BaseErrorListener {
     public static final ThrowingErrorListener INSTANCE = new ThrowingErrorListener();
 
@@ -183,6 +183,10 @@ public class EnhancedParser {
     this.tokenSource.setTokenFilter(parseTokenFilter);
   }
 
+  public TokenFilter<?> getParseTokenFilter() {
+    return parseTokenFilter;
+  }
+
   /**
    * Parses a string as a translation unit.
    * 
@@ -303,5 +307,10 @@ public class EnhancedParser {
 
     node.setParent(parent);
     return node;
+  }
+
+  @Override
+  public EnhancedParser getInternalParser() {
+    return this;
   }
 }

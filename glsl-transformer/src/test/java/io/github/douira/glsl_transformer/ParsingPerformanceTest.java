@@ -11,7 +11,7 @@ import org.junit.jupiter.api.Test;
 import io.github.douira.glsl_transformer.TestResourceManager.*;
 import io.github.douira.glsl_transformer.transform.*;
 
-public class ParsingPerformanceTest extends TestWithBareTransformationManager {
+public class ParsingPerformanceTest extends TestWithBareCSTTransformer {
   private void assertPerformance(Duration expected, Collection<String> inputs) {
     var parser = new EnhancedParser(false);
 

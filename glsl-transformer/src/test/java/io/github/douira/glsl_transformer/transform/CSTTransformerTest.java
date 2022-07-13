@@ -19,13 +19,13 @@ import io.github.douira.glsl_transformer.GLSLParser.TranslationUnitContext;
 import io.github.douira.glsl_transformer.TestResourceManager.DirectoryLocation;
 
 @ExtendWith({ SnapshotExtension.class })
-public class TransformationManagerTest extends TestWithResource {
+public class CSTTransformerTest extends TestWithResource {
   private Expect expect;
   private Exception storeException;
 
   @BeforeEach
   void setupManager() {
-    manager = new TransformationManager<>();
+    manager = new CSTTransformer<>();
     manager.addConcurrent(new Transformation<>(new RunPhase<>() {
       @Override
       protected void run(TranslationUnitContext ctx) {
@@ -113,7 +113,7 @@ public class TransformationManagerTest extends TestWithResource {
     TestResourceManager
         .getDirectoryResources(DirectoryLocation.GLSLANG_TESTS)
         .forEach(resource -> {
-          manager = new TransformationManager<>(false);
+          manager = new CSTTransformer<>(false);
           manager.setSLLOnly();
           var collectingListener = new CollectingErrorListener();
           manager.getLexer().addErrorListener(collectingListener);
@@ -137,7 +137,7 @@ public class TransformationManagerTest extends TestWithResource {
 
   @Test
   void testWithJobParameters() {
-    TransformationManager<NonFixedJobParameters> man = new TransformationManager<>();
+    CSTTransformer<NonFixedJobParameters> man = new CSTTransformer<>();
     assertNull(man.getJobParameters(), "It should start with no job parameters");
     var parameters = new NonFixedJobParameters();
     man.withJobParameters(parameters,

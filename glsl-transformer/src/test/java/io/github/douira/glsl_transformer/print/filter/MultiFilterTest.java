@@ -12,15 +12,15 @@ import io.github.douira.glsl_transformer.util.CompatUtil;
 public class MultiFilterTest extends TestWithResource {
   int nextIndex;
 
-  static <T extends JobParameters> TransformationManager<T> assertPrintFilterResult(
+  static <T extends JobParameters> CSTTransformer<T> assertPrintFilterResult(
       String expected, String input, T parameters, TokenFilter<T> filter, String message) {
-    var man = new TransformationManager<T>();
-    man.setPrintTokenFilter(filter);
-    assertEquals(expected, man.transform(input, parameters), message);
-    return man;
+    var transformer = new CSTTransformer<T>();
+    transformer.setPrintTokenFilter(filter);
+    assertEquals(expected, transformer.transform(input, parameters), message);
+    return transformer;
   }
 
-  static <T extends JobParameters> TransformationManager<T> assertPrintFilterResult(
+  static <T extends JobParameters> CSTTransformer<T> assertPrintFilterResult(
       String expected, String input, TokenFilter<T> filter, String message) {
     return assertPrintFilterResult(expected, input, null, filter, message);
   }
