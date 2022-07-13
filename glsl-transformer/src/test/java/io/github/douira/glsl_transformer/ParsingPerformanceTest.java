@@ -13,13 +13,12 @@ import io.github.douira.glsl_transformer.transform.*;
 
 public class ParsingPerformanceTest extends TestWithBareTransformationManager {
   private void assertPerformance(Duration expected, Collection<String> inputs) {
-    var man = new TransformationManager<NonFixedJobParameters>(false);
-    man.setSLLOnly();
+    var parser = new EnhancedParser(false);
 
     // warmup the JVM and the parser's DFA cache
-    inputs.forEach(man::parse);
+    inputs.forEach(parser::parse);
 
-    assertTimeout(expected, () -> inputs.forEach(man::parse),
+    assertTimeout(expected, () -> inputs.forEach(parser::parse),
         "It should parse fast enough using SLL mode.");
   }
 

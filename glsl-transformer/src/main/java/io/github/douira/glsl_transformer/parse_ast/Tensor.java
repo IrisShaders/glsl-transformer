@@ -6,7 +6,7 @@ import org.antlr.v4.runtime.tree.TerminalNode;
 
 import io.github.douira.glsl_transformer.*;
 import io.github.douira.glsl_transformer.GLSLParser.BuiltinTypeSpecifierParseableContext;
-import io.github.douira.glsl_transformer.transform.TransformationManager;
+import io.github.douira.glsl_transformer.transform.EnhancedParser;
 import io.github.douira.glsl_transformer.tree.ExtendedContext;
 
 /**
@@ -55,7 +55,8 @@ public class Tensor extends ParsableTerminalASTNode {
    * @param str The string to parse as a GLSL type specifier
    */
   public Tensor(String str) {
-    this(TransformationManager.INTERNAL.parse(str, GLSLParser::builtinTypeSpecifierParseable));
+    this(EnhancedParser.getInternalInstance()
+        .parse(str, GLSLParser::builtinTypeSpecifierParseable));
   }
 
   private static int getTypeSpecifierType(BuiltinTypeSpecifierParseableContext ctx) {

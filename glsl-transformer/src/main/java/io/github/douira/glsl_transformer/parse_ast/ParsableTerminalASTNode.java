@@ -3,7 +3,7 @@ package io.github.douira.glsl_transformer.parse_ast;
 import java.util.function.Function;
 
 import io.github.douira.glsl_transformer.GLSLParser;
-import io.github.douira.glsl_transformer.transform.TransformationManager;
+import io.github.douira.glsl_transformer.transform.*;
 import io.github.douira.glsl_transformer.tree.ExtendedContext;
 
 /**
@@ -41,7 +41,7 @@ public abstract class ParsableTerminalASTNode extends TerminalASTNode {
    * @return The AST node's code parsed into a node
    */
   public ExtendedContext getParsed(ExtendedContext parent) {
-    return TransformationManager.INTERNAL.parse(
+    return EnhancedParser.getInternalInstance().parse(
         getPrinted(), parent, getOutputParseMethod());
   }
 }

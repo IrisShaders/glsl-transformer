@@ -244,8 +244,9 @@ public abstract class TransformationPhaseBase<T extends JobParameters> extends G
   protected static <RuleType extends ExtendedContext> RuleType createLocalRoot(
       String str, ExtendedContext parent,
       Function<GLSLParser, RuleType> parseMethod) {
-    var node = TransformationManager.INTERNAL.parse(str, parent, parseMethod);
-    node.makeLocalRoot(TransformationManager.INTERNAL.tokenStream);
+    var parser = EnhancedParser.getInternalInstance();
+    var node = parser.parse(str, parent, parseMethod);
+    node.makeLocalRoot(parser.getTokenStream());
     return node;
   }
 
