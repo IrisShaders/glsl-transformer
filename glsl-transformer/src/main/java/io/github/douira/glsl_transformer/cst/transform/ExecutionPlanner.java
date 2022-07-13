@@ -1,7 +1,6 @@
 package io.github.douira.glsl_transformer.cst.transform;
 
 import java.util.*;
-import java.util.function.Supplier;
 
 import org.antlr.v4.runtime.BufferedTokenStream;
 
