@@ -813,8 +813,7 @@ public abstract class ASTPrinter extends ASTPrinterBase {
     emitBreakableSpace();
     visit(node.getName());
     emitType(GLSLLexer.LPAREN);
-    var large = node.getParameters().size() >= 7;
-    if (large) {
+    if (node.getParameters().size() >= 7) {
       emitCommonNewline();
       indent();
       visitWithSeparator(node.getParameters(), () -> {
@@ -1026,11 +1025,17 @@ public abstract class ASTPrinter extends ASTPrinterBase {
   @Override
   public Void visitStructBody(StructBody node) {
     emitType(GLSLLexer.LBRACE);
-    emitCommonNewline();
-    indent();
-    visitWithSeparator(node.getMembers(), this::emitCommonNewline);
-    unindent();
-    emitCommonNewline();
+    if (node.getMembers().size() <= 1) {
+      emitBreakableSpace();
+      visitWithSeparator(node.getMembers(), this::emitBreakableSpace);
+      emitBreakableSpace();
+    } else {
+      emitCommonNewline();
+      indent();
+      visitWithSeparator(node.getMembers(), this::emitCommonNewline);
+      unindent();
+      emitCommonNewline();
+    }
     emitType(GLSLLexer.RBRACE);
     return null;
   }
