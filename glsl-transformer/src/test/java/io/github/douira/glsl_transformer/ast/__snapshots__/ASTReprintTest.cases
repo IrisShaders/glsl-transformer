@@ -903,7 +903,15 @@ void foo(sampler2D t) {
 }
 
 §testReprint translationUnit:
-int f(int8_t i8, uint8_t u8, int16_t i16, uint16_t u16, int64_t i64, uint64_t u64, float16_t f16) {
+int f(
+	int8_t i8,
+	uint8_t u8,
+	int16_t i16,
+	uint16_t u16,
+	int64_t i64,
+	uint64_t u64,
+	float16_t f16
+) {
 	return 0;
 }
 
@@ -954,5 +962,37 @@ for (int a = b; ; a++);
 
 §testReprint statement:
 for (int a = b; ; );
+
+§testReprint translationUnit:
+int foo(int a, int b, int c, int d) {
+}
+int foo(int a, int b, int c, int d, int e, int f) {
+}
+int foo(
+	int a,
+	int b,
+	int c,
+	int d,
+	int c,
+	int d,
+	int e
+) {
+}
+int foo(
+	int a,
+	int b,
+	int c,
+	int d,
+	int c,
+	int d,
+	int e,
+	int c,
+	int d,
+	int c,
+	int d,
+	int e,
+	int e
+) {
+}
 
 §
