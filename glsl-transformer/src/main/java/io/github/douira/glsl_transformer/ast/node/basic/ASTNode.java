@@ -90,7 +90,7 @@ public abstract class ASTNode {
           "parent cannot be set to null");
     }
 
-    // if the parent doesn't change nothing has to be done
+    // if the parent doesn't change, nothing has to be done
     if (this.parent == parent) {
       return false;
     }
@@ -137,6 +137,7 @@ public abstract class ASTNode {
   public <T extends ASTNode> T setup(T node) {
     if (node != null) {
       node.setParent(this);
+      root.registerChild(node);
     }
     return node;
   }
