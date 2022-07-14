@@ -18,7 +18,7 @@ public abstract class ASTNode {
    * Invariant: always refers to a method in the currently set parent.
    * Null if the parent is also null.
    */
-  private Consumer<ASTNode> parentSetter;
+  private Consumer<ASTNode> selfReplacer;
 
   // should never be null
   private Root root = Root.getActiveBuildRoot();
@@ -33,12 +33,12 @@ public abstract class ASTNode {
   }
 
   public Consumer<ASTNode> getParentSetter() {
-    return parentSetter;
+    return selfReplacer;
   }
 
   public boolean replaceInParent(ASTNode replacement) {
-    if (parentSetter != null) {
-      parentSetter.accept(replacement);
+    if (selfReplacer != null) {
+      selfReplacer.accept(replacement);
       return true;
     }
     return false;
@@ -124,7 +124,7 @@ public abstract class ASTNode {
     // this is the normal case for building the AST or moving nodes around
     if (root == parent.root) {
       this.parent = parent;
-      this.parentSetter = (Consumer<ASTNode>) setter;
+      this.selfReplacer = (Consumer<ASTNode>) setter;
       return true;
     }
 
@@ -134,7 +134,7 @@ public abstract class ASTNode {
 
     // not unregistering from the previous root because it's being discarded
     this.parent = parent;
-    this.parentSetter = (Consumer<ASTNode>) setter;
+    this.selfReplacer = (Consumer<ASTNode>) setter;
     new ChangeRootVisitor(parent.root).visit(this);
 
     return true;
