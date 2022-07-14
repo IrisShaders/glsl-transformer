@@ -15,7 +15,6 @@ import au.com.origin.snapshots.Expect;
 import au.com.origin.snapshots.annotations.SnapshotName;
 import au.com.origin.snapshots.junit5.SnapshotExtension;
 import io.github.douira.glsl_transformer.GLSLParser.TranslationUnitContext;
-import io.github.douira.glsl_transformer.basic.InjectionPoint;
 import io.github.douira.glsl_transformer.job_parameter.NonFixedJobParameters;
 import io.github.douira.glsl_transformer.test_util.*;
 import io.github.douira.glsl_transformer.test_util.TestResourceManager.DirectoryLocation;
@@ -31,7 +30,7 @@ public class CSTTransformerTest extends TestWithResource {
     manager.addConcurrent(new Transformation<>(new RunPhase<>() {
       @Override
       protected void run(TranslationUnitContext ctx) {
-        injectExternalDeclaration(InjectionPoint.BEFORE_VERSION, "f;");
+        injectExternalDeclaration(CSTInjectionPoint.BEFORE_VERSION, "f;");
       }
     }));
   }

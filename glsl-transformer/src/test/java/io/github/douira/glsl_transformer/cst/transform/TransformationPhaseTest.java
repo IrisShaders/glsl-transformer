@@ -15,7 +15,6 @@ import au.com.origin.snapshots.annotations.SnapshotName;
 import au.com.origin.snapshots.junit5.SnapshotExtension;
 import io.github.douira.glsl_transformer.GLSLParser;
 import io.github.douira.glsl_transformer.GLSLParser.TranslationUnitContext;
-import io.github.douira.glsl_transformer.basic.InjectionPoint;
 import io.github.douira.glsl_transformer.cst.node.StringNode;
 import io.github.douira.glsl_transformer.test_util.*;
 import io.github.douira.glsl_transformer.test_util.TestCaseProvider.Spacing;
@@ -139,7 +138,7 @@ public class TransformationPhaseTest extends TestWithResource {
   @SnapshotName("testInjectNode")
   void testInjectNode(String scenario, String input) {
     manager.setSLLOnly();
-    for (var location : InjectionPoint.values()) {
+    for (var location : CSTInjectionPoint.values()) {
       setTestCode(input);
       var output = run(new RunPhase<>() {
         @Override
@@ -159,7 +158,7 @@ public class TransformationPhaseTest extends TestWithResource {
   @SnapshotName("testInjectDefine")
   void testInjectDefine(String scenario, String input) {
     manager.setSLLOnly();
-    for (var location : InjectionPoint.values()) {
+    for (var location : CSTInjectionPoint.values()) {
       setTestCode(input);
       var output = run(new RunPhase<>() {
         @Override
@@ -181,7 +180,7 @@ public class TransformationPhaseTest extends TestWithResource {
         run("a;//present\nb;c;d;", new RunPhase<>() {
           @Override
           protected void run(TranslationUnitContext ctx) {
-            injectNodes(InjectionPoint.BEFORE_VERSION,
+            injectNodes(CSTInjectionPoint.BEFORE_VERSION,
                 new LinkedList<ParseTree>(List.of(
                     createLocalRoot("e;", getRootNode(), GLSLParser::externalDeclaration),
                     createLocalRoot("//\nf;", getRootNode(), GLSLParser::externalDeclaration))));
@@ -196,7 +195,7 @@ public class TransformationPhaseTest extends TestWithResource {
         run("a;//present\nb;c;int foo;", new RunPhase<>() {
           @Override
           protected void run(TranslationUnitContext ctx) {
-            injectExternalDeclaration(InjectionPoint.BEFORE_VERSION, "e;");
+            injectExternalDeclaration(CSTInjectionPoint.BEFORE_VERSION, "e;");
           }
         }),
         "It should inject an external declaration at the right position");
