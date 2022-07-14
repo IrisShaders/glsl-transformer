@@ -4,7 +4,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 import org.junit.jupiter.api.Test;
 
-import io.github.douira.glsl_transformer.basic.InjectionPoint;
+import io.github.douira.glsl_transformer.cst.transform.CSTInjectionPoint;
 import io.github.douira.glsl_transformer.job_parameter.NonFixedJobParameters;
 import io.github.douira.glsl_transformer.test_util.TestForExecutionOrder;
 
@@ -24,7 +24,7 @@ public class WrapIdentifierTest extends TestForExecutionOrder {
         .wrapTarget("foo")
         .detectionResult("bar")
         .injectionExternalDeclaration("int snap = 0;")
-        .injectionLocation(InjectionPoint.BEFORE_EOF));
+        .injectionLocation(CSTInjectionPoint.BEFORE_EOF));
     assertEquals(
         "int bar = 4;int snap = 0;",
         manager.transform("int foo = 4;"),
@@ -37,7 +37,7 @@ public class WrapIdentifierTest extends TestForExecutionOrder {
         .wrapTarget("foo")
         .parsedReplacement("bar + 3")
         .injectionExternalDeclaration("int snap = 0;")
-        .injectionLocation(InjectionPoint.BEFORE_DECLARATIONS));
+        .injectionLocation(CSTInjectionPoint.BEFORE_DECLARATIONS));
     assertEquals(
         "int snap = 0;int a = bar + 3;",
         manager.transform("int a = foo;"),
@@ -51,7 +51,7 @@ public class WrapIdentifierTest extends TestForExecutionOrder {
         .detectionResult("bar")
         .parsedReplacement("bar + 3")
         .injectionExternalDeclaration("int snap = 0;")
-        .injectionLocation(InjectionPoint.BEFORE_DECLARATIONS));
+        .injectionLocation(CSTInjectionPoint.BEFORE_DECLARATIONS));
     assertThrows(
         SemanticException.class,
         () -> manager.transform("int a = bar;"),
@@ -65,7 +65,7 @@ public class WrapIdentifierTest extends TestForExecutionOrder {
         .detectionResult("bar")
         .parsedReplacement("bar + 3")
         .injectionExternalDeclaration("int snap = bar;")
-        .injectionLocation(InjectionPoint.BEFORE_DECLARATIONS));
+        .injectionLocation(CSTInjectionPoint.BEFORE_DECLARATIONS));
     assertEquals(
         "int snap = bar;int a = bar + 3;",
         manager.transform("int a = foo;"),
@@ -82,7 +82,7 @@ public class WrapIdentifierTest extends TestForExecutionOrder {
     manager.addConcurrent(new WrapIdentifier<NonFixedJobParameters>()
         .detectionResult("prevMain")
         .wrapTarget("main")
-        .injectionLocation(InjectionPoint.BEFORE_EOF)
+        .injectionLocation(CSTInjectionPoint.BEFORE_EOF)
         .injectionExternalDeclaration("void main() { foo();\n prevMain(); }"));
     assertEquals("void prevMain() { bar(); }\nvoid main() { foo();\n prevMain(); }",
         manager.transform("void main() { bar(); }\n"),
@@ -98,7 +98,7 @@ public class WrapIdentifierTest extends TestForExecutionOrder {
         .wrapTarget("foo")
         .detectionResult("bar")
         .injectionExternalDeclaration("int snap = 0;")
-        .injectionLocation(InjectionPoint.BEFORE_EOF)
+        .injectionLocation(CSTInjectionPoint.BEFORE_EOF)
         .activation(() -> false));
     assertEquals(
         "int bar = foo;",

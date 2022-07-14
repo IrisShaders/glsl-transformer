@@ -4,7 +4,6 @@ import static org.junit.jupiter.api.Assertions.*;
 
 import org.junit.jupiter.api.Test;
 
-import io.github.douira.glsl_transformer.basic.InjectionPoint;
 import io.github.douira.glsl_transformer.cst.node.StringNode;
 import io.github.douira.glsl_transformer.test_util.TestForExecutionOrder;
 
@@ -16,14 +15,14 @@ public class RunPhaseTest extends TestForExecutionOrder {
 
   @Test
   void testWithInjectNodes() {
-    manager.addConcurrent(RunPhase.withInjectNodes(InjectionPoint.BEFORE_EOF, new StringNode("b")));
+    manager.addConcurrent(RunPhase.withInjectNodes(CSTInjectionPoint.BEFORE_EOF, new StringNode("b")));
     assertEquals("a;\nb", manager.transform("a;"),
         "It should generate a run phase that does an injection of multiple nodes.");
   }
 
   @Test
   void testWithInjectExternalDeclarations() {
-    manager.addConcurrent(RunPhase.withInjectExternalDeclarations(InjectionPoint.BEFORE_EOF, "foo;"));
+    manager.addConcurrent(RunPhase.withInjectExternalDeclarations(CSTInjectionPoint.BEFORE_EOF, "foo;"));
     assertEquals("foo;", manager.transform(""),
         "It should generate a run phase that does an injection.");
   }

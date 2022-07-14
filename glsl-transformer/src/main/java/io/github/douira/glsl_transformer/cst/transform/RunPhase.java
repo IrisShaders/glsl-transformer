@@ -3,7 +3,6 @@ package io.github.douira.glsl_transformer.cst.transform;
 import org.antlr.v4.runtime.tree.ParseTree;
 
 import io.github.douira.glsl_transformer.GLSLParser.TranslationUnitContext;
-import io.github.douira.glsl_transformer.basic.InjectionPoint;
 import io.github.douira.glsl_transformer.job_parameter.JobParameters;
 
 /**
@@ -41,7 +40,7 @@ public abstract class RunPhase<T extends JobParameters> extends TransformationPh
   /**
    * Returns a new run phase that injects the given nodes at the given location.
    * 
-   * @see TransformationPhase#injectNodes(InjectionPoint, ParseTree...)
+   * @see TransformationPhase#injectNodes(CSTInjectionPoint, ParseTree...)
    * 
    * @param <R>      The job parameter type
    * @param location The location to inject the nodes at
@@ -49,7 +48,7 @@ public abstract class RunPhase<T extends JobParameters> extends TransformationPh
    * @return The run phase that does only these injections
    */
   public static <R extends JobParameters> RunPhase<R> withInjectNodes(
-      InjectionPoint location, ParseTree newNodes) {
+      CSTInjectionPoint location, ParseTree newNodes) {
     return new RunPhase<R>() {
       @Override
       protected void run(TranslationUnitContext ctx) {
@@ -62,7 +61,7 @@ public abstract class RunPhase<T extends JobParameters> extends TransformationPh
    * Returns a new run phase that injects the given strings as an external
    * declarations at the given location.
    * 
-   * @see TransformationPhase#injectExternalDeclarations(InjectionPoint,
+   * @see TransformationPhase#injectExternalDeclarations(CSTInjectionPoint,
    *      String...)
    * 
    * @param <R>      The job parameter type
@@ -71,7 +70,7 @@ public abstract class RunPhase<T extends JobParameters> extends TransformationPh
    * @return The run phase that does only these injections
    */
   public static <R extends JobParameters> RunPhase<R> withInjectExternalDeclarations(
-      InjectionPoint location, String... str) {
+      CSTInjectionPoint location, String... str) {
     return new RunPhase<R>() {
       @Override
       protected void run(TranslationUnitContext ctx) {

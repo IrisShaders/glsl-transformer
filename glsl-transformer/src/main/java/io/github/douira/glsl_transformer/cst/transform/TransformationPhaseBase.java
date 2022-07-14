@@ -253,23 +253,23 @@ public abstract class TransformationPhaseBase<T extends JobParameters> extends G
     return node;
   }
 
-  private int getInjectionIndex(InjectionPoint location) {
+  private int getInjectionIndex(CSTInjectionPoint location) {
     var rootNode = getRootNode();
     var injectIndex = -1;
 
-    if (location == InjectionPoint.BEFORE_VERSION) {
+    if (location == CSTInjectionPoint.BEFORE_VERSION) {
       injectIndex = rootNode.getChildIndexLike(VersionStatementContext.class);
       if (injectIndex == rootNode.getChildCount()) {
         injectIndex = 0;
       }
-    } else if (location == InjectionPoint.BEFORE_EOF) {
+    } else if (location == CSTInjectionPoint.BEFORE_EOF) {
       injectIndex = rootNode.getChildCount();
     } else {
       do {
         injectIndex++;
         if (rootNode.getChild(injectIndex) instanceof ExternalDeclarationContext externalDeclaration
             && externalDeclaration.getChild(0) instanceof ExtendedContext eChild
-            && CSTInjectionPointHandler.checkChildRelevant(location, eChild.getClass())) {
+            && location.checkChildRelevant(eChild.getClass())) {
           break;
         }
       } while (injectIndex < rootNode.getChildCount());
@@ -291,19 +291,19 @@ public abstract class TransformationPhaseBase<T extends JobParameters> extends G
    * @param location The injection point at which the new node is inserted
    * @param newNode  The new node to be inserted
    */
-  protected void injectNode(InjectionPoint location, ParseTree newNode) {
+  protected void injectNode(CSTInjectionPoint location, ParseTree newNode) {
     getRootNode().addChild(getInjectionIndex(location), newNode);
   }
 
   /**
    * Injects a list of nodes into the translation unit context node. Does the same
-   * thing as {@link #injectNode(InjectionPoint, ParseTree)} but with a list of
+   * thing as {@link #injectNode(CSTInjectionPoint, ParseTree)} but with a list of
    * nodes.
    * 
    * @param location The injection point at which the new nodes are inserted
    * @param newNodes The list of nodes to be inserted
    */
-  protected void injectNodes(InjectionPoint location, Deque<ParseTree> newNodes) {
+  protected void injectNodes(CSTInjectionPoint location, Deque<ParseTree> newNodes) {
     var injectIndex = getInjectionIndex(location);
     var rootNode = getRootNode();
     newNodes.descendingIterator()
@@ -313,11 +313,11 @@ public abstract class TransformationPhaseBase<T extends JobParameters> extends G
   /**
    * Injects an array of nodes at an injection location.
    * 
-   * @see #injectNodes(InjectionPoint, Deque)
+   * @see #injectNodes(CSTInjectionPoint, Deque)
    * @param location The injection point at which the new nodes are inserted
    * @param newNodes The list of nodes to be inserted
    */
-  protected void injectNodes(InjectionPoint location, ParseTree... newNodes) {
+  protected void injectNodes(CSTInjectionPoint location, ParseTree... newNodes) {
     var injectIndex = getInjectionIndex(location);
     var rootNode = getRootNode();
     for (var i = newNodes.length - 1; i >= 0; i--) {
@@ -330,23 +330,23 @@ public abstract class TransformationPhaseBase<T extends JobParameters> extends G
    * convenience method since most of the time injected nodes are external
    * declarations.
    * 
-   * @see #injectNode(InjectionPoint, ParseTree)
+   * @see #injectNode(CSTInjectionPoint, ParseTree)
    * @param location The injection point at which the new node is inserted
    * @param str      The code fragment to be parsed as an external declaration and
    *                 inserted at the given injection point
    */
-  protected void injectExternalDeclaration(InjectionPoint location, String str) {
+  protected void injectExternalDeclaration(CSTInjectionPoint location, String str) {
     injectNode(location, createLocalRoot(str, getRootNode(), GLSLParser::externalDeclaration));
   }
 
   /**
    * Injects multiple strings parsed as individual external declarations.
    * 
-   * @see #injectNode(InjectionPoint, ParseTree)
+   * @see #injectNode(CSTInjectionPoint, ParseTree)
    * @param location The injection point at which the new nodes are inserted
    * @param str      The strings to parse as external declarations and then insert
    */
-  protected void injectExternalDeclarations(InjectionPoint location, String... str) {
+  protected void injectExternalDeclarations(CSTInjectionPoint location, String... str) {
     var nodes = new ParseTree[str.length];
     var rootNode = getRootNode();
     for (var i = 0; i < str.length; i++) {
@@ -368,7 +368,7 @@ public abstract class TransformationPhaseBase<T extends JobParameters> extends G
    * @param location The injection point at which the new node is inserted
    * @param content  The content after the #define prefix
    */
-  protected void injectDefine(InjectionPoint location, String content) {
+  protected void injectDefine(CSTInjectionPoint location, String content) {
     injectNode(location, new Directive(DirectiveType.DEFINE, content));
   }
 }

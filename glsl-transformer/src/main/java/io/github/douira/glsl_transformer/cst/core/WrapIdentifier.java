@@ -5,9 +5,8 @@ import java.util.function.*;
 
 import io.github.douira.glsl_transformer.GLSLParser;
 import io.github.douira.glsl_transformer.GLSLParser.TranslationUnitContext;
-import io.github.douira.glsl_transformer.basic.InjectionPoint;
 import io.github.douira.glsl_transformer.cst.core.target.*;
-import io.github.douira.glsl_transformer.cst.transform.RunPhase;
+import io.github.douira.glsl_transformer.cst.transform.*;
 import io.github.douira.glsl_transformer.cst.transform.lifecycle.ActivatableLifecycleUser;
 import io.github.douira.glsl_transformer.job_parameter.JobParameters;
 import io.github.douira.glsl_transformer.tree.*;
@@ -51,7 +50,7 @@ public class WrapIdentifier<T extends JobParameters> extends ConfigurableTransfo
   private Supplier<String> wrapTarget = once(this::getWrapTarget);
 
   private Supplier<ActivatableLifecycleUser<T>> injector = once(this::getInjector);
-  private Supplier<InjectionPoint> injectionLocation = once(this::getInjectionLocation);
+  private Supplier<CSTInjectionPoint> injectionLocation = once(this::getInjectionLocation);
   private Supplier<Collection<String>> injectionExternalDeclarations = once(this::getInjectionExternalDeclarations);
 
   /**
@@ -269,8 +268,8 @@ public class WrapIdentifier<T extends JobParameters> extends ConfigurableTransfo
    * 
    * @return The configuration property value
    */
-  protected InjectionPoint getInjectionLocation() {
-    return InjectionPoint.BEFORE_DECLARATIONS;
+  protected CSTInjectionPoint getInjectionLocation() {
+    return CSTInjectionPoint.BEFORE_DECLARATIONS;
   }
 
   /**
@@ -405,7 +404,7 @@ public class WrapIdentifier<T extends JobParameters> extends ConfigurableTransfo
    * @param injectionLocation The injection location
    * @return This object
    */
-  public WrapIdentifier<T> injectionLocation(InjectionPoint injectionLocation) {
+  public WrapIdentifier<T> injectionLocation(CSTInjectionPoint injectionLocation) {
     this.injectionLocation = swapSupplier(this.injectionLocation, injectionLocation);
     return this;
   }
@@ -527,7 +526,7 @@ public class WrapIdentifier<T extends JobParameters> extends ConfigurableTransfo
    * @param injectionLocation The value supplier
    * @return This object
    */
-  public WrapIdentifier<T> injectionLocation(Supplier<InjectionPoint> injectionLocation) {
+  public WrapIdentifier<T> injectionLocation(Supplier<CSTInjectionPoint> injectionLocation) {
     this.injectionLocation = swapSupplier(this.injectionLocation, injectionLocation);
     return this;
   }
@@ -740,7 +739,7 @@ public class WrapIdentifier<T extends JobParameters> extends ConfigurableTransfo
    * 
    * @return The configuration property value
    */
-  protected final InjectionPoint injectionLocation() {
+  protected final CSTInjectionPoint injectionLocation() {
     return injectionLocation.get();
   }
 
