@@ -26,7 +26,7 @@ public class VariableDeclaration extends Declaration {
   }
 
   public void setTypeQualifier(TypeQualifier typeQualifier) {
-    updateParents(this.typeQualifier, typeQualifier);
+    updateParents(this.typeQualifier, typeQualifier, this::setTypeQualifier);
     this.typeQualifier = typeQualifier;
   }
 

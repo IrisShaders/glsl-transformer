@@ -9,12 +9,12 @@ public class NamedLayoutQualifierPart extends LayoutQualifierPart {
   protected Expression expression; // TODO: nullable
 
   public NamedLayoutQualifierPart(Identifier name, Expression expression) {
-    this.name = setup(name);
-    this.expression = setup(expression);
+    this.name = setup(name, this::setName);
+    this.expression = setup(expression, this::setExpression);
   }
 
   public NamedLayoutQualifierPart(Identifier name) {
-    this.name = setup(name);
+    this.name = setup(name, this::setName);
   }
 
   public Identifier getName() {
@@ -22,7 +22,7 @@ public class NamedLayoutQualifierPart extends LayoutQualifierPart {
   }
 
   public void setName(Identifier name) {
-    updateParents(this.name, name);
+    updateParents(this.name, name, this::setName);
     this.name = name;
   }
 
@@ -31,7 +31,7 @@ public class NamedLayoutQualifierPart extends LayoutQualifierPart {
   }
 
   public void setExpression(Expression expression) {
-    updateParents(this.expression, expression);
+    updateParents(this.expression, expression, this::setExpression);
     this.expression = expression;
   }
 

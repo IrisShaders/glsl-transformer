@@ -16,7 +16,7 @@ public class WhileLoopStatement extends ConditionLoopStatement {
       IterationConditionInitializer iterationConditionInitializer,
       Statement statement) {
     super(statement, null);
-    this.iterationConditionInitializer = setup(iterationConditionInitializer);
+    this.iterationConditionInitializer = setup(iterationConditionInitializer, this::setIterationConditionInitializer);
   }
 
   public IterationConditionInitializer getIterationConditionInitializer() {
@@ -24,7 +24,8 @@ public class WhileLoopStatement extends ConditionLoopStatement {
   }
 
   public void setIterationConditionInitializer(IterationConditionInitializer iterationConditionInitializer) {
-    updateParents(this.iterationConditionInitializer, iterationConditionInitializer);
+    updateParents(this.iterationConditionInitializer, iterationConditionInitializer,
+        this::setIterationConditionInitializer);
     this.iterationConditionInitializer = iterationConditionInitializer;
   }
 

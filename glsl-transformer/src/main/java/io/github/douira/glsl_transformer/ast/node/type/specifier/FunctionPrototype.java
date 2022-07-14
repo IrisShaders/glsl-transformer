@@ -15,8 +15,8 @@ public class FunctionPrototype extends ListASTNode<FunctionParameter> {
 
   public FunctionPrototype(FullySpecifiedType returnType, Identifier name, Stream<FunctionParameter> parameters) {
     super(parameters);
-    this.returnType = setup(returnType);
-    this.name = setup(name);
+    this.returnType = setup(returnType, this::setReturnType);
+    this.name = setup(name, this::setName);
   }
 
   public FunctionPrototype(FullySpecifiedType returnType, Identifier name) {
@@ -32,7 +32,7 @@ public class FunctionPrototype extends ListASTNode<FunctionParameter> {
   }
 
   public void setReturnType(FullySpecifiedType returnType) {
-    updateParents(this.returnType, returnType);
+    updateParents(this.returnType, returnType, this::setReturnType);
     this.returnType = returnType;
   }
 
@@ -41,7 +41,7 @@ public class FunctionPrototype extends ListASTNode<FunctionParameter> {
   }
 
   public void setName(Identifier name) {
-    updateParents(this.name, name);
+    updateParents(this.name, name, this::setName);
     this.name = name;
   }
 

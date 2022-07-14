@@ -7,12 +7,12 @@ public class TypeReference extends TypeSpecifier {
   protected Identifier reference;
 
   public TypeReference(Identifier reference) {
-    this.reference = setup(reference);
+    this.reference = setup(reference, this::setReference);
   }
 
   public TypeReference(Identifier reference, ArraySpecifier arraySpecifier) {
     super(arraySpecifier);
-    this.reference = setup(reference);
+    this.reference = setup(reference, this::setReference);
   }
 
   public Identifier getReference() {
@@ -20,7 +20,7 @@ public class TypeReference extends TypeSpecifier {
   }
 
   public void setReference(Identifier reference) {
-    updateParents(this.reference, reference);
+    updateParents(this.reference, reference, this::setReference);
     this.reference = reference;
   }
 

@@ -11,8 +11,8 @@ public class PrecisionDeclaration extends Declaration {
   public PrecisionDeclaration(
       PrecisionQualifier precisionQualifier,
       TypeSpecifier typeSpecifier) {
-    this.precisionQualifier = setup(precisionQualifier);
-    this.typeSpecifier = setup(typeSpecifier);
+    this.precisionQualifier = setup(precisionQualifier, this::setPrecisionQualifier);
+    this.typeSpecifier = setup(typeSpecifier, this::setTypeSpecifier);
   }
 
   public PrecisionQualifier getPrecisionQualifier() {
@@ -20,7 +20,7 @@ public class PrecisionDeclaration extends Declaration {
   }
 
   public void setPrecisionQualifier(PrecisionQualifier precisionQualifier) {
-    updateParents(this.precisionQualifier, precisionQualifier);
+    updateParents(this.precisionQualifier, precisionQualifier, this::setPrecisionQualifier);
     this.precisionQualifier = precisionQualifier;
   }
 
@@ -29,7 +29,7 @@ public class PrecisionDeclaration extends Declaration {
   }
 
   public void setTypeSpecifier(TypeSpecifier typeSpecifier) {
-    updateParents(this.typeSpecifier, typeSpecifier);
+    updateParents(this.typeSpecifier, typeSpecifier, this::setTypeSpecifier);
     this.typeSpecifier = typeSpecifier;
   }
 

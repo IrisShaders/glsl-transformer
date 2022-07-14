@@ -7,7 +7,7 @@ public class ReferenceExpression extends TerminalExpression {
   protected Identifier identifier;
 
   public ReferenceExpression(Identifier identifier) {
-    this.identifier = setup(identifier);
+    this.identifier = setup(identifier, this::setIdentifier);
   }
 
   public Identifier getIdentifier() {
@@ -15,7 +15,7 @@ public class ReferenceExpression extends TerminalExpression {
   }
 
   public void setIdentifier(Identifier identifier) {
-    updateParents(this.identifier, identifier);
+    updateParents(this.identifier, identifier, this::setIdentifier);
     this.identifier = identifier;
   }
 

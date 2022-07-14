@@ -7,7 +7,7 @@ public abstract class LoopStatement extends Statement {
   protected Statement statement;
 
   public LoopStatement(Statement statement) {
-    this.statement = setup(statement);
+    this.statement = setup(statement, this::setStatement);
   }
 
   public Statement getStatement() {
@@ -15,7 +15,7 @@ public abstract class LoopStatement extends Statement {
   }
 
   public void setStatement(Statement statement) {
-    updateParents(this.statement, statement);
+    updateParents(this.statement, statement, this::setStatement);
     this.statement = statement;
   }
 

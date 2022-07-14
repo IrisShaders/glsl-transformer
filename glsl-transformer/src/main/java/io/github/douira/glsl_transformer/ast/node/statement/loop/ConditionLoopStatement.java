@@ -8,7 +8,7 @@ public abstract class ConditionLoopStatement extends LoopStatement {
 
   public ConditionLoopStatement(Statement statement, Expression condition) {
     super(statement);
-    this.condition = setup(condition);
+    this.condition = setup(condition, this::setCondition);
   }
 
   public Expression getCondition() {
@@ -16,7 +16,7 @@ public abstract class ConditionLoopStatement extends LoopStatement {
   }
 
   public void setCondition(Expression condition) {
-    updateParents(this.condition, condition);
+    updateParents(this.condition, condition, this::setCondition);
     this.condition = condition;
   }
 }

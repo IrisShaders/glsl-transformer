@@ -8,8 +8,8 @@ public abstract class BinaryExpression extends Expression {
   protected Expression right;
 
   public BinaryExpression(Expression left, Expression right) {
-    this.left = setup(left);
-    this.right = setup(right);
+    this.left = setup(left, this::setLeft);
+    this.right = setup(right, this::setRight);
   }
 
   public Expression getLeft() {
@@ -17,7 +17,7 @@ public abstract class BinaryExpression extends Expression {
   }
 
   public void setLeft(Expression left) {
-    updateParents(this.left, left);
+    updateParents(this.left, left, this::setLeft);
     this.left = left;
   }
 
@@ -26,7 +26,7 @@ public abstract class BinaryExpression extends Expression {
   }
 
   public void setRight(Expression right) {
-    updateParents(this.right, right);
+    updateParents(this.right, right, this::setRight);
     this.right = right;
   }
 

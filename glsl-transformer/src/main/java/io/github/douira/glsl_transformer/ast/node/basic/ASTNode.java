@@ -1,12 +1,24 @@
 package io.github.douira.glsl_transformer.ast.node.basic;
 
+import java.util.function.Consumer;
+
 import io.github.douira.glsl_transformer.ast.query.Root;
 import io.github.douira.glsl_transformer.ast.traversal.*;
 
 public abstract class ASTNode {
-  // is only null for the root node or before being added to a parent
-  // invariant: the parent of this node has to share the same root as this node
+  /**
+   * is only null for the root node or before being added to a parent
+   * invariant: the parent of this node has to share the same root as this node
+   */
   private ASTNode parent;
+
+  /**
+   * a reference to the method of the parent that would overwrite this node
+   * useful for replacing this node within it's parent without searching for it
+   * Invariant: always refers to a method in the currently set parent.
+   * Null if the parent is also null.
+   */
+  private Consumer<ASTNode> parentSetter;
 
   // should never be null
   private Root root = Root.getActiveBuildRoot();
@@ -18,6 +30,18 @@ public abstract class ASTNode {
 
   public ASTNode getParent() {
     return parent;
+  }
+
+  public Consumer<ASTNode> getParentSetter() {
+    return parentSetter;
+  }
+
+  public boolean replaceInParent(ASTNode replacement) {
+    if (parentSetter != null) {
+      parentSetter.accept(replacement);
+      return true;
+    }
+    return false;
   }
 
   public ASTNode getNthParent(int n) {
@@ -84,7 +108,8 @@ public abstract class ASTNode {
    * @param parent The parent value to set, cannot be null.
    * @return {@code true} if the parent was changed, {@code false} otherwise.
    */
-  public boolean setParent(ASTNode parent) {
+  @SuppressWarnings("unchecked") // we rely on our construction doing the right thing
+  public boolean setParent(ASTNode parent, Consumer<? extends ASTNode> setter) {
     if (parent == null) {
       throw new IllegalArgumentException(
           "parent cannot be set to null");
@@ -99,6 +124,7 @@ public abstract class ASTNode {
     // this is the normal case for building the AST or moving nodes around
     if (root == parent.root) {
       this.parent = parent;
+      this.parentSetter = (Consumer<ASTNode>) setter;
       return true;
     }
 
@@ -108,6 +134,7 @@ public abstract class ASTNode {
 
     // not unregistering from the previous root because it's being discarded
     this.parent = parent;
+    this.parentSetter = (Consumer<ASTNode>) setter;
     new ChangeRootVisitor(parent.root).visit(this);
 
     return true;
@@ -134,15 +161,20 @@ public abstract class ASTNode {
     parent = null;
   }
 
-  public <T extends ASTNode> T setup(T node) {
+  public <NodeType extends ASTNode> NodeType setup(
+      NodeType node,
+      Consumer<? extends NodeType> setter) {
     if (node != null) {
-      node.setParent(this);
+      node.setParent(this, setter);
       root.registerChild(node);
     }
     return node;
   }
 
-  public void updateParents(ASTNode currentNode, ASTNode newNode) {
+  public <NodeType extends ASTNode> void updateParents(
+      NodeType currentNode,
+      NodeType newNode,
+      Consumer<? extends NodeType> setter) {
     if (currentNode == newNode) {
       return;
     }
@@ -152,7 +184,7 @@ public abstract class ASTNode {
     }
 
     if (newNode != null) {
-      newNode.setParent(this);
+      newNode.setParent(this, setter);
     }
   }
 }

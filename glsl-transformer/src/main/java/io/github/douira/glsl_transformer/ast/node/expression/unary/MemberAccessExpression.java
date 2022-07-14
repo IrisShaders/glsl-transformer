@@ -9,7 +9,7 @@ public class MemberAccessExpression extends UnaryExpression {
 
   public MemberAccessExpression(Expression expression, Identifier member) {
     super(expression);
-    this.member = setup(member);
+    this.member = setup(member, this::setMember);
   }
 
   public Identifier getMember() {
@@ -17,7 +17,7 @@ public class MemberAccessExpression extends UnaryExpression {
   }
 
   public void setMember(Identifier member) {
-    updateParents(this.member, member);
+    updateParents(this.member, member, this::setMember);
     this.member = member;
   }
 

@@ -12,12 +12,12 @@ public class TypeAndInitDeclaration extends Declaration {
   public final List<DeclarationMember> members;
 
   public TypeAndInitDeclaration(FullySpecifiedType type, Stream<DeclarationMember> members) {
-    this.type = setup(type);
+    this.type = setup(type, this::setType);
     this.members = ChildNodeList.collect(members, this);
   }
 
   public TypeAndInitDeclaration(FullySpecifiedType type) {
-    this.type = setup(type);
+    this.type = setup(type, this::setType);
     this.members = new ChildNodeList<>(this);
   }
 
@@ -26,7 +26,7 @@ public class TypeAndInitDeclaration extends Declaration {
   }
 
   public void setType(FullySpecifiedType type) {
-    updateParents(this.type, type);
+    updateParents(this.type, type, this::setType);
     this.type = type;
   }
 

@@ -11,9 +11,9 @@ public class IterationConditionInitializer extends InnerASTNode {
   protected Initializer initializer;
 
   public IterationConditionInitializer(FullySpecifiedType type, Identifier name, Initializer initializer) {
-    this.type = setup(type);
-    this.name = setup(name);
-    this.initializer = setup(initializer);
+    this.type = setup(type, this::setType);
+    this.name = setup(name, this::setName);
+    this.initializer = setup(initializer, this::setInitializer);
   }
 
   public FullySpecifiedType getType() {
@@ -21,7 +21,7 @@ public class IterationConditionInitializer extends InnerASTNode {
   }
 
   public void setType(FullySpecifiedType type) {
-    updateParents(this.type, type);
+    updateParents(this.type, type, this::setType);
     this.type = type;
   }
 
@@ -30,7 +30,7 @@ public class IterationConditionInitializer extends InnerASTNode {
   }
 
   public void setName(Identifier name) {
-    updateParents(this.name, name);
+    updateParents(this.name, name, this::setName);
     this.name = name;
   }
 
@@ -39,7 +39,7 @@ public class IterationConditionInitializer extends InnerASTNode {
   }
 
   public void setInitializer(Initializer initializer) {
-    updateParents(this.initializer, initializer);
+    updateParents(this.initializer, initializer, this::setInitializer);
     this.initializer = initializer;
   }
 

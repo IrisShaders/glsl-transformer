@@ -9,8 +9,8 @@ public class SwitchStatement extends Statement {
   protected CompoundStatement statement;
 
   public SwitchStatement(Expression expression, CompoundStatement statement) {
-    this.expression = setup(expression);
-    this.statement = setup(statement);
+    this.expression = setup(expression, this::setExpression);
+    this.statement = setup(statement, this::setStatement);
   }
 
   public Expression getExpression() {
@@ -18,7 +18,7 @@ public class SwitchStatement extends Statement {
   }
 
   public void setExpression(Expression expression) {
-    updateParents(this.expression, expression);
+    updateParents(this.expression, expression, this::setExpression);
     this.expression = expression;
   }
 
@@ -27,7 +27,7 @@ public class SwitchStatement extends Statement {
   }
 
   public void setStatement(CompoundStatement statement) {
-    updateParents(this.statement, statement);
+    updateParents(this.statement, statement, this::setStatement);
     this.statement = statement;
   }
 

@@ -7,7 +7,7 @@ public class DeclarationStatement extends SemiTerminalStatement {
   protected Declaration declaration;
 
   public DeclarationStatement(Declaration declaration) {
-    this.declaration = setup(declaration);
+    this.declaration = setup(declaration, this::setDeclaration);
   }
 
   public Declaration getDeclaration() {
@@ -15,7 +15,7 @@ public class DeclarationStatement extends SemiTerminalStatement {
   }
 
   public void setDeclaration(Declaration declaration) {
-    updateParents(this.declaration, declaration);
+    updateParents(this.declaration, declaration, this::setDeclaration);
     this.declaration = declaration;
   }
 

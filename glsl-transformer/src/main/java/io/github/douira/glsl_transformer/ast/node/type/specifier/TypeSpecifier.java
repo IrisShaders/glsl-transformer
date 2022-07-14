@@ -19,7 +19,7 @@ public abstract class TypeSpecifier extends InnerASTNode {
   }
 
   public TypeSpecifier(ArraySpecifier arraySpecifier) {
-    this.arraySpecifier = setup(arraySpecifier);
+    this.arraySpecifier = setup(arraySpecifier, this::setArraySpecifier);
   }
 
   public ArraySpecifier getArraySpecifier() {
@@ -27,7 +27,7 @@ public abstract class TypeSpecifier extends InnerASTNode {
   }
 
   public void setArraySpecifier(ArraySpecifier arraySpecifier) {
-    updateParents(this.arraySpecifier, arraySpecifier);
+    updateParents(this.arraySpecifier, arraySpecifier, this::setArraySpecifier);
     this.arraySpecifier = arraySpecifier;
   }
 

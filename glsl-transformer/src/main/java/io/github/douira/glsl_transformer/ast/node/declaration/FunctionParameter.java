@@ -15,18 +15,18 @@ public class FunctionParameter extends InnerASTNode {
       FullySpecifiedType type,
       Identifier name,
       ArraySpecifier arraySpecifier) {
-    this.type = setup(type);
-    this.name = setup(name);
-    this.arraySpecifier = setup(arraySpecifier);
+    this.type = setup(type, this::setType);
+    this.name = setup(name, this::setName);
+    this.arraySpecifier = setup(arraySpecifier, this::setArraySpecifier);
   }
 
   public FunctionParameter(FullySpecifiedType type, Identifier name) {
-    this.type = setup(type);
-    this.name = setup(name);
+    this.type = setup(type, this::setType);
+    this.name = setup(name, this::setName);
   }
 
   public FunctionParameter(FullySpecifiedType type) {
-    this.type = setup(type);
+    this.type = setup(type, this::setType);
   }
 
   public FullySpecifiedType getType() {
@@ -34,7 +34,7 @@ public class FunctionParameter extends InnerASTNode {
   }
 
   public void setType(FullySpecifiedType type) {
-    updateParents(this.type, type);
+    updateParents(this.type, type, this::setType);
     this.type = type;
   }
 
@@ -43,7 +43,7 @@ public class FunctionParameter extends InnerASTNode {
   }
 
   public void setName(Identifier name) {
-    updateParents(this.name, name);
+    updateParents(this.name, name, this::setName);
     this.name = name;
   }
 
@@ -52,7 +52,7 @@ public class FunctionParameter extends InnerASTNode {
   }
 
   public void setArraySpecifier(ArraySpecifier arraySpecifier) {
-    updateParents(this.arraySpecifier, arraySpecifier);
+    updateParents(this.arraySpecifier, arraySpecifier, this::setArraySpecifier);
     this.arraySpecifier = arraySpecifier;
   }
 

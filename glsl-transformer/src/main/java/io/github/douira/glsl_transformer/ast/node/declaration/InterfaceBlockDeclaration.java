@@ -20,7 +20,7 @@ public class InterfaceBlockDeclaration extends Declaration {
       Identifier variableName,
       ArraySpecifier arraySpecifier) {
     this(typeQualifier, blockName, structBody, variableName);
-    this.arraySpecifier = setup(arraySpecifier);
+    this.arraySpecifier = setup(arraySpecifier, this::setArraySpecifier);
   }
 
   public InterfaceBlockDeclaration(
@@ -29,16 +29,16 @@ public class InterfaceBlockDeclaration extends Declaration {
       StructBody structBody,
       Identifier variableName) {
     this(typeQualifier, blockName, structBody);
-    this.variableName = setup(variableName);
+    this.variableName = setup(variableName, this::setVariableName);
   }
 
   public InterfaceBlockDeclaration(
       TypeQualifier typeQualifier,
       Identifier blockName,
       StructBody structBody) {
-    this.typeQualifier = setup(typeQualifier);
-    this.blockName = setup(blockName);
-    this.structBody = setup(structBody);
+    this.typeQualifier = setup(typeQualifier, this::setTypeQualifier);
+    this.blockName = setup(blockName, this::setBlockName);
+    this.structBody = setup(structBody, this::setStructBody);
   }
 
   public TypeQualifier getTypeQualifier() {
@@ -46,7 +46,7 @@ public class InterfaceBlockDeclaration extends Declaration {
   }
 
   public void setTypeQualifier(TypeQualifier typeQualifier) {
-    updateParents(this.typeQualifier, typeQualifier);
+    updateParents(this.typeQualifier, typeQualifier, this::setTypeQualifier);
     this.typeQualifier = typeQualifier;
   }
 
@@ -55,7 +55,7 @@ public class InterfaceBlockDeclaration extends Declaration {
   }
 
   public void setBlockName(Identifier blockName) {
-    updateParents(this.blockName, blockName);
+    updateParents(this.blockName, blockName, this::setBlockName);
     this.blockName = blockName;
   }
 
@@ -64,7 +64,7 @@ public class InterfaceBlockDeclaration extends Declaration {
   }
 
   public void setStructBody(StructBody structBody) {
-    updateParents(this.structBody, structBody);
+    updateParents(this.structBody, structBody, this::setStructBody);
     this.structBody = structBody;
   }
 
@@ -73,7 +73,7 @@ public class InterfaceBlockDeclaration extends Declaration {
   }
 
   public void setVariableName(Identifier variableName) {
-    updateParents(this.variableName, variableName);
+    updateParents(this.variableName, variableName, this::setVariableName);
     this.variableName = variableName;
   }
 
@@ -82,7 +82,7 @@ public class InterfaceBlockDeclaration extends Declaration {
   }
 
   public void setArraySpecifier(ArraySpecifier arraySpecifier) {
-    updateParents(this.arraySpecifier, arraySpecifier);
+    updateParents(this.arraySpecifier, arraySpecifier, this::setArraySpecifier);
     this.arraySpecifier = arraySpecifier;
   }
 

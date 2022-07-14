@@ -2,6 +2,8 @@ package io.github.douira.glsl_transformer.ast.transform;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+import java.util.ArrayList;
+
 import org.junit.jupiter.api.*;
 
 import io.github.douira.glsl_transformer.GLSLParser;
@@ -44,8 +46,8 @@ public class ASTTransformerTest {
 
   @Test
   public void testIdentifierQuery() {
-    transformer.setTransformation(translationUnit -> {
-      translationUnit.getRoot().identifierIndex.index.prefixMap("a").values()
+    transformer.setTransformation(tree -> {
+      tree.getRoot().identifierIndex.index.prefixMap("a").values()
           .stream().forEach(Index.<Identifier>iterate(node -> node.name += "b"));
     });
     assertEquals(
@@ -58,8 +60,8 @@ public class ASTTransformerTest {
 
   @Test
   public void testNodeQuery() {
-    transformer.setTransformation(translationUnit -> {
-      translationUnit.getRoot().nodeIndex.get(LiteralExpression.class)
+    transformer.setTransformation(tree -> {
+      tree.getRoot().nodeIndex.get(LiteralExpression.class)
           .stream().forEach(literal -> {
             literal.integerValue++;
           });
@@ -74,15 +76,17 @@ public class ASTTransformerTest {
 
   @Test
   public void testNodeQueryAfterModification() {
-    transformer.setTransformation(translationUnit -> {
-      Root.<LiteralExpression>indexNodes(
-          translationUnit,
-          register -> translationUnit.getRoot().nodeIndex
-              .get(SequenceExpression.class)
-              .stream().forEach(sequence -> sequence.expressions.add(
+    transformer.setTransformation(tree -> {
+      Root.<LiteralExpression>indexNodes(tree,
+          register -> {
+            for (var sequence : tree.getRoot().nodeIndex
+                .get(SequenceExpression.class)) {
+              sequence.expressions.add(
                   register.apply(
-                      new LiteralExpression(Type.INT32, 1)))));
-      translationUnit.getRoot().nodeIndex.get(LiteralExpression.class)
+                      new LiteralExpression(Type.INT32, 1)));
+            }
+          });
+      tree.getRoot().nodeIndex.get(LiteralExpression.class)
           .stream().forEach(literal -> literal.integerValue++);
     });
     assertEquals(
@@ -91,5 +95,31 @@ public class ASTTransformerTest {
     assertEquals(
         "int a = 2, 3, 4, 2;\n",
         transformer.transform("int a = 1, 2, 3;\n"));
+  }
+
+  @Test
+  public void testSelfReplacement() {
+    transformer.setTransformation(tree -> {
+      Root.<Expression>indexNodes(tree,
+          register -> {
+            var toReplace = new ArrayList<LiteralExpression>();
+            for (var node : tree.getRoot().nodeIndex
+                .get(LiteralExpression.class)) {
+              if (node.integerValue == 3) {
+                toReplace.add(node);
+              }
+            }
+            for (var node : toReplace) {
+              node.replaceInParent(
+                  register.apply(new ReferenceExpression(new Identifier("foo"))));
+            }
+          });
+    });
+    assertEquals(
+        "int a = 1, b = 2, c = foo;\n",
+        transformer.transform("int a = 1, b = 2, c = 3;\n"));
+    assertEquals(
+        "int a = foo, 2, foo, 5 + foo + b;\n",
+        transformer.transform("int a = 3, 2, 3, 5 + 3 + b;\n"));
   }
 }

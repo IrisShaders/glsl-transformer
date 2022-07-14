@@ -9,8 +9,8 @@ public class FunctionDefinition extends ExternalDeclaration {
   protected CompoundStatement body;
 
   public FunctionDefinition(FunctionPrototype functionPrototype, CompoundStatement body) {
-    this.functionPrototype = setup(functionPrototype);
-    this.body = setup(body);
+    this.functionPrototype = setup(functionPrototype, this::setFunctionPrototype);
+    this.body = setup(body, this::setBody);
   }
 
   public FunctionPrototype getFunctionPrototype() {
@@ -18,7 +18,7 @@ public class FunctionDefinition extends ExternalDeclaration {
   }
 
   public void setFunctionPrototype(FunctionPrototype functionPrototype) {
-    updateParents(this.functionPrototype, functionPrototype);
+    updateParents(this.functionPrototype, functionPrototype, this::setFunctionPrototype);
     this.functionPrototype = functionPrototype;
   }
 
@@ -27,7 +27,7 @@ public class FunctionDefinition extends ExternalDeclaration {
   }
 
   public void setBody(CompoundStatement body) {
-    updateParents(this.body, body);
+    updateParents(this.body, body, this::setBody);
     this.body = body;
   }
 

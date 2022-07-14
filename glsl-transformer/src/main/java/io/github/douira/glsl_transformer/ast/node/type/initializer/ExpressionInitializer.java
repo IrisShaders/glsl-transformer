@@ -7,7 +7,7 @@ public class ExpressionInitializer extends Initializer {
   protected Expression expression;
 
   public ExpressionInitializer(Expression expression) {
-    this.expression = setup(expression);
+    this.expression = setup(expression, this::setExpression);
   }
 
   public Expression getExpression() {
@@ -15,7 +15,7 @@ public class ExpressionInitializer extends Initializer {
   }
 
   public void setExpression(Expression expression) {
-    updateParents(this.expression, expression);
+    updateParents(this.expression, expression, this::setExpression);
     this.expression = expression;
   }
 
