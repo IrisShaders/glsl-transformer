@@ -150,7 +150,7 @@ public abstract class ASTNode {
   /**
    * To be called after removing this node from its parent. This unregisters it
    * and all its children from the parent's root. Use a simple
-   * {@link ASTNode#setParent(ASTNode)} to move a subtree from one node to the
+   * {@link ASTNode#setParent(ASTNode, Consumer)} to move a subtree from one node to the
    * other.
    */
   public void detachFromParent() {
