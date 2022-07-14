@@ -34,7 +34,7 @@ public class LayoutDefaults extends ExternalDeclaration {
   public LayoutMode mode;
 
   public LayoutDefaults(LayoutQualifier qualifier, LayoutMode mode) {
-    this.qualifier = setup(qualifier);
+    this.qualifier = setup(qualifier, this::setQualifier);
     this.mode = mode;
   }
 
@@ -43,7 +43,7 @@ public class LayoutDefaults extends ExternalDeclaration {
   }
 
   public void setQualifier(LayoutQualifier qualifier) {
-    updateParents(this.qualifier, qualifier);
+    updateParents(this.qualifier, qualifier, this::setQualifier);
     this.qualifier = qualifier;
   }
 

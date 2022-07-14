@@ -10,12 +10,12 @@ public class FullySpecifiedType extends InnerASTNode {
   protected TypeSpecifier typeSpecifier;
 
   public FullySpecifiedType(TypeQualifier typeQualifier, TypeSpecifier typeSpecifier) {
-    this.typeQualifier = setup(typeQualifier);
-    this.typeSpecifier = setup(typeSpecifier);
+    this.typeQualifier = setup(typeQualifier, this::setTypeQualifier);
+    this.typeSpecifier = setup(typeSpecifier, this::setTypeSpecifier);
   }
 
   public FullySpecifiedType(TypeSpecifier typeSpecifier) {
-    this.typeSpecifier = setup(typeSpecifier);
+    this.typeSpecifier = setup(typeSpecifier, this::setTypeSpecifier);
   }
 
   public TypeQualifier getTypeQualifier() {
@@ -23,7 +23,7 @@ public class FullySpecifiedType extends InnerASTNode {
   }
 
   public void setTypeQualifier(TypeQualifier typeQualifier) {
-    updateParents(this.typeQualifier, typeQualifier);
+    updateParents(this.typeQualifier, typeQualifier, this::setTypeQualifier);
     this.typeQualifier = typeQualifier;
   }
 
@@ -32,7 +32,7 @@ public class FullySpecifiedType extends InnerASTNode {
   }
 
   public void setTypeSpecifier(TypeSpecifier typeSpecifier) {
-    updateParents(this.typeSpecifier, typeSpecifier);
+    updateParents(this.typeSpecifier, typeSpecifier, this::setTypeSpecifier);
     this.typeSpecifier = typeSpecifier;
   }
 

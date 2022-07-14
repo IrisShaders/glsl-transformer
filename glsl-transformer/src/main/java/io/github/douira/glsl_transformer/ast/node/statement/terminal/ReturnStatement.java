@@ -10,7 +10,7 @@ public class ReturnStatement extends SemiTerminalStatement {
   }
 
   public ReturnStatement(Expression expression) {
-    this.expression = setup(expression);
+    this.expression = setup(expression, this::setExpression);
   }
 
   public Expression getExpression() {
@@ -18,7 +18,7 @@ public class ReturnStatement extends SemiTerminalStatement {
   }
 
   public void setExpression(Expression expression) {
-    updateParents(this.expression, expression);
+    updateParents(this.expression, expression, this::setExpression);
     this.expression = expression;
   }
 

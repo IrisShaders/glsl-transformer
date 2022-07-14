@@ -10,12 +10,12 @@ public class StructDeclarator extends InnerASTNode {
   protected ArraySpecifier arraySpecifier; // TODO: nullable
 
   public StructDeclarator(Identifier name, ArraySpecifier arraySpecifier) {
-    this.name = setup(name);
-    this.arraySpecifier = setup(arraySpecifier);
+    this.name = setup(name, this::setName);
+    this.arraySpecifier = setup(arraySpecifier, this::setArraySpecifier);
   }
 
   public StructDeclarator(Identifier name) {
-    this.name = setup(name);
+    this.name = setup(name, this::setName);
   }
 
   public Identifier getName() {
@@ -23,7 +23,7 @@ public class StructDeclarator extends InnerASTNode {
   }
 
   public void setName(Identifier name) {
-    updateParents(this.name, name);
+    updateParents(this.name, name, this::setName);
     this.name = name;
   }
 
@@ -32,7 +32,7 @@ public class StructDeclarator extends InnerASTNode {
   }
 
   public void setArraySpecifier(ArraySpecifier arraySpecifier) {
-    updateParents(this.arraySpecifier, arraySpecifier);
+    updateParents(this.arraySpecifier, arraySpecifier, this::setArraySpecifier);
     this.arraySpecifier = arraySpecifier;
   }
 

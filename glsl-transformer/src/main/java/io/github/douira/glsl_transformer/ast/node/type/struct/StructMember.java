@@ -13,7 +13,7 @@ public class StructMember extends InnerASTNode {
   public final List<StructDeclarator> declarators;
 
   public StructMember(FullySpecifiedType type, Stream<StructDeclarator> declarators) {
-    this.type = setup(type);
+    this.type = setup(type, this::setType);
     this.declarators = ChildNodeList.collect(declarators, this);
   }
 
@@ -22,7 +22,7 @@ public class StructMember extends InnerASTNode {
   }
 
   public void setType(FullySpecifiedType type) {
-    updateParents(this.type, type);
+    updateParents(this.type, type, this::setType);
     this.type = type;
   }
 

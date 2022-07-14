@@ -19,9 +19,9 @@ public class ForLoopStatement extends LoopStatement {
       Expression condition,
       Expression incrementer) {
     super(statement);
-    this.initExpression = setup(initExpression);
-    this.condition = setup(condition);
-    this.incrementer = setup(incrementer);
+    this.initExpression = setup(initExpression, this::setInitExpression);
+    this.condition = setup(condition, this::setCondition);
+    this.incrementer = setup(incrementer, this::setIncrementer);
   }
 
   public ForLoopStatement(
@@ -30,9 +30,9 @@ public class ForLoopStatement extends LoopStatement {
       Expression condition,
       Expression incrementer) {
     super(statement);
-    this.initDeclaration = setup(initDeclaration);
-    this.condition = setup(condition);
-    this.incrementer = setup(incrementer);
+    this.initDeclaration = setup(initDeclaration, this::setInitDeclaration);
+    this.condition = setup(condition, this::setCondition);
+    this.incrementer = setup(incrementer, this::setIncrementer);
   }
 
   public ForLoopStatement(
@@ -41,9 +41,9 @@ public class ForLoopStatement extends LoopStatement {
       IterationConditionInitializer iterationConditionInitializer,
       Expression incrementer) {
     super(statement);
-    this.initExpression = setup(initExpression);
-    this.iterationConditionInitializer = setup(iterationConditionInitializer);
-    this.incrementer = setup(incrementer);
+    this.initExpression = setup(initExpression, this::setInitExpression);
+    this.iterationConditionInitializer = setup(iterationConditionInitializer, this::setIterationConditionInitializer);
+    this.incrementer = setup(incrementer, this::setIncrementer);
   }
 
   public ForLoopStatement(
@@ -52,9 +52,9 @@ public class ForLoopStatement extends LoopStatement {
       IterationConditionInitializer iterationConditionInitializer,
       Expression incrementer) {
     super(statement);
-    this.initDeclaration = setup(initDeclaration);
-    this.iterationConditionInitializer = setup(iterationConditionInitializer);
-    this.incrementer = setup(incrementer);
+    this.initDeclaration = setup(initDeclaration, this::setInitDeclaration);
+    this.iterationConditionInitializer = setup(iterationConditionInitializer, this::setIterationConditionInitializer);
+    this.incrementer = setup(incrementer, this::setIncrementer);
   }
 
   public ForLoopStatement(Statement statement) {
@@ -69,11 +69,11 @@ public class ForLoopStatement extends LoopStatement {
       Expression incrementer,
       Statement statement) {
     super(statement);
-    this.initExpression = setup(initExpression);
-    this.initDeclaration = setup(initDeclaration);
-    this.condition = setup(condition);
-    this.iterationConditionInitializer = setup(iterationConditionInitializer);
-    this.incrementer = setup(incrementer);
+    this.initExpression = setup(initExpression, this::setInitExpression);
+    this.initDeclaration = setup(initDeclaration, this::setInitDeclaration);
+    this.condition = setup(condition, this::setCondition);
+    this.iterationConditionInitializer = setup(iterationConditionInitializer, this::setIterationConditionInitializer);
+    this.incrementer = setup(incrementer, this::setIncrementer);
   }
 
   public Expression getInitExpression() {
@@ -81,7 +81,7 @@ public class ForLoopStatement extends LoopStatement {
   }
 
   public void setInitExpression(Expression initExpression) {
-    updateParents(this.initExpression, initExpression);
+    updateParents(this.initExpression, initExpression, this::setInitExpression);
     this.initExpression = initExpression;
   }
 
@@ -90,7 +90,7 @@ public class ForLoopStatement extends LoopStatement {
   }
 
   public void setInitDeclaration(Declaration initDeclaration) {
-    updateParents(this.initDeclaration, initDeclaration);
+    updateParents(this.initDeclaration, initDeclaration, this::setInitDeclaration);
     this.initDeclaration = initDeclaration;
   }
 
@@ -99,7 +99,7 @@ public class ForLoopStatement extends LoopStatement {
   }
 
   public void setCondition(Expression condition) {
-    updateParents(this.condition, condition);
+    updateParents(this.condition, condition, this::setCondition);
     this.condition = condition;
   }
 
@@ -108,7 +108,8 @@ public class ForLoopStatement extends LoopStatement {
   }
 
   public void setIterationConditionInitializer(IterationConditionInitializer iterationConditionInitializer) {
-    updateParents(this.iterationConditionInitializer, iterationConditionInitializer);
+    updateParents(this.iterationConditionInitializer, iterationConditionInitializer,
+        this::setIterationConditionInitializer);
     this.iterationConditionInitializer = iterationConditionInitializer;
   }
 
@@ -117,7 +118,7 @@ public class ForLoopStatement extends LoopStatement {
   }
 
   public void setIncrementer(Expression incrementer) {
-    updateParents(this.incrementer, incrementer);
+    updateParents(this.incrementer, incrementer, this::setIncrementer);
     this.incrementer = incrementer;
   }
 

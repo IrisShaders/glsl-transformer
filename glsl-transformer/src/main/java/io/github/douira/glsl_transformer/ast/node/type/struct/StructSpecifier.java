@@ -9,17 +9,17 @@ public class StructSpecifier extends TypeSpecifier {
   protected StructBody structBody;
 
   public StructSpecifier(StructBody structBody) {
-    this.structBody = setup(structBody);
+    this.structBody = setup(structBody, this::setStructBody);
   }
 
   public StructSpecifier(StructBody structBody, ArraySpecifier arraySpecifier) {
     super(arraySpecifier);
-    this.structBody = setup(structBody);
+    this.structBody = setup(structBody, this::setStructBody);
   }
 
   public StructSpecifier(Identifier name, StructBody structBody) {
-    this.name = setup(name);
-    this.structBody = setup(structBody);
+    this.name = setup(name, this::setName);
+    this.structBody = setup(structBody, this::setStructBody);
   }
 
   public StructSpecifier(
@@ -27,8 +27,8 @@ public class StructSpecifier extends TypeSpecifier {
       StructBody structBody,
       ArraySpecifier arraySpecifier) {
     super(arraySpecifier);
-    this.name = setup(name);
-    this.structBody = setup(structBody);
+    this.name = setup(name, this::setName);
+    this.structBody = setup(structBody, this::setStructBody);
   }
 
   public Identifier getName() {
@@ -36,7 +36,7 @@ public class StructSpecifier extends TypeSpecifier {
   }
 
   public void setName(Identifier name) {
-    updateParents(this.name, name);
+    updateParents(this.name, name, this::setName);
     this.name = name;
   }
 
@@ -45,7 +45,7 @@ public class StructSpecifier extends TypeSpecifier {
   }
 
   public void setStructBody(StructBody structBody) {
-    updateParents(this.structBody, structBody);
+    updateParents(this.structBody, structBody, this::setStructBody);
     this.structBody = structBody;
   }
 

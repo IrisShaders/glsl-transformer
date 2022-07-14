@@ -7,7 +7,7 @@ public class FunctionDeclaration extends Declaration {
   protected FunctionPrototype functionPrototype;
 
   public FunctionDeclaration(FunctionPrototype functionPrototype) {
-    this.functionPrototype = setup(functionPrototype);
+    this.functionPrototype = setup(functionPrototype, this::setFunctionPrototype);
   }
 
   public FunctionPrototype getFunctionPrototype() {
@@ -15,7 +15,7 @@ public class FunctionDeclaration extends Declaration {
   }
 
   public void setFunctionPrototype(FunctionPrototype functionPrototype) {
-    updateParents(this.functionPrototype, functionPrototype);
+    updateParents(this.functionPrototype, functionPrototype, this::setFunctionPrototype);
     this.functionPrototype = functionPrototype;
   }
 

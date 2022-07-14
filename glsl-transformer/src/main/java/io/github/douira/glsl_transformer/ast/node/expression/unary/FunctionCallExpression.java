@@ -23,13 +23,13 @@ public class FunctionCallExpression extends TerminalExpression {
   protected List<Expression> parameters;
 
   public FunctionCallExpression(Identifier functionName) {
-    this.functionName = setup(functionName);
+    this.functionName = setup(functionName, this::setFunctionName);
     referenceType = FunctionReferenceType.NAME;
     parameters = new ChildNodeList<>(this);
   }
 
   public FunctionCallExpression(TypeSpecifier functionSpecifier) {
-    this.functionSpecifier = setup(functionSpecifier);
+    this.functionSpecifier = setup(functionSpecifier, this::setFunctionSpecifier);
     referenceType = FunctionReferenceType.TYPE_SPECIFIER;
     parameters = new ChildNodeList<>(this);
   }
@@ -53,7 +53,7 @@ public class FunctionCallExpression extends TerminalExpression {
   }
 
   protected void setFunctionName(Identifier functionName) {
-    updateParents(this.functionName, functionName);
+    updateParents(this.functionName, functionName, this::setFunctionName);
     this.functionName = functionName;
   }
 
@@ -68,7 +68,7 @@ public class FunctionCallExpression extends TerminalExpression {
   }
 
   protected void setFunctionSpecifier(TypeSpecifier functionSpecifier) {
-    updateParents(this.functionSpecifier, functionSpecifier);
+    updateParents(this.functionSpecifier, functionSpecifier, this::setFunctionSpecifier);
     this.functionSpecifier = functionSpecifier;
   }
 

@@ -7,7 +7,7 @@ public abstract class UnaryExpression extends Expression {
   protected Expression operand;
 
   public UnaryExpression(Expression operand) {
-    this.operand = setup(operand);
+    this.operand = setup(operand, this::setOperand);
   }
 
   public Expression getOperand() {
@@ -15,7 +15,7 @@ public abstract class UnaryExpression extends Expression {
   }
 
   public void setOperand(Expression operand) {
-    updateParents(this.operand, operand);
+    updateParents(this.operand, operand, this::setOperand);
     this.operand = operand;
   }
 

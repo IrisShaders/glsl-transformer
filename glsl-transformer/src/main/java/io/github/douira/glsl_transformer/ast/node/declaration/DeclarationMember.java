@@ -12,23 +12,23 @@ public class DeclarationMember extends InnerASTNode {
   protected Initializer initializer; // TODO: nullable
 
   public DeclarationMember(Identifier name, ArraySpecifier arraySpecifier, Initializer initializer) {
-    this.name = setup(name);
-    this.arraySpecifier = setup(arraySpecifier);
-    this.initializer = setup(initializer);
+    this.name = setup(name, this::setName);
+    this.arraySpecifier = setup(arraySpecifier, this::setArraySpecifier);
+    this.initializer = setup(initializer, this::setInitializer);
   }
 
   public DeclarationMember(Identifier name, Initializer initializer) {
-    this.name = setup(name);
-    this.initializer = setup(initializer);
+    this.name = setup(name, this::setName);
+    this.initializer = setup(initializer, this::setInitializer);
   }
 
   public DeclarationMember(Identifier name, ArraySpecifier arraySpecifier) {
-    this.name = setup(name);
-    this.arraySpecifier = setup(arraySpecifier);
+    this.name = setup(name, this::setName);
+    this.arraySpecifier = setup(arraySpecifier, this::setArraySpecifier);
   }
 
   public DeclarationMember(Identifier name) {
-    this.name = setup(name);
+    this.name = setup(name, this::setName);
   }
 
   public Identifier getName() {
@@ -36,7 +36,7 @@ public class DeclarationMember extends InnerASTNode {
   }
 
   public void setName(Identifier name) {
-    updateParents(this.name, name);
+    updateParents(this.name, name, this::setName);
     this.name = name;
   }
 
@@ -45,7 +45,7 @@ public class DeclarationMember extends InnerASTNode {
   }
 
   public void setArraySpecifier(ArraySpecifier arraySpecifier) {
-    updateParents(this.arraySpecifier, arraySpecifier);
+    updateParents(this.arraySpecifier, arraySpecifier, this::setArraySpecifier);
     this.arraySpecifier = arraySpecifier;
   }
 
@@ -54,7 +54,7 @@ public class DeclarationMember extends InnerASTNode {
   }
 
   public void setInitializer(Initializer initializer) {
-    updateParents(this.initializer, initializer);
+    updateParents(this.initializer, initializer, this::setInitializer);
     this.initializer = initializer;
   }
 

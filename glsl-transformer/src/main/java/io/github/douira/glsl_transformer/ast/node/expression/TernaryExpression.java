@@ -8,9 +8,9 @@ public abstract class TernaryExpression extends Expression {
   protected Expression third;
 
   public TernaryExpression(Expression first, Expression second, Expression third) {
-    this.first = setup(first);
-    this.second = setup(second);
-    this.third = setup(third);
+    this.first = setup(first, this::setFirst);
+    this.second = setup(second, this::setSecond);
+    this.third = setup(third, this::setThird);
   }
 
   public Expression getFirst() {
@@ -18,7 +18,7 @@ public abstract class TernaryExpression extends Expression {
   }
 
   public void setFirst(Expression first) {
-    updateParents(this.first, first);
+    updateParents(this.first, first, this::setFirst);
     this.first = first;
   }
 
@@ -27,7 +27,7 @@ public abstract class TernaryExpression extends Expression {
   }
 
   public void setSecond(Expression second) {
-    updateParents(this.second, second);
+    updateParents(this.second, second, this::setSecond);
     this.second = second;
   }
 
@@ -36,7 +36,7 @@ public abstract class TernaryExpression extends Expression {
   }
 
   public void setThird(Expression third) {
-    updateParents(this.third, third);
+    updateParents(this.third, third, this::setThird);
     this.third = third;
   }
 
