@@ -10,7 +10,15 @@ import io.github.douira.glsl_transformer.ast.node.Identifier;
  * Indexes identifiers based on their content and enabled fast string queries.
  */
 public class IdentifierIndex implements Index<Identifier> {
-  public final PatriciaTrie<Set<Identifier>> index = new PrefixTrie<>();
+  public final PatriciaTrie<Set<Identifier>> index;
+
+  public IdentifierIndex(PatriciaTrie<Set<Identifier>> index) {
+    this.index = index;
+  }
+
+  public IdentifierIndex() {
+    this(new PatriciaTrie<Set<Identifier>>());
+  }
 
   @Override
   public void add(Identifier node) {
@@ -44,4 +52,5 @@ public class IdentifierIndex implements Index<Identifier> {
       set.addAll(entry.getValue());
     }
   }
+
 }

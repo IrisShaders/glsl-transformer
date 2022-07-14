@@ -1,7 +1,7 @@
 package io.github.douira.glsl_transformer.ast.transform;
 
 import java.util.*;
-import java.util.function.Function;
+import java.util.function.*;
 import java.util.regex.Pattern;
 import java.util.stream.Stream;
 
@@ -57,8 +57,21 @@ public class ASTBuilder extends GLSLParserBaseVisitor<ASTNode> {
     return Root.indexNodes(parentTreeMember, () -> doBuild(ctx));
   }
 
+  public static <TreeType extends ParseTree, ReturnType extends ASTNode> ReturnType buildSubtreeWith(
+      ASTNode parentTreeMember,
+      TreeType ctx,
+      BiFunction<ASTBuilder, TreeType, ReturnType> visitMethod) {
+    return Root.indexNodes(parentTreeMember, () -> buildWith(ctx, visitMethod));
+  }
+
   private static ASTNode doBuild(ParseTree ctx) {
     return new ASTBuilder().visit(ctx);
+  }
+
+  private static <TreeType extends ParseTree, ReturnType extends ASTNode> ReturnType buildWith(
+      TreeType ctx,
+      BiFunction<ASTBuilder, TreeType, ReturnType> visitMethod) {
+    return visitMethod.apply(new ASTBuilder(), ctx);
   }
 
   private static <N, R> R applySafe(N ctx, Function<N, R> visitMethod) {

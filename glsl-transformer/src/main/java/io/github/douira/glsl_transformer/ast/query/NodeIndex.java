@@ -33,17 +33,18 @@ public class NodeIndex implements Index<ASTNode> {
       return;
     }
     set.remove(node);
-
   }
 
   @SuppressWarnings("unchecked")
   public <T extends ASTNode> Set<T> get(Class<T> clazz) {
-    return (Set<T>) index.get(clazz);
+    var result = (Set<T>) index.get(clazz);
+    return result == null ? Collections.emptySet() : result;
   }
 
   @SuppressWarnings("unchecked")
   public <T extends ASTNode> Set<T> get(T node) {
-    return (Set<T>) get(node.getClass());
+    var result = (Set<T>) get(node.getClass());
+    return result == null ? Collections.emptySet() : result;
   }
 
   @SuppressWarnings("unchecked")

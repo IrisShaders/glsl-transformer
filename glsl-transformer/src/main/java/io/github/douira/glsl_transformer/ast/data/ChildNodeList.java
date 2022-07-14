@@ -26,7 +26,9 @@ public class ChildNodeList<Child extends ASTNode> extends ProxyArrayList<Child> 
   protected ChildNodeList(Collection<? extends Child> c, InnerASTNode parent) {
     super(c, false);
     this.parent = parent;
-    notifyAdditionInternal(c);
+    for (var child : c) {
+      parent.setup(child);
+    }
   }
 
   @Override
@@ -34,12 +36,14 @@ public class ChildNodeList<Child extends ASTNode> extends ProxyArrayList<Child> 
     added.setParent(parent);
   }
 
-  public static <Child extends ASTNode> Collector<Child, ?, ChildNodeList<Child>> getCollector(InnerASTNode parent) {
-    return Collectors.toCollection(() -> new ChildNodeList<Child>(parent));
-  }
-
   public static <Child extends ASTNode> ChildNodeList<Child> collect(
       Stream<Child> stream, InnerASTNode parent) {
-    return stream.collect(getCollector(parent));
+    return stream.collect(
+      () -> new ChildNodeList<Child>(parent),
+        (list, child) -> {
+          parent.setup(child);
+          list.add(child);
+        },
+        ChildNodeList::addAll);
   }
 }
