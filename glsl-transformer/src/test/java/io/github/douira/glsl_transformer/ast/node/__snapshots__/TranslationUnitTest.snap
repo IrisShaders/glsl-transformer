@@ -1,0 +1,738 @@
+testInject[empty/before_all]=[
+
+<><><><><><><><><><><><><><><><><><><><><><><><><>
+float x;
+float y;
+
+]
+
+
+testInject[empty/before_declarations]=[
+
+<><><><><><><><><><><><><><><><><><><><><><><><><>
+float x;
+float y;
+
+]
+
+
+testInject[empty/before_functions]=[
+
+<><><><><><><><><><><><><><><><><><><><><><><><><>
+float x;
+float y;
+
+]
+
+
+testInject[empty/end]=[
+
+<><><><><><><><><><><><><><><><><><><><><><><><><>
+float x;
+float y;
+
+]
+
+
+testInject[full/before_all]=[
+#version 5432
+#extension extension_name: require
+#pragma foo
+varying vec2 a;
+void functionDef(const in float param) {
+  functionCall();
+}
+
+<><><><><><><><><><><><><><><><><><><><><><><><><>
+#version 5432
+float x;
+float y;
+#extension extension_name: require
+#pragma foo
+varying vec2 a;
+void functionDef(const in float param) {
+	functionCall();
+}
+
+]
+
+
+testInject[full/before_declarations]=[
+#version 5432
+#extension extension_name: require
+#pragma foo
+varying vec2 a;
+void functionDef(const in float param) {
+  functionCall();
+}
+
+<><><><><><><><><><><><><><><><><><><><><><><><><>
+#version 5432
+#extension extension_name: require
+#pragma foo
+float x;
+float y;
+varying vec2 a;
+void functionDef(const in float param) {
+	functionCall();
+}
+
+]
+
+
+testInject[full/before_functions]=[
+#version 5432
+#extension extension_name: require
+#pragma foo
+varying vec2 a;
+void functionDef(const in float param) {
+  functionCall();
+}
+
+<><><><><><><><><><><><><><><><><><><><><><><><><>
+#version 5432
+#extension extension_name: require
+#pragma foo
+varying vec2 a;
+float x;
+float y;
+void functionDef(const in float param) {
+	functionCall();
+}
+
+]
+
+
+testInject[full/end]=[
+#version 5432
+#extension extension_name: require
+#pragma foo
+varying vec2 a;
+void functionDef(const in float param) {
+  functionCall();
+}
+
+<><><><><><><><><><><><><><><><><><><><><><><><><>
+#version 5432
+#extension extension_name: require
+#pragma foo
+varying vec2 a;
+void functionDef(const in float param) {
+	functionCall();
+}
+float x;
+float y;
+
+]
+
+
+testInject[full_reverse/before_all]=[
+#version 5432
+void functionDef(const in float param) {
+  functionCall();
+}
+varying vec2 a;
+#pragma foo
+#extension extension_name: require
+
+<><><><><><><><><><><><><><><><><><><><><><><><><>
+#version 5432
+float x;
+float y;
+void functionDef(const in float param) {
+	functionCall();
+}
+varying vec2 a;
+#pragma foo
+#extension extension_name: require
+
+]
+
+
+testInject[full_reverse/before_declarations]=[
+#version 5432
+void functionDef(const in float param) {
+  functionCall();
+}
+varying vec2 a;
+#pragma foo
+#extension extension_name: require
+
+<><><><><><><><><><><><><><><><><><><><><><><><><>
+#version 5432
+float x;
+float y;
+void functionDef(const in float param) {
+	functionCall();
+}
+varying vec2 a;
+#pragma foo
+#extension extension_name: require
+
+]
+
+
+testInject[full_reverse/before_functions]=[
+#version 5432
+void functionDef(const in float param) {
+  functionCall();
+}
+varying vec2 a;
+#pragma foo
+#extension extension_name: require
+
+<><><><><><><><><><><><><><><><><><><><><><><><><>
+#version 5432
+float x;
+float y;
+void functionDef(const in float param) {
+	functionCall();
+}
+varying vec2 a;
+#pragma foo
+#extension extension_name: require
+
+]
+
+
+testInject[full_reverse/end]=[
+#version 5432
+void functionDef(const in float param) {
+  functionCall();
+}
+varying vec2 a;
+#pragma foo
+#extension extension_name: require
+
+<><><><><><><><><><><><><><><><><><><><><><><><><>
+#version 5432
+void functionDef(const in float param) {
+	functionCall();
+}
+varying vec2 a;
+#pragma foo
+#extension extension_name: require
+float x;
+float y;
+
+]
+
+
+testInject[single_declaration/before_all]=[
+varying vec2 a;
+
+<><><><><><><><><><><><><><><><><><><><><><><><><>
+float x;
+float y;
+varying vec2 a;
+
+]
+
+
+testInject[single_declaration/before_declarations]=[
+varying vec2 a;
+
+<><><><><><><><><><><><><><><><><><><><><><><><><>
+float x;
+float y;
+varying vec2 a;
+
+]
+
+
+testInject[single_declaration/before_functions]=[
+varying vec2 a;
+
+<><><><><><><><><><><><><><><><><><><><><><><><><>
+varying vec2 a;
+float x;
+float y;
+
+]
+
+
+testInject[single_declaration/end]=[
+varying vec2 a;
+
+<><><><><><><><><><><><><><><><><><><><><><><><><>
+varying vec2 a;
+float x;
+float y;
+
+]
+
+
+testInject[single_extension/before_all]=[
+#extension extension_name: require
+
+<><><><><><><><><><><><><><><><><><><><><><><><><>
+float x;
+float y;
+#extension extension_name: require
+
+]
+
+
+testInject[single_extension/before_declarations]=[
+#extension extension_name: require
+
+<><><><><><><><><><><><><><><><><><><><><><><><><>
+#extension extension_name: require
+float x;
+float y;
+
+]
+
+
+testInject[single_extension/before_functions]=[
+#extension extension_name: require
+
+<><><><><><><><><><><><><><><><><><><><><><><><><>
+#extension extension_name: require
+float x;
+float y;
+
+]
+
+
+testInject[single_extension/end]=[
+#extension extension_name: require
+
+<><><><><><><><><><><><><><><><><><><><><><><><><>
+#extension extension_name: require
+float x;
+float y;
+
+]
+
+
+testInject[single_function/before_all]=[
+void main() {}
+
+<><><><><><><><><><><><><><><><><><><><><><><><><>
+float x;
+float y;
+void main() {
+}
+
+]
+
+
+testInject[single_function/before_declarations]=[
+void main() {}
+
+<><><><><><><><><><><><><><><><><><><><><><><><><>
+float x;
+float y;
+void main() {
+}
+
+]
+
+
+testInject[single_function/before_functions]=[
+void main() {}
+
+<><><><><><><><><><><><><><><><><><><><><><><><><>
+float x;
+float y;
+void main() {
+}
+
+]
+
+
+testInject[single_function/end]=[
+void main() {}
+
+<><><><><><><><><><><><><><><><><><><><><><><><><>
+void main() {
+}
+float x;
+float y;
+
+]
+
+
+testInject[single_layout/before_all]=[
+layout(location = 0) out vec3 layoutOne;
+
+<><><><><><><><><><><><><><><><><><><><><><><><><>
+float x;
+float y;
+layout(location = 0) out vec3 layoutOne;
+
+]
+
+
+testInject[single_layout/before_declarations]=[
+layout(location = 0) out vec3 layoutOne;
+
+<><><><><><><><><><><><><><><><><><><><><><><><><>
+float x;
+float y;
+layout(location = 0) out vec3 layoutOne;
+
+]
+
+
+testInject[single_layout/before_functions]=[
+layout(location = 0) out vec3 layoutOne;
+
+<><><><><><><><><><><><><><><><><><><><><><><><><>
+layout(location = 0) out vec3 layoutOne;
+float x;
+float y;
+
+]
+
+
+testInject[single_layout/end]=[
+layout(location = 0) out vec3 layoutOne;
+
+<><><><><><><><><><><><><><><><><><><><><><><><><>
+layout(location = 0) out vec3 layoutOne;
+float x;
+float y;
+
+]
+
+
+testInject[single_pragma/before_all]=[
+#pragma foo
+
+<><><><><><><><><><><><><><><><><><><><><><><><><>
+float x;
+float y;
+#pragma foo
+
+]
+
+
+testInject[single_pragma/before_declarations]=[
+#pragma foo
+
+<><><><><><><><><><><><><><><><><><><><><><><><><>
+#pragma foo
+float x;
+float y;
+
+]
+
+
+testInject[single_pragma/before_functions]=[
+#pragma foo
+
+<><><><><><><><><><><><><><><><><><><><><><><><><>
+#pragma foo
+float x;
+float y;
+
+]
+
+
+testInject[single_pragma/end]=[
+#pragma foo
+
+<><><><><><><><><><><><><><><><><><><><><><><><><>
+#pragma foo
+float x;
+float y;
+
+]
+
+
+testInject[single_version/before_all]=[
+#version 5432
+
+<><><><><><><><><><><><><><><><><><><><><><><><><>
+#version 5432
+float x;
+float y;
+
+]
+
+
+testInject[single_version/before_declarations]=[
+#version 5432
+
+<><><><><><><><><><><><><><><><><><><><><><><><><>
+#version 5432
+float x;
+float y;
+
+]
+
+
+testInject[single_version/before_functions]=[
+#version 5432
+
+<><><><><><><><><><><><><><><><><><><><><><><><><>
+#version 5432
+float x;
+float y;
+
+]
+
+
+testInject[single_version/end]=[
+#version 5432
+
+<><><><><><><><><><><><><><><><><><><><><><><><><>
+#version 5432
+float x;
+float y;
+
+]
+
+
+testInject[unparsed_and_functions/before_all]=[
+varying vec2 a;
+varying vec2 b;
+void funcA() {
+}
+void funcB() {
+}
+void funcC() {
+}
+<><><><><><><><><><><><><><><><><><><><><><><><><>
+float x;
+float y;
+varying vec2 a;
+varying vec2 b;
+void funcA() {
+}
+void funcB() {
+}
+void funcC() {
+}
+
+]
+
+
+testInject[unparsed_and_functions/before_declarations]=[
+varying vec2 a;
+varying vec2 b;
+void funcA() {
+}
+void funcB() {
+}
+void funcC() {
+}
+<><><><><><><><><><><><><><><><><><><><><><><><><>
+float x;
+float y;
+varying vec2 a;
+varying vec2 b;
+void funcA() {
+}
+void funcB() {
+}
+void funcC() {
+}
+
+]
+
+
+testInject[unparsed_and_functions/before_functions]=[
+varying vec2 a;
+varying vec2 b;
+void funcA() {
+}
+void funcB() {
+}
+void funcC() {
+}
+<><><><><><><><><><><><><><><><><><><><><><><><><>
+varying vec2 a;
+varying vec2 b;
+float x;
+float y;
+void funcA() {
+}
+void funcB() {
+}
+void funcC() {
+}
+
+]
+
+
+testInject[unparsed_and_functions/end]=[
+varying vec2 a;
+varying vec2 b;
+void funcA() {
+}
+void funcB() {
+}
+void funcC() {
+}
+<><><><><><><><><><><><><><><><><><><><><><><><><>
+varying vec2 a;
+varying vec2 b;
+void funcA() {
+}
+void funcB() {
+}
+void funcC() {
+}
+float x;
+float y;
+
+]
+
+
+testInject[unparsed_separators/before_all]=[
+#version 5432
+varying vec2 a;
+
+<><><><><><><><><><><><><><><><><><><><><><><><><>
+#version 5432
+float x;
+float y;
+varying vec2 a;
+
+]
+
+
+testInject[unparsed_separators/before_declarations]=[
+#version 5432
+varying vec2 a;
+
+<><><><><><><><><><><><><><><><><><><><><><><><><>
+#version 5432
+float x;
+float y;
+varying vec2 a;
+
+]
+
+
+testInject[unparsed_separators/before_functions]=[
+#version 5432
+varying vec2 a;
+
+<><><><><><><><><><><><><><><><><><><><><><><><><>
+#version 5432
+varying vec2 a;
+float x;
+float y;
+
+]
+
+
+testInject[unparsed_separators/end]=[
+#version 5432
+varying vec2 a;
+
+<><><><><><><><><><><><><><><><><><><><><><><><><>
+#version 5432
+varying vec2 a;
+float x;
+float y;
+
+]
+
+
+testInject[version_with_extension/before_all]=[
+#version 5432
+#extension extension_name: require
+
+<><><><><><><><><><><><><><><><><><><><><><><><><>
+#version 5432
+float x;
+float y;
+#extension extension_name: require
+
+]
+
+
+testInject[version_with_extension/before_declarations]=[
+#version 5432
+#extension extension_name: require
+
+<><><><><><><><><><><><><><><><><><><><><><><><><>
+#version 5432
+#extension extension_name: require
+float x;
+float y;
+
+]
+
+
+testInject[version_with_extension/before_functions]=[
+#version 5432
+#extension extension_name: require
+
+<><><><><><><><><><><><><><><><><><><><><><><><><>
+#version 5432
+#extension extension_name: require
+float x;
+float y;
+
+]
+
+
+testInject[version_with_extension/end]=[
+#version 5432
+#extension extension_name: require
+
+<><><><><><><><><><><><><><><><><><><><><><><><><>
+#version 5432
+#extension extension_name: require
+float x;
+float y;
+
+]
+
+
+testInject[version_with_pragma/before_all]=[
+#version 5432
+#pragma foo
+
+<><><><><><><><><><><><><><><><><><><><><><><><><>
+#version 5432
+float x;
+float y;
+#pragma foo
+
+]
+
+
+testInject[version_with_pragma/before_declarations]=[
+#version 5432
+#pragma foo
+
+<><><><><><><><><><><><><><><><><><><><><><><><><>
+#version 5432
+#pragma foo
+float x;
+float y;
+
+]
+
+
+testInject[version_with_pragma/before_functions]=[
+#version 5432
+#pragma foo
+
+<><><><><><><><><><><><><><><><><><><><><><><><><>
+#version 5432
+#pragma foo
+float x;
+float y;
+
+]
+
+
+testInject[version_with_pragma/end]=[
+#version 5432
+#pragma foo
+
+<><><><><><><><><><><><><><><><><><><><><><><><><>
+#version 5432
+#pragma foo
+float x;
+float y;
+
+]

@@ -132,10 +132,10 @@ public class CSTTransformer<T extends JobParameters> extends ExecutionPlanner<T>
   }
 
   @Override
-  public String transformStreamBare(IntStream charStream) throws RecognitionException {
+  public String transformBare(String str) throws RecognitionException {
     setTokenFilterPlanner(printTokenFilter);
     setTokenFilterPlanner(parseTokenFilter);
-    var tree = parser.parse(charStream, null, GLSLParser::translationUnit);
+    var tree = parser.parse(CharStreams.fromString(str), null, GLSLParser::translationUnit);
     var tokenStream = parser.getTokenStream();
     transformTree(tree, tokenStream);
     return PrintVisitor.printTree(tokenStream, tree, printTokenFilter);

@@ -4,22 +4,16 @@ import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.ArrayList;
 
-import org.junit.jupiter.api.*;
+import org.junit.jupiter.api.Test;
 
 import io.github.douira.glsl_transformer.GLSLParser;
 import io.github.douira.glsl_transformer.ast.node.Identifier;
 import io.github.douira.glsl_transformer.ast.node.expression.*;
 import io.github.douira.glsl_transformer.ast.query.*;
+import io.github.douira.glsl_transformer.test_util.TestWithASTTransformer;
 import io.github.douira.glsl_transformer.util.Type;
 
-public class ASTTransformerTest {
-  ASTTransformer transformer;
-
-  @BeforeEach
-  public void setUp() {
-    transformer = new ASTTransformer();
-  }
-
+public class ASTTransformerTest extends TestWithASTTransformer {
   void assertInjectExternalDeclaration(int index, String input, String output) {
     transformer.setTransformation(translationUnit -> {
       translationUnit.children.add(index, transformer.parseNode(
@@ -32,7 +26,7 @@ public class ASTTransformerTest {
   }
 
   @Test
-  public void testInsertion() {
+  void testInsertion() {
     assertInjectExternalDeclaration(0,
         "int b;\nint c;\n",
         "int a;\nint b;\nint c;\n");
@@ -45,7 +39,7 @@ public class ASTTransformerTest {
   }
 
   @Test
-  public void testIdentifierQuery() {
+  void testIdentifierQuery() {
     transformer.setTransformation(tree -> {
       tree.getRoot().identifierIndex.index.prefixMap("a").values()
           .stream().forEach(Index.<Identifier>iterate(node -> node.name += "b"));
@@ -59,7 +53,7 @@ public class ASTTransformerTest {
   }
 
   @Test
-  public void testNodeQuery() {
+  void testNodeQuery() {
     transformer.setTransformation(tree -> {
       tree.getRoot().nodeIndex.get(LiteralExpression.class)
           .stream().forEach(literal -> {
@@ -75,7 +69,7 @@ public class ASTTransformerTest {
   }
 
   @Test
-  public void testNodeQueryAfterModification() {
+  void testNodeQueryAfterModification() {
     transformer.setTransformation(tree -> {
       Root.<LiteralExpression>indexNodes(tree,
           register -> {
@@ -98,7 +92,7 @@ public class ASTTransformerTest {
   }
 
   @Test
-  public void testSelfReplacement() {
+  void testSelfReplacement() {
     transformer.setTransformation(tree -> {
       Root.<Expression>indexNodes(tree,
           register -> {

@@ -81,13 +81,6 @@ public class CSTTransformerTest extends TestWithResource {
   }
 
   @Test
-  void testTransformStream() {
-    assertEquals(
-        "f;a;//present\nb;c;d;",
-        manager.transformStream(CharStreams.fromString("a;//present\nb;c;d;")));
-  }
-
-  @Test
   @SnapshotName("testGlslangErrors")
   void testGlslangErrors() {
     class CollectingErrorListener extends BaseErrorListener {

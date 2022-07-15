@@ -39,8 +39,9 @@ public class PrintVisitorTest extends TestWithResource {
   void testPrintTree() {
     var modifiedManager = new CSTTransformer<NonFixedJobParameters>() {
       @Override
-      public String transformStream(IntStream stream, NonFixedJobParameters parameters) throws RecognitionException {
-        var tree = getInternalParser().parse(stream, null, GLSLParser::translationUnit);
+      public String transform(String str, NonFixedJobParameters parameters) throws RecognitionException {
+        var tree = getInternalParser().parse(
+            CharStreams.fromString(str), null, GLSLParser::translationUnit);
         var tokenStream = getInternalParser().getTokenStream();
         transformTree(tree, tokenStream);
         var printed = PrintVisitor.printTree(tokenStream, tree);
