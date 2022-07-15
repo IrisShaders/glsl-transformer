@@ -52,5 +52,4 @@ public class IdentifierIndex implements Index<Identifier> {
       set.addAll(entry.getValue());
     }
   }
-
 }
