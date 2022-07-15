@@ -10,26 +10,31 @@ This is an actively being developed library that parses GLSL using an ANTLR4 gra
 
 ## Capabilities
 
-`glsl-transformer` is a library for GLSL program transformation. It uses a parser generated with ANTLR based on a custom GLSL grammar to turn shader code into a parse tree. In this tree each syntactic piece of the code is represented as a node with children. The API facilitates the creation of composable transformations that can be used to manipulate this parse tree. Transformations can iterate through the parse tree, insert or remove nodes, match patterns and extract information from it. An execution planner optimizes at what time each step of the whole transformation process is performed. After the parse tree has been changed, it is printed back into a string while preserving the original whitespace.
+`glsl-transformer` is a library for GLSL program transformation. It uses a parser generated with ANTLR based on a custom GLSL grammar to turn shader code into a parse tree. At this point there are two different ways of approaching transformation: The concrete syntax tree (CST) that is directly taken from the parser can be transformed. The other approach turns this CST into an abstract syntax tree (AST) and then does transformations on that. In both types of trees each syntactic piece of the code is represented as a node with children. However, the AST is a little closer to the semantic content of the code rather than how the parser understands it.
+
+For transforming the CST, the API facilitates the creation of composable transformations that can be used to manipulate this parse tree. Transformations can iterate through the parse tree, insert or remove nodes, match patterns and extract information from it. An execution planner optimizes at what time each step of the whole transformation process is performed. After the parse tree has been changed, it is printed back into a string while preserving the original whitespace.
+
+Transforming the AST requires the additional step of building the AST from the parse tree (the CST). Once the AST is available, transforming it is easier and more efficient since traversing the entire tree frequently (or even altogether) is avoided though the use of index structures that allow fast queries for specific identifiers and node types. After transformation the AST is directly printed into a string, optionally with some formatting applied. Since the AST only contains the semantically relevant data from the code, any non-code parts of the original string, such as comments and formatting whitespace, are not present in the re-printed string. AST transformations don't have an execution planner and dependency graph mechanism since they operate on the AST without traversal that needs synchronization and management.
 
 - GLSL Lexing & Parsing
-- Composable parse tree transformations
-- Pattern matching and tree visitation
+- AST and CST transformation
+- CST: Composable parse tree transformations
+- CST: Pattern and XPath matching
+- Tree walking with visitors and listeners
 - Parse tree manipulation and declaration injection
 - New nodes are treated as part of the existing parse tree
-- Whitespace-preserving re-printing
-- The original input is preserved if no changes are made
-- Limited support for AST generation and printing
+- CST: Whitespace-preserving re-printing
+- CST: The original input is preserved if no changes are made
+
+Further reading on [Abstract vs Concrete (Parse) Syntax Trees](https://eli.thegreenplace.net/2009/02/16/abstract-vs-concrete-syntax-trees/)
 
 ## What `glsl-transformer` is not
 
-Currently, `glsl-transformer` mostly operates only on the syntactic level. This means it only knows how the code looks and what structure it has to have, not what it means and which structures are legal or not. It has no or only a very limited semantic understanding of the code. Semantic processing of programs can be implemented by API users on a case-by-case basis for specific tasks. Building a simple AST that is abstracted far away from the actual GLSL spec is an interesting possibility for future development of this library. However, implementing full semantics would require building what basically amounts to a GLSL compiler which is way out of scope for this project.
+Currently, `glsl-transformer` mostly operates only on the syntactic level, even if an AST is constructed. This means it only knows how the code looks and what structure it has to have, not what it means and which structures are legal or not. It only has a limited semantic understanding of the code. Semantic processing of programs can be implemented by API users on a case-by-case basis for specific tasks. The implemented AST does not do type checking or check if the defined structures adhere to the GLSL spec. Implementing full semantics would require building what basically amounts to a GLSL compiler which is way out of scope for this project.
 
 `glsl-transformer` does not do semantic validation of the code and will not error on code that is actually invalid for semantic reasons. It will only error on syntax errors. In particular, it will not error on type errors like assigning a boolean to an integer. It supports GLSL 4.6 with some extensions such as explicit arithmetic types and some others. It won't error on modern syntax features even if your driver doesn't support them. Do not rely on `glsl-transformer` for shader validation, only for syntax transformation.
 
-It also doesn't validate that features aren't used which may not be available in a older GLSL versions. The `#version` directive is not semantically interpreted. It may also fail to parse code that is technically legal in old GLSL version where certain tokens weren't declared as reserved words yet. Just don't use reserved words as tokens in this case. If it's really necessary, preprocess the code by simply replacing the reserved words with some placeholder before parsing.
-
-Further reading on [Abstract vs Concrete (Parse) Syntax Trees](https://eli.thegreenplace.net/2009/02/16/abstract-vs-concrete-syntax-trees/)
+It also doesn't validate that features aren't used which may not be available in older GLSL versions. The `#version` directive is not semantically interpreted. It may also fail to parse code that is technically legal in old GLSL version where certain tokens weren't declared as reserved words yet. Just don't use reserved words as tokens in this case. If it's really necessary, preprocess the code by simply replacing the reserved words with some placeholder before parsing.
 
 ## Versioning
 
@@ -47,7 +52,7 @@ Of course all of this wouldn't be possible without ANTLR4 and its contributors, 
 
 ## Support
 
-If something breaks, please make an issue report with the details so I can fix the issue and add a test case. Until 1.0 is released, expect many features to be untested. For more direct support, you can also ask in the `glsl-transformer` thread in the [Iris discord server](https://discord.gg/jQJnav2jPu). I'm also interested in hearing from anyone using this library in their projects!
+If something breaks, please make an issue report with the details so I can fix the issue and add a test case. For more direct support, you can also ask in the `glsl-transformer` thread in the [Iris discord server](https://discord.gg/jQJnav2jPu). I'm also interested in hearing from anyone using this library in their projects!
 
 # Usage
 
@@ -69,18 +74,34 @@ gradle javadoc
 
 ## Example
 
+CST Transformation
+
 ```java
-// setup a manager
+// setup a transformer
 var transformer = new CSTTransformer<>();
 
 // register a transformation
 manager.addConcurrent(transformation);
 
 // after transformation
-System.out.println(transformer.transform(string));
+System.out.println(transformer.transform(input));
 ```
 
-## Permitted Parse Tree Operations
+AST Transformation
+```java
+// setup a transformer
+var transformer = new ASTTransformer<>();
+
+// set the transformation
+transformer.setTransformation(translationUnit -> {
+  // do things
+});
+
+// after transformation
+System.out.println(transformer.transform(input));
+```
+
+## Permitted CST Operations
 
 - Adding a new parsed node anywhere (as a new local root)
 - Removing any node with its entire subtree
