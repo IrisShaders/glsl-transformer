@@ -116,4 +116,27 @@ public class ASTTransformerTest extends TestWithASTTransformer {
         "int a = foo, 2, foo, 5 + foo + b;\n",
         transformer.transform("int a = 3, 2, 3, 5 + 3 + b;\n"));
   }
+
+  @Test
+  void testNodeRemovalAndQuery() {
+    transformer.setTransformation(tree -> {
+      var toRemove = new ArrayList<ReferenceExpression>();
+      for (var node : tree.getRoot().nodeIndex
+          .get(ReferenceExpression.class)) {
+        if (node.getIdentifier().name.equals("a")) {
+          toRemove.add(node);
+        }
+      }
+      for (var node : toRemove) {
+        node.removeFromParent();
+      }
+      assertTrue(tree.getRoot().identifierIndex.get("a").isEmpty());
+    });
+    assertEquals(
+        "int x = b, c, d;\n",
+        transformer.transform("int x = a, b, c, a, d;\n"));
+    // assertEquals(
+    // "int a = 1, 2, 5 + 2 + b;\n",
+    // transformer.transform("int a = 1, 2, 3;\n"));
+  }
 }
