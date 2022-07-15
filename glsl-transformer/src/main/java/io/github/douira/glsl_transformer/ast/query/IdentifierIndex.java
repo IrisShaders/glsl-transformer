@@ -52,4 +52,13 @@ public class IdentifierIndex implements Index<Identifier> {
       set.addAll(entry.getValue());
     }
   }
+
+  public Set<Identifier> get(String k) {
+    var result = index.get(k);
+    return result == null ? Collections.emptySet() : result;
+  }
+
+  public SortedMap<String, Set<Identifier>> prefixMap(String key) {
+    return index.prefixMap(key);
+  }
 }
