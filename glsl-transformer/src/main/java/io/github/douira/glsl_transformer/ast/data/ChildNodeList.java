@@ -38,11 +38,12 @@ public class ChildNodeList<Child extends ASTNode> extends ProxyArrayList<Child> 
   }
 
   protected static <Child extends ASTNode> Consumer<Child> makeChildReplacer(ChildNodeList<Child> list, Child child) {
-    return node -> {
-      if (node == child) {
+    return newNode -> {
+      if (newNode == child) {
         return;
       }
-      list.set(list.indexOf(child), node);
+      list.parent.updateParents(child, newNode, makeChildReplacer(list, newNode));
+      list.set(list.indexOf(child), newNode);
     };
   }
 

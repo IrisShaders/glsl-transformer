@@ -44,6 +44,10 @@ public abstract class ASTNode {
     return false;
   }
 
+  public boolean removeFromParent() {
+    return replaceInParent(null);
+  }
+
   public ASTNode getNthParent(int n) {
     ASTNode node = this;
     for (int i = 0; i < n; i++) {
@@ -150,7 +154,8 @@ public abstract class ASTNode {
   /**
    * To be called after removing this node from its parent. This unregisters it
    * and all its children from the parent's root. Use a simple
-   * {@link ASTNode#setParent(ASTNode, Consumer)} to move a subtree from one node to the
+   * {@link ASTNode#setParent(ASTNode, Consumer)} to move a subtree from one node
+   * to the
    * other.
    */
   public void detachFromParent() {
