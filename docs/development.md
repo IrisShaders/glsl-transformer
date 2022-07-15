@@ -51,7 +51,8 @@ Each `ASTNode` extending class has the following parts, some of which are option
 - private fields
 - constructors
 - own abstract methods
-- public non-inherited methods (like getters/setters)
+- non-inherited getters and setters
+- other non-inherited methods
 - implementations of enum getters
 - other inherited methods of the closest subclass
 - inherited methods: `accept` or `footypeAccept`, optionally `enterFoo` and `exitFoo`
