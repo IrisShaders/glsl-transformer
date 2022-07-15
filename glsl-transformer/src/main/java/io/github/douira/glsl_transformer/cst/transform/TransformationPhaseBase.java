@@ -11,7 +11,7 @@ import org.antlr.v4.runtime.tree.xpath.XPath;
 
 import io.github.douira.glsl_transformer.*;
 import io.github.douira.glsl_transformer.GLSLParser.*;
-import io.github.douira.glsl_transformer.basic.*;
+import io.github.douira.glsl_transformer.basic.EnhancedParser;
 import io.github.douira.glsl_transformer.cst.node.Directive;
 import io.github.douira.glsl_transformer.cst.node.Directive.DirectiveType;
 import io.github.douira.glsl_transformer.cst.print.EmptyTerminalNode;
@@ -262,7 +262,7 @@ public abstract class TransformationPhaseBase<T extends JobParameters> extends G
       if (injectIndex == rootNode.getChildCount()) {
         injectIndex = 0;
       }
-    } else if (location == CSTInjectionPoint.BEFORE_EOF) {
+    } else if (location == CSTInjectionPoint.END) {
       injectIndex = rootNode.getChildCount();
     } else {
       do {
