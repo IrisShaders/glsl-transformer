@@ -173,7 +173,11 @@ public abstract class ASTPrinterBase extends ASTListenerVisitor<Void> {
 
   protected void visitWithSeparator(List<? extends ASTNode> nodes, Runnable emitter) {
     for (int i = 0, size = nodes.size(); i < size; i++) {
-      visit(nodes.get(i));
+      var node = nodes.get(i);
+      if (node == null) {
+        continue;
+      }
+      visit(node);
       if (i < size - 1) {
         emitter.run();
       }
