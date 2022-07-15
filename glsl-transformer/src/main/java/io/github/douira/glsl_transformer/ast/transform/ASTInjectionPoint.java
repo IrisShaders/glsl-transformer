@@ -19,7 +19,7 @@ public enum ASTInjectionPoint {
     // TODO
   },
 
-  BEFORE_EOF() {
+  END() {
     // TODO
   };
 

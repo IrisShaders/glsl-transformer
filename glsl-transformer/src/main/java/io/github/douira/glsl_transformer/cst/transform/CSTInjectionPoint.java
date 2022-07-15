@@ -74,7 +74,7 @@ public enum CSTInjectionPoint {
   /**
    * Before the end of the file, basically the last possible location
    */
-  BEFORE_EOF;
+  END;
 
   /**
    * Checks if the given class of the child of an external declaration makes the

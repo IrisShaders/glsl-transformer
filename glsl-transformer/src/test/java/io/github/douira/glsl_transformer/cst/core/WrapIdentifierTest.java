@@ -24,7 +24,7 @@ public class WrapIdentifierTest extends TestForExecutionOrder {
         .wrapTarget("foo")
         .detectionResult("bar")
         .injectionExternalDeclaration("int snap = 0;")
-        .injectionLocation(CSTInjectionPoint.BEFORE_EOF));
+        .injectionLocation(CSTInjectionPoint.END));
     assertEquals(
         "int bar = 4;int snap = 0;",
         manager.transform("int foo = 4;"),
@@ -82,7 +82,7 @@ public class WrapIdentifierTest extends TestForExecutionOrder {
     manager.addConcurrent(new WrapIdentifier<NonFixedJobParameters>()
         .detectionResult("prevMain")
         .wrapTarget("main")
-        .injectionLocation(CSTInjectionPoint.BEFORE_EOF)
+        .injectionLocation(CSTInjectionPoint.END)
         .injectionExternalDeclaration("void main() { foo();\n prevMain(); }"));
     assertEquals("void prevMain() { bar(); }\nvoid main() { foo();\n prevMain(); }",
         manager.transform("void main() { bar(); }\n"),
@@ -98,7 +98,7 @@ public class WrapIdentifierTest extends TestForExecutionOrder {
         .wrapTarget("foo")
         .detectionResult("bar")
         .injectionExternalDeclaration("int snap = 0;")
-        .injectionLocation(CSTInjectionPoint.BEFORE_EOF)
+        .injectionLocation(CSTInjectionPoint.END)
         .activation(() -> false));
     assertEquals(
         "int bar = foo;",

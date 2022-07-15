@@ -15,14 +15,14 @@ public class RunPhaseTest extends TestForExecutionOrder {
 
   @Test
   void testWithInjectNodes() {
-    manager.addConcurrent(RunPhase.withInjectNodes(CSTInjectionPoint.BEFORE_EOF, new StringNode("b")));
+    manager.addConcurrent(RunPhase.withInjectNodes(CSTInjectionPoint.END, new StringNode("b")));
     assertEquals("a;\nb", manager.transform("a;"),
         "It should generate a run phase that does an injection of multiple nodes.");
   }
 
   @Test
   void testWithInjectExternalDeclarations() {
-    manager.addConcurrent(RunPhase.withInjectExternalDeclarations(CSTInjectionPoint.BEFORE_EOF, "foo;"));
+    manager.addConcurrent(RunPhase.withInjectExternalDeclarations(CSTInjectionPoint.END, "foo;"));
     assertEquals("foo;", manager.transform(""),
         "It should generate a run phase that does an injection.");
   }
