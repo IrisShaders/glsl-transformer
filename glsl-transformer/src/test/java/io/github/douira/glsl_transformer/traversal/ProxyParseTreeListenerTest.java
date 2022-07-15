@@ -8,6 +8,7 @@ import org.antlr.v4.runtime.ParserRuleContext;
 import org.antlr.v4.runtime.tree.*;
 import org.junit.jupiter.api.*;
 
+import io.github.douira.glsl_transformer.cst.traversal.*;
 import io.github.douira.glsl_transformer.tree.ExtendedContext;
 
 public class ProxyParseTreeListenerTest {
@@ -162,22 +163,22 @@ public class ProxyParseTreeListenerTest {
   class ThrowOnAllVisits extends TreeListener {
     @Override
     public void enterEveryRule(ParserRuleContext ctx) {
-      throw new RuntimeException("Should not be called");
+      throw new AssertionError("Should not be called");
     }
 
     @Override
     public void exitEveryRule(ParserRuleContext ctx) {
-      throw new RuntimeException("Should not be called");
+      throw new AssertionError("Should not be called");
     }
 
     @Override
     public void visitErrorNode(ErrorNode node) {
-      throw new RuntimeException("Should not be called");
+      throw new AssertionError("Should not be called");
     }
 
     @Override
     public void visitTerminal(TerminalNode node) {
-      throw new RuntimeException("Should not be called");
+      throw new AssertionError("Should not be called");
     }
   }
 

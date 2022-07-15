@@ -2,7 +2,7 @@ package io.github.douira.glsl_transformer.tree;
 
 import org.antlr.v4.runtime.tree.ParseTree;
 
-import io.github.douira.glsl_transformer.traversal.MoveCheckable;
+import io.github.douira.glsl_transformer.cst.traversal.MoveCheckable;
 
 /**
  * A tree member has a parent and its tokens can be omitted. This interface

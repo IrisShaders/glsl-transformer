@@ -7,17 +7,17 @@ channels {
 }
 
 //GLSL token utilities
-fragment DECIMAL_DIGITS: '0' | ('1' ..'9' DIGIT*);
-fragment OCTAL_DIGITS: '0' '0' ..'7'+;
-fragment HEX_DIGITS: '0x' (DIGIT | 'a' ..'f' | 'A' ..'F')+;
-fragment DIGIT: '0' ..'9';
+fragment DECIMAL_DIGITS: '0' | ('1' .. '9' DIGIT*); //no leading 0
+fragment OCTAL_DIGITS: '0' ('0' .. '7')+;
+fragment HEX_DIGITS: '0x' (DIGIT | 'a' .. 'f' | 'A' .. 'F')+;
+fragment DIGIT: '0' .. '9';
 fragment FLOAT_DIGITS: ((DIGIT+ ('.' DIGIT*)?) | ('.' DIGIT+)) (
 		('e' | 'E') ('+' | '-')? DIGIT*
 	)?;
-fragment IDENTIFIER_frag: ('a' ..'z' | 'A' ..'Z' | '_') (
+fragment IDENTIFIER_frag: ('a' .. 'z' | 'A' .. 'Z' | '_') (
 		DIGIT
-		| 'a' ..'z'
-		| 'A' ..'Z'
+		| 'a' .. 'z'
+		| 'A' .. 'Z'
 		| '_'
 	)*;
 fragment WS_frag: [\t\r\u000C ]+;
@@ -60,6 +60,7 @@ WORKGROUPCOHERENT: 'workgroupcoherent';
 SUBGROUPCOHERENT: 'subgroupcoherent';
 NONPRIVATE: 'nonprivate';
 LAYOUT: 'layout';
+DOT_LENGTH: '.length';
 
 ATOMIC_UINT: 'atomic_uint';
 STRUCT: 'struct';
@@ -78,7 +79,7 @@ DISCARD: 'discard';
 DEMOTE: 'demote';
 
 fragment INTCONSTANT_frag: DECIMAL_DIGITS | OCTAL_DIGITS | HEX_DIGITS;
-fragment SINGLE_SUFFIX: 'f' | 'F';
+fragment FLOAT_SUFFIX: 'f' | 'F';
 fragment HALF_SUFFIX: 'h' | 'H';
 fragment DOUBLE_SUFFIX: 'l' | 'L';
 fragment UNSIGNED_SUFFIX: 'u' | 'U';
@@ -93,9 +94,9 @@ INT32CONSTANT: INTCONSTANT_frag;
 UINT64CONSTANT: INTCONSTANT_frag UNSIGNED_SUFFIX DOUBLE_SUFFIX;
 INT64CONSTANT: INTCONSTANT_frag DOUBLE_SUFFIX;
 
-FLOAT16CONSTANT: FLOAT_DIGITS HALF_SUFFIX SINGLE_SUFFIX;
-FLOAT32CONSTANT: FLOAT_DIGITS SINGLE_SUFFIX?;
-FLOAT64CONSTANT: FLOAT_DIGITS DOUBLE_SUFFIX SINGLE_SUFFIX;
+FLOAT16CONSTANT: FLOAT_DIGITS HALF_SUFFIX FLOAT_SUFFIX;
+FLOAT32CONSTANT: FLOAT_DIGITS FLOAT_SUFFIX?;
+FLOAT64CONSTANT: FLOAT_DIGITS DOUBLE_SUFFIX FLOAT_SUFFIX;
 BOOLCONSTANT: 'true' | 'false';
 
 BOOL: 'bool';
@@ -194,7 +195,6 @@ SAMPLER1D: 'sampler1D';
 SAMPLER2D: 'sampler2D';
 SAMPLER3D: 'sampler3D';
 SAMPLER2DRECT: 'sampler2DRect';
-SAMPLEREXTERNALOES: 'samplerExternalOES';
 SAMPLER1DSHADOW: 'sampler1DShadow';
 SAMPLER2DSHADOW: 'sampler2DShadow';
 SAMPLER2DRECTSHADOW: 'sampler2DRectShadow';
@@ -266,9 +266,9 @@ LE_OP: '<=';
 GE_OP: '>=';
 EQ_OP: '==';
 NE_OP: '!=';
-AND_OP: '&&';
-XOR_OP: '^^';
-OR_OP: '||';
+BOOL_AND_OP: '&&';
+BOOL_XOR_OP: '^^';
+BOOL_OR_OP: '||';
 MUL_ASSIGN: '*=';
 DIV_ASSIGN: '/=';
 MOD_ASSIGN: '%=';
@@ -292,16 +292,16 @@ COMMA: ',';
 DOT: '.';
 PLUS_OP: '+';
 MINUS_OP: '-';
-NOT_OP: '!';
-BNEG_OP: '~';
+BOOL_NOT_OP: '!';
+BIT_NEG_OP: '~';
 TIMES_OP: '*';
 DIV_OP: '/';
 MOD_OP: '%';
 LT_OP: '<';
 GT_OP: '>';
-BAND_OP: '&';
-BOR_OP: '|';
-BXOR_OP: '^';
+BIT_AND_OP: '&';
+BIT_OR_OP: '|';
+BIT_XOR_OP: '^';
 QUERY_OP: '?';
 ASSIGN_OP: '=';
 
@@ -359,7 +359,7 @@ NR_LPAREN: '(';
 NR_RPAREN: ')';
 NR_STDGL: 'STDGL';
 NR_CORE: 'core';
-NR_COMPATABILITY: 'compatibility';
+NR_COMPATIBILITY: 'compatibility';
 NR_ES: 'es';
 
 NR_INTCONSTANT: INTCONSTANT_frag;

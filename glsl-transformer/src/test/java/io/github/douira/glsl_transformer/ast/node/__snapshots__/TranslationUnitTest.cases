@@ -1,0 +1,59 @@
+§testInjectExDecl empty:
+
+§testInjectExDecl single_version:
+#version 5432
+
+§testInjectExDecl single_extension:
+#extension extension_name: require
+
+§testInjectExDecl single_declaration:
+varying vec2 a;
+
+§testInjectExDecl single_layout:
+layout(location = 0) out vec3 layoutOne;
+
+§testInjectExDecl single_pragma:
+#pragma foo
+
+§testInjectExDecl single_function:
+void main() {}
+
+§testInjectExDecl full:
+#version 5432
+#extension extension_name: require
+#pragma foo
+varying vec2 a;
+void functionDef(const in float param) {
+  functionCall();
+}
+
+§testInjectExDecl full_reverse:
+#version 5432
+void functionDef(const in float param) {
+  functionCall();
+}
+varying vec2 a;
+#pragma foo
+#extension extension_name: require
+
+§testInjectExDecl version_with_pragma:
+#version 5432
+#pragma foo
+
+§testInjectExDecl version_with_extension:
+#version 5432
+#extension extension_name: require
+
+§testInjectExDecl unparsed_separators:
+#version 5432
+varying vec2 a;
+
+§testInjectExDecl unparsed_and_functions:
+varying vec2 a;
+varying vec2 b;
+void funcA() {
+}
+void funcB() {
+}
+void funcC() {
+}

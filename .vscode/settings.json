@@ -1,12 +1,8 @@
 {
-  "java.configuration.updateBuildConfiguration": "automatic",
   "java.project.sourcePaths": ["build/generated-src/antlr/main/"],
-  "java.project.resourceFilters": ["node_modules", ".git", ".antlr"],
   "[java]": {
     "editor.suggest.snippetsPreventQuickSuggestions": false
-    //"editor.formatOnSave": false
   },
-  "java.jdt.ls.vmargs": "-XX:+UseParallelGC -XX:GCTimeRatio=4 -XX:AdaptiveSizePolicyWeight=90 -Dsun.zip.disableMemoryMapping=true -Xmx4G -Xms100m",
   "files.associations": {
     "*.snap": "glsl",
     "*.cases": "glsl",
@@ -20,9 +16,6 @@
     "jacocoTestReport.xml"
   ],
   "coverage-gutters.coverageBaseDir": "glsl-transformer/build/reports/jacoco/test",
-  "antlr4.format": {
-    "columnLimit": 110
-  },
   "java.sources.organizeImports.staticStarThreshold": 1,
   "java.sources.organizeImports.starThreshold": 2,
   "java.configuration.runtimes": [
@@ -32,4 +25,6 @@
       "default": true
     }
   ],
+  "editor.detectIndentation": false,
+  "editor.insertSpaces": true
 }

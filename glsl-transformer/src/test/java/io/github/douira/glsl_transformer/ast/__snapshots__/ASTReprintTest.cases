@@ -1,0 +1,948 @@
+§testReprint translationUnit:
+;
+
+§testReprint translationUnit:
+
+§testReprint translationUnit:
+#version 330 core
+;
+
+§testReprint translationUnit:
+#pragma STDGL debug(on)
+
+§testReprint translationUnit:
+#pragma optimize(off)
+
+§testReprint translationUnit:
+#pragma invariant(all)
+
+§testReprint translationUnit:
+#pragma foobar
+
+§testReprint translationUnit:
+#extension foobar: require
+
+§testReprint translationUnit:
+#extension foobar: enable
+
+§testReprint translationUnit:
+#extension foobar: warn
+
+§testReprint translationUnit:
+#extension foobar: disable
+
+§testReprint expression:
+1 + 2
+§testReprint expression:
+1 | 2
+§testReprint expression:
+((a + b) * c)
+§testReprint expression:
+true ? 1.0 : bar.length()
+§testReprint expression:
+a, b, c
+§testReprint expression:
+(a, b, c, d)
+§testReprint expression:
+++1, --1, 1++, 1--, +1, -1, ~1, !1
+§testReprint expression:
+a.b, b.foo, a.b.c.d
+§testReprint expression:
+a.b.c.d.e.f.g.h.i.j.k.l.m.n.o.p.q.r.s
+§testReprint expression:
+a ? b ? c : d : e
+§testReprint expression:
+a - b * c / d % e ^ d & c | b ^ c
+§testReprint expression:
+a.c[4 + b[c]]
+§testReprint expression:
+a == b != c < d <= e > f >= g
+§testReprint expression:
+a && b || c ^^ c
+§testReprint expression:
+a << b >> c
+§testReprint expression:
+a = b += b -= b *= b /= a
+§testReprint expression:
+a %= b &= b |= b ^= b <<= c <<= d
+§testReprint expression:
+1 + 2us + 3ul + 4u + 5s + 0.1 + 0.2f + 0.3hf + 0.4lf
+===
+1 + 2us + 3ul + 4u + 5s + 0.1 + 0.2 + 0.3hf + 0.4lf
+§testReprint expression:
+0x54ae + 06453543 + 1.6e10 + 50.1e-10 + 1e+10
+===
+0x54ae + 06453543 + 1.6E10 + 5.01E-9 + 1.0E10
+§testReprint expression:
+foo(1, 2, 3)
+§testReprint expression:
+foo()
+§testReprint expression:
+foo() + bar()
+§testReprint expression:
+foo() + bar() + baz()
+§testReprint expression:
+foo(1, bar(), baz(1, 2))
+§testReprint expression:
+foo(bar(baz(bar)))
+§testReprint expression:
+vec3(1, 2, 3)
+§testReprint fullySpecifiedType:
+vec2
+§testReprint statement:
+;
+
+§testReprint statement:
+1;
+
+§testReprint statement:
+a + b;
+
+§testReprint statement:
+a = c;
+
+§testReprint statement:
+{
+	1;
+	2;
+	3;
+}
+
+§testReprint statement:
+{
+	{
+		1;
+		2;
+		{
+			1;
+			2;
+			{
+				1;
+				2;
+				{
+					1;
+					2;
+				}
+			}
+		}
+	}
+	2;
+	3;
+}
+
+§testReprint statement:
+{
+	;
+	;
+	;
+}
+
+§testReprint statement:
+if (a && b) {
+	1;
+}
+
+§testReprint statement:
+if (a) 1;
+
+§testReprint statement:
+if (a) 1;
+else 2;
+
+§testReprint statement:
+if (a) 1;
+else if (b) 2;
+
+§testReprint statement:
+if (a) 1;
+else if (b) 2;
+else 3;
+
+§testReprint statement:
+if (a) 1;
+else if (b) 2;
+else if (c) 3;
+else 4;
+
+§testReprint statement:
+if (a) 1;
+else if (b) 2;
+else if (c) 3;
+
+§testReprint statement:
+if (a) 1;
+else if (b) 2;
+else if (c) 3;
+else if (c) 3;
+else if (c) 3;
+else if (c) 3;
+else if (c) 3;
+else if (c) 3;
+else if (c) 3;
+else if (c) 3;
+else 4;
+
+§testReprint statement:
+if (a) {
+	1;
+} else if (b) {
+	2;
+} else {
+	3;
+}
+
+§testReprint statement:
+if (a) {
+	1;
+} else {
+	3;
+}
+
+§testReprint statement:
+if (a) {
+	1;
+} else if (b) {
+	3;
+}
+
+§testReprint statement:
+while (true) 1;
+
+§testReprint statement:
+while (true) {
+	1;
+}
+
+§testReprint statement:
+while (a && b) {
+	5;
+	if (true) {
+		4;
+	}
+	4;
+}
+
+§testReprint statement:
+do {
+	1;
+} while (true);
+
+§testReprint statement:
+do 1;
+while (true);
+
+§testReprint statement:
+for (i = 0; i < 10; i++) {
+	1;
+}
+
+§testReprint statement:
+for (i = 0; i < 10; i++) 1;
+
+§testReprint statement:
+for (i = 0; i < 10; ) 1;
+
+§testReprint statement:
+for (i = 0; ; i++) 1;
+
+§testReprint statement:
+for (i = 0; ; ) 1;
+
+§testReprint statement:
+for ( ; ; ) 1;
+
+§testReprint statement:
+for ( ; ; i++) 1;
+
+§testReprint statement:
+for ( ; i < 10; ) 1;
+
+§testReprint statement:
+break;
+
+§testReprint statement:
+continue;
+
+§testReprint statement:
+return;
+
+§testReprint statement:
+return 4 + 4;
+
+§testReprint statement:
+discard;
+
+§testReprint statement:
+demote;
+
+§testReprint statement:
+{
+	return;
+}
+
+§testReprint statement:
+{
+	1;
+	switch (a) {
+		case 1:
+			1;
+			break;
+	}
+}
+
+§testReprint statement:
+switch (a) {
+	case 1:
+		1;
+		break;
+}
+
+§testReprint statement:
+switch (a) {
+	case 1:
+	case 2:
+		break;
+	default:
+		1;
+		break;
+}
+
+§testReprint statement:
+switch (a) {
+	case 1:
+		switch (b) {
+			case 1:
+				1;
+				break;
+		}
+	default:
+}
+
+§testReprint statement:
+switch (a) {
+}
+
+§testReprint statement:
+switch (a) {
+	case 2:
+}
+
+§testReprint statement:
+{
+	{
+		1;
+	}
+	2;
+}
+
+§testReprint translationUnit:
+void foo() {
+	1;
+}
+
+§testReprint translationUnit:
+void foo() {
+}
+
+§testReprint translationUnit:
+void foo(int foo) {
+}
+
+§testReprint translationUnit:
+const in float p;
+
+§testReprint translationUnit:
+void functionDef(const in float param) {
+	functionCall();
+}
+
+§testReprint translationUnit:
+varying vec2 varyVec;
+
+§testReprint translationUnit:
+layout(location = 0) out vec3 layoutOne;
+
+§testReprint translationUnit:
+layout(location = 0) out vec3 layoutOne;
+layout(location = 1) out vec3 layoutTwo;
+
+§testReprint translationUnit:
+uniform sampler2D Sampler;
+
+§testReprint translationUnit:
+struct Struct {
+	vec4 vector;
+	float number;
+};
+
+§testReprint translationUnit:
+Struct arrayName[arraySize];
+
+§testReprint translationUnit:
+buffer BufferName {
+	float a;
+	int b;
+} Name;
+
+§testReprint translationUnit:
+precise S {
+	float a;
+	int b;
+};
+
+§testReprint translationUnit:
+struct S {
+	float a;
+	int b;
+};
+
+§testReprint translationUnit:
+struct {
+	float a;
+	int b;
+} e = { 1.2, 2 };
+
+§testReprint translationUnit:
+float b[] = { 3.4, 4.2, 5.0, 5.2, 1.1 };
+
+§testReprint translationUnit:
+in myTexCoord;
+
+§testReprint translationUnit:
+const vec2 longList[75] = vec2[75](vec2(1, 2), vec2(1, 2), vec2(1, 2), vec2(1, 2), vec2(1, 2), vec2(1, 2), vec2(1, 2), vec2(1, 2));
+
+§testReprint translationUnit:
+uniform sampler2D DiffuseSampler;
+uniform sampler2D DiffuseDepthSampler;
+
+§testReprint translationUnit:
+int layerIndices[NUM_LAYERS];
+
+§testReprint statement:
+la[0] = A(texture2D(DS, t), texture2D(TDS, t).r, 0.0);
+
+§testReprint statement:
+for (int ii = 0; ii < NUM_LAYERS; ++ii) {
+	for (int jj = 0; jj < NUM_LAYERS - ii - 1; ++jj) {
+		if (layers[layerIndices[jj]].depth < layers[layerIndices[jj + 1]].depth) {
+			int temp = layerIndices[jj];
+			layerIndices[jj] = layerIndices[jj + 1];
+			layerIndices[jj + 1] = temp;
+		}
+	}
+}
+
+§testReprint statement:
+float diffuseDepth = texture2D(DiffuseDepthSampler, texCoord).r;
+
+§testReprint statement:
+float op = 0.0;
+
+§testReprint statement:
+if (ColorTmp.a > 0.0) {
+	outColor = vec4(mix(mix(ColorTmp.rgb, outColor.rgb, outColor.a), ColorTmp.rgb, ColorTmp.a), 1.0 - (1.0 - ColorTmp.a) * (1.0 - outColor.a));
+}
+
+§testReprint translationUnit:
+layout(location = 0) attribute vec4 b, c;
+
+§testReprint translationUnit:
+void main() {
+	foo = a[3].f;
+	foo = b.length();
+}
+
+§testReprint statement:
+{
+	float16_t baz = 4;
+	int f;
+	uint f;
+	uint16_t f;
+	float fds;
+}
+
+§testReprint translationUnit:
+float16_t baz = 4;
+int f;
+uint f;
+uint16_t f;
+float fds;
+
+§testReprint translationUnit:
+uniform bool uniformDecl = true;
+const bool constDecl = true;
+
+§testReprint translationUnit:
+layout(std140, binding = 0) uniform ubo_DynamicState {
+	mat4 ModelViewMat;
+	mat4 ProjMat;
+};
+
+§testReprint translationUnit:
+int i = int(u_f) + int(b);
+ivec2 i2 = ivec2(u_f2) + ivec2(b2);
+ivec3 i3 = ivec3(u_f3) + ivec3(b3);
+ivec4 i4 = ivec4(u_f4) + ivec4(b4);
+
+§testReprint translationUnit:
+uniform float d;
+uniform vec4 bigColor, smallColor;
+uniform vec4 otherColor;
+
+§testReprint translationUnit:
+layout(binding = 0) buffer Buffers {
+	vec4 f4;
+	ivec4 i4;
+	uvec4 u4;
+	dvec4 d4;
+	int r;
+} data[4];
+
+§testReprint translationUnit:
+layout(std140) uniform ColorBlock { vec4 color1; } uC;
+
+§testReprint translationUnit:
+mediump vec4 calculateColor();
+
+§testReprint translationUnit:
+in gl_PerVertex { float gl_CullDistance[3]; } gl_in[gl_MaxPatchVertices];
+out gl_PerVertex { float gl_CullDistance[3]; } gl_out[4];
+
+§testReprint translationUnit:
+in fromVertex { in vec3 color; } fromV[];
+in vec4 nonBlockUnsized[];
+out toFragment { out vec3 color; } toF;
+
+§testReprint translationUnit:
+out outbname {
+	int a;
+	out vec4 v;
+	highp sampler2D s;
+} outbinst;
+out outbname2 {
+	layout(location = 12) int aAnon;
+	layout(location = 13) vec4 vAnon;
+};
+
+§testReprint translationUnit:
+smooth out smo { int i; } smon;
+flat out fmo { int i; } fmon;
+centroid out cmo { int i; } cmon;
+invariant out imo { int i; } imon;
+
+§testReprint translationUnit:
+in vec2 inf, ing;
+uniform ivec2 offsets[4];
+uniform sampler2D sArray[4];
+uniform int sIndex;
+layout(binding = 0) uniform atomic_uint auArray[2];
+uniform ubName { int i; } ubInst[4];
+buffer bbName { int i; } bbInst[4];
+highp uniform writeonly image2D iArray[5];
+const ivec2 constOffsets[4] = ivec2[4](ivec2(0.1), ivec2(0.2), ivec2(0.3), ivec2(0.4));
+precision highp uimageBuffer;
+
+§testReprint translationUnit:
+int foo(int a, const int b, in int c, const in int d, out int e, inout int f) {
+	return a + b + c + d + e + f;
+}
+
+§testReprint translationUnit:
+layout(location = 0) in Primitive { vec2 texCoord; } IN;
+
+§testReprint translationUnit:
+struct S { int[3] a[2], b[5]; };
+S s;
+int[5] c[4], d[8];
+int[9] e[], f[];
+int e[11][9];
+int f[13][9];
+int[14] g[], h[];
+int[14][15][6] foo(int[6] p[14][15]) {
+	return p;
+}
+void main() {
+	g[3];
+	h[2];
+}
+float[4][3][2] bar() {
+	float[3][2] a[4];
+	return a;
+}
+in inbname { float[7] f[8][9]; } inbinst[4][5][6];
+
+§testReprint translationUnit:
+precision mediump float;
+
+§testReprint translationUnit:
+float f1 = 1.0;
+float f2 = 2.;
+float f3 = 3e0;
+float f4 = 40e-1;
+float f5 = 05.;
+float f6 = 006.;
+float f7 = .7e1;
+float f8 = 08e0;
+float f9 = .9e+1;
+float f10 = 10.0;
+float f11 = .011e+3;
+float f12 = .0012e4;
+float f543 = 000000543.;
+float f6789 = 00006789.;
+float f88 = 0000088.;
+float g1 = 5.3876e4;
+float g2 = 4000000000e-11;
+float g3 = 1e+5;
+float g4 = 7.321E-3;
+float g5 = 3.2E+4;
+float g6 = 0.5e-5;
+float g7 = 0.45;
+float g8 = 6.e10;
+double gf1 = 1.0lf;
+double gf2 = 2.Lf;
+double gf3 = .3e1lF;
+double gf4 = .4e1LF;
+float gf5 = 5.f;
+float gf6 = 6.F;
+int h0 = 0x0;
+int h00 = 0x00;
+int h000 = 0x000;
+int h1 = 0x1;
+int h2 = 0x00000002;
+int h300 = 0x000300;
+int hABCDEF = 0xAbCdEF;
+int hFFFFFFFF = 0xFFFFFFFF;
+int h12345678 = 0xBC614E;
+int hToBeOrNotToBe = 0x2b | ~0x2B;
+uint uh0 = 0x0u;
+uint uhg = (0xcu);
+uint uh000 = 0x000u;
+uint uh1 = 0x1u;
+uint uh2 = 0x00000002u;
+uint uh300 = 0x000300u;
+uint uhABCDEF = 0xAbCdEFu;
+uint uhFFFFFFFF = 0xFFFFFFFFu;
+uint uh12345678 = 0xBC614Eu;
+uint uhToBeOrNotToBe = 0x2bu | ~0x2BU;
+layout(location = 0x7u) out vec4 c7;
+uint g2 = 4294967295u;
+===
+float f1 = 1.0;
+float f2 = 2.0;
+float f3 = 3.0;
+float f4 = 4.0;
+float f5 = 5.0;
+float f6 = 6.0;
+float f7 = 7.0;
+float f8 = 8.0;
+float f9 = 9.0;
+float f10 = 10.0;
+float f11 = 11.0;
+float f12 = 12.0;
+float f543 = 543.0;
+float f6789 = 6789.0;
+float f88 = 88.0;
+float g1 = 53876.0;
+float g2 = 0.04;
+float g3 = 100000.0;
+float g4 = 0.007321;
+float g5 = 32000.0;
+float g6 = 5.0E-6;
+float g7 = 0.45;
+float g8 = 6.0E10;
+double gf1 = 1.0lf;
+double gf2 = 2.0lf;
+double gf3 = 3.0lf;
+double gf4 = 4.0lf;
+float gf5 = 5.0;
+float gf6 = 6.0;
+int h0 = 0x0;
+int h00 = 0x0;
+int h000 = 0x0;
+int h1 = 0x1;
+int h2 = 0x2;
+int h300 = 0x300;
+int hABCDEF = 0xabcdef;
+int hFFFFFFFF = 0xffffffff;
+int h12345678 = 0xbc614e;
+int hToBeOrNotToBe = 0x2b | ~0x2b;
+uint uh0 = 0x0u;
+uint uhg = (0xcu);
+uint uh000 = 0x0u;
+uint uh1 = 0x1u;
+uint uh2 = 0x2u;
+uint uh300 = 0x300u;
+uint uhABCDEF = 0xabcdefu;
+uint uhFFFFFFFF = 0xffffffffu;
+uint uh12345678 = 0xbc614eu;
+uint uhToBeOrNotToBe = 0x2bu | ~0x2bu;
+layout(location = 0x7u) out vec4 c7;
+uint g2 = 4294967295u;
+
+§testReprint translationUnit:
+int i4[4];
+int j, k5[5];
+int m6[6], m7[7];
+int n8[8], p;
+int ii4[4] = int[](1, 2, 3, 4);
+int ij, ik5[5] = int[](5, 6, 7, 8, 9);
+int im2[2] = int[](10, 11), im3[3] = int[](12, 13, 14);
+int in8[4] = int[](21, 22, 23, 24), ip;
+void vi4[4] = int[](1, 2, 3, 4);
+void vj, vk5[5] = int[](5, 6, 7, 8, 9);
+void vm2[2] = int[](10, 11), vm3[3] = int[](12, 13, 14);
+void vn8[4] = int[](21, 22, 23, 24), vp;
+const int cii4[4] = int[](1, 2, 3, 4);
+const int cij, cik5[5] = int[](5, 6, 7, 8, 9);
+const int cim2[2] = int[](10, 11), cim3[3] = int[](12, 13, 14);
+const int cin8[4] = int[](21, 22, 23, 24), cip;
+uniform int uii4[4] = int[](1, 2, 3, 4);
+uniform int uij, uik5[5] = int[](5, 6, 7, 8, 9);
+uniform int uim2[2] = int[](10, 11), uim3[3] = int[](12, 13, 14);
+uniform int uin8[4] = int[](21, 22, 23, 24), uip;
+int gl_vi4[4] = int[](1, 2, 3, 4);
+int gl_vj, gl_vk5[5] = int[](5, 6, 7, 8, 9);
+int gl_vm2[2] = int[](10, 11), gl_vm3[3] = int[](12, 13, 14);
+int gl_vn8[4] = int[](21, 22, 23, 24), gl_vp;
+void main() {
+	while (bool cond = b < c);
+	while (int icond = b);
+	while (bool gl_cond = b < c);
+}
+int foob__vi4[4] = int[](1, 2, 3, 4);
+int foob__vj, foob__vk5[5] = int[](5, 6, 7, 8, 9);
+int __foobvm2[2] = int[](10, 11), __foobvm3[3] = int[](12, 13, 14);
+int foob__vn8[4] = int[](21, 22, 23, 24), foob__vp;
+
+§testReprint translationUnit:
+noperspective in vec4 color;
+
+§testReprint translationUnit:
+layout(std140, set = 0, binding = 0) uniform ub { bool bi[2][3]; };
+layout(std430, set = 0, binding = 1) buffer ssbo { bool bo[2][3]; };
+
+§testReprint translationUnit:
+patch out vec4 patchOut;
+
+§testReprint statement:
+data[invocation].i8.x = subgroupClusteredAdd(data[0].i8.x, 1);
+
+§testReprint translationUnit:
+out gl_PerVertex { int gl_ViewportMask[2]; } gl_out[4];
+
+§testReprint translationUnit:
+uniform vec4 a;
+uniform vec2 b = vec2(0, 0);
+layout(location = 0) uniform vec2 c;
+uniform vec4 d[10];
+uniform struct e {
+	vec2 x;
+	float y;
+	uint z;
+} structUniform;
+
+§testReprint translationUnit:
+uniform samplerShadow sShadow;
+uniform texture3D t3d5[5];
+writeonly uniform image2D i2d;
+
+§testReprint translationUnit:
+void badConst() {
+	sampler2D(t2d);
+	sampler2D(s, s);
+	sampler2D(i, i);
+	sampler2D(t2d, i);
+	sampler2D(t2d, t2d);
+	sampler2D(t2d, sA);
+	sampler3D[4](t3d5, sA[2]);
+	sampler2D(i2d, s);
+	sampler2D(t3d[1], s);
+	sampler2D(t2d, sShadow);
+	sampler2DShadow(t2d, s);
+}
+sampler2D s2D = sampler2D(t2d, s);
+sampler3D s3d[4] = sampler3D[4](t3d, sA[2]);
+out vec4 color;
+void main() {
+	color = texture(s2D, vec2(0.5));
+	color += texture(s3d[i], vec3(0.5));
+}
+layout(push_constant) buffer pcb { int a; } pcbInst;
+layout(push_constant) uniform float pcfloat;
+layout(std430, push_constant) uniform pcb1 { int a; } pcb1inst;
+layout(push_constant) uniform pcb2 { int a; };
+layout(input_attachment_index = 2) uniform subpassInput subD;
+layout(input_attachment_index = 3) uniform texture2D subDbad1;
+layout(input_attachment_index = 4) writeonly uniform image2D subDbad2;
+uniform subpassInput subDbad3;
+layout(input_attachment_index = 2) uniform subpassInputMS subDMS;
+
+§testReprint translationUnit:
+precision highp float;
+uniform int c, d;
+in highp float x;
+
+§testReprint translationUnit:
+readonly coherent uniform layout(set = 0, binding = 0) image2D image1;
+readonly uniform layout(set = 0, binding = 2) image2D image2;
+writeonly coherent uniform layout(set = 0, binding = 1, rgba32f) image2D image3;
+writeonly uniform layout(set = 0, binding = 3, rgba16f) image2D image4;
+flat in layout(location = 0) ivec2 in_coords;
+out layout(location = 0) vec4 out_color;
+vec4 image_load(readonly coherent image2D image, ivec2 coords) {
+	return imageLoad(image, in_coords);
+}
+layout(location = 0) flat in int Index;
+layout(location = 0) out vec4 FragColor;
+
+§testReprint translationUnit:
+const vec2 cv2 = vec2(10.0, 20.0);
+const mat2x4 m24 = mat2x4(3.0);
+const mat4x2 m42 = mat4x2(1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0);
+
+§testReprint translationUnit:
+layout(binding = 2, std140) uniform UBO { MyStruct c; } uBuf;
+
+§testReprint translationUnit:
+out B1 {
+	precise T s;
+	float x;
+} partial_precise_block;
+precise out B2 {
+	T s;
+	float x;
+} all_precise_block;
+
+§testReprint translationUnit:
+buffer B {
+	int8_t i8_from_i16;
+	int16_t i16_from_i8;
+	uint8_t u8_from_u16;
+	uint16_t u16_from_u8;
+	float16_t f16_from_i8;
+};
+
+§testReprint translationUnit:
+struct sA { int x, y; };
+struct sB { sA a; };
+layout(binding = 0, set = 0) uniform ubo { sB b; };
+struct sC { sA state; } c = { b.a };
+
+§testReprint translationUnit:
+layout(location = 0) uniform struct {
+	float r;
+	float g;
+	float b;
+} parts[2] = { { 1.0, 1.0, 1.0 }, { 0.0, 1.0, 0.0 } };
+
+§testReprint translationUnit:
+layout(location = 5, xfb_buffer = 1, xfb_offset = 8) out struct S2 {
+	float y1_out;
+	vec4 y2_out;
+} s2;
+
+§testReprint translationUnit:
+int foo2(float a, vec3 b, out int r) {
+	r = int(3.0 * a);
+	return int(5.0 * b.y);
+}
+
+§testReprint translationUnit:
+void foo(sampler2D t) {
+	texture(t, vec2(0.5));
+}
+
+§testReprint translationUnit:
+int f(
+	int8_t i8,
+	uint8_t u8,
+	int16_t i16,
+	uint16_t u16,
+	int64_t i64,
+	uint64_t u64,
+	float16_t f16
+) {
+	return 0;
+}
+
+§testReprint statement:
+{
+	while (int a = 4 > 4);
+	while (4 > 4);
+}
+
+§testReprint statement:
+while (int a = 4 > 4);
+
+§testReprint statement:
+while (1);
+
+§testReprint statement:
+do;
+while (1);
+
+§testReprint translationUnit:
+layout(push_constant) uniform;
+
+§testReprint translationUnit:
+layout(push_constant);
+
+§testReprint translationUnit:
+layout(points) in;
+layout(triangle_strip, max_vertices = 4) out;
+
+§testReprint translationUnit:
+void foo(int p[14]) {
+}
+
+§testReprint statement:
+for (int a = 0; a < b; a++);
+
+§testReprint statement:
+for (int a = 0; a < b; );
+
+§testReprint statement:
+for (int a = 0; int x = a < b; a++);
+
+§testReprint statement:
+for ( ; int x = a < b; a++);
+
+§testReprint statement:
+for (int a = b; ; a++);
+
+§testReprint statement:
+for (int a = b; ; );
+
+§testReprint translationUnit:
+int foo(int a, int b, int c, int d) {
+}
+int foo(int a, int b, int c, int d, int e, int f) {
+}
+int foo(
+	int a,
+	int b,
+	int c,
+	int d,
+	int c,
+	int d,
+	int e
+) {
+}
+int foo(
+	int a,
+	int b,
+	int c,
+	int d,
+	int c,
+	int d,
+	int e,
+	int c,
+	int d,
+	int c,
+	int d,
+	int e,
+	int e
+) {
+}
+
+§

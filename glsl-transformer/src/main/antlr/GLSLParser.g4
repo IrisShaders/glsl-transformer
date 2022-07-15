@@ -37,7 +37,7 @@ translationUnit: versionStatement? externalDeclaration* EOF;
 versionStatement:
 	NR VERSION version = NR_INTCONSTANT profile = (
 		NR_CORE
-		| NR_COMPATABILITY
+		| NR_COMPATIBILITY
 		| NR_ES
 	)? NR_EOL;
 
@@ -52,18 +52,18 @@ externalDeclaration:
 emptyDeclaration: SEMICOLON;
 
 pragmaStatement:
-	NR PRAGMA NR_STDGL? (
+	NR PRAGMA stdGL = NR_STDGL? (
 		type = (PRAGMA_DEBUG | PRAGMA_OPTIMIZE) NR_LPAREN state = (
 			NR_ON
 			| NR_OFF
-		) RPAREN
+		) NR_RPAREN
 		| type = PRAGMA_INVARIANT NR_LPAREN state = NR_ALL NR_RPAREN
 		| type = NR_IDENTIFIER
 	) NR_EOL;
 
 extensionStatement:
 	NR EXTENSION extensionName = NR_IDENTIFIER (
-		NR_COLON extensionState = (
+		NR_COLON extensionBehavior = (
 			NR_REQUIRE
 			| NR_ENABLE
 			| NR_WARN
@@ -76,23 +76,9 @@ layoutDefaults:
 
 functionDefinition: functionPrototype compoundStatement;
 
-variableIdentifier: IDENTIFIER;
-
-functionCall: functionIdentifier callParameterList;
-
-methodCall: variableIdentifier callParameterList;
-
-//assignment expressions
-callParameterList:
-	LPAREN ( | VOID | expression (COMMA expression)*) RPAREN;
-
-//Note: diverges from the spec by not allowing a prefixExpression as an identifier
-//array-type function identfiers are handled by typeSpecifier
-functionIdentifier: typeSpecifier | variableIdentifier;
-
 //Note: diverges from the spec by explicity adding a method call instead of handling it through postfixExpression in functionIdentifier
 expression:
-	variableIdentifier # referenceExpression
+	IDENTIFIER # referenceExpression
 	| (
 		INT16CONSTANT
 		| UINT16CONSTANT
@@ -107,29 +93,34 @@ expression:
 	)																													# literalExpression
 	| LPAREN value = expression RPAREN												# groupingExpression
 	| left = expression LBRACKET right = expression RBRACKET	# arrayAccessExpression
-	| operand = expression DOT methodCall											# methodCallExpression
-	| functionCall																						# functionCallExpression
-	| operand = expression DOT IDENTIFIER											# memberAccessExpression
-	| operand = expression op = (INC_OP | DEC_OP)							# postfixExpression
+	| operand = expression DOT_LENGTH LPAREN RPAREN						# lengthAccessExpression
+	//Note: diverges from the spec by not allowing a prefixExpression as an identifier
+	//array-type function identfiers are handled by typeSpecifier
+	| (typeSpecifier | IDENTIFIER) LPAREN (
+		| VOID
+		| parameters += expression (COMMA parameters += expression)*
+	) RPAREN																				# functionCallExpression
+	| operand = expression DOT member = IDENTIFIER	# memberAccessExpression
+	| operand = expression op = (INC_OP | DEC_OP)		# postfixExpression
 	| <assoc = right> op = (
 		INC_OP
 		| DEC_OP
 		| PLUS_OP
 		| MINUS_OP
-		| NOT_OP
-		| BNEG_OP
+		| BOOL_NOT_OP
+		| BIT_NEG_OP
 	) operand = expression																											# prefixExpression
 	| left = expression op = (TIMES_OP | DIV_OP | MOD_OP) right = expression		# multiplicativeExpression
 	| left = expression op = (PLUS_OP | MINUS_OP) right = expression						# additiveExpression
 	| left = expression op = (LEFT_OP | RIGHT_OP) right = expression						# shiftExpression
 	| left = expression op = (LT_OP | GT_OP | LE_OP | GE_OP) right = expression	# relationalExpression
 	| left = expression op = (EQ_OP | NE_OP) right = expression									# equalityExpression
-	| left = expression op = BAND_OP right = expression													# bitwiseAndExpression
-	| left = expression op = BXOR_OP right = expression													# bitwiseExclusiveOrExpression
-	| left = expression op = BOR_OP right = expression													# bitwiseInclusiveOrExpression
-	| left = expression op = AND_OP right = expression													# logicalAndExpression
-	| left = expression op = XOR_OP right = expression													# logicalExclusiveOrExpression
-	| left = expression op = OR_OP right = expression														# logicalInclusiveOrExpression
+	| left = expression op = BIT_AND_OP right = expression											# bitwiseAndExpression
+	| left = expression op = BIT_XOR_OP right = expression											# bitwiseExclusiveOrExpression
+	| left = expression op = BIT_OR_OP right = expression												# bitwiseInclusiveOrExpression
+	| left = expression op = BOOL_AND_OP right = expression											# logicalAndExpression
+	| left = expression op = BOOL_XOR_OP right = expression											# logicalExclusiveOrExpression
+	| left = expression op = BOOL_OR_OP right = expression											# logicalInclusiveOrExpression
 	| <assoc = right> condition = expression QUERY_OP trueAlternative = expression COLON falseAlternative =
 		expression # conditionalExpression
 	| <assoc = right> left = expression op = (
@@ -148,8 +139,12 @@ expression:
 	| left = expression COMMA right = expression	# sequenceExpression;
 
 declaration:
-	functionPrototype SEMICOLON															# functionDeclaration
-	| initDeclaratorList SEMICOLON													# typeAndInitDeclaration
+	functionPrototype SEMICOLON # functionDeclaration
+	| fullySpecifiedType (
+		declarationMembers += declarationMember (
+			COMMA declarationMembers += declarationMember
+		)*
+	)? SEMICOLON																						# typeAndInitDeclaration
 	| PRECISION precisionQualifier typeSpecifier SEMICOLON	# precisionDeclaration
 	| typeQualifier blockName = IDENTIFIER structBody (
 		variableName = IDENTIFIER arraySpecifier?
@@ -160,20 +155,16 @@ declaration:
 
 //allows for EXT_subgroup_uniform_control_flow
 functionPrototype:
-	attribute? functionHeader LPAREN functionParameterList RPAREN attribute?;
+	attribute? fullySpecifiedType IDENTIFIER LPAREN functionParameterList RPAREN attribute?;
 
 functionParameterList: (
-		parameterDeclaration (COMMA parameterDeclaration)*
+		parameters += parameterDeclaration (
+			COMMA parameters += parameterDeclaration
+		)*
 	)?;
 
-functionHeader: fullySpecifiedType IDENTIFIER;
-
-parameterDeclarator:
-	typeSpecifier parameterName = IDENTIFIER arraySpecifier?;
-
 parameterDeclaration:
-	typeQualifier? parameterDeclarator
-	| fullySpecifiedType;
+	fullySpecifiedType (parameterName = IDENTIFIER arraySpecifier?)?;
 
 //part of GL_EXT_control_flow_attributes
 attribute:
@@ -181,15 +172,9 @@ attribute:
 		COMMA attributes += singleAttribute
 	)* RBRACKET RBRACKET;
 
-//constant expression
 singleAttribute:
-	(IDENTIFIER COLON COLON)? IDENTIFIER (LPAREN expression RPAREN)?;
-
-initDeclaratorList:
-	fullySpecifiedType (
-		declarationMembers += declarationMember (
-			COMMA declarationMembers += declarationMember
-		)*
+	(prefix = IDENTIFIER COLON COLON)? name = IDENTIFIER (
+		LPAREN content = expression RPAREN
 	)?;
 
 declarationMember: IDENTIFIER arraySpecifier? (ASSIGN_OP initializer)?;
@@ -215,7 +200,10 @@ storageQualifier:
 	| COHERENT
 	| READONLY
 	| WRITEONLY
-	| SUBROUTINE (LPAREN typeNameList RPAREN)?
+	| SUBROUTINE (
+		//TYPE_NAME instead of IDENTIFIER in the spec
+		LPAREN typeNames += IDENTIFIER (COMMA typeNames += IDENTIFIER)* RPAREN
+	)?
 	| DEVICECOHERENT
 	| QUEUEFAMILYCOHERENT
 	| WORKGROUPCOHERENT
@@ -250,175 +238,171 @@ typeQualifier: (
 	)+;
 
 //TYPE_NAME instead of IDENTIFIER in the spec
-typeNameList: names += IDENTIFIER (COMMA names += IDENTIFIER)*;
-
-typeSpecifier: typeSpecifierNonarray arraySpecifier?;
+typeSpecifier: (
+		builtinTypeSpecifierFixed
+		| builtinTypeSpecifierParseable
+		| structSpecifier
+		| IDENTIFIER
+	) arraySpecifier?;
 
 //needs duplicated rule parts like this or it becomes mutually left-recursive
 //constant expressions
 arraySpecifier: arraySpecifierSegment+;
 arraySpecifierSegment: (LBRACKET expression? RBRACKET);
 
-//TYPE_NAME instead of IDENTIFIER in the spec
-typeSpecifierNonarray:
-	builtinTypeSpecifierFixed				# builtinType
-	| builtinTypeSpecifierParseable	# builtinType
-	| structSpecifier								# structSpecifierType
-	| IDENTIFIER										# referencedType;
-
 builtinTypeSpecifierParseable:
-	BOOL				# booleanType
-	| BVEC2			# booleanVectorType
-	| BVEC3			# booleanVectorType
-	| BVEC4			# booleanVectorType
-	| FLOAT16		# floatType
-	| F16VEC2		# floatVectorType
-	| F16VEC3		# floatVectorType
-	| F16VEC4		# floatVectorType
-	| F16MAT2X2	# floatMatrixType
-	| F16MAT2X3	# floatMatrixType
-	| F16MAT2X4	# floatMatrixType
-	| F16MAT3X2	# floatMatrixType
-	| F16MAT3X3	# floatMatrixType
-	| F16MAT3X4	# floatMatrixType
-	| F16MAT4X2	# floatMatrixType
-	| F16MAT4X3	# floatMatrixType
-	| F16MAT4X4	# floatMatrixType
-	| FLOAT32		# floatType
-	| F32VEC2		# floatVectorType
-	| F32VEC3		# floatVectorType
-	| F32VEC4		# floatVectorType
-	| F32MAT2X2	# floatMatrixType
-	| F32MAT2X3	# floatMatrixType
-	| F32MAT2X4	# floatMatrixType
-	| F32MAT3X2	# floatMatrixType
-	| F32MAT3X3	# floatMatrixType
-	| F32MAT3X4	# floatMatrixType
-	| F32MAT4X2	# floatMatrixType
-	| F32MAT4X3	# floatMatrixType
-	| F32MAT4X4	# floatMatrixType
-	| FLOAT64		# floatType
-	| F64VEC2		# floatVectorType
-	| F64VEC3		# floatVectorType
-	| F64VEC4		# floatVectorType
-	| F64MAT2X2	# floatMatrixType
-	| F64MAT2X3	# floatMatrixType
-	| F64MAT2X4	# floatMatrixType
-	| F64MAT3X2	# floatMatrixType
-	| F64MAT3X3	# floatMatrixType
-	| F64MAT3X4	# floatMatrixType
-	| F64MAT4X2	# floatMatrixType
-	| F64MAT4X3	# floatMatrixType
-	| F64MAT4X4	# floatMatrixType
-	| INT8			# integerType
-	| I8VEC2		# integerVectorType
-	| I8VEC3		# integerVectorType
-	| I8VEC4		# integerVectorType
-	| UINT8			# integerType
-	| UI8VEC2		# integerVectorType
-	| UI8VEC3		# integerVectorType
-	| UI8VEC4		# integerVectorType
-	| INT16			# integerType
-	| I16VEC2		# integerVectorType
-	| I16VEC3		# integerVectorType
-	| I16VEC4		# integerVectorType
-	| UINT16		# integerType
-	| UI16VEC2	# integerVectorType
-	| UI16VEC3	# integerVectorType
-	| UI16VEC4	# integerVectorType
-	| INT32			# integerType
-	| I32VEC2		# integerVectorType
-	| I32VEC3		# integerVectorType
-	| I32VEC4		# integerVectorType
-	| UINT32		# integerType
-	| UI32VEC2	# integerVectorType
-	| UI32VEC3	# integerVectorType
-	| UI32VEC4	# integerVectorType
-	| INT64			# integerType
-	| I64VEC2		# integerVectorType
-	| I64VEC3		# integerVectorType
-	| I64VEC4		# integerVectorType
-	| UINT64		# integerType
-	| UI64VEC2	# integerVectorType
-	| UI64VEC3	# integerVectorType
-	| UI64VEC4	# integerVectorType;
+	BOOL
+	| BVEC2
+	| BVEC3
+	| BVEC4
+	| FLOAT16
+	| F16VEC2
+	| F16VEC3
+	| F16VEC4
+	| F16MAT2X2
+	| F16MAT2X3
+	| F16MAT2X4
+	| F16MAT3X2
+	| F16MAT3X3
+	| F16MAT3X4
+	| F16MAT4X2
+	| F16MAT4X3
+	| F16MAT4X4
+	| FLOAT32
+	| F32VEC2
+	| F32VEC3
+	| F32VEC4
+	| F32MAT2X2
+	| F32MAT2X3
+	| F32MAT2X4
+	| F32MAT3X2
+	| F32MAT3X3
+	| F32MAT3X4
+	| F32MAT4X2
+	| F32MAT4X3
+	| F32MAT4X4
+	| FLOAT64
+	| F64VEC2
+	| F64VEC3
+	| F64VEC4
+	| F64MAT2X2
+	| F64MAT2X3
+	| F64MAT2X4
+	| F64MAT3X2
+	| F64MAT3X3
+	| F64MAT3X4
+	| F64MAT4X2
+	| F64MAT4X3
+	| F64MAT4X4
+	| INT8
+	| I8VEC2
+	| I8VEC3
+	| I8VEC4
+	| UINT8
+	| UI8VEC2
+	| UI8VEC3
+	| UI8VEC4
+	| INT16
+	| I16VEC2
+	| I16VEC3
+	| I16VEC4
+	| UINT16
+	| UI16VEC2
+	| UI16VEC3
+	| UI16VEC4
+	| INT32
+	| I32VEC2
+	| I32VEC3
+	| I32VEC4
+	| UINT32
+	| UI32VEC2
+	| UI32VEC3
+	| UI32VEC4
+	| INT64
+	| I64VEC2
+	| I64VEC3
+	| I64VEC4
+	| UINT64
+	| UI64VEC2
+	| UI64VEC3
+	| UI64VEC4;
 
 builtinTypeSpecifierFixed:
-	VOID											# voidType
-	| ATOMIC_UINT							# atomicUnitType
-	| SAMPLER2D								# samplerType
-	| SAMPLER3D								# samplerType
-	| SAMPLERCUBE							# samplerType
-	| SAMPLER2DSHADOW					# samplerType
-	| SAMPLERCUBESHADOW				# samplerType
-	| SAMPLER2DARRAY					# samplerType
-	| SAMPLER2DARRAYSHADOW		# samplerType
-	| SAMPLERCUBEARRAY				# samplerType
-	| SAMPLERCUBEARRAYSHADOW	# samplerType
-	| ISAMPLER2D							# samplerType
-	| ISAMPLER3D							# samplerType
-	| ISAMPLERCUBE						# samplerType
-	| ISAMPLER2DARRAY					# samplerType
-	| ISAMPLERCUBEARRAY				# samplerType
-	| USAMPLER2D							# samplerType
-	| USAMPLER3D							# samplerType
-	| USAMPLERCUBE						# samplerType
-	| USAMPLER2DARRAY					# samplerType
-	| USAMPLERCUBEARRAY				# samplerType
-	| SAMPLER1D								# samplerType
-	| SAMPLER1DSHADOW					# samplerType
-	| SAMPLER1DARRAY					# samplerType
-	| SAMPLER1DARRAYSHADOW		# samplerType
-	| ISAMPLER1D							# samplerType
-	| ISAMPLER1DARRAY					# samplerType
-	| USAMPLER1D							# samplerType
-	| USAMPLER1DARRAY					# samplerType
-	| SAMPLER2DRECT						# samplerType
-	| SAMPLER2DRECTSHADOW			# samplerType
-	| ISAMPLER2DRECT					# samplerType
-	| USAMPLER2DRECT					# samplerType
-	| SAMPLERBUFFER						# samplerType
-	| ISAMPLERBUFFER					# samplerType
-	| USAMPLERBUFFER					# samplerType
-	| SAMPLER2DMS							# samplerType
-	| ISAMPLER2DMS						# samplerType
-	| USAMPLER2DMS						# samplerType
-	| SAMPLER2DMSARRAY				# samplerType
-	| ISAMPLER2DMSARRAY				# samplerType
-	| USAMPLER2DMSARRAY				# samplerType
-	| IMAGE2D									# imageType
-	| IIMAGE2D								# imageType
-	| UIMAGE2D								# imageType
-	| IMAGE3D									# imageType
-	| IIMAGE3D								# imageType
-	| UIMAGE3D								# imageType
-	| IMAGECUBE								# imageType
-	| IIMAGECUBE							# imageType
-	| UIMAGECUBE							# imageType
-	| IMAGEBUFFER							# imageType
-	| IIMAGEBUFFER						# imageType
-	| UIMAGEBUFFER						# imageType
-	| IMAGE1D									# imageType
-	| IIMAGE1D								# imageType
-	| UIMAGE1D								# imageType
-	| IMAGE1DARRAY						# imageType
-	| IIMAGE1DARRAY						# imageType
-	| UIMAGE1DARRAY						# imageType
-	| IMAGE2DRECT							# imageType
-	| IIMAGE2DRECT						# imageType
-	| UIMAGE2DRECT						# imageType
-	| IMAGE2DARRAY						# imageType
-	| IIMAGE2DARRAY						# imageType
-	| UIMAGE2DARRAY						# imageType
-	| IMAGECUBEARRAY					# imageType
-	| IIMAGECUBEARRAY					# imageType
-	| UIMAGECUBEARRAY					# imageType
-	| IMAGE2DMS								# imageType
-	| IIMAGE2DMS							# imageType
-	| UIMAGE2DMS							# imageType
-	| IMAGE2DMSARRAY					# imageType
-	| IIMAGE2DMSARRAY					# imageType
-	| UIMAGE2DMSARRAY					# imageType;
+	VOID
+	| ATOMIC_UINT
+	| SAMPLER2D
+	| SAMPLER3D
+	| SAMPLERCUBE
+	| SAMPLER2DSHADOW
+	| SAMPLERCUBESHADOW
+	| SAMPLER2DARRAY
+	| SAMPLER2DARRAYSHADOW
+	| SAMPLERCUBEARRAY
+	| SAMPLERCUBEARRAYSHADOW
+	| ISAMPLER2D
+	| ISAMPLER3D
+	| ISAMPLERCUBE
+	| ISAMPLER2DARRAY
+	| ISAMPLERCUBEARRAY
+	| USAMPLER2D
+	| USAMPLER3D
+	| USAMPLERCUBE
+	| USAMPLER2DARRAY
+	| USAMPLERCUBEARRAY
+	| SAMPLER1D
+	| SAMPLER1DSHADOW
+	| SAMPLER1DARRAY
+	| SAMPLER1DARRAYSHADOW
+	| ISAMPLER1D
+	| ISAMPLER1DARRAY
+	| USAMPLER1D
+	| USAMPLER1DARRAY
+	| SAMPLER2DRECT
+	| SAMPLER2DRECTSHADOW
+	| ISAMPLER2DRECT
+	| USAMPLER2DRECT
+	| SAMPLERBUFFER
+	| ISAMPLERBUFFER
+	| USAMPLERBUFFER
+	| SAMPLER2DMS
+	| ISAMPLER2DMS
+	| USAMPLER2DMS
+	| SAMPLER2DMSARRAY
+	| ISAMPLER2DMSARRAY
+	| USAMPLER2DMSARRAY
+	| IMAGE2D
+	| IIMAGE2D
+	| UIMAGE2D
+	| IMAGE3D
+	| IIMAGE3D
+	| UIMAGE3D
+	| IMAGECUBE
+	| IIMAGECUBE
+	| UIMAGECUBE
+	| IMAGEBUFFER
+	| IIMAGEBUFFER
+	| UIMAGEBUFFER
+	| IMAGE1D
+	| IIMAGE1D
+	| UIMAGE1D
+	| IMAGE1DARRAY
+	| IIMAGE1DARRAY
+	| UIMAGE1DARRAY
+	| IMAGE2DRECT
+	| IIMAGE2DRECT
+	| UIMAGE2DRECT
+	| IMAGE2DARRAY
+	| IIMAGE2DARRAY
+	| UIMAGE2DARRAY
+	| IMAGECUBEARRAY
+	| IIMAGECUBEARRAY
+	| UIMAGECUBEARRAY
+	| IMAGE2DMS
+	| IIMAGE2DMS
+	| UIMAGE2DMS
+	| IMAGE2DMSARRAY
+	| IIMAGE2DMSARRAY
+	| UIMAGE2DMSARRAY;
 
 structSpecifier: STRUCT IDENTIFIER? structBody;
 
@@ -431,7 +415,6 @@ structMember:
 
 structDeclarator: IDENTIFIER arraySpecifier?;
 
-//assignment epxression
 initializer:
 	expression
 	| LBRACE (
@@ -461,33 +444,36 @@ expressionStatement: expression SEMICOLON;
 emptyStatement: SEMICOLON;
 
 selectionStatement:
-	attribute? IF LPAREN expression RPAREN ifTrue = statement (
+	attribute? IF LPAREN condition = expression RPAREN ifTrue = statement (
 		ELSE ifFalse = statement
 	)?;
 
 iterationCondition:
-	expression
-	| fullySpecifiedType IDENTIFIER ASSIGN_OP initializer;
+	fullySpecifiedType name = IDENTIFIER ASSIGN_OP initializer;
 
 switchStatement:
-	attribute? SWITCH LPAREN expression RPAREN compoundStatement;
+	attribute? SWITCH LPAREN condition = expression RPAREN compoundStatement;
 
 caseLabel:
 	CASE expression COLON	# valuedCaseLabel
 	| DEFAULT COLON				# defaultCaseLabel;
 
 whileStatement:
-	attribute? WHILE LPAREN iterationCondition RPAREN loopBody = statement;
+	attribute? WHILE LPAREN (
+		condition = expression
+		| initCondition = iterationCondition
+	) RPAREN loopBody = statement;
 
 doWhileStatement:
-	attribute? DO loopBody = statement WHILE LPAREN expression RPAREN SEMICOLON;
+	attribute? DO loopBody = statement WHILE LPAREN condition = expression RPAREN SEMICOLON;
 
 forStatement:
 	attribute? FOR LPAREN (
 		emptyStatement
 		| expressionStatement
 		| declarationStatement
-	) iterationCondition? SEMICOLON expression? RPAREN loopBody = statement;
+	) (condition = expression | initCondition = iterationCondition)? SEMICOLON incrementer = expression? RPAREN
+		loopBody = statement;
 
 jumpStatement:
 	CONTINUE SEMICOLON							# continueStatement

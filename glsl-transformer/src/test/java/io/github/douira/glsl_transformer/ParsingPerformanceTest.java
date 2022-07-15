@@ -8,18 +8,18 @@ import java.util.stream.*;
 
 import org.junit.jupiter.api.Test;
 
-import io.github.douira.glsl_transformer.TestResourceManager.*;
-import io.github.douira.glsl_transformer.transform.*;
+import io.github.douira.glsl_transformer.basic.EnhancedParser;
+import io.github.douira.glsl_transformer.test_util.*;
+import io.github.douira.glsl_transformer.test_util.TestResourceManager.*;
 
-public class ParsingPerformanceTest extends TestWithBareTransformationManager {
+public class ParsingPerformanceTest extends TestWithBareCSTTransformer {
   private void assertPerformance(Duration expected, Collection<String> inputs) {
-    var man = new TransformationManager<NonFixedJobParameters>(false);
-    man.setSLLOnly();
+    var parser = new EnhancedParser(false);
 
     // warmup the JVM and the parser's DFA cache
-    inputs.forEach(man::parse);
+    inputs.forEach(parser::parse);
 
-    assertTimeout(expected, () -> inputs.forEach(man::parse),
+    assertTimeout(expected, () -> inputs.forEach(parser::parse),
         "It should parse fast enough using SLL mode.");
   }
 
@@ -28,9 +28,9 @@ public class ParsingPerformanceTest extends TestWithBareTransformationManager {
         resources.map(Resource::content).collect(Collectors.toList()));
   }
 
-  private void assertPerformance(Duration expected, Resource... resources) {
-    assertPerformance(expected, Stream.of(resources));
-  }
+  // private void assertPerformance(Duration expected, Resource... resources) {
+  //   assertPerformance(expected, Stream.of(resources));
+  // }
 
   private void assertFilePerformance(Duration expected, Stream<FileLocation> files) {
     assertPerformance(expected, files.map(TestResourceManager::getResource));

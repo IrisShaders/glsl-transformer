@@ -6,8 +6,10 @@ import java.util.stream.Stream;
 
 import org.junit.jupiter.api.*;
 
-import io.github.douira.glsl_transformer.TestResourceManager.FileLocation;
-import io.github.douira.glsl_transformer.transform.*;
+import io.github.douira.glsl_transformer.cst.transform.*;
+import io.github.douira.glsl_transformer.job_parameter.WrappedParameters;
+import io.github.douira.glsl_transformer.test_util.*;
+import io.github.douira.glsl_transformer.test_util.TestResourceManager.FileLocation;
 
 /**
  * This test is only enabled for debugging purposes.
@@ -21,15 +23,15 @@ public class GrammarDebugTest {
   @Test
   @Disabled
   void testParseTree() {
-    var man = new TransformationManager<WrappedParameters<StringBuilder>>(false);
-    man.addConcurrent(new PrintTreeDebug());
+    var transformer = new CSTTransformer<WrappedParameters<StringBuilder>>(false);
+    transformer.addConcurrent(new PrintTreeDebug());
 
     Stream.of(
         TestResourceManager.getResource(FileLocation.GRAMMAR_DEBUG))
         .forEach(resource -> {
           var content = resource.content();
           var builder = new StringBuilder();
-          man.transform(content, new WrappedParameters<>(builder));
+          transformer.transform(content, new WrappedParameters<>(builder));
           System.out.println(ansi().fgBrightMagenta().bold().a(resource.getScenarioName()).reset());
           System.out.println(content);
           System.out.println(builder.toString());
