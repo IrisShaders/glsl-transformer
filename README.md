@@ -90,7 +90,7 @@ System.out.println(transformer.transform(input));
 AST Transformation
 ```java
 // setup a transformer
-var transformer = new ASTTransformer<>();
+var transformer = new ASTTransformer();
 
 // set the transformation
 transformer.setTransformation(translationUnit -> {
