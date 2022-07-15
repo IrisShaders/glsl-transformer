@@ -7,7 +7,7 @@ import org.antlr.v4.runtime.*;
 import io.github.douira.glsl_transformer.*;
 import io.github.douira.glsl_transformer.ast.node.TranslationUnit;
 import io.github.douira.glsl_transformer.ast.node.basic.ASTNode;
-import io.github.douira.glsl_transformer.ast.print.ASTPrinter;
+import io.github.douira.glsl_transformer.ast.print.*;
 import io.github.douira.glsl_transformer.basic.*;
 import io.github.douira.glsl_transformer.basic.EnhancedParser.ParsingStrategy;
 import io.github.douira.glsl_transformer.tree.ExtendedContext;
@@ -68,12 +68,16 @@ public class ASTTransformer implements Transformer, ParserInterface {
     parser.setLLOnly();
   }
 
-  @Override
-  public String transformStream(IntStream charStream) throws RecognitionException {
-    var parseTree = parser.parse(charStream, null, GLSLParser::translationUnit);
+  public String transform(PrintType printType, String str) throws RecognitionException {
+    var parseTree = parser.parse(CharStreams.fromString(str), null, GLSLParser::translationUnit);
     var translationUnit = (TranslationUnit) ASTBuilder.build(parseTree);
     transformation.accept(translationUnit);
-    return ASTPrinter.printedIndented(translationUnit);
+    return ASTPrinter.printIndented(translationUnit);
+  }
+
+  @Override
+  public String transform(String str) throws RecognitionException {
+    return transform(PrintType.INDENTED, str);
   }
 
   public <RuleType extends ExtendedContext> ASTNode parseNode(
