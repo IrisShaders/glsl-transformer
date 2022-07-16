@@ -10,11 +10,13 @@ import io.github.douira.glsl_transformer.ast.node.basic.ASTNode;
 import io.github.douira.glsl_transformer.ast.print.*;
 import io.github.douira.glsl_transformer.basic.*;
 import io.github.douira.glsl_transformer.basic.EnhancedParser.ParsingStrategy;
+import io.github.douira.glsl_transformer.job_parameter.*;
 import io.github.douira.glsl_transformer.tree.ExtendedContext;
 
-public class ASTTransformer implements Transformer, ParserInterface {
+public class ASTTransformer<T extends JobParameters> implements ParameterizedTransformer<T>, ParserInterface {
   private final EnhancedParser parser;
   private Consumer<TranslationUnit> transformation;
+  private T jobParameters;
 
   public ASTTransformer() {
     parser = new EnhancedParser();
@@ -68,18 +70,6 @@ public class ASTTransformer implements Transformer, ParserInterface {
     parser.setLLOnly();
   }
 
-  public String transform(PrintType printType, String str) throws RecognitionException {
-    var parseTree = parser.parse(CharStreams.fromString(str), null, GLSLParser::translationUnit);
-    var translationUnit = (TranslationUnit) ASTBuilder.build(parseTree);
-    transformation.accept(translationUnit);
-    return ASTPrinter.printIndented(translationUnit);
-  }
-
-  @Override
-  public String transform(String str) throws RecognitionException {
-    return transform(PrintType.INDENTED, str);
-  }
-
   public <RuleType extends ExtendedContext> ASTNode parseNode(
       String input,
       Function<GLSLParser, RuleType> parseMethod) throws RecognitionException {
@@ -102,5 +92,36 @@ public class ASTTransformer implements Transformer, ParserInterface {
       BiFunction<ASTBuilder, RuleType, ReturnType> visitMethod) throws RecognitionException {
     var parseTree = parser.parse(input, null, parseMethod);
     return ASTBuilder.buildSubtreeWith(parentTreeMember, parseTree, visitMethod);
+  }
+
+  public String transformBare(PrintType printType, String str) throws RecognitionException {
+    var parseTree = parser.parse(CharStreams.fromString(str), null, GLSLParser::translationUnit);
+    var translationUnit = (TranslationUnit) ASTBuilder.build(parseTree);
+    transformation.accept(translationUnit);
+    return ASTPrinter.printIndented(translationUnit);
+  }
+
+  public String transform(
+      PrintType printType, String str, T parameters) throws RecognitionException {
+    return withJobParameters(parameters, () -> transformBare(printType, str));
+  }
+
+  public String transform(PrintType printType, String str) throws RecognitionException {
+    return transform(printType, str, null);
+  }
+
+  @Override
+  public T getJobParameters() {
+    return jobParameters;
+  }
+
+  @Override
+  public void setJobParameters(T parameters) {
+    jobParameters = parameters;
+  }
+
+  @Override
+  public String transformBare(String str) throws RecognitionException {
+    return transformBare(PrintType.INDENTED, str);
   }
 }

@@ -10,7 +10,8 @@ import io.github.douira.glsl_transformer.GLSLParser;
 import io.github.douira.glsl_transformer.ast.node.Identifier;
 import io.github.douira.glsl_transformer.ast.node.expression.*;
 import io.github.douira.glsl_transformer.ast.query.*;
-import io.github.douira.glsl_transformer.test_util.TestWithASTTransformer;
+import io.github.douira.glsl_transformer.job_parameter.NonFixedJobParameters;
+import io.github.douira.glsl_transformer.test_util.*;
 import io.github.douira.glsl_transformer.util.Type;
 
 public class ASTTransformerTest extends TestWithASTTransformer {
@@ -135,8 +136,14 @@ public class ASTTransformerTest extends TestWithASTTransformer {
     assertEquals(
         "int x = b, c, d;\n",
         transformer.transform("int x = a, b, c, a, d;\n"));
-    // assertEquals(
-    // "int a = 1, 2, 5 + 2 + b;\n",
-    // transformer.transform("int a = 1, 2, 3;\n"));
+  }
+
+  @Test
+  void testJobParameters() {
+    var jobParameters = new NonFixedJobParameters();
+    transformer.setTransformation(tree -> {
+      assertEquals(transformer.getJobParameters(), jobParameters);
+    });
+    transformer.transform("", jobParameters);
   }
 }
