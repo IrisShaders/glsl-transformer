@@ -8,10 +8,12 @@ import io.github.douira.glsl_transformer.*;
 import io.github.douira.glsl_transformer.ast.node.TranslationUnit;
 import io.github.douira.glsl_transformer.ast.node.basic.ASTNode;
 import io.github.douira.glsl_transformer.ast.print.*;
+import io.github.douira.glsl_transformer.ast.query.Root;
 import io.github.douira.glsl_transformer.basic.*;
 import io.github.douira.glsl_transformer.basic.EnhancedParser.ParsingStrategy;
 import io.github.douira.glsl_transformer.job_parameter.*;
 import io.github.douira.glsl_transformer.tree.ExtendedContext;
+import io.github.douira.glsl_transformer.util.TriConsumer;
 
 public class ASTTransformer<T extends JobParameters> implements ParameterizedTransformer<T>, ParserInterface {
   private final EnhancedParser parser;
@@ -123,5 +125,13 @@ public class ASTTransformer<T extends JobParameters> implements ParameterizedTra
   @Override
   public String transformBare(String str) throws RecognitionException {
     return transformBare(PrintType.INDENTED, str);
+  }
+
+  public static <T> Consumer<TranslationUnit> wrapTransformation(ParameterizedTransformer<T> transformer,
+      TriConsumer<TranslationUnit, Root, T> transformation) {
+    return translationUnit -> transformation.accept(
+        translationUnit,
+        translationUnit.getRoot(),
+        transformer.getJobParameters());
   }
 }
