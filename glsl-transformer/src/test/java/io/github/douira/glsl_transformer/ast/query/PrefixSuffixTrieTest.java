@@ -7,7 +7,7 @@ import java.util.Set;
 
 import org.junit.jupiter.api.*;
 
-public class PermutermTrieTest {
+public class PrefixSuffixTrieTest {
   static Object a = new Object(),
       b = new Object(),
       c = new Object(),
@@ -15,12 +15,12 @@ public class PermutermTrieTest {
       e = new Object(),
       f = new Object();
 
-  PermutermTrie<Object> trie;
+  PrefixSuffixTrie<Object> trie;
 
   // setup before each test
   @BeforeEach
   void setup() {
-    trie = new PermutermTrie<>();
+    trie = new PrefixSuffixTrie<>();
   }
 
   @Test
@@ -79,21 +79,6 @@ public class PermutermTrieTest {
   }
 
   @Test
-  void testInfixQuery() {
-    trie.put("aaa", a);
-    trie.put("tat", b);
-    trie.put("aac", c);
-    trie.put("abc", d);
-    trie.put("fdsfds", e);
-    assertQuery(Set.of(a, b, c, d), trie.infixQuery("a"));
-    assertQuery(Set.of(a, c), trie.infixQuery("aa"));
-    assertQuery(Set.of(c), trie.infixQuery("ac"));
-    assertTrue(trie.infixQuery("ca").count() == 0);
-    assertTrue(trie.infixQuery("ba").count() == 0);
-    assertTrue(trie.infixQuery("cba").count() == 0);
-  }
-
-  @Test
   void testPrefixQuery() {
     trie.put("aaa", a);
     trie.put("tat", b);
@@ -109,24 +94,6 @@ public class PermutermTrieTest {
   }
 
   @Test
-  void testSuffixPrefixQuery() {
-    trie.put("aaa", a);
-    trie.put("tat", b);
-    trie.put("aac", c);
-    trie.put("abc", d);
-    trie.put("aabababbba", e);
-    assertQuery(Set.of(a, e), trie.suffixPrefixQuery("a", "a"));
-    assertQuery(Set.of(a, e), trie.suffixPrefixQuery("aa", "a"));
-    assertQuery(Set.of(b), trie.suffixPrefixQuery("t", "t"));
-    assertQuery(Set.of(e), trie.suffixPrefixQuery("aa", "bbba"));
-    assertQuery(Set.of(a, b, c, d, e), trie.suffixPrefixQuery("", ""));
-    assertQuery(Set.of(a, c, d, e), trie.suffixPrefixQuery("a", ""));
-    assertQuery(Set.of(a, e), trie.suffixPrefixQuery("", "a"));
-    assertQuery(Set.of(b), trie.suffixPrefixQuery("", "tat"));
-    assertTrue(trie.suffixPrefixQuery("aa", "aa").count() == 0);
-  }
-
-  @Test
   void testSuffixQuery() {
     trie.put("aaa", a);
     trie.put("tat", b);
@@ -136,6 +103,7 @@ public class PermutermTrieTest {
     assertQuery(Set.of(c, d), trie.suffixQuery("c"));
     assertQuery(Set.of(a), trie.suffixQuery("aa"));
     assertQuery(Set.of(b), trie.suffixQuery("tat"));
+    assertQuery(Set.of(b), trie.suffixQuery("at"));
     assertTrue(trie.suffixQuery("ta").count() == 0);
     assertTrue(trie.suffixQuery("aaaa").count() == 0);
     assertTrue(trie.suffixQuery("fsd").count() == 0);
