@@ -4,6 +4,13 @@ import java.util.*;
 import java.util.function.Consumer;
 import java.util.stream.Stream;
 
+/**
+ * This prefix-suffix trie supports both prefix and suffix queries but no
+ * infix-related queries and works by inserting the key and its reverse into the
+ * underlying trie. This is more efficient than the permuterm trie since the
+ * number of bits used to index an entry is not quadratic in the size of the key
+ * but linear.
+ */
 public class PrefixSuffixTrie<E> extends DuplicatorTrie<E> {
   private static final int removeThreshold = 200;
   private Map<String, String> reverses = new HashMap<>();
@@ -19,7 +26,7 @@ public class PrefixSuffixTrie<E> extends DuplicatorTrie<E> {
   }
 
   @Override
-  protected void iteratePermutations(String key, Consumer<String> consumer) {
+  protected void iterateKeyVariations(String key, Consumer<String> consumer) {
     consumer.accept(key);
     consumer.accept(marker + getReverse(key));
   }
