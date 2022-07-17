@@ -2,7 +2,9 @@ package io.github.douira.glsl_transformer.test_util;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+import java.util.Set;
 import java.util.function.Function;
+import java.util.stream.*;
 
 import io.github.douira.glsl_transformer.GLSLParser;
 import io.github.douira.glsl_transformer.ast.print.*;
@@ -32,5 +34,9 @@ public class AssertUtil {
     var ast = ASTBuilder.build(parseTree);
     var reprinted = ASTPrinter.printAST(printType, ast);
     assertEquals(expected, reprinted);
+  }
+
+  public static void assertQuery(Set<Object> expected, Stream<Object> result) {
+    assertEquals(expected, result.collect(Collectors.toSet()));
   }
 }
