@@ -4,6 +4,12 @@ import java.util.Map;
 import java.util.function.Consumer;
 import java.util.stream.Stream;
 
+/**
+ * This permuterm trie supports prefix, suffix, infix and inverted infix (suffix
+ * + prefix) queries and works by inserting all rotations of the key into the
+ * underlying trie. The number of bits used to index an entry is quadratic in
+ * the size of the key.
+ */
 public class PermutermTrie<E> extends DuplicatorTrie<E> {
   public PermutermTrie() {
   }
@@ -21,7 +27,7 @@ public class PermutermTrie<E> extends DuplicatorTrie<E> {
   }
 
   @Override
-  protected void iteratePermutations(String key, Consumer<String> consumer) {
+  protected void iterateKeyVariations(String key, Consumer<String> consumer) {
     var length = key.length();
     for (var i = 0; i <= length; i++) {
       consumer.accept(key.substring(i) + marker + key.substring(0, i));

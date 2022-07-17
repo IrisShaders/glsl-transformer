@@ -6,6 +6,9 @@ import java.util.stream.Stream;
 
 import org.apache.commons.collections4.trie.PatriciaTrie;
 
+/**
+ * Base class for trie variants that insert more than one entry per key.
+ */
 public abstract class DuplicatorTrie<E> extends PatriciaTrie<E> {
   public static final char DEFAULT_MARKER = '$';
   protected final char marker;
@@ -41,7 +44,7 @@ public abstract class DuplicatorTrie<E> extends PatriciaTrie<E> {
     this.marker = marker;
   }
 
-  protected abstract void iteratePermutations(String key, Consumer<String> consumer);
+  protected abstract void iterateKeyVariations(String key, Consumer<String> consumer);
 
   protected String prepareKey(Object k) {
     return sanitizeKey(k.toString());
@@ -91,14 +94,14 @@ public abstract class DuplicatorTrie<E> extends PatriciaTrie<E> {
   @Override
   public E put(String key, E value) {
     var previous = get(key);
-    iteratePermutations(key, k -> super.put(k, value));
+    iterateKeyVariations(key, k -> super.put(k, value));
     return previous;
   }
 
   @Override
   public E remove(Object k) {
     var previous = get(k);
-    iteratePermutations((String) k, super::remove);
+    iterateKeyVariations((String) k, super::remove);
     return previous;
   }
 
