@@ -66,18 +66,23 @@ public abstract class ASTNode {
     return getFirstOfType(limit, type);
   }
 
+  public ASTNode getFirstOfType(Class<? extends ASTNode> type) {
+    return getFirstOfType(Integer.MAX_VALUE, type);
+  }
+
+  public ASTNode getFirstParentOfType(Class<? extends ASTNode> type) {
+    return getFirstParentOfType(Integer.MAX_VALUE, type);
+  }
+
   public ASTNode getFirstParentOfType(int limit, Class<? extends ASTNode> type) {
     ASTNode node = this;
     for (int i = 0; i < limit; i++) {
-      if (node == null) {
-        return null;
-      }
-      node = node.getParent();
-      if (node.getClass() == type) {
+      if (node == null || type.isInstance(node)) {
         return node;
       }
+      node = node.getParent();
     }
-    return null;
+    return node;
   }
 
   public Root getRoot() {
