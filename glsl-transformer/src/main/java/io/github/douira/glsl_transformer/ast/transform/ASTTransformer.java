@@ -72,7 +72,7 @@ public class ASTTransformer<T extends JobParameters> implements ParameterizedTra
     parser.setLLOnly();
   }
 
-  public <RuleType extends ExtendedContext> ASTNode parseNode(
+  public <RuleType extends ExtendedContext> ASTNode parseTranslationUnit(
       String input,
       Function<GLSLParser, RuleType> parseMethod) throws RecognitionException {
     var parseTree = parser.parse(input, null, parseMethod);
@@ -94,6 +94,14 @@ public class ASTTransformer<T extends JobParameters> implements ParameterizedTra
       BiFunction<ASTBuilder, RuleType, ReturnType> visitMethod) throws RecognitionException {
     var parseTree = parser.parse(input, null, parseMethod);
     return ASTBuilder.buildSubtreeWith(parentTreeMember, parseTree, visitMethod);
+  }
+
+  public <RuleType extends ExtendedContext, ReturnType extends ASTNode> ReturnType parseNodeWithoutRoot(
+      String input,
+      Function<GLSLParser, RuleType> parseMethod,
+      BiFunction<ASTBuilder, RuleType, ReturnType> visitMethod) throws RecognitionException {
+    var parseTree = parser.parse(input, null, parseMethod);
+    return ASTBuilder.build(parseTree, visitMethod);
   }
 
   public String transformBare(PrintType printType, String str) throws RecognitionException {

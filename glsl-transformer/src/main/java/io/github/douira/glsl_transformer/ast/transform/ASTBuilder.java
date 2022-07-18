@@ -53,6 +53,12 @@ public class ASTBuilder extends GLSLParserBaseVisitor<ASTNode> {
     return Root.indexNodes(rootInstance, () -> doBuild(ctx));
   }
 
+  public static <TreeType extends ParseTree, ReturnType extends ASTNode> ReturnType build(
+      TreeType ctx,
+      BiFunction<ASTBuilder, TreeType, ReturnType> visitMethod) {
+    return Root.indexNodes(() -> buildWith(ctx, visitMethod));
+  }
+
   public static ASTNode buildSubtreeFor(ASTNode parentTreeMember, ParseTree ctx) {
     return Root.indexNodes(parentTreeMember, () -> doBuild(ctx));
   }
