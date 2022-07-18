@@ -1,5 +1,6 @@
 package io.github.douira.glsl_transformer.util;
 
+import java.util.Objects;
 import java.util.function.Supplier;
 
 /**
@@ -49,9 +50,7 @@ public class ConfigUtil {
    */
   public static <V> V withDefault(V setValue, V defaultValue) {
     if (setValue == null) {
-      if (defaultValue == null) {
-        throw new AssertionError("Generated default value is null!");
-      }
+      Objects.requireNonNull(defaultValue);
       return defaultValue;
     } else {
       return setValue;

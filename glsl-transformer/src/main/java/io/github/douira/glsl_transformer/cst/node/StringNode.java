@@ -1,5 +1,7 @@
 package io.github.douira.glsl_transformer.cst.node;
 
+import java.util.Objects;
+
 /**
  * String node provides a terminal node with arbitrary contents. This is useful
  * for inserting strings into the printed code such as comments.
@@ -21,9 +23,7 @@ public class StringNode extends UnparsableCSTNode {
    * @param content The string to create a token for
    */
   public StringNode(String content) {
-    if (content == null) {
-      throw new IllegalArgumentException("String node content must not be null!");
-    }
+    Objects.requireNonNull(content);
     this.content = content;
     this.doNewlineInsertion = true;
   }
