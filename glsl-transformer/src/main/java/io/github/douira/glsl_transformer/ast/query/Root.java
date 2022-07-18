@@ -1,5 +1,6 @@
 package io.github.douira.glsl_transformer.ast.query;
 
+import java.util.*;
 import java.util.function.*;
 
 import io.github.douira.glsl_transformer.ast.node.Identifier;
@@ -10,24 +11,20 @@ public class Root {
   public final NodeIndex nodeIndex;
   public final IdentifierIndex identifierIndex;
 
-  private static Root activeBuildRoot;
+  private static Deque<Root> activeBuildRoots = new ArrayDeque<>();
 
   public static Root getActiveBuildRoot() {
-    return activeBuildRoot;
+    return activeBuildRoots.peekLast();
   }
 
   protected static synchronized <R> R withActiveBuildRoot(
       Root instance,
       Function<Root, R> rootConsumer) {
-    if (activeBuildRoot != null) {
-      throw new IllegalStateException("There is already a build in progress");
-    }
-
-    activeBuildRoot = instance;
+    activeBuildRoots.addLast(instance);
     try {
       return rootConsumer.apply(instance);
     } finally {
-      activeBuildRoot = null;
+      activeBuildRoots.removeLast();
     }
   }
 
