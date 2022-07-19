@@ -6,6 +6,7 @@ import java.util.stream.Stream;
 
 import io.github.douira.glsl_transformer.ast.query.Root;
 import io.github.douira.glsl_transformer.ast.traversal.*;
+import io.github.douira.glsl_transformer.util.CompatUtil;
 
 /**
  * The AST node represents a node in the abstract syntax tree. Each AST node has
@@ -144,7 +145,7 @@ public abstract class ASTNode {
   }
 
   public Stream<ASTNode> getAncestors() {
-    return Stream.iterate(this, ASTNode::hasParent, ASTNode::getParent);
+    return CompatUtil.iterateStream(this, ASTNode::hasParent, ASTNode::getParent);
   }
 
   public Root getRoot() {
