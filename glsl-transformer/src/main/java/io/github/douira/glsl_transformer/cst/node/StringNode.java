@@ -23,7 +23,7 @@ public class StringNode extends UnparsableCSTNode {
    * @param content The string to create a token for
    */
   public StringNode(String content) {
-    Objects.requireNonNull(content);
+    Objects.requireNonNull(content, "String node content must not be null!");
     this.content = content;
     this.doNewlineInsertion = true;
   }

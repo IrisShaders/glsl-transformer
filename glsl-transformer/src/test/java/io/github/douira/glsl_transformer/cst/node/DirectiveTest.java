@@ -14,7 +14,7 @@ public class DirectiveTest {
   @Test
   void testConstructor() {
     assertThrows(
-        IllegalArgumentException.class,
+        NullPointerException.class,
         () -> new Directive(DirectiveType.DEFINE, null),
         "It should throw on a null content");
     assertThrows(

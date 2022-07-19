@@ -12,7 +12,7 @@ public class StringNodeTest {
   @Test
   void testConstructor() {
     assertThrows(
-        IllegalArgumentException.class,
+        NullPointerException.class,
         () -> new StringNode(null),
         "It should throw on a null content");
   }

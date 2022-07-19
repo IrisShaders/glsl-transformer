@@ -50,7 +50,7 @@ public class ConfigUtil {
    */
   public static <V> V withDefault(V setValue, V defaultValue) {
     if (setValue == null) {
-      Objects.requireNonNull(defaultValue);
+      Objects.requireNonNull(defaultValue, "Generated default value is null!");
       return defaultValue;
     } else {
       return setValue;
