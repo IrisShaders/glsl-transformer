@@ -66,7 +66,7 @@ public abstract class ASTNode {
    * check the current node.
    * 
    * @param limit     the number of parents to check in total
-   * @param number    the number of parents to skip before checking the predicate
+   * @param skip      the number of parents to skip before checking the predicate
    * @param predicate the predicate to check
    * @return true if there is an ancestor of this node that fulfills the given
    *         predicate, false otherwise
