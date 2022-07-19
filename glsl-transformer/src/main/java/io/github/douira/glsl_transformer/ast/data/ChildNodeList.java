@@ -39,7 +39,7 @@ public class ChildNodeList<Child extends ASTNode> extends ProxyArrayList<Child> 
 
   @Override
   protected void notifyRemoval(Child removed) {
-    removed.unregisterFromParent();
+    removed.detachParent();
   }
 
   protected static <Child extends ASTNode> Consumer<Child> makeChildReplacer(ChildNodeList<Child> list, Child child) {
@@ -48,7 +48,11 @@ public class ChildNodeList<Child extends ASTNode> extends ProxyArrayList<Child> 
         return;
       }
       list.parent.updateParents(child, newNode, makeChildReplacer(list, newNode));
-      list.set(list.indexOf(child), newNode);
+      if (newNode == null) {
+        list.remove(child);
+      } else {
+        list.set(list.indexOf(child), newNode);
+      }
     };
   }
 
