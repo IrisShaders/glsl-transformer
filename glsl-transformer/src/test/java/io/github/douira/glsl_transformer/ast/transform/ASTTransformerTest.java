@@ -159,7 +159,7 @@ public class ASTTransformerTest extends TestWithASTTransformer {
         }
         var literalExpression = (LiteralExpression) node;
         if (literalExpression.integerValue == 3
-            && literalExpression.getFirstOfType(ExternalDeclaration.class) == firstDeclaration) {
+            && literalExpression.getAncestor(ExternalDeclaration.class) == firstDeclaration) {
           toMove.add(literalExpression);
         }
       }
@@ -256,7 +256,7 @@ public class ASTTransformerTest extends TestWithASTTransformer {
       assertTrue(root.identifierIndex.has("bar"));
       assertTrue(root.identifierIndex.has("foo"));
       root.identifierIndex.getOne("bar")
-          .getAncestorOfType(ReferenceExpression.class).detachAndDelete();
+          .getAncestor(ReferenceExpression.class).detachAndDelete();
       assertFalse(root.identifierIndex.has("bar"));
       assertTrue(root.identifierIndex.has("foo"));
     });
@@ -272,12 +272,12 @@ public class ASTTransformerTest extends TestWithASTTransformer {
       assertTrue(root.identifierIndex.has("bar"));
       assertTrue(root.identifierIndex.has("foo"));
       var foo = root.identifierIndex.getOne("foo")
-          .getAncestorOfType(ReferenceExpression.class);
+          .getAncestor(ReferenceExpression.class);
       Root.indexBuildSession(tree, () -> {
         foo.replaceBy(new ReferenceExpression(new Identifier("hello")));
       });
       root.identifierIndex.getOne("bar")
-          .getAncestorOfType(ReferenceExpression.class)
+          .getAncestor(ReferenceExpression.class)
           .replaceByAndDelete(foo);
       assertEquals(1, root.identifierIndex.get("hello").size());
       assertEquals(1, root.identifierIndex.get("foo").size());

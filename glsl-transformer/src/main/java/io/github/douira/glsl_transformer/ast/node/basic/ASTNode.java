@@ -1,7 +1,7 @@
 package io.github.douira.glsl_transformer.ast.node.basic;
 
 import java.util.Objects;
-import java.util.function.Consumer;
+import java.util.function.*;
 
 import io.github.douira.glsl_transformer.ast.query.Root;
 import io.github.douira.glsl_transformer.ast.traversal.*;
@@ -42,6 +42,13 @@ public abstract class ASTNode {
     return selfReplacer;
   }
 
+  /**
+   * Gets the nth parent of this node. The 0th parent is this node. The 1st parent
+   * is the parent of this node.
+   * 
+   * @param n the number of parents to go up
+   * @return the nth parent of this node
+   */
   public ASTNode getNthParent(int n) {
     ASTNode node = this;
     for (int i = 0; i < n; i++) {
@@ -53,10 +60,24 @@ public abstract class ASTNode {
     return node;
   }
 
-  public boolean hasAncestor(ASTNode ancestor) {
+  /**
+   * Checks if there is an ancestor of this node that fulfills the given
+   * predicate within a limited nubmer of steps. If the limit is 0, it will only
+   * check the current node.
+   * 
+   * @param limit     the number of parents to check in total
+   * @param number    the number of parents to skip before checking the predicate
+   * @param predicate the predicate to check
+   * @return true if there is an ancestor of this node that fulfills the given
+   *         predicate, false otherwise
+   */
+  public boolean hasAncestor(int limit, int skip, Predicate<ASTNode> predicate) {
     ASTNode node = this;
-    while (node != null) {
-      if (node == ancestor) {
+    for (int i = 0; i <= limit; i++) {
+      if (node == null) {
+        return false;
+      }
+      if (predicate.test(node) && i >= skip) {
         return true;
       }
       node = node.getParent();
@@ -64,35 +85,57 @@ public abstract class ASTNode {
     return false;
   }
 
-  public ASTNode getFirstOfType(int limit, Class<? extends ASTNode> type) {
+  public boolean hasAncestor(int limit, Predicate<ASTNode> predicate) {
+    return hasAncestor(limit, 0, predicate);
+  }
+
+  public boolean hasAncestor(Predicate<ASTNode> predicate) {
+    return hasAncestor(Integer.MAX_VALUE, predicate);
+  }
+
+  public boolean hasAncestor(Class<? extends ASTNode> clazz) {
+    return hasAncestor(clazz::isInstance);
+  }
+
+  public boolean hasAncestor(ASTNode node) {
+    return hasAncestor(node::equals);
+  }
+
+  /**
+   * Returns the first ancestor that fulfills the given predicate, limited to a
+   * certain number of steps. If the limit is 0, it will only check the current
+   * node.
+   * 
+   * @param limit     the number of parents to check in total
+   * @param skip      the number of steps to skip before checking the predicate
+   * @param predicate the predicate to check
+   * @return the first ancestor that fulfills the given predicate, or null
+   *         otherwise
+   */
+  public ASTNode getAncestor(int limit, int skip, Predicate<ASTNode> predicate) {
     ASTNode node = this;
-    for (int i = 0; i < limit; i++) {
-      if (node == null || type.isInstance(node)) {
+    for (int i = 0; i <= limit; i++) {
+      if (node == null) {
+        return null;
+      }
+      if (predicate.test(node) && i >= skip) {
         return node;
       }
       node = node.getParent();
     }
-    return node;
+    return null;
   }
 
-  public ASTNode getFirstOfType(Class<? extends ASTNode> type) {
-    return getFirstOfType(Integer.MAX_VALUE, type);
+  public ASTNode getAncestor(int limit, Predicate<ASTNode> predicate) {
+    return getAncestor(limit, 0, predicate);
   }
 
-  public ASTNode getAncestorOfType(int limit, Class<? extends ASTNode> type) {
-    return parent == null ? null : parent.getFirstOfType(limit - 1, type);
+  public ASTNode getAncestor(Predicate<ASTNode> predicate) {
+    return getAncestor(Integer.MAX_VALUE, predicate);
   }
 
-  public ASTNode getAncestorOfType(Class<? extends ASTNode> type) {
-    return getFirstOfType(Integer.MAX_VALUE, type);
-  }
-
-  public boolean hasAncestorOfType(int limit, Class<? extends ASTNode> type) {
-    return getAncestorOfType(limit, type) != null;
-  }
-
-  public boolean hasAncestorOfType(Class<? extends ASTNode> type) {
-    return getAncestorOfType(type) != null;
+  public ASTNode getAncestor(Class<? extends ASTNode> clazz) {
+    return getAncestor(clazz::isInstance);
   }
 
   public Root getRoot() {
