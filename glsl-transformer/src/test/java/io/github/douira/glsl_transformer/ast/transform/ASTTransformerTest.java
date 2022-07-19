@@ -8,6 +8,7 @@ import org.junit.jupiter.api.Test;
 
 import io.github.douira.glsl_transformer.GLSLParser;
 import io.github.douira.glsl_transformer.ast.node.Identifier;
+import io.github.douira.glsl_transformer.ast.node.basic.ASTNode;
 import io.github.douira.glsl_transformer.ast.node.expression.*;
 import io.github.douira.glsl_transformer.ast.node.external_declaration.ExternalDeclaration;
 import io.github.douira.glsl_transformer.ast.print.PrintType;
@@ -16,19 +17,6 @@ import io.github.douira.glsl_transformer.job_parameter.NonFixedJobParameters;
 import io.github.douira.glsl_transformer.test_util.TestWithASTTransformer;
 import io.github.douira.glsl_transformer.util.Type;
 
-/**
- * TODO: scenarios
- * add already registered subtree to tree
- * 
- * add new subtree with different root to tree and register
- * 
- * move subtree within tree
- * 
- * delete subtree from tree and unregister
- * 
- * detach subtree from tree without unregistering for later insertion?
- * 
- */
 public class ASTTransformerTest extends TestWithASTTransformer {
   void assertInjectExternalDeclaration(int index, String input, String output) {
     transformer.setTransformation(translationUnit -> {
@@ -118,7 +106,7 @@ public class ASTTransformerTest extends TestWithASTTransformer {
         }
         for (var node : toReplace) {
           var newNode = new ReferenceExpression(new Identifier("foo"));
-          node.replaceBy(newNode);
+          node.replaceByAndDelete(newNode);
         }
       });
     });
@@ -141,7 +129,7 @@ public class ASTTransformerTest extends TestWithASTTransformer {
         }
       }
       for (var node : toRemove) {
-        node.deleteFromParent();
+        node.detachAndDelete();
       }
       assertTrue(tree.getRoot().identifierIndex.get("a").isEmpty());
     });
@@ -161,7 +149,7 @@ public class ASTTransformerTest extends TestWithASTTransformer {
 
   @Test
   void testMoveNodeInternal() {
-    transformer.setTransformation(ASTTransformer.wrapTransformation(transformer, (tree, root) -> {
+    transformer.setTransformation((tree, root) -> {
       var firstDeclaration = tree.children.get(0);
       var toMove = new ArrayList<LiteralExpression>();
       for (var node : root.nodeIndex
@@ -171,7 +159,7 @@ public class ASTTransformerTest extends TestWithASTTransformer {
         }
         var literalExpression = (LiteralExpression) node;
         if (literalExpression.integerValue == 3
-            && literalExpression.getFirstParentOfType(ExternalDeclaration.class) == firstDeclaration) {
+            && literalExpression.getFirstOfType(ExternalDeclaration.class) == firstDeclaration) {
           toMove.add(literalExpression);
         }
       }
@@ -180,13 +168,16 @@ public class ASTTransformerTest extends TestWithASTTransformer {
           tree,
           GLSLParser::externalDeclaration,
           ASTBuilder::visitExternalDeclaration);
-      tree.children.add(secondDeclaration);
-      //TODO: find a better way of selecting the sequence expression of the second declaration
       var sequenceExpression = secondDeclaration.getRoot().nodeIndex
-          .getOne(SequenceExpression.class);
+          .get(SequenceExpression.class).stream()
+          .filter(e -> e.hasAncestor(secondDeclaration)).findAny().get();
       sequenceExpression.expressions.clear();
-      sequenceExpression.expressions.addAll(toMove);
-    }));
+      tree.children.add(secondDeclaration);
+      for (var node : toMove) {
+        node.detach();
+        sequenceExpression.expressions.add(node);
+      }
+    });
     assertEquals(
         "int y = 1, 2, 4, 5; int x = 3, 3; ",
         transformer.transform(PrintType.COMPACT, "int y = 1, 2, 3, 4, 3, 5; "));
@@ -194,68 +185,106 @@ public class ASTTransformerTest extends TestWithASTTransformer {
 
   @Test
   void testAddMatchingRootTree() {
-    transformer.setTransformation(ASTTransformer.wrapTransformation(transformer, (tree, root) -> {
+    transformer.setTransformation((tree, root) -> {
       Root.indexBuildSession(tree, () -> {
         assertTrue(root.identifierIndex.has("bar"));
-        root.identifierIndex.getOne("bar").replaceBy(new Identifier("foo"));
+        root.identifierIndex.getOne("bar").replaceByAndDelete(new Identifier("foo"));
         assertFalse(root.identifierIndex.has("bar"));
         assertTrue(root.identifierIndex.has("foo"));
       });
-    }));
+    });
     assertEquals(
         "int x = foo; ",
         transformer.transform(PrintType.COMPACT, "int x = bar; "));
   }
 
+  // add already registered subtree to tree
   @Test
   void testAddMatchingRootTreeNested() {
-    transformer.setTransformation(ASTTransformer.wrapTransformation(transformer, (tree, root) -> {
+    transformer.setTransformation((tree, root) -> {
       Root.indexBuildSession(tree, () -> {
         assertTrue(root.identifierIndex.has("bar"));
-        root.nodeIndex.getOne(ReferenceExpression.class).replaceBy(
+        root.nodeIndex.getOne(ReferenceExpression.class).replaceByAndDelete(
             new ReferenceExpression(new Identifier("foo")));
         assertFalse(root.identifierIndex.has("bar"));
         assertTrue(root.identifierIndex.has("foo"));
       });
-    }));
+    });
     assertEquals(
         "int x = foo; ",
         transformer.transform(PrintType.COMPACT, "int x = bar;"));
   }
 
+  // add new subtree with different root to tree and register
   @Test
   void testAddNewRootTree() {
-    transformer.setTransformation(ASTTransformer.wrapTransformation(transformer, (tree, root) -> {
+    transformer.setTransformation((tree, root) -> {
       Root.indexSeparateTrees(register -> {
         assertTrue(root.identifierIndex.has("bar"));
-        root.nodeIndex.getOne(ReferenceExpression.class).replaceBy(
+        root.nodeIndex.getOne(ReferenceExpression.class).replaceByAndDelete(
             register.apply(new ReferenceExpression(new Identifier("foo"))));
         assertFalse(root.identifierIndex.has("bar"));
         assertTrue(root.identifierIndex.has("foo"));
       });
-    }));
+    });
     assertEquals(
         "int x = foo; ",
         transformer.transform(PrintType.COMPACT, "int x = bar;"));
   }
 
+  // move subtree within tree
   @Test
-  void testMoveSubtreeInternal() {
-    transformer.setTransformation(ASTTransformer.wrapTransformation(transformer, (tree, root) -> {
+  void testSubtreeMoveSwap() {
+    transformer.setTransformation((tree, root) -> {
       assertTrue(root.identifierIndex.has("bar"));
       assertTrue(root.identifierIndex.has("foo"));
-
-      var bar = root.identifierIndex.getOne("bar");
-      var foo = root.identifierIndex.getOne("foo");
-      var prevFooParent = (ReferenceExpression) foo.getParent();
-      prevFooParent.setIdentifier(null);
-      bar.replaceBy(foo);
-      prevFooParent.setIdentifier(bar);
+      ASTNode.swap(
+          root.identifierIndex.getOne("bar"),
+          root.identifierIndex.getOne("foo"));
       assertEquals(1, root.identifierIndex.get("bar").size());
       assertEquals(1, root.identifierIndex.get("foo").size());
-    }));
+    });
     assertEquals(
         "int x = foo; int y = bar; ",
+        transformer.transform(PrintType.COMPACT, "int x = bar; int y = foo;"));
+  }
+
+  // delete subtree from tree and unregister
+  @Test
+  void testSubtreeDeletion() {
+    transformer.setTransformation((tree, root) -> {
+      assertTrue(root.identifierIndex.has("bar"));
+      assertTrue(root.identifierIndex.has("foo"));
+      root.identifierIndex.getOne("bar")
+          .getAncestorOfType(ReferenceExpression.class).detachAndDelete();
+      assertFalse(root.identifierIndex.has("bar"));
+      assertTrue(root.identifierIndex.has("foo"));
+    });
+    assertEquals(
+        "int x = foo; ",
+        transformer.transform(PrintType.COMPACT, "int x = bar, foo;"));
+  }
+
+  // move subtree without swapping with another subtree
+  @Test
+  void testSubtreeMoveWithoutSwap() {
+    transformer.setTransformation((tree, root) -> {
+      assertTrue(root.identifierIndex.has("bar"));
+      assertTrue(root.identifierIndex.has("foo"));
+      var foo = root.identifierIndex.getOne("foo")
+          .getAncestorOfType(ReferenceExpression.class);
+      Root.indexBuildSession(tree, () -> {
+        foo.replaceBy(new ReferenceExpression(new Identifier("hello")));
+      });
+      root.identifierIndex.getOne("bar")
+          .getAncestorOfType(ReferenceExpression.class)
+          .replaceByAndDelete(foo);
+      assertEquals(1, root.identifierIndex.get("hello").size());
+      assertEquals(1, root.identifierIndex.get("foo").size());
+      assertTrue(root.identifierIndex.get("bar").isEmpty());
+    });
+    assertEquals(
+        "int x = foo; int y = hello; ",
         transformer.transform(PrintType.COMPACT, "int x = bar; int y = foo;"));
   }
 }

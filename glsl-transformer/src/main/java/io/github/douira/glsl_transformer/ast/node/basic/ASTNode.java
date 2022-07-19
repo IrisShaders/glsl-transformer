@@ -53,22 +53,18 @@ public abstract class ASTNode {
     return node;
   }
 
-  public ASTNode getFirstOfType(int limit, Class<? extends ASTNode> type) {
-    if (this.getClass() == type) {
-      return this;
+  public boolean hasAncestor(ASTNode ancestor) {
+    ASTNode node = this;
+    while (node != null) {
+      if (node == ancestor) {
+        return true;
+      }
+      node = node.getParent();
     }
-    return getFirstOfType(limit, type);
+    return false;
   }
 
-  public ASTNode getFirstOfType(Class<? extends ASTNode> type) {
-    return getFirstOfType(Integer.MAX_VALUE, type);
-  }
-
-  public ASTNode getFirstParentOfType(Class<? extends ASTNode> type) {
-    return getFirstParentOfType(Integer.MAX_VALUE, type);
-  }
-
-  public ASTNode getFirstParentOfType(int limit, Class<? extends ASTNode> type) {
+  public ASTNode getFirstOfType(int limit, Class<? extends ASTNode> type) {
     ASTNode node = this;
     for (int i = 0; i < limit; i++) {
       if (node == null || type.isInstance(node)) {
@@ -79,12 +75,55 @@ public abstract class ASTNode {
     return node;
   }
 
+  public ASTNode getFirstOfType(Class<? extends ASTNode> type) {
+    return getFirstOfType(Integer.MAX_VALUE, type);
+  }
+
+  public ASTNode getAncestorOfType(int limit, Class<? extends ASTNode> type) {
+    return parent == null ? null : parent.getFirstOfType(limit - 1, type);
+  }
+
+  public ASTNode getAncestorOfType(Class<? extends ASTNode> type) {
+    return getFirstOfType(Integer.MAX_VALUE, type);
+  }
+
+  public boolean hasAncestorOfType(int limit, Class<? extends ASTNode> type) {
+    return getAncestorOfType(limit, type) != null;
+  }
+
+  public boolean hasAncestorOfType(Class<? extends ASTNode> type) {
+    return getAncestorOfType(type) != null;
+  }
+
   public Root getRoot() {
     return root;
   }
 
-  private void adoptNewRoot(Root root) {
-    if (this.root != null && registered) {
+  class ChangeRootVisitor extends ASTVoidVisitor {
+    private Root root;
+
+    public ChangeRootVisitor(Root root) {
+      this.root = root;
+    }
+
+    @Override
+    public void visitVoid(ASTNode node) {
+      node.setRoot(root);
+    }
+  }
+
+  class UnregisterVisitor extends ASTVoidVisitor {
+    @Override
+    public void visitVoid(ASTNode node) {
+      node.unregister();
+    }
+  }
+
+  private void setRoot(Root root) {
+    if (this.root == root) {
+      return;
+    }
+    if (registered) {
       unregister();
     }
     this.root = root;
@@ -101,23 +140,9 @@ public abstract class ASTNode {
     registered = true;
   }
 
-  class ChangeRootVisitor extends ASTVoidVisitor {
-    private Root root;
-
-    public ChangeRootVisitor(Root root) {
-      this.root = root;
-    }
-
-    @Override
-    public void visitVoid(ASTNode node) {
-      node.adoptNewRoot(root);
-    }
-  }
-
   /**
-   * Sets the parent of this node and handles registration. It is assumed that
-   * this node is removed from the old parent and added to the new one before or
-   * after executing this method.
+   * Sets the parent of this node and handles registration and unregistration of
+   * the subtree with the new parent.
    * 
    * @param parent The parent value to set, cannot be null.
    * @return {@code true} if the parent was changed, {@code false} otherwise.
@@ -145,68 +170,103 @@ public abstract class ASTNode {
       return true;
     }
 
-    // in this case, we have to adapt the root of this subtree to the root of the
-    // new parent since this subtree is now part of a different tree
-    parent.root.merge(root);
-
-    // not unregistering from the previous root because it's being discarded
     this.parent = parent;
     this.selfReplacer = (Consumer<ASTNode>) setter;
     new ChangeRootVisitor(parent.root).visit(this);
-
     return true;
   }
 
+  /**
+   * Uses the stored replacer function to remove this node from the parent and
+   * remove the parent from this node. It does not unregister the subtree.
+   * 
+   * @param replacement The node to replace this node with
+   * @return {@code true} if the parent was changed, {@code false} otherwise.
+   */
   public boolean replaceBy(ASTNode replacement) {
     if (selfReplacer != null) {
       selfReplacer.accept(replacement);
-      unregisterFromParent();
       return true;
     }
     return false;
   }
 
   /**
-   * Removes a node from its parent by using the stored self replacer function. If
-   * the node can be removed from the parent in a more efficient way, especially
-   * in the case of node lists, use that method instead and then just call
-   * ${@link #unregisterFromParent()} afterwards.
+   * Replaces this node in the parent by the given node and unregisters the
+   * subtree. This fully removes the node from the tree.
    * 
-   * Calling this method is often not necessary at all since all interfaces with
-   * the AST tree will automatically remove nodes from whereever they are stored.
-   * 
-   * @return {@code true} if the node was removed, {@code false} otherwise.
+   * @param replacement The node to replace this node with
+   * @return {@code true} if the parent was changed, {@code false} otherwise.
    */
-  public boolean deleteFromParent() {
-    return replaceBy(null);
-  }
-
-  class UnregisterVisitor extends ASTVoidVisitor {
-    @Override
-    public void visitVoid(ASTNode node) {
-      node.unregister();
+  public boolean replaceByAndDelete(ASTNode replacement) {
+    if (replaceBy(replacement)) {
+      unregisterSubtree();
+      return true;
     }
+    return false;
   }
 
   /**
-   * To be called after removing this node from its parent. This unregisters it
-   * and all its children from the parent's root. Use a simple
-   * {@link ASTNode#setParent(ASTNode, Consumer)} to move a subtree from one node
-   * to the other.
+   * Detaches a node from its parent by using the stored self replacer function
+   * and also removes the parent from this node. Does not unregister the subtree.
    * 
-   * Doesn't unregister from root if there is no parent since then there are no
-   * other nodes that have access to this root and as such unregistering all nodes
-   * from a root makes no sense.
+   * @return {@code true} if the node was removed, {@code false} otherwise.
+   */
+  public boolean detach() {
+    // the parent is removed from this node through updateParents()
+    return replaceBy(null);
+  }
+
+  /**
+   * Removes this node in the parent and unregisters the subtree.
+   * 
+   * @return {@code true} if the parent was changed, {@code false} otherwise.
+   */
+  public boolean detachAndDelete() {
+    return replaceByAndDelete(null);
+  }
+
+  /**
+   * Removes the parent from this node. This is useful if the node has already
+   * been (efficiently) removed from the parent.
+   */
+  public void detachParent() {
+    parent = null;
+    selfReplacer = null;
+  }
+
+  /**
+   * This unregisters this node and all its children from its root.
    * 
    * @return {@code true} if there was unregistering, {@code false} otherwise.
    */
-  public boolean unregisterFromParent() {
-    if (parent == null) {
+  public boolean unregisterSubtree() {
+    detachParent();
+    new UnregisterVisitor().visit(this);
+    return true;
+  }
+
+  /**
+   * Swaps two nodes in their parents. Throws if the nodes or their parents are
+   * null in which case calling this method is pointless.
+   * 
+   * @param a The first node to swap
+   * @param b The second node to swap
+   * @return {@code true} if the nodes were swapped, {@code false} otherwise.
+   */
+  public static boolean swap(ASTNode a, ASTNode b) {
+    Objects.requireNonNull(a);
+    Objects.requireNonNull(b);
+    var bParent = b.getParent();
+    var aParent = a.getParent();
+    Objects.requireNonNull(aParent);
+    Objects.requireNonNull(bParent);
+    if (aParent == b || bParent == a) {
       return false;
     }
-    new UnregisterVisitor().visit(this);
-    parent = null;
-    selfReplacer = null;
+    var bReplacer = b.selfReplacer;
+    a.replaceBy(b);
+    bReplacer.accept(a);
     return true;
   }
 
@@ -238,7 +298,7 @@ public abstract class ASTNode {
     }
 
     if (currentNode != null) {
-      currentNode.unregisterFromParent();
+      currentNode.detachParent();
     }
 
     if (newNode != null) {

@@ -42,6 +42,30 @@ public class ASTTransformer<T extends JobParameters> implements ParameterizedTra
     this.transformation = transformation;
   }
 
+  public void setTransformation(TriConsumer<TranslationUnit, Root, T> transformation) {
+    this.transformation = wrapTransformation(this, transformation);
+  }
+
+  public void setTransformation(BiConsumer<TranslationUnit, Root> transformation) {
+    this.transformation = wrapTransformation(this, transformation);
+  }
+
+  public static <T> Consumer<TranslationUnit> wrapTransformation(ParameterizedTransformer<T> transformer,
+      TriConsumer<TranslationUnit, Root, T> transformation) {
+    return translationUnit -> transformation.accept(
+        translationUnit,
+        translationUnit.getRoot(),
+        transformer.getJobParameters());
+  }
+
+  public static Consumer<TranslationUnit> wrapTransformation(
+      ParameterizedTransformer<?> transformer,
+      BiConsumer<TranslationUnit, Root> transformation) {
+    return translationUnit -> transformation.accept(
+        translationUnit,
+        translationUnit.getRoot());
+  }
+
   @Override
   public GLSLLexer getLexer() {
     return parser.getLexer();
@@ -135,19 +159,4 @@ public class ASTTransformer<T extends JobParameters> implements ParameterizedTra
     return transformBare(PrintType.INDENTED, str);
   }
 
-  public static <T> Consumer<TranslationUnit> wrapTransformation(ParameterizedTransformer<T> transformer,
-      TriConsumer<TranslationUnit, Root, T> transformation) {
-    return translationUnit -> transformation.accept(
-        translationUnit,
-        translationUnit.getRoot(),
-        transformer.getJobParameters());
-  }
-
-  public static Consumer<TranslationUnit> wrapTransformation(
-    ParameterizedTransformer<?> transformer,
-      BiConsumer<TranslationUnit, Root> transformation) {
-    return translationUnit -> transformation.accept(
-        translationUnit,
-        translationUnit.getRoot());
-  }
 }
