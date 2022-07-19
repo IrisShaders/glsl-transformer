@@ -2,13 +2,11 @@
 
 See [publish-on-central](https://github.com/DanySK/publish-on-central) for docs on how it works.
 
-1. Make sure the javadocs are up to date and mostly complete `gradle javadoc`
-2. Test that everything builds ok `gradle build --warning-mode all`
-3. Run the tests `gradle test`
-4. Bump the version in `build.gradle` and commit it
-5. Make a tag `git tag vX.Y.Z`
-6. Upload the tag `git push --tags`
-7. Release the build `gradle releaseJavaMavenOnMavenCentralNexus`
+1. Test javadoc, compilation and tests with `gradle build --warning-mode all`
+2. Bump the version in `build.gradle` and commit it
+3. Make a tag `git tag vX.Y.Z`
+4. Upload the tag `git push --tags`
+5. Release the build `gradle releaseJavaMavenOnMavenCentralNexus`
 
 # Other
 
