@@ -2,6 +2,7 @@ package io.github.douira.glsl_transformer.ast.node.basic;
 
 import java.util.Objects;
 import java.util.function.*;
+import java.util.stream.Stream;
 
 import io.github.douira.glsl_transformer.ast.query.Root;
 import io.github.douira.glsl_transformer.ast.traversal.*;
@@ -36,6 +37,10 @@ public abstract class ASTNode {
 
   public ASTNode getParent() {
     return parent;
+  }
+
+  public boolean hasParent() {
+    return parent != null;
   }
 
   public Consumer<ASTNode> getParentSetter() {
@@ -136,6 +141,10 @@ public abstract class ASTNode {
 
   public ASTNode getAncestor(Class<? extends ASTNode> clazz) {
     return getAncestor(clazz::isInstance);
+  }
+
+  public Stream<ASTNode> getAncestors() {
+    return Stream.iterate(this, ASTNode::hasParent, ASTNode::getParent);
   }
 
   public Root getRoot() {
