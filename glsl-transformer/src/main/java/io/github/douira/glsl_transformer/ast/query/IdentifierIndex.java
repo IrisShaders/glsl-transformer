@@ -58,6 +58,15 @@ public class IdentifierIndex implements Index<Identifier> {
     return result == null ? Collections.emptySet() : result;
   }
 
+  public Identifier getOne(String k) {
+    return index.get(k).iterator().next();
+  }
+
+  public boolean has(String k) {
+    var result = index.get(k);
+    return result != null && !result.isEmpty();
+  }
+
   public SortedMap<String, Set<Identifier>> prefixMap(String key) {
     return index.prefixMap(key);
   }

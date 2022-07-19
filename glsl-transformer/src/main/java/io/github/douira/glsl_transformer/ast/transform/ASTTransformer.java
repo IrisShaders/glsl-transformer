@@ -108,7 +108,7 @@ public class ASTTransformer<T extends JobParameters> implements ParameterizedTra
     var parseTree = parser.parse(CharStreams.fromString(str), null, GLSLParser::translationUnit);
     var translationUnit = (TranslationUnit) ASTBuilder.build(parseTree);
     transformation.accept(translationUnit);
-    return ASTPrinter.printIndented(translationUnit);
+    return ASTPrinter.print(printType, translationUnit);
   }
 
   public String transform(
@@ -141,5 +141,13 @@ public class ASTTransformer<T extends JobParameters> implements ParameterizedTra
         translationUnit,
         translationUnit.getRoot(),
         transformer.getJobParameters());
+  }
+
+  public static Consumer<TranslationUnit> wrapTransformation(
+    ParameterizedTransformer<?> transformer,
+      BiConsumer<TranslationUnit, Root> transformation) {
+    return translationUnit -> transformation.accept(
+        translationUnit,
+        translationUnit.getRoot());
   }
 }

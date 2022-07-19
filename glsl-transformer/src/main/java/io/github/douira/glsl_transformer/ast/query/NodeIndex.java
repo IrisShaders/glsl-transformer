@@ -42,9 +42,28 @@ public class NodeIndex implements Index<ASTNode> {
   }
 
   @SuppressWarnings("unchecked")
+  public <T extends ASTNode> T getOne(Class<T> clazz) {
+    var result = (Set<T>) index.get(clazz);
+    return result == null ? null : result.iterator().next();
+  }
+
+  public boolean has(Class<? extends ASTNode> clazz) {
+    var result = index.get(clazz);
+    return result != null && !result.isEmpty();
+  }
+
+  @SuppressWarnings("unchecked")
   public <T extends ASTNode> Set<T> get(T node) {
-    var result = (Set<T>) get(node.getClass());
-    return result == null ? Collections.emptySet() : result;
+    return (Set<T>) get(node.getClass());
+  }
+
+  @SuppressWarnings("unchecked")
+  public <T extends ASTNode> T getOne(T node) {
+    return (T) getOne(node.getClass());
+  }
+
+  public boolean has(ASTNode node) {
+    return has(node.getClass());
   }
 
   @SuppressWarnings("unchecked")
