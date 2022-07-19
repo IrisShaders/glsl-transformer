@@ -1,27 +1,33 @@
 package io.github.douira.glsl_transformer.ast.node.basic;
 
+import java.util.Objects;
 import java.util.function.Consumer;
 
 import io.github.douira.glsl_transformer.ast.query.Root;
 import io.github.douira.glsl_transformer.ast.traversal.*;
 
+/**
+ * The AST node represents a node in the abstract syntax tree. Each AST node has
+ * a reference to the shared root object that contains the indexes for querying
+ * the tree.
+ * 
+ * Invariants:
+ * 1. The root must contain exactly the nodes that are accessible by
+ * traversing the tree downwards at any time.
+ * 2. Each contained node must have a reference to the root node it is part of.
+ * 3. The node must have a reference to its parent if it's not the root of the
+ * tree and it must have the same root reference as its parent.
+ * 4. The selfReplacer function replaces the current node in the referenced
+ * parent with a new one.
+ * 5. An AST node may only ever be in a tree once. Attempting to insert it
+ * multiple times will cause undefined behavior. Moving a node requires removing
+ * it from one parent and then adding it to another.
+ */
 public abstract class ASTNode {
-  /**
-   * is only null for the root node or before being added to a parent
-   * invariant: the parent of this node has to share the same root as this node
-   */
   private ASTNode parent;
-
-  /**
-   * a reference to the method of the parent that would overwrite this node
-   * useful for replacing this node within it's parent without searching for it
-   * Invariant: always refers to a method in the currently set parent.
-   * Null if the parent is also null.
-   */
   private Consumer<ASTNode> selfReplacer;
-
-  // should never be null
   private Root root = Root.getActiveBuildRoot();
+  private boolean registered = false;
 
   public ASTNode() {
   }
@@ -34,18 +40,6 @@ public abstract class ASTNode {
 
   public Consumer<ASTNode> getParentSetter() {
     return selfReplacer;
-  }
-
-  public boolean replaceInParent(ASTNode replacement) {
-    if (selfReplacer != null) {
-      selfReplacer.accept(replacement);
-      return true;
-    }
-    return false;
-  }
-
-  public boolean removeFromParent() {
-    return replaceInParent(null);
   }
 
   public ASTNode getNthParent(int n) {
@@ -90,12 +84,21 @@ public abstract class ASTNode {
   }
 
   private void adoptNewRoot(Root root) {
+    if (this.root != null && registered) {
+      unregister();
+    }
     this.root = root;
-    root.registerChild(this);
+    register();
   }
 
   private void unregister() {
     root.unregisterChild(this);
+    registered = false;
+  }
+
+  private void register() {
+    root.registerChild(this);
+    registered = true;
   }
 
   class ChangeRootVisitor extends ASTVoidVisitor {
@@ -112,17 +115,16 @@ public abstract class ASTNode {
   }
 
   /**
-   * Sets the parent of this node and handles registration.
+   * Sets the parent of this node and handles registration. It is assumed that
+   * this node is removed from the old parent and added to the new one before or
+   * after executing this method.
    * 
    * @param parent The parent value to set, cannot be null.
    * @return {@code true} if the parent was changed, {@code false} otherwise.
    */
   @SuppressWarnings("unchecked") // we rely on our construction doing the right thing
   public boolean setParent(ASTNode parent, Consumer<? extends ASTNode> setter) {
-    if (parent == null) {
-      throw new IllegalArgumentException(
-          "parent cannot be set to null");
-    }
+    Objects.requireNonNull(parent);
 
     // if the parent doesn't change, nothing has to be done
     if (this.parent == parent) {
@@ -134,6 +136,12 @@ public abstract class ASTNode {
     if (root == parent.root) {
       this.parent = parent;
       this.selfReplacer = (Consumer<ASTNode>) setter;
+
+      // when the root node of a newly built subtree that already has the same root
+      // references is added to the main tree, only the root node isn't registered yet
+      if (!registered) {
+        register();
+      }
       return true;
     }
 
@@ -149,6 +157,30 @@ public abstract class ASTNode {
     return true;
   }
 
+  public boolean replaceBy(ASTNode replacement) {
+    if (selfReplacer != null) {
+      selfReplacer.accept(replacement);
+      unregisterFromParent();
+      return true;
+    }
+    return false;
+  }
+
+  /**
+   * Removes a node from its parent by using the stored self replacer function. If
+   * the node can be removed from the parent in a more efficient way, especially
+   * in the case of node lists, use that method instead and then just call
+   * ${@link #unregisterFromParent()} afterwards.
+   * 
+   * Calling this method is often not necessary at all since all interfaces with
+   * the AST tree will automatically remove nodes from whereever they are stored.
+   * 
+   * @return {@code true} if the node was removed, {@code false} otherwise.
+   */
+  public boolean deleteFromParent() {
+    return replaceBy(null);
+  }
+
   class UnregisterVisitor extends ASTVoidVisitor {
     @Override
     public void visitVoid(ASTNode node) {
@@ -160,23 +192,39 @@ public abstract class ASTNode {
    * To be called after removing this node from its parent. This unregisters it
    * and all its children from the parent's root. Use a simple
    * {@link ASTNode#setParent(ASTNode, Consumer)} to move a subtree from one node
-   * to the
-   * other.
+   * to the other.
+   * 
+   * Doesn't unregister from root if there is no parent since then there are no
+   * other nodes that have access to this root and as such unregistering all nodes
+   * from a root makes no sense.
+   * 
+   * @return {@code true} if there was unregistering, {@code false} otherwise.
    */
-  public void detachFromParent() {
+  public boolean unregisterFromParent() {
     if (parent == null) {
-      return;
+      return false;
     }
     new UnregisterVisitor().visit(this);
     parent = null;
+    selfReplacer = null;
+    return true;
   }
 
+  /**
+   * Adds a newly constructed node to this node as the parent. The node will
+   * already have a reference to the current root but will not be registered to it
+   * yet.
+   * 
+   * @param <NodeType> Type of the node for passthrough
+   * @param node       The node to add
+   * @param setter     The setter to replace the node in this parent
+   * @return The node itself
+   */
   public <NodeType extends ASTNode> NodeType setup(
       NodeType node,
       Consumer<? extends NodeType> setter) {
     if (node != null) {
       node.setParent(this, setter);
-      root.registerChild(node);
     }
     return node;
   }
@@ -190,7 +238,7 @@ public abstract class ASTNode {
     }
 
     if (currentNode != null) {
-      currentNode.detachFromParent();
+      currentNode.unregisterFromParent();
     }
 
     if (newNode != null) {

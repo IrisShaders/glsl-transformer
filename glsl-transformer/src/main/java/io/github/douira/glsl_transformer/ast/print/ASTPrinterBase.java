@@ -53,20 +53,20 @@ public abstract class ASTPrinterBase extends ASTListenerVisitor<Void> {
     return printer.generateString();
   }
 
-  public static String printAST(PrintType type, ASTNode node) {
+  public static String print(PrintType type, ASTNode node) {
     return printAST(type.getPrinter(node), node);
   }
 
   public static String printSimple(ASTNode node) {
-    return printAST(PrintType.SIMPLE, node);
+    return print(PrintType.SIMPLE, node);
   }
 
   public static String printIndented(ASTNode node) {
-    return printAST(PrintType.INDENTED, node);
+    return print(PrintType.INDENTED, node);
   }
 
   public static String printCompact(ASTNode node) {
-    return printAST(PrintType.COMPACT, node);
+    return print(PrintType.COMPACT, node);
   }
 
   protected void emitTokens(PrintToken... tokens) {

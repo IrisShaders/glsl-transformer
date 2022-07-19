@@ -37,16 +37,8 @@ public class Root {
     });
   }
 
-  protected static synchronized <NodeType extends ASTNode> void indexNodes(
-      Root instance, Consumer<Passthrough<NodeType>> registerer) {
-    withActiveBuildRoot(instance, root -> {
-      registerer.accept(Passthrough.of(root::registerChild));
-      return null;
-    });
-  }
-
   public static <NodeType extends ASTNode> NodeType indexNodes(
-      Supplier<NodeType> builder) {
+    Supplier<NodeType> builder) {
     return indexNodes(new Root(), builder);
   }
 
@@ -55,14 +47,37 @@ public class Root {
     return indexNodes(parentTreeMember.getRoot(), builder);
   }
 
-  public static <NodeType extends ASTNode> void indexNodes(
-      Consumer<Passthrough<NodeType>> registerer) {
-    indexNodes(new Root(), registerer);
+  public static synchronized void indexBuildSession(Root instance, Runnable session) {
+    withActiveBuildRoot(instance, root -> {
+      session.run();
+      return null;
+    });
   }
 
-  public static <NodeType extends ASTNode> void indexNodes(
+  public static void indexBuildSession(Runnable session) {
+    indexBuildSession(new Root(), session);
+  }
+
+  public static void indexBuildSession(ASTNode parentTreeMember, Runnable session) {
+    indexBuildSession(parentTreeMember.getRoot(), session);
+  }
+
+  protected static synchronized <NodeType extends ASTNode> void indexSeparateTrees(
+      Root instance, Consumer<Passthrough<NodeType>> registererConsumer) {
+    withActiveBuildRoot(instance, root -> {
+      registererConsumer.accept(Passthrough.of(root::registerChild));
+      return null;
+    });
+  }
+
+  public static <NodeType extends ASTNode> void indexSeparateTrees(
+      Consumer<Passthrough<NodeType>> registerer) {
+    indexSeparateTrees(new Root(), registerer);
+  }
+
+  public static <NodeType extends ASTNode> void indexSeparateTrees(
       ASTNode parentTreeMember, Consumer<Passthrough<NodeType>> registerer) {
-    indexNodes(parentTreeMember.getRoot(), registerer);
+    indexSeparateTrees(parentTreeMember.getRoot(), registerer);
   }
 
   public Root(NodeIndex nodeIndex, IdentifierIndex identifierIndex) {

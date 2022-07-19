@@ -32,7 +32,7 @@ public class AssertUtil {
     var parser = new EnhancedParser();
     var parseTree = parser.parse(input, parseMethod);
     var ast = ASTBuilder.build(parseTree);
-    var reprinted = ASTPrinter.printAST(printType, ast);
+    var reprinted = ASTPrinter.print(printType, ast);
     assertEquals(expected, reprinted);
   }
 
