@@ -1,6 +1,7 @@
 package io.github.douira.glsl_transformer.ast.query;
 
 import java.util.*;
+import java.util.stream.Stream;
 
 import org.apache.commons.collections4.trie.PatriciaTrie;
 
@@ -9,15 +10,11 @@ import io.github.douira.glsl_transformer.ast.node.Identifier;
 /**
  * Indexes identifiers based on their content and enabled fast string queries.
  */
-public class IdentifierIndex implements Index<Identifier> {
-  public final PatriciaTrie<Set<Identifier>> index;
+public class IdentifierIndex<I extends PatriciaTrie<Set<Identifier>>> implements Index<Identifier>, PrefixQueryable<Identifier> {
+  public final I index;
 
-  public IdentifierIndex(PatriciaTrie<Set<Identifier>> index) {
+  public IdentifierIndex(I index) {
     this.index = index;
-  }
-
-  public IdentifierIndex() {
-    this(new PatriciaTrie<Set<Identifier>>());
   }
 
   @Override
@@ -44,7 +41,7 @@ public class IdentifierIndex implements Index<Identifier> {
     }
   }
 
-  public void merge(IdentifierIndex other) {
+  public void merge(IdentifierIndex<?> other) {
     for (var entry : other.index.entrySet()) {
       var set = index.get(entry.getKey());
       if (set == null) {
@@ -71,5 +68,27 @@ public class IdentifierIndex implements Index<Identifier> {
 
   public SortedMap<String, Set<Identifier>> prefixMap(String key) {
     return index.prefixMap(key);
+  }
+
+  @Override
+  public Stream<Set<Identifier>> prefixQuery(String key) {
+    return index.prefixMap(key).values().stream();
+  }
+  
+  @Override
+  public Stream<Identifier> prefixQueryFlat(String key) {
+    return prefixQuery(key).flatMap(Set::stream);
+  }
+
+  public static IdentifierIndex<PrefixTrie<Identifier>> withPrefix() {
+    return new IdentifierIndex<>(new PrefixTrie<>());
+  }
+
+  public static IdentifierIndex<PrefixSuffixTrie<Identifier>> withPrefixSuffix() {
+    return new IdentifierIndex<>(new PrefixSuffixTrie<>());
+  }
+
+  public static IdentifierIndex<PermutermTrie<Identifier>> withPermuterm() {
+    return new IdentifierIndex<>(new PermutermTrie<>());
   }
 }

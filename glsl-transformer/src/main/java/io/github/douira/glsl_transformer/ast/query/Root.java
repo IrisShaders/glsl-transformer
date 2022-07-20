@@ -9,7 +9,7 @@ import io.github.douira.glsl_transformer.util.Passthrough;
 
 public class Root {
   public final NodeIndex nodeIndex;
-  public final IdentifierIndex identifierIndex;
+  public final IdentifierIndex<?> identifierIndex;
 
   private static Deque<Root> activeBuildRoots = new ArrayDeque<>();
 
@@ -38,7 +38,7 @@ public class Root {
   }
 
   public static <NodeType extends ASTNode> NodeType indexNodes(
-    Supplier<NodeType> builder) {
+      Supplier<NodeType> builder) {
     return indexNodes(new Root(), builder);
   }
 
@@ -80,13 +80,13 @@ public class Root {
     indexSeparateTrees(parentTreeMember.getRoot(), registerer);
   }
 
-  public Root(NodeIndex nodeIndex, IdentifierIndex identifierIndex) {
+  public Root(NodeIndex nodeIndex, IdentifierIndex<?> identifierIndex) {
     this.nodeIndex = nodeIndex;
     this.identifierIndex = identifierIndex;
   }
 
   public Root() {
-    this(new NodeIndex(), new IdentifierIndex());
+    this(new NodeIndex(), IdentifierIndex.withPrefix());
   }
 
   public void registerChild(ASTNode child) {
