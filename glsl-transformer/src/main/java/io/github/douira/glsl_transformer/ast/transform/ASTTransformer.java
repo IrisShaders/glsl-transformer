@@ -28,25 +28,35 @@ public class ASTTransformer<T extends JobParameters> implements ParameterizedTra
     parser = new EnhancedParser(throwParseErrors);
   }
 
-  public ASTTransformer(Consumer<TranslationUnit> transformation) {
-    this();
-    this.transformation = transformation;
-  }
-
   public ASTTransformer(Consumer<TranslationUnit> transformation, boolean throwParseErrors) {
     this(throwParseErrors);
-    this.transformation = transformation;
+    setTransformation(transformation);
+  }
+
+  public ASTTransformer(Consumer<TranslationUnit> transformation) {
+    this();
+    setTransformation(transformation);
+  }
+
+  public ASTTransformer(BiConsumer<TranslationUnit, Root> transformation) {
+    this();
+    setTransformation(transformation);
+  }
+
+  public ASTTransformer(TriConsumer<TranslationUnit, Root, T> transformation) {
+    this();
+    setTransformation(transformation);
   }
 
   public void setTransformation(Consumer<TranslationUnit> transformation) {
     this.transformation = transformation;
   }
 
-  public void setTransformation(TriConsumer<TranslationUnit, Root, T> transformation) {
+  public void setTransformation(BiConsumer<TranslationUnit, Root> transformation) {
     this.transformation = wrapTransformation(this, transformation);
   }
 
-  public void setTransformation(BiConsumer<TranslationUnit, Root> transformation) {
+  public void setTransformation(TriConsumer<TranslationUnit, Root, T> transformation) {
     this.transformation = wrapTransformation(this, transformation);
   }
 
