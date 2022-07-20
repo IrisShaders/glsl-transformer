@@ -7,14 +7,9 @@ import java.util.Set;
 
 import org.junit.jupiter.api.*;
 
-public class PermutermTrieTest {
-  static Object a = new Object(),
-      b = new Object(),
-      c = new Object(),
-      d = new Object(),
-      e = new Object(),
-      f = new Object();
+import io.github.douira.glsl_transformer.test_util.TestWithTrieObjects;
 
+public class PermutermTrieTest extends TestWithTrieObjects {
   PermutermTrie<Object> trie;
 
   // setup before each test
@@ -79,65 +74,65 @@ public class PermutermTrieTest {
   }
 
   @Test
-  void testInfixQuery() {
+  void testInfixQueryFlat() {
     trie.put("aaa", a);
     trie.put("tat", b);
     trie.put("aac", c);
     trie.put("abc", d);
     trie.put("fdsfds", e);
-    assertQuery(Set.of(a, b, c, d), trie.infixQuery("a"));
-    assertQuery(Set.of(a, c), trie.infixQuery("aa"));
-    assertQuery(Set.of(c), trie.infixQuery("ac"));
-    assertTrue(trie.infixQuery("ca").count() == 0);
-    assertTrue(trie.infixQuery("ba").count() == 0);
-    assertTrue(trie.infixQuery("cba").count() == 0);
+    assertQuery(Set.of(a, b, c, d), trie.infixQueryFlat("a"));
+    assertQuery(Set.of(a, c), trie.infixQueryFlat("aa"));
+    assertQuery(Set.of(c), trie.infixQueryFlat("ac"));
+    assertTrue(trie.infixQueryFlat("ca").count() == 0);
+    assertTrue(trie.infixQueryFlat("ba").count() == 0);
+    assertTrue(trie.infixQueryFlat("cba").count() == 0);
   }
 
   @Test
-  void testPrefixQuery() {
+  void testPrefixQueryFlat() {
     trie.put("aaa", a);
     trie.put("tat", b);
     trie.put("aac", c);
     trie.put("abc", d);
     trie.put("fdsfds", e);
-    assertQuery(Set.of(a, c, d), trie.prefixQuery("a"));
-    assertQuery(Set.of(a, c), trie.prefixQuery("aa"));
-    assertQuery(Set.of(d), trie.prefixQuery("ab"));
-    assertTrue(trie.prefixQuery("ac").count() == 0);
-    assertTrue(trie.prefixQuery("ds").count() == 0);
-    assertTrue(trie.prefixQuery("aaaa").count() == 0);
+    assertQuery(Set.of(a, c, d), trie.prefixQueryFlat("a"));
+    assertQuery(Set.of(a, c), trie.prefixQueryFlat("aa"));
+    assertQuery(Set.of(d), trie.prefixQueryFlat("ab"));
+    assertTrue(trie.prefixQueryFlat("ac").count() == 0);
+    assertTrue(trie.prefixQueryFlat("ds").count() == 0);
+    assertTrue(trie.prefixQueryFlat("aaaa").count() == 0);
   }
 
   @Test
-  void testSuffixPrefixQuery() {
+  void testSuffixPrefixQueryFlat() {
     trie.put("aaa", a);
     trie.put("tat", b);
     trie.put("aac", c);
     trie.put("abc", d);
     trie.put("aabababbba", e);
-    assertQuery(Set.of(a, e), trie.suffixPrefixQuery("a", "a"));
-    assertQuery(Set.of(a, e), trie.suffixPrefixQuery("aa", "a"));
-    assertQuery(Set.of(b), trie.suffixPrefixQuery("t", "t"));
-    assertQuery(Set.of(e), trie.suffixPrefixQuery("aa", "bbba"));
-    assertQuery(Set.of(a, b, c, d, e), trie.suffixPrefixQuery("", ""));
-    assertQuery(Set.of(a, c, d, e), trie.suffixPrefixQuery("a", ""));
-    assertQuery(Set.of(a, e), trie.suffixPrefixQuery("", "a"));
-    assertQuery(Set.of(b), trie.suffixPrefixQuery("", "tat"));
-    assertTrue(trie.suffixPrefixQuery("aa", "aa").count() == 0);
+    assertQuery(Set.of(a, e), trie.invertedInfixQueryFlat("a", "a"));
+    assertQuery(Set.of(a, e), trie.invertedInfixQueryFlat("aa", "a"));
+    assertQuery(Set.of(b), trie.invertedInfixQueryFlat("t", "t"));
+    assertQuery(Set.of(e), trie.invertedInfixQueryFlat("aa", "bbba"));
+    assertQuery(Set.of(a, b, c, d, e), trie.invertedInfixQueryFlat("", ""));
+    assertQuery(Set.of(a, c, d, e), trie.invertedInfixQueryFlat("a", ""));
+    assertQuery(Set.of(a, e), trie.invertedInfixQueryFlat("", "a"));
+    assertQuery(Set.of(b), trie.invertedInfixQueryFlat("", "tat"));
+    assertTrue(trie.invertedInfixQueryFlat("aa", "aa").count() == 0);
   }
 
   @Test
-  void testSuffixQuery() {
+  void testSuffixQueryFlat() {
     trie.put("aaa", a);
     trie.put("tat", b);
     trie.put("aac", c);
     trie.put("abc", d);
     trie.put("fdsfds", e);
-    assertQuery(Set.of(c, d), trie.suffixQuery("c"));
-    assertQuery(Set.of(a), trie.suffixQuery("aa"));
-    assertQuery(Set.of(b), trie.suffixQuery("tat"));
-    assertTrue(trie.suffixQuery("ta").count() == 0);
-    assertTrue(trie.suffixQuery("aaaa").count() == 0);
-    assertTrue(trie.suffixQuery("fsd").count() == 0);
+    assertQuery(Set.of(c, d), trie.suffixQueryFlat("c"));
+    assertQuery(Set.of(a), trie.suffixQueryFlat("aa"));
+    assertQuery(Set.of(b), trie.suffixQueryFlat("tat"));
+    assertTrue(trie.suffixQueryFlat("ta").count() == 0);
+    assertTrue(trie.suffixQueryFlat("aaaa").count() == 0);
+    assertTrue(trie.suffixQueryFlat("fsd").count() == 0);
   }
 }

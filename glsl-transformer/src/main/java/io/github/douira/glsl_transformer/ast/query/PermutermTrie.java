@@ -1,6 +1,6 @@
 package io.github.douira.glsl_transformer.ast.query;
 
-import java.util.Map;
+import java.util.*;
 import java.util.function.Consumer;
 import java.util.stream.Stream;
 
@@ -10,11 +10,12 @@ import java.util.stream.Stream;
  * underlying trie. The number of bits used to index an entry is quadratic in
  * the size of the key.
  */
-public class PermutermTrie<E> extends DuplicatorTrie<E> {
+public class PermutermTrie<E> extends DuplicatorTrie<Set<E>>
+    implements PrefixQueryable<E>, SuffixQueryable<E>, InfixQueryable<E>, InvertedInfixQueryable<E> {
   public PermutermTrie() {
   }
 
-  public PermutermTrie(Map<? extends String, ? extends E> m) {
+  public PermutermTrie(Map<? extends String, ? extends Set<E>> m) {
     super(m);
   }
 
@@ -22,7 +23,7 @@ public class PermutermTrie<E> extends DuplicatorTrie<E> {
     super(marker);
   }
 
-  public PermutermTrie(Map<? extends String, ? extends E> m, char marker) {
+  public PermutermTrie(Map<? extends String, ? extends Set<E>> m, char marker) {
     super(m, marker);
   }
 
@@ -45,7 +46,8 @@ public class PermutermTrie<E> extends DuplicatorTrie<E> {
    * @param prefix the prefix to search for
    * @return the elements that have the prefix
    */
-  public Stream<E> prefixQuery(String prefix) {
+  @Override
+  public Stream<Set<E>> prefixQuery(String prefix) {
     return distinctPrefixQuery(marker + sanitizeKey(prefix));
   }
 
@@ -55,7 +57,8 @@ public class PermutermTrie<E> extends DuplicatorTrie<E> {
    * @param suffix the suffix to search for
    * @return the elements that have the suffix
    */
-  public Stream<E> suffixQuery(String suffix) {
+  @Override
+  public Stream<Set<E>> suffixQuery(String suffix) {
     return distinctPrefixQuery(sanitizeKey(suffix) + marker);
   }
 
@@ -65,7 +68,8 @@ public class PermutermTrie<E> extends DuplicatorTrie<E> {
    * @param infix the infix to search for
    * @return the elements that have the infix
    */
-  public Stream<E> infixQuery(String infix) {
+  @Override
+  public Stream<Set<E>> infixQuery(String infix) {
     return distinctPrefixQuery(sanitizeKey(infix));
   }
 
@@ -76,7 +80,8 @@ public class PermutermTrie<E> extends DuplicatorTrie<E> {
    * @param suffix the suffix to search require
    * @return the elements that have the prefix and suffix
    */
-  public Stream<E> suffixPrefixQuery(String prefix, String suffix) {
+  @Override
+  public Stream<Set<E>> invertedInfixQuery(String prefix, String suffix) {
     return distinctPrefixQuery(sanitizeKey(suffix) + marker + sanitizeKey(prefix));
   }
 }
