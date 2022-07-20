@@ -3,6 +3,7 @@ package io.github.douira.glsl_transformer.ast.transform;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.ArrayList;
+import java.util.stream.Collectors;
 
 import org.junit.jupiter.api.Test;
 
@@ -12,7 +13,7 @@ import io.github.douira.glsl_transformer.ast.node.basic.ASTNode;
 import io.github.douira.glsl_transformer.ast.node.expression.*;
 import io.github.douira.glsl_transformer.ast.node.external_declaration.ExternalDeclaration;
 import io.github.douira.glsl_transformer.ast.print.PrintType;
-import io.github.douira.glsl_transformer.ast.query.*;
+import io.github.douira.glsl_transformer.ast.query.Root;
 import io.github.douira.glsl_transformer.job_parameter.NonFixedJobParameters;
 import io.github.douira.glsl_transformer.test_util.TestWithASTTransformer;
 import io.github.douira.glsl_transformer.util.Type;
@@ -45,9 +46,8 @@ public class ASTTransformerTest extends TestWithASTTransformer {
   @Test
   void testIdentifierQuery() {
     transformer.setTransformation((tree, root) -> {
-      root.identifierIndex.prefixMap("a").values()
-          .stream().forEach(Index.<Identifier>iterate(
-              node -> node.setName(node.getName() + "b")));
+      root.identifierIndex.prefixQueryFlat("a").collect(Collectors.toList()).forEach(
+          node -> node.setName(node.getName() + "b"));
     });
     assertEquals(
         "int ab, ab, c; ",
