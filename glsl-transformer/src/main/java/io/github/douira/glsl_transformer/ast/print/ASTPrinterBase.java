@@ -26,11 +26,11 @@ public abstract class ASTPrinterBase extends ASTListenerVisitor<Void> {
 
   protected void emitToken(PrintToken token) {
     token.setSource(currentNode);
-    if (token instanceof ReplaceToken) {
+    if (token instanceof ReplaceToken replaceToken) {
       if (lastToken == null) {
         return;
       }
-      ((ReplaceToken) token).replace(lastToken, this);
+      replaceToken.replace(lastToken, this);
       return;
     }
 

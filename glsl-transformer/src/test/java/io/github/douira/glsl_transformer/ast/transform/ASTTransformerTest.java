@@ -155,13 +155,13 @@ public class ASTTransformerTest extends TestWithASTTransformer {
       var toMove = new ArrayList<LiteralExpression>();
       for (var node : root.nodeIndex
           .getOne(SequenceExpression.class).expressions) {
-        if (!(node instanceof LiteralExpression)) {
+        if (node instanceof LiteralExpression literalExpression) {
+          if (literalExpression.integerValue == 3
+              && literalExpression.getAncestor(ExternalDeclaration.class) == firstDeclaration) {
+            toMove.add(literalExpression);
+          }
+        } else {
           continue;
-        }
-        var literalExpression = (LiteralExpression) node;
-        if (literalExpression.integerValue == 3
-            && literalExpression.getAncestor(ExternalDeclaration.class) == firstDeclaration) {
-          toMove.add(literalExpression);
         }
       }
       var secondDeclaration = transformer.parseNode(

@@ -19,7 +19,7 @@ public abstract class JobParameters {
 
   @Override
   public boolean equals(Object other) {
-    return other instanceof JobParameters ? equals((JobParameters) other) : false;
+    return other instanceof JobParameters parameters ? equals(parameters) : false;
   }
 
   /**
