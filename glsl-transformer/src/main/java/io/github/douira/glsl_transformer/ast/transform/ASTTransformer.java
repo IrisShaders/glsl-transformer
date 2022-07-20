@@ -113,14 +113,6 @@ public class ASTTransformer<T extends JobParameters> implements ParameterizedTra
     return ASTBuilder.build(parseTree);
   }
 
-  public <RuleType extends ExtendedContext> ASTNode parseNode(
-      String input,
-      ASTNode parentTreeMember,
-      Function<GLSLParser, RuleType> parseMethod) throws RecognitionException {
-    var parseTree = parser.parse(input, null, parseMethod);
-    return ASTBuilder.buildSubtreeFor(parentTreeMember, parseTree);
-  }
-
   public <RuleType extends ExtendedContext, ReturnType extends ASTNode> ReturnType parseNode(
       String input,
       ASTNode parentTreeMember,
