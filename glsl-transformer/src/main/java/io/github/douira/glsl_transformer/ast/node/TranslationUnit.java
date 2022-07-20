@@ -3,7 +3,6 @@ package io.github.douira.glsl_transformer.ast.node;
 import java.util.Collection;
 import java.util.stream.Stream;
 
-import io.github.douira.glsl_transformer.GLSLParser;
 import io.github.douira.glsl_transformer.ast.node.basic.ListASTNode;
 import io.github.douira.glsl_transformer.ast.node.external_declaration.ExternalDeclaration;
 import io.github.douira.glsl_transformer.ast.transform.*;
@@ -37,11 +36,9 @@ public class TranslationUnit extends ListASTNode<ExternalDeclaration> {
   public void parseAndInjectNode(ASTTransformer<?> transformer, ASTInjectionPoint injectionPoint,
       String externalDeclarationContent) {
     children.add(injectionPoint.getInjectionIndex(this),
-        transformer.parseNode(
-            externalDeclarationContent,
+        transformer.parseExternalDeclaration(
             this,
-            GLSLParser::externalDeclaration,
-            ASTBuilder::visitExternalDeclaration));
+            externalDeclarationContent));
   }
 
   public void injectNode(
