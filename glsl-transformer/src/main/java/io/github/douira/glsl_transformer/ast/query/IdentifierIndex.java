@@ -86,6 +86,12 @@ public class IdentifierIndex<I extends PatriciaTrie<Set<Identifier>>>
     return prefixQuery(key).flatMap(Set::stream);
   }
 
+  public void renameAll(String oldName, String newName) {
+    index.get(oldName).forEach(identifier -> {
+      identifier.setName(newName);
+    });
+  }
+
   public static IdentifierIndex<PrefixTrie<Identifier>> withPrefix() {
     return new IdentifierIndex<>(new PrefixTrie<>());
   }
