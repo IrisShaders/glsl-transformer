@@ -490,6 +490,9 @@ uniform vec4 bigColor, smallColor;
 uniform vec4 otherColor;
 
 §testReprint translationUnit:
+uniform vec4 entityColor;
+
+§testReprint translationUnit:
 layout(binding = 0) buffer Buffers {
 	vec4 f4;
 	ivec4 i4;
