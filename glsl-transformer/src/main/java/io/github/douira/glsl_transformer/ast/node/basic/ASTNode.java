@@ -140,8 +140,9 @@ public abstract class ASTNode {
     return getAncestor(Integer.MAX_VALUE, predicate);
   }
 
-  public ASTNode getAncestor(Class<? extends ASTNode> clazz) {
-    return getAncestor(clazz::isInstance);
+  @SuppressWarnings("unchecked")
+  public <T extends ASTNode> T getAncestor(Class<T> clazz) {
+    return (T) getAncestor(clazz::isInstance);
   }
 
   public Stream<ASTNode> getAncestors() {
