@@ -10,7 +10,8 @@ import io.github.douira.glsl_transformer.ast.node.Identifier;
 /**
  * Indexes identifiers based on their content and enabled fast string queries.
  */
-public class IdentifierIndex<I extends PatriciaTrie<Set<Identifier>>> implements Index<Identifier>, PrefixQueryable<Identifier> {
+public class IdentifierIndex<I extends PatriciaTrie<Set<Identifier>>>
+    implements Index<Identifier>, PrefixQueryable<Identifier> {
   public final I index;
 
   public IdentifierIndex(I index) {
@@ -79,7 +80,7 @@ public class IdentifierIndex<I extends PatriciaTrie<Set<Identifier>>> implements
   public Stream<Set<Identifier>> prefixQuery(String key) {
     return index.prefixMap(key).values().stream();
   }
-  
+
   @Override
   public Stream<Identifier> prefixQueryFlat(String key) {
     return prefixQuery(key).flatMap(Set::stream);
