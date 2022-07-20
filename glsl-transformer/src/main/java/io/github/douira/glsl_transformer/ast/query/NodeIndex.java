@@ -1,6 +1,7 @@
 package io.github.douira.glsl_transformer.ast.query;
 
 import java.util.*;
+import java.util.stream.Stream;
 
 import io.github.douira.glsl_transformer.ast.node.basic.ASTNode;
 
@@ -39,6 +40,12 @@ public class NodeIndex implements Index<ASTNode> {
   public <T extends ASTNode> Set<T> get(Class<T> clazz) {
     var result = (Set<T>) index.get(clazz);
     return result == null ? Collections.emptySet() : result;
+  }
+
+  @SuppressWarnings("unchecked")
+  public <T extends ASTNode> Stream<T> getStream(Class<T> clazz) {
+    var result = (Set<T>) index.get(clazz);
+    return result == null ? Stream.empty() : result.stream();
   }
 
   @SuppressWarnings("unchecked")
