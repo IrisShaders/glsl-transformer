@@ -22,23 +22,25 @@ public class IdentifierIndex implements Index<Identifier> {
 
   @Override
   public void add(Identifier node) {
-    var set = index.get(node.name);
+    var name = node.getName();
+    var set = index.get(name);
     if (set == null) {
       set = new HashSet<>();
-      index.put(node.name, set);
+      index.put(name, set);
     }
     set.add(node);
   }
 
   @Override
   public void remove(Identifier node) {
-    var set = index.get(node.name);
+    var name = node.getName();
+    var set = index.get(name);
     if (set == null) {
       return;
     }
     set.remove(node);
     if (set.isEmpty()) {
-      index.remove(node.name);
+      index.remove(name);
     }
   }
 
