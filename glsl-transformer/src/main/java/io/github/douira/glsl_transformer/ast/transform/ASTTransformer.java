@@ -7,6 +7,9 @@ import org.antlr.v4.runtime.*;
 import io.github.douira.glsl_transformer.*;
 import io.github.douira.glsl_transformer.ast.node.TranslationUnit;
 import io.github.douira.glsl_transformer.ast.node.basic.ASTNode;
+import io.github.douira.glsl_transformer.ast.node.expression.Expression;
+import io.github.douira.glsl_transformer.ast.node.external_declaration.ExternalDeclaration;
+import io.github.douira.glsl_transformer.ast.node.statement.Statement;
 import io.github.douira.glsl_transformer.ast.print.*;
 import io.github.douira.glsl_transformer.ast.query.Root;
 import io.github.douira.glsl_transformer.basic.*;
@@ -161,4 +164,16 @@ public class ASTTransformer<T extends JobParameters> implements ParameterizedTra
     return transformBare(PrintType.INDENTED, str);
   }
 
+  public ExternalDeclaration parseExternalDeclaration(TranslationUnit parent, String input)
+      throws RecognitionException {
+    return parseNode(input, parent, GLSLParser::externalDeclaration, ASTBuilder::visitExternalDeclaration);
+  }
+
+  public Expression parseExpression(ASTNode parent, String input) throws RecognitionException {
+    return parseNode(input, parent, GLSLParser::expression, ASTBuilder::visitExpression);
+  }
+
+  public Statement parseStatement(ASTNode parent, String input) throws RecognitionException {
+    return parseNode(input, parent, GLSLParser::statement, ASTBuilder::visitStatement);
+  }
 }
