@@ -57,6 +57,11 @@ public class IdentifierIndex<I extends PatriciaTrie<Set<Identifier>>> implements
     return result == null ? Collections.emptySet() : result;
   }
 
+  public Stream<Identifier> getStream(String k) {
+    var result = index.get(k);
+    return result == null ? Stream.empty() : result.stream();
+  }
+
   public Identifier getOne(String k) {
     return index.get(k).iterator().next();
   }
