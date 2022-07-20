@@ -91,15 +91,15 @@ public class Root {
 
   public void registerChild(ASTNode child) {
     nodeIndex.add(child);
-    if (child instanceof Identifier) {
-      identifierIndex.add((Identifier) child);
+    if (child instanceof Identifier identifier) {
+      identifierIndex.add(identifier);
     }
   }
 
   public void unregisterChild(ASTNode child) {
     nodeIndex.remove(child);
-    if (child instanceof Identifier) {
-      identifierIndex.remove((Identifier) child);
+    if (child instanceof Identifier identifier) {
+      identifierIndex.remove(identifier);
     }
   }
 

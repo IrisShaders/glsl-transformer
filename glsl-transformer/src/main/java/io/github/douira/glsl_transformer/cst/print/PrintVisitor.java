@@ -250,10 +250,10 @@ public class PrintVisitor extends AbstractParseTreeVisitor<Void> {
         var child = context.children.get(i);
 
         // prettify unparsable AST nodes
-        if (child instanceof UnparsableCSTNode) {
+        if (child instanceof UnparsableCSTNode unparsableCSTNode) {
           // insert a newline before each group of unparsable ast nodes.
           // line preservation doesn't matter here since it's being broken anyways
-          if (!lastWasUnparsableASTNode && ((UnparsableCSTNode) child).doNewlineInsertion()) {
+          if (!lastWasUnparsableASTNode && unparsableCSTNode.doNewlineInsertion()) {
             addLiteral("\n");
             lastWasUnparsableASTNode = true;
           }

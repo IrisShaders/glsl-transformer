@@ -19,8 +19,8 @@ public class IndentingASTPrinter extends SimpleASTPrinter {
 
   @Override
   protected void appendToken(PrintToken token) {
-    if (token instanceof IndentMarker) {
-      indentLevel += ((IndentMarker) token).indentDelta;
+    if (token instanceof IndentMarker indentMarker) {
+      indentLevel += indentMarker.indentDelta;
     } else {
       var content = token.getContent();
       var isNewline = content != null && content.endsWith("\n");
