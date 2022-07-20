@@ -1092,7 +1092,7 @@ public abstract class ASTPrinter extends ASTPrinterBase {
 
   @Override
   public Void visitIdentifier(Identifier node) {
-    emitLiteral(node.name);
+    emitLiteral(node.getName());
     return null;
   }
 }

@@ -6,7 +6,7 @@ import io.github.douira.glsl_transformer.ast.node.basic.ASTNode;
 import io.github.douira.glsl_transformer.ast.traversal.ASTVisitor;
 
 public class Identifier extends ASTNode {
-  public String name;
+  private String name;
 
   public Identifier(String name) {
     this.name = name;
@@ -14,6 +14,19 @@ public class Identifier extends ASTNode {
 
   public Identifier(Token token) {
     this(token.getText());
+  }
+
+  public String getName() {
+    return name;
+  }
+
+  public void setName(String name) {
+    if (this.name.equals(name)) {
+      return;
+    }
+    getRoot().identifierIndex.remove(this);
+    this.name = name;
+    getRoot().identifierIndex.add(this);
   }
 
   @Override

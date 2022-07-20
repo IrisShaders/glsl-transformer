@@ -44,9 +44,10 @@ public class ASTTransformerTest extends TestWithASTTransformer {
 
   @Test
   void testIdentifierQuery() {
-    transformer.setTransformation(tree -> {
-      tree.getRoot().identifierIndex.index.prefixMap("a").values()
-          .stream().forEach(Index.<Identifier>iterate(node -> node.name += "b"));
+    transformer.setTransformation((tree, root) -> {
+      root.identifierIndex.prefixMap("a").values()
+          .stream().forEach(Index.<Identifier>iterate(
+              node -> node.setName(node.getName() + "b")));
     });
     assertEquals(
         "int ab, ab, c; ",
@@ -58,8 +59,8 @@ public class ASTTransformerTest extends TestWithASTTransformer {
 
   @Test
   void testNodeQuery() {
-    transformer.setTransformation(tree -> {
-      tree.getRoot().nodeIndex.get(LiteralExpression.class)
+    transformer.setTransformation((tree, root) -> {
+      root.nodeIndex.get(LiteralExpression.class)
           .stream().forEach(literal -> {
             literal.integerValue++;
           });
@@ -74,15 +75,15 @@ public class ASTTransformerTest extends TestWithASTTransformer {
 
   @Test
   void testNodeQueryAfterModification() {
-    transformer.setTransformation(tree -> {
+    transformer.setTransformation((tree, root) -> {
       Root.indexBuildSession(tree, () -> {
-        for (var sequence : tree.getRoot().nodeIndex
+        for (var sequence : root.nodeIndex
             .get(SequenceExpression.class)) {
           sequence.expressions.add(
               new LiteralExpression(Type.INT32, 1));
         }
       });
-      tree.getRoot().nodeIndex.get(LiteralExpression.class)
+      root.nodeIndex.get(LiteralExpression.class)
           .stream().forEach(literal -> literal.integerValue++);
     });
     assertEquals(
@@ -95,10 +96,10 @@ public class ASTTransformerTest extends TestWithASTTransformer {
 
   @Test
   void testSelfReplacement() {
-    transformer.setTransformation(tree -> {
+    transformer.setTransformation((tree, root) -> {
       Root.indexBuildSession(tree, () -> {
         var toReplace = new ArrayList<LiteralExpression>();
-        for (var node : tree.getRoot().nodeIndex
+        for (var node : root.nodeIndex
             .get(LiteralExpression.class)) {
           if (node.integerValue == 3) {
             toReplace.add(node);
@@ -120,18 +121,18 @@ public class ASTTransformerTest extends TestWithASTTransformer {
 
   @Test
   void testNodeRemovalAndQuery() {
-    transformer.setTransformation(tree -> {
+    transformer.setTransformation((tree, root) -> {
       var toRemove = new ArrayList<ReferenceExpression>();
-      for (var node : tree.getRoot().nodeIndex
+      for (var node : root.nodeIndex
           .get(ReferenceExpression.class)) {
-        if (node.getIdentifier().name.equals("a")) {
+        if (node.getIdentifier().getName().equals("a")) {
           toRemove.add(node);
         }
       }
       for (var node : toRemove) {
         node.detachAndDelete();
       }
-      assertTrue(tree.getRoot().identifierIndex.get("a").isEmpty());
+      assertTrue(root.identifierIndex.get("a").isEmpty());
     });
     assertEquals(
         "int x = b, c, d; ",
@@ -141,7 +142,7 @@ public class ASTTransformerTest extends TestWithASTTransformer {
   @Test
   void testJobParameters() {
     var jobParameters = new NonFixedJobParameters();
-    transformer.setTransformation(tree -> {
+    transformer.setTransformation((tree, root) -> {
       assertEquals(transformer.getJobParameters(), jobParameters);
     });
     transformer.transform(PrintType.COMPACT, "", jobParameters);
