@@ -7,7 +7,7 @@ import io.github.douira.glsl_transformer.ast.data.*;
 import io.github.douira.glsl_transformer.ast.traversal.*;
 
 public class PrecisionQualifier extends TypeQualifierPart {
-  public enum PrecisionLevel implements TokenAssociatedEnum {
+  public enum PrecisionLevel implements TokenTyped {
     HIGH(GLSLLexer.HIGHP),
     MEDIUM(GLSLLexer.MEDIUMP),
     LOW(GLSLLexer.LOWP);

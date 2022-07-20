@@ -520,6 +520,6 @@ public interface ASTVisitor<R> extends GeneralASTVisitor<R> {
   }
 
   default R visitIdentifier(Identifier node) {
-    return defaultResult();
+    return visitData(node.getName());
   }
 }

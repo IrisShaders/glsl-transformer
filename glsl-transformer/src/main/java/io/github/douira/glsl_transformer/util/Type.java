@@ -5,7 +5,7 @@ import java.util.*;
 import org.antlr.v4.runtime.Token;
 
 import io.github.douira.glsl_transformer.GLSLLexer;
-import io.github.douira.glsl_transformer.ast.data.TokenAssociatedEnum;
+import io.github.douira.glsl_transformer.ast.data.TokenTyped;
 
 /**
  * The shape is an array of up to three integers describing how big this
@@ -13,7 +13,7 @@ import io.github.douira.glsl_transformer.ast.data.TokenAssociatedEnum;
  * of each value and the following dimensions describe the actual dimensions of
  * the tensor.
  */
-public enum Type implements TokenAssociatedEnum {
+public enum Type implements TokenTyped {
   BOOL(GLSLLexer.BOOL, GLSLLexer.BOOLCONSTANT, NumberType.BOOLEAN, "bool", "bool", 1),
   BVEC2(GLSLLexer.BVEC2, NumberType.BOOLEAN, "bvec2", "bvec2", 1, 2),
   BVEC3(GLSLLexer.BVEC3, NumberType.BOOLEAN, "bvec3", "bvec3", 1, 3),

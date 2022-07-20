@@ -229,6 +229,11 @@ public abstract class ASTPrinterBase extends ASTListenerVisitor<Void> {
   }
 
   @Override
+  public Void visitData(Object data) {
+    return null;
+  }
+
+  @Override
   public Void defaultResult() {
     throw new IllegalStateException("The default value should never be used and all nodes should be printed properly!");
   }

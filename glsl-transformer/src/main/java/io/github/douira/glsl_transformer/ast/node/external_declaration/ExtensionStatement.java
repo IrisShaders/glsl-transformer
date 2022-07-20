@@ -7,7 +7,7 @@ import io.github.douira.glsl_transformer.ast.data.*;
 import io.github.douira.glsl_transformer.ast.traversal.*;
 
 public class ExtensionStatement extends ExternalDeclaration {
-  public enum ExtensionBehavior implements TokenAssociatedEnum {
+  public enum ExtensionBehavior implements TokenTyped {
     DEBUG(GLSLLexer.NR_REQUIRE),
     ENABLE(GLSLLexer.NR_ENABLE),
     WARN(GLSLLexer.NR_WARN),

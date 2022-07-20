@@ -14,7 +14,7 @@ public class BuiltinFixedTypeSpecifier extends TypeSpecifier {
     IMAGE;
   }
 
-  public enum BuiltinType implements TokenAssociatedEnum {
+  public enum BuiltinType implements TokenTyped {
     VOID(GLSLLexer.VOID, TypeKind.VOID),
     ATOMIC_UINT(GLSLLexer.ATOMIC_UINT, TypeKind.ATOMIC_UINT),
     SAMPLER2D(GLSLLexer.SAMPLER2D, TypeKind.SAMPLER),

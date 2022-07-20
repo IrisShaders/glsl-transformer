@@ -7,7 +7,7 @@ import io.github.douira.glsl_transformer.ast.data.*;
 import io.github.douira.glsl_transformer.ast.traversal.*;
 
 public class PragmaStatement extends ExternalDeclaration {
-  public enum PragmaType implements TokenAssociatedEnum {
+  public enum PragmaType implements TokenTyped {
     DEBUG(GLSLLexer.PRAGMA_DEBUG),
     OPTIMIZE(GLSLLexer.PRAGMA_OPTIMIZE),
     INVARIANT(GLSLLexer.PRAGMA_INVARIANT),
@@ -29,7 +29,7 @@ public class PragmaStatement extends ExternalDeclaration {
     }
   }
 
-  public enum PragmaState implements TokenAssociatedEnum {
+  public enum PragmaState implements TokenTyped {
     ON(GLSLLexer.NR_ON),
     OFF(GLSLLexer.NR_OFF),
     ALL(GLSLLexer.NR_ALL);

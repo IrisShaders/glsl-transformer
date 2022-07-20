@@ -7,7 +7,7 @@ import io.github.douira.glsl_transformer.ast.data.*;
 import io.github.douira.glsl_transformer.ast.traversal.*;
 
 public class InterpolationQualifier extends TypeQualifierPart {
-  public enum InterpolationType implements TokenAssociatedEnum {
+  public enum InterpolationType implements TokenTyped {
     SMOOTH(GLSLLexer.SMOOTH),
     FLAT(GLSLLexer.FLAT),
     NOPERSPECTIVE(GLSLLexer.NOPERSPECTIVE);
