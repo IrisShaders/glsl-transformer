@@ -20,34 +20,34 @@ public class PrefixSuffixTrieTest extends TestWithTrieObjects {
 
   @Test
   void testContainsKey() {
-    trie.put("aaa", a);
-    trie.put("baa", b);
-    trie.put("aac", c);
-    trie.put("abc", d);
-    trie.put("fdsfds", e);
-    Assertions.assertTrue(trie.containsKey("aaa"));
-    Assertions.assertTrue(trie.containsKey("baa"));
-    Assertions.assertTrue(trie.containsKey("aac"));
-    Assertions.assertTrue(trie.containsKey("abc"));
-    Assertions.assertTrue(trie.containsKey("fdsfds"));
-    Assertions.assertFalse(trie.containsKey("aa"));
-    Assertions.assertFalse(trie.containsKey("aab"));
-    Assertions.assertFalse(trie.containsKey("a"));
-    Assertions.assertFalse(trie.containsKey("cba"));
+    trie.put("aaa", Set.of(a));
+    trie.put("baa", Set.of(b));
+    trie.put("aac", Set.of(c));
+    trie.put("abc", Set.of(d));
+    trie.put("fdsfds", Set.of(e));
+    assertTrue(trie.containsKey("aaa"));
+    assertTrue(trie.containsKey("baa"));
+    assertTrue(trie.containsKey("aac"));
+    assertTrue(trie.containsKey("abc"));
+    assertTrue(trie.containsKey("fdsfds"));
+    assertFalse(trie.containsKey("aa"));
+    assertFalse(trie.containsKey("aab"));
+    assertFalse(trie.containsKey("a"));
+    assertFalse(trie.containsKey("cba"));
   }
 
   @Test
   void testGet() {
-    trie.put("aaa", a);
-    trie.put("baa", b);
-    trie.put("aac", c);
-    trie.put("abc", d);
-    trie.put("fdsfds", e);
-    assertEquals(a, trie.get("aaa"));
-    assertEquals(b, trie.get("baa"));
-    assertEquals(c, trie.get("aac"));
-    assertEquals(d, trie.get("abc"));
-    assertEquals(e, trie.get("fdsfds"));
+    trie.put("aaa", Set.of(a));
+    trie.put("baa", Set.of(b));
+    trie.put("aac", Set.of(c));
+    trie.put("abc", Set.of(d));
+    trie.put("fdsfds", Set.of(e));
+    assertEquals(a, trie.get("aaa").iterator().next());
+    assertEquals(b, trie.get("baa").iterator().next());
+    assertEquals(c, trie.get("aac").iterator().next());
+    assertEquals(d, trie.get("abc").iterator().next());
+    assertEquals(e, trie.get("fdsfds").iterator().next());
     assertNull(trie.get("aa"));
     assertNull(trie.get("aab"));
     assertNull(trie.get("a"));
@@ -56,11 +56,11 @@ public class PrefixSuffixTrieTest extends TestWithTrieObjects {
 
   @Test
   void testRemove() {
-    trie.put("aaa", a);
-    trie.put("baa", b);
-    trie.put("aac", c);
-    trie.put("abc", d);
-    trie.put("fdsfds", e);
+    trie.put("aaa", Set.of(a));
+    trie.put("baa", Set.of(b));
+    trie.put("aac", Set.of(c));
+    trie.put("abc", Set.of(d));
+    trie.put("fdsfds", Set.of(e));
     trie.remove("baa");
     trie.remove("a");
     trie.remove("aac");
@@ -75,32 +75,32 @@ public class PrefixSuffixTrieTest extends TestWithTrieObjects {
 
   @Test
   void testPrefixQueryFlat() {
-    trie.put("aaa", a);
-    trie.put("tat", b);
-    trie.put("aac", c);
-    trie.put("abc", d);
-    trie.put("fdsfds", e);
+    trie.put("aaa", Set.of(a));
+    trie.put("tat", Set.of(b));
+    trie.put("aac", Set.of(c));
+    trie.put("abc", Set.of(d));
+    trie.put("fdsfds", Set.of(e));
     assertQuery(Set.of(a, c, d), trie.prefixQueryFlat("a"));
     assertQuery(Set.of(a, c), trie.prefixQueryFlat("aa"));
     assertQuery(Set.of(d), trie.prefixQueryFlat("ab"));
-    assertTrue(trie.prefixQueryFlat("ac").count() == 0);
-    assertTrue(trie.prefixQueryFlat("ds").count() == 0);
-    assertTrue(trie.prefixQueryFlat("aaaa").count() == 0);
+    assertEquals(0, trie.prefixQueryFlat("ac").count());
+    assertEquals(0, trie.prefixQueryFlat("ds").count());
+    assertEquals(0, trie.prefixQueryFlat("aaaa").count());
   }
 
   @Test
   void testSuffixQueryFlat() {
-    trie.put("aaa", a);
-    trie.put("tat", b);
-    trie.put("aac", c);
-    trie.put("abc", d);
-    trie.put("fdsfds", e);
+    trie.put("aaa", Set.of(a));
+    trie.put("tat", Set.of(b));
+    trie.put("aac", Set.of(c));
+    trie.put("abc", Set.of(d));
+    trie.put("fdsfds", Set.of(e));
     assertQuery(Set.of(c, d), trie.suffixQueryFlat("c"));
     assertQuery(Set.of(a), trie.suffixQueryFlat("aa"));
     assertQuery(Set.of(b), trie.suffixQueryFlat("tat"));
     assertQuery(Set.of(b), trie.suffixQueryFlat("at"));
-    assertTrue(trie.suffixQueryFlat("ta").count() == 0);
-    assertTrue(trie.suffixQueryFlat("aaaa").count() == 0);
-    assertTrue(trie.suffixQueryFlat("fsd").count() == 0);
+    assertEquals(0, trie.suffixQueryFlat("ta").count());
+    assertEquals(0, trie.suffixQueryFlat("aaaa").count());
+    assertEquals(0, trie.suffixQueryFlat("fsd").count());
   }
 }

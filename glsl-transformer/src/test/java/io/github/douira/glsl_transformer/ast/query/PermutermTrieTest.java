@@ -20,11 +20,11 @@ public class PermutermTrieTest extends TestWithTrieObjects {
 
   @Test
   void testContainsKey() {
-    trie.put("aaa", a);
-    trie.put("baa", b);
-    trie.put("aac", c);
-    trie.put("abc", d);
-    trie.put("fdsfds", e);
+    trie.put("aaa", Set.of(a));
+    trie.put("baa", Set.of(b));
+    trie.put("aac", Set.of(c));
+    trie.put("abc", Set.of(d));
+    trie.put("fdsfds", Set.of(e));
     Assertions.assertTrue(trie.containsKey("aaa"));
     Assertions.assertTrue(trie.containsKey("baa"));
     Assertions.assertTrue(trie.containsKey("aac"));
@@ -38,16 +38,16 @@ public class PermutermTrieTest extends TestWithTrieObjects {
 
   @Test
   void testGet() {
-    trie.put("aaa", a);
-    trie.put("baa", b);
-    trie.put("aac", c);
-    trie.put("abc", d);
-    trie.put("fdsfds", e);
-    assertEquals(a, trie.get("aaa"));
-    assertEquals(b, trie.get("baa"));
-    assertEquals(c, trie.get("aac"));
-    assertEquals(d, trie.get("abc"));
-    assertEquals(e, trie.get("fdsfds"));
+    trie.put("aaa", Set.of(a));
+    trie.put("baa", Set.of(b));
+    trie.put("aac", Set.of(c));
+    trie.put("abc", Set.of(d));
+    trie.put("fdsfds", Set.of(e));
+    assertEquals(a, trie.get("aaa").iterator().next());
+    assertEquals(b, trie.get("baa").iterator().next());
+    assertEquals(c, trie.get("aac").iterator().next());
+    assertEquals(d, trie.get("abc").iterator().next());
+    assertEquals(e, trie.get("fdsfds").iterator().next());
     assertNull(trie.get("aa"));
     assertNull(trie.get("aab"));
     assertNull(trie.get("a"));
@@ -56,11 +56,11 @@ public class PermutermTrieTest extends TestWithTrieObjects {
 
   @Test
   void testRemove() {
-    trie.put("aaa", a);
-    trie.put("baa", b);
-    trie.put("aac", c);
-    trie.put("abc", d);
-    trie.put("fdsfds", e);
+    trie.put("aaa", Set.of(a));
+    trie.put("baa", Set.of(b));
+    trie.put("aac", Set.of(c));
+    trie.put("abc", Set.of(d));
+    trie.put("fdsfds", Set.of(e));
     trie.remove("baa");
     trie.remove("a");
     trie.remove("aac");
@@ -75,41 +75,41 @@ public class PermutermTrieTest extends TestWithTrieObjects {
 
   @Test
   void testInfixQueryFlat() {
-    trie.put("aaa", a);
-    trie.put("tat", b);
-    trie.put("aac", c);
-    trie.put("abc", d);
-    trie.put("fdsfds", e);
+    trie.put("aaa", Set.of(a));
+    trie.put("tat", Set.of(b));
+    trie.put("aac", Set.of(c));
+    trie.put("abc", Set.of(d));
+    trie.put("fdsfds", Set.of(e));
     assertQuery(Set.of(a, b, c, d), trie.infixQueryFlat("a"));
     assertQuery(Set.of(a, c), trie.infixQueryFlat("aa"));
     assertQuery(Set.of(c), trie.infixQueryFlat("ac"));
-    assertTrue(trie.infixQueryFlat("ca").count() == 0);
-    assertTrue(trie.infixQueryFlat("ba").count() == 0);
-    assertTrue(trie.infixQueryFlat("cba").count() == 0);
+    assertEquals(0, trie.infixQueryFlat("ca").count());
+    assertEquals(0, trie.infixQueryFlat("ba").count());
+    assertEquals(0, trie.infixQueryFlat("cba").count());
   }
 
   @Test
   void testPrefixQueryFlat() {
-    trie.put("aaa", a);
-    trie.put("tat", b);
-    trie.put("aac", c);
-    trie.put("abc", d);
-    trie.put("fdsfds", e);
+    trie.put("aaa", Set.of(a));
+    trie.put("tat", Set.of(b));
+    trie.put("aac", Set.of(c));
+    trie.put("abc", Set.of(d));
+    trie.put("fdsfds", Set.of(e));
     assertQuery(Set.of(a, c, d), trie.prefixQueryFlat("a"));
     assertQuery(Set.of(a, c), trie.prefixQueryFlat("aa"));
     assertQuery(Set.of(d), trie.prefixQueryFlat("ab"));
-    assertTrue(trie.prefixQueryFlat("ac").count() == 0);
-    assertTrue(trie.prefixQueryFlat("ds").count() == 0);
-    assertTrue(trie.prefixQueryFlat("aaaa").count() == 0);
+    assertEquals(0, trie.prefixQueryFlat("ac").count());
+    assertEquals(0, trie.prefixQueryFlat("ds").count());
+    assertEquals(0, trie.prefixQueryFlat("aaaa").count());
   }
 
   @Test
   void testSuffixPrefixQueryFlat() {
-    trie.put("aaa", a);
-    trie.put("tat", b);
-    trie.put("aac", c);
-    trie.put("abc", d);
-    trie.put("aabababbba", e);
+    trie.put("aaa", Set.of(a));
+    trie.put("tat", Set.of(b));
+    trie.put("aac", Set.of(c));
+    trie.put("abc", Set.of(d));
+    trie.put("aabababbba", Set.of(e));
     assertQuery(Set.of(a, e), trie.invertedInfixQueryFlat("a", "a"));
     assertQuery(Set.of(a, e), trie.invertedInfixQueryFlat("aa", "a"));
     assertQuery(Set.of(b), trie.invertedInfixQueryFlat("t", "t"));
@@ -118,21 +118,21 @@ public class PermutermTrieTest extends TestWithTrieObjects {
     assertQuery(Set.of(a, c, d, e), trie.invertedInfixQueryFlat("a", ""));
     assertQuery(Set.of(a, e), trie.invertedInfixQueryFlat("", "a"));
     assertQuery(Set.of(b), trie.invertedInfixQueryFlat("", "tat"));
-    assertTrue(trie.invertedInfixQueryFlat("aa", "aa").count() == 0);
+    assertEquals(0, trie.invertedInfixQueryFlat("aa", "aa").count());
   }
 
   @Test
   void testSuffixQueryFlat() {
-    trie.put("aaa", a);
-    trie.put("tat", b);
-    trie.put("aac", c);
-    trie.put("abc", d);
-    trie.put("fdsfds", e);
+    trie.put("aaa", Set.of(a));
+    trie.put("tat", Set.of(b));
+    trie.put("aac", Set.of(c));
+    trie.put("abc", Set.of(d));
+    trie.put("fdsfds", Set.of(e));
     assertQuery(Set.of(c, d), trie.suffixQueryFlat("c"));
     assertQuery(Set.of(a), trie.suffixQueryFlat("aa"));
     assertQuery(Set.of(b), trie.suffixQueryFlat("tat"));
-    assertTrue(trie.suffixQueryFlat("ta").count() == 0);
-    assertTrue(trie.suffixQueryFlat("aaaa").count() == 0);
-    assertTrue(trie.suffixQueryFlat("fsd").count() == 0);
+    assertEquals(0, trie.suffixQueryFlat("ta").count());
+    assertEquals(0, trie.suffixQueryFlat("aaaa").count());
+    assertEquals(0, trie.suffixQueryFlat("fsd").count());
   }
 }
