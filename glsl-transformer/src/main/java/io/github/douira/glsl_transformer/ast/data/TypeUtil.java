@@ -3,7 +3,7 @@ package io.github.douira.glsl_transformer.ast.data;
 import org.antlr.v4.runtime.Token;
 
 public class TypeUtil {
-  public static <T extends TokenAssociatedEnum> T enumFromToken(T[] enumValues, Token token) {
+  public static <T extends TokenTyped> T enumFromToken(T[] enumValues, Token token) {
     for (T value : enumValues) {
       if (value.getTokenType() == token.getType()) {
         return value;

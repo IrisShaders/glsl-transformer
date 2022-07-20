@@ -11,6 +11,10 @@ public interface GeneralASTVisitor<R> {
 
   R visit(ASTNode node);
 
+  default R visitData(Object data) {
+    return defaultResult();
+  }
+
   default R visit(R previousResult, ASTNode node) {
     return aggregateResult(previousResult, visit(node));
   }

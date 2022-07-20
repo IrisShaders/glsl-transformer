@@ -11,7 +11,7 @@ import io.github.douira.glsl_transformer.ast.node.Identifier;
 import io.github.douira.glsl_transformer.ast.traversal.*;
 
 public class StorageQualifier extends TypeQualifierPart {
-  public enum StorageType implements TokenAssociatedEnum {
+  public enum StorageType implements TokenTyped {
     CONST(GLSLLexer.CONST),
     IN(GLSLLexer.IN),
     OUT(GLSLLexer.OUT),

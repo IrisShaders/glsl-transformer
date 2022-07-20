@@ -8,7 +8,7 @@ import io.github.douira.glsl_transformer.ast.node.basic.ASTNode;
 import io.github.douira.glsl_transformer.ast.traversal.ASTVisitor;
 
 public class VersionStatement extends ASTNode {
-  public enum Profile implements TokenAssociatedEnum {
+  public enum Profile implements TokenTyped {
     CORE(GLSLLexer.NR_CORE),
     COMPATIBILITY(GLSLLexer.NR_COMPATIBILITY),
     ES(GLSLLexer.NR_ES);

@@ -8,7 +8,7 @@ import io.github.douira.glsl_transformer.ast.node.type.qualifier.LayoutQualifier
 import io.github.douira.glsl_transformer.ast.traversal.*;
 
 public class LayoutDefaults extends ExternalDeclaration {
-  public enum LayoutMode implements TokenAssociatedEnum {
+  public enum LayoutMode implements TokenTyped {
     UNIFORM(GLSLLexer.UNIFORM),
     IN(GLSLLexer.IN),
     OUT(GLSLLexer.OUT),
