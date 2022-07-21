@@ -2,6 +2,7 @@ package io.github.douira.glsl_transformer.ast.query;
 
 import java.util.*;
 import java.util.function.*;
+import java.util.stream.Stream;
 
 import io.github.douira.glsl_transformer.ast.node.Identifier;
 import io.github.douira.glsl_transformer.ast.node.basic.ASTNode;
@@ -10,6 +11,7 @@ import io.github.douira.glsl_transformer.util.Passthrough;
 public class Root {
   public final NodeIndex nodeIndex;
   public final IdentifierIndex<?> identifierIndex;
+  private List<Identifier> nodeList;
 
   private static Deque<Root> activeBuildRoots = new ArrayDeque<>();
 
@@ -106,5 +108,48 @@ public class Root {
   public void merge(Root other) {
     nodeIndex.merge(other.nodeIndex);
     identifierIndex.merge(other.identifierIndex);
+  }
+
+  private void ensureNodeList() {
+    if (nodeList == null) {
+      nodeList = new ArrayList<>();
+    } else {
+      nodeList.clear();
+    }
+  }
+
+  public void renameAll(String oldName, String newName) {
+    ensureNodeList();
+    var set = identifierIndex.get(oldName);
+    if (set == null) {
+      return;
+    }
+    nodeList.addAll(set);
+    for (var identifier : nodeList) {
+      identifier.setName(newName);
+    }
+  }
+
+  public void replaceAll(String name, Consumer<Identifier> replacer) {
+    ensureNodeList();
+    var set = identifierIndex.get(name);
+    if (set == null) {
+      return;
+    }
+    nodeList.addAll(set);
+    for (var identifier : nodeList) {
+      replacer.accept(identifier);
+    }
+  }
+
+  public void replaceAll(Stream<Identifier> targets, Consumer<Identifier> replacer) {
+    ensureNodeList();
+    if (targets == null) {
+      return;
+    }
+    targets.forEach(nodeList::add);
+    for (var identifier : nodeList) {
+      replacer.accept(identifier);
+    }
   }
 }
