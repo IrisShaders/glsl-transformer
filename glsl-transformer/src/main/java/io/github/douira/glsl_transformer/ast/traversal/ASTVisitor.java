@@ -30,7 +30,7 @@ public interface ASTVisitor<R> extends GeneralASTVisitor<R> {
   }
 
   default R visitVersionStatement(VersionStatement node) {
-    return defaultResult();
+    return visitData(node.profile);
   }
 
   default R visitExternalDeclaration(ExternalDeclaration node) {
@@ -46,11 +46,15 @@ public interface ASTVisitor<R> extends GeneralASTVisitor<R> {
   }
 
   default R visitPragmaStatement(PragmaStatement node) {
-    return defaultResult();
+    var result = visitData(node.stdGL);
+    result = visitData(result, node.type);
+    result = visitData(result, node.customName);
+    return visitData(result, node.state);
   }
 
   default R visitExtensionStatement(ExtensionStatement node) {
-    return superNodeTypeResult();
+    var result = visitData(superNodeTypeResult(), node.name);
+    return visitData(result, node.behavior);
   }
 
   default R visitDeclarationExternalDeclaration(DeclarationExternalDeclaration node) {
@@ -58,7 +62,9 @@ public interface ASTVisitor<R> extends GeneralASTVisitor<R> {
   }
 
   default R visitLayoutDefaults(LayoutDefaults node) {
-    return visit(node.getQualifier());
+    var result = visit(node.getQualifier());
+    result = aggregateResult(result, visitData(node.mode));
+    return result;
   }
 
   default R visitExpression(Expression node) {
@@ -277,7 +283,9 @@ public interface ASTVisitor<R> extends GeneralASTVisitor<R> {
   }
 
   default R visitLiteralExpression(LiteralExpression node) {
-    return defaultResult();
+    var result = visitData(node.literalType);
+    result = visitData(result, node.getNumber());
+    return node.isInteger() ? visitData(result, node.integerFormat) : result;
   }
 
   default R visitStatement(Statement node) {
@@ -428,7 +436,7 @@ public interface ASTVisitor<R> extends GeneralASTVisitor<R> {
   }
 
   default R visitInterpolationQualifier(InterpolationQualifier node) {
-    return defaultResult();
+    return visitData(node.interpolationType);
   }
 
   default R visitInvariantQualifier(InvariantQualifier node) {
@@ -452,7 +460,7 @@ public interface ASTVisitor<R> extends GeneralASTVisitor<R> {
   }
 
   default R visitPrecisionQualifier(PrecisionQualifier node) {
-    return defaultResult();
+    return visitData(node.precisionLevel);
   }
 
   default R visitSharedLayoutQualifierPart(SharedLayoutQualifierPart node) {
@@ -460,7 +468,8 @@ public interface ASTVisitor<R> extends GeneralASTVisitor<R> {
   }
 
   default R visitStorageQualifier(StorageQualifier node) {
-    return visitChildren(node.typeNames);
+    var result = visitChildren(node.typeNames);
+    return visitData(result, node.storageType);
   }
 
   default R visitTypeQualifier(TypeQualifier node) {
@@ -476,11 +485,11 @@ public interface ASTVisitor<R> extends GeneralASTVisitor<R> {
   }
 
   default R visitBuiltinFixedTypeSpecifier(BuiltinFixedTypeSpecifier node) {
-    return defaultResult();
+    return visitData(node.type);
   }
 
   default R visitBuiltinNumericTypeSpecifier(BuiltinNumericTypeSpecifier node) {
-    return defaultResult();
+    return visitData(node.type);
   }
 
   default R visitTypeReference(TypeReference node) {
