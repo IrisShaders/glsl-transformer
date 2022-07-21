@@ -135,6 +135,12 @@ public class ASTTransformer<T extends JobParameters> implements ParameterizedTra
         visitMethod);
   }
 
+  public ASTNode parseNodeWithoutRoot(
+      String input,
+      Function<GLSLParser, ? extends ExtendedContext> parseMethod) throws RecognitionException {
+    return ASTBuilder.build(parser.parse(input, parseMethod));
+  }
+
   public String transformBare(PrintType printType, String str) throws RecognitionException {
     var parseTree = parser.parse(
         CharStreams.fromString(str), null, GLSLParser::translationUnit);

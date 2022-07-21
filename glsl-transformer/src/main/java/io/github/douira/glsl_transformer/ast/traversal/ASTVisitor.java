@@ -92,11 +92,10 @@ public interface ASTVisitor<R> extends GeneralASTVisitor<R> {
   }
 
   default R visitFunctionCallExpression(FunctionCallExpression node) {
-    return visitChildren(
-        visitTwoChildren(
-            node.getFunctionName(),
-            node.getFunctionSpecifier()),
-        node.getParameters());
+    var result = visitTwoChildren(
+        node.getFunctionName(),
+        node.getFunctionSpecifier());
+    return visitChildren(result, node.getParameters());
   }
 
   default R visitGroupingExpression(GroupingExpression node) {
@@ -392,7 +391,7 @@ public interface ASTVisitor<R> extends GeneralASTVisitor<R> {
   }
 
   default R visitDeclarationMember(DeclarationMember node) {
-    return visitTwoChildren(node.getArraySpecifier(), node.getInitializer());
+    return visitThreeChildren(node.getName(), node.getArraySpecifier(), node.getInitializer());
   }
 
   default R visitFunctionDeclaration(FunctionDeclaration node) {
