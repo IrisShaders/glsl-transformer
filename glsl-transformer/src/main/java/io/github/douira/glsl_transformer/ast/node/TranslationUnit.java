@@ -1,6 +1,6 @@
 package io.github.douira.glsl_transformer.ast.node;
 
-import java.util.Collection;
+import java.util.*;
 import java.util.stream.Stream;
 
 import io.github.douira.glsl_transformer.ast.node.basic.ListASTNode;
@@ -33,6 +33,12 @@ public class TranslationUnit extends ListASTNode<ExternalDeclaration> {
     children.add(injectionPoint.getInjectionIndex(this), node);
   }
 
+  public void injectNodes(
+      ASTInjectionPoint injectionPoint,
+      Collection<ExternalDeclaration> nodes) {
+    children.addAll(injectionPoint.getInjectionIndex(this), nodes);
+  }
+
   public void parseAndInjectNode(ASTTransformer<?> transformer, ASTInjectionPoint injectionPoint,
       String externalDeclarationContent) {
     children.add(injectionPoint.getInjectionIndex(this),
@@ -41,10 +47,15 @@ public class TranslationUnit extends ListASTNode<ExternalDeclaration> {
             externalDeclarationContent));
   }
 
-  public void injectNode(
-      ASTInjectionPoint injectionPoint,
-      Collection<ExternalDeclaration> nodes) {
-    children.addAll(injectionPoint.getInjectionIndex(this), nodes);
+  public void parseAndInjectNodes(ASTTransformer<?> transformer, ASTInjectionPoint injectionPoint,
+      String... externalDeclarationContents) {
+    var nodes = new ArrayList<ExternalDeclaration>();
+    for (var externalDeclarationContent : externalDeclarationContents) {
+      nodes.add(transformer.parseExternalDeclaration(
+          this,
+          externalDeclarationContent));
+    }
+    injectNodes(injectionPoint, nodes);
   }
 
   @Override
