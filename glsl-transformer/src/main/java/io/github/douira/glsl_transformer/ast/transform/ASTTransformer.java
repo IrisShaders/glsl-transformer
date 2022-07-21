@@ -173,16 +173,16 @@ public class ASTTransformer<T extends JobParameters> implements ParameterizedTra
     return transformBare(PrintType.INDENTED, str);
   }
 
-  public ExternalDeclaration parseExternalDeclaration(TranslationUnit parent, String input)
+  public ExternalDeclaration parseExternalDeclaration(ASTNode treeMember, String input)
       throws RecognitionException {
-    return parseNode(input, parent, GLSLParser::externalDeclaration, ASTBuilder::visitExternalDeclaration);
+    return parseNode(input, treeMember, GLSLParser::externalDeclaration, ASTBuilder::visitExternalDeclaration);
   }
 
-  public Expression parseExpression(ASTNode parent, String input) throws RecognitionException {
-    return parseNode(input, parent, GLSLParser::expression, ASTBuilder::visitExpression);
+  public Expression parseExpression(ASTNode treeMember, String input) throws RecognitionException {
+    return parseNode(input, treeMember, GLSLParser::expression, ASTBuilder::visitExpression);
   }
 
-  public Statement parseStatement(ASTNode parent, String input) throws RecognitionException {
-    return parseNode(input, parent, GLSLParser::statement, ASTBuilder::visitStatement);
+  public Statement parseStatement(ASTNode treeMember, String input) throws RecognitionException {
+    return parseNode(input, treeMember, GLSLParser::statement, ASTBuilder::visitStatement);
   }
 }
