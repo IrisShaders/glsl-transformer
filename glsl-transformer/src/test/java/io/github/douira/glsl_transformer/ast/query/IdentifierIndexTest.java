@@ -32,6 +32,7 @@ public class IdentifierIndexTest extends TestWithASTTransformer {
       assertTrue(index.has("b"));
       assertFalse(index.has("c"));
       index.renameAll("a", "c");
+      assertDoesNotThrow(() -> index.renameAll("foo", "c"));
       assertFalse(index.has("a"));
       assertTrue(index.has("b"));
       assertTrue(index.has("c"));

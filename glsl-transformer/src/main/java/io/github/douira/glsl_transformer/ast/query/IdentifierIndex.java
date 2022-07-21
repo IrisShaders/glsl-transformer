@@ -93,7 +93,11 @@ public class IdentifierIndex<I extends PatriciaTrie<Set<Identifier>>>
     } else {
       toRename.clear();
     }
-    toRename.addAll(index.get(oldName));
+    var set = index.get(oldName);
+    if (set == null) {
+      return;
+    }
+    toRename.addAll(set);
     for (var identifier : toRename) {
       identifier.setName(newName);
     }
