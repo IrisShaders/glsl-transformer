@@ -2,6 +2,8 @@ package io.github.douira.glsl_transformer.ast.query;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+import java.util.stream.Stream;
+
 import org.junit.jupiter.api.Test;
 
 import io.github.douira.glsl_transformer.ast.node.Identifier;
@@ -51,5 +53,14 @@ public class RootTest extends TestWithASTTransformer {
     assertEquals(
         "int x = bam + spam + bar + bam + spam; ",
         transformer.transform(PrintType.COMPACT, "int x = foo + bar + fan;"));
+  }
+
+  @Test
+  void testNullReplaceStream() {
+    transformer.setTransformation((tree, root) -> {
+      root.replaceAll(Stream.of((Identifier) null), id -> {
+      });
+    });
+    assertDoesNotThrow(() -> transformer.transform(""));
   }
 }
