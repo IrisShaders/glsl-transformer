@@ -1,7 +1,6 @@
 package io.github.douira.glsl_transformer.ast.query;
 
 import java.util.*;
-import java.util.function.Consumer;
 import java.util.stream.Stream;
 
 import org.apache.commons.collections4.trie.PatriciaTrie;
@@ -14,7 +13,6 @@ import io.github.douira.glsl_transformer.ast.node.Identifier;
 public class IdentifierIndex<I extends PatriciaTrie<Set<Identifier>>>
     implements Index<Identifier>, PrefixQueryable<Identifier> {
   public final I index;
-  private List<Identifier> nodeList;
 
   public IdentifierIndex(I index) {
     this.index = index;
@@ -86,49 +84,6 @@ public class IdentifierIndex<I extends PatriciaTrie<Set<Identifier>>>
   @Override
   public Stream<Identifier> prefixQueryFlat(String key) {
     return prefixQuery(key).flatMap(Set::stream);
-  }
-
-  private void ensureNodeList() {
-    if (nodeList == null) {
-      nodeList = new ArrayList<>();
-    } else {
-      nodeList.clear();
-    }
-  }
-
-  public void renameAll(String oldName, String newName) {
-    ensureNodeList();
-    var set = index.get(oldName);
-    if (set == null) {
-      return;
-    }
-    nodeList.addAll(set);
-    for (var identifier : nodeList) {
-      identifier.setName(newName);
-    }
-  }
-
-  public void replaceAll(String name, Consumer<Identifier> replacer) {
-    ensureNodeList();
-    var set = index.get(name);
-    if (set == null) {
-      return;
-    }
-    nodeList.addAll(set);
-    for (var identifier : nodeList) {
-      replacer.accept(identifier);
-    }
-  }
-
-  public void replaceAll(Stream<Identifier> targets, Consumer<Identifier> replacer) {
-    ensureNodeList();
-    if (targets == null) {
-      return;
-    }
-    targets.forEach(nodeList::add);
-    for (var identifier : nodeList) {
-      replacer.accept(identifier);
-    }
   }
 
   public static IdentifierIndex<PrefixTrie<Identifier>> withPrefix() {
