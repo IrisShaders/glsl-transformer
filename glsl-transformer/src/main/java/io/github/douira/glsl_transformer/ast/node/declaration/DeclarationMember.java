@@ -72,5 +72,4 @@ public class DeclarationMember extends InnerASTNode {
   public void exitNode(ASTListener listener) {
     listener.exitDeclarationMember(this);
   }
-
 }

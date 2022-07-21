@@ -6,6 +6,21 @@ public abstract class ASTVoidVisitor implements ASTVisitor<Void> {
   public void visitVoid(ASTNode node) {
   }
 
+  public void visitVoid(Object data) {
+  }
+
+  @Override
+  public Void visitData(Object data) {
+    visitVoid(data);
+    return null;
+  }
+
+  @Override
+  public Void visitData(Void previousResult, Object data) {
+    visitData(data);
+    return null;
+  }
+
   @Override
   public Void visit(ASTNode node) {
     visitVoid(node);
