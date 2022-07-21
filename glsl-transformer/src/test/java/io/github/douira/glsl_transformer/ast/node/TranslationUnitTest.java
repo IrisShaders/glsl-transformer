@@ -43,7 +43,7 @@ public class TranslationUnitTest extends TestWithASTTransformer {
   @SnapshotName("testInject")
   void testInject(String scenario, String input) {
     for (var location : ASTInjectionPoint.values()) {
-      transformer.setTransformation(tree -> tree.injectNode(
+      transformer.setTransformation(tree -> tree.injectNodes(
           location,
           Stream.of("x", "y")
               .<ExternalDeclaration>map(name -> transformer.parseNode(
