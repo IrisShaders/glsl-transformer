@@ -135,7 +135,7 @@ public class Root {
   }
 
   @SuppressWarnings("unchecked")
-  public void replaceAll(String name, Consumer<Identifier> replacer) {
+  public void processAll(String name, Consumer<Identifier> replacer) {
     ensureEmptyNodeList();
     var set = identifierIndex.get(name);
     if (set == null) {
@@ -149,7 +149,7 @@ public class Root {
   }
 
   @SuppressWarnings("unchecked")
-  public <T extends ASTNode> void replaceAll(Stream<T> targets, Consumer<T> replacer) {
+  public <T extends ASTNode> void processAll(Stream<T> targets, Consumer<T> replacer) {
     ensureEmptyNodeList();
     if (targets == null) {
       return;
@@ -167,7 +167,7 @@ public class Root {
       ASTTransformer<?> transformer,
       String name,
       String expressionContent) {
-    replaceAll(name, identifier -> {
+    processAll(name, identifier -> {
       var parent = identifier.getParent();
       if (!(parent instanceof ReferenceExpression)) {
         return;
@@ -181,7 +181,7 @@ public class Root {
       ASTTransformer<?> transformer,
       Stream<Identifier> targets,
       String expressionContent) {
-    replaceAll(targets, identifier -> {
+    processAll(targets, identifier -> {
       var parent = identifier.getParent();
       if (!(parent instanceof ReferenceExpression)) {
         return;

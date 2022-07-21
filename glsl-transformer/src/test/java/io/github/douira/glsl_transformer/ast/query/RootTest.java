@@ -34,7 +34,7 @@ public class RootTest extends TestWithASTTransformer {
   @Test
   void testReplaceAll() {
     transformer.setTransformation((tree, root) -> {
-      root.replaceAll("foo",
+      root.processAll("foo",
           id -> id.getParent().replaceByAndDelete(
               transformer.parseExpression(tree, "bam + spam")));
     });
@@ -46,7 +46,7 @@ public class RootTest extends TestWithASTTransformer {
   @Test
   void testReplaceAllMultiple() {
     transformer.setTransformation((tree, root) -> {
-      root.replaceAll(root.identifierIndex.prefixQueryFlat("f"),
+      root.processAll(root.identifierIndex.prefixQueryFlat("f"),
           id -> id.getParent().replaceByAndDelete(
               transformer.parseExpression(tree, "bam + spam")));
     });
@@ -58,7 +58,7 @@ public class RootTest extends TestWithASTTransformer {
   @Test
   void testNullReplaceStream() {
     transformer.setTransformation((tree, root) -> {
-      root.replaceAll(Stream.of((Identifier) null), id -> {
+      root.processAll(Stream.of((Identifier) null), id -> {
       });
     });
     assertDoesNotThrow(() -> transformer.transform(""));
