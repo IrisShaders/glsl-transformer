@@ -13,6 +13,7 @@ import io.github.douira.glsl_transformer.ast.node.Identifier;
 public class IdentifierIndex<I extends PatriciaTrie<Set<Identifier>>>
     implements Index<Identifier>, PrefixQueryable<Identifier> {
   public final I index;
+  private List<Identifier> toRename;
 
   public IdentifierIndex(I index) {
     this.index = index;
@@ -87,9 +88,15 @@ public class IdentifierIndex<I extends PatriciaTrie<Set<Identifier>>>
   }
 
   public void renameAll(String oldName, String newName) {
-    index.get(oldName).forEach(identifier -> {
+    if (toRename == null) {
+      toRename = new ArrayList<>();
+    } else {
+      toRename.clear();
+    }
+    toRename.addAll(index.get(oldName));
+    for (var identifier : toRename) {
       identifier.setName(newName);
-    });
+    }
   }
 
   public static IdentifierIndex<PrefixTrie<Identifier>> withPrefix() {
