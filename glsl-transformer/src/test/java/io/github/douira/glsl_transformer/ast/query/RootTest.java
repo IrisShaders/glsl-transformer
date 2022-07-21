@@ -39,8 +39,8 @@ public class RootTest extends TestWithASTTransformer {
               transformer.parseExpression(tree, "bam + spam")));
     });
     assertEquals(
-        "int x = bam + spam + bar; ",
-        transformer.transform(PrintType.COMPACT, "int x = foo + bar;"));
+        "int x = bam + spam + bar + fooo; ",
+        transformer.transform(PrintType.COMPACT, "int x = foo + bar + fooo;"));
   }
 
   @Test
@@ -62,5 +62,29 @@ public class RootTest extends TestWithASTTransformer {
       });
     });
     assertDoesNotThrow(() -> transformer.transform(""));
+  }
+
+  @Test
+  void testReplaceAllReferenceExpressionsPrefix() {
+    transformer.setTransformation((tree, root) -> {
+      root.replaceAllReferenceExpressions(transformer,
+          root.identifierIndex.prefixQueryFlat("f"),
+          "bam + spam");
+    });
+    assertEquals(
+        "int foo = bam + spam + bar + bam + spam; ",
+        transformer.transform(PrintType.COMPACT, "int foo = foo + bar + fan;"));
+  }
+
+  @Test
+  void testReplaceAllReferenceExpressionsExact() {
+    transformer.setTransformation((tree, root) -> {
+      root.replaceAllReferenceExpressions(transformer,
+          "foo",
+          "bam + spam");
+    });
+    assertEquals(
+        "int foo = bam + spam + bar + fan; ",
+        transformer.transform(PrintType.COMPACT, "int foo = foo + bar + fan;"));
   }
 }

@@ -6,6 +6,8 @@ import java.util.stream.Stream;
 
 import io.github.douira.glsl_transformer.ast.node.Identifier;
 import io.github.douira.glsl_transformer.ast.node.basic.ASTNode;
+import io.github.douira.glsl_transformer.ast.node.expression.ReferenceExpression;
+import io.github.douira.glsl_transformer.ast.transform.ASTTransformer;
 import io.github.douira.glsl_transformer.util.Passthrough;
 
 public class Root {
@@ -159,5 +161,33 @@ public class Root {
         replacer.accept(node);
       }
     }
+  }
+
+  public void replaceAllReferenceExpressions(
+      ASTTransformer<?> transformer,
+      String name,
+      String expressionContent) {
+    replaceAll(name, identifier -> {
+      var parent = identifier.getParent();
+      if (!(parent instanceof ReferenceExpression)) {
+        return;
+      }
+      identifier.getParent().replaceByAndDelete(
+          transformer.parseExpression(identifier, expressionContent));
+    });
+  }
+
+  public void replaceAllReferenceExpressions(
+      ASTTransformer<?> transformer,
+      Stream<Identifier> targets,
+      String expressionContent) {
+    replaceAll(targets, identifier -> {
+      var parent = identifier.getParent();
+      if (!(parent instanceof ReferenceExpression)) {
+        return;
+      }
+      identifier.getParent().replaceByAndDelete(
+          transformer.parseExpression(identifier, expressionContent));
+    });
   }
 }
