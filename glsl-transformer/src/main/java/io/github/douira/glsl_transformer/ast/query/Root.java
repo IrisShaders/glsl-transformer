@@ -149,7 +149,9 @@ public class Root {
     }
     targets.forEach(nodeList::add);
     for (var identifier : nodeList) {
-      replacer.accept(identifier);
+      if (identifier != null) {
+        replacer.accept(identifier);
+      }
     }
   }
 }
