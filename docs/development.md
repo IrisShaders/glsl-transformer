@@ -2,7 +2,7 @@
 
 See [publish-on-central](https://github.com/DanySK/publish-on-central) for docs on how it works.
 
-1. Test javadoc, compilation and tests with `gradle build --warning-mode all`
+1. Test javadoc, compilation and tests with `CI=1 gradle build --warning-mode all`
 2. Bump the version in `build.gradle` and commit it
 3. Make a tag `git tag vX.Y.Z`
 4. Upload the tag `git push --tags`
