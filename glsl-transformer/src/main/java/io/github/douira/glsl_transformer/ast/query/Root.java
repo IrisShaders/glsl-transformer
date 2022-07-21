@@ -11,7 +11,7 @@ import io.github.douira.glsl_transformer.util.Passthrough;
 public class Root {
   public final NodeIndex nodeIndex;
   public final IdentifierIndex<?> identifierIndex;
-  private List<Identifier> nodeList;
+  private List<? extends ASTNode> nodeList;
 
   private static Deque<Root> activeBuildRoots = new ArrayDeque<>();
 
@@ -110,7 +110,7 @@ public class Root {
     identifierIndex.merge(other.identifierIndex);
   }
 
-  private void ensureNodeList() {
+  private void ensureEmptyNodeList() {
     if (nodeList == null) {
       nodeList = new ArrayList<>();
     } else {
@@ -118,39 +118,45 @@ public class Root {
     }
   }
 
+  @SuppressWarnings("unchecked")
   public void renameAll(String oldName, String newName) {
-    ensureNodeList();
+    ensureEmptyNodeList();
     var set = identifierIndex.get(oldName);
     if (set == null) {
       return;
     }
-    nodeList.addAll(set);
-    for (var identifier : nodeList) {
+    var identifierList = (List<Identifier>) nodeList;
+    identifierList.addAll(set);
+    for (var identifier : identifierList) {
       identifier.setName(newName);
     }
   }
 
+  @SuppressWarnings("unchecked")
   public void replaceAll(String name, Consumer<Identifier> replacer) {
-    ensureNodeList();
+    ensureEmptyNodeList();
     var set = identifierIndex.get(name);
     if (set == null) {
       return;
     }
-    nodeList.addAll(set);
-    for (var identifier : nodeList) {
+    var identifierList = (List<Identifier>) nodeList;
+    identifierList.addAll(set);
+    for (var identifier : identifierList) {
       replacer.accept(identifier);
     }
   }
 
-  public void replaceAll(Stream<Identifier> targets, Consumer<Identifier> replacer) {
-    ensureNodeList();
+  @SuppressWarnings("unchecked")
+  public <T extends ASTNode> void replaceAll(Stream<T> targets, Consumer<T> replacer) {
+    ensureEmptyNodeList();
     if (targets == null) {
       return;
     }
-    targets.forEach(nodeList::add);
-    for (var identifier : nodeList) {
-      if (identifier != null) {
-        replacer.accept(identifier);
+    var typedList = (List<T>) nodeList;
+    targets.forEach(typedList::add);
+    for (var node : typedList) {
+      if (node != null) {
+        replacer.accept(node);
       }
     }
   }
