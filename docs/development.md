@@ -62,3 +62,6 @@ Use multi cursor to generate a file that has lots of class files and then use th
 ```js
 fs.readFileSync("split").toString().split("//split_marker").map(str => str.trim() + "\n").forEach(str => fs.writeFileSync(str.match(/class (\w+)/)[1] + ".java", str))
 ```
+
+### TODO
+- Operator precedence isn't respected by the printer when printing nodes. Parentheses are only inserted if there is an actual grouping expression. (Are grouping expressions necessary at all if the printer automatically inserts parenthesis only exactly where necessary based on the expression tree?)
