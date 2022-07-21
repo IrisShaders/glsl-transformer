@@ -112,7 +112,7 @@ public class ASTTransformer<T extends JobParameters> implements ParameterizedTra
   public <RuleType extends ExtendedContext> ASTNode parseTranslationUnit(
       String input,
       Function<GLSLParser, RuleType> parseMethod) throws RecognitionException {
-    return ASTBuilder.build(parser.parse(input, null, parseMethod));
+    return ASTBuilder.build(parser.parse(input, parseMethod));
   }
 
   public <RuleType extends ExtendedContext, ReturnType extends ASTNode> ReturnType parseNode(
@@ -122,7 +122,7 @@ public class ASTTransformer<T extends JobParameters> implements ParameterizedTra
       BiFunction<ASTBuilder, RuleType, ReturnType> visitMethod) throws RecognitionException {
     return ASTBuilder.buildSubtreeWith(
         parentTreeMember,
-        parser.parse(input, null, parseMethod),
+        parser.parse(input, parseMethod),
         visitMethod);
   }
 
@@ -131,12 +131,13 @@ public class ASTTransformer<T extends JobParameters> implements ParameterizedTra
       Function<GLSLParser, RuleType> parseMethod,
       BiFunction<ASTBuilder, RuleType, ReturnType> visitMethod) throws RecognitionException {
     return ASTBuilder.build(
-        parser.parse(input, null, parseMethod),
+        parser.parse(input, parseMethod),
         visitMethod);
   }
 
   public String transformBare(PrintType printType, String str) throws RecognitionException {
-    var parseTree = parser.parse(CharStreams.fromString(str), null, GLSLParser::translationUnit);
+    var parseTree = parser.parse(
+        CharStreams.fromString(str), null, GLSLParser::translationUnit);
     var translationUnit = (TranslationUnit) ASTBuilder.build(parseTree);
     transformation.accept(translationUnit);
     return ASTPrinter.print(printType, translationUnit);
