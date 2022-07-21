@@ -2,6 +2,7 @@ package io.github.douira.glsl_transformer.ast.node.expression;
 
 import io.github.douira.glsl_transformer.ast.traversal.*;
 import io.github.douira.glsl_transformer.util.Type;
+import io.github.douira.glsl_transformer.util.Type.NumberType;
 
 public class LiteralExpression extends TerminalExpression {
   public Type literalType;
@@ -70,6 +71,19 @@ public class LiteralExpression extends TerminalExpression {
         : integerFormat == IntegerFormat.OCTAL
             ? 8
             : 10;
+  }
+
+  public boolean isBoolean() {
+    return literalType.getNumberType() == NumberType.BOOLEAN;
+  }
+
+  public boolean isInteger() {
+    return literalType.getNumberType() == NumberType.SIGNED_INTEGER
+        || literalType.getNumberType() == NumberType.UNSIGNED_INTEGER;
+  }
+
+  public boolean isFloatingPoint() {
+    return literalType.getNumberType() == NumberType.FLOATING_POINT;
   }
 
   @Override
