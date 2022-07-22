@@ -20,11 +20,6 @@ public abstract class LoopStatement extends Statement {
   }
 
   @Override
-  public StructureType getStructureType() {
-    return StructureType.UNARY;
-  }
-
-  @Override
   public <R> R accept(ASTVisitor<R> visitor) {
     return visitor.aggregateResult(
         super.accept(visitor),

@@ -20,11 +20,6 @@ public abstract class UnaryExpression extends Expression {
   }
 
   @Override
-  public OperandStructure getOperandStructure() {
-    return OperandStructure.UNARY;
-  }
-
-  @Override
   public <R> R accept(ASTVisitor<R> visitor) {
     return visitor.aggregateResult(
         super.accept(visitor),

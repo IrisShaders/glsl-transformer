@@ -37,11 +37,6 @@ public class SwitchStatement extends Statement {
   }
 
   @Override
-  public StructureType getStructureType() {
-    return StructureType.UNARY;
-  }
-
-  @Override
   public <R> R statementAccept(ASTVisitor<R> visitor) {
     return visitor.visitSwitchStatement(this);
   }

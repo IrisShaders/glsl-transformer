@@ -4,11 +4,6 @@ import io.github.douira.glsl_transformer.ast.traversal.*;
 
 public abstract class TerminalExpression extends Expression {
   @Override
-  public OperandStructure getOperandStructure() {
-    return OperandStructure.NONE;
-  }
-
-  @Override
   public <R> R accept(ASTVisitor<R> visitor) {
     return visitor.aggregateResult(
         super.accept(visitor),

@@ -5,35 +5,38 @@ import io.github.douira.glsl_transformer.ast.traversal.*;
 
 public abstract class Statement extends InnerASTNode {
   public enum StatementType {
-    COMPOUND, // many-ary
-    DECLARATION, // TODO (incomplete) semi-terminal
-    EXPRESSION, // semi-terminal
-    EMPTY, // terminal
-    SELECTION, // many-ary (if-else)
-    SWITCH, // unary (nested compound statement)
-    CASE, // semi-terminal
-    DEFAULT, // terminal
-    FOR_LOOP, // unary
-    WHILE_LOOP, // unary
-    DO_WHILE_LOOP, // unary
+    COMPOUND(StructureType.MANY), // many-ary
+    DECLARATION(StructureType.SEMI_TERMINAL), // semi-terminal
+    EXPRESSION(StructureType.SEMI_TERMINAL), // semi-terminal
+    EMPTY(StructureType.TERMINAL), // terminal
+    SELECTION(StructureType.MANY), // many-ary (if-else)
+    SWITCH(StructureType.UNARY), // unary (nested compound statement)
+    CASE(StructureType.SEMI_TERMINAL), // semi-terminal
+    DEFAULT(StructureType.TERMINAL), // terminal
+    FOR_LOOP(StructureType.UNARY), // unary
+    WHILE_LOOP(StructureType.UNARY), // unary
+    DO_WHILE_LOOP(StructureType.UNARY), // unary
+    CONTINUE(StructureType.TERMINAL), // terminal
+    BREAK(StructureType.TERMINAL), // terminal
+    RETURN(StructureType.SEMI_TERMINAL), // semi-terminal
+    DISCARD(StructureType.TERMINAL), // terminal
+    DEMOTE(StructureType.TERMINAL); // terminal
 
-    CONTINUE, // terminal
-    BREAK, // terminal
-    RETURN, // semi-terminal
-    DISCARD, // terminal
-    DEMOTE // terminal
+    public enum StructureType {
+      SEMI_TERMINAL, // no nested statements but not a terminal AST node
+      TERMINAL, // no nested statements or AST nodes
+      UNARY, // one nested statement
+      MANY // a list of nested statements
+    }
+
+    public final StructureType structureType;
+
+    StatementType(StructureType structureType) {
+      this.structureType = structureType;
+    }
   }
 
   public abstract StatementType getStatementType();
-
-  public enum StructureType {
-    SEMI_TERMINAL, // no nested statements but not a terminal AST node
-    TERMINAL, // no nested statements or AST nodes
-    UNARY, // one nested statement
-    MANY // a list of nested statements
-  }
-
-  public abstract StructureType getStructureType();
 
   public abstract <R> R statementAccept(ASTVisitor<R> visitor);
 

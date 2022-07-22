@@ -28,12 +28,7 @@ public class CaseStatement extends CaseLabelStatement {
   public StatementType getStatementType() {
     return StatementType.CASE;
   }
-
-  @Override
-  public StructureType getStructureType() {
-    return StructureType.SEMI_TERMINAL;
-  }
-
+  
   @Override
   public <R> R statementAccept(ASTVisitor<R> visitor) {
     return visitor.visitCaseStatement(this);

@@ -20,11 +20,6 @@ public abstract class ManyStatement extends Statement implements ListNode<Statem
   }
 
   @Override
-  public StructureType getStructureType() {
-    return StructureType.MANY;
-  }
-
-  @Override
   public <R> R accept(ASTVisitor<R> visitor) {
     return visitor.aggregateResult(
         super.accept(visitor),

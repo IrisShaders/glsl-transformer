@@ -31,11 +31,6 @@ public abstract class BinaryExpression extends Expression {
   }
 
   @Override
-  public OperandStructure getOperandStructure() {
-    return OperandStructure.BINARY;
-  }
-
-  @Override
   public <R> R accept(ASTVisitor<R> visitor) {
     return visitor.aggregateResult(
         super.accept(visitor),

@@ -41,11 +41,6 @@ public abstract class TernaryExpression extends Expression {
   }
 
   @Override
-  public OperandStructure getOperandStructure() {
-    return OperandStructure.TERNARY;
-  }
-
-  @Override
   public <R> R accept(ASTVisitor<R> visitor) {
     return visitor.aggregateResult(
         super.accept(visitor),

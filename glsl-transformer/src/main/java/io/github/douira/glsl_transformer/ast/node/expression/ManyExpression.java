@@ -20,11 +20,6 @@ public abstract class ManyExpression extends Expression implements ListNode<Expr
   }
 
   @Override
-  public OperandStructure getOperandStructure() {
-    return OperandStructure.MANY;
-  }
-
-  @Override
   public <R> R accept(ASTVisitor<R> visitor) {
     return visitor.aggregateResult(
         super.accept(visitor),
