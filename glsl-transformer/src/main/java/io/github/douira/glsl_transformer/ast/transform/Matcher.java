@@ -186,6 +186,29 @@ public class Matcher<T extends ASTNode> {
     return succeeded;
   }
 
+  private Class<?> getPatternClass() {
+    return pattern.getClass();
+  }
+
+  @SuppressWarnings("unchecked")
+  public boolean matchesWide(ASTNode tree) {
+    return getPatternClass().isInstance(tree) && matches((T) tree);
+  }
+
+  @SuppressWarnings("unchecked")
+  public boolean matchesExtractWide(ASTNode tree) {
+    return getPatternClass().isInstance(tree) && matchesExtract((T) tree);
+  }
+
+  @SuppressWarnings("unchecked")
+  public boolean matchesExtractWide(
+      ASTNode tree,
+      Map<String, Object> dataMatches,
+      Map<String, ASTNode> nodeMatches) {
+    return getPatternClass().isInstance(tree)
+        && matchesExtract((T) tree, dataMatches, nodeMatches);
+  }
+
   public Map<String, Object> getDataMatches() {
     return dataMatches;
   }
