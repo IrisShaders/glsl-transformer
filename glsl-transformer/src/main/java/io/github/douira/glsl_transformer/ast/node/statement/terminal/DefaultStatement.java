@@ -14,11 +14,6 @@ public class DefaultStatement extends CaseLabelStatement {
   }
 
   @Override
-  public StructureType getStructureType() {
-    return StructureType.TERMINAL;
-  }
-
-  @Override
   public <R> R statementAccept(ASTVisitor<R> visitor) {
     return visitor.visitDefaultStatement(this);
   }

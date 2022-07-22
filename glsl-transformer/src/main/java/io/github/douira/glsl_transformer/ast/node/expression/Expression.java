@@ -5,68 +5,90 @@ import io.github.douira.glsl_transformer.ast.traversal.*;
 
 public abstract class Expression extends InnerASTNode {
   public enum ExpressionType {
-    REFERENCE, // identifier
-    LITERAL, // literal
-    GROUPING, // unary
-    INCREMENT_POSTFIX, // unary
-    DECREMENT_POSTFIX, // unary
-    INCREMENT_PREFIX, // unary
-    DECREMENT_PREFIX, // unary
-    IDENTITY, // unary
-    NEGATION, // unary
-    BOOLEAN_NOT, // unary
-    BITWISE_NOT, // unary
-    LENGTH_ACCESS, // unary
-    MEMBER_ACCESS, // unary + identifier
-    FUNCTION_CALL, // unary + parameters
+    REFERENCE(OperandStructure.NONE),
+    LITERAL(OperandStructure.NONE),
+    GROUPING(OperandStructure.UNARY, 1),
+    INCREMENT_POSTFIX(OperandStructure.UNARY, 2, Associativity.LTR),
+    DECREMENT_POSTFIX(OperandStructure.UNARY, 2, Associativity.LTR),
+    INCREMENT_PREFIX(OperandStructure.UNARY, 3, Associativity.RTL),
+    DECREMENT_PREFIX(OperandStructure.UNARY, 3, Associativity.RTL),
+    IDENTITY(OperandStructure.UNARY, 3, Associativity.RTL),
+    NEGATION(OperandStructure.UNARY, 3, Associativity.RTL),
+    BOOLEAN_NOT(OperandStructure.UNARY, 3, Associativity.RTL),
+    BITWISE_NOT(OperandStructure.UNARY, 3, Associativity.RTL),
+    LENGTH_ACCESS(OperandStructure.UNARY, 2, Associativity.LTR),
+    MEMBER_ACCESS(OperandStructure.UNARY, 2, Associativity.LTR),
+    FUNCTION_CALL(OperandStructure.UNARY, 2, Associativity.LTR),
+    ARRAY_ACCESS(OperandStructure.BINARY, 2, Associativity.LTR),
+    MULTIPLICATION(OperandStructure.BINARY, 4, Associativity.LTR),
+    DIVISION(OperandStructure.BINARY, 4, Associativity.LTR),
+    MODULO(OperandStructure.BINARY, 4, Associativity.LTR),
+    ADDITION(OperandStructure.BINARY, 5, Associativity.LTR),
+    SUBTRACTION(OperandStructure.BINARY, 5, Associativity.LTR),
+    SHIFT_LEFT(OperandStructure.BINARY, 6, Associativity.LTR),
+    SHIFT_RIGHT(OperandStructure.BINARY, 6, Associativity.LTR),
+    LESS_THAN(OperandStructure.BINARY, 7, Associativity.LTR),
+    GREATER_THAN(OperandStructure.BINARY, 7, Associativity.LTR),
+    LESS_THAN_EQUAL(OperandStructure.BINARY, 7, Associativity.LTR),
+    GREATER_THAN_EQUAL(OperandStructure.BINARY, 7, Associativity.LTR),
+    EQUAL(OperandStructure.BINARY, 7, Associativity.LTR),
+    NOT_EQUAL(OperandStructure.BINARY, 7, Associativity.LTR),
+    BITWISE_AND(OperandStructure.BINARY, 9, Associativity.LTR),
+    BITWISE_XOR(OperandStructure.BINARY, 10, Associativity.LTR),
+    BITWISE_OR(OperandStructure.BINARY, 11, Associativity.LTR),
+    BOOLEAN_AND(OperandStructure.BINARY, 12, Associativity.LTR),
+    BOOLEAN_XOR(OperandStructure.BINARY, 13, Associativity.LTR),
+    BOOLEAN_OR(OperandStructure.BINARY, 14, Associativity.LTR),
+    ASSIGNMENT(OperandStructure.BINARY, 16, Associativity.RTL),
+    MULTIPLICATION_ASSIGNMENT(OperandStructure.BINARY, 16, Associativity.RTL),
+    DIVISION_ASSIGNMENT(OperandStructure.BINARY, 16, Associativity.RTL),
+    MODULO_ASSIGNMENT(OperandStructure.BINARY, 16, Associativity.RTL),
+    ADDITION_ASSIGNMENT(OperandStructure.BINARY, 16, Associativity.RTL),
+    SUBTRACTION_ASSIGNMENT(OperandStructure.BINARY, 16, Associativity.RTL),
+    LEFT_SHIFT_ASSIGNMENT(OperandStructure.BINARY, 16, Associativity.RTL),
+    RIGHT_SHIFT_ASSIGNMENT(OperandStructure.BINARY, 16, Associativity.RTL),
+    BITWISE_AND_ASSIGNMENT(OperandStructure.BINARY, 16, Associativity.RTL),
+    BITWISE_XOR_ASSIGNMENT(OperandStructure.BINARY, 16, Associativity.RTL),
+    BITWISE_OR_ASSIGNMENT(OperandStructure.BINARY, 16, Associativity.RTL),
+    CONDITION(OperandStructure.TERNARY, 15, Associativity.RTL),
+    SEQUENCE(OperandStructure.MANY, 17, Associativity.LTR);
 
-    ARRAY_ACCESS, // binary
-    MULTIPLICATION, // binary
-    DIVISION, // binary
-    MODULO, // binary
-    ADDITION, // binary
-    SUBTRACTION, // binary
-    SHIFT_LEFT, // binary
-    SHIFT_RIGHT, // binary
-    LESS_THAN, // binary
-    GREATER_THAN, // binary
-    LESS_THAN_EQUAL, // binary
-    GREATER_THAN_EQUAL, // binary
-    EQUAL, // binary
-    NOT_EQUAL, // binary
-    BITWISE_AND, // binary
-    BITWISE_XOR, // binary
-    BITWISE_OR, // binary
-    BOOLEAN_AND, // binary
-    BOOLEAN_XOR, // binary
-    BOOLEAN_OR, // binary
-    ASSIGNMENT, // binary
-    MULTIPLICATION_ASSIGNMENT, // binary
-    DIVISION_ASSIGNMENT, // binary
-    MODULO_ASSIGNMENT, // binary
-    ADDITION_ASSIGNMENT, // binary
-    SUBTRACTION_ASSIGNMENT, // binary
-    LEFT_SHIFT_ASSIGNMENT, // binary
-    RIGHT_SHIFT_ASSIGNMENT, // binary
-    BITWISE_AND_ASSIGNMENT, // binary
-    BITWISE_XOR_ASSIGNMENT, // binary
-    BITWISE_OR_ASSIGNMENT, // binary
+    public enum Associativity {
+      LTR, // left-to-right
+      RTL // right-to-left
+    }
 
-    CONDITION, // ternary
-    SEQUENCE // many-ary
+    public enum OperandStructure {
+      NONE, // no operands, reference and literals
+      UNARY, // unary operator
+      BINARY, // binary operator
+      TERNARY, // ternary operator (conditional expression)
+      MANY // sequence of expressions (sequence expression)
+    }
+
+    public final int precedence;
+    public final Associativity associativity;
+    public final OperandStructure operandStructure;
+
+    ExpressionType(
+        OperandStructure operandStructure,
+        int precedence,
+        Associativity associativity) {
+      this.operandStructure = operandStructure;
+      this.precedence = precedence;
+      this.associativity = associativity;
+    }
+
+    ExpressionType(OperandStructure operandStructure, int precedence) {
+      this(operandStructure, precedence, null);
+    }
+
+    ExpressionType(OperandStructure operandStructure) {
+      this(operandStructure, 0);
+    }
   }
 
   public abstract ExpressionType getExpressionType();
-
-  public enum OperandStructure {
-    NONE,
-    UNARY,
-    BINARY,
-    TERNARY,
-    MANY
-  }
-
-  public abstract OperandStructure getOperandStructure();
 
   public abstract <R> R expressionAccept(ASTVisitor<R> visitor);
 

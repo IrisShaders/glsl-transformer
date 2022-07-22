@@ -7,13 +7,6 @@ import io.github.douira.glsl_transformer.ast.data.*;
 import io.github.douira.glsl_transformer.ast.traversal.*;
 
 public class BuiltinFixedTypeSpecifier extends TypeSpecifier {
-  public enum TypeKind {
-    VOID,
-    ATOMIC_UINT,
-    SAMPLER,
-    IMAGE;
-  }
-
   public enum BuiltinType implements TokenTyped {
     VOID(GLSLLexer.VOID, TypeKind.VOID),
     ATOMIC_UINT(GLSLLexer.ATOMIC_UINT, TypeKind.ATOMIC_UINT),
@@ -90,6 +83,13 @@ public class BuiltinFixedTypeSpecifier extends TypeSpecifier {
     IMAGE2DMSARRAY(GLSLLexer.IMAGE2DMSARRAY, TypeKind.IMAGE),
     IIMAGE2DMSARRAY(GLSLLexer.IIMAGE2DMSARRAY, TypeKind.IMAGE),
     UIMAGE2DMSARRAY(GLSLLexer.UIMAGE2DMSARRAY, TypeKind.IMAGE);
+
+    public enum TypeKind {
+      VOID,
+      ATOMIC_UINT,
+      SAMPLER,
+      IMAGE;
+    }
 
     public final int tokenType;
     public final TypeKind kind;

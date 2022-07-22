@@ -5,11 +5,6 @@ import io.github.douira.glsl_transformer.ast.traversal.*;
 
 public abstract class TerminalStatement extends Statement {
   @Override
-  public StructureType getStructureType() {
-    return StructureType.TERMINAL;
-  }
-
-  @Override
   public <R> R accept(ASTVisitor<R> visitor) {
     return visitor.aggregateResult(
         super.accept(visitor),
