@@ -2,9 +2,7 @@ package io.github.douira.glsl_transformer.ast.transform;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-import java.util.function.Function;
-
-import org.junit.jupiter.api.*;
+import org.junit.jupiter.api.Test;
 
 import io.github.douira.glsl_transformer.GLSLParser;
 import io.github.douira.glsl_transformer.ast.node.*;
@@ -13,82 +11,77 @@ import io.github.douira.glsl_transformer.ast.node.expression.*;
 import io.github.douira.glsl_transformer.ast.node.expression.binary.AdditionExpression;
 import io.github.douira.glsl_transformer.ast.node.expression.unary.FunctionCallExpression;
 import io.github.douira.glsl_transformer.ast.node.external_declaration.*;
-import io.github.douira.glsl_transformer.ast.node.type.qualifier.PreciseQualifier;
 import io.github.douira.glsl_transformer.test_util.TestWithASTTransformer;
-import io.github.douira.glsl_transformer.tree.ExtendedContext;
 
 public class MatcherTest extends TestWithASTTransformer {
-  Function<GLSLParser, ? extends ExtendedContext> parseMethod;
-  Matcher p;
-
-  @BeforeEach
-  void setup() {
-    parseMethod = null;
-    p = null;
+  private void assertNoMatchED(Matcher<ExternalDeclaration> p, String input) {
+    assertFalse(p.matches(transformer.parseNode(input,
+        GLSLParser::externalDeclaration,
+        ASTBuilder::visitExternalDeclaration)));
   }
 
-  private void assertNoMatch(String input) {
-    assertFalse(p.matches(transformer.parseNode(input, parseMethod)));
+  private void assertMatchED(Matcher<ExternalDeclaration> p, String input) {
+    assertTrue(p.matches(transformer.parseNode(input,
+        GLSLParser::externalDeclaration,
+        ASTBuilder::visitExternalDeclaration)));
   }
 
-  private void assertMatch(String input) {
-    assertTrue(p.matches(transformer.parseNode(input, parseMethod)));
+  private void assertExtractED(Matcher<ExternalDeclaration> p, String input) {
+    assertTrue(p.matchesExtract(transformer.parseNode(input, GLSLParser::externalDeclaration,
+        ASTBuilder::visitExternalDeclaration)));
   }
 
-  private void assertNoExtract(String input) {
-    assertFalse(p.matchesExtract(transformer.parseNode(input, parseMethod)));
+  private void assertNoExtractTU(Matcher<TranslationUnit> p, String input) {
+    assertFalse(p.matchesExtract(transformer.parseNode(input, GLSLParser::translationUnit,
+        ASTBuilder::visitTranslationUnit)));
   }
 
-  private void assertExtract(String input) {
-    assertTrue(p.matchesExtract(transformer.parseNode(input, parseMethod)));
+  private void assertExtractTU(Matcher<TranslationUnit> p, String input) {
+    assertTrue(p.matchesExtract(transformer.parseNode(input, GLSLParser::translationUnit,
+        ASTBuilder::visitTranslationUnit)));
   }
 
   @Test
   void testMatches() {
-    parseMethod = GLSLParser::externalDeclaration;
-    p = new Matcher("uniform vec4 entityColor;", parseMethod);
+    var p = new Matcher<>("uniform vec4 entityColor;",
+        GLSLParser::externalDeclaration,
+        ASTBuilder::visitExternalDeclaration);
 
     assertFalse(p.matches(null));
-    assertFalse(p.matches(new PreciseQualifier()));
-    assertMatch("uniform vec4 entityColor;");
-    assertNoMatch("uniform vec3 entityColor;");
-    assertNoMatch("in vec4 entityColor;");
-    assertNoMatch("uniform precise vec4 entityColor;");
-    assertNoMatch("uniform vec4 entityColo;");
-    assertNoMatch("uniform vec4 entityColor_;");
+    assertMatchED(p, "uniform vec4 entityColor;");
+    assertNoMatchED(p, "uniform vec3 entityColor;");
+    assertNoMatchED(p, "in vec4 entityColor;");
+    assertNoMatchED(p, "uniform precise vec4 entityColor;");
+    assertNoMatchED(p, "uniform vec4 entityColo;");
+    assertNoMatchED(p, "uniform vec4 entityColor_;");
   }
 
   @Test
   void testMatchesDataWildcard() {
-    parseMethod = GLSLParser::externalDeclaration;
-    p = new Matcher("uniform vec4 ___ = foo + ___;",
-        parseMethod, "___");
+    var p = new Matcher<>("uniform vec4 ___ = foo + ___;",
+        GLSLParser::externalDeclaration,
+        ASTBuilder::visitExternalDeclaration, "___");
 
     assertFalse(p.matches(null));
-    assertFalse(p.matches(new PreciseQualifier()));
-    assertMatch("uniform vec4 foo = foo + foo;");
-    assertNoMatch("uniform vec3 foo = foo + foo;");
-    assertNoMatch("in vec4 foo = foo + foo;");
-    assertNoMatch("uniform precise vec4 foo = foo + foo;");
-    assertNoMatch("uniform vec4 foo = bar + foo;");
-    assertNoMatch("uniform vec4 foo = __ + foo;");
+    assertMatchED(p, "uniform vec4 foo = foo + foo;");
+    assertNoMatchED(p, "uniform vec3 foo = foo + foo;");
+    assertNoMatchED(p, "in vec4 foo = foo + foo;");
+    assertNoMatchED(p, "uniform precise vec4 foo = foo + foo;");
+    assertNoMatchED(p, "uniform vec4 foo = bar + foo;");
+    assertNoMatchED(p, "uniform vec4 foo = __ + foo;");
   }
 
   @Test
   void testExtractDataWildcards() {
-    parseMethod = GLSLParser::externalDeclaration;
-    p = new Matcher("uniform vec4 ___a = foo + ___b;",
-        parseMethod, "___");
+    var p = new Matcher<>("uniform vec4 ___a = foo + ___b;",
+        GLSLParser::externalDeclaration,
+        ASTBuilder::visitExternalDeclaration, "___");
 
     assertFalse(p.matchesExtract(null));
     assertTrue(p.getDataMatches().isEmpty());
     assertTrue(p.getNodeMatches().isEmpty());
 
-    assertFalse(p.matchesExtract(new PreciseQualifier()));
-    assertTrue(p.getDataMatches().isEmpty());
-    assertTrue(p.getNodeMatches().isEmpty());
-
-    assertExtract("uniform vec4 bar = foo + bam;");
+    assertExtractED(p, "uniform vec4 bar = foo + bam;");
     var dataMatches = p.getDataMatches();
     assertEquals("bar", dataMatches.get("a"));
     assertEquals("bam", dataMatches.get("b"));
@@ -96,15 +89,15 @@ public class MatcherTest extends TestWithASTTransformer {
     assertEquals(dataMatches.get("b"), p.getStringDataMatch("b"));
     assertTrue(p.getNodeMatches().isEmpty());
 
-    assertNoMatch("uniform vec4 bar = foo;");
+    assertNoMatchED(p, "uniform vec4 bar = foo;");
     // It should not match Identifiers with LiteralExpressions
-    assertNoMatch("uniform vec4 bar = foo + 5;");
+    assertNoMatchED(p, "uniform vec4 bar = foo + 5;");
   }
 
   @Test
   void testExtractNodeWildcards() {
-    parseMethod = GLSLParser::externalDeclaration;
-    p = new Matcher("uniform vec4 a = foo + b;", parseMethod) {
+    var p = new Matcher<>("uniform vec4 a = foo + b;", GLSLParser::externalDeclaration,
+        ASTBuilder::visitExternalDeclaration) {
       {
         markAnyWildcard("aNode",
             pattern.getRoot().identifierIndex.getOne("a"));
@@ -114,7 +107,7 @@ public class MatcherTest extends TestWithASTTransformer {
       }
     };
 
-    assertExtract("uniform vec4 bam = foo + bar;");
+    assertExtractED(p, "uniform vec4 bam = foo + bar;");
     assertTrue(p.getDataMatches().isEmpty());
     assertEquals("bam",
         p.getNodeMatch("aNode", Identifier.class).getName());
@@ -122,22 +115,22 @@ public class MatcherTest extends TestWithASTTransformer {
         p.getNodeMatch("bNode", ReferenceExpression.class)
             .getIdentifier().getName());
 
-    assertExtract("uniform vec4 bam = foo + a();");
+    assertExtractED(p, "uniform vec4 bam = foo + a();");
     assertTrue(p.getDataMatches().isEmpty());
     assertNotNull(p.getNodeMatch("bNode", FunctionCallExpression.class));
 
-    assertExtract("uniform vec4 bam = foo + 5;");
+    assertExtractED(p, "uniform vec4 bam = foo + 5;");
     assertEquals(5,
         p.getNodeMatch("bNode", LiteralExpression.class).getNumber());
-    assertExtract("uniform vec4 bam = foo + 5f;");
+    assertExtractED(p, "uniform vec4 bam = foo + 5f;");
     assertEquals(5f,
         p.getNodeMatch("bNode", LiteralExpression.class).getNumber());
   }
 
   @Test
   void testExtractNodeWildcardsList() {
-    parseMethod = GLSLParser::translationUnit;
-    p = new Matcher("int ___a; int x = a; b; float ___b;", parseMethod, "___") {
+    var p = new Matcher<>("int ___a; int x = a; b; float ___b;", GLSLParser::translationUnit,
+        ASTBuilder::visitTranslationUnit, "___") {
       {
         markAnyWildcard("aNode", pattern.getRoot().identifierIndex
             .getOne("a").getAncestor(Expression.class));
@@ -146,7 +139,7 @@ public class MatcherTest extends TestWithASTTransformer {
       }
     };
 
-    assertExtract("int foo; int x = 45 + 5; void main() {} float bar;");
+    assertExtractTU(p, "int foo; int x = 45 + 5; void main() {} float bar;");
     assertEquals("foo", p.getStringDataMatch("a"));
     assertEquals("bar", p.getStringDataMatch("b"));
     assertEquals(AdditionExpression.class,
@@ -158,8 +151,8 @@ public class MatcherTest extends TestWithASTTransformer {
 
   @Test
   void testPredicatedWildcard() {
-    parseMethod = GLSLParser::translationUnit;
-    p = new Matcher("a;", parseMethod) {
+    var p = new Matcher<>("a;", GLSLParser::translationUnit,
+        ASTBuilder::visitTranslationUnit) {
       {
         markPredicatedWildcard("bNode",
             pattern.getAncestor(TranslationUnit.class)
@@ -168,14 +161,14 @@ public class MatcherTest extends TestWithASTTransformer {
       }
     };
 
-    assertNoExtract("foo;");
-    assertExtract(";");
+    assertNoExtractTU(p, "foo;");
+    assertExtractTU(p, ";");
   }
 
   @Test
   void testClassWildcard1() {
-    parseMethod = GLSLParser::translationUnit;
-    p = new Matcher("a;", parseMethod) {
+    var p = new Matcher<>("a;", GLSLParser::translationUnit,
+        ASTBuilder::visitTranslationUnit) {
       {
         markClassWildcard("bNode",
             pattern.getAncestor(TranslationUnit.class)
@@ -184,14 +177,14 @@ public class MatcherTest extends TestWithASTTransformer {
       }
     };
 
-    assertNoExtract("foo;");
-    assertExtract(";");
+    assertNoExtractTU(p, "foo;");
+    assertExtractTU(p, ";");
   }
 
   @Test
   void testClassWildcard2() {
-    parseMethod = GLSLParser::translationUnit;
-    p = new Matcher("a;", parseMethod) {
+    var p = new Matcher<>("a;", GLSLParser::translationUnit,
+        ASTBuilder::visitTranslationUnit) {
       {
         markClassWildcard("bNode",
             pattern.getAncestor(TranslationUnit.class)
@@ -200,14 +193,14 @@ public class MatcherTest extends TestWithASTTransformer {
       }
     };
 
-    assertExtract("foo;");
-    assertExtract(";");
+    assertExtractTU(p, "foo;");
+    assertExtractTU(p, ";");
   }
 
   @Test
   void testClassedPredicateWildcard() {
-    parseMethod = GLSLParser::translationUnit;
-    p = new Matcher("a;", parseMethod) {
+    var p = new Matcher<>("a;", GLSLParser::translationUnit,
+        ASTBuilder::visitTranslationUnit) {
       {
         markClassedPredicateWildcard("bNode",
             pattern.getAncestor(TranslationUnit.class)
@@ -218,9 +211,9 @@ public class MatcherTest extends TestWithASTTransformer {
       }
     };
 
-    assertNoExtract("foo;");
-    assertNoExtract(";");
-    assertExtract("void main() {}");
-    assertNoExtract("void foo() {}");
+    assertNoExtractTU(p, "foo;");
+    assertNoExtractTU(p, ";");
+    assertExtractTU(p, "void main() {}");
+    assertNoExtractTU(p, "void foo() {}");
   }
 }

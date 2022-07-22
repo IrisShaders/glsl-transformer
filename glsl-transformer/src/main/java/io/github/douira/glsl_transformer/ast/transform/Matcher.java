@@ -13,8 +13,8 @@ import io.github.douira.glsl_transformer.tree.ExtendedContext;
  * Instances of the matcher can match a node against a stored pattern. This
  * avoids a separate equality implementation for each node type.
  */
-public class Matcher {
-  protected final ASTNode pattern;
+public class Matcher<T extends ASTNode> {
+  protected final T pattern;
   private final String wildcardPrefix;
   private Map<String, Object> dataMatches;
   private Map<String, ASTNode> nodeMatches;
@@ -25,25 +25,29 @@ public class Matcher {
   private int matchIndex;
   private boolean matches;
 
-  public Matcher(ASTNode pattern, String wildcardIdentifier) {
+  public Matcher(T pattern, String wildcardIdentifier) {
     this.pattern = pattern;
     this.wildcardPrefix = wildcardIdentifier;
   }
 
-  public Matcher(ASTNode pattern) {
+  public Matcher(T pattern) {
     this(pattern, null);
   }
 
-  public Matcher(String input,
-      Function<GLSLParser, ? extends ExtendedContext> parseMethod,
+  public <RuleType extends ExtendedContext> Matcher(String input,
+      Function<GLSLParser, RuleType> parseMethod,
+      BiFunction<ASTBuilder, RuleType, T> visitMethod,
       String wildcardIdentifier) {
     this(ASTBuilder.build(
-        EnhancedParser.getInternalInstance().parse(input, parseMethod)), wildcardIdentifier);
+        EnhancedParser.getInternalInstance().parse(input, parseMethod),
+        visitMethod),
+        wildcardIdentifier);
   }
 
-  public Matcher(String input,
-      Function<GLSLParser, ? extends ExtendedContext> parseMethod) {
-    this(input, parseMethod, null);
+  public <RuleType extends ExtendedContext> Matcher(String input,
+      Function<GLSLParser, RuleType> parseMethod,
+      BiFunction<ASTBuilder, RuleType, T> visitMethod) {
+    this(input, parseMethod, visitMethod, null);
   }
 
   private ASTVisitor<?> matchVisitor = new ASTVoidVisitor() {
@@ -136,7 +140,7 @@ public class Matcher {
    * Traverse the given tree and the pattern at the same time and make sure they
    * are the same at each visit step.
    */
-  public boolean matches(ASTNode tree) {
+  public boolean matches(T tree) {
     if (tree == null) {
       return false;
     }
@@ -156,7 +160,7 @@ public class Matcher {
     }
   }
 
-  public boolean matchesExtract(ASTNode tree) {
+  public boolean matchesExtract(T tree) {
     ensureMatchMaps();
     dataMatches.clear();
     nodeMatches.clear();
@@ -171,7 +175,7 @@ public class Matcher {
   }
 
   public boolean matchesExtract(
-      ASTNode tree,
+      T tree,
       Map<String, Object> dataMatches,
       Map<String, ASTNode> nodeMatches) {
     this.dataMatches = dataMatches;
@@ -203,7 +207,7 @@ public class Matcher {
     return nodeMatches.get(name);
   }
 
-  public <T extends ASTNode> T getNodeMatch(String name, Class<T> clazz) {
+  public <R extends ASTNode> R getNodeMatch(String name, Class<R> clazz) {
     var result = nodeMatches.get(name);
     return clazz.isInstance(result) ? clazz.cast(result) : null;
   }
@@ -307,11 +311,11 @@ public class Matcher {
     }
   }
 
-  public <T extends ASTNode> void markClassedPredicateWildcard(
+  public <R extends ASTNode> void markClassedPredicateWildcard(
       String name,
       ASTNode patternNode,
-      Class<T> clazz,
-      Predicate<T> predicate) {
+      Class<R> clazz,
+      Predicate<R> predicate) {
     markWildcard(patternNode, new ClassedPredicateWildcard<>(name, clazz, predicate));
   }
 }
