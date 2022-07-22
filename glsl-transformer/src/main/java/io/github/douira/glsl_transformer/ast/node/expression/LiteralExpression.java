@@ -38,14 +38,29 @@ public class LiteralExpression extends TerminalExpression {
   }
 
   public Number getNumber() {
+    var bitDepth = literalType.getBitDepth();
     switch (literalType.getNumberType()) {
       case BOOLEAN:
         return booleanValue ? 1 : 0;
       case SIGNED_INTEGER:
       case UNSIGNED_INTEGER:
-        return integerValue;
+        switch (bitDepth) {
+          case 8:
+            return Byte.valueOf((byte) integerValue);
+          case 16:
+            return Short.valueOf((short) integerValue);
+          case 32:
+            return Integer.valueOf((int) integerValue);
+          case 64:
+            return Long.valueOf(integerValue);
+          default:
+            throw new IllegalArgumentException("Unsupported bit depth: " + bitDepth);
+        }
       case FLOATING_POINT:
-        return floatingValue;
+        if (bitDepth == 64) {
+          return Double.valueOf(floatingValue);
+        }
+        return Float.valueOf((float) floatingValue);
       default:
         throw new IllegalArgumentException("Unsupported literal type: " + literalType);
     }
@@ -54,12 +69,26 @@ public class LiteralExpression extends TerminalExpression {
   public boolean isPositive() {
     switch (literalType.getNumberType()) {
       case BOOLEAN:
+        return true;
+      case SIGNED_INTEGER:
+      case UNSIGNED_INTEGER:
+        return integerValue > 0l;
+      case FLOATING_POINT:
+        return floatingValue > 0.0d;
+      default:
+        throw new IllegalArgumentException("Unsupported literal type: " + literalType);
+    }
+  }
+
+  public boolean isNonZero() {
+    switch (literalType.getNumberType()) {
+      case BOOLEAN:
         return booleanValue;
       case SIGNED_INTEGER:
       case UNSIGNED_INTEGER:
-        return integerValue > 0;
+        return integerValue != 0l;
       case FLOATING_POINT:
-        return floatingValue > 0;
+        return floatingValue != 0.0d;
       default:
         throw new IllegalArgumentException("Unsupported literal type: " + literalType);
     }
