@@ -158,7 +158,10 @@ public class ASTBuilder extends GLSLParserBaseVisitor<ASTNode> {
 
   @Override
   public GroupingExpression visitGroupingExpression(GroupingExpressionContext ctx) {
-    return new GroupingExpression(visitExpression(ctx.value));
+    var expression = visitExpression(ctx.value);
+    return expression instanceof GroupingExpression grouping
+        ? grouping
+        : new GroupingExpression(expression);
   }
 
   @Override
