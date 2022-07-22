@@ -49,12 +49,12 @@ public class ASTTransformerTest extends TestWithASTTransformer {
       root.identifierIndex.prefixQueryFlat("a").collect(Collectors.toList()).forEach(
           node -> node.setName(node.getName() + "b"));
     });
-    assertEquals(
+    assertTransform(
         "int ab, ab, c; ",
-        transformer.transform(PrintType.COMPACT, "int a, a, c; "));
-    assertEquals(
+        "int a, a, c; ");
+    assertTransform(
         "int ab = 4 + ab + aab, ab, c; ",
-        transformer.transform(PrintType.COMPACT, "int a = 4 + a + aa, a, c; "));
+        "int a = 4 + a + aa, a, c; ");
   }
 
   @Test
@@ -65,12 +65,12 @@ public class ASTTransformerTest extends TestWithASTTransformer {
             literal.integerValue++;
           });
     });
-    assertEquals(
+    assertTransform(
         "int a = 2, b = 3, c = 4; ",
-        transformer.transform(PrintType.COMPACT, "int a = 1, b = 2, c = 3; "));
-    assertEquals(
+        "int a = 1, b = 2, c = 3; ");
+    assertTransform(
         "int a = 2, 3, 4; ",
-        transformer.transform(PrintType.COMPACT, "int a = 1, 2, 3; "));
+        "int a = 1, 2, 3; ");
   }
 
   @Test
@@ -86,12 +86,12 @@ public class ASTTransformerTest extends TestWithASTTransformer {
       root.nodeIndex.get(LiteralExpression.class)
           .stream().forEach(literal -> literal.integerValue++);
     });
-    assertEquals(
+    assertTransform(
         "int a = 2, b = 3, c = 4, 2; ",
-        transformer.transform(PrintType.COMPACT, "int a = 1, b = 2, c = 3; "));
-    assertEquals(
+        "int a = 1, b = 2, c = 3; ");
+    assertTransform(
         "int a = 2, 3, 4, 2; ",
-        transformer.transform(PrintType.COMPACT, "int a = 1, 2, 3; "));
+        "int a = 1, 2, 3; ");
   }
 
   @Test
@@ -111,12 +111,12 @@ public class ASTTransformerTest extends TestWithASTTransformer {
         }
       });
     });
-    assertEquals(
+    assertTransform(
         "int a = 1, b = 2, c = foo; ",
-        transformer.transform(PrintType.COMPACT, "int a = 1, b = 2, c = 3; "));
-    assertEquals(
+        "int a = 1, b = 2, c = 3; ");
+    assertTransform(
         "int a = foo, 2, foo, 5 + foo + b; ",
-        transformer.transform(PrintType.COMPACT, "int a = 3, 2, 3, 5 + 3 + b; "));
+        "int a = 3, 2, 3, 5 + 3 + b; ");
   }
 
   @Test
@@ -134,9 +134,9 @@ public class ASTTransformerTest extends TestWithASTTransformer {
       }
       assertTrue(root.identifierIndex.get("a").isEmpty());
     });
-    assertEquals(
+    assertTransform(
         "int x = b, c, d; ",
-        transformer.transform(PrintType.COMPACT, "int x = a, b, c, a, d; "));
+        "int x = a, b, c, a, d; ");
   }
 
   @Test
@@ -179,9 +179,9 @@ public class ASTTransformerTest extends TestWithASTTransformer {
         sequenceExpression.expressions.add(node);
       }
     });
-    assertEquals(
+    assertTransform(
         "int y = 1, 2, 4, 5; int x = 3, 3; ",
-        transformer.transform(PrintType.COMPACT, "int y = 1, 2, 3, 4, 3, 5; "));
+        "int y = 1, 2, 3, 4, 3, 5; ");
   }
 
   @Test
@@ -194,9 +194,9 @@ public class ASTTransformerTest extends TestWithASTTransformer {
         assertTrue(root.identifierIndex.has("foo"));
       });
     });
-    assertEquals(
+    assertTransform(
         "int x = foo; ",
-        transformer.transform(PrintType.COMPACT, "int x = bar; "));
+        "int x = bar; ");
   }
 
   // add already registered subtree to tree
@@ -211,9 +211,9 @@ public class ASTTransformerTest extends TestWithASTTransformer {
         assertTrue(root.identifierIndex.has("foo"));
       });
     });
-    assertEquals(
+    assertTransform(
         "int x = foo; ",
-        transformer.transform(PrintType.COMPACT, "int x = bar;"));
+        "int x = bar;");
   }
 
   // add new subtree with different root to tree and register
@@ -228,9 +228,9 @@ public class ASTTransformerTest extends TestWithASTTransformer {
         assertTrue(root.identifierIndex.has("foo"));
       });
     });
-    assertEquals(
+    assertTransform(
         "int x = foo; ",
-        transformer.transform(PrintType.COMPACT, "int x = bar;"));
+        "int x = bar;");
   }
 
   // move subtree within tree
@@ -245,9 +245,9 @@ public class ASTTransformerTest extends TestWithASTTransformer {
       assertEquals(1, root.identifierIndex.get("bar").size());
       assertEquals(1, root.identifierIndex.get("foo").size());
     });
-    assertEquals(
+    assertTransform(
         "int x = foo; int y = bar; ",
-        transformer.transform(PrintType.COMPACT, "int x = bar; int y = foo;"));
+        "int x = bar; int y = foo;");
   }
 
   // delete subtree from tree and unregister
@@ -261,9 +261,9 @@ public class ASTTransformerTest extends TestWithASTTransformer {
       assertFalse(root.identifierIndex.has("bar"));
       assertTrue(root.identifierIndex.has("foo"));
     });
-    assertEquals(
+    assertTransform(
         "int x = foo; ",
-        transformer.transform(PrintType.COMPACT, "int x = bar, foo;"));
+        "int x = bar, foo;");
   }
 
   // move subtree without swapping with another subtree
@@ -284,8 +284,8 @@ public class ASTTransformerTest extends TestWithASTTransformer {
       assertEquals(1, root.identifierIndex.get("foo").size());
       assertTrue(root.identifierIndex.get("bar").isEmpty());
     });
-    assertEquals(
+    assertTransform(
         "int x = foo; int y = hello; ",
-        transformer.transform(PrintType.COMPACT, "int x = bar; int y = foo;"));
+        "int x = bar; int y = foo;");
   }
 }
