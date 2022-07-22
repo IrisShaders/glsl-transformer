@@ -1,9 +1,14 @@
 package io.github.douira.glsl_transformer.ast.print;
 
+import java.util.*;
+
 import io.github.douira.glsl_transformer.GLSLLexer;
 import io.github.douira.glsl_transformer.ast.node.*;
+import io.github.douira.glsl_transformer.ast.node.basic.ASTNode;
 import io.github.douira.glsl_transformer.ast.node.declaration.*;
 import io.github.douira.glsl_transformer.ast.node.expression.*;
+import io.github.douira.glsl_transformer.ast.node.expression.Expression.ExpressionType;
+import io.github.douira.glsl_transformer.ast.node.expression.Expression.ExpressionType.OperandStructure;
 import io.github.douira.glsl_transformer.ast.node.expression.binary.*;
 import io.github.douira.glsl_transformer.ast.node.expression.unary.*;
 import io.github.douira.glsl_transformer.ast.node.external_declaration.*;
@@ -25,6 +30,14 @@ import io.github.douira.glsl_transformer.ast.print.token.EOFToken;
  * content and printed structure of each node is encoded in this printer.
  */
 public abstract class ASTPrinter extends ASTPrinterBase {
+  private final Deque<Expression> precedenceWrapped = new ArrayDeque<>();
+
+  @Override
+  public Void startVisit(ASTNode node) {
+    precedenceWrapped.clear();
+    return super.startVisit(node);
+  }
+
   @Override
   public void exitTranslationUnit(TranslationUnit node) {
     emitToken(new EOFToken());
@@ -100,6 +113,36 @@ public abstract class ASTPrinter extends ASTPrinterBase {
   }
 
   @Override
+  public void enterExpression(Expression node) {
+    // emit extra parentheses if necessary to preserve the semantics of the AST in
+    // the printed code
+    if (node.getParent() instanceof Expression parent) {
+      var parentType = parent.getExpressionType();
+      var ownType = node.getExpressionType();
+      if (parentType != ExpressionType.GROUPING
+          && ownType != ExpressionType.GROUPING
+          && parentType.precedence < ownType.precedence
+          && (parentType.operandStructure == OperandStructure.UNARY
+              || parentType.operandStructure == OperandStructure.BINARY
+              || parentType.operandStructure == OperandStructure.TERNARY
+              || parentType == ExpressionType.SEQUENCE)
+          && !(parent instanceof ArrayAccessExpression access
+              && access.getRight() == node)) {
+        emitType(GLSLLexer.NR_LPAREN);
+        precedenceWrapped.add(node);
+      }
+    }
+  }
+
+  @Override
+  public void exitExpression(Expression node) {
+    if (precedenceWrapped.peekLast() == node) {
+      emitType(GLSLLexer.NR_RPAREN);
+      precedenceWrapped.removeLast();
+    }
+  }
+
+  @Override
   public void enterBitwiseNotExpression(BitwiseNotExpression node) {
     emitType(GLSLLexer.BIT_NEG_OP);
   }
@@ -115,13 +158,16 @@ public abstract class ASTPrinter extends ASTPrinterBase {
   }
 
   @Override
-  public void enterGroupingExpression(GroupingExpression node) {
-    emitType(GLSLLexer.LPAREN);
-  }
-
-  @Override
-  public void exitGroupingExpression(GroupingExpression node) {
-    emitType(GLSLLexer.RPAREN);
+  public Void visitGroupingExpression(GroupingExpression node) {
+    var operand = node.getOperand();
+    if (operand.getExpressionType() == ExpressionType.GROUPING) {
+      visit(operand);
+    } else {
+      emitType(GLSLLexer.LPAREN);
+      visit(operand);
+      emitType(GLSLLexer.RPAREN);
+    }
+    return null;
   }
 
   @Override

@@ -87,6 +87,36 @@ foo(1, bar(), baz(1, 2))
 foo(bar(baz(bar)))
 §testReprint expression:
 vec3(1, 2, 3)
+§testReprint expression:
+vec3((1, 2, 3))
+§testReprint expression:
+vec3(((1, 2, 3)))
+===
+vec3((1, 2, 3))
+§testReprint expression:
+(0)
+§testReprint expression:
+((0))
+===
+(0)
+§testReprint expression:
+(((0)))
+===
+(0)
+§testReprint expression:
+(1, (2, (3)))
+§testReprint expression:
+(((3), 2), 1)
+§testReprint expression:
+a[(a)]
+§testReprint expression:
+a[(a[b])]
+§testReprint expression:
+a[(a)[(a)]]
+§testReprint expression:
+a[((a))[((a))]]
+===
+a[(a)[(a)]]
 §testReprint fullySpecifiedType:
 vec2
 §testReprint statement:
