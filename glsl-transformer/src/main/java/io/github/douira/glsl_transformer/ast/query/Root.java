@@ -6,7 +6,7 @@ import java.util.stream.Stream;
 
 import io.github.douira.glsl_transformer.ast.node.Identifier;
 import io.github.douira.glsl_transformer.ast.node.basic.ASTNode;
-import io.github.douira.glsl_transformer.ast.node.expression.ReferenceExpression;
+import io.github.douira.glsl_transformer.ast.node.expression.*;
 import io.github.douira.glsl_transformer.ast.transform.ASTTransformer;
 import io.github.douira.glsl_transformer.util.Passthrough;
 
@@ -120,6 +120,7 @@ public class Root {
     }
   }
 
+  // rename all uses a fast path without a lambda
   @SuppressWarnings("unchecked")
   public void renameAll(String oldName, String newName) {
     ensureEmptyNodeList();
@@ -131,20 +132,6 @@ public class Root {
     identifierList.addAll(set);
     for (var identifier : identifierList) {
       identifier.setName(newName);
-    }
-  }
-
-  @SuppressWarnings("unchecked")
-  public void processAll(String name, Consumer<Identifier> replacer) {
-    ensureEmptyNodeList();
-    var set = identifierIndex.get(name);
-    if (set == null) {
-      return;
-    }
-    var identifierList = (List<Identifier>) nodeList;
-    identifierList.addAll(set);
-    for (var identifier : identifierList) {
-      replacer.accept(identifier);
     }
   }
 
@@ -163,18 +150,18 @@ public class Root {
     }
   }
 
+  public void processAll(String name, Consumer<Identifier> replacer) {
+    processAll(identifierIndex.getStream(name), replacer);
+  }
+
   public void replaceAllReferenceExpressions(
       ASTTransformer<?> transformer,
       String name,
       String expressionContent) {
-    processAll(name, identifier -> {
-      var parent = identifier.getParent();
-      if (!(parent instanceof ReferenceExpression)) {
-        return;
-      }
-      identifier.getParent().replaceByAndDelete(
-          transformer.parseExpression(identifier, expressionContent));
-    });
+    replaceAllReferenceExpressions(
+        transformer,
+        identifierIndex.getStream(name),
+        expressionContent);
   }
 
   public void replaceAllReferenceExpressions(
@@ -186,8 +173,28 @@ public class Root {
       if (!(parent instanceof ReferenceExpression)) {
         return;
       }
-      identifier.getParent().replaceByAndDelete(
+      parent.replaceByAndDelete(
           transformer.parseExpression(identifier, expressionContent));
+    });
+  }
+
+  public void replaceAllExpressions(
+      ASTTransformer<?> transformer,
+      Stream<? extends Expression> targets,
+      String expressionContent) {
+    processAll(targets, expression -> {
+      expression.replaceByAndDelete(
+          transformer.parseExpression(expression, expressionContent));
+    });
+  }
+
+  public void replaceAllExpressions(
+      ASTTransformer<?> transformer,
+      String name,
+      String expressionContent) {
+    processAll(name, expression -> {
+      expression.replaceByAndDelete(
+          transformer.parseExpression(expression, expressionContent));
     });
   }
 }
