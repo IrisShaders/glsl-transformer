@@ -197,4 +197,14 @@ public class Root {
           transformer.parseExpression(expression, expressionContent));
     });
   }
+
+  public static void replaceAllExpressionsConcurrent(
+      ASTTransformer<?> transformer,
+      List<? extends Expression> targets,
+      String expressionContent) {
+    for (var node : targets) {
+      node.replaceByAndDelete(
+          transformer.parseExpression(node, expressionContent));
+    }
+  }
 }
