@@ -18,7 +18,7 @@ public abstract class Expression extends InnerASTNode {
     BITWISE_NOT(OperandStructure.UNARY, 3, Associativity.RTL),
     LENGTH_ACCESS(OperandStructure.UNARY, 2, Associativity.LTR),
     MEMBER_ACCESS(OperandStructure.UNARY, 2, Associativity.LTR),
-    FUNCTION_CALL(OperandStructure.UNARY, 2, Associativity.LTR),
+    FUNCTION_CALL(OperandStructure.MANY, 2, Associativity.LTR),
     ARRAY_ACCESS(OperandStructure.BINARY, 2, Associativity.LTR),
     MULTIPLICATION(OperandStructure.BINARY, 4, Associativity.LTR),
     DIVISION(OperandStructure.BINARY, 4, Associativity.LTR),
