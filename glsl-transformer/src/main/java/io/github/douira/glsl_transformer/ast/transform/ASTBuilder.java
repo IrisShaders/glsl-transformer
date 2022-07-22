@@ -804,6 +804,8 @@ public class ASTBuilder extends GLSLParserBaseVisitor<ASTNode> {
 
   @Override
   public ExternalDeclaration visitExternalDeclaration(ExternalDeclarationContext ctx) {
+    // wrap in an extra layer since we can't inherit from both external declaration
+    // and declaration
     var result = super.visitExternalDeclaration(ctx);
     if (result instanceof Declaration declaration) {
       return new DeclarationExternalDeclaration(declaration);
