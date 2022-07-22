@@ -7,7 +7,6 @@ import java.util.stream.Stream;
 import org.junit.jupiter.api.Test;
 
 import io.github.douira.glsl_transformer.ast.node.Identifier;
-import io.github.douira.glsl_transformer.ast.print.PrintType;
 import io.github.douira.glsl_transformer.test_util.TestWithASTTransformer;
 
 public class RootTest extends TestWithASTTransformer {
@@ -38,9 +37,9 @@ public class RootTest extends TestWithASTTransformer {
           id -> id.getParent().replaceByAndDelete(
               transformer.parseExpression(tree, "bam + spam")));
     });
-    assertEquals(
+    assertTransform(
         "int x = bam + spam + bar + fooo; ",
-        transformer.transform(PrintType.COMPACT, "int x = foo + bar + fooo;"));
+        "int x = foo + bar + fooo;");
   }
 
   @Test
@@ -50,9 +49,9 @@ public class RootTest extends TestWithASTTransformer {
           id -> id.getParent().replaceByAndDelete(
               transformer.parseExpression(tree, "bam + spam")));
     });
-    assertEquals(
+    assertTransform(
         "int x = bam + spam + bar + bam + spam; ",
-        transformer.transform(PrintType.COMPACT, "int x = foo + bar + fan;"));
+        "int x = foo + bar + fan;");
   }
 
   @Test
@@ -71,9 +70,9 @@ public class RootTest extends TestWithASTTransformer {
           root.identifierIndex.prefixQueryFlat("f"),
           "bam + spam");
     });
-    assertEquals(
+    assertTransform(
         "int foo = bam + spam + bar + bam + spam; ",
-        transformer.transform(PrintType.COMPACT, "int foo = foo + bar + fan;"));
+        "int foo = foo + bar + fan;");
   }
 
   @Test
@@ -83,8 +82,8 @@ public class RootTest extends TestWithASTTransformer {
           "foo",
           "bam + spam");
     });
-    assertEquals(
+    assertTransform(
         "int foo = bam + spam + bar + fan; ",
-        transformer.transform(PrintType.COMPACT, "int foo = foo + bar + fan;"));
+        "int foo = foo + bar + fan;");
   }
 }
