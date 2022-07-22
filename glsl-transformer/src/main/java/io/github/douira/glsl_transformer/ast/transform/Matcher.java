@@ -73,7 +73,7 @@ public class Matcher {
     }
 
     @Override
-    public void visitVoid(Object data) {
+    public void visitVoidData(Object data) {
       // Data has to only match by equality since these might also be strings.
       if (!matches
           || matchIndex >= patternItemsSize
@@ -125,7 +125,7 @@ public class Matcher {
       }
 
       @Override
-      public void visitVoid(Object data) {
+      public void visitVoidData(Object data) {
         patternItems.add(data);
       }
     }.startVisit(pattern);
