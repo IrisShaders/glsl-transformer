@@ -2,7 +2,7 @@ package io.github.douira.glsl_transformer.ast.transform;
 
 import java.util.function.*;
 
-import org.antlr.v4.runtime.*;
+import org.antlr.v4.runtime.RecognitionException;
 
 import io.github.douira.glsl_transformer.*;
 import io.github.douira.glsl_transformer.ast.node.TranslationUnit;
@@ -109,12 +109,6 @@ public class ASTTransformer<T extends JobParameters> implements ParameterizedTra
     parser.setLLOnly();
   }
 
-  public <RuleType extends ExtendedContext> ASTNode parseTranslationUnit(
-      String input,
-      Function<GLSLParser, RuleType> parseMethod) throws RecognitionException {
-    return ASTBuilder.build(parser.parse(input, parseMethod));
-  }
-
   public <RuleType extends ExtendedContext, ReturnType extends ASTNode> ReturnType parseNode(
       String input,
       ASTNode parentTreeMember,
@@ -126,7 +120,7 @@ public class ASTTransformer<T extends JobParameters> implements ParameterizedTra
         visitMethod);
   }
 
-  public <RuleType extends ExtendedContext, ReturnType extends ASTNode> ReturnType parseNodeWithoutRoot(
+  public <RuleType extends ExtendedContext, ReturnType extends ASTNode> ReturnType parseNode(
       String input,
       Function<GLSLParser, RuleType> parseMethod,
       BiFunction<ASTBuilder, RuleType, ReturnType> visitMethod) throws RecognitionException {
@@ -135,16 +129,14 @@ public class ASTTransformer<T extends JobParameters> implements ParameterizedTra
         visitMethod);
   }
 
-  public ASTNode parseNodeWithoutRoot(
+  public ASTNode parseNode(
       String input,
       Function<GLSLParser, ? extends ExtendedContext> parseMethod) throws RecognitionException {
     return ASTBuilder.build(parser.parse(input, parseMethod));
   }
 
   public String transformBare(PrintType printType, String str) throws RecognitionException {
-    var parseTree = parser.parse(
-        CharStreams.fromString(str), null, GLSLParser::translationUnit);
-    var translationUnit = (TranslationUnit) ASTBuilder.build(parseTree);
+    var translationUnit = parseTranslationUnit(str);
     transformation.accept(translationUnit);
     return ASTPrinter.print(printType, translationUnit);
   }
@@ -171,6 +163,10 @@ public class ASTTransformer<T extends JobParameters> implements ParameterizedTra
   @Override
   public String transformBare(String str) throws RecognitionException {
     return transformBare(PrintType.INDENTED, str);
+  }
+
+  public TranslationUnit parseTranslationUnit(String input) throws RecognitionException {
+    return parseNode(input, GLSLParser::translationUnit, ASTBuilder::visitTranslationUnit);
   }
 
   public ExternalDeclaration parseExternalDeclaration(ASTNode treeMember, String input)
