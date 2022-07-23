@@ -1,33 +1,54 @@
 package io.github.douira.glsl_transformer.ast.query;
 
 import java.util.*;
+import java.util.function.Supplier;
 import java.util.stream.Stream;
 
 import io.github.douira.glsl_transformer.ast.node.basic.ASTNode;
 
 /**
  * Indexes nodes based on their ASTNode subclass and enables fast queries for
- * nodes by type.
+ * nodes by type. Only the exact class is added to the index which means
+ * querying for the superclass Expression returns no results. Use
+ * {@link SuperclassNodeIndex} to index nodes by the chain of their
+ * superclasses.
  * 
  * Unchecked casts are used but they are safe because each set in the map only
  * has the right types of nodes.
  */
 public class NodeIndex implements Index<ASTNode> {
   public final Map<Class<? extends ASTNode>, Set<? extends ASTNode>> index = new HashMap<>();
+  public final Supplier<Set<ASTNode>> bucketConstructor;
 
-  @SuppressWarnings("unchecked")
+  public NodeIndex(Supplier<Set<ASTNode>> bucketConstructor) {
+    this.bucketConstructor = bucketConstructor;
+  }
+
+  public NodeIndex() {
+    this(HashSet::new);
+  }
+
+  public static NodeIndex withHashSetBuckets() {
+    return new NodeIndex(HashSet::new);
+  }
+
+  public static NodeIndex withLinkedHashSetBuckets() {
+    return new NodeIndex(LinkedHashSet::new);
+  }
+
   @Override
+  @SuppressWarnings("unchecked")
   public void add(ASTNode node) {
     var set = (Set<ASTNode>) index.get(node.getClass());
     if (set == null) {
-      set = new HashSet<>();
+      set = bucketConstructor.get();
       index.put(node.getClass(), set);
     }
     set.add(node);
   }
 
-  @SuppressWarnings("unchecked")
   @Override
+  @SuppressWarnings("unchecked")
   public void remove(ASTNode node) {
     var set = (Set<ASTNode>) index.get(node.getClass());
     if (set == null) {
@@ -59,26 +80,62 @@ public class NodeIndex implements Index<ASTNode> {
     return result != null && !result.isEmpty();
   }
 
+  /**
+   * Returns the set of nodes that have the same class as the given node.
+   * 
+   * @param <T>  The type of the nodes
+   * @param node The node to get the set of
+   * @return The set of nodes that have the same class as the given node
+   */
   @SuppressWarnings("unchecked")
   public <T extends ASTNode> Set<T> get(T node) {
     return (Set<T>) get(node.getClass());
   }
 
+  /**
+   * Returns an arbitrary node that has the same class as the given node.
+   * 
+   * @param <T>  The type of the node
+   * @param node The node to get a node from the index for
+   * @return An arbitrary node that has the same class as the given node
+   */
   @SuppressWarnings("unchecked")
   public <T extends ASTNode> T getOne(T node) {
     return (T) getOne(node.getClass());
   }
 
+  /**
+   * Checks if the index contains a node of the given type.
+   * 
+   * @param node the node to check for
+   * @return true if the index contains the node
+   */
   public boolean has(ASTNode node) {
     return has(node.getClass());
   }
 
+  /**
+   * Checks if the index contains the given node itself.
+   * 
+   * @param node the node to check for
+   * @return true if the index contains the node
+   */
+  public boolean hasExact(ASTNode node) {
+    var set = get(node);
+    return set != null && set.contains(node);
+  }
+
+  /**
+   * Merges the given node index into this one.
+   * 
+   * @param other the other index to merge
+   */
   @SuppressWarnings("unchecked")
   public void merge(NodeIndex other) {
     for (var entry : other.index.entrySet()) {
       var set = (Set<ASTNode>) index.get(entry.getKey());
       if (set == null) {
-        set = new HashSet<>();
+        set = bucketConstructor.get();
         index.put(entry.getKey(), set);
       }
       set.addAll(entry.getValue());
