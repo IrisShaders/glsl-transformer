@@ -12,7 +12,7 @@ import io.github.douira.glsl_transformer.cst.token_filter.TokenFilter;
 import io.github.douira.glsl_transformer.tree.ExtendedContext;
 
 /**
- * The enhanced parser does more than just parsing. It also does lexing and
+ * The enhanced parser does more than just parsing. It also does lexing,
  * token filtering and switching between parsing modes on demand. It also
  * handles error listeners.
  */

@@ -18,6 +18,10 @@ import io.github.douira.glsl_transformer.job_parameter.*;
 import io.github.douira.glsl_transformer.tree.ExtendedContext;
 import io.github.douira.glsl_transformer.util.TriConsumer;
 
+/**
+ * The AST transformer takes parses a string, turns it into an AST, transforms
+ * it with the given transformation and then prints it back.
+ */
 public class ASTTransformer<T extends JobParameters> implements ParameterizedTransformer<T>, ParserInterface {
   private final EnhancedParser parser;
   private Consumer<TranslationUnit> transformation;

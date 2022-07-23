@@ -14,7 +14,11 @@ import io.github.douira.glsl_transformer.tree.ExtendedContext;
  * avoids a separate equality implementation for each node type.
  */
 public class Matcher<T extends ASTNode> {
+  /**
+   * The node of the pattern being matched.
+   */
   protected final T pattern;
+
   private final String wildcardPrefix;
   private Map<String, Object> dataMatches;
   private Map<String, ASTNode> nodeMatches;
@@ -25,15 +29,36 @@ public class Matcher<T extends ASTNode> {
   private int matchIndex;
   private boolean matches;
 
+  /**
+   * Creates a new matcher for the given pattern and wildcard prefix.
+   * 
+   * @param pattern            The pattern to match
+   * @param wildcardIdentifier The prefix for wildcard identifiers
+   */
   public Matcher(T pattern, String wildcardIdentifier) {
     this.pattern = pattern;
     this.wildcardPrefix = wildcardIdentifier;
   }
 
+  /**
+   * Creates a new matcher for the given pattern and no wildcard prefix.
+   * 
+   * @param pattern The pattern to match
+   */
   public Matcher(T pattern) {
     this(pattern, null);
   }
 
+  /**
+   * Creates a new matcher that matches the pattern parsed from the given string,
+   * parser method and visitor method. There is also a given wildcard prefix.
+   * 
+   * @param <RuleType>         The type of the parser rule context
+   * @param input              The string to parse
+   * @param parseMethod        The parser method to use
+   * @param visitMethod        The build visitor method to use
+   * @param wildcardIdentifier The wildcard prefix
+   */
   public <RuleType extends ExtendedContext> Matcher(String input,
       Function<GLSLParser, RuleType> parseMethod,
       BiFunction<ASTBuilder, RuleType, T> visitMethod,
@@ -44,6 +69,15 @@ public class Matcher<T extends ASTNode> {
         wildcardIdentifier);
   }
 
+  /**
+   * Creates a new matcher that matches the pattern parsed from the given string,
+   * parser method and visitor method. There is no wildcard prefix.
+   * 
+   * @param <RuleType>  The type of the parser rule context
+   * @param input       The string to parse
+   * @param parseMethod The parser method to use
+   * @param visitMethod The build visitor method to use
+   */
   public <RuleType extends ExtendedContext> Matcher(String input,
       Function<GLSLParser, RuleType> parseMethod,
       BiFunction<ASTBuilder, RuleType, T> visitMethod) {
@@ -105,6 +139,11 @@ public class Matcher<T extends ASTNode> {
     }
   };
 
+  /**
+   * Prepares the matcher for matching. It parses the pattern and stores the
+   * resulting items. This can be used to pre-compute this list of items.
+   * Otherwise, this will be calculated on demand
+   */
   public void preparePatternItems() {
     if (patternItems != null) {
       return;
@@ -139,6 +178,9 @@ public class Matcher<T extends ASTNode> {
   /**
    * Traverse the given tree and the pattern at the same time and make sure they
    * are the same at each visit step.
+   * 
+   * @param tree The tree to match
+   * @return True if the tree matches the pattern, false otherwise
    */
   public boolean matches(T tree) {
     if (tree == null) {
@@ -160,6 +202,13 @@ public class Matcher<T extends ASTNode> {
     }
   }
 
+  /**
+   * Matches the given tree and collect matching string wildcards, data wildcard
+   * and node wildcards. It uses the default data and node wildcard maps.
+   * 
+   * @param tree The tree to match
+   * @return True if the tree matches the pattern, false otherwise
+   */
   public boolean matchesExtract(T tree) {
     ensureMatchMaps();
     dataMatches.clear();
@@ -174,6 +223,15 @@ public class Matcher<T extends ASTNode> {
     return succeeded;
   }
 
+  /**
+   * Matches the given tree and collect matching string wildcards, data wildcard
+   * and node wildcards using the given data and node match maps.
+   * 
+   * @param tree        The tree to match
+   * @param dataMatches The data match map to use
+   * @param nodeMatches The node match map to use
+   * @return
+   */
   public boolean matchesExtract(
       T tree,
       Map<String, Object> dataMatches,
@@ -186,50 +244,63 @@ public class Matcher<T extends ASTNode> {
     return succeeded;
   }
 
-  private Class<?> getPatternClass() {
-    return pattern.getClass();
-  }
-
-  @SuppressWarnings("unchecked")
-  public boolean matchesWide(ASTNode tree) {
-    return getPatternClass().isInstance(tree) && matches((T) tree);
-  }
-
-  @SuppressWarnings("unchecked")
-  public boolean matchesExtractWide(ASTNode tree) {
-    return getPatternClass().isInstance(tree) && matchesExtract((T) tree);
-  }
-
-  @SuppressWarnings("unchecked")
-  public boolean matchesExtractWide(
-      ASTNode tree,
-      Map<String, Object> dataMatches,
-      Map<String, ASTNode> nodeMatches) {
-    return getPatternClass().isInstance(tree)
-        && matchesExtract((T) tree, dataMatches, nodeMatches);
-  }
-
+  /**
+   * Returns the data match map.
+   * 
+   * @return The data match map
+   */
   public Map<String, Object> getDataMatches() {
     return dataMatches;
   }
 
+  /**
+   * Returns the node match map.
+   * 
+   * @return The node match map
+   */
   public Map<String, ASTNode> getNodeMatches() {
     return nodeMatches;
   }
 
+  /**
+   * Gets a data match with the given name.
+   * 
+   * @param name The name of the data match
+   * @return The data match or null if not found
+   */
   public Object getDataMatch(String name) {
     return dataMatches.get(name);
   }
 
+  /**
+   * Gets a data match with the given name as a string.
+   * 
+   * @param name The name of the data match
+   * @return The data match or null if either not found or not a string
+   */
   public String getStringDataMatch(String name) {
     var result = dataMatches.get(name);
     return result instanceof String str ? str : null;
   }
 
+  /**
+   * Gets a node match with the given name.
+   * 
+   * @param name The name of the node match
+   * @return The node match or null if not found
+   */
   public ASTNode getNodeMatch(String name) {
     return nodeMatches.get(name);
   }
 
+  /**
+   * Gets a node match with the given name if it is available as the given class.
+   * 
+   * @param <R>   The type of the node match
+   * @param name  The name of the node match
+   * @param clazz The class of the node match
+   * @return The node match or null if not found or not of the given class
+   */
   public <R extends ASTNode> R getNodeMatch(String name, Class<R> clazz) {
     var result = nodeMatches.get(name);
     return clazz.isInstance(result) ? clazz.cast(result) : null;
@@ -265,6 +336,13 @@ public class Matcher<T extends ASTNode> {
     }
   }
 
+  /**
+   * Marks the given node as an any wildcard with the given name. The wildcard
+   * will match any node in the same position in the tree.
+   * 
+   * @param name        The name of the wildcard
+   * @param patternNode The node to mark as an any wildcard
+   */
   public void markAnyWildcard(String name, ASTNode patternNode) {
     markWildcard(patternNode, new AnyWildcard(name));
   }
@@ -283,6 +361,15 @@ public class Matcher<T extends ASTNode> {
     }
   }
 
+  /**
+   * Marks the given node as a predicate wildcard with the given name. The
+   * predicate wildcard will match any node in the same position in the tree that
+   * matches the predicate.
+   * 
+   * @param name           The name of the wildcard
+   * @param patternNode    The node to mark as a predicate wildcard
+   * @param matchPredicate The predicate to match the node with
+   */
   public void markPredicatedWildcard(
       String name,
       ASTNode patternNode,
@@ -304,6 +391,16 @@ public class Matcher<T extends ASTNode> {
     }
   }
 
+  /**
+   * Marks the given node as a class wildcard with the given name. The wildcard
+   * will match any node in the same position in the tree that is an instance of
+   * the given class. If any subclass should be matched, use a superclass for
+   * matching.
+   * 
+   * @param name        The name of the wildcard
+   * @param patternNode The node to mark as a class wildcard
+   * @param clazz       The class to match the node with
+   */
   public void markClassWildcard(
       String name,
       ASTNode patternNode,
@@ -311,6 +408,14 @@ public class Matcher<T extends ASTNode> {
     markWildcard(patternNode, new ClassWildcard(name, clazz));
   }
 
+  /**
+   * Marks the given node as a class wildcard with the given name where the class
+   * is extracted from the pattern node itself. This will match any node in the
+   * same position in the tree that is the same class as the pattern node.
+   * 
+   * @param name        The name of the wildcard
+   * @param patternNode The node to mark as a class wildcard
+   */
   public void markClassWildcard(
       String name,
       ASTNode patternNode) {
@@ -334,6 +439,17 @@ public class Matcher<T extends ASTNode> {
     }
   }
 
+  /**
+   * Marks the given node as a classed predicate wildcard with the given name. The
+   * wildcard will match any node in the same position in the tree that is an
+   * instance of the given class and matches the predicate.
+   * 
+   * @param <R>         The type of the node match
+   * @param name        The name of the wildcard
+   * @param patternNode The node to mark as a classed predicate wildcard
+   * @param clazz       The class to match the node with
+   * @param predicate   The predicate to match the node with
+   */
   public <R extends ASTNode> void markClassedPredicateWildcard(
       String name,
       ASTNode patternNode,
