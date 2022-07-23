@@ -27,7 +27,7 @@ public class SuperclassNodeIndex extends NodeIndex {
   }
 
   @SuppressWarnings("unchecked")
-  void iterateClasses(
+  protected void iterateClasses(
       ASTNode node,
       BiConsumer<Class<? extends ASTNode>, ASTNode> consumer) {
     Class<? extends ASTNode> clazz = node.getClass();
