@@ -132,7 +132,7 @@ public class CompatUtil {
    * @param next    a function to be applied to the previous element to produce
    *                a new element
    * @return a new sequential {@code Stream}
-   * @since 9
+   * @implNote The implementation was taken from the JDK 9 source code.
    */
   public static <T> Stream<T> iterateStream(T seed, Predicate<? super T> hasNext, UnaryOperator<T> next) {
     Objects.requireNonNull(next);
