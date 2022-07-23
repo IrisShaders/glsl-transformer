@@ -7,7 +7,8 @@ import io.github.douira.glsl_transformer.ast.node.basic.*;
 
 /**
  * The superclass node index also creates index entries for the superclasses for
- * all nodes. This means querying for Expression returns all Expressions.
+ * all nodes. This means querying for Expression returns all nodes that extend
+ * Expression.
  */
 public class SuperclassNodeIndex extends NodeIndex {
   public SuperclassNodeIndex(Supplier<Set<ASTNode>> bucketConstructor) {
@@ -26,7 +27,7 @@ public class SuperclassNodeIndex extends NodeIndex {
   }
 
   @SuppressWarnings("unchecked")
-  protected void iterateClasses(
+  void iterateClasses(
       ASTNode node,
       BiConsumer<Class<? extends ASTNode>, ASTNode> consumer) {
     Class<? extends ASTNode> clazz = node.getClass();

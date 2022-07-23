@@ -184,12 +184,12 @@ public abstract class ASTNode {
   }
 
   private void unregister() {
-    root.unregisterChild(this);
+    root.unregisterNode(this);
     registered = false;
   }
 
   private void register() {
-    root.registerChild(this);
+    root.registerNode(this);
     registered = true;
   }
 

@@ -36,6 +36,10 @@ public class NodeIndex implements Index<ASTNode> {
     return new NodeIndex(LinkedHashSet::new);
   }
 
+  /**
+   * Method used internally to add a node to the index. This is only meant to be
+   * called by {@link Root}.
+   */
   @Override
   @SuppressWarnings("unchecked")
   public void add(ASTNode node) {
@@ -47,6 +51,11 @@ public class NodeIndex implements Index<ASTNode> {
     set.add(node);
   }
 
+  /**
+   * Method used internally to remove a node from the index. This is only meant to
+   * be
+   * called by {@link Root}.
+   */
   @Override
   @SuppressWarnings("unchecked")
   public void remove(ASTNode node) {
@@ -57,24 +66,51 @@ public class NodeIndex implements Index<ASTNode> {
     set.remove(node);
   }
 
+  /**
+   * Returns a set of all nodes with the given type.
+   * 
+   * @param <T>   the type of the class
+   * @param clazz the class of nodes to return
+   * @return a set of nodes with the given type
+   */
   @SuppressWarnings("unchecked")
   public <T extends ASTNode> Set<T> get(Class<T> clazz) {
     var result = (Set<T>) index.get(clazz);
     return result == null ? Collections.emptySet() : result;
   }
 
+  /**
+   * Returns a stream of all nodes with the given type.
+   * 
+   * @param <T>   the type of the class
+   * @param clazz the class of nodes to return
+   * @return a stream of nodes with the given type
+   */
   @SuppressWarnings("unchecked")
   public <T extends ASTNode> Stream<T> getStream(Class<T> clazz) {
     var result = (Set<T>) index.get(clazz);
     return result == null ? Stream.empty() : result.stream();
   }
 
+  /**
+   * Returns an arbitrary node with the given type.
+   * 
+   * @param <T>   the type of the class
+   * @param clazz the class of the node to return
+   * @return an arbitrary node with the given type
+   */
   @SuppressWarnings("unchecked")
   public <T extends ASTNode> T getOne(Class<T> clazz) {
     var result = (Set<T>) index.get(clazz);
     return result == null ? null : result.iterator().next();
   }
 
+  /**
+   * Checks if the index contains any nodes of the given type.
+   * 
+   * @param clazz the class of the nodes to check for
+   * @return true if the index contains any nodes of the given type
+   */
   public boolean has(Class<? extends ASTNode> clazz) {
     var result = index.get(clazz);
     return result != null && !result.isEmpty();
