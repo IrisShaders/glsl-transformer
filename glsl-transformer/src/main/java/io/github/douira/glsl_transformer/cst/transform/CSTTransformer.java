@@ -14,10 +14,10 @@ import io.github.douira.glsl_transformer.job_parameter.*;
  * setting
  * up an input, a lexer and a parser.
  * 
- * The transformation manager is meant to be used to transform many strings and
- * be re-used for many transformation jobs of the same kind. For entirely
- * different jobs a new manager should be created. Common transformations can be
- * shared between them.
+ * The CST transformer (formerly called the transformation manager) is meant to
+ * be used to transform many strings and be re-used for many transformation jobs
+ * of the same kind. For entirely different jobs a new manager should be
+ * created. Common transformations can be shared between them.
  * 
  * For printing a tree without transforming it, a manager without and
  * transformations can be used.

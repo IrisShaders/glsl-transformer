@@ -2,6 +2,10 @@ package io.github.douira.glsl_transformer.util;
 
 import java.util.function.*;
 
+/**
+ * A pass-through function takes a value and returns another (or the same) value
+ * of the same type.
+ */
 @FunctionalInterface
 public interface Passthrough<V> extends Function<V, V> {
   V apply(V v);

@@ -8,6 +8,9 @@ import io.github.douira.glsl_transformer.GLSLLexer;
 import io.github.douira.glsl_transformer.ast.data.TokenTyped;
 
 /**
+ * This enum represents the type of a value in GLSL and contains easily accessible
+ * data about each of them.
+ * 
  * The shape is an array of up to three integers describing how big this
  * tensor is in each dimension. The first dimension contains the number of bits
  * of each value and the following dimensions describe the actual dimensions of
