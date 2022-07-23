@@ -68,8 +68,8 @@ public abstract class ASTNode {
 
   /**
    * Checks if there is an ancestor of this node that fulfills the given
-   * predicate within a limited nubmer of steps. If the limit is 0, it will only
-   * check the current node.
+   * predicate within a limited nubmer of steps after a number of steps skipped.
+   * If the limit is 0, it will only check the current node.
    * 
    * @param limit     the number of parents to check in total
    * @param skip      the number of parents to skip before checking the predicate
@@ -91,18 +91,46 @@ public abstract class ASTNode {
     return false;
   }
 
+  /**
+   * Checks if there is an ancestor of this node that fulfills the given predicate
+   * within a limited nubmer of steps.
+   * 
+   * @param limit     the number of parents to check in total
+   * @param predicate the predicate to check
+   * @return true if there is an ancestor of this node that fulfills the predicate
+   */
   public boolean hasAncestor(int limit, Predicate<ASTNode> predicate) {
     return hasAncestor(limit, 0, predicate);
   }
 
+  /**
+   * Checks if there is an ancestor of this node that fulfills the given
+   * predicate.
+   * 
+   * @param predicate the predicate to check
+   * @return true if there is an ancestor of this node that fulfills the predicate
+   */
   public boolean hasAncestor(Predicate<ASTNode> predicate) {
     return hasAncestor(Integer.MAX_VALUE, predicate);
   }
 
+  /**
+   * Checks if there is an ancestor of this node that is an instance of the given
+   * class.
+   * 
+   * @param clazz the class to check
+   * @return true if there is an ancestor that is an instance of the given class
+   */
   public boolean hasAncestor(Class<? extends ASTNode> clazz) {
     return hasAncestor(clazz::isInstance);
   }
 
+  /**
+   * Checks if the given node is an ancestor of this node.
+   * 
+   * @param node the node to check
+   * @return true if the given node is an ancestor of this node
+   */
   public boolean hasAncestor(ASTNode node) {
     return hasAncestor(node::equals);
   }
@@ -132,22 +160,55 @@ public abstract class ASTNode {
     return null;
   }
 
+  /**
+   * Returns the first ancestor that fulfills the given predicate, limited to a
+   * certain number of steps.
+   * 
+   * @param limit     the number of parents to check in total
+   * @param predicate the predicate to check
+   * @return the first ancestor that fulfills the given predicate, or null
+   *         otherwise
+   */
   public ASTNode getAncestor(int limit, Predicate<ASTNode> predicate) {
     return getAncestor(limit, 0, predicate);
   }
 
+  /**
+   * Returns the first ancestor that fulfills the given predicate.
+   * 
+   * @param predicate the predicate to check
+   * @return the first ancestor that fulfills the given predicate, or null
+   *         otherwise
+   */
   public ASTNode getAncestor(Predicate<ASTNode> predicate) {
     return getAncestor(Integer.MAX_VALUE, predicate);
   }
 
+  /**
+   * Returns the first ancestor that is an instance of the given class.
+   * 
+   * @param clazz the class to check
+   * @return the first ancestor that is an instance of the given class, or null
+   *         otherwise
+   */
   public <T extends ASTNode> T getAncestor(Class<T> clazz) {
     return clazz.cast(getAncestor(clazz::isInstance));
   }
 
+  /**
+   * Returns a lazy stream of all ancestors of this node.
+   * 
+   * @return a stream of the ancestors
+   */
   public Stream<ASTNode> getAncestors() {
     return CompatUtil.iterateStream(this, ASTNode::hasParent, ASTNode::getParent);
   }
 
+  /**
+   * Returns the root of this node.
+   * 
+   * @return the root
+   */
   public Root getRoot() {
     return root;
   }
@@ -342,6 +403,18 @@ public abstract class ASTNode {
     return node;
   }
 
+  /**
+   * Updates the parents of two nodes where one is replacing the other in this
+   * node. Both of them may be null if either the existing value is being removed
+   * or a new value is being set.
+   * 
+   * @param <NodeType>  The type of the nodes for pass-through
+   * @param currentNode The current node
+   * @param newNode     The new node
+   * @param setter      The setter to replace the node in this parent (this is
+   *                    usually a method reference to a setter method of the
+   *                    parent, this node)
+   */
   public <NodeType extends ASTNode> void updateParents(
       NodeType currentNode,
       NodeType newNode,
