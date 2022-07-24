@@ -39,21 +39,21 @@ public class TranslationUnit extends ListASTNode<ExternalDeclaration> {
     children.addAll(injectionPoint.getInjectionIndex(this), nodes);
   }
 
-  public void parseAndInjectNode(ASTTransformer<?> transformer, ASTInjectionPoint injectionPoint,
-      String externalDeclarationContent) {
+  public void parseAndInjectNode(ASTTransformer<?> t,
+      ASTInjectionPoint injectionPoint,
+      String externalDeclaration) {
     children.add(injectionPoint.getInjectionIndex(this),
-        transformer.parseExternalDeclaration(
+        t.parseExternalDeclaration(
             this,
-            externalDeclarationContent));
+            externalDeclaration));
   }
 
-  public void parseAndInjectNodes(ASTTransformer<?> transformer, ASTInjectionPoint injectionPoint,
-      String... externalDeclarationContents) {
+  public void parseAndInjectNodes(ASTTransformer<?> t,
+      ASTInjectionPoint injectionPoint,
+      String... externalDeclarations) {
     var nodes = new ArrayList<ExternalDeclaration>();
-    for (var externalDeclarationContent : externalDeclarationContents) {
-      nodes.add(transformer.parseExternalDeclaration(
-          this,
-          externalDeclarationContent));
+    for (var externalDeclaration : externalDeclarations) {
+      nodes.add(t.parseExternalDeclaration(this, externalDeclaration));
     }
     injectNodes(injectionPoint, nodes);
   }
