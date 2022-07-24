@@ -231,4 +231,30 @@ public class MatcherTest extends TestWithASTTransformer {
     assertExtractTU(p, "void main() {}");
     assertNoExtractTU(p, "void foo() {}");
   }
+
+  @Test
+  void testLiteralExpressionWildcard() {
+    var p = new Matcher<>("int x = foo[index];", Matcher.translationUnitPattern) {
+      {
+        markClassedPredicateWildcard("index",
+            pattern.getRoot().identifierIndex.getOne("index").getAncestor(ReferenceExpression.class),
+            LiteralExpression.class,
+            literalExpression -> {
+              if (!literalExpression.isInteger()) {
+                return false;
+              }
+              long index = literalExpression.integerValue;
+              return index >= 0 && index < 8;
+            });
+      }
+    };
+
+    assertNoExtractTU(p, "int x = foo[-1];");
+    assertNoExtractTU(p, "int x = foo[9];");
+    assertNoExtractTU(p, "int x = foo[8];");
+    assertExtractTU(p, "int x = foo[4];");
+    assertExtractTU(p, "int x = foo[7];");
+    assertExtractTU(p, "int x = foo[0];");
+    assertNoExtractTU(p, ";");
+  }
 }
