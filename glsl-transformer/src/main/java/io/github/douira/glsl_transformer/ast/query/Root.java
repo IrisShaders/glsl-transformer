@@ -7,7 +7,7 @@ import java.util.stream.Stream;
 import io.github.douira.glsl_transformer.ast.node.Identifier;
 import io.github.douira.glsl_transformer.ast.node.basic.ASTNode;
 import io.github.douira.glsl_transformer.ast.node.expression.*;
-import io.github.douira.glsl_transformer.ast.transform.ASTTransformer;
+import io.github.douira.glsl_transformer.ast.transform.*;
 import io.github.douira.glsl_transformer.util.Passthrough;
 
 /**
@@ -284,7 +284,7 @@ public class Root {
    * @param replacer The consumer to process the target nodes with
    */
   @SuppressWarnings("unchecked")
-  public <T extends ASTNode> void processAll(Stream<T> targets, Consumer<T> replacer) {
+  public <T extends ASTNode> void processAll(Stream<? extends T> targets, Consumer<? super T> replacer) {
     ensureEmptyNodeList();
     if (targets == null) {
       return;
@@ -385,5 +385,48 @@ public class Root {
       node.replaceByAndDelete(
           transformer.parseExpression(node, expressionContent));
     }
+  }
+
+  public <T extends ASTNode> void processAllMatches(
+      ASTTransformer<?> transformer,
+      Stream<? extends ASTNode> matchTargetChildren,
+      Matcher<T> matcher,
+      Consumer<? super T> replacer) {
+    var matchClass = matcher.getPatternClass();
+    processAll(matchTargetChildren
+        .map(node -> node.getAncestor(matchClass))
+        .distinct()
+        .filter(matcher::matches),
+        replacer);
+  }
+
+  public <T extends ASTNode> void processAllMatches(
+      ASTTransformer<?> transformer,
+      String matchHint,
+      Matcher<T> matcher,
+      Consumer<? super T> replacer) {
+    processAllMatches(transformer, identifierIndex.getStream(matchHint), matcher, replacer);
+  }
+
+  public <T extends Expression> void replaceAllExpressionMatches(
+      ASTTransformer<?> transformer,
+      Stream<? extends ASTNode> matchTargetChildren,
+      Matcher<T> matcher,
+      String expressionContent) {
+    var matchClass = matcher.getPatternClass();
+    replaceAllExpressions(transformer,
+        matchTargetChildren
+            .map(node -> node.getAncestor(matchClass))
+            .distinct()
+            .filter(matcher::matches),
+        expressionContent);
+  }
+
+  public <T extends Expression> void replaceAllExpressionMatches(
+      ASTTransformer<?> transformer,
+      String matchHint,
+      Matcher<T> matcher,
+      String expressionContent) {
+    replaceAllExpressionMatches(transformer, identifierIndex.getStream(matchHint), matcher, expressionContent);
   }
 }
