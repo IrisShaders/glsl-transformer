@@ -18,33 +18,27 @@ public class AutoHintedMatcher<T extends ASTNode> extends HintedMatcher<T> {
   public <RuleType extends ExtendedContext> AutoHintedMatcher(String input, Function<GLSLParser, RuleType> parseMethod,
       BiFunction<ASTBuilder, RuleType, T> visitMethod, String wildcardPrefix) {
     super(input, parseMethod, visitMethod, wildcardPrefix, null);
-    determineHint();
   }
 
   public AutoHintedMatcher(T pattern, String wildcardPrefix) {
     super(pattern, wildcardPrefix, null);
-    determineHint();
   }
 
   public AutoHintedMatcher(T pattern) {
     super(pattern, null);
-    determineHint();
   }
 
   public <RuleType extends ExtendedContext> AutoHintedMatcher(String input, Function<GLSLParser, RuleType> parseMethod,
       BiFunction<ASTBuilder, RuleType, T> visitMethod) {
     super(input, parseMethod, visitMethod, null);
-    determineHint();
   }
 
   public AutoHintedMatcher(String input, Function<String, T> patternParser, String wildcardPrefix) {
     super(input, patternParser, wildcardPrefix, null);
-    determineHint();
   }
 
   public AutoHintedMatcher(String input, Function<String, T> patternParser) {
     super(input, patternParser, null);
-    determineHint();
   }
 
   private void determineHint() {
@@ -66,5 +60,13 @@ public class AutoHintedMatcher<T extends ASTNode> extends HintedMatcher<T> {
           "The provided pattern must contain a non-wildcard identifier to use as the hint!");
     }
     hint = longestHint;
+  }
+
+  @Override
+  public String getHint() {
+    if (hint == null) {
+      determineHint();
+    }
+    return super.getHint();
   }
 }

@@ -10,7 +10,7 @@ import io.github.douira.glsl_transformer.ast.node.expression.*;
 import io.github.douira.glsl_transformer.ast.node.expression.binary.AdditionExpression;
 import io.github.douira.glsl_transformer.ast.node.expression.unary.FunctionCallExpression;
 import io.github.douira.glsl_transformer.ast.node.external_declaration.*;
-import io.github.douira.glsl_transformer.ast.query.match.Matcher;
+import io.github.douira.glsl_transformer.ast.query.match.*;
 import io.github.douira.glsl_transformer.test_util.TestWithASTTransformer;
 
 public class MatcherTest extends TestWithASTTransformer {
@@ -32,6 +32,22 @@ public class MatcherTest extends TestWithASTTransformer {
 
   private void assertExtractTU(Matcher<TranslationUnit> p, String input) {
     assertTrue(p.matchesExtract(transformer.parseTranslationUnit(input)));
+  }
+
+  private void assertMatchTU(Matcher<TranslationUnit> p, String input) {
+    assertTrue(p.matches(transformer.parseTranslationUnit(input)));
+  }
+
+  private void assertNoMatchTU(Matcher<TranslationUnit> p, String input) {
+    assertFalse(p.matches(transformer.parseTranslationUnit(input)));
+  }
+
+  private void assertMatchEx(Matcher<Expression> p, String input) {
+    assertTrue(p.matches(transformer.parseSeparateExpression(input)));
+  }
+
+  private void assertNoMatchEx(Matcher<Expression> p, String input) {
+    assertFalse(p.matches(transformer.parseSeparateExpression(input)));
   }
 
   @Test
@@ -178,8 +194,8 @@ public class MatcherTest extends TestWithASTTransformer {
       }
     };
 
-    assertFalse(p.matches(transformer.parseTranslationUnit("foo;")));
-    assertTrue(p.matches(transformer.parseTranslationUnit(";")));
+    assertNoMatchTU(p, "foo;");
+    assertMatchTU(p, ";");
   }
 
   @Test
@@ -240,5 +256,27 @@ public class MatcherTest extends TestWithASTTransformer {
     assertExtractTU(p, "int x = foo[7];");
     assertExtractTU(p, "int x = foo[0];");
     assertNoExtractTU(p, ";");
+    assertNoMatchTU(p, "int x = foo[8];");
+    assertMatchTU(p, "int x = foo[4];");
+  }
+
+  @Test
+  void testAutoHintedMatcher() {
+    var p = new AutoHintedMatcher<Expression>(
+        "gl_TextureMatrix[index]", Matcher.expressionPattern) {
+      {
+        markClassedPredicateWildcard("index",
+            pattern.getRoot().identifierIndex.getOne("index").getAncestor(ReferenceExpression.class),
+            LiteralExpression.class,
+            literalExpression -> {
+              if (!literalExpression.isInteger()) {
+                return false;
+              }
+              long index = literalExpression.integerValue;
+              return index >= 0 && index < 8;
+            });
+      }
+    };
+    assertMatchEx(p, "gl_TextureMatrix[1]");
   }
 }
