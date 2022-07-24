@@ -35,4 +35,14 @@ public class HintedMatcher<T extends ASTNode> extends Matcher<T> {
     super(input, parseMethod, visitMethod);
     this.hint = hint;
   }
+
+  public HintedMatcher(String input, Function<String, T> patternParser, String wildcardIdentifier, String hint) {
+    super(input, patternParser, wildcardIdentifier);
+    this.hint = hint;
+  }
+
+  public HintedMatcher(String input, Function<String, T> patternParser, String hint) {
+    super(input, patternParser);
+    this.hint = hint;
+  }
 }
