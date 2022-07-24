@@ -8,7 +8,7 @@ public class ASTPrinterTest extends TestWithASTTransformer {
   @Test
   void testOperatorPrecedencePrinting1() {
     transformer.setTransformation((tree, root) -> {
-      root.replaceAllReferenceExpressions(
+      root.replaceReferenceExpressions(
           transformer, "b", "c + d");
     });
     assertTransform(
@@ -34,7 +34,7 @@ public class ASTPrinterTest extends TestWithASTTransformer {
   @Test
   void testOperatorPrecedencePrinting2() {
     transformer.setTransformation((tree, root) -> {
-      root.replaceAllReferenceExpressions(
+      root.replaceReferenceExpressions(
           transformer, "b", "++c");
     });
     assertTransform(
@@ -57,7 +57,7 @@ public class ASTPrinterTest extends TestWithASTTransformer {
   @Test
   void testOperatorPrecedencePrinting3() {
     transformer.setTransformation((tree, root) -> {
-      root.replaceAllReferenceExpressions(
+      root.replaceReferenceExpressions(
           transformer, "b", "c, d");
     });
     assertTransform(
@@ -77,7 +77,7 @@ public class ASTPrinterTest extends TestWithASTTransformer {
   @Test
   void testOperatorPrecedencePrinting4() {
     transformer.setTransformation((tree, root) -> {
-      root.replaceAllReferenceExpressions(
+      root.replaceReferenceExpressions(
           transformer, "b", "(c + d)");
     });
     assertTransform(

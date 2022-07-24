@@ -22,8 +22,8 @@ public class RootTest extends TestWithASTTransformer {
       assertTrue(index.has("a"));
       assertTrue(index.has("b"));
       assertFalse(index.has("c"));
-      root.renameAll("a", "c");
-      assertDoesNotThrow(() -> root.renameAll("foo", "c"));
+      root.rename("a", "c");
+      assertDoesNotThrow(() -> root.rename("foo", "c"));
       assertFalse(index.has("a"));
       assertTrue(index.has("b"));
       assertTrue(index.has("c"));
@@ -33,7 +33,7 @@ public class RootTest extends TestWithASTTransformer {
   @Test
   void testReplaceAll() {
     transformer.setTransformation((tree, root) -> {
-      root.processAll("foo",
+      root.process("foo",
           id -> id.getParent().replaceByAndDelete(
               transformer.parseExpression(tree, "bam + spam")));
     });
@@ -45,7 +45,7 @@ public class RootTest extends TestWithASTTransformer {
   @Test
   void testReplaceAllMultiple() {
     transformer.setTransformation((tree, root) -> {
-      root.processAll(root.identifierIndex.prefixQueryFlat("f"),
+      root.process(root.identifierIndex.prefixQueryFlat("f"),
           id -> id.getParent().replaceByAndDelete(
               transformer.parseExpression(tree, "bam + spam")));
     });
@@ -57,7 +57,7 @@ public class RootTest extends TestWithASTTransformer {
   @Test
   void testNullReplaceStream() {
     transformer.setTransformation((tree, root) -> {
-      root.processAll(Stream.of((Identifier) null), id -> {
+      root.process(Stream.of((Identifier) null), id -> {
       });
     });
     assertDoesNotThrow(() -> transformer.transform(""));
@@ -66,7 +66,7 @@ public class RootTest extends TestWithASTTransformer {
   @Test
   void testReplaceAllReferenceExpressionsPrefix() {
     transformer.setTransformation((tree, root) -> {
-      root.replaceAllReferenceExpressions(transformer,
+      root.replaceReferenceExpressions(transformer,
           root.identifierIndex.prefixQueryFlat("f"),
           "bam + spam");
     });
@@ -78,7 +78,7 @@ public class RootTest extends TestWithASTTransformer {
   @Test
   void testReplaceAllReferenceExpressionsExact() {
     transformer.setTransformation((tree, root) -> {
-      root.replaceAllReferenceExpressions(transformer,
+      root.replaceReferenceExpressions(transformer,
           "foo",
           "bam + spam");
     });

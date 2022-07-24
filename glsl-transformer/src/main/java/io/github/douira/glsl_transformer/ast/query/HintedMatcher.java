@@ -7,6 +7,10 @@ import io.github.douira.glsl_transformer.ast.node.basic.ASTNode;
 import io.github.douira.glsl_transformer.ast.transform.ASTBuilder;
 import io.github.douira.glsl_transformer.tree.ExtendedContext;
 
+/**
+ * A hinted matcher contains an additional string that can be used to find
+ * identifiers whose matching ancestor might match the pattern.
+ */
 public class HintedMatcher<T extends ASTNode> extends Matcher<T> {
   public final String hint;
 
