@@ -43,8 +43,7 @@ public class MatcherTest extends TestWithASTTransformer {
   @Test
   void testMatches() {
     var p = new Matcher<>("uniform vec4 entityColor;",
-        GLSLParser::externalDeclaration,
-        ASTBuilder::visitExternalDeclaration);
+        Matcher.externalDeclarationPattern);
 
     assertFalse(p.matches(null));
     assertMatchED(p, "uniform vec4 entityColor;");
@@ -58,8 +57,7 @@ public class MatcherTest extends TestWithASTTransformer {
   @Test
   void testMatchesDataWildcard() {
     var p = new Matcher<>("uniform vec4 ___ = foo + ___;",
-        GLSLParser::externalDeclaration,
-        ASTBuilder::visitExternalDeclaration, "___");
+        Matcher.externalDeclarationPattern, "___");
 
     assertFalse(p.matches(null));
     assertMatchED(p, "uniform vec4 foo = foo + foo;");
@@ -73,8 +71,7 @@ public class MatcherTest extends TestWithASTTransformer {
   @Test
   void testExtractDataWildcards() {
     var p = new Matcher<>("uniform vec4 ___a = foo + ___b;",
-        GLSLParser::externalDeclaration,
-        ASTBuilder::visitExternalDeclaration, "___");
+        Matcher.externalDeclarationPattern, "___");
 
     assertFalse(p.matchesExtract(null));
     assertTrue(p.getDataMatches().isEmpty());
@@ -95,8 +92,7 @@ public class MatcherTest extends TestWithASTTransformer {
 
   @Test
   void testExtractNodeWildcards() {
-    var p = new Matcher<>("uniform vec4 a = foo + b;", GLSLParser::externalDeclaration,
-        ASTBuilder::visitExternalDeclaration) {
+    var p = new Matcher<>("uniform vec4 a = foo + b;", Matcher.externalDeclarationPattern) {
       {
         markAnyWildcard("aNode",
             pattern.getRoot().identifierIndex.getOne("a"));
@@ -128,8 +124,7 @@ public class MatcherTest extends TestWithASTTransformer {
 
   @Test
   void testExtractNodeWildcardsList() {
-    var p = new Matcher<>("int ___a; int x = a; b; float ___b;", GLSLParser::translationUnit,
-        ASTBuilder::visitTranslationUnit, "___") {
+    var p = new Matcher<>("int ___a; int x = a; b; float ___b;", Matcher.translationUnitPattern, "___") {
       {
         markAnyWildcard("aNode", pattern.getRoot().identifierIndex
             .getOne("a").getAncestor(Expression.class));
@@ -150,8 +145,7 @@ public class MatcherTest extends TestWithASTTransformer {
 
   @Test
   void testPredicatedWildcard() {
-    var p = new Matcher<>("a;", GLSLParser::translationUnit,
-        ASTBuilder::visitTranslationUnit) {
+    var p = new Matcher<>("a;", Matcher.translationUnitPattern) {
       {
         markPredicatedWildcard("bNode",
             pattern.getAncestor(TranslationUnit.class)
@@ -166,8 +160,7 @@ public class MatcherTest extends TestWithASTTransformer {
 
   @Test
   void testClassWildcard1() {
-    var p = new Matcher<>("a;", GLSLParser::translationUnit,
-        ASTBuilder::visitTranslationUnit) {
+    var p = new Matcher<>("a;", Matcher.translationUnitPattern) {
       {
         markClassWildcard("bNode",
             pattern.getAncestor(TranslationUnit.class)
@@ -182,8 +175,7 @@ public class MatcherTest extends TestWithASTTransformer {
 
   @Test
   void testNodeWildcardWithoutExtract() {
-    var p = new Matcher<>("a;", GLSLParser::translationUnit,
-        ASTBuilder::visitTranslationUnit) {
+    var p = new Matcher<>("a;", Matcher.translationUnitPattern) {
       {
         markClassWildcard("bNode",
             pattern.getAncestor(TranslationUnit.class)
@@ -198,8 +190,7 @@ public class MatcherTest extends TestWithASTTransformer {
 
   @Test
   void testClassWildcard2() {
-    var p = new Matcher<>("a;", GLSLParser::translationUnit,
-        ASTBuilder::visitTranslationUnit) {
+    var p = new Matcher<>("a;", Matcher.translationUnitPattern) {
       {
         markClassWildcard("bNode",
             pattern.getAncestor(TranslationUnit.class)
@@ -214,8 +205,7 @@ public class MatcherTest extends TestWithASTTransformer {
 
   @Test
   void testClassedPredicateWildcard() {
-    var p = new Matcher<>("a;", GLSLParser::translationUnit,
-        ASTBuilder::visitTranslationUnit) {
+    var p = new Matcher<>("a;", Matcher.translationUnitPattern) {
       {
         markClassedPredicateWildcard("bNode",
             pattern.getAncestor(TranslationUnit.class)
