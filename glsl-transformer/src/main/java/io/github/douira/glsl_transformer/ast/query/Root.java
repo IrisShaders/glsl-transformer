@@ -316,39 +316,39 @@ public class Root {
    * reference expression are not replaced since an expression would be impossible
    * as a replacement.
    * 
-   * @param transformer       The AST transformer
+   * @param t       The AST transformer
    * @param name              The name of the identifiers to target
-   * @param expressionContent The content of the replacement expression
+   * @param expression The content of the replacement expression
    */
   public void replaceReferenceExpressions(
-      ASTTransformer<?> transformer,
+      ASTTransformer<?> t,
       String name,
-      String expressionContent) {
+      String expression) {
     replaceReferenceExpressions(
-        transformer,
+        t,
         identifierIndex.getStream(name),
-        expressionContent);
+        expression);
   }
 
   /**
    * Replaces all reference expressions containing the given identifiers from the
    * given stream with the given replacement expression.
    * 
-   * @param transformer       The AST transformer
+   * @param t       The AST transformer
    * @param targets           The stream of identifiers to target
-   * @param expressionContent The content of the replacement expression
+   * @param expression The content of the replacement expression
    */
   public void replaceReferenceExpressions(
-      ASTTransformer<?> transformer,
+      ASTTransformer<?> t,
       Stream<Identifier> targets,
-      String expressionContent) {
+      String expression) {
     process(targets, identifier -> {
       var parent = identifier.getParent();
       if (!(parent instanceof ReferenceExpression)) {
         return;
       }
       parent.replaceByAndDelete(
-          transformer.parseExpression(identifier, expressionContent));
+          t.parseExpression(identifier, expression));
     });
   }
 
@@ -356,17 +356,17 @@ public class Root {
    * Replaces all expressions from the given stream with the given replacement
    * expression.
    * 
-   * @param transformer       The AST transformer
+   * @param t       The AST transformer
    * @param targets           The stream of expressions to target
-   * @param expressionContent The content of the replacement expression
+   * @param expression The content of the replacement expression
    */
   public void replaceExpressions(
-      ASTTransformer<?> transformer,
+      ASTTransformer<?> t,
       Stream<? extends Expression> targets,
-      String expressionContent) {
-    process(targets, expression -> {
-      expression.replaceByAndDelete(
-          transformer.parseExpression(expression, expressionContent));
+      String expression) {
+    process(targets, node -> {
+      node.replaceByAndDelete(
+          t.parseExpression(node, expression));
     });
   }
 
@@ -375,22 +375,22 @@ public class Root {
    * expression but without storing the targets in an intermediary list under the
    * assumption that this list will not be modified by the replacement.
    * 
-   * @param transformer       The AST transformer
+   * @param t       The AST transformer
    * @param targets           The list of expressions to target
-   * @param expressionContent The content of the replacement expression
+   * @param expression The content of the replacement expression
    */
   public static void replaceExpressionsConcurrent(
-      ASTTransformer<?> transformer,
+      ASTTransformer<?> t,
       List<? extends Expression> targets,
-      String expressionContent) {
+      String expression) {
     for (var node : targets) {
       node.replaceByAndDelete(
-          transformer.parseExpression(node, expressionContent));
+          t.parseExpression(node, expression));
     }
   }
 
   public <T extends ASTNode> void processMatches(
-      ASTTransformer<?> transformer,
+      ASTTransformer<?> t,
       Stream<? extends ASTNode> matchTargetChildren,
       Matcher<T> matcher,
       Consumer<? super T> replacer) {
@@ -403,46 +403,46 @@ public class Root {
   }
 
   public <T extends ASTNode> void processMatches(
-      ASTTransformer<?> transformer,
+      ASTTransformer<?> t,
       String matchHint,
       Matcher<T> matcher,
       Consumer<? super T> replacer) {
-    processMatches(transformer, identifierIndex.getStream(matchHint), matcher, replacer);
+    processMatches(t, identifierIndex.getStream(matchHint), matcher, replacer);
   }
 
   public <T extends ASTNode> void processMatches(
-      ASTTransformer<?> transformer,
+      ASTTransformer<?> t,
       HintedMatcher<T> hintedMatcher,
       Consumer<? super T> replacer) {
-    processMatches(transformer, hintedMatcher.getHint(), hintedMatcher, replacer);
+    processMatches(t, hintedMatcher.getHint(), hintedMatcher, replacer);
   }
 
   public <T extends Expression> void replaceExpressionMatches(
-      ASTTransformer<?> transformer,
+      ASTTransformer<?> t,
       Stream<? extends ASTNode> matchTargetChildren,
       Matcher<T> matcher,
-      String expressionContent) {
+      String expression) {
     var matchClass = matcher.getPatternClass();
-    replaceExpressions(transformer,
+    replaceExpressions(t,
         matchTargetChildren
             .map(node -> node.getAncestor(matchClass))
             .distinct()
             .filter(matcher::matches),
-        expressionContent);
+        expression);
   }
 
   public <T extends Expression> void replaceExpressionMatches(
-      ASTTransformer<?> transformer,
+      ASTTransformer<?> t,
       String matchHint,
       Matcher<T> matcher,
-      String expressionContent) {
-    replaceExpressionMatches(transformer, identifierIndex.getStream(matchHint), matcher, expressionContent);
+      String expression) {
+    replaceExpressionMatches(t, identifierIndex.getStream(matchHint), matcher, expression);
   }
 
   public <T extends Expression> void replaceExpressionMatches(
-      ASTTransformer<?> transformer,
+      ASTTransformer<?> t,
       HintedMatcher<T> hintedMatcher,
-      String expressionContent) {
-    replaceExpressionMatches(transformer, hintedMatcher.getHint(), hintedMatcher, expressionContent);
+      String expression) {
+    replaceExpressionMatches(t, hintedMatcher.getHint(), hintedMatcher, expression);
   }
 }
