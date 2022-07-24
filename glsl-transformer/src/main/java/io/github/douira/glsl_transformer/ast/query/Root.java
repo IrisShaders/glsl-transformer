@@ -408,6 +408,13 @@ public class Root {
     processAllMatches(transformer, identifierIndex.getStream(matchHint), matcher, replacer);
   }
 
+  public <T extends ASTNode> void processAllMatches(
+      ASTTransformer<?> transformer,
+      HintedMatcher<T> hintedMatcher,
+      Consumer<? super T> replacer) {
+    processAllMatches(transformer, hintedMatcher.hint, hintedMatcher, replacer);
+  }
+
   public <T extends Expression> void replaceAllExpressionMatches(
       ASTTransformer<?> transformer,
       Stream<? extends ASTNode> matchTargetChildren,
@@ -428,5 +435,12 @@ public class Root {
       Matcher<T> matcher,
       String expressionContent) {
     replaceAllExpressionMatches(transformer, identifierIndex.getStream(matchHint), matcher, expressionContent);
+  }
+
+  public <T extends Expression> void replaceAllExpressionMatches(
+      ASTTransformer<?> transformer,
+      HintedMatcher<T> hintedMatcher,
+      String expressionContent) {
+    replaceAllExpressionMatches(transformer, hintedMatcher.hint, hintedMatcher, expressionContent);
   }
 }
