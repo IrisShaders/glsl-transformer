@@ -124,7 +124,7 @@ public class ASTTransformer<T extends JobParameters> implements ParameterizedTra
         visitMethod);
   }
 
-  public <RuleType extends ExtendedContext, ReturnType extends ASTNode> ReturnType parseNode(
+  public <RuleType extends ExtendedContext, ReturnType extends ASTNode> ReturnType parseNodeSeparate(
       String input,
       Function<GLSLParser, RuleType> parseMethod,
       BiFunction<ASTBuilder, RuleType, ReturnType> visitMethod) throws RecognitionException {
@@ -170,7 +170,7 @@ public class ASTTransformer<T extends JobParameters> implements ParameterizedTra
   }
 
   public TranslationUnit parseTranslationUnit(String input) throws RecognitionException {
-    return parseNode(input, GLSLParser::translationUnit, ASTBuilder::visitTranslationUnit);
+    return parseNodeSeparate(input, GLSLParser::translationUnit, ASTBuilder::visitTranslationUnit);
   }
 
   public ExternalDeclaration parseExternalDeclaration(ASTNode treeMember, String input)
@@ -187,14 +187,14 @@ public class ASTTransformer<T extends JobParameters> implements ParameterizedTra
   }
 
   public ExternalDeclaration parseSeparateExternalDeclaration(String input) throws RecognitionException {
-    return parseNode(input, GLSLParser::externalDeclaration, ASTBuilder::visitExternalDeclaration);
+    return parseNodeSeparate(input, GLSLParser::externalDeclaration, ASTBuilder::visitExternalDeclaration);
   }
 
   public Expression parseSeparateExpression(String input) throws RecognitionException {
-    return parseNode(input, GLSLParser::expression, ASTBuilder::visitExpression);
+    return parseNodeSeparate(input, GLSLParser::expression, ASTBuilder::visitExpression);
   }
 
   public Statement parseSeparateStatement(String input) throws RecognitionException {
-    return parseNode(input, GLSLParser::statement, ASTBuilder::visitStatement);
+    return parseNodeSeparate(input, GLSLParser::statement, ASTBuilder::visitStatement);
   }
 }
