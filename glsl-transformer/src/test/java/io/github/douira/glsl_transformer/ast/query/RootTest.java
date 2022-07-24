@@ -7,11 +7,12 @@ import java.util.stream.Stream;
 import org.junit.jupiter.api.Test;
 
 import io.github.douira.glsl_transformer.ast.node.Identifier;
+import io.github.douira.glsl_transformer.ast.node.expression.Expression;
 import io.github.douira.glsl_transformer.test_util.TestWithASTTransformer;
 
 public class RootTest extends TestWithASTTransformer {
   @Test
-  void testRenameAll() {
+  void testRename() {
     Root.indexSeparateTrees(register -> {
       var a = new Identifier("a");
       var b = new Identifier("b");
@@ -31,7 +32,7 @@ public class RootTest extends TestWithASTTransformer {
   }
 
   @Test
-  void testReplaceAll() {
+  void testReplace() {
     transformer.setTransformation((tree, root) -> {
       root.process("foo",
           id -> id.getParent().replaceByAndDelete(
@@ -43,7 +44,7 @@ public class RootTest extends TestWithASTTransformer {
   }
 
   @Test
-  void testReplaceAllMultiple() {
+  void testReplaceMultiple() {
     transformer.setTransformation((tree, root) -> {
       root.process(root.identifierIndex.prefixQueryFlat("f"),
           id -> id.getParent().replaceByAndDelete(
@@ -64,7 +65,7 @@ public class RootTest extends TestWithASTTransformer {
   }
 
   @Test
-  void testReplaceAllReferenceExpressionsPrefix() {
+  void testReplaceReferenceExpressionsPrefix() {
     transformer.setTransformation((tree, root) -> {
       root.replaceReferenceExpressions(transformer,
           root.identifierIndex.prefixQueryFlat("f"),
@@ -76,7 +77,7 @@ public class RootTest extends TestWithASTTransformer {
   }
 
   @Test
-  void testReplaceAllReferenceExpressionsExact() {
+  void testReplaceReferenceExpressionsExact() {
     transformer.setTransformation((tree, root) -> {
       root.replaceReferenceExpressions(transformer,
           "foo",
@@ -85,5 +86,27 @@ public class RootTest extends TestWithASTTransformer {
     assertTransform(
         "int foo = bam + spam + bar + fan; ",
         "int foo = foo + bar + fan;");
+  }
+
+  @Test
+  void testHintedMatcherProcessing() {
+    var matcher = new HintedMatcher<Expression>("foo[1]", Matcher.expressionPattern, "foo");
+    transformer.setTransformation((tree, root) -> {
+      root.replaceExpressionMatches(transformer, matcher, "bar + 4");
+    });
+    assertTransform(
+        "int foo = bam + bar + 4 + foo[4]; ",
+        "int foo = bam + foo[1] + foo[4];");
+  }
+
+  @Test
+  void testHintedMatcherProcessingHintSpecificity() {
+    var matcher = new HintedMatcher<Expression>("foo[1]", Matcher.expressionPattern, "bar");
+    transformer.setTransformation((tree, root) -> {
+      root.replaceExpressionMatches(transformer, matcher, "bar + 4");
+    });
+    assertTransform(
+        "int foo = bam + foo[1] + foo[4]; ",
+        "int foo = bam + foo[1] + foo[4];");
   }
 }
