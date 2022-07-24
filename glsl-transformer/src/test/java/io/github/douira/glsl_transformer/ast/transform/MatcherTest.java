@@ -183,6 +183,22 @@ public class MatcherTest extends TestWithASTTransformer {
   }
 
   @Test
+  void testNodeWildcardWithoutExtract() {
+    var p = new Matcher<>("a;", GLSLParser::translationUnit,
+        ASTBuilder::visitTranslationUnit) {
+      {
+        markClassWildcard("bNode",
+            pattern.getAncestor(TranslationUnit.class)
+                .getChildren().get(0),
+            EmptyDeclaration.class);
+      }
+    };
+
+    assertFalse(p.matches(transformer.parseTranslationUnit("foo;")));
+    assertTrue(p.matches(transformer.parseTranslationUnit(";")));
+  }
+
+  @Test
   void testClassWildcard2() {
     var p = new Matcher<>("a;", GLSLParser::translationUnit,
         ASTBuilder::visitTranslationUnit) {

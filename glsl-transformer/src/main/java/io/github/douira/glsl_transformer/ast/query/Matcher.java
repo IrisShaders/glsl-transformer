@@ -95,11 +95,12 @@ public class Matcher<T extends ASTNode> {
       var patternItem = patternItems.get(matchIndex++);
 
       // match either a wildcard node
-      if (collectMatches
-          && nodeWildcards != null
+      if (nodeWildcards != null
           && patternItem instanceof NodeWildcard wildcard
           && wildcard.test(node)) {
-        nodeMatches.put(wildcard.name, node);
+        if (collectMatches) {
+          nodeMatches.put(wildcard.name, node);
+        }
         return null;
       }
 
@@ -309,7 +310,7 @@ public class Matcher<T extends ASTNode> {
 
   @SuppressWarnings("unchecked")
   public Class<? extends T> getPatternClass() {
-    return (Class<? extends T>)pattern.getClass();
+    return (Class<? extends T>) pattern.getClass();
   }
 
   private void ensureWildcardMap() {
