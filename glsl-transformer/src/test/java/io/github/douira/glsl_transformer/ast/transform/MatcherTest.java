@@ -33,13 +33,11 @@ public class MatcherTest extends TestWithASTTransformer {
   }
 
   private void assertNoExtractTU(Matcher<TranslationUnit> p, String input) {
-    assertFalse(p.matchesExtract(transformer.parseNode(input, GLSLParser::translationUnit,
-        ASTBuilder::visitTranslationUnit)));
+    assertFalse(p.matchesExtract(transformer.parseTranslationUnit(input)));
   }
 
   private void assertExtractTU(Matcher<TranslationUnit> p, String input) {
-    assertTrue(p.matchesExtract(transformer.parseNode(input, GLSLParser::translationUnit,
-        ASTBuilder::visitTranslationUnit)));
+    assertTrue(p.matchesExtract(transformer.parseTranslationUnit(input)));
   }
 
   @Test
