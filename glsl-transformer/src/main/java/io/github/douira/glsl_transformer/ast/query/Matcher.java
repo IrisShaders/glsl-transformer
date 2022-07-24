@@ -1,10 +1,11 @@
-package io.github.douira.glsl_transformer.ast.transform;
+package io.github.douira.glsl_transformer.ast.query;
 
 import java.util.*;
 import java.util.function.*;
 
 import io.github.douira.glsl_transformer.GLSLParser;
 import io.github.douira.glsl_transformer.ast.node.basic.ASTNode;
+import io.github.douira.glsl_transformer.ast.transform.ASTBuilder;
 import io.github.douira.glsl_transformer.ast.traversal.*;
 import io.github.douira.glsl_transformer.basic.EnhancedParser;
 import io.github.douira.glsl_transformer.tree.ExtendedContext;
