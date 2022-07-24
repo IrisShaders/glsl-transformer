@@ -9,19 +9,20 @@ import io.github.douira.glsl_transformer.tree.ExtendedContext;
 
 /**
  * A hinted matcher contains an additional string that can be used to find
- * identifiers whose matching ancestor might match the pattern.
+ * identifiers whose matching ancestor might match the pattern. This makes
+ * working with matchers much less verbose.
  */
 public class HintedMatcher<T extends ASTNode> extends Matcher<T> {
-  public final String hint;
+  protected String hint;
 
   public <RuleType extends ExtendedContext> HintedMatcher(String input, Function<GLSLParser, RuleType> parseMethod,
-      BiFunction<ASTBuilder, RuleType, T> visitMethod, String wildcardIdentifier, String hint) {
-    super(input, parseMethod, visitMethod, wildcardIdentifier);
+      BiFunction<ASTBuilder, RuleType, T> visitMethod, String wildcardPrefix, String hint) {
+    super(input, parseMethod, visitMethod, wildcardPrefix);
     this.hint = hint;
   }
 
-  public HintedMatcher(T pattern, String wildcardIdentifier, String hint) {
-    super(pattern, wildcardIdentifier);
+  public HintedMatcher(T pattern, String wildcardPrefix, String hint) {
+    super(pattern, wildcardPrefix);
     this.hint = hint;
   }
 
@@ -36,13 +37,17 @@ public class HintedMatcher<T extends ASTNode> extends Matcher<T> {
     this.hint = hint;
   }
 
-  public HintedMatcher(String input, Function<String, T> patternParser, String wildcardIdentifier, String hint) {
-    super(input, patternParser, wildcardIdentifier);
+  public HintedMatcher(String input, Function<String, T> patternParser, String wildcardPrefix, String hint) {
+    super(input, patternParser, wildcardPrefix);
     this.hint = hint;
   }
 
   public HintedMatcher(String input, Function<String, T> patternParser, String hint) {
     super(input, patternParser);
     this.hint = hint;
+  }
+
+  public String getHint() {
+    return hint;
   }
 }

@@ -91,7 +91,7 @@ public class RootTest extends TestWithASTTransformer {
 
   @Test
   void testHintedMatcherProcessing() {
-    var matcher = new HintedMatcher<Expression>("foo[1]", Matcher.expressionPattern, "foo");
+    var matcher = new HintedMatcher<>("foo[1]", Matcher.expressionPattern, "foo");
     transformer.setTransformation((tree, root) -> {
       root.replaceExpressionMatches(transformer, matcher, "bar + 4");
     });
@@ -102,12 +102,35 @@ public class RootTest extends TestWithASTTransformer {
 
   @Test
   void testHintedMatcherProcessingHintSpecificity() {
-    var matcher = new HintedMatcher<Expression>("foo[1]", Matcher.expressionPattern, "bar");
+    var matcher = new HintedMatcher<>("foo[1]", Matcher.expressionPattern, "bar");
     transformer.setTransformation((tree, root) -> {
       root.replaceExpressionMatches(transformer, matcher, "bar + 4");
     });
     assertTransform(
         "int foo = bam + foo[1] + foo[4]; ",
         "int foo = bam + foo[1] + foo[4];");
+  }
+
+  @Test
+  void testAutoHintedMatcherProcessing() {
+    var matcher = new AutoHintedMatcher<>("foo[1]", Matcher.expressionPattern);
+    transformer.setTransformation((tree, root) -> {
+      root.replaceExpressionMatches(transformer, matcher, "bar + 4");
+    });
+    assertTransform(
+        "int foo = bam + bar + 4 + foo[4]; ",
+        "int foo = bam + foo[1] + foo[4];");
+  }
+
+  @Test
+  void testAutoHintedMatcherProcessingWildcard() {
+    var matcher = new AutoHintedMatcher<>("a[___f + 5]", Matcher.expressionPattern, "___");
+    transformer.setTransformation((tree, root) -> {
+      root.replaceExpressionMatches(transformer, matcher, "bar + 4");
+    });
+    assertEquals("a", matcher.getHint());
+    assertTransform(
+        "int foo = bam + bar + 4 + a[bar + 4]; ",
+        "int foo = bam + a[bar + 5] + a[bar + 4];");
   }
 }
