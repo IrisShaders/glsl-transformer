@@ -306,6 +306,11 @@ public class Matcher<T extends ASTNode> {
     return clazz.isInstance(result) ? clazz.cast(result) : null;
   }
 
+  @SuppressWarnings("unchecked")
+  public Class<? extends T> getPatternClass() {
+    return (Class<? extends T>)pattern.getClass();
+  }
+
   private void ensureWildcardMap() {
     if (nodeWildcards == null) {
       nodeWildcards = new HashMap<>();
