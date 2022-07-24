@@ -7,6 +7,8 @@ import java.util.stream.Stream;
 import io.github.douira.glsl_transformer.ast.node.Identifier;
 import io.github.douira.glsl_transformer.ast.node.basic.ASTNode;
 import io.github.douira.glsl_transformer.ast.node.expression.*;
+import io.github.douira.glsl_transformer.ast.query.index.*;
+import io.github.douira.glsl_transformer.ast.query.match.*;
 import io.github.douira.glsl_transformer.ast.transform.ASTTransformer;
 import io.github.douira.glsl_transformer.util.Passthrough;
 
