@@ -7,6 +7,7 @@ import java.util.Set;
 
 import org.junit.jupiter.api.*;
 
+import io.github.douira.glsl_transformer.ast.query.index.PermutermTrie;
 import io.github.douira.glsl_transformer.test_util.TestWithTrieObjects;
 
 public class PermutermTrieTest extends TestWithTrieObjects {

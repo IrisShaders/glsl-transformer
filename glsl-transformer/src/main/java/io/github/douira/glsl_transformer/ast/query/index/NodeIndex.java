@@ -1,10 +1,11 @@
-package io.github.douira.glsl_transformer.ast.query;
+package io.github.douira.glsl_transformer.ast.query.index;
 
 import java.util.*;
 import java.util.function.Supplier;
 import java.util.stream.Stream;
 
 import io.github.douira.glsl_transformer.ast.node.basic.ASTNode;
+import io.github.douira.glsl_transformer.ast.query.Root;
 
 /**
  * Indexes nodes based on their ASTNode subclass and enables fast queries for

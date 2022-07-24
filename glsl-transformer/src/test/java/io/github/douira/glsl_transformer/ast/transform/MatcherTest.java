@@ -11,7 +11,7 @@ import io.github.douira.glsl_transformer.ast.node.expression.*;
 import io.github.douira.glsl_transformer.ast.node.expression.binary.AdditionExpression;
 import io.github.douira.glsl_transformer.ast.node.expression.unary.FunctionCallExpression;
 import io.github.douira.glsl_transformer.ast.node.external_declaration.*;
-import io.github.douira.glsl_transformer.ast.query.Matcher;
+import io.github.douira.glsl_transformer.ast.query.match.Matcher;
 import io.github.douira.glsl_transformer.test_util.TestWithASTTransformer;
 
 public class MatcherTest extends TestWithASTTransformer {

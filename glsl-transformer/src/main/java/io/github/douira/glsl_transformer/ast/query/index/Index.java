@@ -1,4 +1,4 @@
-package io.github.douira.glsl_transformer.ast.query;
+package io.github.douira.glsl_transformer.ast.query.index;
 
 import java.util.Set;
 import java.util.function.*;
