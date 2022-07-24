@@ -414,7 +414,7 @@ public class Root {
       ASTTransformer<?> transformer,
       HintedMatcher<T> hintedMatcher,
       Consumer<? super T> replacer) {
-    processMatches(transformer, hintedMatcher.hint, hintedMatcher, replacer);
+    processMatches(transformer, hintedMatcher.getHint(), hintedMatcher, replacer);
   }
 
   public <T extends Expression> void replaceExpressionMatches(
@@ -443,6 +443,6 @@ public class Root {
       ASTTransformer<?> transformer,
       HintedMatcher<T> hintedMatcher,
       String expressionContent) {
-    replaceExpressionMatches(transformer, hintedMatcher.hint, hintedMatcher, expressionContent);
+    replaceExpressionMatches(transformer, hintedMatcher.getHint(), hintedMatcher, expressionContent);
   }
 }

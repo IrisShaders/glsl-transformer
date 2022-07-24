@@ -24,25 +24,25 @@ public class Matcher<T extends ASTNode> {
    */
   protected final T pattern;
 
-  private final String wildcardPrefix;
+  protected final String wildcardPrefix;
   private Map<String, Object> dataMatches;
   private Map<String, ASTNode> nodeMatches;
   private Map<ASTNode, NodeWildcard> nodeWildcards;
   private boolean collectMatches = false;
-  private List<Object> patternItems;
-  private int patternItemsSize;
+  protected List<Object> patternItems;
+  protected int patternItemsSize;
   private int matchIndex;
   private boolean matches;
 
   /**
    * Creates a new matcher for the given pattern and wildcard prefix.
    * 
-   * @param pattern            The pattern to match
-   * @param wildcardIdentifier The prefix for wildcard identifiers
+   * @param pattern        The pattern to match
+   * @param wildcardPrefix The prefix for wildcard identifiers
    */
-  public Matcher(T pattern, String wildcardIdentifier) {
+  public Matcher(T pattern, String wildcardPrefix) {
     this.pattern = pattern;
-    this.wildcardPrefix = wildcardIdentifier;
+    this.wildcardPrefix = wildcardPrefix;
   }
 
   /**
@@ -58,20 +58,20 @@ public class Matcher<T extends ASTNode> {
    * Creates a new matcher that matches the pattern parsed from the given string,
    * parser method and visitor method. There is also a given wildcard prefix.
    * 
-   * @param <RuleType>         The type of the parser rule context
-   * @param input              The string to parse
-   * @param parseMethod        The parser method to use
-   * @param visitMethod        The build visitor method to use
-   * @param wildcardIdentifier The wildcard prefix
+   * @param <RuleType>     The type of the parser rule context
+   * @param input          The string to parse
+   * @param parseMethod    The parser method to use
+   * @param visitMethod    The build visitor method to use
+   * @param wildcardPrefix The wildcard prefix
    */
   public <RuleType extends ExtendedContext> Matcher(String input,
       Function<GLSLParser, RuleType> parseMethod,
       BiFunction<ASTBuilder, RuleType, T> visitMethod,
-      String wildcardIdentifier) {
+      String wildcardPrefix) {
     this(ASTBuilder.build(
         EnhancedParser.getInternalInstance().parse(input, parseMethod),
         visitMethod),
-        wildcardIdentifier);
+        wildcardPrefix);
   }
 
   /**
@@ -89,8 +89,8 @@ public class Matcher<T extends ASTNode> {
     this(input, parseMethod, visitMethod, null);
   }
 
-  public Matcher(String input, Function<String, T> patternParser, String wildcardIdentifier) {
-    this(patternParser.apply(input), wildcardIdentifier);
+  public Matcher(String input, Function<String, T> patternParser, String wildcardPrefix) {
+    this(patternParser.apply(input), wildcardPrefix);
   }
 
   public Matcher(String input, Function<String, T> patternParser) {
