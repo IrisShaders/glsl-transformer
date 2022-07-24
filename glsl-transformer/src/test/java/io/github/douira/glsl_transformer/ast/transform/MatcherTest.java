@@ -4,7 +4,6 @@ import static org.junit.jupiter.api.Assertions.*;
 
 import org.junit.jupiter.api.Test;
 
-import io.github.douira.glsl_transformer.GLSLParser;
 import io.github.douira.glsl_transformer.ast.node.*;
 import io.github.douira.glsl_transformer.ast.node.basic.InnerASTNode;
 import io.github.douira.glsl_transformer.ast.node.expression.*;
@@ -16,20 +15,15 @@ import io.github.douira.glsl_transformer.test_util.TestWithASTTransformer;
 
 public class MatcherTest extends TestWithASTTransformer {
   private void assertNoMatchED(Matcher<ExternalDeclaration> p, String input) {
-    assertFalse(p.matches(transformer.parseNode(input,
-        GLSLParser::externalDeclaration,
-        ASTBuilder::visitExternalDeclaration)));
+    assertFalse(p.matches(transformer.parseSeparateExternalDeclaration(input)));
   }
 
   private void assertMatchED(Matcher<ExternalDeclaration> p, String input) {
-    assertTrue(p.matches(transformer.parseNode(input,
-        GLSLParser::externalDeclaration,
-        ASTBuilder::visitExternalDeclaration)));
+    assertTrue(p.matches(transformer.parseSeparateExternalDeclaration(input)));
   }
 
   private void assertExtractED(Matcher<ExternalDeclaration> p, String input) {
-    assertTrue(p.matchesExtract(transformer.parseNode(input, GLSLParser::externalDeclaration,
-        ASTBuilder::visitExternalDeclaration)));
+    assertTrue(p.matchesExtract(transformer.parseSeparateExternalDeclaration(input)));
   }
 
   private void assertNoExtractTU(Matcher<TranslationUnit> p, String input) {
