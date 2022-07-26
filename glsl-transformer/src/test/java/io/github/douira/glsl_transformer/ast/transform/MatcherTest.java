@@ -283,4 +283,19 @@ public class MatcherTest extends TestWithASTTransformer {
     assertNoMatchEx(p, "gl_TextureMatrix[foo]");
     assertNoMatchEx(p, "gl_TextureMatrix[1.0]");
   }
+
+  @Test
+  void testMatchOnlyUniform() {
+    transformer.setTransformation((tree, root) -> {
+      root.process(root.identifierIndex.getStream("texture")
+          .filter(id -> !(id.getParent() instanceof FunctionCallExpression)),
+          id -> {
+            id.setName("gtexture");
+          });
+    });
+
+    assertTransform("int x = texture(shadowtex0, shadowPos.xy + offset * shadowPos.w).r; ",
+        "int x = texture(shadowtex0, shadowPos.xy + offset * shadowPos.w).r;");
+    assertTransform("int x = texture(gtexture, vec2(0)); ", "int x = texture(texture, vec2(0));");
+  }
 }
