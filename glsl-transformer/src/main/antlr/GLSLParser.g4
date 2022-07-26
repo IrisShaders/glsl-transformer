@@ -67,12 +67,12 @@ emptyDeclaration: SEMICOLON;
 
 pragmaStatement:
 	NR PRAGMA stdGL = NR_STDGL? (
-		type = (PRAGMA_DEBUG | PRAGMA_OPTIMIZE) NR_LPAREN state = (
+		type = NR_IDENTIFIER
+		| type = (PRAGMA_DEBUG | PRAGMA_OPTIMIZE) NR_LPAREN state = (
 			NR_ON
 			| NR_OFF
 		) NR_RPAREN
 		| type = PRAGMA_INVARIANT NR_LPAREN state = NR_ALL NR_RPAREN
-		| type = NR_IDENTIFIER
 	) NR_EOL;
 
 extensionStatement:
@@ -110,7 +110,7 @@ expression:
 	| operand = expression DOT_LENGTH LPAREN RPAREN						# lengthAccessExpression
 	//Note: diverges from the spec by not allowing a prefixExpression as an identifier
 	//array-type function identfiers are handled by typeSpecifier
-	| (typeSpecifier | IDENTIFIER) LPAREN (
+	| (IDENTIFIER | typeSpecifier) LPAREN (
 		| VOID
 		| parameters += expression (COMMA parameters += expression)*
 	) RPAREN																				# functionCallExpression
@@ -154,18 +154,18 @@ expression:
 
 declaration:
 	functionPrototype SEMICOLON # functionDeclaration
-	| fullySpecifiedType (
-		declarationMembers += declarationMember (
-			COMMA declarationMembers += declarationMember
-		)*
-	)? SEMICOLON																						# typeAndInitDeclaration
-	| PRECISION precisionQualifier typeSpecifier SEMICOLON	# precisionDeclaration
 	| typeQualifier blockName = IDENTIFIER structBody (
 		variableName = IDENTIFIER arraySpecifier?
 	)? SEMICOLON # interfaceBlockDeclaration
 	| typeQualifier (
 		variableNames += IDENTIFIER (COMMA variableNames += IDENTIFIER)*
-	)? SEMICOLON # variableDeclaration;
+	)? SEMICOLON																						# variableDeclaration
+	| PRECISION precisionQualifier typeSpecifier SEMICOLON	# precisionDeclaration
+	| fullySpecifiedType (
+		declarationMembers += declarationMember (
+			COMMA declarationMembers += declarationMember
+		)*
+	)? SEMICOLON # typeAndInitDeclaration;
 
 //allows for EXT_subgroup_uniform_control_flow
 functionPrototype:
@@ -253,10 +253,10 @@ typeQualifier: (
 
 //TYPE_NAME instead of IDENTIFIER in the spec
 typeSpecifier: (
-		builtinTypeSpecifierFixed
+		IDENTIFIER
+		| builtinTypeSpecifierFixed
 		| builtinTypeSpecifierParseable
 		| structSpecifier
-		| IDENTIFIER
 	) arraySpecifier?;
 
 //needs duplicated rule parts like this or it becomes mutually left-recursive
