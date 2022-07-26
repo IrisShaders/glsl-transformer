@@ -272,6 +272,7 @@ public class EnhancedParser implements ParserInterface {
         // if there was an error in the SLL strategy either there is an error in the
         // string which should (possibly) be reported or the grammar is too difficult
         // for the SLL strategy to handle and the LL strategy has to be used instead
+        // NOTE: it seems like the GLSL grammar never requires the LL strategy
         lexer.reset();
         parser.reset();
 

@@ -1,5 +1,13 @@
 lexer grammar GLSLLexer;
 
+@header {
+import io.github.douira.glsl_transformer.tree.VersionedGLSLLexer;
+}
+
+options {
+	superClass = VersionedGLSLLexer;
+}
+
 channels {
 	WHITESPACE,
 	COMMENTS,
@@ -41,28 +49,32 @@ PRECISE: 'precise';
 INVARIANT: 'invariant';
 SMOOTH: 'smooth';
 FLAT: 'flat';
-NOPERSPECTIVE: 'noperspective';
 CENTROID: 'centroid';
-SAMPLE: 'sample';
-PATCH: 'patch';
 ATTRIBUTE: 'attribute';
-COHERENT: 'coherent';
 VOLATILE: 'volatile';
-RESTRICT: 'restrict';
 VARYING: 'varying';
-READONLY: 'readonly';
-WRITEONLY: 'writeonly';
 SHARED: 'shared';
-SUBROUTINE: 'subroutine';
-DEVICECOHERENT: 'devicecoherent';
-QUEUEFAMILYCOHERENT: 'queuefamilycoherent';
-WORKGROUPCOHERENT: 'workgroupcoherent';
-SUBGROUPCOHERENT: 'subgroupcoherent';
-NONPRIVATE: 'nonprivate';
 LAYOUT: 'layout';
 DOT_LENGTH: '.length';
+NOPERSPECTIVE: 'noperspective' {isAfter(130)}?; //ignores ES mode
+SAMPLE: 'sample' {isAfter(400)}?; //ignores ES mode
+PATCH: 'patch' {isAfter(400)}?; //ignores ES mode
+COHERENT: 'coherent' {isAfter(130)}?; //unclear, depends on extension
+RESTRICT: 'restrict' {isAfter(130)}?; //unclear, depends on extension
+READONLY: 'readonly' {isAfter(130)}?; //unclear, depends on extension
+WRITEONLY: 'writeonly' {isAfter(130)}?; //unclear, depends on extension
+SUBROUTINE: 'subroutine' {isAfter(400)}?; //ignores ES mode
+DEVICECOHERENT:
+	'devicecoherent' {isAfter(130)}?; //unclear, depends on extension
+QUEUEFAMILYCOHERENT:
+	'queuefamilycoherent' {isAfter(130)}?; //unclear, depends on extension
+WORKGROUPCOHERENT:
+	'workgroupcoherent' {isAfter(130)}?; //unclear, depends on extension
+SUBGROUPCOHERENT:
+	'subgroupcoherent' {isAfter(130)}?; //unclear, depends on extension
+NONPRIVATE: 'nonprivate' {isAfter(130)}?; //unclear, depends on extension
 
-ATOMIC_UINT: 'atomic_uint';
+ATOMIC_UINT: 'atomic_uint' {isAfter(420)}?; //ignores ES mode
 STRUCT: 'struct';
 IF: 'if';
 ELSE: 'else';
@@ -200,26 +212,29 @@ SAMPLER2DSHADOW: 'sampler2DShadow';
 SAMPLER2DRECTSHADOW: 'sampler2DRectShadow';
 SAMPLER1DARRAY: 'sampler1DArray';
 SAMPLER2DARRAY: 'sampler2DArray';
-SAMPLER1DARRAYSHADOW: 'sampler1DArrayShadow';
+SAMPLER1DARRAYSHADOW:
+	'sampler1DArrayShadow' {isAfter(130)}?; //ignores ES mode
 SAMPLER2DARRAYSHADOW: 'sampler2DArrayShadow';
-ISAMPLER1D: 'isampler1D';
+ISAMPLER1D: 'isampler1D' {isAfter(130)}?; //ignores ES mode
 ISAMPLER2D: 'isampler2D';
-ISAMPLER2DRECT: 'isampler2DRect';
+ISAMPLER2DRECT: 'isampler2DRect' {isAfter(140)}?; //ignores ES mode
 ISAMPLER3D: 'isampler3D';
-ISAMPLER1DARRAY: 'isampler1DArray';
+ISAMPLER1DARRAY: 'isampler1DArray' {isAfter(130)}?; //ignores ES mode
 ISAMPLER2DARRAY: 'isampler2DArray';
-USAMPLER1D: 'usampler1D';
+USAMPLER1D: 'usampler1D' {isAfter(130)}?; //ignores ES mode
 USAMPLER2D: 'usampler2D';
-USAMPLER2DRECT: 'usampler2DRect';
+USAMPLER2DRECT: 'usampler2DRect' {isAfter(140)}?; //ignores ES mode
 USAMPLER3D: 'usampler3D';
-USAMPLER1DARRAY: 'usampler1DArray';
+USAMPLER1DARRAY: 'usampler1DArray' {isAfter(130)}?; //ignores ES mode
 USAMPLER2DARRAY: 'usampler2DArray';
-SAMPLER2DMS: 'sampler2DMS';
-ISAMPLER2DMS: 'isampler2DMS';
-USAMPLER2DMS: 'usampler2DMS';
-SAMPLER2DMSARRAY: 'sampler2DMSArray';
-ISAMPLER2DMSARRAY: 'isampler2DMSArray';
-USAMPLER2DMSARRAY: 'usampler2DMSArray';
+SAMPLER2DMS: 'sampler2DMS' {isAfter(150)}?; //ignores ES mode;
+ISAMPLER2DMS: 'isampler2DMS' {isAfter(150)}?; //ignores ES mode;
+USAMPLER2DMS: 'usampler2DMS' {isAfter(150)}?; //ignores ES mode;
+SAMPLER2DMSARRAY: 'sampler2DMSArray' {isAfter(150)}?; //ignores ES mode;
+ISAMPLER2DMSARRAY:
+	'isampler2DMSArray' {isAfter(150)}?; //ignores ES mode;
+USAMPLER2DMSARRAY:
+	'usampler2DMSArray' {isAfter(150)}?; //ignores ES mode;
 IMAGE2DRECT: 'image2DRect';
 IMAGE1DARRAY: 'image1DArray';
 IMAGE2DARRAY: 'image2DArray';
@@ -236,25 +251,25 @@ UIMAGE2DARRAY: 'uimage2DArray';
 UIMAGE2DMS: 'uimage2DMS';
 UIMAGE2DMSARRAY: 'uimage2DMSArray';
 
-SAMPLERCUBE: 'samplerCube';
 SAMPLERCUBESHADOW: 'samplerCubeShadow';
-SAMPLERBUFFER: 'samplerBuffer';
-SAMPLERCUBEARRAY: 'samplerCubeArray';
 SAMPLERCUBEARRAYSHADOW: 'samplerCubeArrayShadow';
+SAMPLERCUBE: 'samplerCube';
 ISAMPLERCUBE: 'isamplerCube';
-ISAMPLERBUFFER: 'isamplerBuffer';
-ISAMPLERCUBEARRAY: 'isamplerCubeArray';
 USAMPLERCUBE: 'usamplerCube';
-USAMPLERBUFFER: 'usamplerBuffer';
+SAMPLERBUFFER: 'samplerBuffer' {isAfter(130)}?; //ignores ES mode
+ISAMPLERBUFFER: 'isamplerBuffer' {isAfter(140)}?; //ignores ES mode
+USAMPLERBUFFER: 'usamplerBuffer' {isAfter(140)}?; //ignores ES mode
+SAMPLERCUBEARRAY: 'samplerCubeArray';
+ISAMPLERCUBEARRAY: 'isamplerCubeArray';
 USAMPLERCUBEARRAY: 'usamplerCubeArray';
 IMAGECUBE: 'imageCube';
-IMAGEBUFFER: 'imageBuffer';
-IMAGECUBEARRAY: 'imageCubeArray';
-IIMAGECUBE: 'iimageCube';
-IIMAGEBUFFER: 'iimageBuffer';
-IIMAGECUBEARRAY: 'iimageCubeArray';
 UIMAGECUBE: 'uimageCube';
+IIMAGECUBE: 'iimageCube';
+IMAGEBUFFER: 'imageBuffer';
+IIMAGEBUFFER: 'iimageBuffer';
 UIMAGEBUFFER: 'uimageBuffer';
+IMAGECUBEARRAY: 'imageCubeArray';
+IIMAGECUBEARRAY: 'iimageCubeArray';
 UIMAGECUBEARRAY: 'uimageCubeArray';
 
 INC_OP: '++';
