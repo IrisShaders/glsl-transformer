@@ -5,10 +5,11 @@ import static org.junit.jupiter.api.Assertions.*;
 import java.util.ArrayList;
 import java.util.stream.Collectors;
 
+import org.antlr.v4.runtime.misc.ParseCancellationException;
 import org.junit.jupiter.api.Test;
 
 import io.github.douira.glsl_transformer.GLSLParser;
-import io.github.douira.glsl_transformer.ast.node.Identifier;
+import io.github.douira.glsl_transformer.ast.node.*;
 import io.github.douira.glsl_transformer.ast.node.basic.ASTNode;
 import io.github.douira.glsl_transformer.ast.node.expression.*;
 import io.github.douira.glsl_transformer.ast.node.external_declaration.ExternalDeclaration;
@@ -291,8 +292,14 @@ public class ASTTransformerTest extends TestWithASTTransformer {
 
   @Test
   void testParseNewKeywords() {
+    assertThrows(ParseCancellationException.class, () -> {
+      transformer.parseSeparateExternalDeclaration("void foo(sampler2D sample) { }");
+      transformer.getLexer().version = Version.GL40;
+      transformer.parseSeparateExternalDeclaration("void foo(sampler2D sample) { }");
+    }, "It should throw if keywords are used as identifiers.");
     assertDoesNotThrow(() -> {
-      
-    }, "It should parse shader code that uses keywords in later GLSL versions as identifiers.");
+      transformer.getLexer().version = Version.GL33;
+      transformer.parseSeparateExternalDeclaration("void foo(sampler2D sample) { }");
+    }, "It should not throw if disabled keywords are used as identifiers.");
   }
 }
