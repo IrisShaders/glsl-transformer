@@ -246,6 +246,8 @@ public class EnhancedParser implements ParserInterface {
     // setup lexer
     input = stream;
     lexer.setInputStream(input);
+
+    // throw on lexer if enabled
     if (throwParseErrors) {
       lexer.addErrorListener(ThrowingErrorListener.INSTANCE);
     } else {
@@ -258,6 +260,7 @@ public class EnhancedParser implements ParserInterface {
 
     RuleType node;
     if (parsingStrategy == ParsingStrategy.SLL_AND_LL_ON_ERROR) {
+      // never throw SLL errors
       parser.removeErrorListener(ThrowingErrorListener.INSTANCE);
       parser.getInterpreter().setPredictionMode(PredictionMode.SLL);
       parser.setErrorHandler(new BailErrorStrategy());
@@ -271,6 +274,8 @@ public class EnhancedParser implements ParserInterface {
         // for the SLL strategy to handle and the LL strategy has to be used instead
         lexer.reset();
         parser.reset();
+
+        // throw LL errors if enabled
         if (throwParseErrors) {
           parser.addErrorListener(ThrowingErrorListener.INSTANCE);
         } else {
