@@ -13,6 +13,7 @@ import io.github.douira.glsl_transformer.test_util.*;
 import io.github.douira.glsl_transformer.test_util.TestResourceManager.*;
 
 public class ParsingPerformanceTest extends TestWithBareCSTTransformer {
+  static final boolean benchmark = false;
   String displayName;
 
   @BeforeEach
@@ -26,7 +27,7 @@ public class ParsingPerformanceTest extends TestWithBareCSTTransformer {
 
     // warmup the JVM and the parser's DFA cache
     inputs.forEach(parser::parse);
-    var n = System.getProperty("GRADLE") != null ? 5 : 30;
+    var n = benchmark ? 30 : 3;
     assertTimeout(expected.multipliedBy(n), () -> {
       var start = System.nanoTime();
       for (int i = 0; i < n; i++) {
@@ -58,36 +59,36 @@ public class ParsingPerformanceTest extends TestWithBareCSTTransformer {
   @Test
   void testParsingPerformanceGLSLang() {
     assertDirectoryPerformance(false,
-        Duration.ofMillis(700), DirectoryLocation.GLSLANG_TESTS);
+        Duration.ofMillis(1000), DirectoryLocation.GLSLANG_TESTS);
   }
 
   @Test
   void testDeepStatementParsing() {
     assertFilePerformance(true,
-        Duration.ofMillis(100), FileLocation.DEEP_STATEMENT_TEST);
+        Duration.ofMillis(300), FileLocation.DEEP_STATEMENT_TEST);
   }
 
   @Test
-  void testDeepExpressionParenParsing() {
+  void testDeepParenExpressionParsing() {
     assertFilePerformance(true,
-        Duration.ofMillis(700), FileLocation.DEEP_PAREN_EXPRESSION_TEST);
+        Duration.ofMillis(1000), FileLocation.DEEP_PAREN_EXPRESSION_TEST);
   }
 
   @Test
   void testDeepExpressionParsing() {
     assertFilePerformance(true,
-        Duration.ofMillis(100), FileLocation.DEEP_EXPRESSION_TEST);
+        Duration.ofMillis(300), FileLocation.DEEP_EXPRESSION_TEST);
   }
 
   @Test
   void testLongExpressionParsing() {
     assertFilePerformance(true,
-        Duration.ofMillis(100), FileLocation.LONG_EXPRESSION_TEST);
+        Duration.ofMillis(300), FileLocation.LONG_EXPRESSION_TEST);
   }
 
   @Test
   void testCommentParsing() {
     assertFilePerformance(true,
-        Duration.ofMillis(100), FileLocation.COMMENT_TEST);
+        Duration.ofMillis(300), FileLocation.COMMENT_TEST);
   }
 }
