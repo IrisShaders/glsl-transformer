@@ -15,6 +15,7 @@ plugins {
   id 'signing'
   id 'org.danilopianini.publish-on-central' version '0.7.5'
   id 'jacoco'
+  id 'com.adarshr.test-logger' version '3.2.0'
 }
 
 group = 'io.github.douira'
@@ -41,9 +42,9 @@ dependencies {
 }
 
 generateGrammarSource {
-  maxHeapSize = "128m"
+  maxHeapSize = '128m'
   arguments += ['-package', 'io.github.douira.glsl_transformer', '-visitor']
-  outputDirectory = new File(buildDir.toString() + "/generated-src/antlr/main/io/github/douira/glsl_transformer/")
+  outputDirectory = new File(buildDir.toString() + '/generated-src/antlr/main/io/github/douira/glsl_transformer/')
 }
 compileJava.dependsOn generateGrammarSource
 sourcesJar.dependsOn generateGrammarSource
@@ -62,8 +63,14 @@ test {
   // report is always generated after tests run
   finalizedBy jacocoTestReport
   testLogging.showStandardStreams = true
-  maxParallelForks = System.getenv("CI") ? 1 : Runtime.runtime.availableProcessors() / 2
-  enviroment "GRADLE"
+  maxParallelForks = System.getenv('CI') ? 1 : Runtime.runtime.availableProcessors() / 2
+  outputs.upToDateWhen { false }
+}
+
+testlogger {
+  theme 'standard-parallel'
+  slowThreshold 5000
+  showSimpleNames true
 }
 
 jacocoTestReport {
@@ -95,17 +102,17 @@ configure([tasks.compileJava]) {
 }
 
 clean {
-  delete "generated-src"
+  delete 'generated-src'
 }
 
 publishOnCentral {
   configureMavenCentral.set(true)
-  projectDescription.set("GLSL Parsing, Program Transformation and Printing with ANTLR4")
-  projectLongName.set("glsl-transformer")
-  projectUrl.set("https://github.com/IrisShaders/glsl-transformer")
-  scmConnection.set("git@github.com:IrisShaders/glsl-transformer.git")
-  licenseName.set("GNU Affero General Public License v3.0")
-  licenseUrl.set("https://www.gnu.org/licenses/agpl-3.0.en.html")
+  projectDescription.set('GLSL Parsing, Program Transformation and Printing with ANTLR4')
+  projectLongName.set('glsl-transformer')
+  projectUrl.set('https://github.com/IrisShaders/glsl-transformer')
+  scmConnection.set('git@github.com:IrisShaders/glsl-transformer.git')
+  licenseName.set('GNU Affero General Public License v3.0')
+  licenseUrl.set('https://www.gnu.org/licenses/agpl-3.0.en.html')
 }
 
 publishing {
@@ -114,9 +121,9 @@ publishing {
       pom {
         developers {
           developer {
-            name.set("douira")
-            email.set("douira100@gmail.com")
-            url.set("https://douira.github.io")
+            name.set('douira')
+            email.set('douira100@gmail.com')
+            url.set('https://douira.github.io')
           }
         }
       }
@@ -131,8 +138,8 @@ javadoc {
       'implNote:a:Implementation Note:',
       'apiNote:a:API Usage Note:'
     )
-    links "https://javadoc.io/doc/org.antlr/antlr4-runtime/$antlrVersion/"
-    links "https://javadoc.io/doc/com.github.bsideup.jabel/jabel-javac-plugin/$jabelVersion/"
+    links 'https://javadoc.io/doc/org.antlr/antlr4-runtime/$antlrVersion/'
+    links 'https://javadoc.io/doc/com.github.bsideup.jabel/jabel-javac-plugin/$jabelVersion/'
   }
   exclude '**/GLSLParser*.java'
   exclude '**/GLSLLexer*.java'
