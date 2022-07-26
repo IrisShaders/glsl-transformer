@@ -278,5 +278,9 @@ public class MatcherTest extends TestWithASTTransformer {
       }
     };
     assertMatchEx(p, "gl_TextureMatrix[1]");
+    assertNoMatchEx(p, "gl_TextureMatrix[-1]");
+    assertNoMatchEx(p, "gl_TextureMatrix[8]");
+    assertNoMatchEx(p, "gl_TextureMatrix[foo]");
+    assertNoMatchEx(p, "gl_TextureMatrix[1.0]");
   }
 }
