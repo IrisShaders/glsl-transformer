@@ -121,20 +121,20 @@ expression:
 		| DEC_OP
 		| PLUS_OP
 		| MINUS_OP
-		| BOOL_NOT_OP
-		| BIT_NEG_OP
+		| LOGICAL_NOT_OP
+		| BITWISE_NEG_OP
 	) operand = expression																											# prefixExpression
 	| left = expression op = (TIMES_OP | DIV_OP | MOD_OP) right = expression		# multiplicativeExpression
 	| left = expression op = (PLUS_OP | MINUS_OP) right = expression						# additiveExpression
 	| left = expression op = (LEFT_OP | RIGHT_OP) right = expression						# shiftExpression
 	| left = expression op = (LT_OP | GT_OP | LE_OP | GE_OP) right = expression	# relationalExpression
 	| left = expression op = (EQ_OP | NE_OP) right = expression									# equalityExpression
-	| left = expression op = BIT_AND_OP right = expression											# bitwiseAndExpression
-	| left = expression op = BIT_XOR_OP right = expression											# bitwiseExclusiveOrExpression
-	| left = expression op = BIT_OR_OP right = expression												# bitwiseInclusiveOrExpression
-	| left = expression op = BOOL_AND_OP right = expression											# logicalAndExpression
-	| left = expression op = BOOL_XOR_OP right = expression											# logicalExclusiveOrExpression
-	| left = expression op = BOOL_OR_OP right = expression											# logicalInclusiveOrExpression
+	| left = expression op = BITWISE_AND_OP right = expression									# bitwiseAndExpression
+	| left = expression op = BITWISE_XOR_OP right = expression									# bitwiseExclusiveOrExpression
+	| left = expression op = BITWISE_OR_OP right = expression										# bitwiseInclusiveOrExpression
+	| left = expression op = LOGICAL_AND_OP right = expression									# logicalAndExpression
+	| left = expression op = LOGICAL_XOR_OP right = expression									# logicalExclusiveOrExpression
+	| left = expression op = LOGICAL_OR_OP right = expression										# logicalInclusiveOrExpression
 	| <assoc = right> condition = expression QUERY_OP trueAlternative = expression COLON falseAlternative =
 		expression # conditionalExpression
 	| <assoc = right> left = expression op = (
