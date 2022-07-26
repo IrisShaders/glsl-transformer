@@ -8,9 +8,9 @@ import io.github.douira.glsl_transformer.ast.node.Version;
  * Provides utility methods for the Lexer to only recognize tokens allowed in
  * the current context, version, profile, extension setting, ES/non-ES mode,
  * Vulkan/non-Vulkan mode. For more information, see
- * {@href https://github.com/KhronosGroup/glslang/blob/master/glslang/MachineIndependent/Scan.cpp}
+ * https://github.com/KhronosGroup/glslang/blob/master/glslang/MachineIndependent/Scan.cpp}
  * and
- * {@href https://github.com/KhronosGroup/glslang/blob/master/glslang/MachineIndependent/Versions.cpp}.
+ * https://github.com/KhronosGroup/glslang/blob/master/glslang/MachineIndependent/Versions.cpp.
  */
 public abstract class VersionedGLSLLexer extends Lexer {
   public Version version = Version.latest;
