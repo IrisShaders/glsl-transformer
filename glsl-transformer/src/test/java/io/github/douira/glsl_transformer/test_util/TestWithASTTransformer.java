@@ -14,6 +14,7 @@ public abstract class TestWithASTTransformer {
   @BeforeEach
   public void setUp() {
     transformer = new ASTTransformer<>();
+    transformer.setSLLOnly();
   }
 
   public void assertTransform(String expected, String input) {

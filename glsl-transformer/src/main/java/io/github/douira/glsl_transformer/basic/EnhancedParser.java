@@ -266,8 +266,6 @@ public class EnhancedParser implements ParserInterface {
       try {
         node = parseMethod.apply(parser);
       } catch (ParseCancellationException SLLException) {
-        ParseCancellationException possibleLLException = null;
-
         // if there was an error in the SLL strategy either there is an error in the
         // string which should (possibly) be reported or the grammar is too difficult
         // for the SLL strategy to handle and the LL strategy has to be used instead
@@ -281,6 +279,7 @@ public class EnhancedParser implements ParserInterface {
         parser.setErrorHandler(new DefaultErrorStrategy());
         parser.getInterpreter().setPredictionMode(PredictionMode.LL);
 
+        ParseCancellationException possibleLLException = null;
         try {
           node = parseMethod.apply(parser);
         } catch (ParseCancellationException LLException) {
