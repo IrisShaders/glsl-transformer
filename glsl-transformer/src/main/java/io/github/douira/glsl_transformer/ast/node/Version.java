@@ -48,4 +48,13 @@ public enum Version implements TokenTyped {
   public static Version fromToken(Token token) {
     return TypeUtil.enumFromToken(Version.values(), token);
   }
+
+  public static Version fromNumber(int number) {
+    for (Version version : Version.values()) {
+      if (version.number == number) {
+        return version;
+      }
+    }
+    throw new IllegalArgumentException("Unknown version: " + number);
+  }
 }
