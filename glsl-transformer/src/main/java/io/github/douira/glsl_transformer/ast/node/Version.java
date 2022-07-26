@@ -24,6 +24,8 @@ public enum Version implements TokenTyped {
   GL45(GLSLLexer.NR_GL_450, 450),
   GL46(GLSLLexer.NR_GL_460, 460);
 
+  public static Version latest = GL46;
+
   public final int tokenType;
   public final int number;
   public final boolean es;
