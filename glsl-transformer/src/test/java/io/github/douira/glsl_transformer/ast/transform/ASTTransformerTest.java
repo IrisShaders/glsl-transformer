@@ -294,6 +294,8 @@ public class ASTTransformerTest extends TestWithASTTransformer {
   void testParseNewKeywords() {
     assertThrows(ParseCancellationException.class, () -> {
       transformer.parseSeparateExternalDeclaration("void foo(sampler2D sample) { }");
+    }, "It should throw if keywords are used as identifiers.");
+    assertThrows(ParseCancellationException.class, () -> {
       transformer.getLexer().version = Version.GL40;
       transformer.parseSeparateExternalDeclaration("void foo(sampler2D sample) { }");
     }, "It should throw if keywords are used as identifiers.");
