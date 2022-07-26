@@ -7963,7 +7963,7 @@ testGlslangErrors[435.vert]=[
 #version 435
 void main() {}
 <><><><><><><><><><><><><><><><><><><><><><><><><>
-
+1:9; [@3,9:11='435',<NR_INTCONSTANT>,1:9]; mismatched input '435' expecting {'110', '120', '100', '130', '140', '150', '330', '300', '310', '320', '400', '410', '420', '430', '440', '450', '460'}; InputMismatchException:null
 ]
 
 

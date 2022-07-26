@@ -35,7 +35,7 @@ float y;
 
 
 testInject[full/before_all]=[
-#version 5432
+#version 460
 #extension extension_name: require
 #pragma foo
 varying vec2 a;
@@ -44,7 +44,7 @@ void functionDef(const in float param) {
 }
 
 <><><><><><><><><><><><><><><><><><><><><><><><><>
-#version 5432
+#version 460
 float x;
 float y;
 #extension extension_name: require
@@ -58,7 +58,7 @@ void functionDef(const in float param) {
 
 
 testInject[full/before_declarations]=[
-#version 5432
+#version 460
 #extension extension_name: require
 #pragma foo
 varying vec2 a;
@@ -67,7 +67,7 @@ void functionDef(const in float param) {
 }
 
 <><><><><><><><><><><><><><><><><><><><><><><><><>
-#version 5432
+#version 460
 #extension extension_name: require
 #pragma foo
 float x;
@@ -81,7 +81,7 @@ void functionDef(const in float param) {
 
 
 testInject[full/before_functions]=[
-#version 5432
+#version 460
 #extension extension_name: require
 #pragma foo
 varying vec2 a;
@@ -90,7 +90,7 @@ void functionDef(const in float param) {
 }
 
 <><><><><><><><><><><><><><><><><><><><><><><><><>
-#version 5432
+#version 460
 #extension extension_name: require
 #pragma foo
 varying vec2 a;
@@ -104,7 +104,7 @@ void functionDef(const in float param) {
 
 
 testInject[full/end]=[
-#version 5432
+#version 460
 #extension extension_name: require
 #pragma foo
 varying vec2 a;
@@ -113,7 +113,7 @@ void functionDef(const in float param) {
 }
 
 <><><><><><><><><><><><><><><><><><><><><><><><><>
-#version 5432
+#version 460
 #extension extension_name: require
 #pragma foo
 varying vec2 a;
@@ -127,7 +127,7 @@ float y;
 
 
 testInject[full_reverse/before_all]=[
-#version 5432
+#version 460
 void functionDef(const in float param) {
   functionCall();
 }
@@ -136,7 +136,7 @@ varying vec2 a;
 #extension extension_name: require
 
 <><><><><><><><><><><><><><><><><><><><><><><><><>
-#version 5432
+#version 460
 float x;
 float y;
 void functionDef(const in float param) {
@@ -150,7 +150,7 @@ varying vec2 a;
 
 
 testInject[full_reverse/before_declarations]=[
-#version 5432
+#version 460
 void functionDef(const in float param) {
   functionCall();
 }
@@ -159,7 +159,7 @@ varying vec2 a;
 #extension extension_name: require
 
 <><><><><><><><><><><><><><><><><><><><><><><><><>
-#version 5432
+#version 460
 float x;
 float y;
 void functionDef(const in float param) {
@@ -173,7 +173,7 @@ varying vec2 a;
 
 
 testInject[full_reverse/before_functions]=[
-#version 5432
+#version 460
 void functionDef(const in float param) {
   functionCall();
 }
@@ -182,7 +182,7 @@ varying vec2 a;
 #extension extension_name: require
 
 <><><><><><><><><><><><><><><><><><><><><><><><><>
-#version 5432
+#version 460
 float x;
 float y;
 void functionDef(const in float param) {
@@ -196,7 +196,7 @@ varying vec2 a;
 
 
 testInject[full_reverse/end]=[
-#version 5432
+#version 460
 void functionDef(const in float param) {
   functionCall();
 }
@@ -205,7 +205,7 @@ varying vec2 a;
 #extension extension_name: require
 
 <><><><><><><><><><><><><><><><><><><><><><><><><>
-#version 5432
+#version 460
 void functionDef(const in float param) {
 	functionCall();
 }
@@ -443,10 +443,10 @@ float y;
 
 
 testInject[single_version/before_all]=[
-#version 5432
+#version 460
 
 <><><><><><><><><><><><><><><><><><><><><><><><><>
-#version 5432
+#version 460
 float x;
 float y;
 
@@ -454,10 +454,10 @@ float y;
 
 
 testInject[single_version/before_declarations]=[
-#version 5432
+#version 460
 
 <><><><><><><><><><><><><><><><><><><><><><><><><>
-#version 5432
+#version 460
 float x;
 float y;
 
@@ -465,10 +465,10 @@ float y;
 
 
 testInject[single_version/before_functions]=[
-#version 5432
+#version 460
 
 <><><><><><><><><><><><><><><><><><><><><><><><><>
-#version 5432
+#version 460
 float x;
 float y;
 
@@ -476,10 +476,10 @@ float y;
 
 
 testInject[single_version/end]=[
-#version 5432
+#version 460
 
 <><><><><><><><><><><><><><><><><><><><><><><><><>
-#version 5432
+#version 460
 float x;
 float y;
 
@@ -583,11 +583,11 @@ float y;
 
 
 testInject[unparsed_separators/before_all]=[
-#version 5432
+#version 460
 varying vec2 a;
 
 <><><><><><><><><><><><><><><><><><><><><><><><><>
-#version 5432
+#version 460
 float x;
 float y;
 varying vec2 a;
@@ -596,11 +596,11 @@ varying vec2 a;
 
 
 testInject[unparsed_separators/before_declarations]=[
-#version 5432
+#version 460
 varying vec2 a;
 
 <><><><><><><><><><><><><><><><><><><><><><><><><>
-#version 5432
+#version 460
 float x;
 float y;
 varying vec2 a;
@@ -609,11 +609,11 @@ varying vec2 a;
 
 
 testInject[unparsed_separators/before_functions]=[
-#version 5432
+#version 460
 varying vec2 a;
 
 <><><><><><><><><><><><><><><><><><><><><><><><><>
-#version 5432
+#version 460
 varying vec2 a;
 float x;
 float y;
@@ -622,11 +622,11 @@ float y;
 
 
 testInject[unparsed_separators/end]=[
-#version 5432
+#version 460
 varying vec2 a;
 
 <><><><><><><><><><><><><><><><><><><><><><><><><>
-#version 5432
+#version 460
 varying vec2 a;
 float x;
 float y;
@@ -635,11 +635,11 @@ float y;
 
 
 testInject[version_with_extension/before_all]=[
-#version 5432
+#version 460
 #extension extension_name: require
 
 <><><><><><><><><><><><><><><><><><><><><><><><><>
-#version 5432
+#version 460
 float x;
 float y;
 #extension extension_name: require
@@ -648,11 +648,11 @@ float y;
 
 
 testInject[version_with_extension/before_declarations]=[
-#version 5432
+#version 460
 #extension extension_name: require
 
 <><><><><><><><><><><><><><><><><><><><><><><><><>
-#version 5432
+#version 460
 #extension extension_name: require
 float x;
 float y;
@@ -661,11 +661,11 @@ float y;
 
 
 testInject[version_with_extension/before_functions]=[
-#version 5432
+#version 460
 #extension extension_name: require
 
 <><><><><><><><><><><><><><><><><><><><><><><><><>
-#version 5432
+#version 460
 #extension extension_name: require
 float x;
 float y;
@@ -674,11 +674,11 @@ float y;
 
 
 testInject[version_with_extension/end]=[
-#version 5432
+#version 460
 #extension extension_name: require
 
 <><><><><><><><><><><><><><><><><><><><><><><><><>
-#version 5432
+#version 460
 #extension extension_name: require
 float x;
 float y;
@@ -687,11 +687,11 @@ float y;
 
 
 testInject[version_with_pragma/before_all]=[
-#version 5432
+#version 460
 #pragma foo
 
 <><><><><><><><><><><><><><><><><><><><><><><><><>
-#version 5432
+#version 460
 float x;
 float y;
 #pragma foo
@@ -700,11 +700,11 @@ float y;
 
 
 testInject[version_with_pragma/before_declarations]=[
-#version 5432
+#version 460
 #pragma foo
 
 <><><><><><><><><><><><><><><><><><><><><><><><><>
-#version 5432
+#version 460
 #pragma foo
 float x;
 float y;
@@ -713,11 +713,11 @@ float y;
 
 
 testInject[version_with_pragma/before_functions]=[
-#version 5432
+#version 460
 #pragma foo
 
 <><><><><><><><><><><><><><><><><><><><><><><><><>
-#version 5432
+#version 460
 #pragma foo
 float x;
 float y;
@@ -726,11 +726,11 @@ float y;
 
 
 testInject[version_with_pragma/end]=[
-#version 5432
+#version 460
 #pragma foo
 
 <><><><><><><><><><><><><><><><><><><><><><><><><>
-#version 5432
+#version 460
 #pragma foo
 float x;
 float y;

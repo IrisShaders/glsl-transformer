@@ -288,4 +288,11 @@ public class ASTTransformerTest extends TestWithASTTransformer {
         "int x = foo; int y = hello; ",
         "int x = bar; int y = foo;");
   }
+
+  @Test
+  void testParseNewKeywords() {
+    assertDoesNotThrow(() -> {
+      
+    }, "It should parse shader code that uses keywords in later GLSL versions as identifiers.");
+  }
 }

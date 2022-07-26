@@ -35,11 +35,25 @@ translationUnit: versionStatement? externalDeclaration* EOF;
 
 //allows for EXT_null_initializer
 versionStatement:
-	NR VERSION version = NR_INTCONSTANT profile = (
-		NR_CORE
-		| NR_COMPATIBILITY
-		| NR_ES
-	)? NR_EOL;
+	NR VERSION version = (
+		NR_GL_110
+		| NR_GL_120
+		| NR_GLES_100
+		| NR_GL_130
+		| NR_GL_140
+		| NR_GL_150
+		| NR_GL_330
+		| NR_GLES_300
+		| NR_GLES_310
+		| NR_GLES_320
+		| NR_GL_400
+		| NR_GL_410
+		| NR_GL_420
+		| NR_GL_430
+		| NR_GL_440
+		| NR_GL_450
+		| NR_GL_460
+	) profile = (NR_CORE | NR_COMPATIBILITY | NR_ES)? NR_EOL;
 
 externalDeclaration:
 	functionDefinition

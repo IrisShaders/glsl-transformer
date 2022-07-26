@@ -1,7 +1,7 @@
 §testInjectExDecl empty:
 
 §testInjectExDecl single_version:
-#version 5432
+#version 460
 
 §testInjectExDecl single_extension:
 #extension extension_name: require
@@ -19,7 +19,7 @@ layout(location = 0) out vec3 layoutOne;
 void main() {}
 
 §testInjectExDecl full:
-#version 5432
+#version 460
 #extension extension_name: require
 #pragma foo
 varying vec2 a;
@@ -28,7 +28,7 @@ void functionDef(const in float param) {
 }
 
 §testInjectExDecl full_reverse:
-#version 5432
+#version 460
 void functionDef(const in float param) {
   functionCall();
 }
@@ -37,15 +37,15 @@ varying vec2 a;
 #extension extension_name: require
 
 §testInjectExDecl version_with_pragma:
-#version 5432
+#version 460
 #pragma foo
 
 §testInjectExDecl version_with_extension:
-#version 5432
+#version 460
 #extension extension_name: require
 
 §testInjectExDecl unparsed_separators:
-#version 5432
+#version 460
 varying vec2 a;
 
 §testInjectExDecl unparsed_and_functions:

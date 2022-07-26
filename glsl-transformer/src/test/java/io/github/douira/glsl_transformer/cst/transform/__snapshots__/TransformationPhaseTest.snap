@@ -20,17 +20,6 @@ testInjectDefine[empty/before_directives]=[
 ]
 
 
-testInjectDefine[empty/end]=[
-.
-.
-<><><><><><><><><><><><><><><><><><><><><><><><><>
-.
-.
-#define foo bar + baz
-
-]
-
-
 testInjectDefine[empty/before_extensions]=[
 .
 .
@@ -64,8 +53,19 @@ testInjectDefine[empty/before_version]=[
 ]
 
 
+testInjectDefine[empty/end]=[
+.
+.
+<><><><><><><><><><><><><><><><><><><><><><><><><>
+.
+.
+#define foo bar + baz
+
+]
+
+
 testInjectDefine[full/before_declarations]=[
-#version 5432
+#version 460
 
 #extension extension_name: require
 
@@ -78,7 +78,7 @@ void functionDef(const in float param) {
 }
 
 <><><><><><><><><><><><><><><><><><><><><><><><><>
-#version 5432
+#version 460
 
 #extension extension_name: require
 
@@ -96,7 +96,7 @@ void functionDef(const in float param) {
 
 
 testInjectDefine[full/before_directives]=[
-#version 5432
+#version 460
 
 #extension extension_name: require
 
@@ -109,7 +109,7 @@ void functionDef(const in float param) {
 }
 
 <><><><><><><><><><><><><><><><><><><><><><><><><>
-#version 5432
+#version 460
 
 #extension extension_name: require
 
@@ -122,43 +122,12 @@ varying vec2 varyVec;
 void functionDef(const in float param) {
   functionCall();
 }
-
-]
-
-
-testInjectDefine[full/end]=[
-#version 5432
-
-#extension extension_name: require
-
-#pragma foo
-
-varying vec2 varyVec;
-
-void functionDef(const in float param) {
-  functionCall();
-}
-
-<><><><><><><><><><><><><><><><><><><><><><><><><>
-#version 5432
-
-#extension extension_name: require
-
-#pragma foo
-
-varying vec2 varyVec;
-
-void functionDef(const in float param) {
-  functionCall();
-}
-
-#define foo bar + baz
 
 ]
 
 
 testInjectDefine[full/before_extensions]=[
-#version 5432
+#version 460
 
 #extension extension_name: require
 
@@ -171,7 +140,7 @@ void functionDef(const in float param) {
 }
 
 <><><><><><><><><><><><><><><><><><><><><><><><><>
-#version 5432
+#version 460
 
 #define foo bar + baz
 
@@ -189,7 +158,7 @@ void functionDef(const in float param) {
 
 
 testInjectDefine[full/before_functions]=[
-#version 5432
+#version 460
 
 #extension extension_name: require
 
@@ -202,7 +171,7 @@ void functionDef(const in float param) {
 }
 
 <><><><><><><><><><><><><><><><><><><><><><><><><>
-#version 5432
+#version 460
 
 #extension extension_name: require
 
@@ -220,7 +189,7 @@ void functionDef(const in float param) {
 
 
 testInjectDefine[full/before_version]=[
-#version 5432
+#version 460
 
 #extension extension_name: require
 
@@ -235,7 +204,7 @@ void functionDef(const in float param) {
 <><><><><><><><><><><><><><><><><><><><><><><><><>
 
 #define foo bar + baz
-#version 5432
+#version 460
 
 #extension extension_name: require
 
@@ -250,8 +219,39 @@ void functionDef(const in float param) {
 ]
 
 
+testInjectDefine[full/end]=[
+#version 460
+
+#extension extension_name: require
+
+#pragma foo
+
+varying vec2 varyVec;
+
+void functionDef(const in float param) {
+  functionCall();
+}
+
+<><><><><><><><><><><><><><><><><><><><><><><><><>
+#version 460
+
+#extension extension_name: require
+
+#pragma foo
+
+varying vec2 varyVec;
+
+void functionDef(const in float param) {
+  functionCall();
+}
+
+#define foo bar + baz
+
+]
+
+
 testInjectDefine[full_reverse/before_declarations]=[
-#version 5432
+#version 460
 
 void functionDef(const in float param) {
   functionCall();
@@ -264,7 +264,7 @@ varying vec2 varyVec;
 #extension extension_name: require
 
 <><><><><><><><><><><><><><><><><><><><><><><><><>
-#version 5432
+#version 460
 
 #define foo bar + baz
 
@@ -282,7 +282,7 @@ varying vec2 varyVec;
 
 
 testInjectDefine[full_reverse/before_directives]=[
-#version 5432
+#version 460
 
 void functionDef(const in float param) {
   functionCall();
@@ -295,7 +295,7 @@ varying vec2 varyVec;
 #extension extension_name: require
 
 <><><><><><><><><><><><><><><><><><><><><><><><><>
-#version 5432
+#version 460
 
 #define foo bar + baz
 
@@ -308,43 +308,12 @@ varying vec2 varyVec;
 #pragma foo
 
 #extension extension_name: require
-
-]
-
-
-testInjectDefine[full_reverse/end]=[
-#version 5432
-
-void functionDef(const in float param) {
-  functionCall();
-}
-
-varying vec2 varyVec;
-
-#pragma foo
-
-#extension extension_name: require
-
-<><><><><><><><><><><><><><><><><><><><><><><><><>
-#version 5432
-
-void functionDef(const in float param) {
-  functionCall();
-}
-
-varying vec2 varyVec;
-
-#pragma foo
-
-#extension extension_name: require
-
-#define foo bar + baz
 
 ]
 
 
 testInjectDefine[full_reverse/before_extensions]=[
-#version 5432
+#version 460
 
 void functionDef(const in float param) {
   functionCall();
@@ -357,7 +326,7 @@ varying vec2 varyVec;
 #extension extension_name: require
 
 <><><><><><><><><><><><><><><><><><><><><><><><><>
-#version 5432
+#version 460
 
 #define foo bar + baz
 
@@ -375,7 +344,7 @@ varying vec2 varyVec;
 
 
 testInjectDefine[full_reverse/before_functions]=[
-#version 5432
+#version 460
 
 void functionDef(const in float param) {
   functionCall();
@@ -388,7 +357,7 @@ varying vec2 varyVec;
 #extension extension_name: require
 
 <><><><><><><><><><><><><><><><><><><><><><><><><>
-#version 5432
+#version 460
 
 #define foo bar + baz
 
@@ -406,7 +375,7 @@ varying vec2 varyVec;
 
 
 testInjectDefine[full_reverse/before_version]=[
-#version 5432
+#version 460
 
 void functionDef(const in float param) {
   functionCall();
@@ -421,7 +390,7 @@ varying vec2 varyVec;
 <><><><><><><><><><><><><><><><><><><><><><><><><>
 
 #define foo bar + baz
-#version 5432
+#version 460
 
 void functionDef(const in float param) {
   functionCall();
@@ -432,6 +401,37 @@ varying vec2 varyVec;
 #pragma foo
 
 #extension extension_name: require
+
+]
+
+
+testInjectDefine[full_reverse/end]=[
+#version 460
+
+void functionDef(const in float param) {
+  functionCall();
+}
+
+varying vec2 varyVec;
+
+#pragma foo
+
+#extension extension_name: require
+
+<><><><><><><><><><><><><><><><><><><><><><><><><>
+#version 460
+
+void functionDef(const in float param) {
+  functionCall();
+}
+
+varying vec2 varyVec;
+
+#pragma foo
+
+#extension extension_name: require
+
+#define foo bar + baz
 
 ]
 
@@ -454,17 +454,6 @@ varying vec2 varyVec;
 
 #define foo bar + baz
 varying vec2 varyVec;
-
-]
-
-
-testInjectDefine[single_declaration/end]=[
-varying vec2 varyVec;
-
-<><><><><><><><><><><><><><><><><><><><><><><><><>
-varying vec2 varyVec;
-
-#define foo bar + baz
 
 ]
 
@@ -502,6 +491,17 @@ varying vec2 varyVec;
 ]
 
 
+testInjectDefine[single_declaration/end]=[
+varying vec2 varyVec;
+
+<><><><><><><><><><><><><><><><><><><><><><><><><>
+varying vec2 varyVec;
+
+#define foo bar + baz
+
+]
+
+
 testInjectDefine[single_extension/before_declarations]=[
 #extension extension_name: require
 
@@ -514,17 +514,6 @@ testInjectDefine[single_extension/before_declarations]=[
 
 
 testInjectDefine[single_extension/before_directives]=[
-#extension extension_name: require
-
-<><><><><><><><><><><><><><><><><><><><><><><><><>
-#extension extension_name: require
-
-#define foo bar + baz
-
-]
-
-
-testInjectDefine[single_extension/end]=[
 #extension extension_name: require
 
 <><><><><><><><><><><><><><><><><><><><><><><><><>
@@ -568,6 +557,17 @@ testInjectDefine[single_extension/before_version]=[
 ]
 
 
+testInjectDefine[single_extension/end]=[
+#extension extension_name: require
+
+<><><><><><><><><><><><><><><><><><><><><><><><><>
+#extension extension_name: require
+
+#define foo bar + baz
+
+]
+
+
 testInjectDefine[single_function/before_declarations]=[
 void main() {}
 
@@ -586,17 +586,6 @@ void main() {}
 
 #define foo bar + baz
 void main() {}
-
-]
-
-
-testInjectDefine[single_function/end]=[
-void main() {}
-
-<><><><><><><><><><><><><><><><><><><><><><><><><>
-void main() {}
-
-#define foo bar + baz
 
 ]
 
@@ -634,6 +623,17 @@ void main() {}
 ]
 
 
+testInjectDefine[single_function/end]=[
+void main() {}
+
+<><><><><><><><><><><><><><><><><><><><><><><><><>
+void main() {}
+
+#define foo bar + baz
+
+]
+
+
 testInjectDefine[single_layout/before_declarations]=[
 layout(location = 0) out vec3 layoutOne;
 
@@ -652,17 +652,6 @@ layout(location = 0) out vec3 layoutOne;
 
 #define foo bar + baz
 layout(location = 0) out vec3 layoutOne;
-
-]
-
-
-testInjectDefine[single_layout/end]=[
-layout(location = 0) out vec3 layoutOne;
-
-<><><><><><><><><><><><><><><><><><><><><><><><><>
-layout(location = 0) out vec3 layoutOne;
-
-#define foo bar + baz
 
 ]
 
@@ -700,6 +689,17 @@ layout(location = 0) out vec3 layoutOne;
 ]
 
 
+testInjectDefine[single_layout/end]=[
+layout(location = 0) out vec3 layoutOne;
+
+<><><><><><><><><><><><><><><><><><><><><><><><><>
+layout(location = 0) out vec3 layoutOne;
+
+#define foo bar + baz
+
+]
+
+
 testInjectDefine[single_pragma/before_declarations]=[
 #pragma foo
 
@@ -718,17 +718,6 @@ testInjectDefine[single_pragma/before_directives]=[
 
 #define foo bar + baz
 #pragma foo
-
-]
-
-
-testInjectDefine[single_pragma/end]=[
-#pragma foo
-
-<><><><><><><><><><><><><><><><><><><><><><><><><>
-#pragma foo
-
-#define foo bar + baz
 
 ]
 
@@ -766,11 +755,22 @@ testInjectDefine[single_pragma/before_version]=[
 ]
 
 
-testInjectDefine[single_version/before_declarations]=[
-#version 5432
+testInjectDefine[single_pragma/end]=[
+#pragma foo
 
 <><><><><><><><><><><><><><><><><><><><><><><><><>
-#version 5432
+#pragma foo
+
+#define foo bar + baz
+
+]
+
+
+testInjectDefine[single_version/before_declarations]=[
+#version 460
+
+<><><><><><><><><><><><><><><><><><><><><><><><><>
+#version 460
 
 #define foo bar + baz
 
@@ -778,21 +778,10 @@ testInjectDefine[single_version/before_declarations]=[
 
 
 testInjectDefine[single_version/before_directives]=[
-#version 5432
+#version 460
 
 <><><><><><><><><><><><><><><><><><><><><><><><><>
-#version 5432
-
-#define foo bar + baz
-
-]
-
-
-testInjectDefine[single_version/end]=[
-#version 5432
-
-<><><><><><><><><><><><><><><><><><><><><><><><><>
-#version 5432
+#version 460
 
 #define foo bar + baz
 
@@ -800,10 +789,10 @@ testInjectDefine[single_version/end]=[
 
 
 testInjectDefine[single_version/before_extensions]=[
-#version 5432
+#version 460
 
 <><><><><><><><><><><><><><><><><><><><><><><><><>
-#version 5432
+#version 460
 
 #define foo bar + baz
 
@@ -811,10 +800,10 @@ testInjectDefine[single_version/before_extensions]=[
 
 
 testInjectDefine[single_version/before_functions]=[
-#version 5432
+#version 460
 
 <><><><><><><><><><><><><><><><><><><><><><><><><>
-#version 5432
+#version 460
 
 #define foo bar + baz
 
@@ -822,12 +811,23 @@ testInjectDefine[single_version/before_functions]=[
 
 
 testInjectDefine[single_version/before_version]=[
-#version 5432
+#version 460
 
 <><><><><><><><><><><><><><><><><><><><><><><><><>
 
 #define foo bar + baz
-#version 5432
+#version 460
+
+]
+
+
+testInjectDefine[single_version/end]=[
+#version 460
+
+<><><><><><><><><><><><><><><><><><><><><><><><><>
+#version 460
+
+#define foo bar + baz
 
 ]
 
@@ -886,35 +886,6 @@ void main() {}
 void main() {
 }
 //before eof
-
-]
-
-
-testInjectDefine[unparsed_and_functions/end]=[
-varying vec2 varyVec;
-//before declaration
-varying vec2 varyVec;
-void main() {
-}
-//before functions
-void main() {}
-void main() {
-}
-//before eof
-
-<><><><><><><><><><><><><><><><><><><><><><><><><>
-varying vec2 varyVec;
-//before declaration
-varying vec2 varyVec;
-void main() {
-}
-//before functions
-void main() {}
-void main() {
-}
-//before eof
-
-#define foo bar + baz
 
 ]
 
@@ -1006,13 +977,42 @@ void main() {
 ]
 
 
+testInjectDefine[unparsed_and_functions/end]=[
+varying vec2 varyVec;
+//before declaration
+varying vec2 varyVec;
+void main() {
+}
+//before functions
+void main() {}
+void main() {
+}
+//before eof
+
+<><><><><><><><><><><><><><><><><><><><><><><><><>
+varying vec2 varyVec;
+//before declaration
+varying vec2 varyVec;
+void main() {
+}
+//before functions
+void main() {}
+void main() {
+}
+//before eof
+
+#define foo bar + baz
+
+]
+
+
 testInjectDefine[unparsed_prefix/before_declarations]=[
 //comment prefix
-#version 5432
+#version 460
 
 <><><><><><><><><><><><><><><><><><><><><><><><><>
 //comment prefix
-#version 5432
+#version 460
 
 #define foo bar + baz
 
@@ -1021,24 +1021,11 @@ testInjectDefine[unparsed_prefix/before_declarations]=[
 
 testInjectDefine[unparsed_prefix/before_directives]=[
 //comment prefix
-#version 5432
+#version 460
 
 <><><><><><><><><><><><><><><><><><><><><><><><><>
 //comment prefix
-#version 5432
-
-#define foo bar + baz
-
-]
-
-
-testInjectDefine[unparsed_prefix/end]=[
-//comment prefix
-#version 5432
-
-<><><><><><><><><><><><><><><><><><><><><><><><><>
-//comment prefix
-#version 5432
+#version 460
 
 #define foo bar + baz
 
@@ -1047,11 +1034,11 @@ testInjectDefine[unparsed_prefix/end]=[
 
 testInjectDefine[unparsed_prefix/before_extensions]=[
 //comment prefix
-#version 5432
+#version 460
 
 <><><><><><><><><><><><><><><><><><><><><><><><><>
 //comment prefix
-#version 5432
+#version 460
 
 #define foo bar + baz
 
@@ -1060,11 +1047,11 @@ testInjectDefine[unparsed_prefix/before_extensions]=[
 
 testInjectDefine[unparsed_prefix/before_functions]=[
 //comment prefix
-#version 5432
+#version 460
 
 <><><><><><><><><><><><><><><><><><><><><><><><><>
 //comment prefix
-#version 5432
+#version 460
 
 #define foo bar + baz
 
@@ -1073,27 +1060,40 @@ testInjectDefine[unparsed_prefix/before_functions]=[
 
 testInjectDefine[unparsed_prefix/before_version]=[
 //comment prefix
-#version 5432
+#version 460
 
 <><><><><><><><><><><><><><><><><><><><><><><><><>
 
 #define foo bar + baz
 //comment prefix
-#version 5432
+#version 460
+
+]
+
+
+testInjectDefine[unparsed_prefix/end]=[
+//comment prefix
+#version 460
+
+<><><><><><><><><><><><><><><><><><><><><><><><><>
+//comment prefix
+#version 460
+
+#define foo bar + baz
 
 ]
 
 
 testInjectDefine[unparsed_separators/before_declarations]=[
 //before version
-#version 5432
+#version 460
 //before declaration
 varying vec2 varyVec;
 //before eof
 
 <><><><><><><><><><><><><><><><><><><><><><><><><>
 //before version
-#version 5432
+#version 460
 
 #define foo bar + baz
 //before declaration
@@ -1105,52 +1105,33 @@ varying vec2 varyVec;
 
 testInjectDefine[unparsed_separators/before_directives]=[
 //before version
-#version 5432
+#version 460
 //before declaration
 varying vec2 varyVec;
 //before eof
 
 <><><><><><><><><><><><><><><><><><><><><><><><><>
 //before version
-#version 5432
+#version 460
 
 #define foo bar + baz
 //before declaration
 varying vec2 varyVec;
 //before eof
-
-]
-
-
-testInjectDefine[unparsed_separators/end]=[
-//before version
-#version 5432
-//before declaration
-varying vec2 varyVec;
-//before eof
-
-<><><><><><><><><><><><><><><><><><><><><><><><><>
-//before version
-#version 5432
-//before declaration
-varying vec2 varyVec;
-//before eof
-
-#define foo bar + baz
 
 ]
 
 
 testInjectDefine[unparsed_separators/before_extensions]=[
 //before version
-#version 5432
+#version 460
 //before declaration
 varying vec2 varyVec;
 //before eof
 
 <><><><><><><><><><><><><><><><><><><><><><><><><>
 //before version
-#version 5432
+#version 460
 
 #define foo bar + baz
 //before declaration
@@ -1162,14 +1143,14 @@ varying vec2 varyVec;
 
 testInjectDefine[unparsed_separators/before_functions]=[
 //before version
-#version 5432
+#version 460
 //before declaration
 varying vec2 varyVec;
 //before eof
 
 <><><><><><><><><><><><><><><><><><><><><><><><><>
 //before version
-#version 5432
+#version 460
 //before declaration
 varying vec2 varyVec;
 //before eof
@@ -1181,7 +1162,7 @@ varying vec2 varyVec;
 
 testInjectDefine[unparsed_separators/before_version]=[
 //before version
-#version 5432
+#version 460
 //before declaration
 varying vec2 varyVec;
 //before eof
@@ -1190,7 +1171,7 @@ varying vec2 varyVec;
 
 #define foo bar + baz
 //before version
-#version 5432
+#version 460
 //before declaration
 varying vec2 varyVec;
 //before eof
@@ -1198,13 +1179,32 @@ varying vec2 varyVec;
 ]
 
 
+testInjectDefine[unparsed_separators/end]=[
+//before version
+#version 460
+//before declaration
+varying vec2 varyVec;
+//before eof
+
+<><><><><><><><><><><><><><><><><><><><><><><><><>
+//before version
+#version 460
+//before declaration
+varying vec2 varyVec;
+//before eof
+
+#define foo bar + baz
+
+]
+
+
 testInjectDefine[version_with_extension/before_declarations]=[
-#version 5432
+#version 460
 
 #extension extension_name: require
 
 <><><><><><><><><><><><><><><><><><><><><><><><><>
-#version 5432
+#version 460
 
 #extension extension_name: require
 
@@ -1214,27 +1214,12 @@ testInjectDefine[version_with_extension/before_declarations]=[
 
 
 testInjectDefine[version_with_extension/before_directives]=[
-#version 5432
+#version 460
 
 #extension extension_name: require
 
 <><><><><><><><><><><><><><><><><><><><><><><><><>
-#version 5432
-
-#extension extension_name: require
-
-#define foo bar + baz
-
-]
-
-
-testInjectDefine[version_with_extension/end]=[
-#version 5432
-
-#extension extension_name: require
-
-<><><><><><><><><><><><><><><><><><><><><><><><><>
-#version 5432
+#version 460
 
 #extension extension_name: require
 
@@ -1244,12 +1229,12 @@ testInjectDefine[version_with_extension/end]=[
 
 
 testInjectDefine[version_with_extension/before_extensions]=[
-#version 5432
+#version 460
 
 #extension extension_name: require
 
 <><><><><><><><><><><><><><><><><><><><><><><><><>
-#version 5432
+#version 460
 
 #define foo bar + baz
 
@@ -1259,12 +1244,12 @@ testInjectDefine[version_with_extension/before_extensions]=[
 
 
 testInjectDefine[version_with_extension/before_functions]=[
-#version 5432
+#version 460
 
 #extension extension_name: require
 
 <><><><><><><><><><><><><><><><><><><><><><><><><>
-#version 5432
+#version 460
 
 #extension extension_name: require
 
@@ -1274,27 +1259,42 @@ testInjectDefine[version_with_extension/before_functions]=[
 
 
 testInjectDefine[version_with_extension/before_version]=[
-#version 5432
+#version 460
 
 #extension extension_name: require
 
 <><><><><><><><><><><><><><><><><><><><><><><><><>
 
 #define foo bar + baz
-#version 5432
+#version 460
 
 #extension extension_name: require
 
 ]
 
 
+testInjectDefine[version_with_extension/end]=[
+#version 460
+
+#extension extension_name: require
+
+<><><><><><><><><><><><><><><><><><><><><><><><><>
+#version 460
+
+#extension extension_name: require
+
+#define foo bar + baz
+
+]
+
+
 testInjectDefine[version_with_pragma/before_declarations]=[
-#version 5432
+#version 460
 
 #pragma foo
 
 <><><><><><><><><><><><><><><><><><><><><><><><><>
-#version 5432
+#version 460
 
 #pragma foo
 
@@ -1304,42 +1304,27 @@ testInjectDefine[version_with_pragma/before_declarations]=[
 
 
 testInjectDefine[version_with_pragma/before_directives]=[
-#version 5432
+#version 460
 
 #pragma foo
 
 <><><><><><><><><><><><><><><><><><><><><><><><><>
-#version 5432
+#version 460
 
 #define foo bar + baz
 
 #pragma foo
-
-]
-
-
-testInjectDefine[version_with_pragma/end]=[
-#version 5432
-
-#pragma foo
-
-<><><><><><><><><><><><><><><><><><><><><><><><><>
-#version 5432
-
-#pragma foo
-
-#define foo bar + baz
 
 ]
 
 
 testInjectDefine[version_with_pragma/before_extensions]=[
-#version 5432
+#version 460
 
 #pragma foo
 
 <><><><><><><><><><><><><><><><><><><><><><><><><>
-#version 5432
+#version 460
 
 #define foo bar + baz
 
@@ -1349,12 +1334,12 @@ testInjectDefine[version_with_pragma/before_extensions]=[
 
 
 testInjectDefine[version_with_pragma/before_functions]=[
-#version 5432
+#version 460
 
 #pragma foo
 
 <><><><><><><><><><><><><><><><><><><><><><><><><>
-#version 5432
+#version 460
 
 #pragma foo
 
@@ -1364,16 +1349,31 @@ testInjectDefine[version_with_pragma/before_functions]=[
 
 
 testInjectDefine[version_with_pragma/before_version]=[
-#version 5432
+#version 460
 
 #pragma foo
 
 <><><><><><><><><><><><><><><><><><><><><><><><><>
 
 #define foo bar + baz
-#version 5432
+#version 460
 
 #pragma foo
+
+]
+
+
+testInjectDefine[version_with_pragma/end]=[
+#version 460
+
+#pragma foo
+
+<><><><><><><><><><><><><><><><><><><><><><><><><>
+#version 460
+
+#pragma foo
+
+#define foo bar + baz
 
 ]
 
@@ -1390,17 +1390,6 @@ injection; //suffix
 
 
 testInjectNode[empty/before_directives]=[
-.
-.
-<><><><><><><><><><><><><><><><><><><><><><><><><>
-
-//prefix
-injection; //suffix
-
-]
-
-
-testInjectNode[empty/end]=[
 .
 .
 <><><><><><><><><><><><><><><><><><><><><><><><><>
@@ -1444,8 +1433,19 @@ injection; //suffix
 ]
 
 
+testInjectNode[empty/end]=[
+.
+.
+<><><><><><><><><><><><><><><><><><><><><><><><><>
+
+//prefix
+injection; //suffix
+
+]
+
+
 testInjectNode[full/before_declarations]=[
-#version 5432
+#version 460
 
 #extension extension_name: require
 
@@ -1458,7 +1458,7 @@ void functionDef(const in float param) {
 }
 
 <><><><><><><><><><><><><><><><><><><><><><><><><>
-#version 5432
+#version 460
 
 #extension extension_name: require
 
@@ -1476,7 +1476,7 @@ void functionDef(const in float param) {
 
 
 testInjectNode[full/before_directives]=[
-#version 5432
+#version 460
 
 #extension extension_name: require
 
@@ -1489,7 +1489,7 @@ void functionDef(const in float param) {
 }
 
 <><><><><><><><><><><><><><><><><><><><><><><><><>
-#version 5432
+#version 460
 
 #extension extension_name: require
 //prefix
@@ -1502,43 +1502,12 @@ varying vec2 varyVec;
 void functionDef(const in float param) {
   functionCall();
 }
-
-]
-
-
-testInjectNode[full/end]=[
-#version 5432
-
-#extension extension_name: require
-
-#pragma foo
-
-varying vec2 varyVec;
-
-void functionDef(const in float param) {
-  functionCall();
-}
-
-<><><><><><><><><><><><><><><><><><><><><><><><><>
-#version 5432
-
-#extension extension_name: require
-
-#pragma foo
-
-varying vec2 varyVec;
-
-void functionDef(const in float param) {
-  functionCall();
-}
-//prefix
-injection; //suffix
 
 ]
 
 
 testInjectNode[full/before_extensions]=[
-#version 5432
+#version 460
 
 #extension extension_name: require
 
@@ -1551,7 +1520,7 @@ void functionDef(const in float param) {
 }
 
 <><><><><><><><><><><><><><><><><><><><><><><><><>
-#version 5432
+#version 460
 //prefix
 injection; //suffix
 
@@ -1569,7 +1538,7 @@ void functionDef(const in float param) {
 
 
 testInjectNode[full/before_functions]=[
-#version 5432
+#version 460
 
 #extension extension_name: require
 
@@ -1582,7 +1551,7 @@ void functionDef(const in float param) {
 }
 
 <><><><><><><><><><><><><><><><><><><><><><><><><>
-#version 5432
+#version 460
 
 #extension extension_name: require
 
@@ -1600,7 +1569,7 @@ void functionDef(const in float param) {
 
 
 testInjectNode[full/before_version]=[
-#version 5432
+#version 460
 
 #extension extension_name: require
 
@@ -1615,7 +1584,7 @@ void functionDef(const in float param) {
 <><><><><><><><><><><><><><><><><><><><><><><><><>
 //prefix
 injection; //suffix
-#version 5432
+#version 460
 
 #extension extension_name: require
 
@@ -1630,8 +1599,39 @@ void functionDef(const in float param) {
 ]
 
 
+testInjectNode[full/end]=[
+#version 460
+
+#extension extension_name: require
+
+#pragma foo
+
+varying vec2 varyVec;
+
+void functionDef(const in float param) {
+  functionCall();
+}
+
+<><><><><><><><><><><><><><><><><><><><><><><><><>
+#version 460
+
+#extension extension_name: require
+
+#pragma foo
+
+varying vec2 varyVec;
+
+void functionDef(const in float param) {
+  functionCall();
+}
+//prefix
+injection; //suffix
+
+]
+
+
 testInjectNode[full_reverse/before_declarations]=[
-#version 5432
+#version 460
 
 void functionDef(const in float param) {
   functionCall();
@@ -1644,7 +1644,7 @@ varying vec2 varyVec;
 #extension extension_name: require
 
 <><><><><><><><><><><><><><><><><><><><><><><><><>
-#version 5432
+#version 460
 //prefix
 injection; //suffix
 
@@ -1662,7 +1662,7 @@ varying vec2 varyVec;
 
 
 testInjectNode[full_reverse/before_directives]=[
-#version 5432
+#version 460
 
 void functionDef(const in float param) {
   functionCall();
@@ -1675,7 +1675,7 @@ varying vec2 varyVec;
 #extension extension_name: require
 
 <><><><><><><><><><><><><><><><><><><><><><><><><>
-#version 5432
+#version 460
 //prefix
 injection; //suffix
 
@@ -1688,43 +1688,12 @@ varying vec2 varyVec;
 #pragma foo
 
 #extension extension_name: require
-
-]
-
-
-testInjectNode[full_reverse/end]=[
-#version 5432
-
-void functionDef(const in float param) {
-  functionCall();
-}
-
-varying vec2 varyVec;
-
-#pragma foo
-
-#extension extension_name: require
-
-<><><><><><><><><><><><><><><><><><><><><><><><><>
-#version 5432
-
-void functionDef(const in float param) {
-  functionCall();
-}
-
-varying vec2 varyVec;
-
-#pragma foo
-
-#extension extension_name: require
-//prefix
-injection; //suffix
 
 ]
 
 
 testInjectNode[full_reverse/before_extensions]=[
-#version 5432
+#version 460
 
 void functionDef(const in float param) {
   functionCall();
@@ -1737,7 +1706,7 @@ varying vec2 varyVec;
 #extension extension_name: require
 
 <><><><><><><><><><><><><><><><><><><><><><><><><>
-#version 5432
+#version 460
 //prefix
 injection; //suffix
 
@@ -1755,7 +1724,7 @@ varying vec2 varyVec;
 
 
 testInjectNode[full_reverse/before_functions]=[
-#version 5432
+#version 460
 
 void functionDef(const in float param) {
   functionCall();
@@ -1768,7 +1737,7 @@ varying vec2 varyVec;
 #extension extension_name: require
 
 <><><><><><><><><><><><><><><><><><><><><><><><><>
-#version 5432
+#version 460
 //prefix
 injection; //suffix
 
@@ -1786,7 +1755,7 @@ varying vec2 varyVec;
 
 
 testInjectNode[full_reverse/before_version]=[
-#version 5432
+#version 460
 
 void functionDef(const in float param) {
   functionCall();
@@ -1801,7 +1770,7 @@ varying vec2 varyVec;
 <><><><><><><><><><><><><><><><><><><><><><><><><>
 //prefix
 injection; //suffix
-#version 5432
+#version 460
 
 void functionDef(const in float param) {
   functionCall();
@@ -1812,6 +1781,37 @@ varying vec2 varyVec;
 #pragma foo
 
 #extension extension_name: require
+
+]
+
+
+testInjectNode[full_reverse/end]=[
+#version 460
+
+void functionDef(const in float param) {
+  functionCall();
+}
+
+varying vec2 varyVec;
+
+#pragma foo
+
+#extension extension_name: require
+
+<><><><><><><><><><><><><><><><><><><><><><><><><>
+#version 460
+
+void functionDef(const in float param) {
+  functionCall();
+}
+
+varying vec2 varyVec;
+
+#pragma foo
+
+#extension extension_name: require
+//prefix
+injection; //suffix
 
 ]
 
@@ -1834,17 +1834,6 @@ varying vec2 varyVec;
 //prefix
 injection; //suffix
 varying vec2 varyVec;
-
-]
-
-
-testInjectNode[single_declaration/end]=[
-varying vec2 varyVec;
-
-<><><><><><><><><><><><><><><><><><><><><><><><><>
-varying vec2 varyVec;
-//prefix
-injection; //suffix
 
 ]
 
@@ -1882,6 +1871,17 @@ varying vec2 varyVec;
 ]
 
 
+testInjectNode[single_declaration/end]=[
+varying vec2 varyVec;
+
+<><><><><><><><><><><><><><><><><><><><><><><><><>
+varying vec2 varyVec;
+//prefix
+injection; //suffix
+
+]
+
+
 testInjectNode[single_extension/before_declarations]=[
 #extension extension_name: require
 
@@ -1894,17 +1894,6 @@ injection; //suffix
 
 
 testInjectNode[single_extension/before_directives]=[
-#extension extension_name: require
-
-<><><><><><><><><><><><><><><><><><><><><><><><><>
-#extension extension_name: require
-//prefix
-injection; //suffix
-
-]
-
-
-testInjectNode[single_extension/end]=[
 #extension extension_name: require
 
 <><><><><><><><><><><><><><><><><><><><><><><><><>
@@ -1948,6 +1937,17 @@ injection; //suffix
 ]
 
 
+testInjectNode[single_extension/end]=[
+#extension extension_name: require
+
+<><><><><><><><><><><><><><><><><><><><><><><><><>
+#extension extension_name: require
+//prefix
+injection; //suffix
+
+]
+
+
 testInjectNode[single_function/before_declarations]=[
 void main() {}
 
@@ -1966,17 +1966,6 @@ void main() {}
 //prefix
 injection; //suffix
 void main() {}
-
-]
-
-
-testInjectNode[single_function/end]=[
-void main() {}
-
-<><><><><><><><><><><><><><><><><><><><><><><><><>
-void main() {}
-//prefix
-injection; //suffix
 
 ]
 
@@ -2014,6 +2003,17 @@ void main() {}
 ]
 
 
+testInjectNode[single_function/end]=[
+void main() {}
+
+<><><><><><><><><><><><><><><><><><><><><><><><><>
+void main() {}
+//prefix
+injection; //suffix
+
+]
+
+
 testInjectNode[single_layout/before_declarations]=[
 layout(location = 0) out vec3 layoutOne;
 
@@ -2032,17 +2032,6 @@ layout(location = 0) out vec3 layoutOne;
 //prefix
 injection; //suffix
 layout(location = 0) out vec3 layoutOne;
-
-]
-
-
-testInjectNode[single_layout/end]=[
-layout(location = 0) out vec3 layoutOne;
-
-<><><><><><><><><><><><><><><><><><><><><><><><><>
-layout(location = 0) out vec3 layoutOne;
-//prefix
-injection; //suffix
 
 ]
 
@@ -2080,6 +2069,17 @@ layout(location = 0) out vec3 layoutOne;
 ]
 
 
+testInjectNode[single_layout/end]=[
+layout(location = 0) out vec3 layoutOne;
+
+<><><><><><><><><><><><><><><><><><><><><><><><><>
+layout(location = 0) out vec3 layoutOne;
+//prefix
+injection; //suffix
+
+]
+
+
 testInjectNode[single_pragma/before_declarations]=[
 #pragma foo
 
@@ -2098,17 +2098,6 @@ testInjectNode[single_pragma/before_directives]=[
 //prefix
 injection; //suffix
 #pragma foo
-
-]
-
-
-testInjectNode[single_pragma/end]=[
-#pragma foo
-
-<><><><><><><><><><><><><><><><><><><><><><><><><>
-#pragma foo
-//prefix
-injection; //suffix
 
 ]
 
@@ -2146,11 +2135,22 @@ injection; //suffix
 ]
 
 
-testInjectNode[single_version/before_declarations]=[
-#version 5432
+testInjectNode[single_pragma/end]=[
+#pragma foo
 
 <><><><><><><><><><><><><><><><><><><><><><><><><>
-#version 5432
+#pragma foo
+//prefix
+injection; //suffix
+
+]
+
+
+testInjectNode[single_version/before_declarations]=[
+#version 460
+
+<><><><><><><><><><><><><><><><><><><><><><><><><>
+#version 460
 //prefix
 injection; //suffix
 
@@ -2158,21 +2158,10 @@ injection; //suffix
 
 
 testInjectNode[single_version/before_directives]=[
-#version 5432
+#version 460
 
 <><><><><><><><><><><><><><><><><><><><><><><><><>
-#version 5432
-//prefix
-injection; //suffix
-
-]
-
-
-testInjectNode[single_version/end]=[
-#version 5432
-
-<><><><><><><><><><><><><><><><><><><><><><><><><>
-#version 5432
+#version 460
 //prefix
 injection; //suffix
 
@@ -2180,10 +2169,10 @@ injection; //suffix
 
 
 testInjectNode[single_version/before_extensions]=[
-#version 5432
+#version 460
 
 <><><><><><><><><><><><><><><><><><><><><><><><><>
-#version 5432
+#version 460
 //prefix
 injection; //suffix
 
@@ -2191,10 +2180,10 @@ injection; //suffix
 
 
 testInjectNode[single_version/before_functions]=[
-#version 5432
+#version 460
 
 <><><><><><><><><><><><><><><><><><><><><><><><><>
-#version 5432
+#version 460
 //prefix
 injection; //suffix
 
@@ -2202,12 +2191,23 @@ injection; //suffix
 
 
 testInjectNode[single_version/before_version]=[
-#version 5432
+#version 460
 
 <><><><><><><><><><><><><><><><><><><><><><><><><>
 //prefix
 injection; //suffix
-#version 5432
+#version 460
+
+]
+
+
+testInjectNode[single_version/end]=[
+#version 460
+
+<><><><><><><><><><><><><><><><><><><><><><><><><>
+#version 460
+//prefix
+injection; //suffix
 
 ]
 
@@ -2266,35 +2266,6 @@ void main() {}
 void main() {
 }
 //before eof
-
-]
-
-
-testInjectNode[unparsed_and_functions/end]=[
-varying vec2 varyVec;
-//before declaration
-varying vec2 varyVec;
-void main() {
-}
-//before functions
-void main() {}
-void main() {
-}
-//before eof
-
-<><><><><><><><><><><><><><><><><><><><><><><><><>
-varying vec2 varyVec;
-//before declaration
-varying vec2 varyVec;
-void main() {
-}
-//before functions
-void main() {}
-void main() {
-}
-//before eof
-//prefix
-injection; //suffix
 
 ]
 
@@ -2386,13 +2357,42 @@ void main() {
 ]
 
 
+testInjectNode[unparsed_and_functions/end]=[
+varying vec2 varyVec;
+//before declaration
+varying vec2 varyVec;
+void main() {
+}
+//before functions
+void main() {}
+void main() {
+}
+//before eof
+
+<><><><><><><><><><><><><><><><><><><><><><><><><>
+varying vec2 varyVec;
+//before declaration
+varying vec2 varyVec;
+void main() {
+}
+//before functions
+void main() {}
+void main() {
+}
+//before eof
+//prefix
+injection; //suffix
+
+]
+
+
 testInjectNode[unparsed_prefix/before_declarations]=[
 //comment prefix
-#version 5432
+#version 460
 
 <><><><><><><><><><><><><><><><><><><><><><><><><>
 //comment prefix
-#version 5432
+#version 460
 //prefix
 injection; //suffix
 
@@ -2401,24 +2401,11 @@ injection; //suffix
 
 testInjectNode[unparsed_prefix/before_directives]=[
 //comment prefix
-#version 5432
+#version 460
 
 <><><><><><><><><><><><><><><><><><><><><><><><><>
 //comment prefix
-#version 5432
-//prefix
-injection; //suffix
-
-]
-
-
-testInjectNode[unparsed_prefix/end]=[
-//comment prefix
-#version 5432
-
-<><><><><><><><><><><><><><><><><><><><><><><><><>
-//comment prefix
-#version 5432
+#version 460
 //prefix
 injection; //suffix
 
@@ -2427,11 +2414,11 @@ injection; //suffix
 
 testInjectNode[unparsed_prefix/before_extensions]=[
 //comment prefix
-#version 5432
+#version 460
 
 <><><><><><><><><><><><><><><><><><><><><><><><><>
 //comment prefix
-#version 5432
+#version 460
 //prefix
 injection; //suffix
 
@@ -2440,11 +2427,11 @@ injection; //suffix
 
 testInjectNode[unparsed_prefix/before_functions]=[
 //comment prefix
-#version 5432
+#version 460
 
 <><><><><><><><><><><><><><><><><><><><><><><><><>
 //comment prefix
-#version 5432
+#version 460
 //prefix
 injection; //suffix
 
@@ -2453,27 +2440,40 @@ injection; //suffix
 
 testInjectNode[unparsed_prefix/before_version]=[
 //comment prefix
-#version 5432
+#version 460
 
 <><><><><><><><><><><><><><><><><><><><><><><><><>
 //prefix
 injection; //suffix
 //comment prefix
-#version 5432
+#version 460
+
+]
+
+
+testInjectNode[unparsed_prefix/end]=[
+//comment prefix
+#version 460
+
+<><><><><><><><><><><><><><><><><><><><><><><><><>
+//comment prefix
+#version 460
+//prefix
+injection; //suffix
 
 ]
 
 
 testInjectNode[unparsed_separators/before_declarations]=[
 //before version
-#version 5432
+#version 460
 //before declaration
 varying vec2 varyVec;
 //before eof
 
 <><><><><><><><><><><><><><><><><><><><><><><><><>
 //before version
-#version 5432
+#version 460
 //prefix
 injection; //suffix
 //before declaration
@@ -2485,52 +2485,33 @@ varying vec2 varyVec;
 
 testInjectNode[unparsed_separators/before_directives]=[
 //before version
-#version 5432
+#version 460
 //before declaration
 varying vec2 varyVec;
 //before eof
 
 <><><><><><><><><><><><><><><><><><><><><><><><><>
 //before version
-#version 5432
+#version 460
 //prefix
 injection; //suffix
 //before declaration
 varying vec2 varyVec;
 //before eof
-
-]
-
-
-testInjectNode[unparsed_separators/end]=[
-//before version
-#version 5432
-//before declaration
-varying vec2 varyVec;
-//before eof
-
-<><><><><><><><><><><><><><><><><><><><><><><><><>
-//before version
-#version 5432
-//before declaration
-varying vec2 varyVec;
-//before eof
-//prefix
-injection; //suffix
 
 ]
 
 
 testInjectNode[unparsed_separators/before_extensions]=[
 //before version
-#version 5432
+#version 460
 //before declaration
 varying vec2 varyVec;
 //before eof
 
 <><><><><><><><><><><><><><><><><><><><><><><><><>
 //before version
-#version 5432
+#version 460
 //prefix
 injection; //suffix
 //before declaration
@@ -2542,14 +2523,14 @@ varying vec2 varyVec;
 
 testInjectNode[unparsed_separators/before_functions]=[
 //before version
-#version 5432
+#version 460
 //before declaration
 varying vec2 varyVec;
 //before eof
 
 <><><><><><><><><><><><><><><><><><><><><><><><><>
 //before version
-#version 5432
+#version 460
 //before declaration
 varying vec2 varyVec;
 //before eof
@@ -2561,7 +2542,7 @@ injection; //suffix
 
 testInjectNode[unparsed_separators/before_version]=[
 //before version
-#version 5432
+#version 460
 //before declaration
 varying vec2 varyVec;
 //before eof
@@ -2570,7 +2551,7 @@ varying vec2 varyVec;
 //prefix
 injection; //suffix
 //before version
-#version 5432
+#version 460
 //before declaration
 varying vec2 varyVec;
 //before eof
@@ -2578,13 +2559,32 @@ varying vec2 varyVec;
 ]
 
 
+testInjectNode[unparsed_separators/end]=[
+//before version
+#version 460
+//before declaration
+varying vec2 varyVec;
+//before eof
+
+<><><><><><><><><><><><><><><><><><><><><><><><><>
+//before version
+#version 460
+//before declaration
+varying vec2 varyVec;
+//before eof
+//prefix
+injection; //suffix
+
+]
+
+
 testInjectNode[version_with_extension/before_declarations]=[
-#version 5432
+#version 460
 
 #extension extension_name: require
 
 <><><><><><><><><><><><><><><><><><><><><><><><><>
-#version 5432
+#version 460
 
 #extension extension_name: require
 //prefix
@@ -2594,27 +2594,12 @@ injection; //suffix
 
 
 testInjectNode[version_with_extension/before_directives]=[
-#version 5432
+#version 460
 
 #extension extension_name: require
 
 <><><><><><><><><><><><><><><><><><><><><><><><><>
-#version 5432
-
-#extension extension_name: require
-//prefix
-injection; //suffix
-
-]
-
-
-testInjectNode[version_with_extension/end]=[
-#version 5432
-
-#extension extension_name: require
-
-<><><><><><><><><><><><><><><><><><><><><><><><><>
-#version 5432
+#version 460
 
 #extension extension_name: require
 //prefix
@@ -2624,12 +2609,12 @@ injection; //suffix
 
 
 testInjectNode[version_with_extension/before_extensions]=[
-#version 5432
+#version 460
 
 #extension extension_name: require
 
 <><><><><><><><><><><><><><><><><><><><><><><><><>
-#version 5432
+#version 460
 //prefix
 injection; //suffix
 
@@ -2639,12 +2624,12 @@ injection; //suffix
 
 
 testInjectNode[version_with_extension/before_functions]=[
-#version 5432
+#version 460
 
 #extension extension_name: require
 
 <><><><><><><><><><><><><><><><><><><><><><><><><>
-#version 5432
+#version 460
 
 #extension extension_name: require
 //prefix
@@ -2654,27 +2639,42 @@ injection; //suffix
 
 
 testInjectNode[version_with_extension/before_version]=[
-#version 5432
+#version 460
 
 #extension extension_name: require
 
 <><><><><><><><><><><><><><><><><><><><><><><><><>
 //prefix
 injection; //suffix
-#version 5432
+#version 460
 
 #extension extension_name: require
 
 ]
 
 
+testInjectNode[version_with_extension/end]=[
+#version 460
+
+#extension extension_name: require
+
+<><><><><><><><><><><><><><><><><><><><><><><><><>
+#version 460
+
+#extension extension_name: require
+//prefix
+injection; //suffix
+
+]
+
+
 testInjectNode[version_with_pragma/before_declarations]=[
-#version 5432
+#version 460
 
 #pragma foo
 
 <><><><><><><><><><><><><><><><><><><><><><><><><>
-#version 5432
+#version 460
 
 #pragma foo
 //prefix
@@ -2684,42 +2684,27 @@ injection; //suffix
 
 
 testInjectNode[version_with_pragma/before_directives]=[
-#version 5432
+#version 460
 
 #pragma foo
 
 <><><><><><><><><><><><><><><><><><><><><><><><><>
-#version 5432
+#version 460
 //prefix
 injection; //suffix
 
 #pragma foo
-
-]
-
-
-testInjectNode[version_with_pragma/end]=[
-#version 5432
-
-#pragma foo
-
-<><><><><><><><><><><><><><><><><><><><><><><><><>
-#version 5432
-
-#pragma foo
-//prefix
-injection; //suffix
 
 ]
 
 
 testInjectNode[version_with_pragma/before_extensions]=[
-#version 5432
+#version 460
 
 #pragma foo
 
 <><><><><><><><><><><><><><><><><><><><><><><><><>
-#version 5432
+#version 460
 //prefix
 injection; //suffix
 
@@ -2729,12 +2714,12 @@ injection; //suffix
 
 
 testInjectNode[version_with_pragma/before_functions]=[
-#version 5432
+#version 460
 
 #pragma foo
 
 <><><><><><><><><><><><><><><><><><><><><><><><><>
-#version 5432
+#version 460
 
 #pragma foo
 //prefix
@@ -2744,15 +2729,30 @@ injection; //suffix
 
 
 testInjectNode[version_with_pragma/before_version]=[
-#version 5432
+#version 460
 
 #pragma foo
 
 <><><><><><><><><><><><><><><><><><><><><><><><><>
 //prefix
 injection; //suffix
-#version 5432
+#version 460
 
 #pragma foo
+
+]
+
+
+testInjectNode[version_with_pragma/end]=[
+#version 460
+
+#pragma foo
+
+<><><><><><><><><><><><><><><><><><><><><><><><><>
+#version 460
+
+#pragma foo
+//prefix
+injection; //suffix
 
 ]
