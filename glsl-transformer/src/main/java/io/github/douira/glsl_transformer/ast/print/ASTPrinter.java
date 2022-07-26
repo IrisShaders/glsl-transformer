@@ -144,12 +144,12 @@ public abstract class ASTPrinter extends ASTPrinterBase {
 
   @Override
   public void enterBitwiseNotExpression(BitwiseNotExpression node) {
-    emitType(GLSLLexer.BIT_NEG_OP);
+    emitType(GLSLLexer.BITWISE_NEG_OP);
   }
 
   @Override
   public void enterBooleanNotExpression(BooleanNotExpression node) {
-    emitType(GLSLLexer.BOOL_NOT_OP);
+    emitType(GLSLLexer.LOGICAL_NOT_OP);
   }
 
   @Override
@@ -439,7 +439,7 @@ public abstract class ASTPrinter extends ASTPrinterBase {
   public Void visitBitwiseAndExpression(BitwiseAndExpression node) {
     visit(node.getLeft());
     emitBreakableSpace();
-    emitType(GLSLLexer.BIT_AND_OP);
+    emitType(GLSLLexer.BITWISE_AND_OP);
     emitBreakableSpace();
     visit(node.getRight());
     return null;
@@ -449,7 +449,7 @@ public abstract class ASTPrinter extends ASTPrinterBase {
   public Void visitBitwiseXorExpression(BitwiseXorExpression node) {
     visit(node.getLeft());
     emitBreakableSpace();
-    emitType(GLSLLexer.BIT_XOR_OP);
+    emitType(GLSLLexer.BITWISE_XOR_OP);
     emitBreakableSpace();
     visit(node.getRight());
     return null;
@@ -459,7 +459,7 @@ public abstract class ASTPrinter extends ASTPrinterBase {
   public Void visitBitwiseOrExpression(BitwiseOrExpression node) {
     visit(node.getLeft());
     emitBreakableSpace();
-    emitType(GLSLLexer.BIT_OR_OP);
+    emitType(GLSLLexer.BITWISE_OR_OP);
     emitBreakableSpace();
     visit(node.getRight());
     return null;
@@ -469,7 +469,7 @@ public abstract class ASTPrinter extends ASTPrinterBase {
   public Void visitBooleanAndExpression(BooleanAndExpression node) {
     visit(node.getLeft());
     emitBreakableSpace();
-    emitType(GLSLLexer.BOOL_AND_OP);
+    emitType(GLSLLexer.LOGICAL_AND_OP);
     emitBreakableSpace();
     visit(node.getRight());
     return null;
@@ -479,7 +479,7 @@ public abstract class ASTPrinter extends ASTPrinterBase {
   public Void visitBooleanXorExpression(BooleanXorExpression node) {
     visit(node.getLeft());
     emitBreakableSpace();
-    emitType(GLSLLexer.BOOL_XOR_OP);
+    emitType(GLSLLexer.LOGICAL_XOR_OP);
     emitBreakableSpace();
     visit(node.getRight());
     return null;
@@ -489,7 +489,7 @@ public abstract class ASTPrinter extends ASTPrinterBase {
   public Void visitBooleanOrExpression(BooleanOrExpression node) {
     visit(node.getLeft());
     emitBreakableSpace();
-    emitType(GLSLLexer.BOOL_OR_OP);
+    emitType(GLSLLexer.LOGICAL_OR_OP);
     emitBreakableSpace();
     visit(node.getRight());
     return null;
