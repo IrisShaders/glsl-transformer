@@ -63,6 +63,7 @@ test {
   finalizedBy jacocoTestReport
   testLogging.showStandardStreams = true
   maxParallelForks = System.getenv("CI") ? 1 : Runtime.runtime.availableProcessors() / 2
+  enviroment "GRADLE"
 }
 
 jacocoTestReport {
