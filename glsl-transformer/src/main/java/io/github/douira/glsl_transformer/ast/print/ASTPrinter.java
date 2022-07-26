@@ -47,7 +47,7 @@ public abstract class ASTPrinter extends ASTPrinterBase {
   public Void visitVersionStatement(VersionStatement node) {
     emitType(GLSLLexer.NR, GLSLLexer.VERSION);
     emitExtendableSpace();
-    emitLiteral(Integer.toString(node.version));
+    emitType(node.version.tokenType);
     if (node.profile != null) {
       emitExtendableSpace();
       emitType(node.profile.tokenType);

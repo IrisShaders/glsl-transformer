@@ -10,7 +10,7 @@ import org.antlr.v4.runtime.tree.*;
 import io.github.douira.glsl_transformer.*;
 import io.github.douira.glsl_transformer.GLSLParser.*;
 import io.github.douira.glsl_transformer.ast.node.*;
-import io.github.douira.glsl_transformer.ast.node.VersionStatement.Profile;
+import io.github.douira.glsl_transformer.ast.node.VersionStatement.*;
 import io.github.douira.glsl_transformer.ast.node.basic.ASTNode;
 import io.github.douira.glsl_transformer.ast.node.declaration.*;
 import io.github.douira.glsl_transformer.ast.node.expression.*;
@@ -99,8 +99,9 @@ public class ASTBuilder extends GLSLParserBaseVisitor<ASTNode> {
     if (ctx == null) {
       return null;
     }
-    var version = Integer.parseInt(ctx.version.getText());
-    return new VersionStatement(version, applySafe(ctx.profile, Profile::fromToken));
+    return new VersionStatement(
+        applySafe(ctx.version, Version::fromToken),
+        applySafe(ctx.profile, Profile::fromToken));
   }
 
   @Override
