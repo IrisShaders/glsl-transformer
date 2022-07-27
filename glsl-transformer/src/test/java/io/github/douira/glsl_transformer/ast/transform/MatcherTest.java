@@ -15,39 +15,39 @@ import io.github.douira.glsl_transformer.test_util.TestWithASTTransformer;
 
 public class MatcherTest extends TestWithASTTransformer {
   private void assertNoMatchED(Matcher<ExternalDeclaration> p, String input) {
-    assertFalse(p.matches(transformer.parseSeparateExternalDeclaration(input)));
+    assertFalse(p.matches(t.parseSeparateExternalDeclaration(input)));
   }
 
   private void assertMatchED(Matcher<ExternalDeclaration> p, String input) {
-    assertTrue(p.matches(transformer.parseSeparateExternalDeclaration(input)));
+    assertTrue(p.matches(t.parseSeparateExternalDeclaration(input)));
   }
 
   private void assertExtractED(Matcher<ExternalDeclaration> p, String input) {
-    assertTrue(p.matchesExtract(transformer.parseSeparateExternalDeclaration(input)));
+    assertTrue(p.matchesExtract(t.parseSeparateExternalDeclaration(input)));
   }
 
   private void assertNoExtractTU(Matcher<TranslationUnit> p, String input) {
-    assertFalse(p.matchesExtract(transformer.parseTranslationUnit(input)));
+    assertFalse(p.matchesExtract(t.parseTranslationUnit(input)));
   }
 
   private void assertExtractTU(Matcher<TranslationUnit> p, String input) {
-    assertTrue(p.matchesExtract(transformer.parseTranslationUnit(input)));
+    assertTrue(p.matchesExtract(t.parseTranslationUnit(input)));
   }
 
   private void assertMatchTU(Matcher<TranslationUnit> p, String input) {
-    assertTrue(p.matches(transformer.parseTranslationUnit(input)));
+    assertTrue(p.matches(t.parseTranslationUnit(input)));
   }
 
   private void assertNoMatchTU(Matcher<TranslationUnit> p, String input) {
-    assertFalse(p.matches(transformer.parseTranslationUnit(input)));
+    assertFalse(p.matches(t.parseTranslationUnit(input)));
   }
 
   private void assertMatchEx(Matcher<Expression> p, String input) {
-    assertTrue(p.matches(transformer.parseSeparateExpression(input)));
+    assertTrue(p.matches(t.parseSeparateExpression(input)));
   }
 
   private void assertNoMatchEx(Matcher<Expression> p, String input) {
-    assertFalse(p.matches(transformer.parseSeparateExpression(input)));
+    assertFalse(p.matches(t.parseSeparateExpression(input)));
   }
 
   @Test
@@ -286,7 +286,7 @@ public class MatcherTest extends TestWithASTTransformer {
 
   @Test
   void testMatchOnlyUniform() {
-    transformer.setTransformation((tree, root) -> {
+    t.setTransformation((tree, root) -> {
       root.process(root.identifierIndex.getStream("texture")
           .filter(id -> !(id.getParent() instanceof FunctionCallExpression)),
           id -> {

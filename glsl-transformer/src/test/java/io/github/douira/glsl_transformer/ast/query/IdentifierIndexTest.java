@@ -9,13 +9,13 @@ import io.github.douira.glsl_transformer.test_util.TestWithASTTransformer;
 public class IdentifierIndexTest extends TestWithASTTransformer {
   @Test
   void testIdentifierChange() {
-    transformer.setTransformation((tree, root) -> {
+    t.setTransformation((tree, root) -> {
       assertTrue(root.identifierIndex.has("a"));
       assertFalse(root.identifierIndex.has("b"));
       root.identifierIndex.getOne("a").setName("b");
       assertFalse(root.identifierIndex.has("a"));
       assertTrue(root.identifierIndex.has("b"));
     });
-    transformer.transform("int a = 1;");
+    t.transform("int a = 1;");
   }
 }

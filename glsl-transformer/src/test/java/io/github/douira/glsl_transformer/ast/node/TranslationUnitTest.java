@@ -23,19 +23,19 @@ public class TranslationUnitTest extends TestWithASTTransformer {
 
   @Test
   void testInjection() {
-    transformer.setTransformation(tree -> tree.injectNode(
+    t.setTransformation(tree -> tree.injectNode(
         ASTInjectionPoint.BEFORE_FUNCTIONS,
-        transformer.parseNode(
+        t.parseNode(
             "float x;",
             tree,
             GLSLParser::externalDeclaration,
             ASTBuilder::visitExternalDeclaration)));
     assertEquals(
         "int a;\nfloat x;\nvoid main() {\n}\n",
-        transformer.transform("int a;\nvoid main() {\n}\n"));
+        t.transform("int a;\nvoid main() {\n}\n"));
     assertEquals(
         "int a;\nfloat x;\n",
-        transformer.transform("int a;\n"));
+        t.transform("int a;\n"));
   }
 
   @ParameterizedTest
@@ -43,10 +43,10 @@ public class TranslationUnitTest extends TestWithASTTransformer {
   @SnapshotName("testInject")
   void testInject(String scenario, String input) {
     for (var location : ASTInjectionPoint.values()) {
-      transformer.setTransformation(tree -> tree.injectNodes(
+      t.setTransformation(tree -> tree.injectNodes(
           location,
           Stream.of("x", "y")
-              .<ExternalDeclaration>map(name -> transformer.parseNode(
+              .<ExternalDeclaration>map(name -> t.parseNode(
                   "float " + name + ";",
                   tree,
                   GLSLParser::externalDeclaration,
@@ -55,7 +55,7 @@ public class TranslationUnitTest extends TestWithASTTransformer {
       expect
           .scenario(scenario + "/" + location.toString().toLowerCase())
           .toMatchSnapshot(SnapshotUtil.inputOutputSnapshot(
-              input, transformer.transform(input)));
+              input, t.transform(input)));
     }
   }
 }

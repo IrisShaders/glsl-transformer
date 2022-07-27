@@ -217,8 +217,8 @@ public class TransformationTest extends TestForExecutionOrder {
 
   @Test
   void testPreferStaticGraph() {
-    var transformer = new CSTTransformer<>();
-    transformer.addConcurrent(new Transformation<>() {
+    var t = new CSTTransformer<>();
+    t.addConcurrent(new Transformation<>() {
       {
         chainDependent(incrementRunPhase());
       }
@@ -230,45 +230,45 @@ public class TransformationTest extends TestForExecutionOrder {
       }
     });
 
-    transformer.transform("", new FullyFixedJobParameters());
+    t.transform("", new FullyFixedJobParameters());
     assertEquals(1, nextIndex, "It should run the static dependency.");
   }
 
   @Test
   void testGraphResetConditional() {
-    var transformer = new CSTTransformer<>();
-    transformer.addConcurrent(new Transformation<>() {
+    var t = new CSTTransformer<>();
+    t.addConcurrent(new Transformation<>() {
       @Override
       protected void setupGraph() {
         chainDependent(incrementRunPhase());
       }
     });
 
-    transformer.transform("", new FullyFixedJobParameters());
+    t.transform("", new FullyFixedJobParameters());
     assertEquals(1, nextIndex,
         "It should run the conditional dependency once.");
 
     nextIndex = 0;
-    transformer.transform("", new FullyFixedJobParameters());
+    t.transform("", new FullyFixedJobParameters());
     assertEquals(1, nextIndex,
         "It should run the conditional dependency once.");
   }
 
   @Test
   void testGraphResetStatic() {
-    var transformer = new CSTTransformer<>();
-    transformer.addConcurrent(new Transformation<>() {
+    var t = new CSTTransformer<>();
+    t.addConcurrent(new Transformation<>() {
       {
         chainDependent(incrementRunPhase());
       }
     });
 
-    transformer.transform("", new FullyFixedJobParameters());
+    t.transform("", new FullyFixedJobParameters());
     assertEquals(1, nextIndex,
         "It should run the static dependency once.");
 
     nextIndex = 0;
-    transformer.transform("", new FullyFixedJobParameters());
+    t.transform("", new FullyFixedJobParameters());
     assertEquals(1, nextIndex,
         "It should run the static dependency once.");
   }
@@ -277,8 +277,8 @@ public class TransformationTest extends TestForExecutionOrder {
   void testConditionalDependency() {
     var a = new Object();
     var b = new Object();
-    var transformer = new CSTTransformer<FixedWrappedParameters<Object>>();
-    transformer.addConcurrent(new Transformation<>() {
+    var t = new CSTTransformer<FixedWrappedParameters<Object>>();
+    t.addConcurrent(new Transformation<>() {
       @Override
       protected void setupGraph() {
         chainDependent(incrementRunPhase());
@@ -292,12 +292,12 @@ public class TransformationTest extends TestForExecutionOrder {
       }
     });
 
-    transformer.transform("", new FixedWrappedParameters<>(a));
+    t.transform("", new FixedWrappedParameters<>(a));
     assertEquals(6, nextIndex,
         "It should run the conditional dependencies in the right order.");
 
     nextIndex = 0;
-    transformer.transform("", new FixedWrappedParameters<>(b));
+    t.transform("", new FixedWrappedParameters<>(b));
     assertEquals(4, nextIndex,
         "It should run the conditional dependencies in the right order.");
   }

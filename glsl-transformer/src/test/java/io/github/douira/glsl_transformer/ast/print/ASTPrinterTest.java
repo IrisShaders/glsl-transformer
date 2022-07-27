@@ -7,9 +7,9 @@ import io.github.douira.glsl_transformer.test_util.TestWithASTTransformer;
 public class ASTPrinterTest extends TestWithASTTransformer {
   @Test
   void testOperatorPrecedencePrinting1() {
-    transformer.setTransformation((tree, root) -> {
+    t.setTransformation((tree, root) -> {
       root.replaceReferenceExpressions(
-          transformer, "b", "c + d");
+          t, "b", "c + d");
     });
     assertTransform(
         "int x = a * (c + d); ",
@@ -33,9 +33,9 @@ public class ASTPrinterTest extends TestWithASTTransformer {
 
   @Test
   void testOperatorPrecedencePrinting2() {
-    transformer.setTransformation((tree, root) -> {
+    t.setTransformation((tree, root) -> {
       root.replaceReferenceExpressions(
-          transformer, "b", "++c");
+          t, "b", "++c");
     });
     assertTransform(
         "int x = ++++c; ",
@@ -56,9 +56,9 @@ public class ASTPrinterTest extends TestWithASTTransformer {
 
   @Test
   void testOperatorPrecedencePrinting3() {
-    transformer.setTransformation((tree, root) -> {
+    t.setTransformation((tree, root) -> {
       root.replaceReferenceExpressions(
-          transformer, "b", "c, d");
+          t, "b", "c, d");
     });
     assertTransform(
         "int x = ++(c, d); ",
@@ -76,9 +76,9 @@ public class ASTPrinterTest extends TestWithASTTransformer {
 
   @Test
   void testOperatorPrecedencePrinting4() {
-    transformer.setTransformation((tree, root) -> {
+    t.setTransformation((tree, root) -> {
       root.replaceReferenceExpressions(
-          transformer, "b", "(c + d)");
+          t, "b", "(c + d)");
     });
     assertTransform(
         "int x = a * (c + d); ",

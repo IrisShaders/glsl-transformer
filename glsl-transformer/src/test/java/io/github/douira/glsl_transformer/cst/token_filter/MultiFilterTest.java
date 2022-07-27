@@ -15,10 +15,10 @@ public class MultiFilterTest extends TestWithResource {
 
   static <T extends JobParameters> CSTTransformer<T> assertPrintFilterResult(
       String expected, String input, T parameters, TokenFilter<T> filter, String message) {
-    var transformer = new CSTTransformer<T>();
-    transformer.setPrintTokenFilter(filter);
-    assertEquals(expected, transformer.transform(input, parameters), message);
-    return transformer;
+    var t = new CSTTransformer<T>();
+    t.setPrintTokenFilter(filter);
+    assertEquals(expected, t.transform(input, parameters), message);
+    return t;
   }
 
   static <T extends JobParameters> CSTTransformer<T> assertPrintFilterResult(
