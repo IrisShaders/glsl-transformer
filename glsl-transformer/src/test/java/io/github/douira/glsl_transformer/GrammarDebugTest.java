@@ -23,15 +23,15 @@ public class GrammarDebugTest {
   @Test
   @Disabled
   void testParseTree() {
-    var transformer = new CSTTransformer<WrappedParameters<StringBuilder>>(false);
-    transformer.addConcurrent(new PrintTreeDebug());
+    var t = new CSTTransformer<WrappedParameters<StringBuilder>>(false);
+    t.addConcurrent(new PrintTreeDebug());
 
     Stream.of(
         TestResourceManager.getResource(FileLocation.GRAMMAR_DEBUG))
         .forEach(resource -> {
           var content = resource.content();
           var builder = new StringBuilder();
-          transformer.transform(content, new WrappedParameters<>(builder));
+          t.transform(content, new WrappedParameters<>(builder));
           System.out.println(ansi().fgBrightMagenta().bold().a(resource.getScenarioName()).reset());
           System.out.println(content);
           System.out.println(builder.toString());

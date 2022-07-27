@@ -19,9 +19,9 @@ public class CSTTransformerTestTree {
   @Test
   @SnapshotName("testParseTree")
   void testParseTree() {
-    var transformer = new CSTTransformer<WrappedParameters<StringBuilder>>(false);
-    transformer.setSLLOnly();
-    transformer.addConcurrent(new PrintTreeSnapshot());
+    var t = new CSTTransformer<WrappedParameters<StringBuilder>>(false);
+    t.setSLLOnly();
+    t.addConcurrent(new PrintTreeSnapshot());
 
     Stream.concat(Stream.of(
         TestResourceManager.getResource(FileLocation.UNIFORM_TEST),
@@ -31,7 +31,7 @@ public class CSTTransformerTestTree {
         .forEach(resource -> {
           var content = resource.content();
           var builder = new StringBuilder();
-          transformer.transform(content, new WrappedParameters<>(builder));
+          t.transform(content, new WrappedParameters<>(builder));
           expect.scenario(resource.getScenarioName())
               .toMatchSnapshot(SnapshotUtil.inputOutputSnapshot(content, builder.toString()));
         });

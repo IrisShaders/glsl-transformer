@@ -210,34 +210,34 @@ public class ExecutionPlannerTest extends TestForExecutionOrder {
 
   @Test
   void testNotCachedParameters() {
-    var transformer = new CSTTransformer<>();
-    transformer.addConcurrent(new Transformation<>() {
+    var t = new CSTTransformer<>();
+    t.addConcurrent(new Transformation<>() {
       @Override
       protected void setupGraph() {
         nextIndex++;
       }
     });
 
-    transformer.planExecutionFor(new FullyFixedJobParameters());
-    transformer.planExecutionFor(new FullyFixedJobParameters());
-    transformer.planExecutionFor(new FullyFixedJobParameters());
+    t.planExecutionFor(new FullyFixedJobParameters());
+    t.planExecutionFor(new FullyFixedJobParameters());
+    t.planExecutionFor(new FullyFixedJobParameters());
 
     assertEquals(3, nextIndex, "It should run the graph setup method during each planning run.");
   }
 
   @Test
   void testFullyCachedParameters() {
-    var transformer = new CSTTransformer<>();
-    transformer.addConcurrent(new Transformation<>() {
+    var t = new CSTTransformer<>();
+    t.addConcurrent(new Transformation<>() {
       @Override
       protected void setupGraph() {
         nextIndex++;
       }
     });
 
-    transformer.planExecutionFor(new NonFixedJobParameters());
-    transformer.planExecutionFor(new NonFixedJobParameters());
-    transformer.planExecutionFor(new NonFixedJobParameters());
+    t.planExecutionFor(new NonFixedJobParameters());
+    t.planExecutionFor(new NonFixedJobParameters());
+    t.planExecutionFor(new NonFixedJobParameters());
 
     assertEquals(1, nextIndex, "It should run the graph setup method only once.");
   }
@@ -337,13 +337,13 @@ public class ExecutionPlannerTest extends TestForExecutionOrder {
 
   @Test
   void testCustomRootTransformation() {
-    var transformer = new CSTTransformer<>(new Transformation<>() {
+    var t = new CSTTransformer<>(new Transformation<>() {
       @Override
       protected void setupGraph() {
         nextIndex++;
       }
     });
-    transformer.planExecutionFor(null);
+    t.planExecutionFor(null);
     assertEquals(1, nextIndex, "It should run the custom transformation's graph setup");
 
   }

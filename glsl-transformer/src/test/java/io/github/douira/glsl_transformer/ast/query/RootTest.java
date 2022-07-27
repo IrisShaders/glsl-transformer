@@ -33,10 +33,10 @@ public class RootTest extends TestWithASTTransformer {
 
   @Test
   void testReplace() {
-    transformer.setTransformation((tree, root) -> {
+    t.setTransformation((tree, root) -> {
       root.process("foo",
           id -> id.getParent().replaceByAndDelete(
-              transformer.parseExpression(tree, "bam + spam")));
+              t.parseExpression(tree, "bam + spam")));
     });
     assertTransform(
         "int x = bam + spam + bar + fooo; ",
@@ -45,10 +45,10 @@ public class RootTest extends TestWithASTTransformer {
 
   @Test
   void testReplaceMultiple() {
-    transformer.setTransformation((tree, root) -> {
+    t.setTransformation((tree, root) -> {
       root.process(root.identifierIndex.prefixQueryFlat("f"),
           id -> id.getParent().replaceByAndDelete(
-              transformer.parseExpression(tree, "bam + spam")));
+              t.parseExpression(tree, "bam + spam")));
     });
     assertTransform(
         "int x = bam + spam + bar + bam + spam; ",
@@ -57,17 +57,17 @@ public class RootTest extends TestWithASTTransformer {
 
   @Test
   void testNullReplaceStream() {
-    transformer.setTransformation((tree, root) -> {
+    t.setTransformation((tree, root) -> {
       root.process(Stream.of((Identifier) null), id -> {
       });
     });
-    assertDoesNotThrow(() -> transformer.transform(""));
+    assertDoesNotThrow(() -> t.transform(""));
   }
 
   @Test
   void testReplaceReferenceExpressionsPrefix() {
-    transformer.setTransformation((tree, root) -> {
-      root.replaceReferenceExpressions(transformer,
+    t.setTransformation((tree, root) -> {
+      root.replaceReferenceExpressions(t,
           root.identifierIndex.prefixQueryFlat("f"),
           "bam + spam");
     });
@@ -78,8 +78,8 @@ public class RootTest extends TestWithASTTransformer {
 
   @Test
   void testReplaceReferenceExpressionsExact() {
-    transformer.setTransformation((tree, root) -> {
-      root.replaceReferenceExpressions(transformer,
+    t.setTransformation((tree, root) -> {
+      root.replaceReferenceExpressions(t,
           "foo",
           "bam + spam");
     });
@@ -91,8 +91,8 @@ public class RootTest extends TestWithASTTransformer {
   @Test
   void testHintedMatcherProcessing() {
     var matcher = new HintedMatcher<>("foo[1]", Matcher.expressionPattern, "foo");
-    transformer.setTransformation((tree, root) -> {
-      root.replaceExpressionMatches(transformer, matcher, "bar + 4");
+    t.setTransformation((tree, root) -> {
+      root.replaceExpressionMatches(t, matcher, "bar + 4");
     });
     assertTransform(
         "int foo = bam + bar + 4 + foo[4]; ",
@@ -102,8 +102,8 @@ public class RootTest extends TestWithASTTransformer {
   @Test
   void testHintedMatcherProcessingHintSpecificity() {
     var matcher = new HintedMatcher<>("foo[1]", Matcher.expressionPattern, "bar");
-    transformer.setTransformation((tree, root) -> {
-      root.replaceExpressionMatches(transformer, matcher, "bar + 4");
+    t.setTransformation((tree, root) -> {
+      root.replaceExpressionMatches(t, matcher, "bar + 4");
     });
     assertTransform(
         "int foo = bam + foo[1] + foo[4]; ",
@@ -113,8 +113,8 @@ public class RootTest extends TestWithASTTransformer {
   @Test
   void testAutoHintedMatcherProcessing() {
     var matcher = new AutoHintedMatcher<>("foo[1]", Matcher.expressionPattern);
-    transformer.setTransformation((tree, root) -> {
-      root.replaceExpressionMatches(transformer, matcher, "bar + 4");
+    t.setTransformation((tree, root) -> {
+      root.replaceExpressionMatches(t, matcher, "bar + 4");
     });
     assertTransform(
         "int foo = bam + bar + 4 + foo[4]; ",
@@ -124,8 +124,8 @@ public class RootTest extends TestWithASTTransformer {
   @Test
   void testAutoHintedMatcherProcessingWildcard() {
     var matcher = new AutoHintedMatcher<>("a[___f + 5]", Matcher.expressionPattern, "___");
-    transformer.setTransformation((tree, root) -> {
-      root.replaceExpressionMatches(transformer, matcher, "bar + 4");
+    t.setTransformation((tree, root) -> {
+      root.replaceExpressionMatches(t, matcher, "bar + 4");
     });
     assertEquals("a", matcher.getHint());
     assertTransform(
