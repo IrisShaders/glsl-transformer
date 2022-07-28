@@ -282,9 +282,9 @@ public interface ASTVisitor<R> extends GeneralASTVisitor<R> {
   }
 
   default R visitLiteralExpression(LiteralExpression node) {
-    var result = visitData(node.literalType);
+    var result = visitData(node.getType());
     result = visitData(result, node.getNumber());
-    return node.isInteger() ? visitData(result, node.integerFormat) : result;
+    return node.isInteger() ? visitData(result, node.getIntegerFormat()) : result;
   }
 
   default R visitStatement(Statement node) {

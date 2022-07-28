@@ -62,9 +62,7 @@ public class ASTTransformerTest extends TestWithASTTransformer {
   void testNodeQuery() {
     t.setTransformation((tree, root) -> {
       root.nodeIndex.get(LiteralExpression.class)
-          .stream().forEach(literal -> {
-            literal.integerValue++;
-          });
+          .stream().forEach(literal -> literal.changeInteger(literal.getInteger() + 1));
     });
     assertTransform(
         "int a = 2, b = 3, c = 4; ",
@@ -85,7 +83,7 @@ public class ASTTransformerTest extends TestWithASTTransformer {
         }
       });
       root.nodeIndex.get(LiteralExpression.class)
-          .stream().forEach(literal -> literal.integerValue++);
+          .stream().forEach(literal -> literal.changeInteger(literal.getInteger() + 1));
     });
     assertTransform(
         "int a = 2, b = 3, c = 4, 2; ",
@@ -102,7 +100,7 @@ public class ASTTransformerTest extends TestWithASTTransformer {
         var toReplace = new ArrayList<LiteralExpression>();
         for (var node : root.nodeIndex
             .get(LiteralExpression.class)) {
-          if (node.integerValue == 3) {
+          if (node.getInteger() == 3) {
             toReplace.add(node);
           }
         }
@@ -157,7 +155,7 @@ public class ASTTransformerTest extends TestWithASTTransformer {
       for (var node : root.nodeIndex
           .getOne(SequenceExpression.class).expressions) {
         if (node instanceof LiteralExpression literalExpression) {
-          if (literalExpression.integerValue == 3
+          if (literalExpression.getInteger() == 3
               && literalExpression.getAncestor(ExternalDeclaration.class) == firstDeclaration) {
             toMove.add(literalExpression);
           }

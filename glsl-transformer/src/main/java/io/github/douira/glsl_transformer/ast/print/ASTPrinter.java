@@ -241,20 +241,20 @@ public abstract class ASTPrinter extends ASTPrinterBase {
   public Void visitLiteralExpression(LiteralExpression node) {
     // literal expressions are always positive, negation is handled with a negation
     // expression
-    switch (node.literalType.getNumberType()) {
+    switch (node.getNumberType()) {
       case BOOLEAN:
-        emitLiteral(node.booleanValue ? "true" : "false");
+        emitLiteral(node.getBoolean() ? "true" : "false");
         break;
       case SIGNED_INTEGER:
       case UNSIGNED_INTEGER:
         int radix = node.getIntegerRadix();
-        var intString = Long.toString(node.integerValue, radix);
+        var intString = Long.toString(node.getInteger(), radix);
         if (radix == 16) {
           intString = "0x" + intString;
         } else if (radix == 8) {
           intString = "0" + intString;
         }
-        switch (node.literalType) {
+        switch (node.getType()) {
           case INT16:
             emitLiteral(intString + "s");
             break;
@@ -274,22 +274,22 @@ public abstract class ASTPrinter extends ASTPrinterBase {
             emitLiteral(intString + "ul");
             break;
           default:
-            throw new IllegalStateException("Unexpected int type: " + node.literalType);
+            throw new IllegalStateException("Unexpected int type: " + node.getType());
         }
         break;
       case FLOATING_POINT:
-        switch (node.literalType) {
+        switch (node.getType()) {
           case FLOAT16:
-            emitLiteral(Double.toString(node.floatingValue) + "hf");
+            emitLiteral(Double.toString(node.getFloating()) + "hf");
             break;
           case FLOAT32:
-            emitLiteral(Double.toString(node.floatingValue));
+            emitLiteral(Double.toString(node.getFloating()));
             break;
           case FLOAT64:
-            emitLiteral(Double.toString(node.floatingValue) + "lf");
+            emitLiteral(Double.toString(node.getFloating()) + "lf");
             break;
           default:
-            throw new IllegalStateException("Unexpected float type: " + node.literalType);
+            throw new IllegalStateException("Unexpected float type: " + node.getType());
         }
         break;
     }

@@ -243,7 +243,7 @@ public class MatcherTest extends TestWithASTTransformer {
               if (!literalExpression.isInteger()) {
                 return false;
               }
-              long index = literalExpression.integerValue;
+              long index = literalExpression.getInteger();
               return index >= 0 && index < 8;
             });
       }
@@ -272,7 +272,7 @@ public class MatcherTest extends TestWithASTTransformer {
               if (!literalExpression.isInteger()) {
                 return false;
               }
-              long index = literalExpression.integerValue;
+              long index = literalExpression.getInteger();
               return index >= 0 && index < 8;
             });
       }
