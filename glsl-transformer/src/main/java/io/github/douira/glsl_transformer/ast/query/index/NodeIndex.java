@@ -18,7 +18,7 @@ import io.github.douira.glsl_transformer.ast.query.Root;
  * has the right types of nodes.
  */
 public class NodeIndex implements Index<ASTNode> {
-  public final Map<Class<? extends ASTNode>, Set<? extends ASTNode>> index = new HashMap<>();
+  public final Map<Class<ASTNode>, Set<ASTNode>> index = new HashMap<>();
   public final Supplier<Set<ASTNode>> bucketConstructor;
 
   public NodeIndex(Supplier<Set<ASTNode>> bucketConstructor) {
@@ -44,10 +44,11 @@ public class NodeIndex implements Index<ASTNode> {
   @Override
   @SuppressWarnings("unchecked")
   public void add(ASTNode node) {
-    var set = (Set<ASTNode>) index.get(node.getClass());
+    var clazz = (Class<ASTNode>) node.getClass();
+    var set = index.get(clazz);
     if (set == null) {
       set = bucketConstructor.get();
-      index.put(node.getClass(), set);
+      index.put(clazz, set);
     }
     set.add(node);
   }
@@ -58,9 +59,8 @@ public class NodeIndex implements Index<ASTNode> {
    * called by {@link Root}.
    */
   @Override
-  @SuppressWarnings("unchecked")
   public void remove(ASTNode node) {
-    var set = (Set<ASTNode>) index.get(node.getClass());
+    var set = index.get(node.getClass());
     if (set == null) {
       return;
     }
@@ -167,7 +167,6 @@ public class NodeIndex implements Index<ASTNode> {
    * 
    * @param other the other index to merge
    */
-  @SuppressWarnings("unchecked")
   public void merge(NodeIndex other) {
     for (var entry : other.index.entrySet()) {
       var set = (Set<ASTNode>) index.get(entry.getKey());
