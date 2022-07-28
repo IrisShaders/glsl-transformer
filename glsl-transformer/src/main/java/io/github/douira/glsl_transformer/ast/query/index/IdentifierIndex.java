@@ -6,6 +6,8 @@ import java.util.stream.Stream;
 import org.apache.commons.collections4.trie.PatriciaTrie;
 
 import io.github.douira.glsl_transformer.ast.node.Identifier;
+import io.github.douira.glsl_transformer.ast.node.basic.ASTNode;
+import io.github.douira.glsl_transformer.ast.node.expression.ReferenceExpression;
 
 /**
  * Indexes identifiers based on their content and enabled fast string queries.
@@ -61,6 +63,18 @@ public class IdentifierIndex<I extends PatriciaTrie<Set<Identifier>>>
   public Stream<Identifier> getStream(String k) {
     var result = index.get(k);
     return result == null ? Stream.empty() : result.stream();
+  }
+
+  public <T extends ASTNode> Stream<T> getAncestors(String k, Class<T> clazz) {
+    return getStream(k)
+        .map(id -> id.getAncestor(clazz))
+        .filter(Objects::nonNull);
+  }
+
+  public Stream<ReferenceExpression> getReferenceExpressions(String k) {
+    return getStream(k)
+        .map(id -> id.getAncestor(ReferenceExpression.class))
+        .filter(Objects::nonNull);
   }
 
   public Identifier getOne(String k) {
