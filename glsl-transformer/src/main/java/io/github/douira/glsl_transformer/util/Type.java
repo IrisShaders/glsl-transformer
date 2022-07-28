@@ -253,6 +253,22 @@ public enum Type implements TokenTyped {
     return dimensions;
   }
 
+  public int getDimension() {
+    return dimensions.length;
+  }
+
+  public boolean isScalar() {
+    return dimensions == SCALAR_DIMENSIONS;
+  }
+
+  public boolean isVector() {
+    return dimensions.length == 1;
+  }
+
+  public boolean isMatrix() {
+    return dimensions.length == 2;
+  }
+
   /**
    * Returns the bit depth.
    * 

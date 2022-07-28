@@ -249,8 +249,7 @@ public class ASTBuilder extends GLSLParserBaseVisitor<ASTNode> {
     var tokenContent = content.getText();
     switch (literalType.getNumberType()) {
       case BOOLEAN:
-        return new LiteralExpression(
-            literalType, tokenContent.equals("true"));
+        return new LiteralExpression(tokenContent.equals("true"));
       case SIGNED_INTEGER:
       case UNSIGNED_INTEGER:
         var intMatcher = intExtractor.matcher(tokenContent);

@@ -1,45 +1,58 @@
 package io.github.douira.glsl_transformer.ast.node.expression;
 
+import java.util.Objects;
+
 import io.github.douira.glsl_transformer.ast.traversal.*;
 import io.github.douira.glsl_transformer.util.Type;
 import io.github.douira.glsl_transformer.util.Type.NumberType;
 
 public class LiteralExpression extends TerminalExpression {
-  public Type literalType;
-  public boolean booleanValue;
-  public long integerValue;
-  public IntegerFormat integerFormat;
-  public double floatingValue;
+  private Type literalType;
+  private boolean booleanValue;
+  private long integerValue;
+  private IntegerFormat integerFormat;
+  private double floatingValue;
 
   public enum IntegerFormat {
-    DECIMAL,
-    HEXADECIMAL,
-    OCTAL
+    DECIMAL(10),
+    HEXADECIMAL(16),
+    OCTAL(8);
+
+    public final int radix;
+
+    IntegerFormat(int radix) {
+      this.radix = radix;
+    }
   }
 
-  public LiteralExpression(Type literalType, boolean booleanValue) {
-    this.literalType = literalType;
-    this.booleanValue = booleanValue;
+  public LiteralExpression(boolean booleanValue) {
+    setBoolean(booleanValue);
   }
 
   public LiteralExpression(Type literalType, long integerValue) {
-    this(literalType, integerValue, IntegerFormat.DECIMAL);
+    setInteger(literalType, integerValue);
   }
 
   public LiteralExpression(Type literalType, long integerValue, IntegerFormat integerFormat) {
-    this.literalType = literalType;
-    this.integerValue = integerValue;
-    this.integerFormat = integerFormat;
+    setInteger(literalType, integerValue, integerFormat);
   }
 
   public LiteralExpression(Type literalType, double floatingValue) {
-    this.literalType = literalType;
-    this.floatingValue = floatingValue;
+    setFloating(literalType, floatingValue);
+  }
+
+  private void validateLiteralType(Type type) {
+    if (type == null) {
+      throw new NullPointerException("Literal type cannot be null!");
+    }
+    if (!type.isScalar()) {
+      throw new IllegalArgumentException("Literal type must be a scalar!");
+    }
   }
 
   public Number getNumber() {
     var bitDepth = literalType.getBitDepth();
-    switch (literalType.getNumberType()) {
+    switch (getNumberType()) {
       case BOOLEAN:
         return booleanValue ? 1 : 0;
       case SIGNED_INTEGER:
@@ -66,10 +79,128 @@ public class LiteralExpression extends TerminalExpression {
     }
   }
 
+  public Type getType() {
+    return literalType;
+  }
+
+  public Type.NumberType getNumberType() {
+    return literalType.getNumberType();
+  }
+
+  public boolean getBoolean() {
+    return booleanValue;
+  }
+
+  public void setBoolean(boolean booleanValue) {
+    this.booleanValue = booleanValue;
+    this.integerFormat = null;
+    this.integerValue = 0;
+    this.floatingValue = 0;
+    this.literalType = Type.BOOL;
+  }
+
+  public void changeBoolean(boolean booleanValue) {
+    if (!isBoolean()) {
+      throw new IllegalStateException("Literal type must be a boolean!");
+    }
+    this.booleanValue = booleanValue;
+  }
+
+  public long getInteger() {
+    return integerValue;
+  }
+
+  public void setInteger(Type integerType, long integerValue, IntegerFormat integerFormat) {
+    Objects.requireNonNull(integerFormat, "Integer format cannot be null!");
+    validateLiteralType(integerType);
+    var numberType = integerType.getNumberType();
+    if (numberType != NumberType.SIGNED_INTEGER && numberType != NumberType.UNSIGNED_INTEGER) {
+      throw new IllegalArgumentException("Literal type must be an integer!");
+    }
+    if (integerValue < 0 && numberType == NumberType.UNSIGNED_INTEGER) {
+      throw new IllegalArgumentException("Unsigned integer cannot be negative!");
+    }
+    this.integerValue = integerValue;
+    this.booleanValue = false;
+    this.integerFormat = integerFormat;
+    this.floatingValue = 0;
+    this.literalType = integerType;
+  }
+
+  public void setInteger(Type integerType, long integerValue) {
+    setInteger(integerType, integerValue, IntegerFormat.DECIMAL);
+  }
+
+  public void setInteger(int integerValue) {
+    setInteger(Type.INT32, integerValue);
+  }
+
+  public void changeInteger(long integerValue) {
+    if (!isInteger()) {
+      throw new IllegalStateException("Literal type must be an integer!");
+    }
+    this.integerValue = integerValue;
+  }
+
+  public IntegerFormat getIntegerFormat() {
+    return integerFormat;
+  }
+
+  public int getIntegerRadix() {
+    return integerFormat.radix;
+  }
+
+  public void setIntegerFormat(IntegerFormat integerFormat) {
+    if (!isInteger()) {
+      throw new IllegalStateException("Literal type must be an integer!");
+    }
+    this.integerFormat = integerFormat;
+  }
+
+  public double getFloating() {
+    return floatingValue;
+  }
+
+  public void setFloating(Type floatingType, double floatingValue) {
+    validateLiteralType(floatingType);
+    if (floatingType.getNumberType() != NumberType.FLOATING_POINT) {
+      throw new IllegalArgumentException("Literal type must be a floating point!");
+    }
+    this.floatingValue = floatingValue;
+    this.booleanValue = false;
+    this.integerValue = 0;
+    this.integerFormat = null;
+    this.literalType = floatingType;
+  }
+
+  public void setFloating(float floatingValue) {
+    setFloating(Type.FLOAT32, floatingValue);
+  }
+
+  public void changeFloating(double floatingValue) {
+    if (!isFloatingPoint()) {
+      throw new IllegalStateException("Literal type must be a floating point!");
+    }
+    this.floatingValue = floatingValue;
+  }
+
+  public boolean isBoolean() {
+    return getNumberType() == NumberType.BOOLEAN;
+  }
+
+  public boolean isInteger() {
+    return getNumberType() == NumberType.SIGNED_INTEGER
+        || getNumberType() == NumberType.UNSIGNED_INTEGER;
+  }
+
+  public boolean isFloatingPoint() {
+    return getNumberType() == NumberType.FLOATING_POINT;
+  }
+
   public boolean isPositive() {
-    switch (literalType.getNumberType()) {
+    switch (getNumberType()) {
       case BOOLEAN:
-        return true;
+        return booleanValue;
       case SIGNED_INTEGER:
       case UNSIGNED_INTEGER:
         return integerValue > 0l;
@@ -81,9 +212,9 @@ public class LiteralExpression extends TerminalExpression {
   }
 
   public boolean isNonZero() {
-    switch (literalType.getNumberType()) {
+    switch (getNumberType()) {
       case BOOLEAN:
-        return booleanValue;
+        return true;
       case SIGNED_INTEGER:
       case UNSIGNED_INTEGER:
         return integerValue != 0l;
@@ -92,27 +223,6 @@ public class LiteralExpression extends TerminalExpression {
       default:
         throw new IllegalArgumentException("Unsupported literal type: " + literalType);
     }
-  }
-
-  public int getIntegerRadix() {
-    return integerFormat == IntegerFormat.HEXADECIMAL
-        ? 16
-        : integerFormat == IntegerFormat.OCTAL
-            ? 8
-            : 10;
-  }
-
-  public boolean isBoolean() {
-    return literalType.getNumberType() == NumberType.BOOLEAN;
-  }
-
-  public boolean isInteger() {
-    return literalType.getNumberType() == NumberType.SIGNED_INTEGER
-        || literalType.getNumberType() == NumberType.UNSIGNED_INTEGER;
-  }
-
-  public boolean isFloatingPoint() {
-    return literalType.getNumberType() == NumberType.FLOATING_POINT;
   }
 
   @Override
