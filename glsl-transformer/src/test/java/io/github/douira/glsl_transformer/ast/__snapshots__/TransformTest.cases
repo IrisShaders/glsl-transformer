@@ -1,0 +1,46 @@
+§uniformRemoval normal:
+layout(std140) uniform UniformBlock {
+	vec4 foo;
+	vec3 bar;
+	float zag, zim;
+	float roo, raa;
+	ivec3 gan;
+};
+uniform OtherBlock { vec4 foo; };
+uniform vec4 foo;
+uniform vec4 rau;
+uniform float zim;
+uniform vec3 bar, baz = 4;
+uniform float roo, raa;
+uniform bool gan;
+layout(location = 0) uniform float zag;
+void runStuff(vec3 foo) {
+	foo = vec3(1);
+}
+void main() {
+	runStuff(foo.xyz);
+	runStuff(bar);
+	int foo;
+	foo = zag;
+}
+===
+layout(std140) uniform UniformBlock {
+	vec4 foo;
+	vec3 bar;
+	float zag, zim;
+	float roo, raa;
+	ivec3 gan;
+};
+uniform OtherBlock { vec4 foo; };
+uniform vec4 rau;
+uniform vec3 baz = 4;
+void runStuff(vec3 foo) {
+	foo = vec3(1);
+}
+void main() {
+	runStuff(foo.xyz);
+	runStuff(bar);
+	int foo;
+	foo = zag;
+}
+
