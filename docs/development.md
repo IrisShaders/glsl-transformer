@@ -64,4 +64,4 @@ fs.readFileSync("split").toString().split("//split_marker").map(str => str.trim(
 ```
 
 ### TODO
-- Operator precedence isn't respected by the printer when printing nodes. Parentheses are only inserted if there is an actual grouping expression. (Are grouping expressions necessary at all if the printer automatically inserts parenthesis only exactly where necessary based on the expression tree?)
+- 
