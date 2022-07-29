@@ -47,14 +47,13 @@ public class SuperclassNodeIndex extends NodeIndex {
       var set = (Set<ASTNode>) index.get(clazz);
       if (set == null) {
         set = bucketConstructor.get();
-        index.put(clazz, set);
+        index.put((Class<ASTNode>)clazz, set);
       }
       set.add(toAdd);
     });
   }
 
   @Override
-  @SuppressWarnings("unchecked")
   public void remove(ASTNode node) {
     iterateClasses(node, (clazz, toAdd) -> {
       var set = (Set<ASTNode>) index.get(clazz);
