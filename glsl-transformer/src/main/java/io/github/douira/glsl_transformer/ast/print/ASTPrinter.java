@@ -650,7 +650,9 @@ public abstract class ASTPrinter extends ASTPrinterBase {
   @Override
   public Void visitSelectionStatement(SelectionStatement node) {
     for (int i = 0, size = node.statements.size(); i < size; i++) {
-      compactCommonNewline(CompoundStatement.class);
+      if (i > 0) {
+        compactCommonNewline(CompoundStatement.class);
+      }
       var condition = node.conditions.get(i);
       if (i > 0) {
         emitType(GLSLLexer.ELSE);

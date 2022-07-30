@@ -176,6 +176,54 @@ if (a && b) {
 if (a) 1;
 
 §testReprint statement:
+{
+	if (a) 1;
+	if (a) 1;
+}
+
+§testReprint statement:
+{
+	if (a) 1;
+	if (a) 1;
+	if (a) 1;
+}
+
+§testReprint statement:
+{
+	if (a) {
+		1;
+	}
+	if (a) {
+		1;
+	}
+}
+
+§testReprint statement:
+{
+	if (a) {
+		1;
+	}
+	if (a) {
+		1;
+	}
+	if (a) {
+		1;
+	}
+}
+
+§testReprint statement:
+{
+	1;
+	if (a) {
+		1;
+	}
+	2;
+	if (a) {
+		1;
+	}
+}
+
+§testReprint statement:
 if (a) 1;
 else 2;
 
