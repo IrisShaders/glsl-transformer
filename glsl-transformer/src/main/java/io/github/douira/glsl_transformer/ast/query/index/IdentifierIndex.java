@@ -86,6 +86,35 @@ public class IdentifierIndex<I extends PatriciaTrie<Set<Identifier>>>
     return result != null && !result.isEmpty();
   }
 
+  /**
+   * Renames all identifiers with one name to have a new name. Since this deals
+   * only with identifiers, this can be done by moving the set of identifiers
+   * around as a whole.
+   * 
+   * @param oldName the old name
+   * @param newName the new name
+   */
+  public void rename(String oldName, String newName) {
+    if (oldName.equals(newName)) {
+      return;
+    }
+    Identifier.validateContents(newName);
+    var set = index.get(oldName);
+    if (set == null) {
+      return;
+    }
+    index.remove(oldName);
+    var existing = index.get(newName);
+    if (existing == null) {
+      index.put(newName, set);
+    } else {
+      existing.addAll(set);
+    }
+    for (var id : set) {
+      id.setNameInternal(newName);
+    }
+  }
+
   public SortedMap<String, Set<Identifier>> prefixMap(String key) {
     return index.prefixMap(key);
   }

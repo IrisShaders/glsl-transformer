@@ -66,3 +66,4 @@ fs.readFileSync("split").toString().split("//split_marker").map(str => str.trim(
 ### TODO
 - Add wildcard matching for any number of items in an item list
 - Add matching for ancestor that is part of a specific branch of a type of class (ancestor matching where the ancestor of the given type has to have been reached through a specific getter method of that ancestor or the direct child of the matched ancestor has to be of a specific type to avoid complications when the "branch" to require is a list)
+- More powerful string based wildcards that can match classes maybe
