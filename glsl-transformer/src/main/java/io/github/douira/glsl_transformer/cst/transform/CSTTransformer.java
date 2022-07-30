@@ -1,13 +1,17 @@
 package io.github.douira.glsl_transformer.cst.transform;
 
+import java.util.function.Function;
+
 import org.antlr.v4.runtime.*;
 
 import io.github.douira.glsl_transformer.*;
+import io.github.douira.glsl_transformer.GLSLParser.TranslationUnitContext;
 import io.github.douira.glsl_transformer.basic.*;
 import io.github.douira.glsl_transformer.basic.EnhancedParser.ParsingStrategy;
 import io.github.douira.glsl_transformer.cst.print.PrintVisitor;
 import io.github.douira.glsl_transformer.cst.token_filter.TokenFilter;
 import io.github.douira.glsl_transformer.job_parameter.*;
+import io.github.douira.glsl_transformer.tree.ExtendedContext;
 
 /**
  * Implements the execution planner by providing the boilerplate code for
@@ -92,11 +96,6 @@ public class CSTTransformer<T extends JobParameters> extends ExecutionPlanner<T>
   }
 
   @Override
-  public EnhancedParser getInternalParser() {
-    return parser;
-  }
-
-  @Override
   public void setParsingStrategy(ParsingStrategy parsingStrategy) {
     parser.setParsingStrategy(parsingStrategy);
   }
@@ -131,12 +130,34 @@ public class CSTTransformer<T extends JobParameters> extends ExecutionPlanner<T>
     }
   }
 
+  protected TranslationUnitContext parseTranslationUnit(String str) {
+    return parser.parse(str);
+  }
+
+  protected <RuleType extends ExtendedContext> RuleType parse(String str, Function<GLSLParser, RuleType> parseMethod) {
+    return parser.parse(str, parseMethod);
+  }
+
+  protected <RuleType extends ExtendedContext> RuleType parse(String str, ExtendedContext parent,
+      Function<GLSLParser, RuleType> parseMethod) {
+    return parser.parse(str, parent, parseMethod);
+  }
+
+  protected <RuleType extends ExtendedContext> RuleType parse(IntStream stream, ExtendedContext parent,
+      Function<GLSLParser, RuleType> parseMethod) {
+    return parser.parse(stream, parent, parseMethod);
+  }
+
+  protected BufferedTokenStream getTokenStream() {
+    return parser.getTokenStream();
+  }
+
   @Override
   public String transformBare(String str) throws RecognitionException {
     setTokenFilterPlanner(printTokenFilter);
     setTokenFilterPlanner(parseTokenFilter);
-    var tree = parser.parse(CharStreams.fromString(str), null, GLSLParser::translationUnit);
-    var tokenStream = parser.getTokenStream();
+    var tree = parseTranslationUnit(str);
+    var tokenStream = getTokenStream();
     transformTree(tree, tokenStream);
     return PrintVisitor.printTree(tokenStream, tree, printTokenFilter);
   }

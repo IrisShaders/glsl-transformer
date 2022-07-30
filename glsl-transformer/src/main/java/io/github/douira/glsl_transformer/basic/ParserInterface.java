@@ -12,8 +12,6 @@ public interface ParserInterface {
 
   GLSLParser getParser();
 
-  EnhancedParser getInternalParser();
-
   void setParsingStrategy(ParsingStrategy parsingStrategy);
 
   void setSLLOnly();

@@ -94,11 +94,6 @@ public class ASTTransformer<T extends JobParameters> implements ParameterizedTra
   }
 
   @Override
-  public EnhancedParser getInternalParser() {
-    return parser;
-  }
-
-  @Override
   public void setParsingStrategy(ParsingStrategy parsingStrategy) {
     parser.setParsingStrategy(parsingStrategy);
   }

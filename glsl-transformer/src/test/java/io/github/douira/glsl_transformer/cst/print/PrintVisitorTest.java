@@ -2,10 +2,9 @@ package io.github.douira.glsl_transformer.cst.print;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-import org.antlr.v4.runtime.*;
+import org.antlr.v4.runtime.RecognitionException;
 import org.junit.jupiter.api.Test;
 
-import io.github.douira.glsl_transformer.GLSLParser;
 import io.github.douira.glsl_transformer.GLSLParser.TranslationUnitContext;
 import io.github.douira.glsl_transformer.cst.node.*;
 import io.github.douira.glsl_transformer.cst.transform.*;
@@ -40,9 +39,8 @@ public class PrintVisitorTest extends TestWithResource {
     var modifiedManager = new CSTTransformer<NonFixedJobParameters>() {
       @Override
       public String transform(String str, NonFixedJobParameters parameters) throws RecognitionException {
-        var tree = getInternalParser().parse(
-            CharStreams.fromString(str), null, GLSLParser::translationUnit);
-        var tokenStream = getInternalParser().getTokenStream();
+        var tree = parseTranslationUnit(str);
+        var tokenStream = getTokenStream();
         transformTree(tree, tokenStream);
         var printed = PrintVisitor.printTree(tokenStream, tree);
         return printed;
