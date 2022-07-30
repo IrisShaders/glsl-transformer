@@ -94,6 +94,7 @@ public class IdentifierIndex<I extends PatriciaTrie<Set<Identifier>>>
    * @param oldName the old name
    * @param newName the new name
    */
+  @SuppressWarnings("deprecation")
   public void rename(String oldName, String newName) {
     if (oldName.equals(newName)) {
       return;
