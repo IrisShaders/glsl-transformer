@@ -313,9 +313,4 @@ public class EnhancedParser implements ParserInterface {
     node.setParent(parent);
     return node;
   }
-
-  @Override
-  public EnhancedParser getInternalParser() {
-    return this;
-  }
 }

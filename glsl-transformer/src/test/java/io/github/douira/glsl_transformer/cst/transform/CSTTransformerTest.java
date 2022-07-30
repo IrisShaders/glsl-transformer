@@ -144,18 +144,4 @@ public class CSTTransformerTest extends TestWithResource {
           return result;
         }), "It should return the value of the supplier function");
   }
-
-  /**
-   * Example transformation that is tested here. Requirements (not fully
-   * specified):
-   * - remove existing uniform declarations
-   * - add const declarations
-   * - add uniform blocks
-   */
-  @Disabled
-  @Test
-  @SnapshotName("testUniformTransform")
-  void testUniformTransform() {
-    // TODO
-  }
 }
