@@ -261,19 +261,8 @@ public class Root {
    * @param oldName The old name
    * @param newName The new name
    */
-  @SuppressWarnings("unchecked")
   public void rename(String oldName, String newName) {
-    // rename all uses a fast path without a lambda
-    ensureEmptyNodeList();
-    var set = identifierIndex.get(oldName);
-    if (set == null) {
-      return;
-    }
-    var identifierList = (List<Identifier>) nodeList;
-    identifierList.addAll(set);
-    for (var identifier : identifierList) {
-      identifier.setName(newName);
-    }
+    identifierIndex.rename(oldName, newName);
   }
 
   /**
@@ -316,8 +305,8 @@ public class Root {
    * reference expression are not replaced since an expression would be impossible
    * as a replacement.
    * 
-   * @param t       The AST transformer
-   * @param name              The name of the identifiers to target
+   * @param t          The AST transformer
+   * @param name       The name of the identifiers to target
    * @param expression The content of the replacement expression
    */
   public void replaceReferenceExpressions(
@@ -334,8 +323,8 @@ public class Root {
    * Replaces all reference expressions containing the given identifiers from the
    * given stream with the given replacement expression.
    * 
-   * @param t       The AST transformer
-   * @param targets           The stream of identifiers to target
+   * @param t          The AST transformer
+   * @param targets    The stream of identifiers to target
    * @param expression The content of the replacement expression
    */
   public void replaceReferenceExpressions(
@@ -356,8 +345,8 @@ public class Root {
    * Replaces all expressions from the given stream with the given replacement
    * expression.
    * 
-   * @param t       The AST transformer
-   * @param targets           The stream of expressions to target
+   * @param t          The AST transformer
+   * @param targets    The stream of expressions to target
    * @param expression The content of the replacement expression
    */
   public void replaceExpressions(
@@ -375,8 +364,8 @@ public class Root {
    * expression but without storing the targets in an intermediary list under the
    * assumption that this list will not be modified by the replacement.
    * 
-   * @param t       The AST transformer
-   * @param targets           The list of expressions to target
+   * @param t          The AST transformer
+   * @param targets    The list of expressions to target
    * @param expression The content of the replacement expression
    */
   public static void replaceExpressionsConcurrent(

@@ -31,7 +31,11 @@ public class Identifier extends ASTNode {
     getRoot().identifierIndex.add(this);
   }
 
-  private void validateContents(String str) {
+  public void setNameInternal(String name) {
+    this.name = name;
+  }
+
+  public static final void validateContents(String str) {
     // verify identifier contents to be only a-z, A-Z, 0-9 and _
     // and does not start with a digit
     if (str.length() == 0) {
