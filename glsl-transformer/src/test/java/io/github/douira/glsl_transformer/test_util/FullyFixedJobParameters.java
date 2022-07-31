@@ -12,7 +12,7 @@ public class FullyFixedJobParameters extends JobParameters {
   private Object tag = new Object();
 
   @Override
-  public boolean equals(JobParameters other) {
+  public boolean equals(Object other) {
     return this == other;
   }
 
