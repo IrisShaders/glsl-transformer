@@ -435,6 +435,17 @@ public class Root {
     return !targets.isEmpty();
   }
 
+  /**
+   * Processes all matches of nodes from the given stream matched with the given
+   * matcher.
+   * 
+   * @param <T>                 The type of the matched nodes
+   * @param t                   The AST transformer
+   * @param matchTargetChildren The stream of nodes to match
+   * @param matcher             The matcher to match the nodes with
+   * @param replacer            The consumer to process the matched nodes with
+   * @return Whether anything was processed
+   */
   public <T extends ASTNode> boolean processMatches(
       ASTTransformer<?> t,
       Stream<? extends ASTNode> matchTargetChildren,
@@ -448,21 +459,35 @@ public class Root {
         replacer);
   }
 
-  public <T extends ASTNode> boolean processMatches(
-      ASTTransformer<?> t,
-      String matchHint,
-      Matcher<T> matcher,
-      Consumer<? super T> replacer) {
-    return processMatches(t, identifierIndex.getStream(matchHint), matcher, replacer);
-  }
-
+  /**
+   * Processes all matches of nodes in the tree that match the given hinted
+   * matcher. The hint is used to identify the nodes to match.
+   * 
+   * @param <T>           The type of the matched nodes
+   * @param t             The AST transformer
+   * @param hintedMatcher The matcher to match the nodes with
+   * @param replacer      The consumer to process the matched nodes with
+   * @return Whether anything was processed
+   */
   public <T extends ASTNode> boolean processMatches(
       ASTTransformer<?> t,
       HintedMatcher<T> hintedMatcher,
       Consumer<? super T> replacer) {
-    return processMatches(t, hintedMatcher.getHint(), hintedMatcher, replacer);
+    return processMatches(t,
+        identifierIndex.getStream(hintedMatcher.getHint()), hintedMatcher, replacer);
   }
 
+  /**
+   * Replaces expressions from the given stream that match the given matcher with
+   * new expressions created from the given string.
+   * 
+   * @param <T>                 The type of the matched expression nodes
+   * @param t                   The AST transformer
+   * @param matchTargetChildren The stream of nodes to match
+   * @param matcher             The matcher to match the nodes with
+   * @param expression          The content of the replacement expression
+   * @return Whether anything was processed
+   */
   public <T extends Expression> boolean replaceExpressionMatches(
       ASTTransformer<?> t,
       Stream<? extends ASTNode> matchTargetChildren,
@@ -477,18 +502,21 @@ public class Root {
         expression);
   }
 
-  public <T extends Expression> boolean replaceExpressionMatches(
-      ASTTransformer<?> t,
-      String matchHint,
-      Matcher<T> matcher,
-      String expression) {
-    return replaceExpressionMatches(t, identifierIndex.getStream(matchHint), matcher, expression);
-  }
-
+  /**
+   * Replaces expressions all matches of expression nodes in the tree that match
+   * the given hinted matcher with new expressions created from the given string.
+   * 
+   * @param <T>           The type of the matched expression nodes
+   * @param t             The AST transformer
+   * @param hintedMatcher The matcher to match the nodes with
+   * @param expression    The content of the replacement expression
+   * @return Whether anything was processed
+   */
   public <T extends Expression> boolean replaceExpressionMatches(
       ASTTransformer<?> t,
       HintedMatcher<T> hintedMatcher,
       String expression) {
-    return replaceExpressionMatches(t, hintedMatcher.getHint(), hintedMatcher, expression);
+    return replaceExpressionMatches(t,
+        identifierIndex.getStream(hintedMatcher.getHint()), hintedMatcher, expression);
   }
 }
