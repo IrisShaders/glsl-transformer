@@ -93,16 +93,17 @@ public class IdentifierIndex<I extends PatriciaTrie<Set<Identifier>>>
    * 
    * @param oldName the old name
    * @param newName the new name
+   * @return Whether anything was renamed
    */
   @SuppressWarnings("deprecation")
-  public void rename(String oldName, String newName) {
+  public boolean rename(String oldName, String newName) {
     if (oldName.equals(newName)) {
-      return;
+      return false;
     }
     Identifier.validateContents(newName);
     var set = index.get(oldName);
     if (set == null) {
-      return;
+      return false;
     }
     index.remove(oldName);
     var existing = index.get(newName);
@@ -114,6 +115,7 @@ public class IdentifierIndex<I extends PatriciaTrie<Set<Identifier>>>
     for (var id : set) {
       id.setNameInternal(newName);
     }
+    return true;
   }
 
   public SortedMap<String, Set<Identifier>> prefixMap(String key) {

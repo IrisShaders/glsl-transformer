@@ -34,6 +34,7 @@ public class Root {
    */
   public final IdentifierIndex<?> identifierIndex;
   private List<? extends ASTNode> nodeList;
+  private boolean activity;
 
   private static Deque<Root> activeBuildRoots = new ArrayDeque<>();
 
@@ -260,9 +261,10 @@ public class Root {
    * 
    * @param oldName The old name
    * @param newName The new name
+   * @return Whether anything was renamed
    */
-  public void rename(String oldName, String newName) {
-    identifierIndex.rename(oldName, newName);
+  public boolean rename(String oldName, String newName) {
+    return identifierIndex.rename(oldName, newName);
   }
 
   /**
@@ -273,20 +275,24 @@ public class Root {
    * @param <T>      The type of the target nodes
    * @param targets  The stream of target nodes to process
    * @param replacer The consumer to process the target nodes with
+   * @return Whether anything was processed
    */
   @SuppressWarnings("unchecked")
-  public <T extends ASTNode> void process(Stream<? extends T> targets, Consumer<? super T> replacer) {
+  public <T extends ASTNode> boolean process(Stream<? extends T> targets, Consumer<? super T> replacer) {
     ensureEmptyNodeList();
     if (targets == null) {
-      return;
+      return false;
     }
     var typedList = (List<T>) nodeList;
     targets.forEach(typedList::add);
+    var activity = false;
     for (var node : typedList) {
       if (node != null) {
         replacer.accept(node);
+        activity = true;
       }
     }
+    return activity;
   }
 
   /**
@@ -294,9 +300,10 @@ public class Root {
    * 
    * @param name     The name of the identifiers to process
    * @param replacer The consumer to process the identifiers with
+   * @return Whether anything was processed
    */
-  public void process(String name, Consumer<Identifier> replacer) {
-    process(identifierIndex.getStream(name), replacer);
+  public boolean process(String name, Consumer<Identifier> replacer) {
+    return process(identifierIndex.getStream(name), replacer);
   }
 
   /**
@@ -314,6 +321,27 @@ public class Root {
       String name,
       String expression) {
     replaceReferenceExpressions(
+        t,
+        identifierIndex.getStream(name),
+        expression);
+  }
+
+  /**
+   * Replaces all reference expressions containing identifiers with the given name
+   * with the given replacement expression. Identifiers that are not part of a
+   * reference expression are not replaced since an expression would be impossible
+   * as a replacement.
+   * 
+   * @param t          The AST transformer
+   * @param name       The name of the identifiers to target
+   * @param expression The content of the replacement expression
+   * @return Whether any replacements were made
+   */
+  public boolean replaceReferenceExpressionsReport(
+      ASTTransformer<?> t,
+      String name,
+      String expression) {
+    return replaceReferenceExpressionsReport(
         t,
         identifierIndex.getStream(name),
         expression);
@@ -342,18 +370,45 @@ public class Root {
   }
 
   /**
+   * Replaces all reference expressions containing the given identifiers from the
+   * given stream with the given replacement expression.
+   * 
+   * @param t          The AST transformer
+   * @param targets    The stream of identifiers to target
+   * @param expression The content of the replacement expression
+   * @return Whether any replacements were made
+   */
+  public boolean replaceReferenceExpressionsReport(
+      ASTTransformer<?> t,
+      Stream<Identifier> targets,
+      String expression) {
+    activity = false;
+    process(targets, identifier -> {
+      var parent = identifier.getParent();
+      if (!(parent instanceof ReferenceExpression)) {
+        return;
+      }
+      parent.replaceByAndDelete(
+          t.parseExpression(identifier, expression));
+      activity = true;
+    });
+    return activity;
+  }
+
+  /**
    * Replaces all expressions from the given stream with the given replacement
    * expression.
    * 
    * @param t          The AST transformer
    * @param targets    The stream of expressions to target
    * @param expression The content of the replacement expression
+   * @return Whether any replacements were made
    */
-  public void replaceExpressions(
+  public boolean replaceExpressions(
       ASTTransformer<?> t,
       Stream<? extends Expression> targets,
       String expression) {
-    process(targets, node -> {
+    return process(targets, node -> {
       node.replaceByAndDelete(
           t.parseExpression(node, expression));
     });
@@ -367,8 +422,9 @@ public class Root {
    * @param t          The AST transformer
    * @param targets    The list of expressions to target
    * @param expression The content of the replacement expression
+   * @return Whether any replacements were made
    */
-  public static void replaceExpressionsConcurrent(
+  public static boolean replaceExpressionsConcurrent(
       ASTTransformer<?> t,
       List<? extends Expression> targets,
       String expression) {
@@ -376,43 +432,44 @@ public class Root {
       node.replaceByAndDelete(
           t.parseExpression(node, expression));
     }
+    return !targets.isEmpty();
   }
 
-  public <T extends ASTNode> void processMatches(
+  public <T extends ASTNode> boolean processMatches(
       ASTTransformer<?> t,
       Stream<? extends ASTNode> matchTargetChildren,
       Matcher<T> matcher,
       Consumer<? super T> replacer) {
     var matchClass = matcher.getPatternClass();
-    process(matchTargetChildren
+    return process(matchTargetChildren
         .map(node -> node.getAncestor(matchClass))
         .distinct()
         .filter(matcher::matches),
         replacer);
   }
 
-  public <T extends ASTNode> void processMatches(
+  public <T extends ASTNode> boolean processMatches(
       ASTTransformer<?> t,
       String matchHint,
       Matcher<T> matcher,
       Consumer<? super T> replacer) {
-    processMatches(t, identifierIndex.getStream(matchHint), matcher, replacer);
+    return processMatches(t, identifierIndex.getStream(matchHint), matcher, replacer);
   }
 
-  public <T extends ASTNode> void processMatches(
+  public <T extends ASTNode> boolean processMatches(
       ASTTransformer<?> t,
       HintedMatcher<T> hintedMatcher,
       Consumer<? super T> replacer) {
-    processMatches(t, hintedMatcher.getHint(), hintedMatcher, replacer);
+    return processMatches(t, hintedMatcher.getHint(), hintedMatcher, replacer);
   }
 
-  public <T extends Expression> void replaceExpressionMatches(
+  public <T extends Expression> boolean replaceExpressionMatches(
       ASTTransformer<?> t,
       Stream<? extends ASTNode> matchTargetChildren,
       Matcher<T> matcher,
       String expression) {
     var matchClass = matcher.getPatternClass();
-    replaceExpressions(t,
+    return replaceExpressions(t,
         matchTargetChildren
             .map(node -> node.getAncestor(matchClass))
             .distinct()
@@ -420,18 +477,18 @@ public class Root {
         expression);
   }
 
-  public <T extends Expression> void replaceExpressionMatches(
+  public <T extends Expression> boolean replaceExpressionMatches(
       ASTTransformer<?> t,
       String matchHint,
       Matcher<T> matcher,
       String expression) {
-    replaceExpressionMatches(t, identifierIndex.getStream(matchHint), matcher, expression);
+    return replaceExpressionMatches(t, identifierIndex.getStream(matchHint), matcher, expression);
   }
 
-  public <T extends Expression> void replaceExpressionMatches(
+  public <T extends Expression> boolean replaceExpressionMatches(
       ASTTransformer<?> t,
       HintedMatcher<T> hintedMatcher,
       String expression) {
-    replaceExpressionMatches(t, hintedMatcher.getHint(), hintedMatcher, expression);
+    return replaceExpressionMatches(t, hintedMatcher.getHint(), hintedMatcher, expression);
   }
 }
