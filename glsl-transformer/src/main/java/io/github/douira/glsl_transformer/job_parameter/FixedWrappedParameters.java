@@ -34,7 +34,7 @@ public class FixedWrappedParameters<T> extends JobParameters {
    */
   @Override
   @SuppressWarnings("unchecked")
-  public boolean equals(JobParameters other) {
+  public boolean equals(Object other) {
     return FixedWrappedParameters.class.isInstance(other) &&
         parameters.equals(((FixedWrappedParameters<Object>) other).getContents());
   }
