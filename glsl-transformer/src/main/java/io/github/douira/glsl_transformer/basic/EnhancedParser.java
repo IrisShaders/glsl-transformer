@@ -117,6 +117,10 @@ public class EnhancedParser implements ParserInterface {
   public EnhancedParser() {
   }
 
+  /**
+   * Gets the internal singleton instance of the parser. This should generally not
+   * be used by external library users.
+   */
   public static EnhancedParser getInternalInstance() {
     if (INSTANCE == null) {
       INSTANCE = new EnhancedParser(true);

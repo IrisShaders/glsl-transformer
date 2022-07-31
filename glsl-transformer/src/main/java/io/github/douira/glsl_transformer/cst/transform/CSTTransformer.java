@@ -119,9 +119,16 @@ public class CSTTransformer<T extends JobParameters> extends ExecutionPlanner<T>
     this.printTokenFilter = printTokenFilter;
   }
 
-  public void setParseTokenFilter(TokenFilter<T> parseTokenFilter) {
+  @Override
+  @SuppressWarnings("unchecked") // the interface is not generic
+  public void setParseTokenFilter(TokenFilter<?> parseTokenFilter) {
     parser.setParseTokenFilter(parseTokenFilter);
-    this.parseTokenFilter = parseTokenFilter;
+    this.parseTokenFilter = (TokenFilter<T>) parseTokenFilter;
+  }
+  
+  @Override
+  public TokenFilter<?> getParseTokenFilter() {
+    return parser.getParseTokenFilter();
   }
 
   private void setTokenFilterPlanner(TokenFilter<T> tokenFilter) {

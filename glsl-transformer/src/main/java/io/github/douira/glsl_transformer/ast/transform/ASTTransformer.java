@@ -14,6 +14,7 @@ import io.github.douira.glsl_transformer.ast.print.*;
 import io.github.douira.glsl_transformer.ast.query.Root;
 import io.github.douira.glsl_transformer.basic.*;
 import io.github.douira.glsl_transformer.basic.EnhancedParser.ParsingStrategy;
+import io.github.douira.glsl_transformer.cst.token_filter.TokenFilter;
 import io.github.douira.glsl_transformer.job_parameter.*;
 import io.github.douira.glsl_transformer.tree.ExtendedContext;
 import io.github.douira.glsl_transformer.util.TriConsumer;
@@ -106,6 +107,16 @@ public class ASTTransformer<T extends JobParameters> implements ParameterizedTra
   @Override
   public void setLLOnly() {
     parser.setLLOnly();
+  }
+
+  @Override
+  public void setParseTokenFilter(TokenFilter<?> parseTokenFilter) {
+    parser.setParseTokenFilter(parseTokenFilter);
+  }
+  
+  @Override
+  public TokenFilter<?> getParseTokenFilter() {
+    return parser.getParseTokenFilter();
   }
 
   public <RuleType extends ExtendedContext, ReturnType extends ASTNode> ReturnType parseNode(
