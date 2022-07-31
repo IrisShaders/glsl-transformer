@@ -213,7 +213,7 @@ public abstract class ASTNode {
     return root;
   }
 
-  class ChangeRootVisitor extends ASTVoidVisitor {
+  private static class ChangeRootVisitor extends ASTVoidVisitor {
     private Root root;
 
     public ChangeRootVisitor(Root root) {
@@ -226,7 +226,7 @@ public abstract class ASTNode {
     }
   }
 
-  class UnregisterVisitor extends ASTVoidVisitor {
+  private static class UnregisterVisitor extends ASTVoidVisitor {
     @Override
     public void visitVoid(ASTNode node) {
       node.unregister();
