@@ -30,16 +30,36 @@ import io.github.douira.glsl_transformer.util.CompatUtil;
  * violates common expectations like the fact that removing a node doesn't also
  * affect other parts of the tree.
  */
-public abstract class ASTNode {
+public abstract class ASTNode implements Cloneable {
   private ASTNode parent;
   private Consumer<ASTNode> selfReplacer;
   private Root root = Root.getActiveBuildRoot();
+
+  /**
+   * Whether this node has been registered with the root. This is only used when
+   * constructing nodes. The {@link #setParent(ASTNode)} method does not check
+   * this recursively.
+   */
   private boolean registered = false;
 
   public ASTNode() {
   }
 
   public abstract <R> R accept(ASTVisitor<R> visitor);
+
+  /**
+   * Clones this object but clears the parent, self replacer fields, root and
+   * registered fields.
+   */
+  @Override
+  protected ASTNode clone() throws CloneNotSupportedException {
+    var clone = (ASTNode) super.clone();
+    clone.parent = null; // detach from parent
+    clone.selfReplacer = null;
+    clone.root = null; // forces a new registration
+    clone.registered = false; // for consistency
+    return clone;
+  }
 
   public ASTNode getParent() {
     return parent;
