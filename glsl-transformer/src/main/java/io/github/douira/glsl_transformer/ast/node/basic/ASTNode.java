@@ -24,6 +24,11 @@ import io.github.douira.glsl_transformer.util.CompatUtil;
  * 5. An AST node may only ever be in a tree once. Attempting to insert it
  * multiple times will cause undefined behavior. Moving a node requires removing
  * it from one parent and then adding it to another.
+ * 
+ * While it is possible to have a single node appear multiple times throughout
+ * the tree (at which point the tree becomes a DAG), this is discuraged since it
+ * violates common expectations like the fact that removing a node doesn't also
+ * affect other parts of the tree.
  */
 public abstract class ASTNode {
   private ASTNode parent;
@@ -265,6 +270,10 @@ public abstract class ASTNode {
   public boolean setParent(ASTNode parent, Consumer<? extends ASTNode> setter) {
     Objects.requireNonNull(parent);
 
+    // always set the self replacer since the node might have moved inside its
+    // parent without changing the parent
+    this.selfReplacer = (Consumer<ASTNode>) setter;
+
     // if the parent doesn't change, nothing has to be done
     if (this.parent == parent) {
       return false;
@@ -274,7 +283,6 @@ public abstract class ASTNode {
     // this is the normal case for building the AST or moving nodes around
     if (root == parent.root) {
       this.parent = parent;
-      this.selfReplacer = (Consumer<ASTNode>) setter;
 
       // when the root node of a newly built subtree that already has the same root
       // references is added to the main tree, only the root node isn't registered yet
@@ -285,7 +293,6 @@ public abstract class ASTNode {
     }
 
     this.parent = parent;
-    this.selfReplacer = (Consumer<ASTNode>) setter;
     new ChangeRootVisitor(parent.root).visit(this);
     return true;
   }
@@ -419,7 +426,7 @@ public abstract class ASTNode {
       NodeType currentNode,
       NodeType newNode,
       Consumer<? extends NodeType> setter) {
-    if (currentNode == newNode) {
+    if (currentNode == newNode && newNode.getParent() == this) {
       return;
     }
 
