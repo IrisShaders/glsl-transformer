@@ -7,10 +7,13 @@ import java.util.*;
 import org.junit.jupiter.params.ParameterizedTest;
 
 import io.github.douira.glsl_transformer.ast.node.declaration.*;
+import io.github.douira.glsl_transformer.ast.node.expression.unary.FunctionCallExpression;
 import io.github.douira.glsl_transformer.ast.node.external_declaration.DeclarationExternalDeclaration;
 import io.github.douira.glsl_transformer.ast.node.type.qualifier.StorageQualifier;
 import io.github.douira.glsl_transformer.ast.node.type.qualifier.StorageQualifier.StorageType;
-import io.github.douira.glsl_transformer.ast.node.type.struct.*;
+import io.github.douira.glsl_transformer.ast.node.type.struct.StructDeclarator;
+import io.github.douira.glsl_transformer.ast.query.Root;
+import io.github.douira.glsl_transformer.ast.transform.ASTTransformer;
 import io.github.douira.glsl_transformer.test_util.*;
 import io.github.douira.glsl_transformer.test_util.TestCaseProvider.Spacing;
 
@@ -82,5 +85,27 @@ public class TransformTest extends TestWithASTTransformer {
 
     });
     assertEquals(output, t.transform(input));
+  }
+
+  @ParameterizedTest
+  @TestCaseSource(caseSet = "functionRenameWrap", spacing = Spacing.TRIM_SINGLE_BOTH)
+  void testFunctionRenameWrap(String type, String input, String output) {
+    t.setTransformation((tree, root) -> {
+      renameWrap(t, root, "shadow2D", "texture");
+      renameWrap(t, root, "shadow2DLod", "textureLod");
+    });
+    assertEquals(output, t.transform(input));
+  }
+
+  private static void renameWrap(ASTTransformer<?> t, Root root, String oldName, String innerName) {
+    root.process(root.identifierIndex.getStream(oldName)
+        .filter(id -> id.getParent() instanceof FunctionCallExpression),
+        id -> {
+          FunctionCallExpression functionCall = (FunctionCallExpression) id.getParent();
+          functionCall.getFunctionName().setName(innerName);
+          FunctionCallExpression wrapper = (FunctionCallExpression) t.parseExpression(id, "vec4()");
+          functionCall.replaceBy(wrapper);
+          wrapper.getParameters().add(functionCall);
+        });
   }
 }
