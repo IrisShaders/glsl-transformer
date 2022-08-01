@@ -103,7 +103,11 @@ public class NodeIndex implements Index<ASTNode> {
   @SuppressWarnings("unchecked")
   public <T extends ASTNode> T getOne(Class<T> clazz) {
     var result = (Set<T>) index.get(clazz);
-    return result == null ? null : result.iterator().next();
+    if (result == null) {
+      return null;
+    }
+    var iterator = result.iterator();
+    return iterator.hasNext() ? iterator.next() : null;
   }
 
   /**

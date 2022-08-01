@@ -77,8 +77,13 @@ public class IdentifierIndex<I extends PatriciaTrie<Set<Identifier>>>
         .filter(Objects::nonNull);
   }
 
+  public ReferenceExpression getOneReferenceExpression(String k) {
+    return getReferenceExpressions(k).findFirst().orElse(null);
+  }
+
   public Identifier getOne(String k) {
-    return index.get(k).iterator().next();
+    var iterator = index.get(k).iterator();
+    return iterator.hasNext() ? iterator.next() : null;
   }
 
   public boolean has(String k) {
