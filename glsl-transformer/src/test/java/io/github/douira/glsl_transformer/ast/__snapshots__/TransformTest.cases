@@ -44,3 +44,15 @@ void main() {
 	foo = zag;
 }
 
+§functionRenameWrap normal:
+void main() {
+	a = shadow2D(a, b);
+	a = shadow2DLod(a, b, c);
+}
+===
+void main() {
+	a = vec4(texture(a, b));
+	a = vec4(textureLod(a, b, c));
+}
+
+§
