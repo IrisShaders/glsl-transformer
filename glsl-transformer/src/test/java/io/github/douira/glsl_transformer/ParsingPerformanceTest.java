@@ -8,7 +8,7 @@ import java.util.stream.*;
 
 import org.junit.jupiter.api.*;
 
-import io.github.douira.glsl_transformer.basic.EnhancedParser;
+import io.github.douira.glsl_transformer.basic.*;
 import io.github.douira.glsl_transformer.test_util.*;
 import io.github.douira.glsl_transformer.test_util.TestResourceManager.*;
 
@@ -16,6 +16,7 @@ public class ParsingPerformanceTest extends TestWithBareCSTTransformer {
   static final boolean benchmark = false;
   static Duration unitTime;
   String displayName;
+  EnhancedParser parser;
 
   @BeforeAll
   static void sample() {
@@ -36,13 +37,10 @@ public class ParsingPerformanceTest extends TestWithBareCSTTransformer {
     displayName = testInfo.getDisplayName();
   }
 
-  private void assertPerformance(boolean throwParseErrors, int expectedMillis, Collection<String> inputs) {
-    var parser = new EnhancedParser(throwParseErrors);
-    parser.setSLLOnly();
-
+  private void assertPerformance(int expectedMillis, Collection<String> inputs) {
     // warmup the JVM and the parser's DFA cache
     inputs.forEach(parser::parse);
-    var n = benchmark ? 30 : 3;
+    var n = benchmark ? 30 : 1;
     assertTimeout(unitTime.multipliedBy(expectedMillis * n), () -> {
       var start = System.nanoTime();
       for (int i = 0; i < n; i++) {
@@ -54,57 +52,77 @@ public class ParsingPerformanceTest extends TestWithBareCSTTransformer {
         "It should parse fast enough using SLL mode.");
   }
 
-  private void assertPerformance(boolean throwParseErrors, int expectedMillis, Stream<Resource> resources) {
-    assertPerformance(throwParseErrors,
-        expectedMillis,
+  private void assertPerformance(int expectedMillis, Stream<Resource> resources) {
+    assertPerformance(expectedMillis,
         resources.map(Resource::content).collect(Collectors.toList()));
   }
 
-  private void assertFilePerformance(boolean throwParseErrors, int expectedMillis, Stream<FileLocation> files) {
-    assertPerformance(throwParseErrors, expectedMillis, files.map(TestResourceManager::getResource));
+  private void assertFilePerformance(int expectedMillis, Stream<FileLocation> files) {
+    assertPerformance(expectedMillis, files.map(TestResourceManager::getResource));
   }
 
-  private void assertFilePerformance(boolean throwParseErrors, int expectedMillis, FileLocation... files) {
-    assertFilePerformance(throwParseErrors, expectedMillis, Stream.of(files));
+  private void assertFilePerformance(int expectedMillis, FileLocation... files) {
+    assertFilePerformance(expectedMillis, Stream.of(files));
   }
 
-  private void assertDirectoryPerformance(boolean throwParseErrors, int expectedMillis, DirectoryLocation dir) {
-    assertPerformance(throwParseErrors, expectedMillis, TestResourceManager.getDirectoryResources(dir));
+  private void assertDirectoryPerformance(int expectedMillis, DirectoryLocation dir) {
+    assertPerformance(expectedMillis, TestResourceManager.getDirectoryResources(dir));
   }
 
   @Test
   void testParsingPerformanceGLSLang() {
-    assertDirectoryPerformance(false,
-        1000, DirectoryLocation.GLSLANG_TESTS);
+    parser = new EnhancedParser(false);
+    parser.setSLLOnly();
+    assertDirectoryPerformance(1000, DirectoryLocation.GLSLANG_TESTS);
+  }
+
+  @Test
+  void testParsingPerformanceGLSLangCaching() {
+    parser = new CachingParser(false, 1000);
+    parser.setSLLOnly();
+    assertDirectoryPerformance(5, DirectoryLocation.GLSLANG_TESTS);
   }
 
   @Test
   void testDeepStatementParsing() {
-    assertFilePerformance(true,
-        300, FileLocation.DEEP_STATEMENT_TEST);
+    parser = new EnhancedParser(true);
+    parser.setSLLOnly();
+    assertFilePerformance(300, FileLocation.DEEP_STATEMENT_TEST);
   }
 
   @Test
   void testDeepParenExpressionParsing() {
-    assertFilePerformance(true,
-        1000, FileLocation.DEEP_PAREN_EXPRESSION_TEST);
+    parser = new EnhancedParser(true);
+    parser.setSLLOnly();
+    assertFilePerformance(1000, FileLocation.DEEP_PAREN_EXPRESSION_TEST);
+  }
+
+  @Test
+  void testDeepParenExpressionParsingCaching() {
+    // with warmup, the caching parser needs basically no time
+    parser = new CachingParser(true);
+    parser.setSLLOnly();
+    assertFilePerformance(5, FileLocation.DEEP_PAREN_EXPRESSION_TEST);
   }
 
   @Test
   void testDeepExpressionParsing() {
-    assertFilePerformance(true,
-        300, FileLocation.DEEP_EXPRESSION_TEST);
+    parser = new EnhancedParser(true);
+    parser.setSLLOnly();
+    assertFilePerformance(300, FileLocation.DEEP_EXPRESSION_TEST);
   }
 
   @Test
   void testLongExpressionParsing() {
-    assertFilePerformance(true,
-        300, FileLocation.LONG_EXPRESSION_TEST);
+    parser = new EnhancedParser(true);
+    parser.setSLLOnly();
+    assertFilePerformance(300, FileLocation.LONG_EXPRESSION_TEST);
   }
 
   @Test
   void testCommentParsing() {
-    assertFilePerformance(true,
-        300, FileLocation.COMMENT_TEST);
+    parser = new EnhancedParser(true);
+    parser.setSLLOnly();
+    assertFilePerformance(300, FileLocation.COMMENT_TEST);
   }
 }
