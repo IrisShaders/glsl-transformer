@@ -210,7 +210,8 @@ public class EnhancedParser implements ParserInterface {
    * @return The parsed string as a parse tree that has the given type
    */
   public <RuleType extends ExtendedContext> RuleType parse(
-      String str, Function<GLSLParser, RuleType> parseMethod) {
+      String str,
+      Function<GLSLParser, RuleType> parseMethod) {
     return parse(str, null, parseMethod);
   }
 
@@ -224,7 +225,8 @@ public class EnhancedParser implements ParserInterface {
    * @return The parsed string as a parse tree that has the given type
    */
   public <RuleType extends ExtendedContext> RuleType parse(
-      String str, ExtendedContext parent,
+      String str,
+      ExtendedContext parent,
       Function<GLSLParser, RuleType> parseMethod) {
     return parse(CharStreams.fromString(str), parent, parseMethod);
   }
@@ -240,8 +242,9 @@ public class EnhancedParser implements ParserInterface {
    * @param parseMethod The parser method reference to use for parsing
    * @return The parsed string as a parse tree that has the given type
    */
-  public <RuleType extends ExtendedContext> RuleType parse(
-      IntStream stream, ExtendedContext parent,
+  private <RuleType extends ExtendedContext> RuleType parse(
+      IntStream stream,
+      ExtendedContext parent,
       Function<GLSLParser, RuleType> parseMethod) {
     if (parseTokenFilter != null) {
       parseTokenFilter.resetState();
