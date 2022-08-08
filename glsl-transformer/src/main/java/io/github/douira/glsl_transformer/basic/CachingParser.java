@@ -17,7 +17,7 @@ import io.github.douira.glsl_transformer.util.LRUCache;
  * is safe to use this.
  */
 public class CachingParser extends EnhancedParser {
-  private static final int defaultCacheSize = 200;
+  private static final int defaultCacheSize = 400;
   private final LRUCache<CacheKey, ExtendedContext> parseCache;
 
   private static class CacheKey {
