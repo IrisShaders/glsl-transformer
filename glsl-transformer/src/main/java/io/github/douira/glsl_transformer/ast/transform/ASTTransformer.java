@@ -112,6 +112,12 @@ public class ASTTransformer<T extends JobParameters> implements ParameterizedTra
         visitMethod);
   }
 
+  public ASTNode parseNode(
+      String input,
+      Function<GLSLParser, ? extends ExtendedContext> parseMethod) throws RecognitionException {
+    return ASTBuilder.build(parser.parse(input, parseMethod));
+  }
+
   public <RuleType extends ExtendedContext, ReturnType extends ASTNode> ReturnType parseNodeSeparate(
       String input,
       Function<GLSLParser, RuleType> parseMethod,
@@ -119,12 +125,6 @@ public class ASTTransformer<T extends JobParameters> implements ParameterizedTra
     return ASTBuilder.build(
         parser.parse(input, parseMethod),
         visitMethod);
-  }
-
-  public ASTNode parseNode(
-      String input,
-      Function<GLSLParser, ? extends ExtendedContext> parseMethod) throws RecognitionException {
-    return ASTBuilder.build(parser.parse(input, parseMethod));
   }
 
   public TranslationUnit parseTranslationUnit(String input) throws RecognitionException {

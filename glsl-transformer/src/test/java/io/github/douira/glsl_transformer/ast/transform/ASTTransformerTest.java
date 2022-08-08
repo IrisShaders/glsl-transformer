@@ -8,7 +8,6 @@ import java.util.stream.Collectors;
 import org.antlr.v4.runtime.misc.ParseCancellationException;
 import org.junit.jupiter.api.Test;
 
-import io.github.douira.glsl_transformer.GLSLParser;
 import io.github.douira.glsl_transformer.ast.node.*;
 import io.github.douira.glsl_transformer.ast.node.basic.ASTNode;
 import io.github.douira.glsl_transformer.ast.node.expression.*;
@@ -22,11 +21,8 @@ import io.github.douira.glsl_transformer.util.Type;
 public class ASTTransformerTest extends TestWithASTTransformer {
   void assertInjectExternalDeclaration(int index, String input, String output) {
     t.setTransformation(translationUnit -> {
-      translationUnit.children.add(index, t.parseNode(
-          "int a;",
-          translationUnit,
-          GLSLParser::externalDeclaration,
-          ASTBuilder::visitExternalDeclaration));
+      translationUnit.children.add(index, t.parseExternalDeclaration(
+          translationUnit, "int a;"));
     });
     assertEquals(output, t.transform(PrintType.COMPACT, input));
   }
@@ -163,11 +159,7 @@ public class ASTTransformerTest extends TestWithASTTransformer {
           continue;
         }
       }
-      var secondDeclaration = t.parseNode(
-          "int x = 4, 4;",
-          tree,
-          GLSLParser::externalDeclaration,
-          ASTBuilder::visitExternalDeclaration);
+      var secondDeclaration = t.parseExternalDeclaration(tree, "int x = 4, 4;");
       var sequenceExpression = secondDeclaration.getRoot().nodeIndex
           .get(SequenceExpression.class).stream()
           .filter(e -> e.hasAncestor(secondDeclaration)).findAny().get();
