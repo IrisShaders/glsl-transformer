@@ -448,33 +448,4 @@ public abstract class ASTNode implements Cloneable {
       newNode.setParent(this, setter);
     }
   }
-
-  /**
-   * Clones this object but clears the parent, self replacer fields, root and
-   * registered fields. This means the resulting tree will have to be registered
-   * with a new root.
-   */
-  @Override
-  protected ASTNode clone() throws CloneNotSupportedException {
-    var clone = (ASTNode) super.clone();
-    clone.parent = null; // detach from parent
-    clone.selfReplacer = null;
-    clone.root = null; // forces a new registration
-    clone.registered = false; // for consistency
-    return clone;
-  }
-
-  public ASTNode cloneInto(Root root) {
-    try {
-      var clone = clone();
-      clone.changeRootRecursive(root);
-      return clone;
-    } catch (CloneNotSupportedException e) {
-      throw new RuntimeException(e);
-    }
-  }
-
-  public ASTNode cloneSeparate() {
-    return cloneInto(new Root());
-  }
 }
