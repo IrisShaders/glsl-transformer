@@ -44,36 +44,76 @@ import io.github.douira.glsl_transformer.util.Type;
  * relationship between a parse tree and an AST is encoded in this visitor.
  */
 public class ASTBuilder extends GLSLParserBaseVisitor<ASTNode> {
+  /**
+   * Builds an AST from the given parse tree with a new root.
+   * 
+   * @param ctx The parse tree
+   * @return The built AST
+   */
   public static ASTNode build(ParseTree ctx) {
-    return Root.indexNodes(() -> doBuild(ctx));
+    return Root.indexNodes(() -> buildInternal(ctx));
   }
 
+  /**
+   * Builds an AST from the given parse tree with the given root.
+   * 
+   * @param rootInstance The root instance
+   * @param ctx          The parse tree
+   * @return The built AST
+   */
   public static ASTNode build(Root rootInstance, ParseTree ctx) {
-    return Root.indexNodes(rootInstance, () -> doBuild(ctx));
+    return Root.indexNodes(rootInstance, () -> buildInternal(ctx));
   }
 
+  /**
+   * Builds an AST of a specific type from the given parse tree with a new root.
+   * 
+   * @param <TreeType>   The type of the parse tree
+   * @param <ReturnType> The type of the AST node
+   * @param ctx          The parse tree
+   * @param visitMethod  The build method reference to this class
+   * @return The built AST
+   */
   public static <TreeType extends ParseTree, ReturnType extends ASTNode> ReturnType build(
       TreeType ctx,
       BiFunction<ASTBuilder, TreeType, ReturnType> visitMethod) {
-    return Root.indexNodes(() -> buildWith(ctx, visitMethod));
+    return Root.indexNodes(() -> buildInternal(ctx, visitMethod));
   }
 
-  public static ASTNode buildSubtreeFor(ASTNode parentTreeMember, ParseTree ctx) {
-    return Root.indexNodes(parentTreeMember, () -> doBuild(ctx));
+  /**
+   * Builds a subtree that has the same root as the given AST node.
+   * 
+   * @param parentTreeMember The parent tree member
+   * @param ctx              The parse tree
+   * @return The built AST
+   */
+  public static ASTNode buildSubtree(ASTNode parentTreeMember, ParseTree ctx) {
+    return Root.indexNodes(parentTreeMember, () -> buildInternal(ctx));
   }
 
-  public static <TreeType extends ParseTree, ReturnType extends ASTNode> ReturnType buildSubtreeWith(
+  /**
+   * Builds a subtree of a specific type that has the same root as the given AST
+   * node.
+   * 
+   * @param <TreeType>       The type of the parse tree
+   * @param <ReturnType>     The type of the AST node
+   * @param parentTreeMember The parent tree member
+   * @param ctx              The parse tree
+   * @param visitMethod      The build method reference to this class
+   * @return The built AST
+   */
+  public static <TreeType extends ParseTree, ReturnType extends ASTNode> ReturnType buildSubtree(
       ASTNode parentTreeMember,
       TreeType ctx,
       BiFunction<ASTBuilder, TreeType, ReturnType> visitMethod) {
-    return Root.indexNodes(parentTreeMember, () -> buildWith(ctx, visitMethod));
+    return Root.indexNodes(parentTreeMember, () -> buildInternal(ctx, visitMethod));
   }
 
-  private static ASTNode doBuild(ParseTree ctx) {
+  private static ASTNode buildInternal(ParseTree ctx) {
     return new ASTBuilder().visit(ctx);
   }
 
-  private static <TreeType extends ParseTree, ReturnType extends ASTNode> ReturnType buildWith(
+  private static <TreeType extends ParseTree, ReturnType extends ASTNode> ReturnType buildInternal(
       TreeType ctx,
       BiFunction<ASTBuilder, TreeType, ReturnType> visitMethod) {
     return visitMethod.apply(new ASTBuilder(), ctx);
