@@ -80,7 +80,7 @@ public class ParsingPerformanceTest extends TestWithBareCSTTransformer {
   void testParsingPerformanceGLSLangCaching() {
     parser = new CachingParser(false, 1000);
     parser.setSLLOnly();
-    assertDirectoryPerformance(5, DirectoryLocation.GLSLANG_TESTS);
+    assertDirectoryPerformance(20, DirectoryLocation.GLSLANG_TESTS);
   }
 
   @Test
@@ -102,7 +102,7 @@ public class ParsingPerformanceTest extends TestWithBareCSTTransformer {
     // with warmup, the caching parser needs basically no time
     parser = new CachingParser(true);
     parser.setSLLOnly();
-    assertFilePerformance(5, FileLocation.DEEP_PAREN_EXPRESSION_TEST);
+    assertFilePerformance(10, FileLocation.DEEP_PAREN_EXPRESSION_TEST);
   }
 
   @Test
