@@ -11,9 +11,8 @@ import org.junit.jupiter.params.ParameterizedTest;
 import au.com.origin.snapshots.Expect;
 import au.com.origin.snapshots.annotations.SnapshotName;
 import au.com.origin.snapshots.junit5.SnapshotExtension;
-import io.github.douira.glsl_transformer.GLSLParser;
 import io.github.douira.glsl_transformer.ast.node.external_declaration.ExternalDeclaration;
-import io.github.douira.glsl_transformer.ast.transform.*;
+import io.github.douira.glsl_transformer.ast.transform.ASTInjectionPoint;
 import io.github.douira.glsl_transformer.test_util.*;
 import io.github.douira.glsl_transformer.test_util.TestCaseProvider.Spacing;
 
@@ -25,11 +24,7 @@ public class TranslationUnitTest extends TestWithASTTransformer {
   void testInjection() {
     t.setTransformation(tree -> tree.injectNode(
         ASTInjectionPoint.BEFORE_FUNCTIONS,
-        t.parseNode(
-            "float x;",
-            tree,
-            GLSLParser::externalDeclaration,
-            ASTBuilder::visitExternalDeclaration)));
+        t.parseExternalDeclaration(tree, "float x;")));
     assertEquals(
         "int a;\nfloat x;\nvoid main() {\n}\n",
         t.transform("int a;\nvoid main() {\n}\n"));
@@ -46,11 +41,8 @@ public class TranslationUnitTest extends TestWithASTTransformer {
       t.setTransformation(tree -> tree.injectNodes(
           location,
           Stream.of("x", "y")
-              .<ExternalDeclaration>map(name -> t.parseNode(
-                  "float " + name + ";",
-                  tree,
-                  GLSLParser::externalDeclaration,
-                  ASTBuilder::visitExternalDeclaration))
+              .<ExternalDeclaration>map(name -> t.parseExternalDeclaration(
+                  tree, "float " + name + ";"))
               .collect(Collectors.toList())));
       expect
           .scenario(scenario + "/" + location.toString().toLowerCase())
