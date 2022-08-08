@@ -5,6 +5,7 @@ import java.util.function.*;
 import org.antlr.v4.runtime.RecognitionException;
 
 import io.github.douira.glsl_transformer.*;
+import io.github.douira.glsl_transformer.GLSLParser.*;
 import io.github.douira.glsl_transformer.ast.node.TranslationUnit;
 import io.github.douira.glsl_transformer.ast.node.basic.ASTNode;
 import io.github.douira.glsl_transformer.ast.node.expression.Expression;
@@ -24,16 +25,16 @@ import io.github.douira.glsl_transformer.util.TriConsumer;
  * it with the given transformation and then prints it back.
  */
 public class ASTTransformer<T extends JobParameters> implements ParameterizedTransformer<T>, ParserInterface {
-  private final EnhancedParser parser;
+  private final CachingParser parser;
   private Consumer<TranslationUnit> transformation;
   private T jobParameters;
 
   public ASTTransformer() {
-    parser = new EnhancedParser();
+    parser = new CachingParser();
   }
 
   public ASTTransformer(boolean throwParseErrors) {
-    parser = new EnhancedParser(throwParseErrors);
+    parser = new CachingParser(throwParseErrors);
   }
 
   public ASTTransformer(Consumer<TranslationUnit> transformation, boolean throwParseErrors) {
@@ -104,56 +105,68 @@ public class ASTTransformer<T extends JobParameters> implements ParameterizedTra
   public <RuleType extends ExtendedContext, ReturnType extends ASTNode> ReturnType parseNode(
       String input,
       ASTNode parentTreeMember,
+      Class<RuleType> ruleType,
       Function<GLSLParser, RuleType> parseMethod,
       BiFunction<ASTBuilder, RuleType, ReturnType> visitMethod) throws RecognitionException {
-    return ASTBuilder.buildSubtree(
-        parentTreeMember,
-        parser.parse(input, parseMethod),
-        visitMethod);
-  }
-
-  public ASTNode parseNode(
-      String input,
-      Function<GLSLParser, ? extends ExtendedContext> parseMethod) throws RecognitionException {
-    return ASTBuilder.build(parser.parse(input, parseMethod));
+    return ASTBuilder.buildSubtree(parentTreeMember, parser.parse(input, ruleType, parseMethod), visitMethod);
   }
 
   public <RuleType extends ExtendedContext, ReturnType extends ASTNode> ReturnType parseNodeSeparate(
       String input,
+      Class<RuleType> ruleType,
       Function<GLSLParser, RuleType> parseMethod,
       BiFunction<ASTBuilder, RuleType, ReturnType> visitMethod) throws RecognitionException {
-    return ASTBuilder.build(
-        parser.parse(input, parseMethod),
-        visitMethod);
+    return ASTBuilder.build(parser.parse(input, ruleType, parseMethod), visitMethod);
   }
 
   public TranslationUnit parseTranslationUnit(String input) throws RecognitionException {
-    return parseNodeSeparate(input, GLSLParser::translationUnit, ASTBuilder::visitTranslationUnit);
+    return parseNodeSeparate(input,
+        TranslationUnitContext.class,
+        GLSLParser::translationUnit,
+        ASTBuilder::visitTranslationUnit);
   }
 
   public ExternalDeclaration parseExternalDeclaration(ASTNode treeMember, String input)
       throws RecognitionException {
-    return parseNode(input, treeMember, GLSLParser::externalDeclaration, ASTBuilder::visitExternalDeclaration);
+    return parseNode(input, treeMember,
+        ExternalDeclarationContext.class,
+        GLSLParser::externalDeclaration,
+        ASTBuilder::visitExternalDeclaration);
   }
 
   public Expression parseExpression(ASTNode treeMember, String input) throws RecognitionException {
-    return parseNode(input, treeMember, GLSLParser::expression, ASTBuilder::visitExpression);
+    return parseNode(input, treeMember,
+        ExpressionContext.class,
+        GLSLParser::expression,
+        ASTBuilder::visitExpression);
   }
 
   public Statement parseStatement(ASTNode treeMember, String input) throws RecognitionException {
-    return parseNode(input, treeMember, GLSLParser::statement, ASTBuilder::visitStatement);
+    return parseNode(input, treeMember,
+        StatementContext.class,
+        GLSLParser::statement,
+        ASTBuilder::visitStatement);
   }
 
   public ExternalDeclaration parseSeparateExternalDeclaration(String input) throws RecognitionException {
-    return parseNodeSeparate(input, GLSLParser::externalDeclaration, ASTBuilder::visitExternalDeclaration);
+    return parseNodeSeparate(input,
+        ExternalDeclarationContext.class,
+        GLSLParser::externalDeclaration,
+        ASTBuilder::visitExternalDeclaration);
   }
 
   public Expression parseSeparateExpression(String input) throws RecognitionException {
-    return parseNodeSeparate(input, GLSLParser::expression, ASTBuilder::visitExpression);
+    return parseNodeSeparate(input,
+        ExpressionContext.class,
+        GLSLParser::expression,
+        ASTBuilder::visitExpression);
   }
 
   public Statement parseSeparateStatement(String input) throws RecognitionException {
-    return parseNodeSeparate(input, GLSLParser::statement, ASTBuilder::visitStatement);
+    return parseNodeSeparate(input,
+        StatementContext.class,
+        GLSLParser::statement,
+        ASTBuilder::visitStatement);
   }
 
   public void setTransformation(Consumer<TranslationUnit> transformation) {
