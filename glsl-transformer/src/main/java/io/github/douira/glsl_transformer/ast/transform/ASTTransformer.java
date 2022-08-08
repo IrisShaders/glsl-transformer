@@ -56,32 +56,14 @@ public class ASTTransformer<T extends JobParameters> implements ParameterizedTra
     setTransformation(transformation);
   }
 
-  public void setTransformation(Consumer<TranslationUnit> transformation) {
-    this.transformation = transformation;
+  @Override
+  public T getJobParameters() {
+    return jobParameters;
   }
 
-  public void setTransformation(BiConsumer<TranslationUnit, Root> transformation) {
-    this.transformation = wrapTransformation(this, transformation);
-  }
-
-  public void setTransformation(TriConsumer<TranslationUnit, Root, T> transformation) {
-    this.transformation = wrapTransformation(this, transformation);
-  }
-
-  public static <T> Consumer<TranslationUnit> wrapTransformation(ParameterizedTransformer<T> transformer,
-      TriConsumer<TranslationUnit, Root, T> transformation) {
-    return translationUnit -> transformation.accept(
-        translationUnit,
-        translationUnit.getRoot(),
-        transformer.getJobParameters());
-  }
-
-  public static Consumer<TranslationUnit> wrapTransformation(
-      ParameterizedTransformer<?> transformer,
-      BiConsumer<TranslationUnit, Root> transformation) {
-    return translationUnit -> transformation.accept(
-        translationUnit,
-        translationUnit.getRoot());
+  @Override
+  public void setJobParameters(T parameters) {
+    jobParameters = parameters;
   }
 
   @Override
@@ -145,36 +127,6 @@ public class ASTTransformer<T extends JobParameters> implements ParameterizedTra
     return ASTBuilder.build(parser.parse(input, parseMethod));
   }
 
-  public String transformBare(PrintType printType, String str) throws RecognitionException {
-    var translationUnit = parseTranslationUnit(str);
-    transformation.accept(translationUnit);
-    return ASTPrinter.print(printType, translationUnit);
-  }
-
-  public String transform(
-      PrintType printType, String str, T parameters) throws RecognitionException {
-    return withJobParameters(parameters, () -> transformBare(printType, str));
-  }
-
-  public String transform(PrintType printType, String str) throws RecognitionException {
-    return transform(printType, str, null);
-  }
-
-  @Override
-  public T getJobParameters() {
-    return jobParameters;
-  }
-
-  @Override
-  public void setJobParameters(T parameters) {
-    jobParameters = parameters;
-  }
-
-  @Override
-  public String transformBare(String str) throws RecognitionException {
-    return transformBare(PrintType.INDENTED, str);
-  }
-
   public TranslationUnit parseTranslationUnit(String input) throws RecognitionException {
     return parseNodeSeparate(input, GLSLParser::translationUnit, ASTBuilder::visitTranslationUnit);
   }
@@ -202,5 +154,53 @@ public class ASTTransformer<T extends JobParameters> implements ParameterizedTra
 
   public Statement parseSeparateStatement(String input) throws RecognitionException {
     return parseNodeSeparate(input, GLSLParser::statement, ASTBuilder::visitStatement);
+  }
+
+  public void setTransformation(Consumer<TranslationUnit> transformation) {
+    this.transformation = transformation;
+  }
+
+  public void setTransformation(BiConsumer<TranslationUnit, Root> transformation) {
+    this.transformation = wrapTransformation(this, transformation);
+  }
+
+  public void setTransformation(TriConsumer<TranslationUnit, Root, T> transformation) {
+    this.transformation = wrapTransformation(this, transformation);
+  }
+
+  public static <T> Consumer<TranslationUnit> wrapTransformation(ParameterizedTransformer<T> transformer,
+      TriConsumer<TranslationUnit, Root, T> transformation) {
+    return translationUnit -> transformation.accept(
+        translationUnit,
+        translationUnit.getRoot(),
+        transformer.getJobParameters());
+  }
+
+  public static Consumer<TranslationUnit> wrapTransformation(
+      ParameterizedTransformer<?> transformer,
+      BiConsumer<TranslationUnit, Root> transformation) {
+    return translationUnit -> transformation.accept(
+        translationUnit,
+        translationUnit.getRoot());
+  }
+
+  public String transformBare(PrintType printType, String str) throws RecognitionException {
+    var translationUnit = parseTranslationUnit(str);
+    transformation.accept(translationUnit);
+    return ASTPrinter.print(printType, translationUnit);
+  }
+
+  public String transform(
+      PrintType printType, String str, T parameters) throws RecognitionException {
+    return withJobParameters(parameters, () -> transformBare(printType, str));
+  }
+
+  public String transform(PrintType printType, String str) throws RecognitionException {
+    return transform(printType, str, null);
+  }
+
+  @Override
+  public String transformBare(String str) throws RecognitionException {
+    return transformBare(PrintType.INDENTED, str);
   }
 }
