@@ -113,7 +113,7 @@ public class ASTTransformer<T extends JobParameters> implements ParameterizedTra
   public void setParseTokenFilter(TokenFilter<?> parseTokenFilter) {
     parser.setParseTokenFilter(parseTokenFilter);
   }
-  
+
   @Override
   public TokenFilter<?> getParseTokenFilter() {
     return parser.getParseTokenFilter();
@@ -124,7 +124,7 @@ public class ASTTransformer<T extends JobParameters> implements ParameterizedTra
       ASTNode parentTreeMember,
       Function<GLSLParser, RuleType> parseMethod,
       BiFunction<ASTBuilder, RuleType, ReturnType> visitMethod) throws RecognitionException {
-    return ASTBuilder.buildSubtreeWith(
+    return ASTBuilder.buildSubtree(
         parentTreeMember,
         parser.parse(input, parseMethod),
         visitMethod);

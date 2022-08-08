@@ -64,7 +64,7 @@ fs.readFileSync("split").toString().split("//split_marker").map(str => str.trim(
 ```
 
 ### TODO
-- Implement `Object.clone` for all the AST nodes so that expression replacement can clone the parsed nodes instead of re-parsing the AST repeatedly
+- Implement `Object.clone` for all the AST nodes so that expression replacement can clone the parsed nodes instead of re-parsing the AST repeatedly. This can cleanly be integrated by making ASTTransformer automatically cache parse results for all calls of most `parseNode` methods. Cache invalidation has to be carefully considered. (parse token filter etc.) This would avoid parsing certain expressions multiple times even across transformation jobs.
 - Add wildcard matching for any number of items in an item list
 - Add matching for ancestor that is part of a specific branch of a type of class (ancestor matching where the ancestor of the given type has to have been reached through a specific getter method of that ancestor or the direct child of the matched ancestor has to be of a specific type to avoid complications when the "branch" to require is a list)
 - More powerful string based wildcards that can match classes maybe
