@@ -18,13 +18,6 @@
   "coverage-gutters.coverageBaseDir": "glsl-transformer/build/reports/jacoco/test",
   "java.sources.organizeImports.staticStarThreshold": 1,
   "java.sources.organizeImports.starThreshold": 2,
-  "java.configuration.runtimes": [
-    {
-      "name": "JavaSE-16",
-      "path": "/Library/Java/JavaVirtualMachines/jdk-16.0.1.jdk/Contents/Home",
-      "default": true
-    }
-  ],
   "editor.detectIndentation": false,
   "editor.insertSpaces": true
 }
