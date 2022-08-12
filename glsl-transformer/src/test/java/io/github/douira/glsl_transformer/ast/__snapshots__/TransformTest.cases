@@ -55,4 +55,15 @@ void main() {
 	a = vec4(textureLod(a, b, c));
 }
 
+§emptyExternalDeclarationRemoval function:
+void main() {
+};
+===
+void main() {
+}
+
+§emptyExternalDeclarationRemoval alone:
+;
+===
+
 §

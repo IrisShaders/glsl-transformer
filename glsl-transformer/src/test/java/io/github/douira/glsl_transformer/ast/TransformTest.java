@@ -6,9 +6,10 @@ import java.util.*;
 
 import org.junit.jupiter.params.ParameterizedTest;
 
+import io.github.douira.glsl_transformer.ast.node.basic.ASTNode;
 import io.github.douira.glsl_transformer.ast.node.declaration.*;
 import io.github.douira.glsl_transformer.ast.node.expression.unary.FunctionCallExpression;
-import io.github.douira.glsl_transformer.ast.node.external_declaration.DeclarationExternalDeclaration;
+import io.github.douira.glsl_transformer.ast.node.external_declaration.*;
 import io.github.douira.glsl_transformer.ast.node.type.qualifier.StorageQualifier;
 import io.github.douira.glsl_transformer.ast.node.type.qualifier.StorageQualifier.StorageType;
 import io.github.douira.glsl_transformer.ast.node.type.struct.StructDeclarator;
@@ -107,5 +108,14 @@ public class TransformTest extends TestWithASTTransformer {
           functionCall.replaceBy(wrapper);
           wrapper.getParameters().add(functionCall);
         });
+  }
+
+  @ParameterizedTest
+  @TestCaseSource(caseSet = "emptyExternalDeclarationRemoval", spacing = Spacing.TRIM_SINGLE_BOTH)
+  void testEmptyExternalDeclarationRemoval(String type, String input, String output) {
+    t.setTransformation((tree, root) -> {
+      root.process(root.nodeIndex.getStream(EmptyDeclaration.class), ASTNode::detachAndDelete);
+    });
+    assertEquals(output, t.transform(input));
   }
 }
