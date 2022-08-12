@@ -71,3 +71,5 @@ fs.readFileSync("split").toString().split("//split_marker").map(str => str.trim(
 - Optional indexes: option to turn off indexes for performance reasons and only if necessary
 - Partial indexes: indexes that only index certain enum values, class types or identifiers to reduce memory usage and improve ast build performance
 - Configuration of partial indexes can happen at construction
+- Make glsl-transformer thread safe so that it can be run in parallel on different transformation jobs
+- Add support methods for interleaved transformation: parse and build multiple ASTs, transform them in any order, and then print them. This allows for exchanging information about the ASTs between different transform jobs.
