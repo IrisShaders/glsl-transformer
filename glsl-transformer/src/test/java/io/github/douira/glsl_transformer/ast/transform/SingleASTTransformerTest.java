@@ -24,7 +24,8 @@ public class SingleASTTransformerTest extends TestWithSingleASTTransformer {
       translationUnit.children.add(index, p.parseExternalDeclaration(
           translationUnit, "int a;"));
     });
-    assertEquals(output, p.transform(PrintType.COMPACT, input));
+    p.setPrintType(PrintType.COMPACT);
+    assertEquals(output, p.transform(input));
   }
 
   @Test
@@ -140,7 +141,8 @@ public class SingleASTTransformerTest extends TestWithSingleASTTransformer {
     p.setTransformation((tree, root) -> {
       assertEquals(p.getJobParameters(), jobParameters);
     });
-    p.transform(PrintType.COMPACT, "", jobParameters);
+    p.setPrintType(PrintType.COMPACT);
+    p.transform("", jobParameters);
   }
 
   @Test

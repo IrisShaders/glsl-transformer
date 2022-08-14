@@ -13,6 +13,7 @@ import io.github.douira.glsl_transformer.ast.node.external_declaration.*;
 import io.github.douira.glsl_transformer.ast.node.type.qualifier.StorageQualifier;
 import io.github.douira.glsl_transformer.ast.node.type.qualifier.StorageQualifier.StorageType;
 import io.github.douira.glsl_transformer.ast.node.type.struct.StructDeclarator;
+import io.github.douira.glsl_transformer.ast.print.PrintType;
 import io.github.douira.glsl_transformer.ast.query.Root;
 import io.github.douira.glsl_transformer.ast.transform.ASTParser;
 import io.github.douira.glsl_transformer.test_util.*;
@@ -22,6 +23,7 @@ public class TransformTest extends TestWithSingleASTTransformer {
   @ParameterizedTest
   @TestCaseSource(caseSet = "uniformRemoval", spacing = Spacing.TRIM_SINGLE_BOTH)
   void testUniformRemoval(String type, String input, String output) {
+    p.setPrintType(PrintType.INDENTED);
     p.setTransformation((tree, root) -> {
       // identify the names of the uniforms to remove from the uniform block
       var blockId = root.identifierIndex.getOne("UniformBlock");
@@ -91,6 +93,7 @@ public class TransformTest extends TestWithSingleASTTransformer {
   @ParameterizedTest
   @TestCaseSource(caseSet = "functionRenameWrap", spacing = Spacing.TRIM_SINGLE_BOTH)
   void testFunctionRenameWrap(String type, String input, String output) {
+    p.setPrintType(PrintType.INDENTED);
     p.setTransformation((tree, root) -> {
       renameWrap(p, root, "shadow2D", "texture");
       renameWrap(p, root, "shadow2DLod", "textureLod");
@@ -113,6 +116,7 @@ public class TransformTest extends TestWithSingleASTTransformer {
   @ParameterizedTest
   @TestCaseSource(caseSet = "emptyExternalDeclarationRemoval", spacing = Spacing.TRIM_SINGLE_BOTH)
   void testEmptyExternalDeclarationRemoval(String type, String input, String output) {
+    p.setPrintType(PrintType.INDENTED);
     p.setTransformation((tree, root) -> {
       root.process(root.nodeIndex.getStream(EmptyDeclaration.class), ASTNode::detachAndDelete);
     });

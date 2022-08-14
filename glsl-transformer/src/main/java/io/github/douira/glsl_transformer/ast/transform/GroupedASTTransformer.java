@@ -6,7 +6,7 @@ import java.util.function.*;
 import org.antlr.v4.runtime.RecognitionException;
 
 import io.github.douira.glsl_transformer.ast.node.TranslationUnit;
-import io.github.douira.glsl_transformer.ast.print.*;
+import io.github.douira.glsl_transformer.ast.print.ASTPrinter;
 import io.github.douira.glsl_transformer.job_parameter.JobParameters;
 
 /**
@@ -67,8 +67,7 @@ public class GroupedASTTransformer<T extends JobParameters, K, M extends Map<K, 
   }
 
   @Override
-  public M transform(PrintType printType, Map<K, String> items)
-      throws RecognitionException {
+  public M transform(Map<K, String> items) throws RecognitionException {
     // parse all items
     var translationUnits = tuMapSupplier.get();
     for (var entry : items.entrySet()) {
@@ -83,7 +82,7 @@ public class GroupedASTTransformer<T extends JobParameters, K, M extends Map<K, 
     var printedItems = resultMapSupplier.get();
     for (var entry : translationUnits.entrySet()) {
       var value = entry.getValue();
-      printedItems.put(entry.getKey(), value == null ? null : ASTPrinter.print(printType, value));
+      printedItems.put(entry.getKey(), value == null ? null : ASTPrinter.print(getPrintType(), value));
     }
     return printedItems;
   }

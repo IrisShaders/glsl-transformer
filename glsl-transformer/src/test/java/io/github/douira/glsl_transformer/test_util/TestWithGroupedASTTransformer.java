@@ -4,7 +4,6 @@ import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.*;
 
-import org.antlr.v4.runtime.RecognitionException;
 import org.junit.jupiter.api.BeforeEach;
 
 import io.github.douira.glsl_transformer.ast.print.PrintType;
@@ -20,12 +19,7 @@ public class TestWithGroupedASTTransformer {
 
   @BeforeEach
   public void setUp() {
-    p = new TriASTTransformer<>(Part.class, Part.A, Part.B, Part.C) {
-      @Override
-      public Map<Part, String> transform(Map<Part, String> str) throws RecognitionException {
-        return super.transform(PrintType.INDENTED, str);
-      }
-    };
+    p = new TriASTTransformer<>(Part.class, Part.A, Part.B, Part.C);
     p.setSLLOnly();
   }
 
@@ -38,12 +32,16 @@ public class TestWithGroupedASTTransformer {
   }
 
   public void assertTransform(Map<Part, String> expected, Map<Part, String> input) {
-    assertEquals(expected, p.transform(PrintType.COMPACT, input));
+    p.setPrintType(PrintType.COMPACT);
+    assertEquals(expected, p.transform(input));
+    p.setPrintType(PrintType.INDENTED);
   }
 
   public void assertTransform(String aExpected, String bExpected, String cExpected, String aInput, String bInput,
       String cInput) {
+    p.setPrintType(PrintType.COMPACT);
     assertEquals(mapOf(aExpected, bExpected, cExpected),
-        p.transform(PrintType.COMPACT, mapOf(aInput, bInput, cInput)));
+        p.transform(mapOf(aInput, bInput, cInput)));
+    p.setPrintType(PrintType.INDENTED);
   }
 }
