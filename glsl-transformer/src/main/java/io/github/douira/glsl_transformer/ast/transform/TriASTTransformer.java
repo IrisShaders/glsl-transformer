@@ -107,8 +107,17 @@ public class TriASTTransformer<T extends JobParameters, E extends Enum<E>> exten
     return transform(items);
   }
 
+  public EnumMap<E, String> transform(String a, String b, String c, T parameters)
+      throws RecognitionException {
+    return withJobParameters(parameters, () -> transform(a, b, c));
+  }
+
   public Triple<String> transform(Triple<String> str) throws RecognitionException {
     var result = transform(str.a, str.b, str.c);
     return new Triple<>(result.get(aType), result.get(bType), result.get(cType));
+  }
+
+  public Triple<String> transform(Triple<String> str, T parameters) throws RecognitionException {
+    return withJobParameters(parameters, () -> transform(str));
   }
 }
