@@ -19,17 +19,26 @@ public class GroupedASTTransformer<T extends JobParameters, K, M extends Map<K, 
   private Supplier<M> resultMapSupplier;
 
   public GroupedASTTransformer(
-      Consumer<N> transformation,
       Supplier<N> tuMapSupplier,
       Supplier<M> resultMapSupplier) {
-    this.transformation = transformation;
     this.tuMapSupplier = tuMapSupplier;
     this.resultMapSupplier = resultMapSupplier;
   }
 
   public GroupedASTTransformer(
+      Consumer<N> transformation,
       Supplier<N> tuMapSupplier,
       Supplier<M> resultMapSupplier) {
+    setTransformation(transformation);
+    this.tuMapSupplier = tuMapSupplier;
+    this.resultMapSupplier = resultMapSupplier;
+  }
+
+  public GroupedASTTransformer(
+      BiConsumer<N, T> transformation,
+      Supplier<N> tuMapSupplier,
+      Supplier<M> resultMapSupplier) {
+    setTransformation(transformation);
     this.tuMapSupplier = tuMapSupplier;
     this.resultMapSupplier = resultMapSupplier;
   }
@@ -43,6 +52,10 @@ public class GroupedASTTransformer<T extends JobParameters, K, M extends Map<K, 
 
   public void setTransformation(Consumer<N> transformation) {
     this.transformation = transformation;
+  }
+
+  public void setTransformation(BiConsumer<N, T> transformation) {
+    this.transformation = trees -> transformation.accept(trees, getJobParameters());
   }
 
   public void setTuMapSupplier(Supplier<N> tuMapSupplier) {
