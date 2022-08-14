@@ -69,9 +69,4 @@ public class SingleASTTransformer<T extends JobParameters> extends ASTTransforme
     transformation.accept(translationUnit);
     return ASTPrinter.print(printType, translationUnit);
   }
-
-  public String transform(
-      PrintType printType, String str, T parameters) throws RecognitionException {
-    return withJobParameters(parameters, () -> transform(printType, str));
-  }
 }

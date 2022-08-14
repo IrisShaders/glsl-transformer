@@ -13,6 +13,7 @@ import io.github.douira.glsl_transformer.job_parameter.*;
 public abstract class ASTTransformer<T extends JobParameters, V> extends ASTParser
     implements ParameterizedTransformer<T, V> {
   private T jobParameters;
+  private PrintType defaultPrintType = PrintType.COMPACT;
 
   @Override
   public T getJobParameters() {
@@ -24,10 +25,18 @@ public abstract class ASTTransformer<T extends JobParameters, V> extends ASTPars
     jobParameters = parameters;
   }
 
+  public PrintType getDefaultPrintType() {
+    return defaultPrintType;
+  }
+
   public abstract V transform(PrintType printType, V str) throws RecognitionException;
 
   @Override
   public V transform(V str) throws RecognitionException {
-    return transform(PrintType.COMPACT, str);
+    return transform(getDefaultPrintType(), str);
+  }
+
+  public V transform(PrintType printType, V str, T parameters) throws RecognitionException {
+    return withJobParameters(parameters, () -> transform(printType, str));
   }
 }
