@@ -2,14 +2,14 @@ package io.github.douira.glsl_transformer.ast.print;
 
 import org.junit.jupiter.api.Test;
 
-import io.github.douira.glsl_transformer.test_util.TestWithASTTransformer;
+import io.github.douira.glsl_transformer.test_util.TestWithSingleASTTransformer;
 
-public class ASTPrinterTest extends TestWithASTTransformer {
+public class ASTPrinterTest extends TestWithSingleASTTransformer {
   @Test
   void testOperatorPrecedencePrinting1() {
-    t.setTransformation((tree, root) -> {
+    p.setTransformation((tree, root) -> {
       root.replaceReferenceExpressions(
-          t, "b", "c + d");
+          p, "b", "c + d");
     });
     assertTransform(
         "int x = a * (c + d); ",
@@ -33,9 +33,9 @@ public class ASTPrinterTest extends TestWithASTTransformer {
 
   @Test
   void testOperatorPrecedencePrinting2() {
-    t.setTransformation((tree, root) -> {
+    p.setTransformation((tree, root) -> {
       root.replaceReferenceExpressions(
-          t, "b", "++c");
+          p, "b", "++c");
     });
     assertTransform(
         "int x = ++++c; ",
@@ -56,9 +56,9 @@ public class ASTPrinterTest extends TestWithASTTransformer {
 
   @Test
   void testOperatorPrecedencePrinting3() {
-    t.setTransformation((tree, root) -> {
+    p.setTransformation((tree, root) -> {
       root.replaceReferenceExpressions(
-          t, "b", "c, d");
+          p, "b", "c, d");
     });
     assertTransform(
         "int x = ++(c, d); ",
@@ -76,9 +76,9 @@ public class ASTPrinterTest extends TestWithASTTransformer {
 
   @Test
   void testOperatorPrecedencePrinting4() {
-    t.setTransformation((tree, root) -> {
+    p.setTransformation((tree, root) -> {
       root.replaceReferenceExpressions(
-          t, "b", "(c + d)");
+          p, "b", "(c + d)");
     });
     assertTransform(
         "int x = a * (c + d); ",

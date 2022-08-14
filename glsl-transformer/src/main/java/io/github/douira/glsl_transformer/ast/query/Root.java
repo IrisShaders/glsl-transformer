@@ -9,7 +9,7 @@ import io.github.douira.glsl_transformer.ast.node.basic.ASTNode;
 import io.github.douira.glsl_transformer.ast.node.expression.*;
 import io.github.douira.glsl_transformer.ast.query.index.*;
 import io.github.douira.glsl_transformer.ast.query.match.*;
-import io.github.douira.glsl_transformer.ast.transform.ASTTransformer;
+import io.github.douira.glsl_transformer.ast.transform.ASTParser;
 import io.github.douira.glsl_transformer.util.Passthrough;
 
 /**
@@ -317,7 +317,7 @@ public class Root {
    * @param expression The content of the replacement expression
    */
   public void replaceReferenceExpressions(
-      ASTTransformer<?> t,
+      ASTParser t,
       String name,
       String expression) {
     replaceReferenceExpressions(
@@ -338,7 +338,7 @@ public class Root {
    * @return Whether any replacements were made
    */
   public boolean replaceReferenceExpressionsReport(
-      ASTTransformer<?> t,
+      ASTParser t,
       String name,
       String expression) {
     return replaceReferenceExpressionsReport(
@@ -356,7 +356,7 @@ public class Root {
    * @param expression The content of the replacement expression
    */
   public void replaceReferenceExpressions(
-      ASTTransformer<?> t,
+      ASTParser t,
       Stream<Identifier> targets,
       String expression) {
     process(targets, identifier -> {
@@ -379,7 +379,7 @@ public class Root {
    * @return Whether any replacements were made
    */
   public boolean replaceReferenceExpressionsReport(
-      ASTTransformer<?> t,
+      ASTParser t,
       Stream<Identifier> targets,
       String expression) {
     activity = false;
@@ -405,7 +405,7 @@ public class Root {
    * @return Whether any replacements were made
    */
   public boolean replaceExpressions(
-      ASTTransformer<?> t,
+      ASTParser t,
       Stream<? extends Expression> targets,
       String expression) {
     return process(targets, node -> {
@@ -425,7 +425,7 @@ public class Root {
    * @return Whether any replacements were made
    */
   public static boolean replaceExpressionsConcurrent(
-      ASTTransformer<?> t,
+      ASTParser t,
       List<? extends Expression> targets,
       String expression) {
     for (var node : targets) {
@@ -447,7 +447,7 @@ public class Root {
    * @return Whether anything was processed
    */
   public <T extends ASTNode> boolean processMatches(
-      ASTTransformer<?> t,
+      ASTParser t,
       Stream<? extends ASTNode> matchTargetChildren,
       Matcher<T> matcher,
       Consumer<? super T> replacer) {
@@ -470,7 +470,7 @@ public class Root {
    * @return Whether anything was processed
    */
   public <T extends ASTNode> boolean processMatches(
-      ASTTransformer<?> t,
+      ASTParser t,
       HintedMatcher<T> hintedMatcher,
       Consumer<? super T> replacer) {
     return processMatches(t,
@@ -489,7 +489,7 @@ public class Root {
    * @return Whether anything was processed
    */
   public <T extends Expression> boolean replaceExpressionMatches(
-      ASTTransformer<?> t,
+      ASTParser t,
       Stream<? extends ASTNode> matchTargetChildren,
       Matcher<T> matcher,
       String expression) {
@@ -513,7 +513,7 @@ public class Root {
    * @return Whether anything was processed
    */
   public <T extends Expression> boolean replaceExpressionMatches(
-      ASTTransformer<?> t,
+      ASTParser t,
       HintedMatcher<T> hintedMatcher,
       String expression) {
     return replaceExpressionMatches(t,

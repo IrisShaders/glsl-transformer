@@ -5,12 +5,12 @@ import static org.junit.jupiter.api.Assertions.*;
 import org.junit.jupiter.api.Test;
 
 import io.github.douira.glsl_transformer.ast.node.expression.binary.AdditionExpression;
-import io.github.douira.glsl_transformer.test_util.TestWithASTTransformer;
+import io.github.douira.glsl_transformer.test_util.TestWithSingleASTTransformer;
 
-public class ASTNodeTest extends TestWithASTTransformer {
+public class ASTNodeTest extends TestWithSingleASTTransformer {
   @Test
   void testMoveInParent() {
-    t.setTransformation((tree, root) -> {
+    p.setTransformation((tree, root) -> {
       var a = root.identifierIndex.getOneReferenceExpression("a");
       var b = root.identifierIndex.getOneReferenceExpression("b");
       assertEquals(a.getParent(), b.getParent());
@@ -39,12 +39,12 @@ public class ASTNodeTest extends TestWithASTTransformer {
       assertEquals(b, parent.getLeft());
       assertEquals(a, parent.getRight());
     });
-    t.transform("int x = a + b;");
+    p.transform("int x = a + b;");
   }
 
   @Test
   void testMoveInParentSimple() {
-    t.setTransformation((tree, root) -> {
+    p.setTransformation((tree, root) -> {
       var a = root.identifierIndex.getOneReferenceExpression("a");
       var b = root.identifierIndex.getOneReferenceExpression("b");
       assertEquals(a.getParent(), b.getParent());
@@ -62,6 +62,6 @@ public class ASTNodeTest extends TestWithASTTransformer {
       assertEquals(a, parent.getLeft());
       assertEquals(a, parent.getRight());
     });
-    t.transform("int x = a + b;");
+    p.transform("int x = a + b;");
   }
 }

@@ -19,7 +19,8 @@ public class CSTTransformerTestTree {
   @Test
   @SnapshotName("testParseTree")
   void testParseTree() {
-    var t = new CSTTransformer<WrappedParameters<StringBuilder>>(false);
+    var t = new CSTTransformer<WrappedParameters<StringBuilder>>();
+    t.setThrowParseErrors(false);
     t.setSLLOnly();
     t.addConcurrent(new PrintTreeSnapshot());
 

@@ -15,16 +15,16 @@ import io.github.douira.glsl_transformer.ast.node.external_declaration.ExternalD
 import io.github.douira.glsl_transformer.ast.print.PrintType;
 import io.github.douira.glsl_transformer.ast.query.Root;
 import io.github.douira.glsl_transformer.job_parameter.NonFixedJobParameters;
-import io.github.douira.glsl_transformer.test_util.TestWithASTTransformer;
+import io.github.douira.glsl_transformer.test_util.TestWithSingleASTTransformer;
 import io.github.douira.glsl_transformer.util.Type;
 
-public class ASTTransformerTest extends TestWithASTTransformer {
+public class SingleASTTransformerTest extends TestWithSingleASTTransformer {
   void assertInjectExternalDeclaration(int index, String input, String output) {
-    t.setTransformation(translationUnit -> {
-      translationUnit.children.add(index, t.parseExternalDeclaration(
+    p.setTransformation(translationUnit -> {
+      translationUnit.children.add(index, p.parseExternalDeclaration(
           translationUnit, "int a;"));
     });
-    assertEquals(output, t.transform(PrintType.COMPACT, input));
+    assertEquals(output, p.transform(PrintType.COMPACT, input));
   }
 
   @Test
@@ -42,7 +42,7 @@ public class ASTTransformerTest extends TestWithASTTransformer {
 
   @Test
   void testIdentifierQuery() {
-    t.setTransformation((tree, root) -> {
+    p.setTransformation((tree, root) -> {
       root.identifierIndex.prefixQueryFlat("a").collect(Collectors.toList()).forEach(
           node -> node.setName(node.getName() + "b"));
     });
@@ -56,7 +56,7 @@ public class ASTTransformerTest extends TestWithASTTransformer {
 
   @Test
   void testNodeQuery() {
-    t.setTransformation((tree, root) -> {
+    p.setTransformation((tree, root) -> {
       root.nodeIndex.get(LiteralExpression.class)
           .stream().forEach(literal -> literal.changeInteger(literal.getInteger() + 1));
     });
@@ -70,7 +70,7 @@ public class ASTTransformerTest extends TestWithASTTransformer {
 
   @Test
   void testNodeQueryAfterModification() {
-    t.setTransformation((tree, root) -> {
+    p.setTransformation((tree, root) -> {
       Root.indexBuildSession(tree, () -> {
         for (var sequence : root.nodeIndex
             .get(SequenceExpression.class)) {
@@ -91,7 +91,7 @@ public class ASTTransformerTest extends TestWithASTTransformer {
 
   @Test
   void testSelfReplacement() {
-    t.setTransformation((tree, root) -> {
+    p.setTransformation((tree, root) -> {
       Root.indexBuildSession(tree, () -> {
         var toReplace = new ArrayList<LiteralExpression>();
         for (var node : root.nodeIndex
@@ -116,7 +116,7 @@ public class ASTTransformerTest extends TestWithASTTransformer {
 
   @Test
   void testNodeRemovalAndQuery() {
-    t.setTransformation((tree, root) -> {
+    p.setTransformation((tree, root) -> {
       var toRemove = new ArrayList<ReferenceExpression>();
       for (var node : root.nodeIndex
           .get(ReferenceExpression.class)) {
@@ -137,15 +137,15 @@ public class ASTTransformerTest extends TestWithASTTransformer {
   @Test
   void testJobParameters() {
     var jobParameters = new NonFixedJobParameters();
-    t.setTransformation((tree, root) -> {
-      assertEquals(t.getJobParameters(), jobParameters);
+    p.setTransformation((tree, root) -> {
+      assertEquals(p.getJobParameters(), jobParameters);
     });
-    t.transform(PrintType.COMPACT, "", jobParameters);
+    p.transform(PrintType.COMPACT, "", jobParameters);
   }
 
   @Test
   void testMoveNodeInternal() {
-    t.setTransformation((tree, root) -> {
+    p.setTransformation((tree, root) -> {
       var firstDeclaration = tree.children.get(0);
       var toMove = new ArrayList<LiteralExpression>();
       for (var node : root.nodeIndex
@@ -159,7 +159,7 @@ public class ASTTransformerTest extends TestWithASTTransformer {
           continue;
         }
       }
-      var secondDeclaration = t.parseExternalDeclaration(tree, "int x = 4, 4;");
+      var secondDeclaration = p.parseExternalDeclaration(tree, "int x = 4, 4;");
       var sequenceExpression = secondDeclaration.getRoot().nodeIndex
           .get(SequenceExpression.class).stream()
           .filter(e -> e.hasAncestor(secondDeclaration)).findAny().get();
@@ -177,7 +177,7 @@ public class ASTTransformerTest extends TestWithASTTransformer {
 
   @Test
   void testAddMatchingRootTree() {
-    t.setTransformation((tree, root) -> {
+    p.setTransformation((tree, root) -> {
       Root.indexBuildSession(tree, () -> {
         assertTrue(root.identifierIndex.has("bar"));
         root.identifierIndex.getOne("bar").replaceByAndDelete(new Identifier("foo"));
@@ -193,7 +193,7 @@ public class ASTTransformerTest extends TestWithASTTransformer {
   // add already registered subtree to tree
   @Test
   void testAddMatchingRootTreeNested() {
-    t.setTransformation((tree, root) -> {
+    p.setTransformation((tree, root) -> {
       Root.indexBuildSession(tree, () -> {
         assertTrue(root.identifierIndex.has("bar"));
         root.nodeIndex.getOne(ReferenceExpression.class).replaceByAndDelete(
@@ -210,7 +210,7 @@ public class ASTTransformerTest extends TestWithASTTransformer {
   // add new subtree with different root to tree and register
   @Test
   void testAddNewRootTree() {
-    t.setTransformation((tree, root) -> {
+    p.setTransformation((tree, root) -> {
       Root.indexSeparateTrees(register -> {
         assertTrue(root.identifierIndex.has("bar"));
         root.nodeIndex.getOne(ReferenceExpression.class).replaceByAndDelete(
@@ -227,7 +227,7 @@ public class ASTTransformerTest extends TestWithASTTransformer {
   // move subtree within tree
   @Test
   void testSubtreeMoveSwap() {
-    t.setTransformation((tree, root) -> {
+    p.setTransformation((tree, root) -> {
       assertTrue(root.identifierIndex.has("bar"));
       assertTrue(root.identifierIndex.has("foo"));
       ASTNode.swap(
@@ -244,7 +244,7 @@ public class ASTTransformerTest extends TestWithASTTransformer {
   // delete subtree from tree and unregister
   @Test
   void testSubtreeDeletion() {
-    t.setTransformation((tree, root) -> {
+    p.setTransformation((tree, root) -> {
       assertTrue(root.identifierIndex.has("bar"));
       assertTrue(root.identifierIndex.has("foo"));
       root.identifierIndex.getOne("bar")
@@ -260,7 +260,7 @@ public class ASTTransformerTest extends TestWithASTTransformer {
   // move subtree without swapping with another subtree
   @Test
   void testSubtreeMoveWithoutSwap() {
-    t.setTransformation((tree, root) -> {
+    p.setTransformation((tree, root) -> {
       assertTrue(root.identifierIndex.has("bar"));
       assertTrue(root.identifierIndex.has("foo"));
       var foo = root.identifierIndex.getOne("foo")
@@ -283,15 +283,15 @@ public class ASTTransformerTest extends TestWithASTTransformer {
   @Test
   void testParseNewKeywords() {
     assertThrows(ParseCancellationException.class, () -> {
-      t.parseSeparateExternalDeclaration("void foo(sampler2D sample) { }");
+      p.parseSeparateExternalDeclaration("void foo(sampler2D sample) { }");
     }, "It should throw if keywords are used as identifiers.");
     assertThrows(ParseCancellationException.class, () -> {
-      t.getLexer().version = Version.GL40;
-      t.parseSeparateExternalDeclaration("void foo(sampler2D sample) { }");
+      p.getLexer().version = Version.GL40;
+      p.parseSeparateExternalDeclaration("void foo(sampler2D sample) { }");
     }, "It should throw if keywords are used as identifiers.");
     assertDoesNotThrow(() -> {
-      t.getLexer().version = Version.GL33;
-      t.parseSeparateExternalDeclaration("void foo(sampler2D sample) { }");
+      p.getLexer().version = Version.GL33;
+      p.parseSeparateExternalDeclaration("void foo(sampler2D sample) { }");
     }, "It should not throw if disabled keywords are used as identifiers.");
   }
 }

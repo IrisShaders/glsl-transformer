@@ -117,6 +117,10 @@ public class EnhancedParser implements ParserInterface {
   public EnhancedParser() {
   }
 
+  public void setThrowParseErrors(boolean throwParseErrors) {
+    this.throwParseErrors = throwParseErrors;
+  }
+
   /**
    * Gets the internal singleton instance of the parser. This should generally not
    * be used by external library users.

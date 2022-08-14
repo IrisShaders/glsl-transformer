@@ -11,98 +11,98 @@ import io.github.douira.glsl_transformer.ast.node.expression.binary.AdditionExpr
 import io.github.douira.glsl_transformer.ast.node.expression.unary.FunctionCallExpression;
 import io.github.douira.glsl_transformer.ast.node.external_declaration.*;
 import io.github.douira.glsl_transformer.ast.query.match.*;
-import io.github.douira.glsl_transformer.test_util.TestWithASTTransformer;
+import io.github.douira.glsl_transformer.test_util.TestWithSingleASTTransformer;
 
-public class MatcherTest extends TestWithASTTransformer {
-  private void assertNoMatchED(Matcher<ExternalDeclaration> p, String input) {
-    assertFalse(p.matches(t.parseSeparateExternalDeclaration(input)));
+public class MatcherTest extends TestWithSingleASTTransformer {
+  private void assertNoMatchED(Matcher<ExternalDeclaration> m, String input) {
+    assertFalse(m.matches(p.parseSeparateExternalDeclaration(input)));
   }
 
-  private void assertMatchED(Matcher<ExternalDeclaration> p, String input) {
-    assertTrue(p.matches(t.parseSeparateExternalDeclaration(input)));
+  private void assertMatchED(Matcher<ExternalDeclaration> m, String input) {
+    assertTrue(m.matches(p.parseSeparateExternalDeclaration(input)));
   }
 
-  private void assertExtractED(Matcher<ExternalDeclaration> p, String input) {
-    assertTrue(p.matchesExtract(t.parseSeparateExternalDeclaration(input)));
+  private void assertExtractED(Matcher<ExternalDeclaration> m, String input) {
+    assertTrue(m.matchesExtract(p.parseSeparateExternalDeclaration(input)));
   }
 
-  private void assertNoExtractTU(Matcher<TranslationUnit> p, String input) {
-    assertFalse(p.matchesExtract(t.parseTranslationUnit(input)));
+  private void assertNoExtractTU(Matcher<TranslationUnit> m, String input) {
+    assertFalse(m.matchesExtract(p.parseTranslationUnit(input)));
   }
 
-  private void assertExtractTU(Matcher<TranslationUnit> p, String input) {
-    assertTrue(p.matchesExtract(t.parseTranslationUnit(input)));
+  private void assertExtractTU(Matcher<TranslationUnit> m, String input) {
+    assertTrue(m.matchesExtract(p.parseTranslationUnit(input)));
   }
 
-  private void assertMatchTU(Matcher<TranslationUnit> p, String input) {
-    assertTrue(p.matches(t.parseTranslationUnit(input)));
+  private void assertMatchTU(Matcher<TranslationUnit> m, String input) {
+    assertTrue(m.matches(p.parseTranslationUnit(input)));
   }
 
-  private void assertNoMatchTU(Matcher<TranslationUnit> p, String input) {
-    assertFalse(p.matches(t.parseTranslationUnit(input)));
+  private void assertNoMatchTU(Matcher<TranslationUnit> m, String input) {
+    assertFalse(m.matches(p.parseTranslationUnit(input)));
   }
 
-  private void assertMatchEx(Matcher<Expression> p, String input) {
-    assertTrue(p.matches(t.parseSeparateExpression(input)));
+  private void assertMatchEx(Matcher<Expression> m, String input) {
+    assertTrue(m.matches(p.parseSeparateExpression(input)));
   }
 
-  private void assertNoMatchEx(Matcher<Expression> p, String input) {
-    assertFalse(p.matches(t.parseSeparateExpression(input)));
+  private void assertNoMatchEx(Matcher<Expression> m, String input) {
+    assertFalse(m.matches(p.parseSeparateExpression(input)));
   }
 
   @Test
   void testMatches() {
-    var p = new Matcher<>("uniform vec4 entityColor;",
+    var m = new Matcher<>("uniform vec4 entityColor;",
         Matcher.externalDeclarationPattern);
 
-    assertFalse(p.matches(null));
-    assertMatchED(p, "uniform vec4 entityColor;");
-    assertNoMatchED(p, "uniform vec3 entityColor;");
-    assertNoMatchED(p, "in vec4 entityColor;");
-    assertNoMatchED(p, "uniform precise vec4 entityColor;");
-    assertNoMatchED(p, "uniform vec4 entityColo;");
-    assertNoMatchED(p, "uniform vec4 entityColor_;");
+    assertFalse(m.matches(null));
+    assertMatchED(m, "uniform vec4 entityColor;");
+    assertNoMatchED(m, "uniform vec3 entityColor;");
+    assertNoMatchED(m, "in vec4 entityColor;");
+    assertNoMatchED(m, "uniform precise vec4 entityColor;");
+    assertNoMatchED(m, "uniform vec4 entityColo;");
+    assertNoMatchED(m, "uniform vec4 entityColor_;");
   }
 
   @Test
   void testMatchesDataWildcard() {
-    var p = new Matcher<>("uniform vec4 ___ = foo + ___;",
+    var m = new Matcher<>("uniform vec4 ___ = foo + ___;",
         Matcher.externalDeclarationPattern, "___");
 
-    assertFalse(p.matches(null));
-    assertMatchED(p, "uniform vec4 foo = foo + foo;");
-    assertNoMatchED(p, "uniform vec3 foo = foo + foo;");
-    assertNoMatchED(p, "in vec4 foo = foo + foo;");
-    assertNoMatchED(p, "uniform precise vec4 foo = foo + foo;");
-    assertNoMatchED(p, "uniform vec4 foo = bar + foo;");
-    assertNoMatchED(p, "uniform vec4 foo = __ + foo;");
+    assertFalse(m.matches(null));
+    assertMatchED(m, "uniform vec4 foo = foo + foo;");
+    assertNoMatchED(m, "uniform vec3 foo = foo + foo;");
+    assertNoMatchED(m, "in vec4 foo = foo + foo;");
+    assertNoMatchED(m, "uniform precise vec4 foo = foo + foo;");
+    assertNoMatchED(m, "uniform vec4 foo = bar + foo;");
+    assertNoMatchED(m, "uniform vec4 foo = __ + foo;");
   }
 
   @Test
   void testExtractDataWildcards() {
-    var p = new Matcher<>("uniform vec4 ___a = foo + ___b;",
+    var m = new Matcher<>("uniform vec4 ___a = foo + ___b;",
         Matcher.externalDeclarationPattern, "___");
 
-    assertFalse(p.matchesExtract(null));
-    assertTrue(p.getDataMatches().isEmpty());
-    assertTrue(p.getNodeMatches().isEmpty());
+    assertFalse(m.matchesExtract(null));
+    assertTrue(m.getDataMatches().isEmpty());
+    assertTrue(m.getNodeMatches().isEmpty());
 
-    assertExtractED(p, "uniform vec4 bar = foo + bam;");
-    var dataMatches = p.getDataMatches();
+    assertExtractED(m, "uniform vec4 bar = foo + bam;");
+    var dataMatches = m.getDataMatches();
     assertEquals("bar", dataMatches.get("a"));
     assertEquals("bam", dataMatches.get("b"));
-    assertEquals(dataMatches.get("b"), p.getDataMatch("b"));
-    assertEquals(dataMatches.get("b"), p.getStringDataMatch("b"));
-    assertTrue(p.getNodeMatches().isEmpty());
+    assertEquals(dataMatches.get("b"), m.getDataMatch("b"));
+    assertEquals(dataMatches.get("b"), m.getStringDataMatch("b"));
+    assertTrue(m.getNodeMatches().isEmpty());
 
-    assertNoMatchED(p, "uniform vec4 bar = foo;");
+    assertNoMatchED(m, "uniform vec4 bar = foo;");
     // It should not match Identifiers with LiteralExpressions
-    assertNoMatchED(p, "uniform vec4 bar = foo + 5;");
+    assertNoMatchED(m, "uniform vec4 bar = foo + 5;");
   }
 
   @Test
   void testExtractNodeWildcards() {
-    var p = new Matcher<>("uniform vec4 a = foo + b;", Matcher.externalDeclarationPattern) {
+    var m = new Matcher<>("uniform vec4 a = foo + b;", Matcher.externalDeclarationPattern) {
       {
         markAnyWildcard("aNode",
             pattern.getRoot().identifierIndex.getOne("a"));
@@ -112,29 +112,29 @@ public class MatcherTest extends TestWithASTTransformer {
       }
     };
 
-    assertExtractED(p, "uniform vec4 bam = foo + bar;");
-    assertTrue(p.getDataMatches().isEmpty());
+    assertExtractED(m, "uniform vec4 bam = foo + bar;");
+    assertTrue(m.getDataMatches().isEmpty());
     assertEquals("bam",
-        p.getNodeMatch("aNode", Identifier.class).getName());
+        m.getNodeMatch("aNode", Identifier.class).getName());
     assertEquals("bar",
-        p.getNodeMatch("bNode", ReferenceExpression.class)
+        m.getNodeMatch("bNode", ReferenceExpression.class)
             .getIdentifier().getName());
 
-    assertExtractED(p, "uniform vec4 bam = foo + a();");
-    assertTrue(p.getDataMatches().isEmpty());
-    assertNotNull(p.getNodeMatch("bNode", FunctionCallExpression.class));
+    assertExtractED(m, "uniform vec4 bam = foo + a();");
+    assertTrue(m.getDataMatches().isEmpty());
+    assertNotNull(m.getNodeMatch("bNode", FunctionCallExpression.class));
 
-    assertExtractED(p, "uniform vec4 bam = foo + 5;");
+    assertExtractED(m, "uniform vec4 bam = foo + 5;");
     assertEquals(5,
-        p.getNodeMatch("bNode", LiteralExpression.class).getNumber());
-    assertExtractED(p, "uniform vec4 bam = foo + 5f;");
+        m.getNodeMatch("bNode", LiteralExpression.class).getNumber());
+    assertExtractED(m, "uniform vec4 bam = foo + 5f;");
     assertEquals(5f,
-        p.getNodeMatch("bNode", LiteralExpression.class).getNumber());
+        m.getNodeMatch("bNode", LiteralExpression.class).getNumber());
   }
 
   @Test
   void testExtractNodeWildcardsList() {
-    var p = new Matcher<>("int ___a; int x = a; b; float ___b;", Matcher.translationUnitPattern, "___") {
+    var m = new Matcher<>("int ___a; int x = a; b; float ___b;", Matcher.translationUnitPattern, "___") {
       {
         markAnyWildcard("aNode", pattern.getRoot().identifierIndex
             .getOne("a").getAncestor(Expression.class));
@@ -143,19 +143,19 @@ public class MatcherTest extends TestWithASTTransformer {
       }
     };
 
-    assertExtractTU(p, "int foo; int x = 45 + 5; void main() {} float bar;");
-    assertEquals("foo", p.getStringDataMatch("a"));
-    assertEquals("bar", p.getStringDataMatch("b"));
+    assertExtractTU(m, "int foo; int x = 45 + 5; void main() {} float bar;");
+    assertEquals("foo", m.getStringDataMatch("a"));
+    assertEquals("bar", m.getStringDataMatch("b"));
     assertEquals(AdditionExpression.class,
-        p.getNodeMatch("aNode").getClass());
+        m.getNodeMatch("aNode").getClass());
     assertEquals("main",
-        p.getNodeMatch("bNode", FunctionDefinition.class)
+        m.getNodeMatch("bNode", FunctionDefinition.class)
             .getFunctionPrototype().getName().getName());
   }
 
   @Test
   void testPredicatedWildcard() {
-    var p = new Matcher<>("a;", Matcher.translationUnitPattern) {
+    var m = new Matcher<>("a;", Matcher.translationUnitPattern) {
       {
         markPredicatedWildcard("bNode",
             pattern.getAncestor(TranslationUnit.class)
@@ -164,13 +164,13 @@ public class MatcherTest extends TestWithASTTransformer {
       }
     };
 
-    assertNoExtractTU(p, "foo;");
-    assertExtractTU(p, ";");
+    assertNoExtractTU(m, "foo;");
+    assertExtractTU(m, ";");
   }
 
   @Test
   void testClassWildcard1() {
-    var p = new Matcher<>("a;", Matcher.translationUnitPattern) {
+    var m = new Matcher<>("a;", Matcher.translationUnitPattern) {
       {
         markClassWildcard("bNode",
             pattern.getAncestor(TranslationUnit.class)
@@ -179,13 +179,13 @@ public class MatcherTest extends TestWithASTTransformer {
       }
     };
 
-    assertNoExtractTU(p, "foo;");
-    assertExtractTU(p, ";");
+    assertNoExtractTU(m, "foo;");
+    assertExtractTU(m, ";");
   }
 
   @Test
   void testNodeWildcardWithoutExtract() {
-    var p = new Matcher<>("a;", Matcher.translationUnitPattern) {
+    var m = new Matcher<>("a;", Matcher.translationUnitPattern) {
       {
         markClassWildcard("bNode",
             pattern.getAncestor(TranslationUnit.class)
@@ -194,13 +194,13 @@ public class MatcherTest extends TestWithASTTransformer {
       }
     };
 
-    assertNoMatchTU(p, "foo;");
-    assertMatchTU(p, ";");
+    assertNoMatchTU(m, "foo;");
+    assertMatchTU(m, ";");
   }
 
   @Test
   void testClassWildcard2() {
-    var p = new Matcher<>("a;", Matcher.translationUnitPattern) {
+    var m = new Matcher<>("a;", Matcher.translationUnitPattern) {
       {
         markClassWildcard("bNode",
             pattern.getAncestor(TranslationUnit.class)
@@ -209,13 +209,13 @@ public class MatcherTest extends TestWithASTTransformer {
       }
     };
 
-    assertExtractTU(p, "foo;");
-    assertExtractTU(p, ";");
+    assertExtractTU(m, "foo;");
+    assertExtractTU(m, ";");
   }
 
   @Test
   void testClassedPredicateWildcard() {
-    var p = new Matcher<>("a;", Matcher.translationUnitPattern) {
+    var m = new Matcher<>("a;", Matcher.translationUnitPattern) {
       {
         markClassedPredicateWildcard("bNode",
             pattern.getAncestor(TranslationUnit.class)
@@ -226,15 +226,15 @@ public class MatcherTest extends TestWithASTTransformer {
       }
     };
 
-    assertNoExtractTU(p, "foo;");
-    assertNoExtractTU(p, ";");
-    assertExtractTU(p, "void main() {}");
-    assertNoExtractTU(p, "void foo() {}");
+    assertNoExtractTU(m, "foo;");
+    assertNoExtractTU(m, ";");
+    assertExtractTU(m, "void main() {}");
+    assertNoExtractTU(m, "void foo() {}");
   }
 
   @Test
   void testLiteralExpressionWildcard() {
-    var p = new Matcher<>("int x = foo[index];", Matcher.translationUnitPattern) {
+    var m = new Matcher<>("int x = foo[index];", Matcher.translationUnitPattern) {
       {
         markClassedPredicateWildcard("index",
             pattern.getRoot().identifierIndex.getOne("index").getAncestor(ReferenceExpression.class),
@@ -249,20 +249,20 @@ public class MatcherTest extends TestWithASTTransformer {
       }
     };
 
-    assertNoExtractTU(p, "int x = foo[-1];");
-    assertNoExtractTU(p, "int x = foo[9];");
-    assertNoExtractTU(p, "int x = foo[8];");
-    assertExtractTU(p, "int x = foo[4];");
-    assertExtractTU(p, "int x = foo[7];");
-    assertExtractTU(p, "int x = foo[0];");
-    assertNoExtractTU(p, ";");
-    assertNoMatchTU(p, "int x = foo[8];");
-    assertMatchTU(p, "int x = foo[4];");
+    assertNoExtractTU(m, "int x = foo[-1];");
+    assertNoExtractTU(m, "int x = foo[9];");
+    assertNoExtractTU(m, "int x = foo[8];");
+    assertExtractTU(m, "int x = foo[4];");
+    assertExtractTU(m, "int x = foo[7];");
+    assertExtractTU(m, "int x = foo[0];");
+    assertNoExtractTU(m, ";");
+    assertNoMatchTU(m, "int x = foo[8];");
+    assertMatchTU(m, "int x = foo[4];");
   }
 
   @Test
   void testAutoHintedMatcher() {
-    var p = new AutoHintedMatcher<Expression>(
+    var m = new AutoHintedMatcher<Expression>(
         "gl_TextureMatrix[index]", Matcher.expressionPattern) {
       {
         markClassedPredicateWildcard("index",
@@ -277,16 +277,16 @@ public class MatcherTest extends TestWithASTTransformer {
             });
       }
     };
-    assertMatchEx(p, "gl_TextureMatrix[1]");
-    assertNoMatchEx(p, "gl_TextureMatrix[-1]");
-    assertNoMatchEx(p, "gl_TextureMatrix[8]");
-    assertNoMatchEx(p, "gl_TextureMatrix[foo]");
-    assertNoMatchEx(p, "gl_TextureMatrix[1.0]");
+    assertMatchEx(m, "gl_TextureMatrix[1]");
+    assertNoMatchEx(m, "gl_TextureMatrix[-1]");
+    assertNoMatchEx(m, "gl_TextureMatrix[8]");
+    assertNoMatchEx(m, "gl_TextureMatrix[foo]");
+    assertNoMatchEx(m, "gl_TextureMatrix[1.0]");
   }
 
   @Test
   void testMatchOnlyUniform() {
-    t.setTransformation((tree, root) -> {
+    p.setTransformation((tree, root) -> {
       root.process(root.identifierIndex.getStream("texture")
           .filter(id -> !(id.getParent() instanceof FunctionCallExpression)),
           id -> {
