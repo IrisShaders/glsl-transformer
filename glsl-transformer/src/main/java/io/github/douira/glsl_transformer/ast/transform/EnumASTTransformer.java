@@ -8,7 +8,6 @@ import io.github.douira.glsl_transformer.job_parameter.JobParameters;
 
 public class EnumASTTransformer<T extends JobParameters, E extends Enum<E>>
     extends GroupedASTTransformer<T, E, EnumMap<E, String>, EnumMap<E, TranslationUnit>> {
-
   public EnumASTTransformer(Consumer<EnumMap<E, TranslationUnit>> transformation, Class<E> enumClass) {
     super(transformation, () -> new EnumMap<>(enumClass), () -> new EnumMap<>(enumClass));
   }
@@ -18,12 +17,17 @@ public class EnumASTTransformer<T extends JobParameters, E extends Enum<E>>
   }
 
   @Override
-  public void setResultMapSupplier(Supplier<EnumMap<E, String>> resultMapSupplier) {
-    throw new UnsupportedOperationException("The enum map suppliers may not be changed.");
+  public void setTuMapSupplier(Supplier<EnumMap<E, TranslationUnit>> tuMapSupplier) {
+    throw new UnsupportedOperationException("The enum map suppliers may not be changed individually.");
   }
 
   @Override
-  public void setTuMapSupplier(Supplier<EnumMap<E, TranslationUnit>> tuMapSupplier) {
-    throw new UnsupportedOperationException("The enum map suppliers may not be changed.");
+  public void setResultMapSupplier(Supplier<EnumMap<E, String>> resultMapSupplier) {
+    throw new UnsupportedOperationException("The enum map suppliers may not be changed individually.");
+  }
+
+  public void setEnumType(Class<E> enumClass) {
+    super.setTuMapSupplier(() -> new EnumMap<>(enumClass));
+    super.setResultMapSupplier(() -> new EnumMap<>(enumClass));
   }
 }

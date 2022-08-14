@@ -8,7 +8,7 @@ import org.antlr.v4.runtime.RecognitionException;
 import org.junit.jupiter.api.BeforeEach;
 
 import io.github.douira.glsl_transformer.ast.print.PrintType;
-import io.github.douira.glsl_transformer.ast.transform.*;
+import io.github.douira.glsl_transformer.ast.transform.TriASTTransformer;
 import io.github.douira.glsl_transformer.job_parameter.JobParameters;
 
 public class TestWithGroupedASTTransformer {
@@ -30,6 +30,19 @@ public class TestWithGroupedASTTransformer {
   }
 
   public void assertTransform(Map<Part, String> expected, Map<Part, String> input) {
-    assertEquals(expected, p.transform(PrintType.COMPACT, input));
+    var result = p.transform(PrintType.COMPACT, input);
+    assertEquals(expected.get(Part.A), result.get(Part.A));
+    assertEquals(expected.get(Part.B), result.get(Part.B));
+    assertEquals(expected.get(Part.C), result.get(Part.C));
+    assertEquals(expected, result);
+  }
+
+  public void assertTransform(String aExpected, String bExpected, String cExpected, String aInput, String bInput,
+      String cInput) {
+    var result = p.transform(PrintType.COMPACT, Map.of(Part.A, aInput, Part.B, bInput, Part.C, cInput));
+    assertEquals(aExpected, result.get(Part.A));
+    assertEquals(bExpected, result.get(Part.B));
+    assertEquals(cExpected, result.get(Part.C));
+    assertEquals(Map.of(Part.A, aExpected, Part.B, bExpected, Part.C, cExpected), result);
   }
 }
