@@ -74,7 +74,10 @@ public class TriASTTransformer<T extends JobParameters, E extends Enum<E>> exten
       final var a = map.get(aType);
       final var b = map.get(bType);
       final var c = map.get(cType);
-      transformation.accept(a, b, c, a.getRoot(), b.getRoot(), c.getRoot());
+      transformation.accept(a, b, c,
+          a == null ? null : a.getRoot(),
+          b == null ? null : b.getRoot(),
+          c == null ? null : c.getRoot());
     });
   }
 
@@ -83,7 +86,11 @@ public class TriASTTransformer<T extends JobParameters, E extends Enum<E>> exten
       final var a = map.get(aType);
       final var b = map.get(bType);
       final var c = map.get(cType);
-      transformation.accept(a, b, c, a.getRoot(), b.getRoot(), c.getRoot(), getJobParameters());
+      transformation.accept(a, b, c,
+          a == null ? null : a.getRoot(),
+          b == null ? null : b.getRoot(),
+          c == null ? null : c.getRoot(),
+          getJobParameters());
     });
   }
 
