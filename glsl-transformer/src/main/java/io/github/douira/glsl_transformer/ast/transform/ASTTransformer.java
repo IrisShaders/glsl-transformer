@@ -25,6 +25,10 @@ public abstract class ASTTransformer<T extends JobParameters, V> extends ASTPars
     jobParameters = parameters;
   }
 
+  public void setDefaultPrintType(PrintType defaultPrintType) {
+    this.defaultPrintType = defaultPrintType;
+  }
+
   public PrintType getDefaultPrintType() {
     return defaultPrintType;
   }
