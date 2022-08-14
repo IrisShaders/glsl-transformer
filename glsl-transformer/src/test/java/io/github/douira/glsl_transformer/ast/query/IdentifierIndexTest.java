@@ -4,18 +4,18 @@ import static org.junit.jupiter.api.Assertions.*;
 
 import org.junit.jupiter.api.Test;
 
-import io.github.douira.glsl_transformer.test_util.TestWithASTTransformer;
+import io.github.douira.glsl_transformer.test_util.TestWithSingleASTTransformer;
 
-public class IdentifierIndexTest extends TestWithASTTransformer {
+public class IdentifierIndexTest extends TestWithSingleASTTransformer {
   @Test
   void testIdentifierChange() {
-    t.setTransformation((tree, root) -> {
+    p.setTransformation((tree, root) -> {
       assertTrue(root.identifierIndex.has("a"));
       assertFalse(root.identifierIndex.has("b"));
       root.identifierIndex.getOne("a").setName("b");
       assertFalse(root.identifierIndex.has("a"));
       assertTrue(root.identifierIndex.has("b"));
     });
-    t.transform("int a = 1;");
+    p.transform("int a = 1;");
   }
 }

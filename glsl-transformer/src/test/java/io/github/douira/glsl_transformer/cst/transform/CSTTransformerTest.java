@@ -107,7 +107,8 @@ public class CSTTransformerTest extends TestWithResource {
     TestResourceManager
         .getDirectoryResources(DirectoryLocation.GLSLANG_TESTS)
         .forEach(resource -> {
-          manager = new CSTTransformer<>(false);
+          manager = new CSTTransformer<>();
+          manager.setThrowParseErrors(false);
           manager.setSLLOnly();
           var collectingListener = new CollectingErrorListener();
           manager.getLexer().addErrorListener(collectingListener);

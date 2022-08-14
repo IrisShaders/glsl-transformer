@@ -42,7 +42,7 @@ import io.github.douira.glsl_transformer.job_parameter.*;
  * @param <T> The job parameters type
  */
 public class CSTTransformer<T extends JobParameters> extends ExecutionPlanner<T>
-    implements ParameterizedTransformer<T>, ParserInterface {
+    implements ParameterizedTransformer<T, String>, ParserInterface {
   /**
    * Optionally a token filter for printing a tree. Can be {@code null} if no
    * filter is to be used.
@@ -53,33 +53,18 @@ public class CSTTransformer<T extends JobParameters> extends ExecutionPlanner<T>
   private final EnhancedParser parser;
 
   /**
-   * Creates a new transformation manager with a given root transformation and
-   * parse error throwing behavior.
-   * 
-   * @param rootTransformation The root transformation to use
-   * @param throwParseErrors   If parse errors should be thrown
-   */
-  public CSTTransformer(Transformation<T> rootTransformation, boolean throwParseErrors) {
-    super(rootTransformation);
-    parser = new EnhancedParser(throwParseErrors);
-  }
-
-  /**
-   * Creates a new transformation manager with a given root transformation that
-   * throws parse errors by default.
+   * Creates a new transformation manager with a given root transformation. Throws
+   * parse errors by default.
    * 
    * @param rootTransformation The root transformation to use
    */
   public CSTTransformer(Transformation<T> rootTransformation) {
-    this(rootTransformation, true);
+    super(rootTransformation);
+    parser = new EnhancedParser();
   }
 
   public CSTTransformer() {
     parser = new EnhancedParser();
-  }
-
-  public CSTTransformer(boolean throwParseErrors) {
-    parser = new EnhancedParser(throwParseErrors);
   }
 
   @Override
@@ -90,6 +75,11 @@ public class CSTTransformer<T extends JobParameters> extends ExecutionPlanner<T>
   @Override
   public GLSLParser getParser() {
     return parser.getParser();
+  }
+
+  @Override
+  public void setThrowParseErrors(boolean throwParseErrors) {
+    parser.setThrowParseErrors(throwParseErrors);
   }
 
   @Override
@@ -122,7 +112,7 @@ public class CSTTransformer<T extends JobParameters> extends ExecutionPlanner<T>
     parser.setParseTokenFilter(parseTokenFilter);
     this.parseTokenFilter = (TokenFilter<T>) parseTokenFilter;
   }
-  
+
   @Override
   public TokenFilter<?> getParseTokenFilter() {
     return parser.getParseTokenFilter();
@@ -143,7 +133,7 @@ public class CSTTransformer<T extends JobParameters> extends ExecutionPlanner<T>
   }
 
   @Override
-  public String transformBare(String str) throws RecognitionException {
+  public String transform(String str) throws RecognitionException {
     setTokenFilterPlanner(printTokenFilter);
     setTokenFilterPlanner(parseTokenFilter);
     var tree = parseTranslationUnit(str);

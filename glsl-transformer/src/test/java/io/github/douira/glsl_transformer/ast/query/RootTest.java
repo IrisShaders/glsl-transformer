@@ -8,9 +8,9 @@ import org.junit.jupiter.api.Test;
 
 import io.github.douira.glsl_transformer.ast.node.Identifier;
 import io.github.douira.glsl_transformer.ast.query.match.*;
-import io.github.douira.glsl_transformer.test_util.TestWithASTTransformer;
+import io.github.douira.glsl_transformer.test_util.TestWithSingleASTTransformer;
 
-public class RootTest extends TestWithASTTransformer {
+public class RootTest extends TestWithSingleASTTransformer {
   @Test
   void testRename() {
     Root.indexSeparateTrees(register -> {
@@ -33,10 +33,10 @@ public class RootTest extends TestWithASTTransformer {
 
   @Test
   void testReplace() {
-    t.setTransformation((tree, root) -> {
+    p.setTransformation((tree, root) -> {
       root.process("foo",
           id -> id.getParent().replaceByAndDelete(
-              t.parseExpression(tree, "bam + spam")));
+              p.parseExpression(tree, "bam + spam")));
     });
     assertTransform(
         "int x = bam + spam + bar + fooo; ",
@@ -45,10 +45,10 @@ public class RootTest extends TestWithASTTransformer {
 
   @Test
   void testReplaceMultiple() {
-    t.setTransformation((tree, root) -> {
+    p.setTransformation((tree, root) -> {
       root.process(root.identifierIndex.prefixQueryFlat("f"),
           id -> id.getParent().replaceByAndDelete(
-              t.parseExpression(tree, "bam + spam")));
+              p.parseExpression(tree, "bam + spam")));
     });
     assertTransform(
         "int x = bam + spam + bar + bam + spam; ",
@@ -57,17 +57,17 @@ public class RootTest extends TestWithASTTransformer {
 
   @Test
   void testNullReplaceStream() {
-    t.setTransformation((tree, root) -> {
+    p.setTransformation((tree, root) -> {
       root.process(Stream.of((Identifier) null), id -> {
       });
     });
-    assertDoesNotThrow(() -> t.transform(""));
+    assertDoesNotThrow(() -> p.transform(""));
   }
 
   @Test
   void testReplaceReferenceExpressionsPrefix() {
-    t.setTransformation((tree, root) -> {
-      root.replaceReferenceExpressions(t,
+    p.setTransformation((tree, root) -> {
+      root.replaceReferenceExpressions(p,
           root.identifierIndex.prefixQueryFlat("f"),
           "bam + spam");
     });
@@ -78,8 +78,8 @@ public class RootTest extends TestWithASTTransformer {
 
   @Test
   void testReplaceReferenceExpressionsExact() {
-    t.setTransformation((tree, root) -> {
-      root.replaceReferenceExpressions(t,
+    p.setTransformation((tree, root) -> {
+      root.replaceReferenceExpressions(p,
           "foo",
           "bam + spam");
     });
@@ -91,8 +91,8 @@ public class RootTest extends TestWithASTTransformer {
   @Test
   void testHintedMatcherProcessing() {
     var matcher = new HintedMatcher<>("foo[1]", Matcher.expressionPattern, "foo");
-    t.setTransformation((tree, root) -> {
-      root.replaceExpressionMatches(t, matcher, "bar + 4");
+    p.setTransformation((tree, root) -> {
+      root.replaceExpressionMatches(p, matcher, "bar + 4");
     });
     assertTransform(
         "int foo = bam + bar + 4 + foo[4]; ",
@@ -102,8 +102,8 @@ public class RootTest extends TestWithASTTransformer {
   @Test
   void testHintedMatcherProcessingHintSpecificity() {
     var matcher = new HintedMatcher<>("foo[1]", Matcher.expressionPattern, "bar");
-    t.setTransformation((tree, root) -> {
-      root.replaceExpressionMatches(t, matcher, "bar + 4");
+    p.setTransformation((tree, root) -> {
+      root.replaceExpressionMatches(p, matcher, "bar + 4");
     });
     assertTransform(
         "int foo = bam + foo[1] + foo[4]; ",
@@ -113,8 +113,8 @@ public class RootTest extends TestWithASTTransformer {
   @Test
   void testAutoHintedMatcherProcessing() {
     var matcher = new AutoHintedMatcher<>("foo[1]", Matcher.expressionPattern);
-    t.setTransformation((tree, root) -> {
-      root.replaceExpressionMatches(t, matcher, "bar + 4");
+    p.setTransformation((tree, root) -> {
+      root.replaceExpressionMatches(p, matcher, "bar + 4");
     });
     assertTransform(
         "int foo = bam + bar + 4 + foo[4]; ",
@@ -124,8 +124,8 @@ public class RootTest extends TestWithASTTransformer {
   @Test
   void testAutoHintedMatcherProcessingWildcard() {
     var matcher = new AutoHintedMatcher<>("a[___f + 5]", Matcher.expressionPattern, "___");
-    t.setTransformation((tree, root) -> {
-      root.replaceExpressionMatches(t, matcher, "bar + 4");
+    p.setTransformation((tree, root) -> {
+      root.replaceExpressionMatches(p, matcher, "bar + 4");
     });
     assertEquals("a", matcher.getHint());
     assertTransform(

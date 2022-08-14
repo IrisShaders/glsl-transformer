@@ -13,6 +13,8 @@ public interface ParserInterface {
 
   GLSLParser getParser();
 
+  void setThrowParseErrors(boolean throwParseErrors);
+
   void setParsingStrategy(ParsingStrategy parsingStrategy);
 
   void setSLLOnly();

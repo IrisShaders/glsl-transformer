@@ -17,20 +17,20 @@ import io.github.douira.glsl_transformer.test_util.*;
 import io.github.douira.glsl_transformer.test_util.TestCaseProvider.Spacing;
 
 @ExtendWith({ SnapshotExtension.class })
-public class TranslationUnitTest extends TestWithASTTransformer {
+public class TranslationUnitTest extends TestWithSingleASTTransformer {
   private Expect expect;
 
   @Test
   void testInjection() {
-    t.setTransformation(tree -> tree.injectNode(
+    p.setTransformation(tree -> tree.injectNode(
         ASTInjectionPoint.BEFORE_FUNCTIONS,
-        t.parseExternalDeclaration(tree, "float x;")));
+        p.parseExternalDeclaration(tree, "float x;")));
     assertEquals(
         "int a;\nfloat x;\nvoid main() {\n}\n",
-        t.transform("int a;\nvoid main() {\n}\n"));
+        p.transform("int a;\nvoid main() {\n}\n"));
     assertEquals(
         "int a;\nfloat x;\n",
-        t.transform("int a;\n"));
+        p.transform("int a;\n"));
   }
 
   @ParameterizedTest
@@ -38,16 +38,16 @@ public class TranslationUnitTest extends TestWithASTTransformer {
   @SnapshotName("testInject")
   void testInject(String scenario, String input) {
     for (var location : ASTInjectionPoint.values()) {
-      t.setTransformation(tree -> tree.injectNodes(
+      p.setTransformation(tree -> tree.injectNodes(
           location,
           Stream.of("x", "y")
-              .<ExternalDeclaration>map(name -> t.parseExternalDeclaration(
+              .<ExternalDeclaration>map(name -> p.parseExternalDeclaration(
                   tree, "float " + name + ";"))
               .collect(Collectors.toList())));
       expect
           .scenario(scenario + "/" + location.toString().toLowerCase())
           .toMatchSnapshot(SnapshotUtil.inputOutputSnapshot(
-              input, t.transform(input)));
+              input, p.transform(input)));
     }
   }
 }

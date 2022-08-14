@@ -23,7 +23,7 @@ public class GrammarDebugTest {
   @Test
   @Disabled
   void testParseTree() {
-    var t = new CSTTransformer<WrappedParameters<StringBuilder>>(false);
+    var t = new CSTTransformer<WrappedParameters<StringBuilder>>();
     t.addConcurrent(new PrintTreeDebug());
 
     Stream.of(

@@ -14,15 +14,15 @@ import io.github.douira.glsl_transformer.ast.node.type.qualifier.StorageQualifie
 import io.github.douira.glsl_transformer.ast.node.type.qualifier.StorageQualifier.StorageType;
 import io.github.douira.glsl_transformer.ast.node.type.struct.StructDeclarator;
 import io.github.douira.glsl_transformer.ast.query.Root;
-import io.github.douira.glsl_transformer.ast.transform.ASTTransformer;
+import io.github.douira.glsl_transformer.ast.transform.ASTParser;
 import io.github.douira.glsl_transformer.test_util.*;
 import io.github.douira.glsl_transformer.test_util.TestCaseProvider.Spacing;
 
-public class TransformTest extends TestWithASTTransformer {
+public class TransformTest extends TestWithSingleASTTransformer {
   @ParameterizedTest
   @TestCaseSource(caseSet = "uniformRemoval", spacing = Spacing.TRIM_SINGLE_BOTH)
   void testUniformRemoval(String type, String input, String output) {
-    t.setTransformation((tree, root) -> {
+    p.setTransformation((tree, root) -> {
       // identify the names of the uniforms to remove from the uniform block
       var blockId = root.identifierIndex.getOne("UniformBlock");
       Objects.requireNonNull(blockId, "UniformBlock identifier not found");
@@ -85,26 +85,26 @@ public class TransformTest extends TestWithASTTransformer {
       }
 
     });
-    assertEquals(output, t.transform(input));
+    assertEquals(output, p.transform(input));
   }
 
   @ParameterizedTest
   @TestCaseSource(caseSet = "functionRenameWrap", spacing = Spacing.TRIM_SINGLE_BOTH)
   void testFunctionRenameWrap(String type, String input, String output) {
-    t.setTransformation((tree, root) -> {
-      renameWrap(t, root, "shadow2D", "texture");
-      renameWrap(t, root, "shadow2DLod", "textureLod");
+    p.setTransformation((tree, root) -> {
+      renameWrap(p, root, "shadow2D", "texture");
+      renameWrap(p, root, "shadow2DLod", "textureLod");
     });
-    assertEquals(output, t.transform(input));
+    assertEquals(output, p.transform(input));
   }
 
-  private static void renameWrap(ASTTransformer<?> t, Root root, String oldName, String innerName) {
+  private static void renameWrap(ASTParser p, Root root, String oldName, String innerName) {
     root.process(root.identifierIndex.getStream(oldName)
         .filter(id -> id.getParent() instanceof FunctionCallExpression),
         id -> {
           FunctionCallExpression functionCall = (FunctionCallExpression) id.getParent();
           functionCall.getFunctionName().setName(innerName);
-          FunctionCallExpression wrapper = (FunctionCallExpression) t.parseExpression(id, "vec4()");
+          FunctionCallExpression wrapper = (FunctionCallExpression) p.parseExpression(id, "vec4()");
           functionCall.replaceBy(wrapper);
           wrapper.getParameters().add(functionCall);
         });
@@ -113,9 +113,9 @@ public class TransformTest extends TestWithASTTransformer {
   @ParameterizedTest
   @TestCaseSource(caseSet = "emptyExternalDeclarationRemoval", spacing = Spacing.TRIM_SINGLE_BOTH)
   void testEmptyExternalDeclarationRemoval(String type, String input, String output) {
-    t.setTransformation((tree, root) -> {
+    p.setTransformation((tree, root) -> {
       root.process(root.nodeIndex.getStream(EmptyDeclaration.class), ASTNode::detachAndDelete);
     });
-    assertEquals(output, t.transform(input));
+    assertEquals(output, p.transform(input));
   }
 }

@@ -39,7 +39,8 @@ public class TranslationUnit extends ListASTNode<ExternalDeclaration> {
     children.addAll(injectionPoint.getInjectionIndex(this), nodes);
   }
 
-  public void parseAndInjectNode(ASTTransformer<?> t,
+  public void parseAndInjectNode(
+      ASTParser t,
       ASTInjectionPoint injectionPoint,
       String externalDeclaration) {
     children.add(injectionPoint.getInjectionIndex(this),
@@ -48,7 +49,8 @@ public class TranslationUnit extends ListASTNode<ExternalDeclaration> {
             externalDeclaration));
   }
 
-  public void parseAndInjectNodes(ASTTransformer<?> t,
+  public void parseAndInjectNodes(
+      ASTParser t,
       ASTInjectionPoint injectionPoint,
       String... externalDeclarations) {
     var nodes = new ArrayList<ExternalDeclaration>();
