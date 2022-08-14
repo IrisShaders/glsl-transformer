@@ -59,7 +59,8 @@ public class GroupedASTTransformer<T extends JobParameters, K, M extends Map<K, 
     // parse all items
     var translationUnits = tuMapSupplier.get();
     for (var entry : items.entrySet()) {
-      translationUnits.put(entry.getKey(), parseTranslationUnit(entry.getValue()));
+      var value = entry.getValue();
+      translationUnits.put(entry.getKey(), value == null ? null : parseTranslationUnit(value));
     }
 
     // transform them all at once
@@ -68,7 +69,8 @@ public class GroupedASTTransformer<T extends JobParameters, K, M extends Map<K, 
     // print all items
     var printedItems = resultMapSupplier.get();
     for (var entry : translationUnits.entrySet()) {
-      printedItems.put(entry.getKey(), ASTPrinter.print(printType, entry.getValue()));
+      var value = entry.getValue();
+      printedItems.put(entry.getKey(), value == null ? null : ASTPrinter.print(printType, value));
     }
     return printedItems;
   }

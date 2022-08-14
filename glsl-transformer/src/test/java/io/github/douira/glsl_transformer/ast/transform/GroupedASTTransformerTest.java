@@ -34,4 +34,11 @@ public class GroupedASTTransformerTest extends TestWithGroupedASTTransformer {
         "int f = 1;",
         "int foo = bar; int foo = zou;");
   }
+
+  @Test
+  void testGroupedTransformWithNulls() {
+    p.setTransformation((a, b, c, rootA, rootB, rootC) -> {
+    });
+    assertTransform("", null, "", "", null, "");
+  }
 }

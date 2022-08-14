@@ -2,7 +2,7 @@ package io.github.douira.glsl_transformer.test_util;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-import java.util.Map;
+import java.util.*;
 
 import org.antlr.v4.runtime.RecognitionException;
 import org.junit.jupiter.api.BeforeEach;
@@ -29,20 +29,21 @@ public class TestWithGroupedASTTransformer {
     p.setSLLOnly();
   }
 
+  public <V> EnumMap<Part, V> mapOf(V a, V b, V c) {
+    EnumMap<Part, V> map = new EnumMap<>(Part.class);
+    map.put(Part.A, a);
+    map.put(Part.B, b);
+    map.put(Part.C, c);
+    return map;
+  }
+
   public void assertTransform(Map<Part, String> expected, Map<Part, String> input) {
-    var result = p.transform(PrintType.COMPACT, input);
-    assertEquals(expected.get(Part.A), result.get(Part.A));
-    assertEquals(expected.get(Part.B), result.get(Part.B));
-    assertEquals(expected.get(Part.C), result.get(Part.C));
-    assertEquals(expected, result);
+    assertEquals(expected, p.transform(PrintType.COMPACT, input));
   }
 
   public void assertTransform(String aExpected, String bExpected, String cExpected, String aInput, String bInput,
       String cInput) {
-    var result = p.transform(PrintType.COMPACT, Map.of(Part.A, aInput, Part.B, bInput, Part.C, cInput));
-    assertEquals(aExpected, result.get(Part.A));
-    assertEquals(bExpected, result.get(Part.B));
-    assertEquals(cExpected, result.get(Part.C));
-    assertEquals(Map.of(Part.A, aExpected, Part.B, bExpected, Part.C, cExpected), result);
+    assertEquals(mapOf(aExpected, bExpected, cExpected),
+        p.transform(PrintType.COMPACT, mapOf(aInput, bInput, cInput)));
   }
 }
