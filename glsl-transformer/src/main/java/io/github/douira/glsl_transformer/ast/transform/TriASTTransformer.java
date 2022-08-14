@@ -6,7 +6,6 @@ import java.util.function.Consumer;
 import org.antlr.v4.runtime.RecognitionException;
 
 import io.github.douira.glsl_transformer.ast.node.TranslationUnit;
-import io.github.douira.glsl_transformer.ast.print.PrintType;
 import io.github.douira.glsl_transformer.job_parameter.JobParameters;
 import io.github.douira.glsl_transformer.util.*;
 
@@ -99,25 +98,17 @@ public class TriASTTransformer<T extends JobParameters, E extends Enum<E>> exten
     throw new UnsupportedOperationException("The tri enum map types may not be changed.");
   }
 
-  public EnumMap<E, String> transform(PrintType printType, String a, String b, String c)
+  public EnumMap<E, String> transform(String a, String b, String c)
       throws RecognitionException {
     var items = new EnumMap<E, String>(enumClass);
     items.put(aType, a);
     items.put(bType, b);
     items.put(cType, c);
-    return transform(printType, items);
-  }
-
-  public EnumMap<E, String> transform(String a, String b, String c) throws RecognitionException {
-    return transform(getDefaultPrintType(), a, b, c);
-  }
-
-  public Triple<String> transform(PrintType printType, Triple<String> str) throws RecognitionException {
-    var result = transform(printType, str.a, str.b, str.c);
-    return new Triple<>(result.get(aType), result.get(bType), result.get(cType));
+    return transform(items);
   }
 
   public Triple<String> transform(Triple<String> str) throws RecognitionException {
-    return transform(getDefaultPrintType(), str);
+    var result = transform(str.a, str.b, str.c);
+    return new Triple<>(result.get(aType), result.get(bType), result.get(cType));
   }
 }

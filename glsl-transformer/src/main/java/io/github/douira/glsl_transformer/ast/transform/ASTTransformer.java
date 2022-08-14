@@ -1,7 +1,5 @@
 package io.github.douira.glsl_transformer.ast.transform;
 
-import org.antlr.v4.runtime.RecognitionException;
-
 import io.github.douira.glsl_transformer.ast.print.PrintType;
 import io.github.douira.glsl_transformer.job_parameter.*;
 
@@ -13,7 +11,8 @@ import io.github.douira.glsl_transformer.job_parameter.*;
 public abstract class ASTTransformer<T extends JobParameters, V> extends ASTParser
     implements ParameterizedTransformer<T, V> {
   private T jobParameters;
-  private PrintType defaultPrintType = PrintType.COMPACT;
+  private static final PrintType defaultPrintType = PrintType.COMPACT;
+  private PrintType printType = defaultPrintType;
 
   @Override
   public T getJobParameters() {
@@ -25,22 +24,11 @@ public abstract class ASTTransformer<T extends JobParameters, V> extends ASTPars
     jobParameters = parameters;
   }
 
-  public void setDefaultPrintType(PrintType defaultPrintType) {
-    this.defaultPrintType = defaultPrintType;
+  public void setPrintType(PrintType printType) {
+    this.printType = printType;
   }
 
-  public PrintType getDefaultPrintType() {
-    return defaultPrintType;
-  }
-
-  public abstract V transform(PrintType printType, V str) throws RecognitionException;
-
-  @Override
-  public V transform(V str) throws RecognitionException {
-    return transform(getDefaultPrintType(), str);
-  }
-
-  public V transform(PrintType printType, V str, T parameters) throws RecognitionException {
-    return withJobParameters(parameters, () -> transform(printType, str));
+  public PrintType getPrintType() {
+    return printType;
   }
 }

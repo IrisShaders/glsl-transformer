@@ -71,6 +71,7 @@ testlogger {
   theme 'standard-parallel'
   slowThreshold 5000
   showSimpleNames true
+  showPassed false
 }
 
 jacocoTestReport {

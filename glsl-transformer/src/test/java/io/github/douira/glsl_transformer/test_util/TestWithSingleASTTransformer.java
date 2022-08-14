@@ -2,7 +2,6 @@ package io.github.douira.glsl_transformer.test_util;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-import org.antlr.v4.runtime.RecognitionException;
 import org.junit.jupiter.api.BeforeEach;
 
 import io.github.douira.glsl_transformer.ast.print.PrintType;
@@ -14,16 +13,13 @@ public abstract class TestWithSingleASTTransformer {
 
   @BeforeEach
   public void setUp() {
-    p = new SingleASTTransformer<>() {
-      @Override
-      public String transform(String str) throws RecognitionException {
-        return transform(PrintType.INDENTED, str);
-      }
-    };
+    p = new SingleASTTransformer<>();
     p.setSLLOnly();
   }
 
   public void assertTransform(String expected, String input) {
-    assertEquals(expected, p.transform(PrintType.COMPACT, input));
+    p.setPrintType(PrintType.COMPACT);
+    assertEquals(expected, p.transform(input));
+    p.setPrintType(PrintType.INDENTED);
   }
 }
