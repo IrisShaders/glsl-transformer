@@ -75,7 +75,7 @@ public class LiteralExpression extends TerminalExpression {
         }
         return Float.valueOf((float) floatingValue);
       default:
-        throw new IllegalArgumentException("Unsupported literal type: " + literalType);
+        throw new IllegalArgumentException("Unsupported number type: " + getNumberType());
     }
   }
 
@@ -207,7 +207,7 @@ public class LiteralExpression extends TerminalExpression {
       case FLOATING_POINT:
         return floatingValue > 0.0d;
       default:
-        throw new IllegalArgumentException("Unsupported literal type: " + literalType);
+        throw new IllegalArgumentException("Unsupported number type: " + getNumberType());
     }
   }
 
@@ -221,7 +221,21 @@ public class LiteralExpression extends TerminalExpression {
       case FLOATING_POINT:
         return floatingValue != 0.0d;
       default:
-        throw new IllegalArgumentException("Unsupported literal type: " + literalType);
+        throw new IllegalArgumentException("Unsupported number type: " + getNumberType());
+    }
+  }
+
+  public static LiteralExpression getDefaultValue(NumberType numberType) {
+    switch (numberType) {
+      case BOOLEAN:
+        return new LiteralExpression(false);
+      case SIGNED_INTEGER:
+      case UNSIGNED_INTEGER:
+        return new LiteralExpression(Type.INT32, 0);
+      case FLOATING_POINT:
+        return new LiteralExpression(Type.FLOAT32, 0.0d);
+      default:
+        throw new IllegalArgumentException("Unsupported literal type: " + numberType);
     }
   }
 
