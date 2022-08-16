@@ -74,19 +74,23 @@ in float gam;
 in bool boo;
 void main() {
 	zou = 4;
+	void main();
 }
 ===
-out bool boo;
 out float gam;
+out bool boo;
 out int bar;
 out float foo;
 in float foo;
 in int bar;
+in float gam;
+in bool boo;
 void main() {
-  boo = false;
-  gam = 0.0;
-  bar = 0;
+	gam = 0.0;
+	boo = false;
+	bar = 0;
 	zou = 4;
+	void main();
 }
 
 §
