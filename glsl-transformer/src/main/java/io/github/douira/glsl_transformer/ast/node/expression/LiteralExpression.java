@@ -239,6 +239,10 @@ public class LiteralExpression extends TerminalExpression {
     }
   }
 
+  public static LiteralExpression getDefaultValue(Type type) {
+    return getDefaultValue(type.getNumberType());
+  }
+
   @Override
   public ExpressionType getExpressionType() {
     return ExpressionType.LITERAL;
