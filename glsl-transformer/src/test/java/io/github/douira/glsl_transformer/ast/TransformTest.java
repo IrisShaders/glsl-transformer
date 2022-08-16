@@ -3,10 +3,10 @@ package io.github.douira.glsl_transformer.ast;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 import org.junit.jupiter.params.ParameterizedTest;
 
-import io.github.douira.glsl_transformer.ast.node.Identifier;
 import io.github.douira.glsl_transformer.ast.node.basic.ASTNode;
 import io.github.douira.glsl_transformer.ast.node.declaration.*;
 import io.github.douira.glsl_transformer.ast.node.expression.LiteralExpression;
@@ -146,6 +146,7 @@ public class TransformTest extends TestWithSingleASTTransformer {
     var typeTag = tag + "1";
     var nameTag = tag + "2";
     var outDeclarationTemplate = "out " + typeTag + " " + nameTag + ";";
+    var initTemplate = nameTag + " = " + typeTag + ";";
 
     p.setPrintType(PrintType.INDENTED);
     p.setTransformation((tree, root) -> {
@@ -159,27 +160,47 @@ public class TransformTest extends TestWithSingleASTTransformer {
         }
       }
 
+      // find the main function
+      var mainFunctionStream = root.identifierIndex.getStream("main")
+          .map(id -> id.getBranchAncestor(FunctionDefinition.class, FunctionDefinition::getFunctionPrototype))
+          .filter(Objects::nonNull);
+      var targets = mainFunctionStream.collect(Collectors.toList());
+      assertEquals(1, targets.size());
+      var mainFunctionStatements = targets.get(0).getBody();
+
       // add out declarations that are missing for in declarations
-      for (ExternalDeclaration declaration : root.nodeIndex.get(DeclarationExternalDeclaration.class)) {
-        if (inDeclarationMatcher.matchesExtract(declaration)) {
-          var name = inDeclarationMatcher.getStringDataMatch("name");
-          var specifier = inDeclarationMatcher.getNodeMatch("type", BuiltinNumericTypeSpecifier.class);
+      root.process(root.nodeIndex
+          .getStream(
+              DeclarationExternalDeclaration.class)
+          .sorted(Comparator.comparing(declaration -> {
+            if (inDeclarationMatcher.matchesExtract(declaration)) {
+              return inDeclarationMatcher.getStringDataMatch("name");
+            }
+            return "";
+          })),
+          declaration -> {
+            if (inDeclarationMatcher.matchesExtract(declaration)) {
+              var name = inDeclarationMatcher.getStringDataMatch("name");
+              var specifier = inDeclarationMatcher.getNodeMatch("type", BuiltinNumericTypeSpecifier.class);
 
-          if (specifier != null && !outDeclarations.containsKey(name)) {
-            var inDeclaration = p.parseExternalDeclaration(tree, outDeclarationTemplate);
-            tree.injectNode(ASTInjectionPoint.BEFORE_DECLARATIONS, inDeclaration);
-            root.identifierIndex.rename(nameTag, name);
+              if (specifier != null && !outDeclarations.containsKey(name)) {
+                var inDeclaration = p.parseExternalDeclaration(tree, outDeclarationTemplate);
+                tree.injectNode(ASTInjectionPoint.BEFORE_DECLARATIONS, inDeclaration);
+                // rename happens later
 
-            // TODO: more efficient copying of the fully specified type
-            // use node cloning once available
-            root.identifierIndex.getOne(typeTag).getAncestor(TypeSpecifier.class)
-                .replaceBy(new BuiltinNumericTypeSpecifier(specifier.type));
-          }
-        }
-      }
+                // TODO: more efficient copying of the fully specified type
+                // use node cloning once available
+                root.identifierIndex.getOne(typeTag).getAncestor(TypeSpecifier.class)
+                    .replaceByAndDelete(new BuiltinNumericTypeSpecifier(specifier.type));
 
-      // TODO: initialization in the main function
-      // LiteralExpression.getDefaultValue(numberType)
+                var init = p.parseStatement(tree, initTemplate);
+                mainFunctionStatements.getChildren().add(0, init);
+                root.identifierIndex.rename(nameTag, name);
+                root.identifierIndex.getOneReferenceExpression(typeTag)
+                    .replaceByAndDelete(LiteralExpression.getDefaultValue(specifier.type));
+              }
+            }
+          });
     });
     assertEquals(output, p.transform(input));
   }
