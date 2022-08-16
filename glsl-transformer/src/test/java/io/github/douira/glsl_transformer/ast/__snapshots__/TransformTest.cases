@@ -66,4 +66,27 @@ void main() {
 ;
 ===
 
+§outDeclarationModify normal:
+out float foo;
+in float foo;
+in int bar;
+in float gam;
+in bool boo;
+void main() {
+	zou = 4;
+}
+===
+out bool boo;
+out float gam;
+out int bar;
+out float foo;
+in float foo;
+in int bar;
+void main() {
+  boo = false;
+  gam = 0.0;
+  bar = 0;
+	zou = 4;
+}
+
 §

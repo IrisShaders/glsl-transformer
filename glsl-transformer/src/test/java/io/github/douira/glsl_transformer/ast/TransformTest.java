@@ -6,16 +6,20 @@ import java.util.*;
 
 import org.junit.jupiter.params.ParameterizedTest;
 
+import io.github.douira.glsl_transformer.ast.node.Identifier;
 import io.github.douira.glsl_transformer.ast.node.basic.ASTNode;
 import io.github.douira.glsl_transformer.ast.node.declaration.*;
+import io.github.douira.glsl_transformer.ast.node.expression.LiteralExpression;
 import io.github.douira.glsl_transformer.ast.node.expression.unary.FunctionCallExpression;
 import io.github.douira.glsl_transformer.ast.node.external_declaration.*;
 import io.github.douira.glsl_transformer.ast.node.type.qualifier.StorageQualifier;
 import io.github.douira.glsl_transformer.ast.node.type.qualifier.StorageQualifier.StorageType;
+import io.github.douira.glsl_transformer.ast.node.type.specifier.*;
 import io.github.douira.glsl_transformer.ast.node.type.struct.StructDeclarator;
 import io.github.douira.glsl_transformer.ast.print.PrintType;
 import io.github.douira.glsl_transformer.ast.query.Root;
-import io.github.douira.glsl_transformer.ast.transform.ASTParser;
+import io.github.douira.glsl_transformer.ast.query.match.*;
+import io.github.douira.glsl_transformer.ast.transform.*;
 import io.github.douira.glsl_transformer.test_util.*;
 import io.github.douira.glsl_transformer.test_util.TestCaseProvider.Spacing;
 
@@ -119,6 +123,63 @@ public class TransformTest extends TestWithSingleASTTransformer {
     p.setPrintType(PrintType.INDENTED);
     p.setTransformation((tree, root) -> {
       root.process(root.nodeIndex.getStream(EmptyDeclaration.class), ASTNode::detachAndDelete);
+    });
+    assertEquals(output, p.transform(input));
+  }
+
+  @ParameterizedTest
+  @TestCaseSource(caseSet = "outDeclarationModify", spacing = Spacing.TRIM_SINGLE_BOTH)
+  void testOutDeclarationModify(String type, String input, String output) {
+    AutoHintedMatcher<ExternalDeclaration> outDeclarationMatcher = new AutoHintedMatcher<ExternalDeclaration>(
+        "out float __name;", Matcher.externalDeclarationPattern, "__") {
+      {
+        markClassWildcard("type", pattern.getRoot().nodeIndex.getOne(BuiltinNumericTypeSpecifier.class));
+      }
+    };
+    AutoHintedMatcher<ExternalDeclaration> inDeclarationMatcher = new AutoHintedMatcher<ExternalDeclaration>(
+        "in float __name;", Matcher.externalDeclarationPattern, "__") {
+      {
+        markClassWildcard("type", pattern.getRoot().nodeIndex.getOne(BuiltinNumericTypeSpecifier.class));
+      }
+    };
+    var tag = "_____";
+    var typeTag = tag + "1";
+    var nameTag = tag + "2";
+    var outDeclarationTemplate = "out " + typeTag + " " + nameTag + ";";
+
+    p.setPrintType(PrintType.INDENTED);
+    p.setTransformation((tree, root) -> {
+      // find out declarations
+      var outDeclarations = new HashMap<>();
+      for (ExternalDeclaration declaration : root.nodeIndex.get(DeclarationExternalDeclaration.class)) {
+        if (outDeclarationMatcher.matchesExtract(declaration)) {
+          outDeclarations.put(
+              outDeclarationMatcher.getStringDataMatch("name"),
+              outDeclarationMatcher.getNodeMatch("type", TypeSpecifier.class));
+        }
+      }
+
+      // add out declarations that are missing for in declarations
+      for (ExternalDeclaration declaration : root.nodeIndex.get(DeclarationExternalDeclaration.class)) {
+        if (inDeclarationMatcher.matchesExtract(declaration)) {
+          var name = inDeclarationMatcher.getStringDataMatch("name");
+          var specifier = inDeclarationMatcher.getNodeMatch("type", BuiltinNumericTypeSpecifier.class);
+
+          if (specifier != null && !outDeclarations.containsKey(name)) {
+            var inDeclaration = p.parseExternalDeclaration(tree, outDeclarationTemplate);
+            tree.injectNode(ASTInjectionPoint.BEFORE_DECLARATIONS, inDeclaration);
+            root.identifierIndex.rename(nameTag, name);
+
+            // TODO: more efficient copying of the fully specified type
+            // use node cloning once available
+            root.identifierIndex.getOne(typeTag).getAncestor(TypeSpecifier.class)
+                .replaceBy(new BuiltinNumericTypeSpecifier(specifier.type));
+          }
+        }
+      }
+
+      // TODO: initialization in the main function
+      // LiteralExpression.getDefaultValue(numberType)
     });
     assertEquals(output, p.transform(input));
   }
