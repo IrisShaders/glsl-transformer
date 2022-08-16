@@ -94,24 +94,12 @@ public abstract class ASTNode implements Cloneable {
       if (node == null) {
         return false;
       }
-      if (predicate.test(node) && i >= skip) {
+      if (i >= skip && predicate.test(node)) {
         return true;
       }
       node = node.getParent();
     }
     return false;
-  }
-
-  /**
-   * Checks if there is an ancestor of this node that fulfills the given predicate
-   * within a limited nubmer of steps.
-   * 
-   * @param limit     the number of parents to check in total
-   * @param predicate the predicate to check
-   * @return true if there is an ancestor of this node that fulfills the predicate
-   */
-  public boolean hasAncestor(int limit, Predicate<ASTNode> predicate) {
-    return hasAncestor(limit, 0, predicate);
   }
 
   /**
@@ -122,7 +110,7 @@ public abstract class ASTNode implements Cloneable {
    * @return true if there is an ancestor of this node that fulfills the predicate
    */
   public boolean hasAncestor(Predicate<ASTNode> predicate) {
-    return hasAncestor(Integer.MAX_VALUE, predicate);
+    return hasAncestor(Integer.MAX_VALUE, 0, predicate);
   }
 
   /**
@@ -163,25 +151,12 @@ public abstract class ASTNode implements Cloneable {
       if (node == null) {
         return null;
       }
-      if (predicate.test(node) && i >= skip) {
+      if (i >= skip && predicate.test(node)) {
         return node;
       }
       node = node.getParent();
     }
     return null;
-  }
-
-  /**
-   * Returns the first ancestor that fulfills the given predicate, limited to a
-   * certain number of steps.
-   * 
-   * @param limit     the number of parents to check in total
-   * @param predicate the predicate to check
-   * @return the first ancestor that fulfills the given predicate, or null
-   *         otherwise
-   */
-  public ASTNode getAncestor(int limit, Predicate<ASTNode> predicate) {
-    return getAncestor(limit, 0, predicate);
   }
 
   /**
@@ -192,7 +167,7 @@ public abstract class ASTNode implements Cloneable {
    *         otherwise
    */
   public ASTNode getAncestor(Predicate<ASTNode> predicate) {
-    return getAncestor(Integer.MAX_VALUE, predicate);
+    return getAncestor(Integer.MAX_VALUE, 0, predicate);
   }
 
   /**
@@ -204,6 +179,44 @@ public abstract class ASTNode implements Cloneable {
    */
   public <T extends ASTNode> T getAncestor(Class<T> clazz) {
     return clazz.cast(getAncestor(clazz::isInstance));
+  }
+
+  public ASTNode getBranchAncestor(int limit, int skip, BiPredicate<ASTNode, ASTNode> predicate) {
+    ASTNode node = this;
+    ASTNode last = null;
+    for (int i = 0; i <= limit; i++) {
+      if (node == null) {
+        return null;
+      }
+      if (i >= skip && predicate.test(node, last)) {
+        return node;
+      }
+      last = node;
+      node = node.getParent();
+    }
+    return null;
+  }
+
+  @SuppressWarnings("unchecked")
+  public <T extends ASTNode> T getBranchAncestor(int limit, int skip, Class<T> branchClass,
+      Function<T, ? extends ASTNode> branchGetter) {
+    return (T) getBranchAncestor(limit, skip, (node, last) -> {
+      if (!branchClass.isInstance(node)) {
+        return false;
+      }
+      return branchGetter.apply(branchClass.cast(node)) == last;
+    });
+  }
+
+  public <T extends ASTNode> T getBranchAncestor(Class<T> branchClass,
+      Function<T, ? extends ASTNode> branchGetter) {
+    return getBranchAncestor(Integer.MAX_VALUE, 0, branchClass, branchGetter);
+  }
+
+  public <T extends ASTNode, R extends ASTNode> R getBranchAncestorContinue(Class<T> branchClass,
+      Function<T, ? extends ASTNode> branchGetter, Class<R> continueClass) {
+    var result = getBranchAncestor(branchClass, branchGetter);
+    return result == null ? null : result.getAncestor(continueClass);
   }
 
   /**
