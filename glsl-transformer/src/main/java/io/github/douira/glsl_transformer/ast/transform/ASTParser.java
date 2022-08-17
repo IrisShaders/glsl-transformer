@@ -1,5 +1,6 @@
 package io.github.douira.glsl_transformer.ast.transform;
 
+import java.util.*;
 import java.util.function.*;
 
 import org.antlr.v4.runtime.RecognitionException;
@@ -103,6 +104,30 @@ public class ASTParser implements ParserInterface {
         StatementContext.class,
         GLSLParser::statement,
         ASTBuilder::visitStatement);
+  }
+
+  public List<ExternalDeclaration> parseExternalDeclarations(ASTNode treeMember, String... inputs) {
+    var nodes = new ArrayList<ExternalDeclaration>(inputs.length);
+    for (var input : inputs) {
+      nodes.add(parseExternalDeclaration(treeMember, input));
+    }
+    return nodes;
+  }
+
+  public List<Expression> parseExpression(ASTNode treeMember, String... inputs) {
+    var nodes = new ArrayList<Expression>(inputs.length);
+    for (var input : inputs) {
+      nodes.add(parseExpression(treeMember, input));
+    }
+    return nodes;
+  }
+
+  public List<Statement> parseStatements(ASTNode treeMember, String... inputs) {
+    var nodes = new ArrayList<Statement>(inputs.length);
+    for (var input : inputs) {
+      nodes.add(parseStatement(treeMember, input));
+    }
+    return nodes;
   }
 
   public ExternalDeclaration parseSeparateExternalDeclaration(String input) throws RecognitionException {

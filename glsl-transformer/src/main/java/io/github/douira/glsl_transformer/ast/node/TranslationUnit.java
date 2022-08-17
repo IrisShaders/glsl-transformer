@@ -4,7 +4,8 @@ import java.util.*;
 import java.util.stream.Stream;
 
 import io.github.douira.glsl_transformer.ast.node.basic.ListASTNode;
-import io.github.douira.glsl_transformer.ast.node.external_declaration.ExternalDeclaration;
+import io.github.douira.glsl_transformer.ast.node.external_declaration.*;
+import io.github.douira.glsl_transformer.ast.node.statement.*;
 import io.github.douira.glsl_transformer.ast.transform.*;
 import io.github.douira.glsl_transformer.ast.traversal.*;
 
@@ -53,11 +54,61 @@ public class TranslationUnit extends ListASTNode<ExternalDeclaration> {
       ASTParser t,
       ASTInjectionPoint injectionPoint,
       String... externalDeclarations) {
-    var nodes = new ArrayList<ExternalDeclaration>();
-    for (var externalDeclaration : externalDeclarations) {
-      nodes.add(t.parseExternalDeclaration(this, externalDeclaration));
-    }
-    injectNodes(injectionPoint, nodes);
+    injectNodes(injectionPoint, t.parseExternalDeclarations(this, externalDeclarations));
+  }
+
+  public CompoundStatement getFunctionDefinitionBody(String functionName) {
+    return getRoot().identifierIndex.getStream(functionName)
+        .map(id -> id.getBranchAncestor(FunctionDefinition.class, FunctionDefinition::getFunctionPrototype))
+        .filter(Objects::nonNull).findAny().map(FunctionDefinition::getBody).orElse(null);
+  }
+
+  public void prependFunctionBody(String functionName, Statement statement) {
+    getFunctionDefinitionBody(functionName).statements.add(0, statement);
+  }
+
+  public void prependFunctionBody(String functionName, Collection<Statement> statements) {
+    getFunctionDefinitionBody(functionName).statements.addAll(0, statements);
+  }
+
+  public void appendFunctionBody(String functionName, Statement statement) {
+    getFunctionDefinitionBody(functionName).statements.add(statement);
+  }
+
+  public void appendFunctionBody(String functionName, Collection<Statement> statements) {
+    getFunctionDefinitionBody(functionName).statements.addAll(statements);
+  }
+
+  public void prependMain(Statement statement) {
+    prependFunctionBody("main", statement);
+  }
+
+  public void prependMain(Collection<Statement> statements) {
+    prependFunctionBody("main", statements);
+  }
+
+  public void appendMain(Statement statement) {
+    appendFunctionBody("main", statement);
+  }
+
+  public void appendMain(Collection<Statement> statements) {
+    appendFunctionBody("main", statements);
+  }
+
+  public void prependMain(ASTParser t, String... statements) {
+    prependMain(t.parseStatements(this, statements));
+  }
+
+  public void prependMain(ASTParser t, String statement) {
+    prependMain(t.parseStatement(this, statement));
+  }
+
+  public void appendMain(ASTParser t, String... statements) {
+    appendMain(t.parseStatements(this, statements));
+  }
+
+  public void appendMain(ASTParser t, String statement) {
+    appendMain(t.parseStatement(this, statement));
   }
 
   @Override
