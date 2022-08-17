@@ -65,11 +65,10 @@ fs.readFileSync("split").toString().split("//split_marker").map(str => str.trim(
 
 ### TODO
 - Add wildcard matching for any number of items in an item list
-- Add matching for ancestor that is part of a specific branch of a type of class (ancestor matching where the ancestor of the given type has to have been reached through a specific getter method of that ancestor or the direct child of the matched ancestor has to be of a specific type to avoid complications when the "branch" to require is a list)
 - More powerful string based wildcards that can match classes maybe
 - Enum value index (index that finds nodes based on their enum values)
 - Optional indexes: option to turn off indexes for performance reasons and only if necessary
 - Partial indexes: indexes that only index certain enum values, class types or identifiers to reduce memory usage and improve ast build performance
 - Configuration of partial indexes can happen at construction
 - Make glsl-transformer thread safe so that it can be run in parallel on different transformation jobs
-- Add support methods for interleaved transformation: parse and build multiple ASTs, transform them in any order, and then print them. This allows for exchanging information about the ASTs between different transform jobs.
+- Implement node cloning using either Java's clone or just constructors. This makes some transformations easier and enables built AST caching. To fix the issue with wrong parent setter method references, the clones need to have their fields re-set with the setter methods that update the method references.
