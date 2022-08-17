@@ -151,12 +151,10 @@ public class TransformTest extends TestWithSingleASTTransformer {
     p.setPrintType(PrintType.INDENTED);
     p.setTransformation((tree, root) -> {
       // find out declarations
-      var outDeclarations = new HashMap<>();
+      var outDeclarations = new HashSet<String>();
       for (ExternalDeclaration declaration : root.nodeIndex.get(DeclarationExternalDeclaration.class)) {
         if (outDeclarationMatcher.matchesExtract(declaration)) {
-          outDeclarations.put(
-              outDeclarationMatcher.getStringDataMatch("name"),
-              outDeclarationMatcher.getNodeMatch("type", TypeSpecifier.class));
+          outDeclarations.add(outDeclarationMatcher.getStringDataMatch("name"));
         }
       }
 
@@ -183,7 +181,7 @@ public class TransformTest extends TestWithSingleASTTransformer {
               var name = inDeclarationMatcher.getStringDataMatch("name");
               var specifier = inDeclarationMatcher.getNodeMatch("type", BuiltinNumericTypeSpecifier.class);
 
-              if (specifier != null && !outDeclarations.containsKey(name)) {
+              if (specifier != null && !outDeclarations.contains(name)) {
                 var inDeclaration = p.parseExternalDeclaration(tree, outDeclarationTemplate);
                 tree.injectNode(ASTInjectionPoint.BEFORE_DECLARATIONS, inDeclaration);
                 // rename happens later
