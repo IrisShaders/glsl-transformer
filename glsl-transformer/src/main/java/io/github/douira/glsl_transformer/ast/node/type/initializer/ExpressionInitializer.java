@@ -1,6 +1,7 @@
 package io.github.douira.glsl_transformer.ast.node.type.initializer;
 
 import io.github.douira.glsl_transformer.ast.node.expression.Expression;
+import io.github.douira.glsl_transformer.ast.query.Root;
 import io.github.douira.glsl_transformer.ast.traversal.*;
 
 public class ExpressionInitializer extends Initializer {
@@ -39,5 +40,22 @@ public class ExpressionInitializer extends Initializer {
   public void exitNode(ASTListener listener) {
     super.exitNode(listener);
     listener.exitExpressionInitializer(this);
+  }
+
+  @Override
+  public ExpressionInitializer clone() {
+    var clone = (ExpressionInitializer) super.clone();
+    clone.setupClone(expression, clone::setExpression);
+    return clone;
+  }
+
+  @Override
+  public ExpressionInitializer cloneInto(Root root) {
+    return (ExpressionInitializer) super.cloneInto(root);
+  }
+
+  @Override
+  public ExpressionInitializer cloneSeparate() {
+    return (ExpressionInitializer) super.cloneSeparate();
   }
 }

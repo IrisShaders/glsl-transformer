@@ -1,6 +1,7 @@
 package io.github.douira.glsl_transformer.ast.node.type.qualifier;
 
 import io.github.douira.glsl_transformer.ast.node.basic.InnerASTNode;
+import io.github.douira.glsl_transformer.ast.query.Root;
 import io.github.douira.glsl_transformer.ast.traversal.*;
 
 public abstract class TypeQualifierPart extends InnerASTNode {
@@ -32,5 +33,20 @@ public abstract class TypeQualifierPart extends InnerASTNode {
   @Override
   public void exitNode(ASTListener listener) {
     listener.exitTypeQualifierPart(this);
+  }
+
+  @Override
+  public TypeQualifierPart clone() {
+    return (TypeQualifierPart) super.clone();
+  }
+
+  @Override
+  public TypeQualifierPart cloneInto(Root root) {
+    return (TypeQualifierPart) super.cloneInto(root);
+  }
+
+  @Override
+  public TypeQualifierPart cloneSeparate() {
+    return (TypeQualifierPart) super.cloneSeparate();
   }
 }

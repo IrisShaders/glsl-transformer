@@ -4,6 +4,7 @@ import org.antlr.v4.runtime.Token;
 
 import io.github.douira.glsl_transformer.GLSLLexer;
 import io.github.douira.glsl_transformer.ast.data.*;
+import io.github.douira.glsl_transformer.ast.query.Root;
 import io.github.douira.glsl_transformer.ast.traversal.*;
 
 public class ExtensionStatement extends ExternalDeclaration {
@@ -61,5 +62,20 @@ public class ExtensionStatement extends ExternalDeclaration {
   public void exitNode(ASTListener listener) {
     super.enterNode(listener);
     // terminal nodes have no children
+  }
+
+  @Override
+  public ExtensionStatement clone() {
+    return (ExtensionStatement) super.clone();
+  }
+
+  @Override
+  public ExtensionStatement cloneInto(Root root) {
+    return (ExtensionStatement) super.cloneInto(root);
+  }
+
+  @Override
+  public ExtensionStatement cloneSeparate() {
+    return (ExtensionStatement) super.cloneSeparate();
   }
 }

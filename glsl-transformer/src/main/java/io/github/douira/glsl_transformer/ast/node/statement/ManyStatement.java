@@ -5,10 +5,11 @@ import java.util.stream.Stream;
 
 import io.github.douira.glsl_transformer.ast.data.ChildNodeList;
 import io.github.douira.glsl_transformer.ast.node.basic.ListNode;
+import io.github.douira.glsl_transformer.ast.query.Root;
 import io.github.douira.glsl_transformer.ast.traversal.*;
 
 public abstract class ManyStatement extends Statement implements ListNode<Statement> {
-  public final List<Statement> statements;
+  protected List<Statement> statements;
 
   public ManyStatement(Stream<Statement> statements) {
     this.statements = ChildNodeList.collect(statements, this);
@@ -16,6 +17,10 @@ public abstract class ManyStatement extends Statement implements ListNode<Statem
 
   @Override
   public List<Statement> getChildren() {
+    return statements;
+  }
+
+  public List<Statement> getStatements() {
     return statements;
   }
 
@@ -37,5 +42,22 @@ public abstract class ManyStatement extends Statement implements ListNode<Statem
   public void exitNode(ASTListener listener) {
     super.exitNode(listener);
     listener.exitManyStatement(this);
+  }
+
+  @Override
+  public ManyStatement clone() {
+    var result = (ManyStatement) super.clone();
+    result.statements = ChildNodeList.clone(statements, result);
+    return result;
+  }
+
+  @Override
+  public ManyStatement cloneInto(Root root) {
+    return (ManyStatement) super.cloneInto(root);
+  }
+
+  @Override
+  public ManyStatement cloneSeparate() {
+    return (ManyStatement) super.cloneSeparate();
   }
 }

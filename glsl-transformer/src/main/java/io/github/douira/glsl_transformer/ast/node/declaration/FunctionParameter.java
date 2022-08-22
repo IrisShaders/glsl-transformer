@@ -4,6 +4,7 @@ import io.github.douira.glsl_transformer.ast.node.Identifier;
 import io.github.douira.glsl_transformer.ast.node.basic.InnerASTNode;
 import io.github.douira.glsl_transformer.ast.node.type.FullySpecifiedType;
 import io.github.douira.glsl_transformer.ast.node.type.specifier.ArraySpecifier;
+import io.github.douira.glsl_transformer.ast.query.Root;
 import io.github.douira.glsl_transformer.ast.traversal.*;
 
 public class FunctionParameter extends InnerASTNode {
@@ -69,5 +70,24 @@ public class FunctionParameter extends InnerASTNode {
   @Override
   public void exitNode(ASTListener listener) {
     listener.exitFunctionParameter(this);
+  }
+
+  @Override
+  public FunctionParameter clone() {
+    var clone = (FunctionParameter) super.clone();
+    clone.setupClone(type, clone::setType);
+    clone.setupClone(name, clone::setName);
+    clone.setupClone(arraySpecifier, clone::setArraySpecifier);
+    return clone;
+  }
+
+  @Override
+  public FunctionParameter cloneInto(Root root) {
+    return (FunctionParameter) super.cloneInto(root);
+  }
+
+  @Override
+  public FunctionParameter cloneSeparate() {
+    return (FunctionParameter) super.cloneSeparate();
   }
 }

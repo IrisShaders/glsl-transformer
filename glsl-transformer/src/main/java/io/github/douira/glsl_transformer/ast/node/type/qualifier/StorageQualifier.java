@@ -8,6 +8,7 @@ import org.antlr.v4.runtime.Token;
 import io.github.douira.glsl_transformer.GLSLLexer;
 import io.github.douira.glsl_transformer.ast.data.*;
 import io.github.douira.glsl_transformer.ast.node.Identifier;
+import io.github.douira.glsl_transformer.ast.query.Root;
 import io.github.douira.glsl_transformer.ast.traversal.*;
 
 public class StorageQualifier extends TypeQualifierPart {
@@ -52,7 +53,7 @@ public class StorageQualifier extends TypeQualifierPart {
     }
   }
 
-  public final List<Identifier> typeNames; // TODO: nullable (optional)
+  protected List<Identifier> typeNames; // TODO: nullable (optional)
   public StorageType storageType;
 
   public StorageQualifier(Stream<Identifier> typeNames) {
@@ -63,6 +64,10 @@ public class StorageQualifier extends TypeQualifierPart {
   public StorageQualifier(StorageType storageType) {
     this.typeNames = null;
     this.storageType = storageType;
+  }
+
+  public List<Identifier> getTypeNames() {
+    return typeNames;
   }
 
   @Override
@@ -85,5 +90,22 @@ public class StorageQualifier extends TypeQualifierPart {
   public void exitNode(ASTListener listener) {
     super.exitNode(listener);
     listener.exitStorageQualifier(this);
+  }
+
+  @Override
+  public StorageQualifier clone() {
+    var result = (StorageQualifier) super.clone();
+    result.typeNames = ChildNodeList.clone(typeNames, result);
+    return result;
+  }
+
+  @Override
+  public StorageQualifier cloneInto(Root root) {
+    return (StorageQualifier) super.cloneInto(root);
+  }
+
+  @Override
+  public StorageQualifier cloneSeparate() {
+    return (StorageQualifier) super.cloneSeparate();
   }
 }

@@ -4,6 +4,7 @@ import org.antlr.v4.runtime.Token;
 
 import io.github.douira.glsl_transformer.GLSLLexer;
 import io.github.douira.glsl_transformer.ast.data.*;
+import io.github.douira.glsl_transformer.ast.query.Root;
 import io.github.douira.glsl_transformer.ast.traversal.*;
 
 public class PragmaStatement extends ExternalDeclaration {
@@ -87,5 +88,20 @@ public class PragmaStatement extends ExternalDeclaration {
   public void exitNode(ASTListener listener) {
     super.enterNode(listener);
     // terminal nodes have no children
+  }
+
+  @Override
+  public PragmaStatement clone() {
+    return (PragmaStatement) super.clone();
+  }
+
+  @Override
+  public PragmaStatement cloneInto(Root root) {
+    return (PragmaStatement) super.cloneInto(root);
+  }
+
+  @Override
+  public PragmaStatement cloneSeparate() {
+    return (PragmaStatement) super.cloneSeparate();
   }
 }

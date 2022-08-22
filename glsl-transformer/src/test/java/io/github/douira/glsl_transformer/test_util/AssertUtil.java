@@ -34,6 +34,9 @@ public class AssertUtil {
     var ast = ASTBuilder.build(parseTree);
     var reprinted = ASTPrinter.print(printType, ast);
     assertEquals(expected, reprinted);
+    ast = ast.cloneSeparate();
+    reprinted = ASTPrinter.print(printType, ast);
+    assertEquals(expected, reprinted);
   }
 
   public static void assertQuery(Set<Object> expected, Stream<Object> result) {

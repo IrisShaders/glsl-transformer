@@ -1,6 +1,7 @@
 package io.github.douira.glsl_transformer.ast.node.expression.binary;
 
 import io.github.douira.glsl_transformer.ast.node.expression.Expression;
+import io.github.douira.glsl_transformer.ast.query.Root;
 import io.github.douira.glsl_transformer.ast.traversal.*;
 
 public class LessThanEqualExpression extends BinaryExpression {
@@ -28,5 +29,20 @@ public class LessThanEqualExpression extends BinaryExpression {
   public void exitNode(ASTListener listener) {
     super.exitNode(listener);
     listener.exitLessThanEqualExpression(this);
+  }
+
+  @Override
+  public LessThanEqualExpression clone() {
+    return (LessThanEqualExpression) super.clone();
+  }
+
+  @Override
+  public LessThanEqualExpression cloneInto(Root root) {
+    return (LessThanEqualExpression) super.cloneInto(root);
+  }
+
+  @Override
+  public LessThanEqualExpression cloneSeparate() {
+    return (LessThanEqualExpression) super.cloneSeparate();
   }
 }

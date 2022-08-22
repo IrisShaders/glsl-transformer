@@ -3,6 +3,7 @@ package io.github.douira.glsl_transformer.ast.node;
 import io.github.douira.glsl_transformer.ast.node.basic.InnerASTNode;
 import io.github.douira.glsl_transformer.ast.node.type.FullySpecifiedType;
 import io.github.douira.glsl_transformer.ast.node.type.initializer.Initializer;
+import io.github.douira.glsl_transformer.ast.query.Root;
 import io.github.douira.glsl_transformer.ast.traversal.*;
 
 public class IterationConditionInitializer extends InnerASTNode {
@@ -56,5 +57,24 @@ public class IterationConditionInitializer extends InnerASTNode {
   @Override
   public void exitNode(ASTListener listener) {
     listener.exitIterationConditionInitializer(this);
+  }
+
+  @Override
+  public IterationConditionInitializer clone() {
+    var clone = (IterationConditionInitializer) super.clone();
+    clone.setupClone(type, clone::setType);
+    clone.setupClone(name, clone::setName);
+    clone.setupClone(initializer, clone::setInitializer);
+    return clone;
+  }
+
+  @Override
+  public IterationConditionInitializer cloneInto(Root root) {
+    return (IterationConditionInitializer) super.cloneInto(root);
+  }
+
+  @Override
+  public IterationConditionInitializer cloneSeparate() {
+    return (IterationConditionInitializer) super.cloneSeparate();
   }
 }

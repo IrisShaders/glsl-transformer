@@ -2,6 +2,7 @@ package io.github.douira.glsl_transformer.ast.node.statement;
 
 import java.util.stream.Stream;
 
+import io.github.douira.glsl_transformer.ast.query.Root;
 import io.github.douira.glsl_transformer.ast.traversal.*;
 
 public class CompoundStatement extends ManyStatement {
@@ -29,5 +30,20 @@ public class CompoundStatement extends ManyStatement {
   public void exitNode(ASTListener listener) {
     super.exitNode(listener);
     listener.exitCompoundStatement(this);
+  }
+
+  @Override
+  public CompoundStatement clone() {
+    return (CompoundStatement) super.clone();
+  }
+
+  @Override
+  public CompoundStatement cloneInto(Root root) {
+    return (CompoundStatement) super.cloneInto(root);
+  }
+
+  @Override
+  public CompoundStatement cloneSeparate() {
+    return (CompoundStatement) super.cloneSeparate();
   }
 }

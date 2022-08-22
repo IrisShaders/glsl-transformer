@@ -2,6 +2,7 @@ package io.github.douira.glsl_transformer.ast.node.statement.selection;
 
 import io.github.douira.glsl_transformer.ast.node.expression.Expression;
 import io.github.douira.glsl_transformer.ast.node.statement.*;
+import io.github.douira.glsl_transformer.ast.query.Root;
 import io.github.douira.glsl_transformer.ast.traversal.*;
 
 public class SwitchStatement extends Statement {
@@ -58,5 +59,23 @@ public class SwitchStatement extends Statement {
   public void exitNode(ASTListener listener) {
     super.exitNode(listener);
     listener.exitSwitchStatement(this);
+  }
+
+  @Override
+  public SwitchStatement clone() {
+    var clone = (SwitchStatement) super.clone();
+    clone.setupClone(expression, clone::setExpression);
+    clone.setupClone(statement, clone::setStatement);
+    return clone;
+  }
+
+  @Override
+  public SwitchStatement cloneInto(Root root) {
+    return (SwitchStatement) super.cloneInto(root);
+  }
+
+  @Override
+  public SwitchStatement cloneSeparate() {
+    return (SwitchStatement) super.cloneSeparate();
   }
 }

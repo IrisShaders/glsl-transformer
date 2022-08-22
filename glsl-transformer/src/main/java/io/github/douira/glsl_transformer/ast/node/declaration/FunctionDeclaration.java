@@ -1,6 +1,7 @@
 package io.github.douira.glsl_transformer.ast.node.declaration;
 
 import io.github.douira.glsl_transformer.ast.node.type.specifier.FunctionPrototype;
+import io.github.douira.glsl_transformer.ast.query.Root;
 import io.github.douira.glsl_transformer.ast.traversal.*;
 
 public class FunctionDeclaration extends Declaration {
@@ -39,5 +40,22 @@ public class FunctionDeclaration extends Declaration {
   public void exitNode(ASTListener listener) {
     super.exitNode(listener);
     listener.exitFunctionDeclaration(this);
+  }
+
+  @Override
+  public FunctionDeclaration clone() {
+    var clone = (FunctionDeclaration) super.clone();
+    clone.setupClone(functionPrototype, clone::setFunctionPrototype);
+    return clone;
+  }
+
+  @Override
+  public FunctionDeclaration cloneInto(Root root) {
+    return (FunctionDeclaration) super.cloneInto(root);
+  }
+
+  @Override
+  public FunctionDeclaration cloneSeparate() {
+    return (FunctionDeclaration) super.cloneSeparate();
   }
 }

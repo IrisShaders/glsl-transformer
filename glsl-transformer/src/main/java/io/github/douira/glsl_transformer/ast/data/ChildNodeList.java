@@ -1,6 +1,6 @@
 package io.github.douira.glsl_transformer.ast.data;
 
-import java.util.Collection;
+import java.util.*;
 import java.util.function.Consumer;
 import java.util.stream.Stream;
 
@@ -27,8 +27,10 @@ public class ChildNodeList<Child extends ASTNode> extends ProxyArrayList<Child> 
   protected ChildNodeList(Collection<? extends Child> c, InnerASTNode parent) {
     super(c, false);
     this.parent = parent;
-    for (var child : c) {
-      parent.setup(child, makeChildReplacer(this, child));
+    for (var child : this) {
+      if (child != null) {
+        parent.setup(child, makeChildReplacer(this, child));
+      }
     }
   }
 
@@ -61,9 +63,23 @@ public class ChildNodeList<Child extends ASTNode> extends ProxyArrayList<Child> 
     return stream.collect(
         () -> new ChildNodeList<Child>(parent),
         (list, child) -> {
-          parent.setup(child, makeChildReplacer(list, child));
+          if (child != null) {
+            parent.setup(child, makeChildReplacer(list, child));
+          }
           list.add(child);
         },
         ChildNodeList::addAll);
+  }
+
+  @Override
+  public ChildNodeList<Child> clone() {
+    return (ChildNodeList<Child>) super.clone();
+  }
+
+  @SuppressWarnings("unchecked")
+  public static <Child extends ASTNode> ChildNodeList<Child> clone(List<Child> list, InnerASTNode parent) {
+    return list == null
+        ? null
+        : (ChildNodeList<Child>) ChildNodeList.collect(list.stream().map(ASTNode::cloneSafe), parent);
   }
 }

@@ -4,13 +4,18 @@ import java.util.List;
 import java.util.stream.Stream;
 
 import io.github.douira.glsl_transformer.ast.data.ChildNodeList;
+import io.github.douira.glsl_transformer.ast.query.Root;
 import io.github.douira.glsl_transformer.ast.traversal.*;
 
 public class LayoutQualifier extends TypeQualifierPart {
-  public final List<LayoutQualifierPart> parts;
+  protected List<LayoutQualifierPart> parts;
 
   public LayoutQualifier(Stream<LayoutQualifierPart> parts) {
     this.parts = ChildNodeList.collect(parts, this);
+  }
+
+  public List<LayoutQualifierPart> getParts() {
+    return parts;
   }
 
   @Override
@@ -33,5 +38,22 @@ public class LayoutQualifier extends TypeQualifierPart {
   public void exitNode(ASTListener listener) {
     super.exitNode(listener);
     listener.exitLayoutQualifier(this);
+  }
+
+  @Override
+  public LayoutQualifier clone() {
+    var result = (LayoutQualifier) super.clone();
+    result.parts = ChildNodeList.clone(parts, result);
+    return result;
+  }
+
+  @Override
+  public LayoutQualifier cloneInto(Root root) {
+    return (LayoutQualifier) super.cloneInto(root);
+  }
+
+  @Override
+  public LayoutQualifier cloneSeparate() {
+    return (LayoutQualifier) super.cloneSeparate();
   }
 }

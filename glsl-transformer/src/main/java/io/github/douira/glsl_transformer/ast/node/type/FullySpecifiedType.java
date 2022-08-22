@@ -3,6 +3,7 @@ package io.github.douira.glsl_transformer.ast.node.type;
 import io.github.douira.glsl_transformer.ast.node.basic.InnerASTNode;
 import io.github.douira.glsl_transformer.ast.node.type.qualifier.TypeQualifier;
 import io.github.douira.glsl_transformer.ast.node.type.specifier.TypeSpecifier;
+import io.github.douira.glsl_transformer.ast.query.Root;
 import io.github.douira.glsl_transformer.ast.traversal.*;
 
 public class FullySpecifiedType extends InnerASTNode {
@@ -49,5 +50,23 @@ public class FullySpecifiedType extends InnerASTNode {
   @Override
   public void exitNode(ASTListener listener) {
     listener.exitFullySpecifiedType(this);
+  }
+
+  @Override
+  public FullySpecifiedType clone() {
+    var clone = (FullySpecifiedType) super.clone();
+    clone.setupClone(typeQualifier, clone::setTypeQualifier);
+    clone.setupClone(typeSpecifier, clone::setTypeSpecifier);
+    return clone;
+  }
+
+  @Override
+  public FullySpecifiedType cloneInto(Root root) {
+    return (FullySpecifiedType) super.cloneInto(root);
+  }
+
+  @Override
+  public FullySpecifiedType cloneSeparate() {
+    return (FullySpecifiedType) super.cloneSeparate();
   }
 }

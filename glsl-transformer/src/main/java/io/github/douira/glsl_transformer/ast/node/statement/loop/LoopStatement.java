@@ -1,6 +1,7 @@
 package io.github.douira.glsl_transformer.ast.node.statement.loop;
 
 import io.github.douira.glsl_transformer.ast.node.statement.Statement;
+import io.github.douira.glsl_transformer.ast.query.Root;
 import io.github.douira.glsl_transformer.ast.traversal.*;
 
 public abstract class LoopStatement extends Statement {
@@ -37,5 +38,22 @@ public abstract class LoopStatement extends Statement {
   public void exitNode(ASTListener listener) {
     super.exitNode(listener);
     listener.exitLoopStatement(this);
+  }
+
+  @Override
+  public LoopStatement clone() {
+    var clone = (LoopStatement) super.clone();
+    clone.setupClone(statement, clone::setStatement);
+    return clone;
+  }
+
+  @Override
+  public LoopStatement cloneInto(Root root) {
+    return (LoopStatement) super.cloneInto(root);
+  }
+
+  @Override
+  public LoopStatement cloneSeparate() {
+    return (LoopStatement) super.cloneSeparate();
   }
 }

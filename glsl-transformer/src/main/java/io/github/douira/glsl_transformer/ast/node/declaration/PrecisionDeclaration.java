@@ -2,6 +2,7 @@ package io.github.douira.glsl_transformer.ast.node.declaration;
 
 import io.github.douira.glsl_transformer.ast.node.type.qualifier.PrecisionQualifier;
 import io.github.douira.glsl_transformer.ast.node.type.specifier.TypeSpecifier;
+import io.github.douira.glsl_transformer.ast.query.Root;
 import io.github.douira.glsl_transformer.ast.traversal.*;
 
 public class PrecisionDeclaration extends Declaration {
@@ -53,5 +54,23 @@ public class PrecisionDeclaration extends Declaration {
   public void exitNode(ASTListener listener) {
     super.exitNode(listener);
     listener.exitPrecisionDeclaration(this);
+  }
+
+  @Override
+  public PrecisionDeclaration clone() {
+    var clone = (PrecisionDeclaration) super.clone();
+    clone.setupClone(precisionQualifier, clone::setPrecisionQualifier);
+    clone.setupClone(typeSpecifier, clone::setTypeSpecifier);
+    return clone;
+  }
+
+  @Override
+  public PrecisionDeclaration cloneInto(Root root) {
+    return (PrecisionDeclaration) super.cloneInto(root);
+  }
+
+  @Override
+  public PrecisionDeclaration cloneSeparate() {
+    return (PrecisionDeclaration) super.cloneSeparate();
   }
 }

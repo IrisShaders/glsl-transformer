@@ -1,6 +1,7 @@
 package io.github.douira.glsl_transformer.ast.node.statement.terminal;
 
 import io.github.douira.glsl_transformer.ast.node.expression.Expression;
+import io.github.douira.glsl_transformer.ast.query.Root;
 import io.github.douira.glsl_transformer.ast.traversal.*;
 
 public class CaseStatement extends CaseLabelStatement {
@@ -28,7 +29,7 @@ public class CaseStatement extends CaseLabelStatement {
   public StatementType getStatementType() {
     return StatementType.CASE;
   }
-  
+
   @Override
   public <R> R statementAccept(ASTVisitor<R> visitor) {
     return visitor.visitCaseStatement(this);
@@ -44,5 +45,22 @@ public class CaseStatement extends CaseLabelStatement {
   public void exitNode(ASTListener listener) {
     super.exitNode(listener);
     listener.exitCaseStatement(this);
+  }
+
+  @Override
+  public CaseStatement clone() {
+    var clone = (CaseStatement) super.clone();
+    clone.setupClone(expression, clone::setExpression);
+    return clone;
+  }
+
+  @Override
+  public CaseStatement cloneInto(Root root) {
+    return (CaseStatement) super.cloneInto(root);
+  }
+
+  @Override
+  public CaseStatement cloneSeparate() {
+    return (CaseStatement) super.cloneSeparate();
   }
 }

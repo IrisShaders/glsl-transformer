@@ -1,6 +1,7 @@
 package io.github.douira.glsl_transformer.ast.node.expression.unary;
 
 import io.github.douira.glsl_transformer.ast.node.expression.Expression;
+import io.github.douira.glsl_transformer.ast.query.Root;
 import io.github.douira.glsl_transformer.ast.traversal.*;
 
 public class IncrementPrefixExpression extends UnaryExpression {
@@ -28,5 +29,20 @@ public class IncrementPrefixExpression extends UnaryExpression {
   public void exitNode(ASTListener listener) {
     super.exitNode(listener);
     listener.exitIncrementPrefixExpression(this);
+  }
+
+  @Override
+  public IncrementPrefixExpression clone() {
+    return (IncrementPrefixExpression) super.clone();
+  }
+
+  @Override
+  public IncrementPrefixExpression cloneInto(Root root) {
+    return (IncrementPrefixExpression) super.cloneInto(root);
+  }
+
+  @Override
+  public IncrementPrefixExpression cloneSeparate() {
+    return (IncrementPrefixExpression) super.cloneSeparate();
   }
 }

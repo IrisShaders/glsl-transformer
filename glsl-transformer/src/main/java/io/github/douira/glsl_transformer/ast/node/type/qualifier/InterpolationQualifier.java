@@ -4,6 +4,7 @@ import org.antlr.v4.runtime.Token;
 
 import io.github.douira.glsl_transformer.GLSLLexer;
 import io.github.douira.glsl_transformer.ast.data.*;
+import io.github.douira.glsl_transformer.ast.query.Root;
 import io.github.douira.glsl_transformer.ast.traversal.*;
 
 public class InterpolationQualifier extends TypeQualifierPart {
@@ -54,5 +55,20 @@ public class InterpolationQualifier extends TypeQualifierPart {
   public void exitNode(ASTListener listener) {
     super.exitNode(listener);
     // terminal nodes have no children
+  }
+
+  @Override
+  public InterpolationQualifier clone() {
+    return (InterpolationQualifier) super.clone();
+  }
+
+  @Override
+  public InterpolationQualifier cloneInto(Root root) {
+    return (InterpolationQualifier) super.cloneInto(root);
+  }
+
+  @Override
+  public InterpolationQualifier cloneSeparate() {
+    return (InterpolationQualifier) super.cloneSeparate();
   }
 }

@@ -5,6 +5,7 @@ import org.antlr.v4.runtime.Token;
 import io.github.douira.glsl_transformer.GLSLLexer;
 import io.github.douira.glsl_transformer.ast.data.*;
 import io.github.douira.glsl_transformer.ast.node.type.qualifier.LayoutQualifier;
+import io.github.douira.glsl_transformer.ast.query.Root;
 import io.github.douira.glsl_transformer.ast.traversal.*;
 
 public class LayoutDefaults extends ExternalDeclaration {
@@ -67,5 +68,22 @@ public class LayoutDefaults extends ExternalDeclaration {
   public void exitNode(ASTListener listener) {
     super.exitNode(listener);
     listener.exitLayoutDefaults(this);
+  }
+
+  @Override
+  public LayoutDefaults clone() {
+    var clone = (LayoutDefaults) super.clone();
+    clone.setupClone(qualifier, clone::setQualifier);
+    return clone;
+  }
+
+  @Override
+  public LayoutDefaults cloneInto(Root root) {
+    return (LayoutDefaults) super.cloneInto(root);
+  }
+
+  @Override
+  public LayoutDefaults cloneSeparate() {
+    return (LayoutDefaults) super.cloneSeparate();
   }
 }

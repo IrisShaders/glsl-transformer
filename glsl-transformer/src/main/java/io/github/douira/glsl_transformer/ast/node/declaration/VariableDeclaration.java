@@ -6,11 +6,12 @@ import java.util.stream.Stream;
 import io.github.douira.glsl_transformer.ast.data.ChildNodeList;
 import io.github.douira.glsl_transformer.ast.node.Identifier;
 import io.github.douira.glsl_transformer.ast.node.type.qualifier.TypeQualifier;
+import io.github.douira.glsl_transformer.ast.query.Root;
 import io.github.douira.glsl_transformer.ast.traversal.*;
 
 public class VariableDeclaration extends Declaration {
   protected TypeQualifier typeQualifier;
-  public final List<Identifier> names;
+  protected List<Identifier> names;
 
   public VariableDeclaration(TypeQualifier typeQualifier, Stream<Identifier> names) {
     this.typeQualifier = typeQualifier;
@@ -28,6 +29,10 @@ public class VariableDeclaration extends Declaration {
   public void setTypeQualifier(TypeQualifier typeQualifier) {
     updateParents(this.typeQualifier, typeQualifier, this::setTypeQualifier);
     this.typeQualifier = typeQualifier;
+  }
+
+  public List<Identifier> getNames() {
+    return names;
   }
 
   @Override
@@ -50,5 +55,23 @@ public class VariableDeclaration extends Declaration {
   public void exitNode(ASTListener listener) {
     super.exitNode(listener);
     listener.exitVariableDeclaration(this);
+  }
+
+  @Override
+  public VariableDeclaration clone() {
+    var clone = (VariableDeclaration) super.clone();
+    clone.setupClone(typeQualifier, clone::setTypeQualifier);
+    clone.names = ChildNodeList.clone(names, clone);
+    return clone;
+  }
+
+  @Override
+  public VariableDeclaration cloneInto(Root root) {
+    return (VariableDeclaration) super.cloneInto(root);
+  }
+
+  @Override
+  public VariableDeclaration cloneSeparate() {
+    return (VariableDeclaration) super.cloneSeparate();
   }
 }

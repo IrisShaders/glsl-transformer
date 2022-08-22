@@ -1,6 +1,7 @@
 package io.github.douira.glsl_transformer.ast.node.expression.unary;
 
 import io.github.douira.glsl_transformer.ast.node.expression.Expression;
+import io.github.douira.glsl_transformer.ast.query.Root;
 import io.github.douira.glsl_transformer.ast.traversal.*;
 
 public abstract class UnaryExpression extends Expression {
@@ -37,5 +38,22 @@ public abstract class UnaryExpression extends Expression {
   public void exitNode(ASTListener listener) {
     super.exitNode(listener);
     listener.exitUnaryExpression(this);
+  }
+
+  @Override
+  public UnaryExpression clone() {
+    var clone = (UnaryExpression) super.clone();
+    clone.setupClone(operand, clone::setOperand);
+    return clone;
+  }
+
+  @Override
+  public UnaryExpression cloneInto(Root root) {
+    return (UnaryExpression) super.cloneInto(root);
+  }
+
+  @Override
+  public UnaryExpression cloneSeparate() {
+    return (UnaryExpression) super.cloneSeparate();
   }
 }

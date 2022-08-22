@@ -5,11 +5,12 @@ import java.util.stream.Stream;
 
 import io.github.douira.glsl_transformer.ast.data.ChildNodeList;
 import io.github.douira.glsl_transformer.ast.node.type.FullySpecifiedType;
+import io.github.douira.glsl_transformer.ast.query.Root;
 import io.github.douira.glsl_transformer.ast.traversal.*;
 
 public class TypeAndInitDeclaration extends Declaration {
   protected FullySpecifiedType type;
-  public final List<DeclarationMember> members;
+  protected List<DeclarationMember> members;
 
   public TypeAndInitDeclaration(FullySpecifiedType type, Stream<DeclarationMember> members) {
     this.type = setup(type, this::setType);
@@ -28,6 +29,10 @@ public class TypeAndInitDeclaration extends Declaration {
   public void setType(FullySpecifiedType type) {
     updateParents(this.type, type, this::setType);
     this.type = type;
+  }
+
+  public List<DeclarationMember> getMembers() {
+    return members;
   }
 
   @Override
@@ -50,5 +55,23 @@ public class TypeAndInitDeclaration extends Declaration {
   public void exitNode(ASTListener listener) {
     super.exitNode(listener);
     listener.exitTypeAndInitDeclaration(this);
+  }
+
+  @Override
+  public TypeAndInitDeclaration clone() {
+    var clone = (TypeAndInitDeclaration) super.clone();
+    clone.setupClone(type, clone::setType);
+    clone.members = ChildNodeList.clone(members, clone);
+    return clone;
+  }
+
+  @Override
+  public TypeAndInitDeclaration cloneInto(Root root) {
+    return (TypeAndInitDeclaration) super.cloneInto(root);
+  }
+
+  @Override
+  public TypeAndInitDeclaration cloneSeparate() {
+    return (TypeAndInitDeclaration) super.cloneSeparate();
   }
 }

@@ -8,6 +8,7 @@ import io.github.douira.glsl_transformer.ast.node.Identifier;
 import io.github.douira.glsl_transformer.ast.node.basic.ASTNode;
 import io.github.douira.glsl_transformer.ast.node.expression.*;
 import io.github.douira.glsl_transformer.ast.node.type.specifier.TypeSpecifier;
+import io.github.douira.glsl_transformer.ast.query.Root;
 import io.github.douira.glsl_transformer.ast.traversal.*;
 
 public class FunctionCallExpression extends TerminalExpression {
@@ -110,5 +111,24 @@ public class FunctionCallExpression extends TerminalExpression {
   public void exitNode(ASTListener listener) {
     super.exitNode(listener);
     listener.exitFunctionCallExpression(this);
+  }
+
+  @Override
+  public FunctionCallExpression clone() {
+    var result = (FunctionCallExpression) super.clone();
+    result.setupClone(functionName, result::setFunctionName);
+    result.setupClone(functionSpecifier, result::setFunctionSpecifier);
+    result.parameters = ChildNodeList.clone(parameters, result);
+    return result;
+  }
+
+  @Override
+  public FunctionCallExpression cloneInto(Root root) {
+    return (FunctionCallExpression) super.cloneInto(root);
+  }
+
+  @Override
+  public FunctionCallExpression cloneSeparate() {
+    return (FunctionCallExpression) super.cloneSeparate();
   }
 }

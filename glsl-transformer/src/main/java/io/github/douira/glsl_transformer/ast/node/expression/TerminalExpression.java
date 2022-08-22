@@ -1,5 +1,6 @@
 package io.github.douira.glsl_transformer.ast.node.expression;
 
+import io.github.douira.glsl_transformer.ast.query.Root;
 import io.github.douira.glsl_transformer.ast.traversal.*;
 
 public abstract class TerminalExpression extends Expression {
@@ -21,5 +22,20 @@ public abstract class TerminalExpression extends Expression {
   public void exitNode(ASTListener listener) {
     super.exitNode(listener);
     // terminal expressions have no children
+  }
+
+  @Override
+  public TerminalExpression clone() {
+    return (TerminalExpression) super.clone();
+  }
+
+  @Override
+  public TerminalExpression cloneInto(Root root) {
+    return (TerminalExpression) super.cloneInto(root);
+  }
+
+  @Override
+  public TerminalExpression cloneSeparate() {
+    return (TerminalExpression) super.cloneSeparate();
   }
 }

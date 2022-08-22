@@ -5,6 +5,7 @@ import java.util.stream.Stream;
 
 import io.github.douira.glsl_transformer.ast.node.basic.ListASTNode;
 import io.github.douira.glsl_transformer.ast.node.expression.Expression;
+import io.github.douira.glsl_transformer.ast.query.Root;
 import io.github.douira.glsl_transformer.ast.traversal.*;
 
 //TODO: any of these expressions can be null
@@ -30,5 +31,20 @@ public class ArraySpecifier extends ListASTNode<Expression> {
   @Override
   public void exitNode(ASTListener listener) {
     listener.exitArraySpecifier(this);
+  }
+
+  @Override
+  public ArraySpecifier clone() {
+    return (ArraySpecifier) super.clone();
+  }
+
+  @Override
+  public ArraySpecifier cloneInto(Root root) {
+    return (ArraySpecifier) super.cloneInto(root);
+  }
+
+  @Override
+  public ArraySpecifier cloneSeparate() {
+    return (ArraySpecifier) super.cloneSeparate();
   }
 }

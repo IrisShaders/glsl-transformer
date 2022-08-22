@@ -34,6 +34,8 @@ public abstract class ASTNode implements Cloneable {
   private ASTNode parent;
   private Consumer<ASTNode> selfReplacer;
   private Root root = Root.getActiveBuildRoot();
+  private static boolean doParentUpdate = true;
+  private static Root cloneRoot;
 
   /**
    * Whether this node has been registered with the root. This is only used when
@@ -449,7 +451,7 @@ public abstract class ASTNode implements Cloneable {
       NodeType currentNode,
       NodeType newNode,
       Consumer<? extends NodeType> setter) {
-    if (currentNode == newNode && newNode.getParent() == this) {
+    if (!doParentUpdate || currentNode == newNode && newNode.getParent() == this) {
       return;
     }
 
@@ -460,5 +462,71 @@ public abstract class ASTNode implements Cloneable {
     if (newNode != null) {
       newNode.setParent(this, setter);
     }
+  }
+
+  /**
+   * Makes a clone of the given node and inserts it with the given setter. This
+   * node is set as the parent. Since the setter reference usually also detaches
+   * the previous node, detachment is temporarily disabled.
+   * 
+   * @param <NodeType>   Type of the node
+   * @param node         The node to clone
+   * @param selfReplacer The setter to replace the node in this parent
+   */
+  @SuppressWarnings("unchecked")
+  public <NodeType extends ASTNode> void setupClone(
+      NodeType node,
+      Consumer<NodeType> selfReplacer) {
+    if (node != null) {
+      var clone = node.clone();
+      clone.parent = this;
+      clone.selfReplacer = (Consumer<ASTNode>) selfReplacer;
+      clone.registered = true;
+      doParentUpdate = false;
+      ((Consumer<ASTNode>) selfReplacer).accept(clone);
+      doParentUpdate = true;
+    }
+  }
+
+  @Override
+  public ASTNode clone() {
+    if (cloneRoot == null) {
+      throw new IllegalStateException("The clone root may not be null!");
+    }
+    ASTNode clone;
+    try {
+      clone = (ASTNode) super.clone();
+    } catch (CloneNotSupportedException e) {
+      // should never happen
+      throw new RuntimeException(e);
+    }
+    clone.registered = true;
+    clone.parent = null;
+    clone.selfReplacer = null;
+    clone.root = cloneRoot;
+    clone.root.registerNode(clone);
+    return clone;
+  }
+
+  public ASTNode cloneInto(Root root) {
+    cloneRoot = root;
+    var clone = clone();
+    cloneRoot = null;
+    return clone;
+  }
+
+  public ASTNode cloneInto(ASTNode treeMember) {
+    return cloneInto(treeMember.getRoot());
+  }
+
+  public ASTNode cloneSeparate() {
+    return cloneInto(new Root());
+  }
+
+  public static ASTNode cloneSafe(ASTNode node) {
+    if (node == null) {
+      return null;
+    }
+    return node.clone();
   }
 }

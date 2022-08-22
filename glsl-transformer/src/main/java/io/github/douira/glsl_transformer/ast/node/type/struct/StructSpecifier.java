@@ -2,6 +2,7 @@ package io.github.douira.glsl_transformer.ast.node.type.struct;
 
 import io.github.douira.glsl_transformer.ast.node.Identifier;
 import io.github.douira.glsl_transformer.ast.node.type.specifier.*;
+import io.github.douira.glsl_transformer.ast.query.Root;
 import io.github.douira.glsl_transformer.ast.traversal.*;
 
 public class StructSpecifier extends TypeSpecifier {
@@ -69,5 +70,23 @@ public class StructSpecifier extends TypeSpecifier {
   public void exitNode(ASTListener listener) {
     super.exitNode(listener);
     listener.exitStructSpecifier(this);
+  }
+
+  @Override
+  public StructSpecifier clone() {
+    var clone = (StructSpecifier) super.clone();
+    clone.setupClone(name, clone::setName);
+    clone.setupClone(structBody, clone::setStructBody);
+    return clone;
+  }
+
+  @Override
+  public StructSpecifier cloneInto(Root root) {
+    return (StructSpecifier) super.cloneInto(root);
+  }
+
+  @Override
+  public StructSpecifier cloneSeparate() {
+    return (StructSpecifier) super.cloneSeparate();
   }
 }

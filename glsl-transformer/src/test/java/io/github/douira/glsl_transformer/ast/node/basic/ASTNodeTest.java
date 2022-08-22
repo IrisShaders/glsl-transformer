@@ -64,4 +64,12 @@ public class ASTNodeTest extends TestWithSingleASTTransformer {
     });
     p.transform("int x = a + b;");
   }
+
+  @Test
+  void testClone() {
+    p.setTransformation((tree, root) -> {
+
+    });
+    p.transform("int x = a + b;");
+  }
 }

@@ -6,6 +6,7 @@ import java.util.stream.Stream;
 import io.github.douira.glsl_transformer.ast.node.basic.ListASTNode;
 import io.github.douira.glsl_transformer.ast.node.external_declaration.*;
 import io.github.douira.glsl_transformer.ast.node.statement.*;
+import io.github.douira.glsl_transformer.ast.query.Root;
 import io.github.douira.glsl_transformer.ast.transform.*;
 import io.github.douira.glsl_transformer.ast.traversal.*;
 
@@ -31,20 +32,37 @@ public class TranslationUnit extends ListASTNode<ExternalDeclaration> {
   }
 
   public void injectNode(ASTInjectionPoint injectionPoint, ExternalDeclaration node) {
-    children.add(injectionPoint.getInjectionIndex(this), node);
+    getChildren().add(injectionPoint.getInjectionIndex(this), node);
   }
 
   public void injectNodes(
       ASTInjectionPoint injectionPoint,
       Collection<ExternalDeclaration> nodes) {
-    children.addAll(injectionPoint.getInjectionIndex(this), nodes);
+    getChildren().addAll(injectionPoint.getInjectionIndex(this), nodes);
+  }
+
+  public void injectNodes(
+      ASTInjectionPoint injectionPoint,
+      Stream<ExternalDeclaration> nodes) {
+    nodes.reduce(injectionPoint.getInjectionIndex(this), (index, node) -> {
+      getChildren().add(index, node);
+      return index + 1;
+    }, Integer::sum);
+  }
+
+  public void parseAndInjectNodes(
+      ASTParser t,
+      ASTInjectionPoint injectionPoint,
+      Stream<String> externalDeclarations) {
+    injectNodes(injectionPoint,
+        externalDeclarations.map(str -> t.parseExternalDeclaration(this, str)));
   }
 
   public void parseAndInjectNode(
       ASTParser t,
       ASTInjectionPoint injectionPoint,
       String externalDeclaration) {
-    children.add(injectionPoint.getInjectionIndex(this),
+    getChildren().add(injectionPoint.getInjectionIndex(this),
         t.parseExternalDeclaration(
             this,
             externalDeclaration));
@@ -64,19 +82,19 @@ public class TranslationUnit extends ListASTNode<ExternalDeclaration> {
   }
 
   public void prependFunctionBody(String functionName, Statement statement) {
-    getFunctionDefinitionBody(functionName).statements.add(0, statement);
+    getFunctionDefinitionBody(functionName).getStatements().add(0, statement);
   }
 
   public void prependFunctionBody(String functionName, Collection<Statement> statements) {
-    getFunctionDefinitionBody(functionName).statements.addAll(0, statements);
+    getFunctionDefinitionBody(functionName).getStatements().addAll(0, statements);
   }
 
   public void appendFunctionBody(String functionName, Statement statement) {
-    getFunctionDefinitionBody(functionName).statements.add(statement);
+    getFunctionDefinitionBody(functionName).getStatements().add(statement);
   }
 
   public void appendFunctionBody(String functionName, Collection<Statement> statements) {
-    getFunctionDefinitionBody(functionName).statements.addAll(statements);
+    getFunctionDefinitionBody(functionName).getStatements().addAll(statements);
   }
 
   public void prependMain(Statement statement) {
@@ -125,5 +143,22 @@ public class TranslationUnit extends ListASTNode<ExternalDeclaration> {
   @Override
   public void exitNode(ASTListener listener) {
     listener.exitTranslationUnit(this);
+  }
+
+  @Override
+  public TranslationUnit clone() {
+    var clone = (TranslationUnit) super.clone();
+    clone.setupClone(versionStatement, clone::setVersionStatement);
+    return clone;
+  }
+
+  @Override
+  public TranslationUnit cloneInto(Root root) {
+    return (TranslationUnit) super.cloneInto(root);
+  }
+
+  @Override
+  public TranslationUnit cloneSeparate() {
+    return (TranslationUnit) super.cloneSeparate();
   }
 }

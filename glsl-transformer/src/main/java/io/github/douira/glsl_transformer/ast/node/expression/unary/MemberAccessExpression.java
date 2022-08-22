@@ -2,6 +2,7 @@ package io.github.douira.glsl_transformer.ast.node.expression.unary;
 
 import io.github.douira.glsl_transformer.ast.node.Identifier;
 import io.github.douira.glsl_transformer.ast.node.expression.Expression;
+import io.github.douira.glsl_transformer.ast.query.Root;
 import io.github.douira.glsl_transformer.ast.traversal.*;
 
 public class MemberAccessExpression extends UnaryExpression {
@@ -41,5 +42,22 @@ public class MemberAccessExpression extends UnaryExpression {
   public void exitNode(ASTListener listener) {
     super.exitNode(listener);
     listener.exitMemberAccessExpression(this);
+  }
+
+  @Override
+  public MemberAccessExpression clone() {
+    var clone = (MemberAccessExpression) super.clone();
+    clone.setupClone(member, clone::setMember);
+    return clone;
+  }
+
+  @Override
+  public MemberAccessExpression cloneInto(Root root) {
+    return (MemberAccessExpression) super.cloneInto(root);
+  }
+
+  @Override
+  public MemberAccessExpression cloneSeparate() {
+    return (MemberAccessExpression) super.cloneSeparate();
   }
 }

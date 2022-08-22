@@ -1,5 +1,6 @@
 package io.github.douira.glsl_transformer.ast.node.statement.terminal;
 
+import io.github.douira.glsl_transformer.ast.query.Root;
 import io.github.douira.glsl_transformer.ast.traversal.ASTVisitor;
 
 public class DiscardStatement extends TerminalStatement {
@@ -14,5 +15,20 @@ public class DiscardStatement extends TerminalStatement {
   @Override
   public <R> R statementAccept(ASTVisitor<R> visitor) {
     return visitor.visitDiscardStatement(this);
+  }
+
+  @Override
+  public DiscardStatement clone() {
+    return (DiscardStatement) super.clone();
+  }
+
+  @Override
+  public DiscardStatement cloneInto(Root root) {
+    return (DiscardStatement) super.cloneInto(root);
+  }
+
+  @Override
+  public DiscardStatement cloneSeparate() {
+    return (DiscardStatement) super.cloneSeparate();
   }
 }

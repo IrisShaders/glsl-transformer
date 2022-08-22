@@ -309,9 +309,9 @@ public interface ASTVisitor<R> extends GeneralASTVisitor<R> {
 
   default R visitSelectionStatement(SelectionStatement node) {
     var result = initialResult();
-    for (int i = 0, size = node.statements.size(); i < size; i++) {
-      result = visitSafe(result, node.conditions.get(i));
-      result = visitSafe(result, node.statements.get(i));
+    for (int i = 0, size = node.getStatements().size(); i < size; i++) {
+      result = visitSafe(result, node.getConditions().get(i));
+      result = visitSafe(result, node.getStatements().get(i));
     }
     return result;
   }
@@ -415,11 +415,11 @@ public interface ASTVisitor<R> extends GeneralASTVisitor<R> {
   }
 
   default R visitTypeAndInitDeclaration(TypeAndInitDeclaration node) {
-    return visitChildren(visit(node.getType()), node.members);
+    return visitChildren(visit(node.getType()), node.getMembers());
   }
 
   default R visitVariableDeclaration(VariableDeclaration node) {
-    return visitChildren(visit(node.getTypeQualifier()), node.names);
+    return visitChildren(visit(node.getTypeQualifier()), node.getNames());
   }
 
   default R visitExpressionInitializer(ExpressionInitializer node) {
@@ -431,7 +431,7 @@ public interface ASTVisitor<R> extends GeneralASTVisitor<R> {
   }
 
   default R visitNestedInitializer(NestedInitializer node) {
-    return visitChildren(node.initializers);
+    return visitChildren(node.getInitializers());
   }
 
   default R visitInterpolationQualifier(InterpolationQualifier node) {
@@ -443,7 +443,7 @@ public interface ASTVisitor<R> extends GeneralASTVisitor<R> {
   }
 
   default R visitLayoutQualifier(LayoutQualifier node) {
-    return visitChildren(node.parts);
+    return visitChildren(node.getParts());
   }
 
   default R visitLayoutQualifierPart(LayoutQualifierPart node) {
@@ -467,7 +467,7 @@ public interface ASTVisitor<R> extends GeneralASTVisitor<R> {
   }
 
   default R visitStorageQualifier(StorageQualifier node) {
-    var result = visitChildren(node.typeNames);
+    var result = visitChildren(node.getTypeNames());
     return visitData(result, node.storageType);
   }
 
@@ -508,7 +508,7 @@ public interface ASTVisitor<R> extends GeneralASTVisitor<R> {
   }
 
   default R visitStructMember(StructMember node) {
-    return visitChildren(visit(node.getType()), node.declarators);
+    return visitChildren(visit(node.getType()), node.getDeclarators());
   }
 
   default R visitStructSpecifier(StructSpecifier node) {

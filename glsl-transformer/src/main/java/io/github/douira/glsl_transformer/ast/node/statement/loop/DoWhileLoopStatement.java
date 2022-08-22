@@ -2,6 +2,7 @@ package io.github.douira.glsl_transformer.ast.node.statement.loop;
 
 import io.github.douira.glsl_transformer.ast.node.expression.Expression;
 import io.github.douira.glsl_transformer.ast.node.statement.Statement;
+import io.github.douira.glsl_transformer.ast.query.Root;
 import io.github.douira.glsl_transformer.ast.traversal.*;
 
 public class DoWhileLoopStatement extends ConditionLoopStatement {
@@ -29,5 +30,20 @@ public class DoWhileLoopStatement extends ConditionLoopStatement {
   public void exitNode(ASTListener listener) {
     super.exitNode(listener);
     listener.exitDoWhileLoopStatement(this);
+  }
+
+  @Override
+  public DoWhileLoopStatement clone() {
+    return (DoWhileLoopStatement) super.clone();
+  }
+
+  @Override
+  public DoWhileLoopStatement cloneInto(Root root) {
+    return (DoWhileLoopStatement) super.cloneInto(root);
+  }
+
+  @Override
+  public DoWhileLoopStatement cloneSeparate() {
+    return (DoWhileLoopStatement) super.cloneSeparate();
   }
 }
