@@ -7,6 +7,7 @@ import io.github.douira.glsl_transformer.ast.node.Identifier;
 import io.github.douira.glsl_transformer.ast.node.basic.ListASTNode;
 import io.github.douira.glsl_transformer.ast.node.declaration.FunctionParameter;
 import io.github.douira.glsl_transformer.ast.node.type.FullySpecifiedType;
+import io.github.douira.glsl_transformer.ast.query.Root;
 import io.github.douira.glsl_transformer.ast.traversal.*;
 
 public class FunctionPrototype extends ListASTNode<FunctionParameter> {
@@ -57,5 +58,23 @@ public class FunctionPrototype extends ListASTNode<FunctionParameter> {
   @Override
   public void exitNode(ASTListener listener) {
     listener.exitFunctionPrototype(this);
+  }
+
+  @Override
+  public FunctionPrototype clone() {
+    var clone = (FunctionPrototype) super.clone();
+    clone.setupClone(returnType, clone::setReturnType);
+    clone.setupClone(name, clone::setName);
+    return clone;
+  }
+
+  @Override
+  public FunctionPrototype cloneInto(Root root) {
+    return (FunctionPrototype) super.cloneInto(root);
+  }
+
+  @Override
+  public FunctionPrototype cloneSeparate() {
+    return (FunctionPrototype) super.cloneSeparate();
   }
 }

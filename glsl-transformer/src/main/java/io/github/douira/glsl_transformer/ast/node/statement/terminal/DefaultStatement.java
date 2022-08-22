@@ -1,5 +1,6 @@
 package io.github.douira.glsl_transformer.ast.node.statement.terminal;
 
+import io.github.douira.glsl_transformer.ast.query.Root;
 import io.github.douira.glsl_transformer.ast.traversal.ASTVisitor;
 
 public class DefaultStatement extends CaseLabelStatement {
@@ -16,5 +17,20 @@ public class DefaultStatement extends CaseLabelStatement {
   @Override
   public <R> R statementAccept(ASTVisitor<R> visitor) {
     return visitor.visitDefaultStatement(this);
+  }
+
+  @Override
+  public DefaultStatement clone() {
+    return (DefaultStatement) super.clone();
+  }
+
+  @Override
+  public DefaultStatement cloneInto(Root root) {
+    return (DefaultStatement) super.cloneInto(root);
+  }
+
+  @Override
+  public DefaultStatement cloneSeparate() {
+    return (DefaultStatement) super.cloneSeparate();
   }
 }

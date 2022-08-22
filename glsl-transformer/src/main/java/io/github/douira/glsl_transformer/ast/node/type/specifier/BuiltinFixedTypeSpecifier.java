@@ -4,6 +4,7 @@ import org.antlr.v4.runtime.Token;
 
 import io.github.douira.glsl_transformer.GLSLLexer;
 import io.github.douira.glsl_transformer.ast.data.*;
+import io.github.douira.glsl_transformer.ast.query.Root;
 import io.github.douira.glsl_transformer.ast.traversal.*;
 
 public class BuiltinFixedTypeSpecifier extends TypeSpecifier {
@@ -140,5 +141,20 @@ public class BuiltinFixedTypeSpecifier extends TypeSpecifier {
   public void exitNode(ASTListener listener) {
     super.exitNode(listener);
     // terminal nodes have no children
+  }
+
+  @Override
+  public BuiltinFixedTypeSpecifier clone() {
+    return (BuiltinFixedTypeSpecifier) super.clone();
+  }
+
+  @Override
+  public BuiltinFixedTypeSpecifier cloneInto(Root root) {
+    return (BuiltinFixedTypeSpecifier) super.cloneInto(root);
+  }
+
+  @Override
+  public BuiltinFixedTypeSpecifier cloneSeparate() {
+    return (BuiltinFixedTypeSpecifier) super.cloneSeparate();
   }
 }

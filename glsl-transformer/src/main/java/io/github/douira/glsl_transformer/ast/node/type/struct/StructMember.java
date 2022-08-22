@@ -6,11 +6,12 @@ import java.util.stream.Stream;
 import io.github.douira.glsl_transformer.ast.data.ChildNodeList;
 import io.github.douira.glsl_transformer.ast.node.basic.InnerASTNode;
 import io.github.douira.glsl_transformer.ast.node.type.FullySpecifiedType;
+import io.github.douira.glsl_transformer.ast.query.Root;
 import io.github.douira.glsl_transformer.ast.traversal.*;
 
 public class StructMember extends InnerASTNode {
   protected FullySpecifiedType type;
-  public final List<StructDeclarator> declarators;
+  protected List<StructDeclarator> declarators;
 
   public StructMember(FullySpecifiedType type, Stream<StructDeclarator> declarators) {
     this.type = setup(type, this::setType);
@@ -26,6 +27,10 @@ public class StructMember extends InnerASTNode {
     this.type = type;
   }
 
+  public List<StructDeclarator> getDeclarators() {
+    return declarators;
+  }
+
   @Override
   public <R> R accept(ASTVisitor<R> visitor) {
     return visitor.visitStructMember(this);
@@ -39,5 +44,23 @@ public class StructMember extends InnerASTNode {
   @Override
   public void exitNode(ASTListener listener) {
     listener.exitStructMember(this);
+  }
+
+  @Override
+  public StructMember clone() {
+    var clone = (StructMember) super.clone();
+    clone.setupClone(type, clone::setType);
+    clone.declarators = ChildNodeList.clone(declarators, clone);
+    return clone;
+  }
+
+  @Override
+  public StructMember cloneInto(Root root) {
+    return (StructMember) super.cloneInto(root);
+  }
+
+  @Override
+  public StructMember cloneSeparate() {
+    return (StructMember) super.cloneSeparate();
   }
 }

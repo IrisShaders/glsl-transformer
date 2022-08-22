@@ -2,6 +2,7 @@ package io.github.douira.glsl_transformer.ast.node.expression;
 
 import java.util.Objects;
 
+import io.github.douira.glsl_transformer.ast.query.Root;
 import io.github.douira.glsl_transformer.ast.traversal.*;
 import io.github.douira.glsl_transformer.util.Type;
 import io.github.douira.glsl_transformer.util.Type.NumberType;
@@ -263,5 +264,20 @@ public class LiteralExpression extends TerminalExpression {
   public void exitNode(ASTListener listener) {
     super.exitNode(listener);
     listener.exitLiteralExpression(this);
+  }
+
+  @Override
+  public LiteralExpression clone() {
+    return (LiteralExpression) super.clone();
+  }
+
+  @Override
+  public LiteralExpression cloneInto(Root root) {
+    return (LiteralExpression) super.cloneInto(root);
+  }
+
+  @Override
+  public LiteralExpression cloneSeparate() {
+    return (LiteralExpression) super.cloneSeparate();
   }
 }

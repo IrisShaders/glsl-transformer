@@ -1,6 +1,7 @@
 package io.github.douira.glsl_transformer.ast.node.expression.unary;
 
 import io.github.douira.glsl_transformer.ast.node.expression.Expression;
+import io.github.douira.glsl_transformer.ast.query.Root;
 import io.github.douira.glsl_transformer.ast.traversal.*;
 
 public class BooleanNotExpression extends UnaryExpression {
@@ -28,5 +29,20 @@ public class BooleanNotExpression extends UnaryExpression {
   public void exitNode(ASTListener listener) {
     super.exitNode(listener);
     listener.exitBooleanNotExpression(this);
+  }
+
+  @Override
+  public BooleanNotExpression clone() {
+    return (BooleanNotExpression) super.clone();
+  }
+
+  @Override
+  public BooleanNotExpression cloneInto(Root root) {
+    return (BooleanNotExpression) super.cloneInto(root);
+  }
+
+  @Override
+  public BooleanNotExpression cloneSeparate() {
+    return (BooleanNotExpression) super.cloneSeparate();
   }
 }

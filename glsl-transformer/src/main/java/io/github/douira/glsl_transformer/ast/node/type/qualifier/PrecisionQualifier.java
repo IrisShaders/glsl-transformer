@@ -4,6 +4,7 @@ import org.antlr.v4.runtime.Token;
 
 import io.github.douira.glsl_transformer.GLSLLexer;
 import io.github.douira.glsl_transformer.ast.data.*;
+import io.github.douira.glsl_transformer.ast.query.Root;
 import io.github.douira.glsl_transformer.ast.traversal.*;
 
 public class PrecisionQualifier extends TypeQualifierPart {
@@ -54,5 +55,20 @@ public class PrecisionQualifier extends TypeQualifierPart {
   public void exitNode(ASTListener listener) {
     super.exitNode(listener);
     // terminal nodes have no children
+  }
+
+  @Override
+  public PrecisionQualifier clone() {
+    return (PrecisionQualifier) super.clone();
+  }
+
+  @Override
+  public PrecisionQualifier cloneInto(Root root) {
+    return (PrecisionQualifier) super.cloneInto(root);
+  }
+
+  @Override
+  public PrecisionQualifier cloneSeparate() {
+    return (PrecisionQualifier) super.cloneSeparate();
   }
 }

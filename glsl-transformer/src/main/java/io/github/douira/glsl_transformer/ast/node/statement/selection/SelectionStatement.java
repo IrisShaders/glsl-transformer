@@ -6,10 +6,11 @@ import java.util.stream.Stream;
 import io.github.douira.glsl_transformer.ast.data.ChildNodeList;
 import io.github.douira.glsl_transformer.ast.node.expression.Expression;
 import io.github.douira.glsl_transformer.ast.node.statement.*;
+import io.github.douira.glsl_transformer.ast.query.Root;
 import io.github.douira.glsl_transformer.ast.traversal.*;
 
 public class SelectionStatement extends ManyStatement {
-  public final List<Expression> conditions; // TODO: last one may be null
+  protected List<Expression> conditions; // TODO: last one may be null
 
   public SelectionStatement(
       Stream<Expression> conditions,
@@ -61,5 +62,22 @@ public class SelectionStatement extends ManyStatement {
   public void exitNode(ASTListener listener) {
     super.exitNode(listener);
     listener.exitSelectionStatement(this);
+  }
+
+  @Override
+  public SelectionStatement clone() {
+    var result = (SelectionStatement) super.clone();
+    result.conditions = ChildNodeList.clone(conditions, result);
+    return result;
+  }
+
+  @Override
+  public SelectionStatement cloneInto(Root root) {
+    return (SelectionStatement) super.cloneInto(root);
+  }
+
+  @Override
+  public SelectionStatement cloneSeparate() {
+    return (SelectionStatement) super.cloneSeparate();
   }
 }

@@ -21,11 +21,10 @@ import io.github.douira.glsl_transformer.util.Type;
 public class SingleASTTransformerTest extends TestWithSingleASTTransformer {
   void assertInjectExternalDeclaration(int index, String input, String output) {
     p.setTransformation(translationUnit -> {
-      translationUnit.children.add(index, p.parseExternalDeclaration(
+      translationUnit.getChildren().add(index, p.parseExternalDeclaration(
           translationUnit, "int a;"));
     });
-    p.setPrintType(PrintType.COMPACT);
-    assertEquals(output, p.transform(input));
+    assertTransform(output, input);
   }
 
   @Test
@@ -58,8 +57,8 @@ public class SingleASTTransformerTest extends TestWithSingleASTTransformer {
   @Test
   void testNodeQuery() {
     p.setTransformation((tree, root) -> {
-      root.nodeIndex.get(LiteralExpression.class)
-          .stream().forEach(literal -> literal.changeInteger(literal.getInteger() + 1));
+      root.nodeIndex.getStream(LiteralExpression.class)
+          .forEach(literal -> literal.changeInteger(literal.getInteger() + 1));
     });
     assertTransform(
         "int a = 2, b = 3, c = 4; ",
@@ -75,12 +74,12 @@ public class SingleASTTransformerTest extends TestWithSingleASTTransformer {
       Root.indexBuildSession(tree, () -> {
         for (var sequence : root.nodeIndex
             .get(SequenceExpression.class)) {
-          sequence.expressions.add(
+          sequence.getExpressions().add(
               new LiteralExpression(Type.INT32, 1));
         }
       });
-      root.nodeIndex.get(LiteralExpression.class)
-          .stream().forEach(literal -> literal.changeInteger(literal.getInteger() + 1));
+      root.nodeIndex.getStream(LiteralExpression.class)
+          .forEach(literal -> literal.changeInteger(literal.getInteger() + 1));
     });
     assertTransform(
         "int a = 2, b = 3, c = 4, 2; ",
@@ -148,10 +147,10 @@ public class SingleASTTransformerTest extends TestWithSingleASTTransformer {
   @Test
   void testMoveNodeInternal() {
     p.setTransformation((tree, root) -> {
-      var firstDeclaration = tree.children.get(0);
+      var firstDeclaration = tree.getChildren().get(0);
       var toMove = new ArrayList<LiteralExpression>();
       for (var node : root.nodeIndex
-          .getOne(SequenceExpression.class).expressions) {
+          .getOne(SequenceExpression.class).getExpressions()) {
         if (node instanceof LiteralExpression literalExpression) {
           if (literalExpression.getInteger() == 3
               && literalExpression.getAncestor(ExternalDeclaration.class) == firstDeclaration) {
@@ -163,13 +162,13 @@ public class SingleASTTransformerTest extends TestWithSingleASTTransformer {
       }
       var secondDeclaration = p.parseExternalDeclaration(tree, "int x = 4, 4;");
       var sequenceExpression = secondDeclaration.getRoot().nodeIndex
-          .get(SequenceExpression.class).stream()
+          .getStream(SequenceExpression.class)
           .filter(e -> e.hasAncestor(secondDeclaration)).findAny().get();
-      sequenceExpression.expressions.clear();
-      tree.children.add(secondDeclaration);
+      sequenceExpression.getExpressions().clear();
+      tree.getChildren().add(secondDeclaration);
       for (var node : toMove) {
         node.detach();
-        sequenceExpression.expressions.add(node);
+        sequenceExpression.getExpressions().add(node);
       }
     });
     assertTransform(
@@ -230,8 +229,8 @@ public class SingleASTTransformerTest extends TestWithSingleASTTransformer {
   @Test
   void testSubtreeMoveSwap() {
     p.setTransformation((tree, root) -> {
-      assertTrue(root.identifierIndex.has("bar"));
-      assertTrue(root.identifierIndex.has("foo"));
+      assertEquals(1, root.identifierIndex.get("bar").size());
+      assertEquals(1, root.identifierIndex.get("foo").size());
       ASTNode.swap(
           root.identifierIndex.getOne("bar"),
           root.identifierIndex.getOne("foo"));

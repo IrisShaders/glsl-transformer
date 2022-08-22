@@ -1,6 +1,7 @@
 package io.github.douira.glsl_transformer.ast.node.expression;
 
 import io.github.douira.glsl_transformer.ast.node.Identifier;
+import io.github.douira.glsl_transformer.ast.query.Root;
 import io.github.douira.glsl_transformer.ast.traversal.*;
 
 public class ReferenceExpression extends TerminalExpression {
@@ -39,5 +40,22 @@ public class ReferenceExpression extends TerminalExpression {
   public void exitNode(ASTListener listener) {
     super.exitNode(listener);
     listener.exitReferenceExpression(this);
+  }
+
+  @Override
+  public ReferenceExpression clone() {
+    var clone = (ReferenceExpression) super.clone();
+    clone.setupClone(identifier, clone::setIdentifier);
+    return clone;
+  }
+
+  @Override
+  public ReferenceExpression cloneInto(Root root) {
+    return (ReferenceExpression) super.cloneInto(root);
+  }
+
+  @Override
+  public ReferenceExpression cloneSeparate() {
+    return (ReferenceExpression) super.cloneSeparate();
   }
 }

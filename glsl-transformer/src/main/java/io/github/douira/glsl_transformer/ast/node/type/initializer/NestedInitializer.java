@@ -4,10 +4,11 @@ import java.util.List;
 import java.util.stream.Stream;
 
 import io.github.douira.glsl_transformer.ast.data.ChildNodeList;
+import io.github.douira.glsl_transformer.ast.query.Root;
 import io.github.douira.glsl_transformer.ast.traversal.*;
 
 public class NestedInitializer extends Initializer {
-  public final List<Initializer> initializers;
+  protected List<Initializer> initializers;
 
   public NestedInitializer(Stream<Initializer> initializers) {
     this.initializers = ChildNodeList.collect(initializers, this);
@@ -15,6 +16,10 @@ public class NestedInitializer extends Initializer {
 
   public NestedInitializer() {
     this.initializers = new ChildNodeList<>(this);
+  }
+
+  public List<Initializer> getInitializers() {
+    return initializers;
   }
 
   @Override
@@ -37,5 +42,22 @@ public class NestedInitializer extends Initializer {
   public void exitNode(ASTListener listener) {
     super.exitNode(listener);
     listener.exitNestedInitializer(this);
+  }
+
+  @Override
+  public NestedInitializer clone() {
+    var result = (NestedInitializer) super.clone();
+    result.initializers = ChildNodeList.clone(initializers, result);
+    return result;
+  }
+
+  @Override
+  public NestedInitializer cloneInto(Root root) {
+    return (NestedInitializer) super.cloneInto(root);
+  }
+
+  @Override
+  public NestedInitializer cloneSeparate() {
+    return (NestedInitializer) super.cloneSeparate();
   }
 }

@@ -1,6 +1,7 @@
 package io.github.douira.glsl_transformer.ast.node.expression;
 
 import io.github.douira.glsl_transformer.ast.node.basic.InnerASTNode;
+import io.github.douira.glsl_transformer.ast.query.Root;
 import io.github.douira.glsl_transformer.ast.traversal.*;
 
 public abstract class Expression extends InnerASTNode {
@@ -105,5 +106,20 @@ public abstract class Expression extends InnerASTNode {
   @Override
   public void exitNode(ASTListener listener) {
     listener.exitExpression(this);
+  }
+
+  @Override
+  public Expression clone() {
+    return (Expression) super.clone();
+  }
+
+  @Override
+  public Expression cloneInto(Root root) {
+    return (Expression) super.cloneInto(root);
+  }
+
+  @Override
+  public Expression cloneSeparate() {
+    return (Expression) super.cloneSeparate();
   }
 }

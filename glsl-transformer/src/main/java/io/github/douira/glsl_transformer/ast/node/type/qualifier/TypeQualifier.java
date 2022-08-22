@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.stream.Stream;
 
 import io.github.douira.glsl_transformer.ast.node.basic.ListASTNode;
+import io.github.douira.glsl_transformer.ast.query.Root;
 import io.github.douira.glsl_transformer.ast.traversal.*;
 
 public class TypeQualifier extends ListASTNode<TypeQualifierPart> {
@@ -28,5 +29,20 @@ public class TypeQualifier extends ListASTNode<TypeQualifierPart> {
   @Override
   public void exitNode(ASTListener listener) {
     listener.exitTypeQualifier(this);
+  }
+
+  @Override
+  public TypeQualifier clone() {
+    return (TypeQualifier) super.clone();
+  }
+
+  @Override
+  public TypeQualifier cloneInto(Root root) {
+    return (TypeQualifier) super.cloneInto(root);
+  }
+
+  @Override
+  public TypeQualifier cloneSeparate() {
+    return (TypeQualifier) super.cloneSeparate();
   }
 }

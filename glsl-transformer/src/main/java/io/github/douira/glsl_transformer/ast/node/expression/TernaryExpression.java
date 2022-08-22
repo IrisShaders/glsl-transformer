@@ -1,5 +1,6 @@
 package io.github.douira.glsl_transformer.ast.node.expression;
 
+import io.github.douira.glsl_transformer.ast.query.Root;
 import io.github.douira.glsl_transformer.ast.traversal.*;
 
 public abstract class TernaryExpression extends Expression {
@@ -58,5 +59,24 @@ public abstract class TernaryExpression extends Expression {
   public void exitNode(ASTListener listener) {
     super.exitNode(listener);
     listener.exitTernaryExpression(this);
+  }
+
+  @Override
+  public TernaryExpression clone() {
+    var clone = (TernaryExpression) super.clone();
+    clone.setupClone(first, clone::setFirst);
+    clone.setupClone(second, clone::setSecond);
+    clone.setupClone(third, clone::setThird);
+    return clone;
+  }
+
+  @Override
+  public TernaryExpression cloneInto(Root root) {
+    return (TernaryExpression) super.cloneInto(root);
+  }
+
+  @Override
+  public TernaryExpression cloneSeparate() {
+    return (TernaryExpression) super.cloneSeparate();
   }
 }

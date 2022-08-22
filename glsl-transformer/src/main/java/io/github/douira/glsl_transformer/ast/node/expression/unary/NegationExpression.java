@@ -1,6 +1,7 @@
 package io.github.douira.glsl_transformer.ast.node.expression.unary;
 
 import io.github.douira.glsl_transformer.ast.node.expression.Expression;
+import io.github.douira.glsl_transformer.ast.query.Root;
 import io.github.douira.glsl_transformer.ast.traversal.*;
 
 public class NegationExpression extends UnaryExpression {
@@ -28,5 +29,20 @@ public class NegationExpression extends UnaryExpression {
   public void exitNode(ASTListener listener) {
     super.exitNode(listener);
     listener.exitNegationExpression(this);
+  }
+
+  @Override
+  public NegationExpression clone() {
+    return (NegationExpression) super.clone();
+  }
+
+  @Override
+  public NegationExpression cloneInto(Root root) {
+    return (NegationExpression) super.cloneInto(root);
+  }
+
+  @Override
+  public NegationExpression cloneSeparate() {
+    return (NegationExpression) super.cloneSeparate();
   }
 }

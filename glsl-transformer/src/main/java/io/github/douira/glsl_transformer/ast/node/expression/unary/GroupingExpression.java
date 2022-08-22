@@ -1,6 +1,7 @@
 package io.github.douira.glsl_transformer.ast.node.expression.unary;
 
 import io.github.douira.glsl_transformer.ast.node.expression.Expression;
+import io.github.douira.glsl_transformer.ast.query.Root;
 import io.github.douira.glsl_transformer.ast.traversal.*;
 
 public class GroupingExpression extends UnaryExpression {
@@ -28,5 +29,20 @@ public class GroupingExpression extends UnaryExpression {
   public void exitNode(ASTListener listener) {
     super.exitNode(listener);
     listener.exitGroupingExpression(this);
+  }
+
+  @Override
+  public GroupingExpression clone() {
+    return (GroupingExpression) super.clone();
+  }
+
+  @Override
+  public GroupingExpression cloneInto(Root root) {
+    return (GroupingExpression) super.cloneInto(root);
+  }
+
+  @Override
+  public GroupingExpression cloneSeparate() {
+    return (GroupingExpression) super.cloneSeparate();
   }
 }

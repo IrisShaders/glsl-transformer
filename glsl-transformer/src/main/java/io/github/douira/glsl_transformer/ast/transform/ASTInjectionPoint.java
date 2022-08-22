@@ -58,9 +58,9 @@ public enum ASTInjectionPoint {
       TranslationUnit translationUnit,
       Predicate<ExternalDeclaration> stopPredicate) {
     int i = 0;
-    int size = translationUnit.children.size();
+    int size = translationUnit.getChildren().size();
     while (i < size) {
-      if (stopPredicate.test(translationUnit.children.get(i))) {
+      if (stopPredicate.test(translationUnit.getChildren().get(i))) {
         return i;
       }
       i++;

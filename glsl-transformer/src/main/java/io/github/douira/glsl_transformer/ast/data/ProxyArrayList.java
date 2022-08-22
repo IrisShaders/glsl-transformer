@@ -193,4 +193,12 @@ public abstract class ProxyArrayList<T> extends ArrayList<T> {
     notifyRemovalSafe(this);
     super.clear();
   }
+
+  @Override
+  @SuppressWarnings("unchecked")
+  public ProxyArrayList<T> clone() {
+    var result = (ProxyArrayList<T>) super.clone();
+    result.elements = null;
+    return result;
+  }
 }

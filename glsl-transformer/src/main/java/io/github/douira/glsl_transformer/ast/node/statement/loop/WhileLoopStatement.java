@@ -3,6 +3,7 @@ package io.github.douira.glsl_transformer.ast.node.statement.loop;
 import io.github.douira.glsl_transformer.ast.node.IterationConditionInitializer;
 import io.github.douira.glsl_transformer.ast.node.expression.Expression;
 import io.github.douira.glsl_transformer.ast.node.statement.Statement;
+import io.github.douira.glsl_transformer.ast.query.Root;
 import io.github.douira.glsl_transformer.ast.traversal.*;
 
 public class WhileLoopStatement extends ConditionLoopStatement {
@@ -49,5 +50,22 @@ public class WhileLoopStatement extends ConditionLoopStatement {
   public void exitNode(ASTListener listener) {
     super.exitNode(listener);
     listener.exitWhileLoopStatement(this);
+  }
+
+  @Override
+  public WhileLoopStatement clone() {
+    var clone = (WhileLoopStatement) super.clone();
+    clone.setupClone(iterationConditionInitializer, clone::setIterationConditionInitializer);
+    return clone;
+  }
+
+  @Override
+  public WhileLoopStatement cloneInto(Root root) {
+    return (WhileLoopStatement) super.cloneInto(root);
+  }
+
+  @Override
+  public WhileLoopStatement cloneSeparate() {
+    return (WhileLoopStatement) super.cloneSeparate();
   }
 }

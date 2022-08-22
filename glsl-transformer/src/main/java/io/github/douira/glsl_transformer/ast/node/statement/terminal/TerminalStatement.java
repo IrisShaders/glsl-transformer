@@ -1,6 +1,7 @@
 package io.github.douira.glsl_transformer.ast.node.statement.terminal;
 
 import io.github.douira.glsl_transformer.ast.node.statement.Statement;
+import io.github.douira.glsl_transformer.ast.query.Root;
 import io.github.douira.glsl_transformer.ast.traversal.*;
 
 public abstract class TerminalStatement extends Statement {
@@ -22,5 +23,20 @@ public abstract class TerminalStatement extends Statement {
   public void exitNode(ASTListener listener) {
     super.exitNode(listener);
     // terminal statements have no children
+  }
+
+  @Override
+  public TerminalStatement clone() {
+    return (TerminalStatement) super.clone();
+  }
+
+  @Override
+  public TerminalStatement cloneInto(Root root) {
+    return (TerminalStatement) super.cloneInto(root);
+  }
+
+  @Override
+  public TerminalStatement cloneSeparate() {
+    return (TerminalStatement) super.cloneSeparate();
   }
 }

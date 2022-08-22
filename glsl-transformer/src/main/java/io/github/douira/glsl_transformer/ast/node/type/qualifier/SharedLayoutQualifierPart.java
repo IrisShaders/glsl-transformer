@@ -1,5 +1,6 @@
 package io.github.douira.glsl_transformer.ast.node.type.qualifier;
 
+import io.github.douira.glsl_transformer.ast.query.Root;
 import io.github.douira.glsl_transformer.ast.traversal.*;
 
 public class SharedLayoutQualifierPart extends LayoutQualifierPart {
@@ -23,5 +24,20 @@ public class SharedLayoutQualifierPart extends LayoutQualifierPart {
   public void exitNode(ASTListener listener) {
     super.exitNode(listener);
     // terminal nodes have no children
+  }
+
+  @Override
+  public SharedLayoutQualifierPart clone() {
+    return (SharedLayoutQualifierPart) super.clone();
+  }
+
+  @Override
+  public SharedLayoutQualifierPart cloneInto(Root root) {
+    return (SharedLayoutQualifierPart) super.cloneInto(root);
+  }
+
+  @Override
+  public SharedLayoutQualifierPart cloneSeparate() {
+    return (SharedLayoutQualifierPart) super.cloneSeparate();
   }
 }

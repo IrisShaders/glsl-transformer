@@ -1,6 +1,7 @@
 package io.github.douira.glsl_transformer.ast.node.expression.binary;
 
 import io.github.douira.glsl_transformer.ast.node.expression.Expression;
+import io.github.douira.glsl_transformer.ast.query.Root;
 import io.github.douira.glsl_transformer.ast.traversal.*;
 
 public class AdditionExpression extends BinaryExpression {
@@ -28,5 +29,20 @@ public class AdditionExpression extends BinaryExpression {
   public void exitNode(ASTListener listener) {
     super.exitNode(listener);
     listener.exitAdditionExpression(this);
+  }
+
+  @Override
+  public AdditionExpression clone() {
+    return (AdditionExpression) super.clone();
+  }
+
+  @Override
+  public AdditionExpression cloneInto(Root root) {
+    return (AdditionExpression) super.cloneInto(root);
+  }
+
+  @Override
+  public AdditionExpression cloneSeparate() {
+    return (AdditionExpression) super.cloneSeparate();
   }
 }

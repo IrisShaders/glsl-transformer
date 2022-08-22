@@ -4,6 +4,7 @@ import io.github.douira.glsl_transformer.ast.node.IterationConditionInitializer;
 import io.github.douira.glsl_transformer.ast.node.declaration.Declaration;
 import io.github.douira.glsl_transformer.ast.node.expression.Expression;
 import io.github.douira.glsl_transformer.ast.node.statement.Statement;
+import io.github.douira.glsl_transformer.ast.query.Root;
 import io.github.douira.glsl_transformer.ast.traversal.*;
 
 public class ForLoopStatement extends LoopStatement {
@@ -142,5 +143,26 @@ public class ForLoopStatement extends LoopStatement {
   public void exitNode(ASTListener listener) {
     super.exitNode(listener);
     listener.exitForLoopStatement(this);
+  }
+
+  @Override
+  public ForLoopStatement clone() {
+    var clone = (ForLoopStatement) super.clone();
+    clone.setupClone(initExpression, clone::setInitExpression);
+    clone.setupClone(initDeclaration, clone::setInitDeclaration);
+    clone.setupClone(condition, clone::setCondition);
+    clone.setupClone(iterationConditionInitializer, clone::setIterationConditionInitializer);
+    clone.setupClone(incrementer, clone::setIncrementer);
+    return clone;
+  }
+
+  @Override
+  public ForLoopStatement cloneInto(Root root) {
+    return (ForLoopStatement) super.cloneInto(root);
+  }
+
+  @Override
+  public ForLoopStatement cloneSeparate() {
+    return (ForLoopStatement) super.cloneSeparate();
   }
 }

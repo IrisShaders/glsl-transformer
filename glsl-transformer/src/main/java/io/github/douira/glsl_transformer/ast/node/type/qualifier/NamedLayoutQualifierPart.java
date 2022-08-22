@@ -2,6 +2,7 @@ package io.github.douira.glsl_transformer.ast.node.type.qualifier;
 
 import io.github.douira.glsl_transformer.ast.node.Identifier;
 import io.github.douira.glsl_transformer.ast.node.expression.Expression;
+import io.github.douira.glsl_transformer.ast.query.Root;
 import io.github.douira.glsl_transformer.ast.traversal.*;
 
 public class NamedLayoutQualifierPart extends LayoutQualifierPart {
@@ -55,5 +56,23 @@ public class NamedLayoutQualifierPart extends LayoutQualifierPart {
   public void exitNode(ASTListener listener) {
     super.exitNode(listener);
     listener.exitNamedLayoutQualifierPart(this);
+  }
+
+  @Override
+  public NamedLayoutQualifierPart clone() {
+    var clone = (NamedLayoutQualifierPart) super.clone();
+    clone.setupClone(name, clone::setName);
+    clone.setupClone(expression, clone::setExpression);
+    return clone;
+  }
+
+  @Override
+  public NamedLayoutQualifierPart cloneInto(Root root) {
+    return (NamedLayoutQualifierPart) super.cloneInto(root);
+  }
+
+  @Override
+  public NamedLayoutQualifierPart cloneSeparate() {
+    return (NamedLayoutQualifierPart) super.cloneSeparate();
   }
 }

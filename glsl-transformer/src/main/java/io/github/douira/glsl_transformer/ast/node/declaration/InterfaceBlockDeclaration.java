@@ -4,6 +4,7 @@ import io.github.douira.glsl_transformer.ast.node.Identifier;
 import io.github.douira.glsl_transformer.ast.node.type.qualifier.TypeQualifier;
 import io.github.douira.glsl_transformer.ast.node.type.specifier.ArraySpecifier;
 import io.github.douira.glsl_transformer.ast.node.type.struct.StructBody;
+import io.github.douira.glsl_transformer.ast.query.Root;
 import io.github.douira.glsl_transformer.ast.traversal.*;
 
 public class InterfaceBlockDeclaration extends Declaration {
@@ -106,5 +107,26 @@ public class InterfaceBlockDeclaration extends Declaration {
   public void exitNode(ASTListener listener) {
     super.exitNode(listener);
     listener.exitInterfaceBlockDeclaration(this);
+  }
+
+  @Override
+  public InterfaceBlockDeclaration clone() {
+    var clone = (InterfaceBlockDeclaration) super.clone();
+    clone.setupClone(typeQualifier, clone::setTypeQualifier);
+    clone.setupClone(blockName, clone::setBlockName);
+    clone.setupClone(structBody, clone::setStructBody);
+    clone.setupClone(variableName, clone::setVariableName);
+    clone.setupClone(arraySpecifier, clone::setArraySpecifier);
+    return clone;
+  }
+
+  @Override
+  public InterfaceBlockDeclaration cloneInto(Root root) {
+    return (InterfaceBlockDeclaration) super.cloneInto(root);
+  }
+
+  @Override
+  public InterfaceBlockDeclaration cloneSeparate() {
+    return (InterfaceBlockDeclaration) super.cloneSeparate();
   }
 }

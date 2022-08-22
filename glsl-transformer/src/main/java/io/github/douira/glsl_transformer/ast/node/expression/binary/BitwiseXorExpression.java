@@ -1,6 +1,7 @@
 package io.github.douira.glsl_transformer.ast.node.expression.binary;
 
 import io.github.douira.glsl_transformer.ast.node.expression.Expression;
+import io.github.douira.glsl_transformer.ast.query.Root;
 import io.github.douira.glsl_transformer.ast.traversal.*;
 
 public class BitwiseXorExpression extends BinaryExpression {
@@ -28,5 +29,20 @@ public class BitwiseXorExpression extends BinaryExpression {
   public void exitNode(ASTListener listener) {
     super.exitNode(listener);
     listener.exitBitwiseXorExpression(this);
+  }
+
+  @Override
+  public BitwiseXorExpression clone() {
+    return (BitwiseXorExpression) super.clone();
+  }
+
+  @Override
+  public BitwiseXorExpression cloneInto(Root root) {
+    return (BitwiseXorExpression) super.cloneInto(root);
+  }
+
+  @Override
+  public BitwiseXorExpression cloneSeparate() {
+    return (BitwiseXorExpression) super.cloneSeparate();
   }
 }

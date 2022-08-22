@@ -16,7 +16,6 @@ import io.github.douira.glsl_transformer.ast.node.type.qualifier.StorageQualifie
 import io.github.douira.glsl_transformer.ast.node.type.qualifier.StorageQualifier.StorageType;
 import io.github.douira.glsl_transformer.ast.node.type.specifier.*;
 import io.github.douira.glsl_transformer.ast.node.type.struct.StructDeclarator;
-import io.github.douira.glsl_transformer.ast.print.PrintType;
 import io.github.douira.glsl_transformer.ast.query.Root;
 import io.github.douira.glsl_transformer.ast.query.match.*;
 import io.github.douira.glsl_transformer.ast.transform.*;
@@ -27,7 +26,6 @@ public class TransformTest extends TestWithSingleASTTransformer {
   @ParameterizedTest
   @TestCaseSource(caseSet = "uniformRemoval", spacing = Spacing.TRIM_SINGLE_BOTH)
   void testUniformRemoval(String type, String input, String output) {
-    p.setPrintType(PrintType.INDENTED);
     p.setTransformation((tree, root) -> {
       // identify the names of the uniforms to remove from the uniform block
       var blockId = root.identifierIndex.getOne("UniformBlock");
@@ -38,8 +36,8 @@ public class TransformTest extends TestWithSingleASTTransformer {
       var uniformDeclarations = new HashSet<>();
 
       // identify the declaration external declarations the names are part of
-      for (var declarator : (Iterable<StructDeclarator>) block.getStructBody().children.stream()
-          .flatMap(member -> member.declarators.stream())::iterator) {
+      for (var declarator : (Iterable<StructDeclarator>) block.getStructBody().getChildren().stream()
+          .flatMap(member -> member.getDeclarators().stream())::iterator) {
         var name = declarator.getName().getName();
 
         // get the enclosing declaration by looking at all usages of the name
@@ -67,7 +65,7 @@ public class TransformTest extends TestWithSingleASTTransformer {
           if (!uniformDeclarations.contains(externalDeclaration)) {
             var qualifier = typeAndInit.getType().getTypeQualifier();
             if (qualifier == null
-                || qualifier.children.stream().noneMatch(
+                || qualifier.getChildren().stream().noneMatch(
                     qualifierPart -> qualifierPart instanceof StorageQualifier storageQualifier
                         && storageQualifier.storageType == StorageType.UNIFORM)) {
               continue;
@@ -82,7 +80,7 @@ public class TransformTest extends TestWithSingleASTTransformer {
         if (foundTarget) {
           // remove the declaration and if this is the only declaration member, remove the
           // whole external declaration
-          if (typeAndInit.members.size() == 1) {
+          if (typeAndInit.getMembers().size() == 1) {
             externalDeclaration.detachAndDelete();
           } else {
             declarationMember.detachAndDelete();
@@ -91,18 +89,17 @@ public class TransformTest extends TestWithSingleASTTransformer {
       }
 
     });
-    assertEquals(output, p.transform(input));
+    assertTransformI(output, input);
   }
 
   @ParameterizedTest
   @TestCaseSource(caseSet = "functionRenameWrap", spacing = Spacing.TRIM_SINGLE_BOTH)
   void testFunctionRenameWrap(String type, String input, String output) {
-    p.setPrintType(PrintType.INDENTED);
     p.setTransformation((tree, root) -> {
       renameWrap(p, root, "shadow2D", "texture");
       renameWrap(p, root, "shadow2DLod", "textureLod");
     });
-    assertEquals(output, p.transform(input));
+    assertTransformI(output, input);
   }
 
   private static void renameWrap(ASTParser p, Root root, String oldName, String innerName) {
@@ -120,11 +117,10 @@ public class TransformTest extends TestWithSingleASTTransformer {
   @ParameterizedTest
   @TestCaseSource(caseSet = "emptyExternalDeclarationRemoval", spacing = Spacing.TRIM_SINGLE_BOTH)
   void testEmptyExternalDeclarationRemoval(String type, String input, String output) {
-    p.setPrintType(PrintType.INDENTED);
     p.setTransformation((tree, root) -> {
       root.process(root.nodeIndex.getStream(EmptyDeclaration.class), ASTNode::detachAndDelete);
     });
-    assertEquals(output, p.transform(input));
+    assertTransformI(output, input);
   }
 
   @ParameterizedTest
@@ -142,13 +138,14 @@ public class TransformTest extends TestWithSingleASTTransformer {
         markClassWildcard("type", pattern.getRoot().nodeIndex.getOne(BuiltinNumericTypeSpecifier.class));
       }
     };
+
+    // TODO: replace this with cloning instead of repeated parsing
     var tag = "_____";
     var typeTag = tag + "1";
     var nameTag = tag + "2";
     var outDeclarationTemplate = "out " + typeTag + " " + nameTag + ";";
     var initTemplate = nameTag + " = " + typeTag + ";";
 
-    p.setPrintType(PrintType.INDENTED);
     p.setTransformation((tree, root) -> {
       // find out declarations
       var outDeclarations = new HashSet<String>();
@@ -186,10 +183,10 @@ public class TransformTest extends TestWithSingleASTTransformer {
                 tree.injectNode(ASTInjectionPoint.BEFORE_DECLARATIONS, inDeclaration);
                 // rename happens later
 
-                // TODO: more efficient copying of the fully specified type
-                // use node cloning once available
-                root.identifierIndex.getOne(typeTag).getAncestor(TypeSpecifier.class)
-                    .replaceByAndDelete(new BuiltinNumericTypeSpecifier(specifier.type));
+                root.identifierIndex
+                    .getOne(typeTag)
+                    .getAncestor(TypeSpecifier.class)
+                    .replaceByAndDelete(specifier.cloneInto(root));
 
                 var init = p.parseStatement(tree, initTemplate);
                 mainFunctionStatements.getChildren().add(0, init);
@@ -200,6 +197,6 @@ public class TransformTest extends TestWithSingleASTTransformer {
             }
           });
     });
-    assertEquals(output, p.transform(input));
+    assertTransformI(output, input);
   }
 }

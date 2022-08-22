@@ -3,6 +3,7 @@ package io.github.douira.glsl_transformer.ast.node.type.struct;
 import io.github.douira.glsl_transformer.ast.node.Identifier;
 import io.github.douira.glsl_transformer.ast.node.basic.InnerASTNode;
 import io.github.douira.glsl_transformer.ast.node.type.specifier.ArraySpecifier;
+import io.github.douira.glsl_transformer.ast.query.Root;
 import io.github.douira.glsl_transformer.ast.traversal.*;
 
 public class StructDeclarator extends InnerASTNode {
@@ -49,5 +50,23 @@ public class StructDeclarator extends InnerASTNode {
   @Override
   public void exitNode(ASTListener listener) {
     listener.exitStructDeclarator(this);
+  }
+
+  @Override
+  public StructDeclarator clone() {
+    var clone = (StructDeclarator) super.clone();
+    clone.setupClone(name, clone::setName);
+    clone.setupClone(arraySpecifier, clone::setArraySpecifier);
+    return clone;
+  }
+
+  @Override
+  public StructDeclarator cloneInto(Root root) {
+    return (StructDeclarator) super.cloneInto(root);
+  }
+
+  @Override
+  public StructDeclarator cloneSeparate() {
+    return (StructDeclarator) super.cloneSeparate();
   }
 }

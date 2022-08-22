@@ -1,6 +1,7 @@
 package io.github.douira.glsl_transformer.ast.node.expression.binary;
 
 import io.github.douira.glsl_transformer.ast.node.expression.Expression;
+import io.github.douira.glsl_transformer.ast.query.Root;
 import io.github.douira.glsl_transformer.ast.traversal.*;
 
 public class LeftShiftExpression extends BinaryExpression {
@@ -28,5 +29,20 @@ public class LeftShiftExpression extends BinaryExpression {
   public void exitNode(ASTListener listener) {
     super.exitNode(listener);
     listener.exitLeftShiftExpression(this);
+  }
+
+  @Override
+  public LeftShiftExpression clone() {
+    return (LeftShiftExpression) super.clone();
+  }
+
+  @Override
+  public LeftShiftExpression cloneInto(Root root) {
+    return (LeftShiftExpression) super.cloneInto(root);
+  }
+
+  @Override
+  public LeftShiftExpression cloneSeparate() {
+    return (LeftShiftExpression) super.cloneSeparate();
   }
 }

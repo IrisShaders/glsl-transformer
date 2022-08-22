@@ -1,5 +1,6 @@
 package io.github.douira.glsl_transformer.ast.node.type.qualifier;
 
+import io.github.douira.glsl_transformer.ast.query.Root;
 import io.github.douira.glsl_transformer.ast.traversal.*;
 
 public class InvariantQualifier extends TypeQualifierPart {
@@ -23,5 +24,20 @@ public class InvariantQualifier extends TypeQualifierPart {
   public void exitNode(ASTListener listener) {
     super.exitNode(listener);
     // terminal nodes have no children
+  }
+
+  @Override
+  public InvariantQualifier clone() {
+    return (InvariantQualifier) super.clone();
+  }
+
+  @Override
+  public InvariantQualifier cloneInto(Root root) {
+    return (InvariantQualifier) super.cloneInto(root);
+  }
+
+  @Override
+  public InvariantQualifier cloneSeparate() {
+    return (InvariantQualifier) super.cloneSeparate();
   }
 }

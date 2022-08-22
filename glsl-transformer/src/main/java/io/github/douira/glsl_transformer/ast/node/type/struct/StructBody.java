@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.stream.Stream;
 
 import io.github.douira.glsl_transformer.ast.node.basic.ListASTNode;
+import io.github.douira.glsl_transformer.ast.query.Root;
 import io.github.douira.glsl_transformer.ast.traversal.*;
 
 public class StructBody extends ListASTNode<StructMember> {
@@ -28,5 +29,20 @@ public class StructBody extends ListASTNode<StructMember> {
   @Override
   public void exitNode(ASTListener listener) {
     listener.exitStructBody(this);
+  }
+
+  @Override
+  public StructBody clone() {
+    return (StructBody) super.clone();
+  }
+
+  @Override
+  public StructBody cloneInto(Root root) {
+    return (StructBody) super.cloneInto(root);
+  }
+
+  @Override
+  public StructBody cloneSeparate() {
+    return (StructBody) super.cloneSeparate();
   }
 }

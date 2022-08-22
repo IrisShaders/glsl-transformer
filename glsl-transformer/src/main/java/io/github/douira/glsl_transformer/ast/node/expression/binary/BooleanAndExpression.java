@@ -1,6 +1,7 @@
 package io.github.douira.glsl_transformer.ast.node.expression.binary;
 
 import io.github.douira.glsl_transformer.ast.node.expression.Expression;
+import io.github.douira.glsl_transformer.ast.query.Root;
 import io.github.douira.glsl_transformer.ast.traversal.*;
 
 public class BooleanAndExpression extends BinaryExpression {
@@ -28,5 +29,20 @@ public class BooleanAndExpression extends BinaryExpression {
   public void exitNode(ASTListener listener) {
     super.exitNode(listener);
     listener.exitBooleanAndExpression(this);
+  }
+
+  @Override
+  public BooleanAndExpression clone() {
+    return (BooleanAndExpression) super.clone();
+  }
+
+  @Override
+  public BooleanAndExpression cloneInto(Root root) {
+    return (BooleanAndExpression) super.cloneInto(root);
+  }
+
+  @Override
+  public BooleanAndExpression cloneSeparate() {
+    return (BooleanAndExpression) super.cloneSeparate();
   }
 }

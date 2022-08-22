@@ -233,7 +233,7 @@ public abstract class ASTPrinter extends ASTPrinterBase {
 
   @Override
   public Void visitSequenceExpression(SequenceExpression node) {
-    visitCommaSpaced(node.expressions);
+    visitCommaSpaced(node.getExpressions());
     return null;
   }
 
@@ -649,11 +649,11 @@ public abstract class ASTPrinter extends ASTPrinterBase {
    */
   @Override
   public Void visitSelectionStatement(SelectionStatement node) {
-    for (int i = 0, size = node.statements.size(); i < size; i++) {
+    for (int i = 0, size = node.getStatements().size(); i < size; i++) {
       if (i > 0) {
         compactCommonNewline(CompoundStatement.class);
       }
-      var condition = node.conditions.get(i);
+      var condition = node.getConditions().get(i);
       if (i > 0) {
         emitType(GLSLLexer.ELSE);
         if (condition != null) {
@@ -664,11 +664,11 @@ public abstract class ASTPrinter extends ASTPrinterBase {
         emitType(GLSLLexer.IF);
         emitExtendableSpace();
         emitType(GLSLLexer.LPAREN);
-        visit(node.conditions.get(i));
+        visit(node.getConditions().get(i));
         emitType(GLSLLexer.RPAREN);
       }
       emitBreakableSpace();
-      visit(node.statements.get(i));
+      visit(node.getStatements().get(i));
     }
     return null;
   }
@@ -943,9 +943,9 @@ public abstract class ASTPrinter extends ASTPrinterBase {
   @Override
   public Void visitTypeAndInitDeclaration(TypeAndInitDeclaration node) {
     visit(node.getType());
-    if (!node.members.isEmpty()) {
+    if (!node.getMembers().isEmpty()) {
       emitBreakableSpace();
-      visitCommaSpaced(node.members);
+      visitCommaSpaced(node.getMembers());
     }
     emitStatementEnd();
     return null;
@@ -954,9 +954,9 @@ public abstract class ASTPrinter extends ASTPrinterBase {
   @Override
   public Void visitVariableDeclaration(VariableDeclaration node) {
     visit(node.getTypeQualifier());
-    if (!node.names.isEmpty()) {
+    if (!node.getNames().isEmpty()) {
       emitBreakableSpace();
-      visitCommaSpaced(node.names);
+      visitCommaSpaced(node.getNames());
     }
     emitStatementEnd();
     return null;
@@ -968,7 +968,7 @@ public abstract class ASTPrinter extends ASTPrinterBase {
   public Void visitNestedInitializer(NestedInitializer node) {
     emitType(GLSLLexer.LBRACE);
     emitBreakableSpace();
-    visitCommaSpaced(node.initializers);
+    visitCommaSpaced(node.getInitializers());
     emitBreakableSpace();
     emitType(GLSLLexer.RBRACE);
     return null;
@@ -989,7 +989,7 @@ public abstract class ASTPrinter extends ASTPrinterBase {
   @Override
   public Void visitLayoutQualifier(LayoutQualifier node) {
     emitType(GLSLLexer.LAYOUT, GLSLLexer.LPAREN);
-    visitCommaSpaced(node.parts);
+    visitCommaSpaced(node.getParts());
     emitType(GLSLLexer.RPAREN);
     return null;
   }
@@ -1027,9 +1027,9 @@ public abstract class ASTPrinter extends ASTPrinterBase {
   @Override
   public Void visitStorageQualifier(StorageQualifier node) {
     emitType(node.storageType.tokenType);
-    if (node.typeNames != null) {
+    if (node.getTypeNames() != null) {
       emitType(GLSLLexer.LPAREN);
-      visitCommaSpaced(node.typeNames);
+      visitCommaSpaced(node.getTypeNames());
       emitType(GLSLLexer.RPAREN);
     }
     return null;
@@ -1099,7 +1099,7 @@ public abstract class ASTPrinter extends ASTPrinterBase {
   public Void visitStructMember(StructMember node) {
     visit(node.getType());
     emitBreakableSpace();
-    visitCommaSpaced(node.declarators);
+    visitCommaSpaced(node.getDeclarators());
     emitType(GLSLLexer.SEMICOLON);
     return null;
   }

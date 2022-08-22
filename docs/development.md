@@ -71,4 +71,9 @@ fs.readFileSync("split").toString().split("//split_marker").map(str => str.trim(
 - Partial indexes: indexes that only index certain enum values, class types or identifiers to reduce memory usage and improve ast build performance
 - Configuration of partial indexes can happen at construction
 - Make glsl-transformer thread safe so that it can be run in parallel on different transformation jobs
-- Implement node cloning using either Java's clone or just constructors. This makes some transformations easier and enables built AST caching. To fix the issue with wrong parent setter method references, the clones need to have their fields re-set with the setter methods that update the method references.
+- Try to remove double detachParent call when removing items from a list
+- Improve transformation test to use cloning instead of copying
+- Use cloning for AST caching.
+  - Problem: The if caching is done, the clone has to be kept private since it would be modified by the external transformation otherwise. However, creating a clone for every transformation is expensive and probably unnecessary.
+  - The cache clone doesn't need to be indexed or have a root at all (it can be a degenerate tree)
+  - Is AST building (we already have CST parse caching) so expensive that it should be made faster using an AST cache?

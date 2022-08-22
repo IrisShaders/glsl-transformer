@@ -1,6 +1,7 @@
 package io.github.douira.glsl_transformer.ast.node.expression.unary;
 
 import io.github.douira.glsl_transformer.ast.node.expression.Expression;
+import io.github.douira.glsl_transformer.ast.query.Root;
 import io.github.douira.glsl_transformer.ast.traversal.*;
 
 public class BitwiseNotExpression extends UnaryExpression {
@@ -28,5 +29,20 @@ public class BitwiseNotExpression extends UnaryExpression {
   public void exitNode(ASTListener listener) {
     super.exitNode(listener);
     listener.exitBitwiseNotExpression(this);
+  }
+
+  @Override
+  public BitwiseNotExpression clone() {
+    return (BitwiseNotExpression) super.clone();
+  }
+
+  @Override
+  public BitwiseNotExpression cloneInto(Root root) {
+    return (BitwiseNotExpression) super.cloneInto(root);
+  }
+
+  @Override
+  public BitwiseNotExpression cloneSeparate() {
+    return (BitwiseNotExpression) super.cloneSeparate();
   }
 }

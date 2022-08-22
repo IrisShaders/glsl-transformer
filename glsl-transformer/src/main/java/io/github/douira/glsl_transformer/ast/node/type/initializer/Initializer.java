@@ -1,6 +1,7 @@
 package io.github.douira.glsl_transformer.ast.node.type.initializer;
 
 import io.github.douira.glsl_transformer.ast.node.basic.InnerASTNode;
+import io.github.douira.glsl_transformer.ast.query.Root;
 import io.github.douira.glsl_transformer.ast.traversal.*;
 
 public abstract class Initializer extends InnerASTNode {
@@ -28,5 +29,20 @@ public abstract class Initializer extends InnerASTNode {
   @Override
   public void exitNode(ASTListener listener) {
     listener.exitInitializer(this);
+  }
+
+  @Override
+  public Initializer clone() {
+    return (Initializer) super.clone();
+  }
+
+  @Override
+  public Initializer cloneInto(Root root) {
+    return (Initializer) super.cloneInto(root);
+  }
+
+  @Override
+  public Initializer cloneSeparate() {
+    return (Initializer) super.cloneSeparate();
   }
 }

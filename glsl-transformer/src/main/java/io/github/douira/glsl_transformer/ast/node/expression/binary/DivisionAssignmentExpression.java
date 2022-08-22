@@ -1,6 +1,7 @@
 package io.github.douira.glsl_transformer.ast.node.expression.binary;
 
 import io.github.douira.glsl_transformer.ast.node.expression.Expression;
+import io.github.douira.glsl_transformer.ast.query.Root;
 import io.github.douira.glsl_transformer.ast.traversal.*;
 
 public class DivisionAssignmentExpression extends BinaryExpression {
@@ -28,5 +29,20 @@ public class DivisionAssignmentExpression extends BinaryExpression {
   public void exitNode(ASTListener listener) {
     super.exitNode(listener);
     listener.exitDivisionAssignmentExpression(this);
+  }
+
+  @Override
+  public DivisionAssignmentExpression clone() {
+    return (DivisionAssignmentExpression) super.clone();
+  }
+
+  @Override
+  public DivisionAssignmentExpression cloneInto(Root root) {
+    return (DivisionAssignmentExpression) super.cloneInto(root);
+  }
+
+  @Override
+  public DivisionAssignmentExpression cloneSeparate() {
+    return (DivisionAssignmentExpression) super.cloneSeparate();
   }
 }

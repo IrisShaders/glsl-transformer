@@ -1,6 +1,7 @@
 package io.github.douira.glsl_transformer.ast.node.statement.terminal;
 
 import io.github.douira.glsl_transformer.ast.node.expression.Expression;
+import io.github.douira.glsl_transformer.ast.query.Root;
 import io.github.douira.glsl_transformer.ast.traversal.*;
 
 public class ExpressionStatement extends SemiTerminalStatement {
@@ -39,5 +40,22 @@ public class ExpressionStatement extends SemiTerminalStatement {
   public void exitNode(ASTListener listener) {
     super.exitNode(listener);
     listener.exitExpressionStatement(this);
+  }
+
+  @Override
+  public ExpressionStatement clone() {
+    var clone = (ExpressionStatement) super.clone();
+    clone.setupClone(expression, clone::setExpression);
+    return clone;
+  }
+
+  @Override
+  public ExpressionStatement cloneInto(Root root) {
+    return (ExpressionStatement) super.cloneInto(root);
+  }
+
+  @Override
+  public ExpressionStatement cloneSeparate() {
+    return (ExpressionStatement) super.cloneSeparate();
   }
 }

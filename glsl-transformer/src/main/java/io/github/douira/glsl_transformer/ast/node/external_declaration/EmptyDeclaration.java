@@ -1,5 +1,6 @@
 package io.github.douira.glsl_transformer.ast.node.external_declaration;
 
+import io.github.douira.glsl_transformer.ast.query.Root;
 import io.github.douira.glsl_transformer.ast.traversal.*;
 
 public class EmptyDeclaration extends ExternalDeclaration {
@@ -23,5 +24,20 @@ public class EmptyDeclaration extends ExternalDeclaration {
   public void exitNode(ASTListener listener) {
     super.enterNode(listener);
     // terminal nodes have no children
+  }
+
+  @Override
+  public EmptyDeclaration clone() {
+    return (EmptyDeclaration) super.clone();
+  }
+
+  @Override
+  public EmptyDeclaration cloneInto(Root root) {
+    return (EmptyDeclaration) super.cloneInto(root);
+  }
+
+  @Override
+  public EmptyDeclaration cloneSeparate() {
+    return (EmptyDeclaration) super.cloneSeparate();
   }
 }

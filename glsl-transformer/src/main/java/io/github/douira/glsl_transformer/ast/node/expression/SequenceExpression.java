@@ -2,6 +2,7 @@ package io.github.douira.glsl_transformer.ast.node.expression;
 
 import java.util.stream.Stream;
 
+import io.github.douira.glsl_transformer.ast.query.Root;
 import io.github.douira.glsl_transformer.ast.traversal.*;
 
 public class SequenceExpression extends ManyExpression {
@@ -29,5 +30,20 @@ public class SequenceExpression extends ManyExpression {
   public void exitNode(ASTListener listener) {
     super.exitNode(listener);
     listener.exitSequenceExpression(this);
+  }
+
+  @Override
+  public SequenceExpression clone() {
+    return (SequenceExpression) super.clone();
+  }
+
+  @Override
+  public SequenceExpression cloneInto(Root root) {
+    return (SequenceExpression) super.cloneInto(root);
+  }
+
+  @Override
+  public SequenceExpression cloneSeparate() {
+    return (SequenceExpression) super.cloneSeparate();
   }
 }
