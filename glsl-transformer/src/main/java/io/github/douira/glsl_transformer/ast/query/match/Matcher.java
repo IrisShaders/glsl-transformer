@@ -4,12 +4,13 @@ import java.util.*;
 import java.util.function.*;
 
 import io.github.douira.glsl_transformer.GLSLParser;
+import io.github.douira.glsl_transformer.GLSLParser.*;
 import io.github.douira.glsl_transformer.ast.node.TranslationUnit;
 import io.github.douira.glsl_transformer.ast.node.basic.ASTNode;
 import io.github.douira.glsl_transformer.ast.node.expression.Expression;
 import io.github.douira.glsl_transformer.ast.node.external_declaration.ExternalDeclaration;
 import io.github.douira.glsl_transformer.ast.node.statement.Statement;
-import io.github.douira.glsl_transformer.ast.transform.ASTBuilder;
+import io.github.douira.glsl_transformer.ast.transform.*;
 import io.github.douira.glsl_transformer.ast.traversal.*;
 import io.github.douira.glsl_transformer.basic.EnhancedParser;
 import io.github.douira.glsl_transformer.tree.ExtendedContext;
@@ -98,23 +99,26 @@ public class Matcher<T extends ASTNode> {
   }
 
   private static <RuleType extends ExtendedContext, ReturnType extends ASTNode> Function<String, ReturnType> makePatternParser(
+      Class<RuleType> ruleType,
       Function<GLSLParser, RuleType> parseMethod,
       BiFunction<ASTBuilder, RuleType, ReturnType> visitMethod) {
-    return input -> ASTBuilder.build(
-        EnhancedParser.getInternalInstance().parse(input, parseMethod),
-        visitMethod);
+    return input -> ASTParser.getInternalInstance().parseNodeSeparate(input, ruleType, parseMethod, visitMethod);
   }
 
   public static final Function<String, TranslationUnit> translationUnitPattern = makePatternParser(
+      TranslationUnitContext.class,
       GLSLParser::translationUnit, ASTBuilder::visitTranslationUnit);
 
   public static final Function<String, ExternalDeclaration> externalDeclarationPattern = makePatternParser(
+      ExternalDeclarationContext.class,
       GLSLParser::externalDeclaration, ASTBuilder::visitExternalDeclaration);
 
   public static final Function<String, Expression> expressionPattern = makePatternParser(
+      ExpressionContext.class,
       GLSLParser::expression, ASTBuilder::visitExpression);
 
   public static final Function<String, Statement> statementPattern = makePatternParser(
+      StatementContext.class,
       GLSLParser::statement, ASTBuilder::visitStatement);
 
   private ASTVisitor<?> matchVisitor = new ASTVoidVisitor() {

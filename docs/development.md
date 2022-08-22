@@ -72,7 +72,6 @@ fs.readFileSync("split").toString().split("//split_marker").map(str => str.trim(
 - Configuration of partial indexes can happen at construction
 - Make glsl-transformer thread safe so that it can be run in parallel on different transformation jobs
 - Try to remove double detachParent call when removing items from a list
-- Improve transformation test to use cloning instead of copying
 - Use cloning for AST caching.
   - Problem: The if caching is done, the clone has to be kept private since it would be modified by the external transformation otherwise. However, creating a clone for every transformation is expensive and probably unnecessary.
   - The cache clone doesn't need to be indexed or have a root at all (it can be a degenerate tree)
