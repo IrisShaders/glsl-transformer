@@ -139,7 +139,6 @@ public class TransformTest extends TestWithSingleASTTransformer {
       }
     };
 
-    // TODO: replace this with cloning instead of repeated parsing
     var typeTag = "_____1";
     var nameTag = "_____2";
     var initTemplate = ASTParser.getInternalInstance()
