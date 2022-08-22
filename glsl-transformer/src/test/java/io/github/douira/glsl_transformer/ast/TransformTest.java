@@ -126,13 +126,13 @@ public class TransformTest extends TestWithSingleASTTransformer {
   @ParameterizedTest
   @TestCaseSource(caseSet = "outDeclarationModify", spacing = Spacing.TRIM_SINGLE_BOTH)
   void testOutDeclarationModify(String type, String input, String output) {
-    AutoHintedMatcher<ExternalDeclaration> outDeclarationMatcher = new AutoHintedMatcher<ExternalDeclaration>(
+    var outDeclarationMatcher = new AutoHintedMatcher<ExternalDeclaration>(
         "out float __name;", Matcher.externalDeclarationPattern, "__") {
       {
         markClassWildcard("type", pattern.getRoot().nodeIndex.getOne(BuiltinNumericTypeSpecifier.class));
       }
     };
-    AutoHintedMatcher<ExternalDeclaration> inDeclarationMatcher = new AutoHintedMatcher<ExternalDeclaration>(
+    var inDeclarationMatcher = new AutoHintedMatcher<ExternalDeclaration>(
         "in float __name;", Matcher.externalDeclarationPattern, "__") {
       {
         markClassWildcard("type", pattern.getRoot().nodeIndex.getOne(BuiltinNumericTypeSpecifier.class));
@@ -140,11 +140,12 @@ public class TransformTest extends TestWithSingleASTTransformer {
     };
 
     // TODO: replace this with cloning instead of repeated parsing
-    var tag = "_____";
-    var typeTag = tag + "1";
-    var nameTag = tag + "2";
-    var outDeclarationTemplate = "out " + typeTag + " " + nameTag + ";";
-    var initTemplate = nameTag + " = " + typeTag + ";";
+    var typeTag = "_____1";
+    var nameTag = "_____2";
+    var initTemplate = ASTParser.getInternalInstance()
+        .parseSeparateStatement(nameTag + " = " + typeTag + ";");
+    var declarationTemplate = ASTParser.getInternalInstance()
+        .parseSeparateExternalDeclaration("out " + typeTag + " " + nameTag + ";");
 
     p.setTransformation((tree, root) -> {
       // find out declarations
@@ -179,7 +180,7 @@ public class TransformTest extends TestWithSingleASTTransformer {
               var specifier = inDeclarationMatcher.getNodeMatch("type", BuiltinNumericTypeSpecifier.class);
 
               if (specifier != null && !outDeclarations.contains(name)) {
-                var inDeclaration = p.parseExternalDeclaration(tree, outDeclarationTemplate);
+                var inDeclaration = declarationTemplate.cloneInto(root);
                 tree.injectNode(ASTInjectionPoint.BEFORE_DECLARATIONS, inDeclaration);
                 // rename happens later
 
@@ -188,7 +189,7 @@ public class TransformTest extends TestWithSingleASTTransformer {
                     .getAncestor(TypeSpecifier.class)
                     .replaceByAndDelete(specifier.cloneInto(root));
 
-                var init = p.parseStatement(tree, initTemplate);
+                var init = initTemplate.cloneInto(root);
                 mainFunctionStatements.getChildren().add(0, init);
                 root.identifierIndex.rename(nameTag, name);
                 root.identifierIndex.getOneReferenceExpression(typeTag)

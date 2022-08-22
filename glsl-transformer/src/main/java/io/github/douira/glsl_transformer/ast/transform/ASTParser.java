@@ -18,7 +18,16 @@ import io.github.douira.glsl_transformer.cst.token_filter.TokenFilter;
 import io.github.douira.glsl_transformer.tree.ExtendedContext;
 
 public class ASTParser implements ParserInterface {
+  private static ASTParser INSTANCE;
+
   private final CachingParser parser = new CachingParser();
+
+  public static ASTParser getInternalInstance() {
+    if (INSTANCE == null) {
+      INSTANCE = new ASTParser();
+    }
+    return INSTANCE;
+  }
 
   @Override
   public GLSLLexer getLexer() {

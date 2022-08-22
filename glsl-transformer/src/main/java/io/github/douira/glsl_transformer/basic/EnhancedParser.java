@@ -127,7 +127,7 @@ public class EnhancedParser implements ParserInterface {
    */
   public static EnhancedParser getInternalInstance() {
     if (INSTANCE == null) {
-      INSTANCE = new EnhancedParser(true);
+      INSTANCE = new CachingParser(true);
     }
     return INSTANCE;
   }
