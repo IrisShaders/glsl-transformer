@@ -76,3 +76,4 @@ fs.readFileSync("split").toString().split("//split_marker").map(str => str.trim(
   - Problem: The if caching is done, the clone has to be kept private since it would be modified by the external transformation otherwise. However, creating a clone for every transformation is expensive and probably unnecessary.
   - The cache clone doesn't need to be indexed or have a root at all (it can be a degenerate tree)
   - Is AST building (we already have CST parse caching) so expensive that it should be made faster using an AST cache?
+  - Idea: Only clone when non-translation units are being parsed since whole translation units are usually only parsed for the whole thing. This way the injected things are cached with cloning but expensive translation units are just returned directly.

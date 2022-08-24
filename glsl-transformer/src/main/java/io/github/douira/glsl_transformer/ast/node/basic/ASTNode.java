@@ -5,6 +5,7 @@ import java.util.function.*;
 import java.util.stream.Stream;
 
 import io.github.douira.glsl_transformer.ast.query.Root;
+import io.github.douira.glsl_transformer.ast.transform.Template;
 import io.github.douira.glsl_transformer.ast.traversal.*;
 import io.github.douira.glsl_transformer.util.CompatUtil;
 
@@ -34,6 +35,7 @@ public abstract class ASTNode implements Cloneable {
   private ASTNode parent;
   private Consumer<ASTNode> selfReplacer;
   private Root root = Root.getActiveBuildRoot();
+  private Template<?> template = null;
   private static boolean doParentUpdate = true;
   private static Root cloneRoot;
 
@@ -464,21 +466,37 @@ public abstract class ASTNode implements Cloneable {
     }
   }
 
+  public void markTemplate(Template<?> template) {
+    this.template = template;
+  }
+
+  public static ASTNode getChildClone(ASTNode child) {
+    if (child == null) {
+      return null;
+    }
+    var oldParent = child.parent;
+    if (oldParent == null || oldParent.template == null) {
+      return child.clone();
+    }
+    var replacement = oldParent.template.getReplacement(child);
+    return replacement == null ? child.clone() : replacement;
+  }
+
   /**
    * Makes a clone of the given node and inserts it with the given setter. This
    * node is set as the parent. Since the setter reference usually also detaches
    * the previous node, detachment is temporarily disabled.
    * 
    * @param <NodeType>   Type of the node
-   * @param node         The node to clone
+   * @param child        The node to clone
    * @param selfReplacer The setter to replace the node in this parent
    */
   @SuppressWarnings("unchecked")
-  public <NodeType extends ASTNode> void setupClone(
-      NodeType node,
+  public <NodeType extends ASTNode> void cloneChild(
+      NodeType child,
       Consumer<NodeType> selfReplacer) {
-    if (node != null) {
-      var clone = node.clone();
+    if (child != null) {
+      var clone = getChildClone(child);
       clone.parent = this;
       clone.selfReplacer = (Consumer<ASTNode>) selfReplacer;
       clone.registered = true;
@@ -521,12 +539,5 @@ public abstract class ASTNode implements Cloneable {
 
   public ASTNode cloneSeparate() {
     return cloneInto(new Root());
-  }
-
-  public static ASTNode cloneSafe(ASTNode node) {
-    if (node == null) {
-      return null;
-    }
-    return node.clone();
   }
 }
