@@ -80,6 +80,6 @@ public class ChildNodeList<Child extends ASTNode> extends ProxyArrayList<Child> 
   public static <Child extends ASTNode> ChildNodeList<Child> clone(List<Child> list, InnerASTNode parent) {
     return list == null
         ? null
-        : (ChildNodeList<Child>) ChildNodeList.collect(list.stream().map(ASTNode::cloneSafe), parent);
+        : (ChildNodeList<Child>) ChildNodeList.collect(list.stream().map(ASTNode::getChildClone), parent);
   }
 }

@@ -3,13 +3,13 @@ package io.github.douira.glsl_transformer.ast;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.*;
-import java.util.stream.Collectors;
 
 import org.junit.jupiter.params.ParameterizedTest;
 
+import io.github.douira.glsl_transformer.ast.node.Identifier;
 import io.github.douira.glsl_transformer.ast.node.basic.ASTNode;
 import io.github.douira.glsl_transformer.ast.node.declaration.*;
-import io.github.douira.glsl_transformer.ast.node.expression.LiteralExpression;
+import io.github.douira.glsl_transformer.ast.node.expression.*;
 import io.github.douira.glsl_transformer.ast.node.expression.unary.FunctionCallExpression;
 import io.github.douira.glsl_transformer.ast.node.external_declaration.*;
 import io.github.douira.glsl_transformer.ast.node.type.qualifier.StorageQualifier;
@@ -139,12 +139,12 @@ public class TransformTest extends TestWithSingleASTTransformer {
       }
     };
 
-    var typeTag = "_____1";
-    var nameTag = "_____2";
-    var initTemplate = ASTParser.getInternalInstance()
-        .parseSeparateStatement(nameTag + " = " + typeTag + ";");
-    var declarationTemplate = ASTParser.getInternalInstance()
-        .parseSeparateExternalDeclaration("out " + typeTag + " " + nameTag + ";");
+    var declarationTemplate = Template.withExternalDelcaration("out __1 __2;");
+    declarationTemplate.markLocalReplacement("__1", TypeSpecifier.class);
+    declarationTemplate.markIdentifierReplacement("__2");
+    var initTemplate = Template.withStatement("__1 = __2;");
+    initTemplate.markIdentifierReplacement("__1");
+    initTemplate.markLocalReplacement("__2", ReferenceExpression.class);
 
     p.setTransformation((tree, root) -> {
       // find out declarations
@@ -155,13 +155,8 @@ public class TransformTest extends TestWithSingleASTTransformer {
         }
       }
 
-      // find the main function
-      var mainFunctionStream = root.identifierIndex.getStream("main")
-          .map(id -> id.getBranchAncestor(FunctionDefinition.class, FunctionDefinition::getFunctionPrototype))
-          .filter(Objects::nonNull);
-      var targets = mainFunctionStream.collect(Collectors.toList());
-      assertEquals(1, targets.size());
-      var mainFunctionStatements = targets.get(0).getBody();
+      // sanity check that there is a main function
+      assertNotNull(tree.getFunctionDefinitionBody("main"));
 
       // add out declarations that are missing for in declarations
       root.process(root.nodeIndex
@@ -179,20 +174,14 @@ public class TransformTest extends TestWithSingleASTTransformer {
               var specifier = inDeclarationMatcher.getNodeMatch("type", BuiltinNumericTypeSpecifier.class);
 
               if (specifier != null && !outDeclarations.contains(name)) {
-                var inDeclaration = declarationTemplate.cloneInto(root);
-                tree.injectNode(ASTInjectionPoint.BEFORE_DECLARATIONS, inDeclaration);
-                // rename happens later
+                tree.injectNode(ASTInjectionPoint.BEFORE_DECLARATIONS,
+                    declarationTemplate.getInstanceFor(root,
+                        specifier.cloneInto(root),
+                        new Identifier(name)));
 
-                root.identifierIndex
-                    .getOne(typeTag)
-                    .getAncestor(TypeSpecifier.class)
-                    .replaceByAndDelete(specifier.cloneInto(root));
-
-                var init = initTemplate.cloneInto(root);
-                mainFunctionStatements.getChildren().add(0, init);
-                root.identifierIndex.rename(nameTag, name);
-                root.identifierIndex.getOneReferenceExpression(typeTag)
-                    .replaceByAndDelete(LiteralExpression.getDefaultValue(specifier.type));
+                tree.prependMain(initTemplate.getInstanceFor(root,
+                    new Identifier(name),
+                    LiteralExpression.getDefaultValue(specifier.type)));
               }
             }
           });
