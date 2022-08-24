@@ -54,8 +54,8 @@ public abstract class BinaryExpression extends Expression {
   @Override
   public BinaryExpression clone() {
     var clone = (BinaryExpression) super.clone();
-    clone.setupClone(left, clone::setLeft);
-    clone.setupClone(right, clone::setRight);
+    clone.cloneChild(left, clone::setLeft);
+    clone.cloneChild(right, clone::setRight);
     return clone;
   }
 

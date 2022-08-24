@@ -77,9 +77,9 @@ public class DeclarationMember extends InnerASTNode {
   @Override
   public DeclarationMember clone() {
     var clone = (DeclarationMember) super.clone();
-    clone.setupClone(name, clone::setName);
-    clone.setupClone(arraySpecifier, clone::setArraySpecifier);
-    clone.setupClone(initializer, clone::setInitializer);
+    clone.cloneChild(name, clone::setName);
+    clone.cloneChild(arraySpecifier, clone::setArraySpecifier);
+    clone.cloneChild(initializer, clone::setInitializer);
     return clone;
   }
 

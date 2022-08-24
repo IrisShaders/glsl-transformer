@@ -45,7 +45,7 @@ public class ReferenceExpression extends TerminalExpression {
   @Override
   public ReferenceExpression clone() {
     var clone = (ReferenceExpression) super.clone();
-    clone.setupClone(identifier, clone::setIdentifier);
+    clone.cloneChild(identifier, clone::setIdentifier);
     return clone;
   }
 

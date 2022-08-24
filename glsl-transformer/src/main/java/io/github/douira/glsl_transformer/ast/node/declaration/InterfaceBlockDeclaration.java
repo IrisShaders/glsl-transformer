@@ -112,11 +112,11 @@ public class InterfaceBlockDeclaration extends Declaration {
   @Override
   public InterfaceBlockDeclaration clone() {
     var clone = (InterfaceBlockDeclaration) super.clone();
-    clone.setupClone(typeQualifier, clone::setTypeQualifier);
-    clone.setupClone(blockName, clone::setBlockName);
-    clone.setupClone(structBody, clone::setStructBody);
-    clone.setupClone(variableName, clone::setVariableName);
-    clone.setupClone(arraySpecifier, clone::setArraySpecifier);
+    clone.cloneChild(typeQualifier, clone::setTypeQualifier);
+    clone.cloneChild(blockName, clone::setBlockName);
+    clone.cloneChild(structBody, clone::setStructBody);
+    clone.cloneChild(variableName, clone::setVariableName);
+    clone.cloneChild(arraySpecifier, clone::setArraySpecifier);
     return clone;
   }
 

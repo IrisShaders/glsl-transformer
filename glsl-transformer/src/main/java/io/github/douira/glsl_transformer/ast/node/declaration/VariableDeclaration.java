@@ -60,7 +60,7 @@ public class VariableDeclaration extends Declaration {
   @Override
   public VariableDeclaration clone() {
     var clone = (VariableDeclaration) super.clone();
-    clone.setupClone(typeQualifier, clone::setTypeQualifier);
+    clone.cloneChild(typeQualifier, clone::setTypeQualifier);
     clone.names = ChildNodeList.clone(names, clone);
     return clone;
   }

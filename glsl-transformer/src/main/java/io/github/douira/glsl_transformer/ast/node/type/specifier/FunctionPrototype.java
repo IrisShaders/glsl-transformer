@@ -63,8 +63,8 @@ public class FunctionPrototype extends ListASTNode<FunctionParameter> {
   @Override
   public FunctionPrototype clone() {
     var clone = (FunctionPrototype) super.clone();
-    clone.setupClone(returnType, clone::setReturnType);
-    clone.setupClone(name, clone::setName);
+    clone.cloneChild(returnType, clone::setReturnType);
+    clone.cloneChild(name, clone::setName);
     return clone;
   }
 

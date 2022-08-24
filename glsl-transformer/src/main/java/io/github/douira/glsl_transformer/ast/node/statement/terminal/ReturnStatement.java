@@ -36,7 +36,7 @@ public class ReturnStatement extends SemiTerminalStatement {
   @Override
   public ReturnStatement clone() {
     var clone = (ReturnStatement) super.clone();
-    clone.setupClone(expression, clone::setExpression);
+    clone.cloneChild(expression, clone::setExpression);
     return clone;
   }
 

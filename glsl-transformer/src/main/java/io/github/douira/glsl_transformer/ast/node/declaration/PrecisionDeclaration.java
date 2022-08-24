@@ -59,8 +59,8 @@ public class PrecisionDeclaration extends Declaration {
   @Override
   public PrecisionDeclaration clone() {
     var clone = (PrecisionDeclaration) super.clone();
-    clone.setupClone(precisionQualifier, clone::setPrecisionQualifier);
-    clone.setupClone(typeSpecifier, clone::setTypeSpecifier);
+    clone.cloneChild(precisionQualifier, clone::setPrecisionQualifier);
+    clone.cloneChild(typeSpecifier, clone::setTypeSpecifier);
     return clone;
   }
 

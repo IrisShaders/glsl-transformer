@@ -45,7 +45,7 @@ public class DeclarationExternalDeclaration extends ExternalDeclaration {
   @Override
   public DeclarationExternalDeclaration clone() {
     var clone = (DeclarationExternalDeclaration) super.clone();
-    clone.setupClone(declaration, clone::setDeclaration);
+    clone.cloneChild(declaration, clone::setDeclaration);
     return clone;
   }
 
