@@ -115,11 +115,11 @@ public class FunctionCallExpression extends TerminalExpression {
 
   @Override
   public FunctionCallExpression clone() {
-    var result = (FunctionCallExpression) super.clone();
-    result.setupClone(functionName, result::setFunctionName);
-    result.setupClone(functionSpecifier, result::setFunctionSpecifier);
-    result.parameters = ChildNodeList.clone(parameters, result);
-    return result;
+    var clone = (FunctionCallExpression) super.clone();
+    clone.setupClone(functionName, clone::setFunctionName);
+    clone.setupClone(functionSpecifier, clone::setFunctionSpecifier);
+    clone.parameters = ChildNodeList.clone(parameters, clone);
+    return clone;
   }
 
   @Override

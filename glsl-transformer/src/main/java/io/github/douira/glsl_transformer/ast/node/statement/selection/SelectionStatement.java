@@ -66,9 +66,9 @@ public class SelectionStatement extends ManyStatement {
 
   @Override
   public SelectionStatement clone() {
-    var result = (SelectionStatement) super.clone();
-    result.conditions = ChildNodeList.clone(conditions, result);
-    return result;
+    var clone = (SelectionStatement) super.clone();
+    clone.conditions = ChildNodeList.clone(conditions, clone);
+    return clone;
   }
 
   @Override

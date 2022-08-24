@@ -94,9 +94,9 @@ public class StorageQualifier extends TypeQualifierPart {
 
   @Override
   public StorageQualifier clone() {
-    var result = (StorageQualifier) super.clone();
-    result.typeNames = ChildNodeList.clone(typeNames, result);
-    return result;
+    var clone = (StorageQualifier) super.clone();
+    clone.typeNames = ChildNodeList.clone(typeNames, clone);
+    return clone;
   }
 
   @Override

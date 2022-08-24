@@ -46,9 +46,9 @@ public abstract class ManyExpression extends Expression implements ListNode<Expr
 
   @Override
   public ManyExpression clone() {
-    var result = (ManyExpression) super.clone();
-    result.expressions = ChildNodeList.clone(expressions, result);
-    return result;
+    var clone = (ManyExpression) super.clone();
+    clone.expressions = ChildNodeList.clone(expressions, clone);
+    return clone;
   }
 
   @Override

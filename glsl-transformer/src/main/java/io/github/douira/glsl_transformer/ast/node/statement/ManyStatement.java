@@ -46,9 +46,9 @@ public abstract class ManyStatement extends Statement implements ListNode<Statem
 
   @Override
   public ManyStatement clone() {
-    var result = (ManyStatement) super.clone();
-    result.statements = ChildNodeList.clone(statements, result);
-    return result;
+    var clone = (ManyStatement) super.clone();
+    clone.statements = ChildNodeList.clone(statements, clone);
+    return clone;
   }
 
   @Override
