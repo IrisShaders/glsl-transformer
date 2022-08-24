@@ -24,7 +24,7 @@ public abstract class ConditionLoopStatement extends LoopStatement {
   @Override
   public ConditionLoopStatement clone() {
     var clone = (ConditionLoopStatement) super.clone();
-    clone.setupClone(condition, clone::setCondition);
+    clone.cloneChild(condition, clone::setCondition);
     return clone;
   }
 

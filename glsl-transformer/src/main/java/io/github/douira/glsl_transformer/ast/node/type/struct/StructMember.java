@@ -49,7 +49,7 @@ public class StructMember extends InnerASTNode {
   @Override
   public StructMember clone() {
     var clone = (StructMember) super.clone();
-    clone.setupClone(type, clone::setType);
+    clone.cloneChild(type, clone::setType);
     clone.declarators = ChildNodeList.clone(declarators, clone);
     return clone;
   }

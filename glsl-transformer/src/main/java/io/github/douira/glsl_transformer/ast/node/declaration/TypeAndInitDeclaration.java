@@ -60,7 +60,7 @@ public class TypeAndInitDeclaration extends Declaration {
   @Override
   public TypeAndInitDeclaration clone() {
     var clone = (TypeAndInitDeclaration) super.clone();
-    clone.setupClone(type, clone::setType);
+    clone.cloneChild(type, clone::setType);
     clone.members = ChildNodeList.clone(members, clone);
     return clone;
   }

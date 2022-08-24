@@ -55,7 +55,7 @@ public class WhileLoopStatement extends ConditionLoopStatement {
   @Override
   public WhileLoopStatement clone() {
     var clone = (WhileLoopStatement) super.clone();
-    clone.setupClone(iterationConditionInitializer, clone::setIterationConditionInitializer);
+    clone.cloneChild(iterationConditionInitializer, clone::setIterationConditionInitializer);
     return clone;
   }
 

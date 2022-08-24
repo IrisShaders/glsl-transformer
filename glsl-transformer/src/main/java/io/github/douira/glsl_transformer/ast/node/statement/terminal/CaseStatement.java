@@ -50,7 +50,7 @@ public class CaseStatement extends CaseLabelStatement {
   @Override
   public CaseStatement clone() {
     var clone = (CaseStatement) super.clone();
-    clone.setupClone(expression, clone::setExpression);
+    clone.cloneChild(expression, clone::setExpression);
     return clone;
   }
 

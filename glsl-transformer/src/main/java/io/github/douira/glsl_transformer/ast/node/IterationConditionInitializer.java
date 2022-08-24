@@ -62,9 +62,9 @@ public class IterationConditionInitializer extends InnerASTNode {
   @Override
   public IterationConditionInitializer clone() {
     var clone = (IterationConditionInitializer) super.clone();
-    clone.setupClone(type, clone::setType);
-    clone.setupClone(name, clone::setName);
-    clone.setupClone(initializer, clone::setInitializer);
+    clone.cloneChild(type, clone::setType);
+    clone.cloneChild(name, clone::setName);
+    clone.cloneChild(initializer, clone::setInitializer);
     return clone;
   }
 

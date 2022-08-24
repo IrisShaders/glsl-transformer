@@ -43,7 +43,7 @@ public abstract class LoopStatement extends Statement {
   @Override
   public LoopStatement clone() {
     var clone = (LoopStatement) super.clone();
-    clone.setupClone(statement, clone::setStatement);
+    clone.cloneChild(statement, clone::setStatement);
     return clone;
   }
 
