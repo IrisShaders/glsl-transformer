@@ -42,9 +42,9 @@ public class LayoutQualifier extends TypeQualifierPart {
 
   @Override
   public LayoutQualifier clone() {
-    var result = (LayoutQualifier) super.clone();
-    result.parts = ChildNodeList.clone(parts, result);
-    return result;
+    var clone = (LayoutQualifier) super.clone();
+    clone.parts = ChildNodeList.clone(parts, clone);
+    return clone;
   }
 
   @Override

@@ -46,9 +46,9 @@ public class NestedInitializer extends Initializer {
 
   @Override
   public NestedInitializer clone() {
-    var result = (NestedInitializer) super.clone();
-    result.initializers = ChildNodeList.clone(initializers, result);
-    return result;
+    var clone = (NestedInitializer) super.clone();
+    clone.initializers = ChildNodeList.clone(initializers, clone);
+    return clone;
   }
 
   @Override
