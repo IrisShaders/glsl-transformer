@@ -115,6 +115,27 @@ public class ASTParser implements ParserInterface {
         ASTBuilder::visitStatement);
   }
 
+  public ExternalDeclaration parseSeparateExternalDeclaration(String input) throws RecognitionException {
+    return parseNodeSeparate(input,
+        ExternalDeclarationContext.class,
+        GLSLParser::externalDeclaration,
+        ASTBuilder::visitExternalDeclaration);
+  }
+
+  public Expression parseSeparateExpression(String input) throws RecognitionException {
+    return parseNodeSeparate(input,
+        ExpressionContext.class,
+        GLSLParser::expression,
+        ASTBuilder::visitExpression);
+  }
+
+  public Statement parseSeparateStatement(String input) throws RecognitionException {
+    return parseNodeSeparate(input,
+        StatementContext.class,
+        GLSLParser::statement,
+        ASTBuilder::visitStatement);
+  }
+
   public List<ExternalDeclaration> parseExternalDeclarations(ASTNode treeMember, String... inputs) {
     var nodes = new ArrayList<ExternalDeclaration>(inputs.length);
     for (var input : inputs) {
@@ -137,26 +158,5 @@ public class ASTParser implements ParserInterface {
       nodes.add(parseStatement(treeMember, input));
     }
     return nodes;
-  }
-
-  public ExternalDeclaration parseSeparateExternalDeclaration(String input) throws RecognitionException {
-    return parseNodeSeparate(input,
-        ExternalDeclarationContext.class,
-        GLSLParser::externalDeclaration,
-        ASTBuilder::visitExternalDeclaration);
-  }
-
-  public Expression parseSeparateExpression(String input) throws RecognitionException {
-    return parseNodeSeparate(input,
-        ExpressionContext.class,
-        GLSLParser::expression,
-        ASTBuilder::visitExpression);
-  }
-
-  public Statement parseSeparateStatement(String input) throws RecognitionException {
-    return parseNodeSeparate(input,
-        StatementContext.class,
-        GLSLParser::statement,
-        ASTBuilder::visitStatement);
   }
 }
