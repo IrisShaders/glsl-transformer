@@ -1,0 +1,74 @@
+package io.github.douira.glsl_transformer.ast.data;
+
+import java.util.function.*;
+
+import io.github.douira.glsl_transformer.ast.data.TypedTreeCache.CacheKey;
+import io.github.douira.glsl_transformer.tree.ExtendedContext;
+import io.github.douira.glsl_transformer.util.LRUCache;
+
+public class TypedTreeCache<V> extends LRUCache<CacheKey, V> {
+  private static final int defaultCacheSize = 400;
+
+  public TypedTreeCache(int maxSize, float loadFactor) {
+    super(maxSize, loadFactor);
+  }
+
+  public TypedTreeCache(int maxSize) {
+    super(maxSize);
+  }
+
+  public TypedTreeCache() {
+    super(defaultCacheSize);
+  }
+
+  public static class CacheKey {
+    final String input;
+    final Class<? extends ExtendedContext> ruleType;
+
+    public CacheKey(String input, Class<? extends ExtendedContext> ruleType) {
+      this.input = input;
+      this.ruleType = ruleType;
+    }
+
+    @Override
+    public int hashCode() {
+      final int prime = 31;
+      int result = 1;
+      result = prime * result + ((input == null) ? 0 : input.hashCode());
+      result = prime * result + ((ruleType == null) ? 0 : ruleType.hashCode());
+      return result;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+      if (this == obj)
+        return true;
+      if (obj == null)
+        return false;
+      if (getClass() != obj.getClass())
+        return false;
+      CacheKey other = (CacheKey) obj;
+      if (input == null) {
+        if (other.input != null)
+          return false;
+      } else if (!input.equals(other.input))
+        return false;
+      if (ruleType == null) {
+        if (other.ruleType != null)
+          return false;
+      } else if (!ruleType.equals(other.ruleType))
+        return false;
+      return true;
+    }
+  }
+
+  public V cachedGet(String str, Class<? extends ExtendedContext> ruleType,
+      Supplier<V> supplier) {
+    return super.cachedGet(new CacheKey(str, ruleType), supplier);
+  }
+
+  public V cachedGet(String str, Class<? extends ExtendedContext> ruleType,
+      Supplier<V> supplier, Function<V, V> hydrator) {
+    return super.cachedGet(new CacheKey(str, ruleType), supplier, hydrator);
+  }
+}
