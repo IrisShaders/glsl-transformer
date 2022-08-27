@@ -35,7 +35,7 @@ public class ArraySpecifier extends ListASTNode<Expression> {
 
   @Override
   public ArraySpecifier clone() {
-    return (ArraySpecifier) super.clone();
+    return new ArraySpecifier(getClonedChildren());
   }
 
   @Override

@@ -49,9 +49,7 @@ public class TypeReference extends TypeSpecifier {
 
   @Override
   public TypeReference clone() {
-    var clone = (TypeReference) super.clone();
-    clone.cloneChild(reference, clone::setReference);
-    return clone;
+    return new TypeReference(clone(reference), clone(arraySpecifier));
   }
 
   @Override

@@ -33,7 +33,7 @@ public class ArrayAccessExpression extends BinaryExpression {
 
   @Override
   public ArrayAccessExpression clone() {
-    return (ArrayAccessExpression) super.clone();
+    return new ArrayAccessExpression(clone(left), clone(right));
   }
 
   @Override

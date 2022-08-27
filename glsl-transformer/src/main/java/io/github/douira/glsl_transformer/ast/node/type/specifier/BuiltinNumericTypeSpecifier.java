@@ -40,7 +40,7 @@ public class BuiltinNumericTypeSpecifier extends TypeSpecifier {
 
   @Override
   public BuiltinNumericTypeSpecifier clone() {
-    return (BuiltinNumericTypeSpecifier) super.clone();
+    return new BuiltinNumericTypeSpecifier(type, clone(arraySpecifier));
   }
 
   @Override

@@ -4,6 +4,7 @@ import java.util.Objects;
 import java.util.function.*;
 import java.util.stream.Stream;
 
+import io.github.douira.glsl_transformer.ast.data.ChildNodeList;
 import io.github.douira.glsl_transformer.ast.query.Root;
 import io.github.douira.glsl_transformer.ast.transform.Template;
 import io.github.douira.glsl_transformer.ast.traversal.*;
@@ -31,13 +32,11 @@ import io.github.douira.glsl_transformer.util.CompatUtil;
  * violates common expectations like the fact that removing a node doesn't also
  * affect other parts of the tree.
  */
-public abstract class ASTNode implements Cloneable {
+public abstract class ASTNode {
   private ASTNode parent;
   private Consumer<ASTNode> selfReplacer;
   private Root root = Root.getActiveBuildRoot();
-  private Template<?> template = null;
-  private static boolean doParentUpdate = true;
-  private static Root cloneRoot;
+  protected Template<?> template = null;
 
   /**
    * Whether this node has been registered with the root. This is only used when
@@ -453,7 +452,7 @@ public abstract class ASTNode implements Cloneable {
       NodeType currentNode,
       NodeType newNode,
       Consumer<? extends NodeType> setter) {
-    if (!doParentUpdate || currentNode == newNode && newNode.getParent() == this) {
+    if (currentNode == newNode && newNode.getParent() == this) {
       return;
     }
 
@@ -470,74 +469,33 @@ public abstract class ASTNode implements Cloneable {
     this.template = template;
   }
 
-  public static ASTNode getChildClone(ASTNode child) {
-    if (child == null) {
-      return null;
-    }
-    var oldParent = child.parent;
-    if (oldParent == null || oldParent.template == null) {
-      return child.clone();
-    }
-    var replacement = oldParent.template.getReplacement(child);
-    return replacement == null ? child.clone() : replacement;
-  }
-
-  /**
-   * Makes a clone of the given node and inserts it with the given setter. This
-   * node is set as the parent. Since the setter reference usually also detaches
-   * the previous node, detachment is temporarily disabled.
-   * 
-   * @param <NodeType>   Type of the node
-   * @param child        The node to clone
-   * @param selfReplacer The setter to replace the node in this parent
-   */
-  @SuppressWarnings("unchecked")
-  public <NodeType extends ASTNode> void cloneChild(
-      NodeType child,
-      Consumer<NodeType> selfReplacer) {
-    if (child != null) {
-      var clone = getChildClone(child);
-      clone.parent = this;
-      clone.selfReplacer = (Consumer<ASTNode>) selfReplacer;
-      clone.registered = true;
-      doParentUpdate = false;
-      ((Consumer<ASTNode>) selfReplacer).accept(clone);
-      doParentUpdate = true;
-    }
-  }
-
-  @Override
-  public ASTNode clone() {
-    if (cloneRoot == null) {
-      throw new IllegalStateException("The clone root may not be null!");
-    }
-    ASTNode clone;
-    try {
-      clone = (ASTNode) super.clone();
-    } catch (CloneNotSupportedException e) {
-      // should never happen
-      throw new RuntimeException(e);
-    }
-    clone.registered = true;
-    clone.parent = null;
-    clone.selfReplacer = null;
-    clone.root = cloneRoot;
-    clone.root.registerNode(clone);
-    return clone;
-  }
+  public abstract ASTNode clone();
 
   public ASTNode cloneInto(Root root) {
-    cloneRoot = root;
-    var clone = clone();
-    cloneRoot = null;
-    return clone;
+    return Root.indexNodes(root, this::clone);
   }
 
   public ASTNode cloneInto(ASTNode treeMember) {
-    return cloneInto(treeMember.getRoot());
+    return Root.indexNodes(treeMember, this::clone);
   }
 
   public ASTNode cloneSeparate() {
-    return cloneInto(new Root());
+    return Root.indexNodes(this::clone);
+  }
+
+  @SuppressWarnings("unchecked") // the nodes clone themselves correctly
+  public static <T extends ASTNode> T clone(T node) {
+    if (node == null) {
+      return null;
+    }
+    if (node.template == null) {
+      return (T) node.clone();
+    }
+    var replacement = node.template.getReplacement(node);
+    return replacement == null ? (T) node.clone() : replacement;
+  }
+
+  public static <T extends ASTNode> Stream<T> clone(ChildNodeList<T> nodes) {
+    return nodes == null ? null : nodes.getClonedStream();
   }
 }

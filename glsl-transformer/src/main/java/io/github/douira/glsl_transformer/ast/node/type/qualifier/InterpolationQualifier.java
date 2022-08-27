@@ -59,7 +59,7 @@ public class InterpolationQualifier extends TypeQualifierPart {
 
   @Override
   public InterpolationQualifier clone() {
-    return (InterpolationQualifier) super.clone();
+    return new InterpolationQualifier(interpolationType);
   }
 
   @Override

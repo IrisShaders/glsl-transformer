@@ -60,10 +60,7 @@ public class NamedLayoutQualifierPart extends LayoutQualifierPart {
 
   @Override
   public NamedLayoutQualifierPart clone() {
-    var clone = (NamedLayoutQualifierPart) super.clone();
-    clone.cloneChild(name, clone::setName);
-    clone.cloneChild(expression, clone::setExpression);
-    return clone;
+    return new NamedLayoutQualifierPart(clone(name), clone(expression));
   }
 
   @Override

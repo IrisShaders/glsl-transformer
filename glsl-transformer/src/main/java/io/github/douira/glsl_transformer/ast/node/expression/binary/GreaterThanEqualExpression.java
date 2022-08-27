@@ -33,7 +33,7 @@ public class GreaterThanEqualExpression extends BinaryExpression {
 
   @Override
   public GreaterThanEqualExpression clone() {
-    return (GreaterThanEqualExpression) super.clone();
+    return new GreaterThanEqualExpression(clone(left), clone(right));
   }
 
   @Override

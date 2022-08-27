@@ -33,7 +33,7 @@ public class IdentityExpression extends UnaryExpression {
 
   @Override
   public IdentityExpression clone() {
-    return (IdentityExpression) super.clone();
+    return new IdentityExpression(clone(operand));
   }
 
   @Override

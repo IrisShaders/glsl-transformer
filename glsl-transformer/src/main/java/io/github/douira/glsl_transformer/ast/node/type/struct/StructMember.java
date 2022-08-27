@@ -11,7 +11,7 @@ import io.github.douira.glsl_transformer.ast.traversal.*;
 
 public class StructMember extends InnerASTNode {
   protected FullySpecifiedType type;
-  protected List<StructDeclarator> declarators;
+  protected ChildNodeList<StructDeclarator> declarators;
 
   public StructMember(FullySpecifiedType type, Stream<StructDeclarator> declarators) {
     this.type = setup(type, this::setType);
@@ -48,10 +48,7 @@ public class StructMember extends InnerASTNode {
 
   @Override
   public StructMember clone() {
-    var clone = (StructMember) super.clone();
-    clone.cloneChild(type, clone::setType);
-    clone.declarators = ChildNodeList.clone(declarators, clone);
-    return clone;
+    return new StructMember(clone(type), clone(declarators));
   }
 
   @Override

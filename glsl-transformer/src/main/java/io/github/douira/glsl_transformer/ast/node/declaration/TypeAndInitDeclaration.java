@@ -10,7 +10,7 @@ import io.github.douira.glsl_transformer.ast.traversal.*;
 
 public class TypeAndInitDeclaration extends Declaration {
   protected FullySpecifiedType type;
-  protected List<DeclarationMember> members;
+  protected ChildNodeList<DeclarationMember> members;
 
   public TypeAndInitDeclaration(FullySpecifiedType type, Stream<DeclarationMember> members) {
     this.type = setup(type, this::setType);
@@ -59,10 +59,7 @@ public class TypeAndInitDeclaration extends Declaration {
 
   @Override
   public TypeAndInitDeclaration clone() {
-    var clone = (TypeAndInitDeclaration) super.clone();
-    clone.cloneChild(type, clone::setType);
-    clone.members = ChildNodeList.clone(members, clone);
-    return clone;
+    return new TypeAndInitDeclaration(clone(type), clone(members));
   }
 
   @Override

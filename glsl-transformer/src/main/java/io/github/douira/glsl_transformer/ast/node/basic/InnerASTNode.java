@@ -9,9 +9,7 @@ public abstract class InnerASTNode extends ASTNode {
   public abstract void exitNode(ASTListener listener);
 
   @Override
-  public InnerASTNode clone() {
-    return (InnerASTNode) super.clone();
-  }
+  public abstract InnerASTNode clone();
 
   @Override
   public InnerASTNode cloneInto(Root root) {

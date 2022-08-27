@@ -36,9 +36,7 @@ public abstract class ExternalDeclaration extends InnerASTNode {
   }
 
   @Override
-  public ExternalDeclaration clone() {
-    return (ExternalDeclaration) super.clone();
-  }
+  public abstract ExternalDeclaration clone();
 
   @Override
   public ExternalDeclaration cloneInto(Root root) {

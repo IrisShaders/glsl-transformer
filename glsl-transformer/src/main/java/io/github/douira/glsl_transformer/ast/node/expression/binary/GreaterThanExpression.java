@@ -33,7 +33,7 @@ public class GreaterThanExpression extends BinaryExpression {
 
   @Override
   public GreaterThanExpression clone() {
-    return (GreaterThanExpression) super.clone();
+    return new GreaterThanExpression(clone(left), clone(right));
   }
 
   @Override

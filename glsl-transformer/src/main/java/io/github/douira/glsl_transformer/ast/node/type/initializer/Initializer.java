@@ -32,9 +32,7 @@ public abstract class Initializer extends InnerASTNode {
   }
 
   @Override
-  public Initializer clone() {
-    return (Initializer) super.clone();
-  }
+  public abstract Initializer clone();
 
   @Override
   public Initializer cloneInto(Root root) {

@@ -33,7 +33,7 @@ public class IncrementPrefixExpression extends UnaryExpression {
 
   @Override
   public IncrementPrefixExpression clone() {
-    return (IncrementPrefixExpression) super.clone();
+    return new IncrementPrefixExpression(clone(operand));
   }
 
   @Override

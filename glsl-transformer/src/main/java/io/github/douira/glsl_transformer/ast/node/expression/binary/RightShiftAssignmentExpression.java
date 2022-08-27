@@ -33,7 +33,7 @@ public class RightShiftAssignmentExpression extends BinaryExpression {
 
   @Override
   public RightShiftAssignmentExpression clone() {
-    return (RightShiftAssignmentExpression) super.clone();
+    return new RightShiftAssignmentExpression(clone(left), clone(right));
   }
 
   @Override

@@ -33,7 +33,7 @@ public class LessThanEqualExpression extends BinaryExpression {
 
   @Override
   public LessThanEqualExpression clone() {
-    return (LessThanEqualExpression) super.clone();
+    return new LessThanEqualExpression(clone(left), clone(right));
   }
 
   @Override

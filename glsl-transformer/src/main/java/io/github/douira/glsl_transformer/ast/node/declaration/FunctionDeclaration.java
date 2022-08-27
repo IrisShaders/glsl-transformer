@@ -44,9 +44,7 @@ public class FunctionDeclaration extends Declaration {
 
   @Override
   public FunctionDeclaration clone() {
-    var clone = (FunctionDeclaration) super.clone();
-    clone.cloneChild(functionPrototype, clone::setFunctionPrototype);
-    return clone;
+    return new FunctionDeclaration(clone(functionPrototype));
   }
 
   @Override

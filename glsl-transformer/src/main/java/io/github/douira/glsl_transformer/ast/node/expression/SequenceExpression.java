@@ -34,7 +34,7 @@ public class SequenceExpression extends ManyExpression {
 
   @Override
   public SequenceExpression clone() {
-    return (SequenceExpression) super.clone();
+    return new SequenceExpression(clone(expressions));
   }
 
   @Override

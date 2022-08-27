@@ -25,9 +25,7 @@ public abstract class TerminalExpression extends Expression {
   }
 
   @Override
-  public TerminalExpression clone() {
-    return (TerminalExpression) super.clone();
-  }
+  public abstract TerminalExpression clone();
 
   @Override
   public TerminalExpression cloneInto(Root root) {

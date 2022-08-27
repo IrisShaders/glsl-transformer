@@ -26,6 +26,19 @@ public class LiteralExpression extends TerminalExpression {
     }
   }
 
+  private LiteralExpression(
+      Type literalType,
+      boolean booleanValue,
+      long integerValue,
+      IntegerFormat integerFormat,
+      double floatingValue) {
+    this.literalType = literalType;
+    this.booleanValue = booleanValue;
+    this.integerValue = integerValue;
+    this.integerFormat = integerFormat;
+    this.floatingValue = floatingValue;
+  }
+
   public LiteralExpression(boolean booleanValue) {
     setBoolean(booleanValue);
   }
@@ -268,7 +281,7 @@ public class LiteralExpression extends TerminalExpression {
 
   @Override
   public LiteralExpression clone() {
-    return (LiteralExpression) super.clone();
+    return new LiteralExpression(literalType, booleanValue, integerValue, integerFormat, floatingValue);
   }
 
   @Override

@@ -59,7 +59,7 @@ public class PrecisionQualifier extends TypeQualifierPart {
 
   @Override
   public PrecisionQualifier clone() {
-    return (PrecisionQualifier) super.clone();
+    return new PrecisionQualifier(precisionLevel);
   }
 
   @Override

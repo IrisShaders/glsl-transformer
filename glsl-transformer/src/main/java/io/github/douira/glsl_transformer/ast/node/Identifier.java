@@ -68,7 +68,7 @@ public class Identifier extends ASTNode {
 
   @Override
   public Identifier clone() {
-    return (Identifier) super.clone();
+    return new Identifier(name);
   }
 
   @Override

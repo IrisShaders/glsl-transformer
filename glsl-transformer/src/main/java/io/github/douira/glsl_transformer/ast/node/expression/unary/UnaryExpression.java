@@ -41,11 +41,7 @@ public abstract class UnaryExpression extends Expression {
   }
 
   @Override
-  public UnaryExpression clone() {
-    var clone = (UnaryExpression) super.clone();
-    clone.cloneChild(operand, clone::setOperand);
-    return clone;
-  }
+  public abstract UnaryExpression clone();
 
   @Override
   public UnaryExpression cloneInto(Root root) {

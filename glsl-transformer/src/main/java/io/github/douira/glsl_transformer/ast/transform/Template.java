@@ -134,11 +134,7 @@ public class Template<T extends ASTNode> {
     Objects.requireNonNull(original);
     Objects.requireNonNull(replacement);
     replacements.put(original, replacement);
-    if (!original.hasParent()) {
-      throw new IllegalArgumentException(
-          "The original node must have a parent, otherwise setting it as a template doesn't work and it also doesn't make any sense to template the whole tree.");
-    }
-    original.getParent().markTemplate(this);
+    original.markTemplate(this);
   }
 
   @SuppressWarnings("unchecked")

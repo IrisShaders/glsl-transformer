@@ -52,12 +52,7 @@ public abstract class BinaryExpression extends Expression {
   }
 
   @Override
-  public BinaryExpression clone() {
-    var clone = (BinaryExpression) super.clone();
-    clone.cloneChild(left, clone::setLeft);
-    clone.cloneChild(right, clone::setRight);
-    return clone;
-  }
+  public abstract BinaryExpression clone();
 
   @Override
   public BinaryExpression cloneInto(Root root) {

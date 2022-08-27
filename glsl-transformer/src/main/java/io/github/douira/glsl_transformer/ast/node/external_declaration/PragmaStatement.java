@@ -56,6 +56,13 @@ public class PragmaStatement extends ExternalDeclaration {
   public String customName;
   public PragmaState state;
 
+  private PragmaStatement(boolean stdGL, PragmaType type, String customName, PragmaState state) {
+    this.stdGL = stdGL;
+    this.type = type;
+    this.customName = customName;
+    this.state = state;
+  }
+
   public PragmaStatement(boolean stdGL, String customPragmaName) {
     this.stdGL = stdGL;
     this.type = PragmaType.CUSTOM;
@@ -92,7 +99,7 @@ public class PragmaStatement extends ExternalDeclaration {
 
   @Override
   public PragmaStatement clone() {
-    return (PragmaStatement) super.clone();
+    return new PragmaStatement(stdGL, type, customName, state);
   }
 
   @Override

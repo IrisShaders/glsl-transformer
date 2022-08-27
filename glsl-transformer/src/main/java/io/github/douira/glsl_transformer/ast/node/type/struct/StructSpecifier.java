@@ -74,10 +74,7 @@ public class StructSpecifier extends TypeSpecifier {
 
   @Override
   public StructSpecifier clone() {
-    var clone = (StructSpecifier) super.clone();
-    clone.cloneChild(name, clone::setName);
-    clone.cloneChild(structBody, clone::setStructBody);
-    return clone;
+    return new StructSpecifier(clone(name), clone(structBody), clone(arraySpecifier));
   }
 
   @Override

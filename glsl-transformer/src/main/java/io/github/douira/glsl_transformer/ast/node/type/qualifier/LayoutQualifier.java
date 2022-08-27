@@ -8,7 +8,7 @@ import io.github.douira.glsl_transformer.ast.query.Root;
 import io.github.douira.glsl_transformer.ast.traversal.*;
 
 public class LayoutQualifier extends TypeQualifierPart {
-  protected List<LayoutQualifierPart> parts;
+  protected ChildNodeList<LayoutQualifierPart> parts;
 
   public LayoutQualifier(Stream<LayoutQualifierPart> parts) {
     this.parts = ChildNodeList.collect(parts, this);
@@ -42,9 +42,7 @@ public class LayoutQualifier extends TypeQualifierPart {
 
   @Override
   public LayoutQualifier clone() {
-    var clone = (LayoutQualifier) super.clone();
-    clone.parts = ChildNodeList.clone(parts, clone);
-    return clone;
+    return new LayoutQualifier(clone(parts));
   }
 
   @Override

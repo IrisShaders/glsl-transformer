@@ -9,6 +9,14 @@ import io.github.douira.glsl_transformer.ast.traversal.*;
 public class WhileLoopStatement extends ConditionLoopStatement {
   protected IterationConditionInitializer iterationConditionInitializer;
 
+  private WhileLoopStatement(
+      Statement statement,
+      Expression condition,
+      IterationConditionInitializer iterationConditionInitializer) {
+    super(statement, condition);
+    this.iterationConditionInitializer = setup(iterationConditionInitializer, this::setIterationConditionInitializer);
+  }
+
   public WhileLoopStatement(Expression condition, Statement statement) {
     super(statement, condition);
   }
@@ -54,9 +62,7 @@ public class WhileLoopStatement extends ConditionLoopStatement {
 
   @Override
   public WhileLoopStatement clone() {
-    var clone = (WhileLoopStatement) super.clone();
-    clone.cloneChild(iterationConditionInitializer, clone::setIterationConditionInitializer);
-    return clone;
+    return new WhileLoopStatement(clone(statement), clone(condition), clone(iterationConditionInitializer));
   }
 
   @Override

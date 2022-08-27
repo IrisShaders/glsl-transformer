@@ -44,7 +44,7 @@ public class ConditionExpression extends TernaryExpression {
 
   @Override
   public ConditionExpression clone() {
-    return (ConditionExpression) super.clone();
+    return new ConditionExpression(clone(first), clone(second), clone(third));
   }
 
   @Override

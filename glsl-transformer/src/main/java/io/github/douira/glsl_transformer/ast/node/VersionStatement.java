@@ -29,7 +29,7 @@ public class VersionStatement extends ASTNode {
 
   @Override
   public VersionStatement clone() {
-    return (VersionStatement) super.clone();
+    return new VersionStatement(version, profile);
   }
 
   @Override

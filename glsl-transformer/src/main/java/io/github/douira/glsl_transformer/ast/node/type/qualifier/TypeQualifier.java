@@ -33,7 +33,7 @@ public class TypeQualifier extends ListASTNode<TypeQualifierPart> {
 
   @Override
   public TypeQualifier clone() {
-    return (TypeQualifier) super.clone();
+    return new TypeQualifier(getClonedChildren());
   }
 
   @Override
