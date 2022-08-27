@@ -469,7 +469,8 @@ public abstract class ASTNode {
     this.template = template;
   }
 
-  public abstract ASTNode clone();
+  @Override
+  protected abstract ASTNode clone();
 
   public ASTNode cloneInto(Root root) {
     return Root.indexNodes(root, this::clone);
