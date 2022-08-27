@@ -19,6 +19,14 @@ public class Template<T extends ASTNode> {
     this.source = source;
   }
 
+  public T getSource() {
+    return source;
+  }
+
+  public Root getSourceRoot() {
+    return source.getRoot();
+  }
+
   @SuppressWarnings("unchecked") // the replacements map is always consistent
   public <R> R getReplacement(R original) {
     // correct use of the API should result in the right type here
