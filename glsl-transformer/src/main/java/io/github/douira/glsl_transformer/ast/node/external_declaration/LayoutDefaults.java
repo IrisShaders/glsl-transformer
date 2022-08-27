@@ -72,9 +72,7 @@ public class LayoutDefaults extends ExternalDeclaration {
 
   @Override
   public LayoutDefaults clone() {
-    var clone = (LayoutDefaults) super.clone();
-    clone.cloneChild(qualifier, clone::setQualifier);
-    return clone;
+    return new LayoutDefaults(clone(qualifier), mode);
   }
 
   @Override

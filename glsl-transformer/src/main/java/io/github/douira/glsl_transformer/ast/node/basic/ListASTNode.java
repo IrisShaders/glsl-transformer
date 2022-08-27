@@ -22,21 +22,17 @@ public abstract class ListASTNode<Child extends ASTNode>
 
   @Override
   @SuppressWarnings("unchecked")
-  public ListASTNode<Child> clone() {
-    var clone = (ListASTNode<Child>) super.clone();
-    clone.children = ChildNodeList.clone(children, clone);
-    return clone;
+  public ListASTNode<Child> cloneInto(Root root) {
+    return (ListASTNode<Child>) super.cloneInto(root);
   }
 
   @Override
   @SuppressWarnings("unchecked")
-  public ListASTNode<Child> cloneInto(Root root) {
-    return (ListASTNode<Child>) super.cloneInto(root);
-  }
-  
-  @Override
-  @SuppressWarnings("unchecked")
   public ListASTNode<Child> cloneSeparate() {
     return (ListASTNode<Child>) super.cloneSeparate();
+  }
+
+  public Stream<Child> getClonedChildren() {
+    return children.getClonedStream();
   }
 }

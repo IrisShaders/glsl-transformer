@@ -44,9 +44,7 @@ public class ExpressionStatement extends SemiTerminalStatement {
 
   @Override
   public ExpressionStatement clone() {
-    var clone = (ExpressionStatement) super.clone();
-    clone.cloneChild(expression, clone::setExpression);
-    return clone;
+    return new ExpressionStatement(clone(expression));
   }
 
   @Override

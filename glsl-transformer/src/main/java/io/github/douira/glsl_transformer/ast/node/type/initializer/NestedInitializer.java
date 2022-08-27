@@ -8,7 +8,7 @@ import io.github.douira.glsl_transformer.ast.query.Root;
 import io.github.douira.glsl_transformer.ast.traversal.*;
 
 public class NestedInitializer extends Initializer {
-  protected List<Initializer> initializers;
+  protected ChildNodeList<Initializer> initializers;
 
   public NestedInitializer(Stream<Initializer> initializers) {
     this.initializers = ChildNodeList.collect(initializers, this);
@@ -46,9 +46,7 @@ public class NestedInitializer extends Initializer {
 
   @Override
   public NestedInitializer clone() {
-    var clone = (NestedInitializer) super.clone();
-    clone.initializers = ChildNodeList.clone(initializers, clone);
-    return clone;
+    return new NestedInitializer(clone(initializers));
   }
 
   @Override

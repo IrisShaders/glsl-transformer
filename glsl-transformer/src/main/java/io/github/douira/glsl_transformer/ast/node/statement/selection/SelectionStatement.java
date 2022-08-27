@@ -10,7 +10,7 @@ import io.github.douira.glsl_transformer.ast.query.Root;
 import io.github.douira.glsl_transformer.ast.traversal.*;
 
 public class SelectionStatement extends ManyStatement {
-  protected List<Expression> conditions; // TODO: last one may be null
+  protected ChildNodeList<Expression> conditions; // TODO: last one may be null
 
   public SelectionStatement(
       Stream<Expression> conditions,
@@ -66,9 +66,7 @@ public class SelectionStatement extends ManyStatement {
 
   @Override
   public SelectionStatement clone() {
-    var clone = (SelectionStatement) super.clone();
-    clone.conditions = ChildNodeList.clone(conditions, clone);
-    return clone;
+    return new SelectionStatement(clone(conditions), clone(statements));
   }
 
   @Override

@@ -150,9 +150,7 @@ public class TranslationUnit extends ListASTNode<ExternalDeclaration> {
 
   @Override
   public TranslationUnit clone() {
-    var clone = (TranslationUnit) super.clone();
-    clone.cloneChild(versionStatement, clone::setVersionStatement);
-    return clone;
+    return new TranslationUnit(clone(versionStatement), getClonedChildren());
   }
 
   @Override

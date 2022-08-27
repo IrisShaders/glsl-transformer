@@ -33,7 +33,7 @@ public class DecrementPrefixExpression extends UnaryExpression {
 
   @Override
   public DecrementPrefixExpression clone() {
-    return (DecrementPrefixExpression) super.clone();
+    return new DecrementPrefixExpression(clone(operand));
   }
 
   @Override

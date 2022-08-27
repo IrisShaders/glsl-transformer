@@ -19,7 +19,7 @@ public class BreakStatement extends TerminalStatement {
 
   @Override
   public BreakStatement clone() {
-    return (BreakStatement) super.clone();
+    return new BreakStatement();
   }
 
   @Override

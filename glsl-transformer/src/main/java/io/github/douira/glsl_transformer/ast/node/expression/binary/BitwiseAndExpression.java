@@ -33,7 +33,7 @@ public class BitwiseAndExpression extends BinaryExpression {
 
   @Override
   public BitwiseAndExpression clone() {
-    return (BitwiseAndExpression) super.clone();
+    return new BitwiseAndExpression(clone(left), clone(right));
   }
 
   @Override

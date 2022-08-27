@@ -34,7 +34,7 @@ public class CompoundStatement extends ManyStatement {
 
   @Override
   public CompoundStatement clone() {
-    return (CompoundStatement) super.clone();
+    return new CompoundStatement(clone(statements));
   }
 
   @Override

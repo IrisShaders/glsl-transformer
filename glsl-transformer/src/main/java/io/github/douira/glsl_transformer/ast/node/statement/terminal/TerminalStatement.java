@@ -26,9 +26,7 @@ public abstract class TerminalStatement extends Statement {
   }
 
   @Override
-  public TerminalStatement clone() {
-    return (TerminalStatement) super.clone();
-  }
+  public abstract TerminalStatement clone();
 
   @Override
   public TerminalStatement cloneInto(Root root) {

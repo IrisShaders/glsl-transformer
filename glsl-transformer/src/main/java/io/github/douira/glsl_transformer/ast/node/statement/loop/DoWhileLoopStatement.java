@@ -34,7 +34,7 @@ public class DoWhileLoopStatement extends ConditionLoopStatement {
 
   @Override
   public DoWhileLoopStatement clone() {
-    return (DoWhileLoopStatement) super.clone();
+    return new DoWhileLoopStatement(clone(statement), clone(condition));
   }
 
   @Override

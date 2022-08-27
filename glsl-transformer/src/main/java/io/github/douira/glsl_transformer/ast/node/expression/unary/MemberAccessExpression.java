@@ -46,9 +46,7 @@ public class MemberAccessExpression extends UnaryExpression {
 
   @Override
   public MemberAccessExpression clone() {
-    var clone = (MemberAccessExpression) super.clone();
-    clone.cloneChild(member, clone::setMember);
-    return clone;
+    return new MemberAccessExpression(clone(operand), clone(member));
   }
 
   @Override

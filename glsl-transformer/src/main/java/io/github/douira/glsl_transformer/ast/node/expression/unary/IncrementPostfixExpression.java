@@ -33,7 +33,7 @@ public class IncrementPostfixExpression extends UnaryExpression {
 
   @Override
   public IncrementPostfixExpression clone() {
-    return (IncrementPostfixExpression) super.clone();
+    return new IncrementPostfixExpression(clone(operand));
   }
 
   @Override

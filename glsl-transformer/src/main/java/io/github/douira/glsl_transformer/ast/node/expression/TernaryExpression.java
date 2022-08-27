@@ -62,13 +62,7 @@ public abstract class TernaryExpression extends Expression {
   }
 
   @Override
-  public TernaryExpression clone() {
-    var clone = (TernaryExpression) super.clone();
-    clone.cloneChild(first, clone::setFirst);
-    clone.cloneChild(second, clone::setSecond);
-    clone.cloneChild(third, clone::setThird);
-    return clone;
-  }
+  public abstract TernaryExpression clone();
 
   @Override
   public TernaryExpression cloneInto(Root root) {

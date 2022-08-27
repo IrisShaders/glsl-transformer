@@ -33,7 +33,7 @@ public class BitwiseNotExpression extends UnaryExpression {
 
   @Override
   public BitwiseNotExpression clone() {
-    return (BitwiseNotExpression) super.clone();
+    return new BitwiseNotExpression(clone(operand));
   }
 
   @Override

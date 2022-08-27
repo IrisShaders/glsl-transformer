@@ -21,7 +21,17 @@ public class FunctionCallExpression extends TerminalExpression {
   protected TypeSpecifier functionSpecifier;
   protected FunctionReferenceType referenceType;
 
-  protected List<Expression> parameters;
+  protected ChildNodeList<Expression> parameters;
+
+  private FunctionCallExpression(Identifier functionName,
+      TypeSpecifier functionSpecifier,
+      FunctionReferenceType referenceType,
+      Stream<Expression> parameters) {
+    this.functionName = setup(functionName, this::setFunctionName);
+    this.functionSpecifier = setup(functionSpecifier, this::setFunctionSpecifier);
+    this.referenceType = referenceType;
+    this.parameters = ChildNodeList.collect(parameters, this);
+  }
 
   public FunctionCallExpression(Identifier functionName) {
     this.functionName = setup(functionName, this::setFunctionName);
@@ -115,11 +125,7 @@ public class FunctionCallExpression extends TerminalExpression {
 
   @Override
   public FunctionCallExpression clone() {
-    var clone = (FunctionCallExpression) super.clone();
-    clone.cloneChild(functionName, clone::setFunctionName);
-    clone.cloneChild(functionSpecifier, clone::setFunctionSpecifier);
-    clone.parameters = ChildNodeList.clone(parameters, clone);
-    return clone;
+    return new FunctionCallExpression(clone(functionName), clone(functionSpecifier), referenceType, clone(parameters));
   }
 
   @Override

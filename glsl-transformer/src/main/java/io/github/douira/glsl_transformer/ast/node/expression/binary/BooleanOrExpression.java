@@ -33,7 +33,7 @@ public class BooleanOrExpression extends BinaryExpression {
 
   @Override
   public BooleanOrExpression clone() {
-    return (BooleanOrExpression) super.clone();
+    return new BooleanOrExpression(clone(left), clone(right));
   }
 
   @Override

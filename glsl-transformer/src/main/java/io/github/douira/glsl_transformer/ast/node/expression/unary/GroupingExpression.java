@@ -33,7 +33,7 @@ public class GroupingExpression extends UnaryExpression {
 
   @Override
   public GroupingExpression clone() {
-    return (GroupingExpression) super.clone();
+    return new GroupingExpression(clone(operand));
   }
 
   @Override

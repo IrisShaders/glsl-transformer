@@ -19,7 +19,7 @@ public class ContinueStatement extends TerminalStatement {
 
   @Override
   public ContinueStatement clone() {
-    return (ContinueStatement) super.clone();
+    return new ContinueStatement();
   }
 
   @Override

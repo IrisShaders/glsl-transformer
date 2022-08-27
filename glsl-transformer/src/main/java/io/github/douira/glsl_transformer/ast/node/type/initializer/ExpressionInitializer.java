@@ -44,9 +44,7 @@ public class ExpressionInitializer extends Initializer {
 
   @Override
   public ExpressionInitializer clone() {
-    var clone = (ExpressionInitializer) super.clone();
-    clone.cloneChild(expression, clone::setExpression);
-    return clone;
+    return new ExpressionInitializer(clone(expression));
   }
 
   @Override

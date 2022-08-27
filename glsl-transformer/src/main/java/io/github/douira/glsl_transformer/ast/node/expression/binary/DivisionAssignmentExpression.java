@@ -33,7 +33,7 @@ public class DivisionAssignmentExpression extends BinaryExpression {
 
   @Override
   public DivisionAssignmentExpression clone() {
-    return (DivisionAssignmentExpression) super.clone();
+    return new DivisionAssignmentExpression(clone(left), clone(right));
   }
 
   @Override

@@ -44,9 +44,7 @@ public class DeclarationStatement extends SemiTerminalStatement {
 
   @Override
   public DeclarationStatement clone() {
-    var clone = (DeclarationStatement) super.clone();
-    clone.cloneChild(declaration, clone::setDeclaration);
-    return clone;
+    return new DeclarationStatement(clone(declaration));
   }
 
   @Override

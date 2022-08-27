@@ -19,7 +19,7 @@ public class DemoteStatement extends TerminalStatement {
 
   @Override
   public DemoteStatement clone() {
-    return (DemoteStatement) super.clone();
+    return new DemoteStatement();
   }
 
   @Override

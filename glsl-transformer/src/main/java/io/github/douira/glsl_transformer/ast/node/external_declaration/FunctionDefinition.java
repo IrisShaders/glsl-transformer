@@ -56,10 +56,7 @@ public class FunctionDefinition extends ExternalDeclaration {
 
   @Override
   public FunctionDefinition clone() {
-    var clone = (FunctionDefinition) super.clone();
-    clone.cloneChild(functionPrototype, clone::setFunctionPrototype);
-    clone.cloneChild(body, clone::setBody);
-    return clone;
+    return new FunctionDefinition(clone(functionPrototype), clone(body));
   }
 
   @Override

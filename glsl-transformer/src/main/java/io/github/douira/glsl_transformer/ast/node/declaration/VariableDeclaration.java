@@ -11,7 +11,7 @@ import io.github.douira.glsl_transformer.ast.traversal.*;
 
 public class VariableDeclaration extends Declaration {
   protected TypeQualifier typeQualifier;
-  protected List<Identifier> names;
+  protected ChildNodeList<Identifier> names;
 
   public VariableDeclaration(TypeQualifier typeQualifier, Stream<Identifier> names) {
     this.typeQualifier = typeQualifier;
@@ -59,10 +59,7 @@ public class VariableDeclaration extends Declaration {
 
   @Override
   public VariableDeclaration clone() {
-    var clone = (VariableDeclaration) super.clone();
-    clone.cloneChild(typeQualifier, clone::setTypeQualifier);
-    clone.names = ChildNodeList.clone(names, clone);
-    return clone;
+    return new VariableDeclaration(clone(typeQualifier), clone(names));
   }
 
   @Override

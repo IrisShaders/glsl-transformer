@@ -33,7 +33,7 @@ public class StructBody extends ListASTNode<StructMember> {
 
   @Override
   public StructBody clone() {
-    return (StructBody) super.clone();
+    return new StructBody(getClonedChildren());
   }
 
   @Override

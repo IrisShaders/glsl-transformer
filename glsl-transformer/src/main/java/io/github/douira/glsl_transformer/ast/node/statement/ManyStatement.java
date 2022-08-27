@@ -9,7 +9,7 @@ import io.github.douira.glsl_transformer.ast.query.Root;
 import io.github.douira.glsl_transformer.ast.traversal.*;
 
 public abstract class ManyStatement extends Statement implements ListNode<Statement> {
-  protected List<Statement> statements;
+  protected ChildNodeList<Statement> statements;
 
   public ManyStatement(Stream<Statement> statements) {
     this.statements = ChildNodeList.collect(statements, this);
@@ -45,11 +45,7 @@ public abstract class ManyStatement extends Statement implements ListNode<Statem
   }
 
   @Override
-  public ManyStatement clone() {
-    var clone = (ManyStatement) super.clone();
-    clone.statements = ChildNodeList.clone(statements, clone);
-    return clone;
-  }
+  public abstract ManyStatement clone();
 
   @Override
   public ManyStatement cloneInto(Root root) {

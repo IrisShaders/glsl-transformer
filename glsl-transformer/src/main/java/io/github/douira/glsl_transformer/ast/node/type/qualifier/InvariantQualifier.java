@@ -28,7 +28,7 @@ public class InvariantQualifier extends TypeQualifierPart {
 
   @Override
   public InvariantQualifier clone() {
-    return (InvariantQualifier) super.clone();
+    return new InvariantQualifier();
   }
 
   @Override

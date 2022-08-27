@@ -28,7 +28,7 @@ public class SharedLayoutQualifierPart extends LayoutQualifierPart {
 
   @Override
   public SharedLayoutQualifierPart clone() {
-    return (SharedLayoutQualifierPart) super.clone();
+    return new SharedLayoutQualifierPart();
   }
 
   @Override

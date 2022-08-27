@@ -33,7 +33,7 @@ public class ModuloAssignmentExpression extends BinaryExpression {
 
   @Override
   public ModuloAssignmentExpression clone() {
-    return (ModuloAssignmentExpression) super.clone();
+    return new ModuloAssignmentExpression(clone(left), clone(right));
   }
 
   @Override

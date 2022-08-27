@@ -33,7 +33,7 @@ public class EqualityExpression extends BinaryExpression {
 
   @Override
   public EqualityExpression clone() {
-    return (EqualityExpression) super.clone();
+    return new EqualityExpression(clone(left), clone(right));
   }
 
   @Override

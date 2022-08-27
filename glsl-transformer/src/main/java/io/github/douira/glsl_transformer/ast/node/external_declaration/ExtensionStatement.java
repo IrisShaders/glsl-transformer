@@ -66,7 +66,7 @@ public class ExtensionStatement extends ExternalDeclaration {
 
   @Override
   public ExtensionStatement clone() {
-    return (ExtensionStatement) super.clone();
+    return new ExtensionStatement(name, behavior);
   }
 
   @Override

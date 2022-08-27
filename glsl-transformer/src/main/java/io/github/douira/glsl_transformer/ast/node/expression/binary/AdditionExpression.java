@@ -33,7 +33,7 @@ public class AdditionExpression extends BinaryExpression {
 
   @Override
   public AdditionExpression clone() {
-    return (AdditionExpression) super.clone();
+    return new AdditionExpression(clone(left), clone(right));
   }
 
   @Override

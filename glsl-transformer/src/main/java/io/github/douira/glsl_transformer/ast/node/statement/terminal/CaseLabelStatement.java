@@ -33,9 +33,7 @@ public abstract class CaseLabelStatement extends Statement {
   }
 
   @Override
-  public CaseLabelStatement clone() {
-    return (CaseLabelStatement) super.clone();
-  }
+  public abstract CaseLabelStatement clone();
 
   @Override
   public CaseLabelStatement cloneInto(Root root) {

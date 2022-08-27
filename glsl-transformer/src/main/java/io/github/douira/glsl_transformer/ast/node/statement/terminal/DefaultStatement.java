@@ -21,7 +21,7 @@ public class DefaultStatement extends CaseLabelStatement {
 
   @Override
   public DefaultStatement clone() {
-    return (DefaultStatement) super.clone();
+    return new DefaultStatement();
   }
 
   @Override

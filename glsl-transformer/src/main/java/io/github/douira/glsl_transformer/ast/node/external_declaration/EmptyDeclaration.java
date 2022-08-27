@@ -28,7 +28,7 @@ public class EmptyDeclaration extends ExternalDeclaration {
 
   @Override
   public EmptyDeclaration clone() {
-    return (EmptyDeclaration) super.clone();
+    return new EmptyDeclaration();
   }
 
   @Override

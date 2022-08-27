@@ -9,7 +9,7 @@ import io.github.douira.glsl_transformer.ast.query.Root;
 import io.github.douira.glsl_transformer.ast.traversal.*;
 
 public abstract class ManyExpression extends Expression implements ListNode<Expression> {
-  protected List<Expression> expressions;
+  protected ChildNodeList<Expression> expressions;
 
   public ManyExpression(Stream<Expression> expressions) {
     this.expressions = ChildNodeList.collect(expressions, this);
@@ -45,11 +45,7 @@ public abstract class ManyExpression extends Expression implements ListNode<Expr
   }
 
   @Override
-  public ManyExpression clone() {
-    var clone = (ManyExpression) super.clone();
-    clone.expressions = ChildNodeList.clone(expressions, clone);
-    return clone;
-  }
+  public abstract ManyExpression clone();
 
   @Override
   public ManyExpression cloneInto(Root root) {

@@ -19,7 +19,7 @@ public class DiscardStatement extends TerminalStatement {
 
   @Override
   public DiscardStatement clone() {
-    return (DiscardStatement) super.clone();
+    return new DiscardStatement();
   }
 
   @Override

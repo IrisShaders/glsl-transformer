@@ -20,7 +20,7 @@ public class EmptyStatement extends SemiTerminalStatement {
 
   @Override
   public EmptyStatement clone() {
-    return (EmptyStatement) super.clone();
+    return new EmptyStatement();
   }
 
   @Override

@@ -54,10 +54,7 @@ public class StructDeclarator extends InnerASTNode {
 
   @Override
   public StructDeclarator clone() {
-    var clone = (StructDeclarator) super.clone();
-    clone.cloneChild(name, clone::setName);
-    clone.cloneChild(arraySpecifier, clone::setArraySpecifier);
-    return clone;
+    return new StructDeclarator(clone(name), clone(arraySpecifier));
   }
 
   @Override

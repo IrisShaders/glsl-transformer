@@ -74,11 +74,7 @@ public class FunctionParameter extends InnerASTNode {
 
   @Override
   public FunctionParameter clone() {
-    var clone = (FunctionParameter) super.clone();
-    clone.cloneChild(type, clone::setType);
-    clone.cloneChild(name, clone::setName);
-    clone.cloneChild(arraySpecifier, clone::setArraySpecifier);
-    return clone;
+    return new FunctionParameter(clone(type), clone(name), clone(arraySpecifier));
   }
 
   @Override

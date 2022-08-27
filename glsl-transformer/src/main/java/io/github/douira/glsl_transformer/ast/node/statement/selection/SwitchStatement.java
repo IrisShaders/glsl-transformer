@@ -63,10 +63,7 @@ public class SwitchStatement extends Statement {
 
   @Override
   public SwitchStatement clone() {
-    var clone = (SwitchStatement) super.clone();
-    clone.cloneChild(expression, clone::setExpression);
-    clone.cloneChild(statement, clone::setStatement);
-    return clone;
+    return new SwitchStatement(clone(expression), clone(statement));
   }
 
   @Override

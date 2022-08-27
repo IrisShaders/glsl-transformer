@@ -33,7 +33,7 @@ public class LengthAccessExpression extends UnaryExpression {
 
   @Override
   public LengthAccessExpression clone() {
-    return (LengthAccessExpression) super.clone();
+    return new LengthAccessExpression(clone(operand));
   }
 
   @Override

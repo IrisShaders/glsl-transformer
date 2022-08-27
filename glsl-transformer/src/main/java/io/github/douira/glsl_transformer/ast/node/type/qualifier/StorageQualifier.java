@@ -53,8 +53,13 @@ public class StorageQualifier extends TypeQualifierPart {
     }
   }
 
-  protected List<Identifier> typeNames; // TODO: nullable (optional)
+  protected ChildNodeList<Identifier> typeNames; // TODO: nullable (optional)
   public StorageType storageType;
+
+  private StorageQualifier(Stream<Identifier> typeNames, StorageType storageType) {
+    this.typeNames = ChildNodeList.collect(typeNames, this);
+    this.storageType = storageType;
+  }
 
   public StorageQualifier(Stream<Identifier> typeNames) {
     this.typeNames = ChildNodeList.collect(typeNames, this);
@@ -94,9 +99,7 @@ public class StorageQualifier extends TypeQualifierPart {
 
   @Override
   public StorageQualifier clone() {
-    var clone = (StorageQualifier) super.clone();
-    clone.typeNames = ChildNodeList.clone(typeNames, clone);
-    return clone;
+    return new StorageQualifier(clone(typeNames), storageType);
   }
 
   @Override

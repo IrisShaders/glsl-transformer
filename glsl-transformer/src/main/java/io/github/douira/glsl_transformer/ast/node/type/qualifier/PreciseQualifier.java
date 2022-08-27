@@ -28,7 +28,7 @@ public class PreciseQualifier extends TypeQualifierPart {
 
   @Override
   public PreciseQualifier clone() {
-    return (PreciseQualifier) super.clone();
+    return new PreciseQualifier();
   }
 
   @Override

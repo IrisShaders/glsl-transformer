@@ -54,10 +54,7 @@ public class FullySpecifiedType extends InnerASTNode {
 
   @Override
   public FullySpecifiedType clone() {
-    var clone = (FullySpecifiedType) super.clone();
-    clone.cloneChild(typeQualifier, clone::setTypeQualifier);
-    clone.cloneChild(typeSpecifier, clone::setTypeSpecifier);
-    return clone;
+    return new FullySpecifiedType(clone(typeQualifier), clone(typeSpecifier));
   }
 
   @Override

@@ -147,13 +147,13 @@ public class ForLoopStatement extends LoopStatement {
 
   @Override
   public ForLoopStatement clone() {
-    var clone = (ForLoopStatement) super.clone();
-    clone.cloneChild(initExpression, clone::setInitExpression);
-    clone.cloneChild(initDeclaration, clone::setInitDeclaration);
-    clone.cloneChild(condition, clone::setCondition);
-    clone.cloneChild(iterationConditionInitializer, clone::setIterationConditionInitializer);
-    clone.cloneChild(incrementer, clone::setIncrementer);
-    return clone;
+    return new ForLoopStatement(
+        clone(initExpression),
+        clone(initDeclaration),
+        clone(condition),
+        clone(iterationConditionInitializer),
+        clone(incrementer),
+        clone(statement));
   }
 
   @Override

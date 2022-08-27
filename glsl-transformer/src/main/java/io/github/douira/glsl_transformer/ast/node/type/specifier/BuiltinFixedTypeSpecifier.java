@@ -145,7 +145,7 @@ public class BuiltinFixedTypeSpecifier extends TypeSpecifier {
 
   @Override
   public BuiltinFixedTypeSpecifier clone() {
-    return (BuiltinFixedTypeSpecifier) super.clone();
+    return new BuiltinFixedTypeSpecifier(type, clone(arraySpecifier));
   }
 
   @Override

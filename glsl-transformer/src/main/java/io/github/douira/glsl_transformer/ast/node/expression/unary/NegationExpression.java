@@ -33,7 +33,7 @@ public class NegationExpression extends UnaryExpression {
 
   @Override
   public NegationExpression clone() {
-    return (NegationExpression) super.clone();
+    return new NegationExpression(clone(operand));
   }
 
   @Override

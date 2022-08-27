@@ -33,7 +33,7 @@ public class InequalityExpression extends BinaryExpression {
 
   @Override
   public InequalityExpression clone() {
-    return (InequalityExpression) super.clone();
+    return new InequalityExpression(clone(left), clone(right));
   }
 
   @Override

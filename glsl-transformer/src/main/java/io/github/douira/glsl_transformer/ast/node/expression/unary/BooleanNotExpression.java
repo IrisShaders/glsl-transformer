@@ -33,7 +33,7 @@ public class BooleanNotExpression extends UnaryExpression {
 
   @Override
   public BooleanNotExpression clone() {
-    return (BooleanNotExpression) super.clone();
+    return new BooleanNotExpression(clone(operand));
   }
 
   @Override
