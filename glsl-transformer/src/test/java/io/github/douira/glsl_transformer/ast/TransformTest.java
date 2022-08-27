@@ -139,7 +139,7 @@ public class TransformTest extends TestWithSingleASTTransformer {
       }
     };
 
-    var declarationTemplate = Template.withExternalDelcaration("out __1 __2;");
+    var declarationTemplate = Template.withExternalDeclaration("out __1 __2;");
     declarationTemplate.markLocalReplacement("__1", TypeSpecifier.class);
     declarationTemplate.markIdentifierReplacement("__2");
     var initTemplate = Template.withStatement("__1 = __2;");

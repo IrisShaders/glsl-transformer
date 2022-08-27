@@ -143,7 +143,7 @@ public class Template<T extends ASTNode> {
     return new Template<T>((T) source.cloneSeparate());
   }
 
-  public static Template<ExternalDeclaration> withExternalDelcaration(String input) {
+  public static Template<ExternalDeclaration> withExternalDeclaration(String input) {
     return new Template<>(ASTParser.getInternalInstance().parseSeparateExternalDeclaration(input));
   }
 
