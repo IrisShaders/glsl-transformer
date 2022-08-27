@@ -28,13 +28,4 @@ public class LRUCache<K, V> extends LinkedHashMap<K, V> {
     }
     return value;
   }
-
-  public V cachedGet(K key, Supplier<V> supplier, Function<V, V> hydrator) {
-    V value = get(key);
-    if (value == null) {
-      value = supplier.get();
-      put(key, value);
-    }
-    return hydrator.apply(value);
-  }
 }
