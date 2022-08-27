@@ -4,10 +4,10 @@ import java.util.function.Function;
 
 import io.github.douira.glsl_transformer.GLSLParser;
 import io.github.douira.glsl_transformer.GLSLParser.TranslationUnitContext;
+import io.github.douira.glsl_transformer.ast.data.TypedTreeCache;
 import io.github.douira.glsl_transformer.ast.transform.ASTBuilder;
 import io.github.douira.glsl_transformer.cst.token_filter.TokenFilter;
 import io.github.douira.glsl_transformer.tree.ExtendedContext;
-import io.github.douira.glsl_transformer.util.LRUCache;
 
 /**
  * The caching parser extends the enhanced parser and returns previous parse
@@ -17,65 +17,28 @@ import io.github.douira.glsl_transformer.util.LRUCache;
  * is safe to use this.
  */
 public class CachingParser extends EnhancedParser {
-  private static final int defaultCacheSize = 400;
-  private final LRUCache<CacheKey, ExtendedContext> parseCache;
-
-  private static class CacheKey {
-    final String input;
-    final Class<? extends ExtendedContext> ruleType;
-
-    public CacheKey(String input, Class<? extends ExtendedContext> ruleType) {
-      this.input = input;
-      this.ruleType = ruleType;
-    }
-
-    @Override
-    public int hashCode() {
-      final int prime = 31;
-      int result = 1;
-      result = prime * result + ((input == null) ? 0 : input.hashCode());
-      result = prime * result + ((ruleType == null) ? 0 : ruleType.hashCode());
-      return result;
-    }
-
-    @Override
-    public boolean equals(Object obj) {
-      if (this == obj)
-        return true;
-      if (obj == null)
-        return false;
-      if (getClass() != obj.getClass())
-        return false;
-      CacheKey other = (CacheKey) obj;
-      if (input == null) {
-        if (other.input != null)
-          return false;
-      } else if (!input.equals(other.input))
-        return false;
-      if (ruleType == null) {
-        if (other.ruleType != null)
-          return false;
-      } else if (!ruleType.equals(other.ruleType))
-        return false;
-      return true;
-    }
-  }
+  private TypedTreeCache<ExtendedContext> parseCache;
 
   public CachingParser(boolean throwParseErrors, int cacheSize) {
     super(throwParseErrors);
-    parseCache = new LRUCache<>(cacheSize);
+    parseCache = new TypedTreeCache<>(cacheSize);
   }
 
   public CachingParser(int cacheSize) {
-    parseCache = new LRUCache<>(cacheSize);
+    parseCache = new TypedTreeCache<>(cacheSize);
   }
 
   public CachingParser(boolean throwParseErrors) {
-    this(throwParseErrors, defaultCacheSize);
+    super(throwParseErrors);
+    parseCache = new TypedTreeCache<>();
   }
 
   public CachingParser() {
-    this(defaultCacheSize);
+    parseCache = new TypedTreeCache<>();
+  }
+
+  public void setParseCacheSizeAndClear(int size) {
+    parseCache = new TypedTreeCache<>(size);
   }
 
   @Override
@@ -96,7 +59,7 @@ public class CachingParser extends EnhancedParser {
       ExtendedContext parent,
       Class<RuleType> ruleType,
       Function<GLSLParser, RuleType> parseMethod) {
-    return (RuleType) parseCache.cachedGet(new CacheKey(str, ruleType),
+    return (RuleType) parseCache.cachedGet(str, ruleType,
         () -> parse(str, parent, parseMethod));
   }
 

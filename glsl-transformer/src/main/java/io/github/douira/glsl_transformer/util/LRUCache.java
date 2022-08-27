@@ -34,9 +34,7 @@ public class LRUCache<K, V> extends LinkedHashMap<K, V> {
     if (value == null) {
       value = supplier.get();
       put(key, value);
-    } else {
-      value = hydrator.apply(value);
     }
-    return value;
+    return hydrator.apply(value);
   }
 }
