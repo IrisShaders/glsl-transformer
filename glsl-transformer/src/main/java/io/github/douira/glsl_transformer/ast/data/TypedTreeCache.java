@@ -67,8 +67,8 @@ public class TypedTreeCache<V> extends LRUCache<CacheKey, V> {
     return super.cachedGet(new CacheKey(str, ruleType), supplier);
   }
 
-  public V cachedGet(String str, Class<? extends ExtendedContext> ruleType,
+  public V cachedGetHydrateHit(String str, Class<? extends ExtendedContext> ruleType,
       Supplier<V> supplier, Function<V, V> hydrator) {
-    return super.cachedGet(new CacheKey(str, ruleType), supplier, hydrator);
+    return super.cachedGetHydrateHit(new CacheKey(str, ruleType), supplier, hydrator);
   }
 }
