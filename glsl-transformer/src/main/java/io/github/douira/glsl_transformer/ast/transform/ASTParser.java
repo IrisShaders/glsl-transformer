@@ -106,7 +106,7 @@ public class ASTParser implements ParserInterface {
     } else {
       // cache and possibly build, always clone to return new trees
       return (ReturnType) buildCache.cachedGet(input, ruleType,
-          () -> ASTBuilder.buildSubtree(parentTreeMember, parser.parse(input, ruleType, parseMethod), visitMethod))
+          () -> ASTBuilder.build(parser.parse(input, ruleType, parseMethod), visitMethod))
           .cloneInto(parentTreeMember);
     }
   }
