@@ -156,7 +156,7 @@ public class TransformTest extends TestWithSingleASTTransformer {
       }
 
       // sanity check that there is a main function
-      assertNotNull(tree.getFunctionDefinitionBody("main"));
+      assertNotNull(tree.getMainDefinitionBody());
 
       // add out declarations that are missing for in declarations
       root.process(root.nodeIndex
