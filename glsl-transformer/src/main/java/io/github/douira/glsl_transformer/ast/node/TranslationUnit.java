@@ -81,6 +81,10 @@ public class TranslationUnit extends ListASTNode<ExternalDeclaration> {
         .filter(Objects::nonNull).findAny().map(FunctionDefinition::getBody).orElse(null);
   }
 
+  public CompoundStatement getMainDefinitionBody() {
+    return getFunctionDefinitionBody("main");
+  }
+
   public void prependFunctionBody(String functionName, Statement statement) {
     getFunctionDefinitionBody(functionName).getStatements().add(0, statement);
   }
