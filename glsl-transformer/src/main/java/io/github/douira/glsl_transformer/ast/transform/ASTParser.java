@@ -46,6 +46,10 @@ public class ASTParser implements ParserInterface {
     parser.setParseCacheSizeAndClear(size);
   }
 
+  public void setCacheStrategy(CacheStrategy cacheStrategy) {
+    this.cacheStrategy = cacheStrategy;
+  }
+
   @Override
   public GLSLLexer getLexer() {
     return parser.getLexer();
