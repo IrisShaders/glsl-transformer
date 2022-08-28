@@ -34,6 +34,7 @@ public class Matcher<T extends ASTNode> {
   protected int patternItemsSize;
   private int matchIndex;
   private boolean matches;
+  private NodeWildcard activeListWildcard;
 
   /**
    * Creates a new matcher for the given pattern and wildcard prefix.
@@ -124,19 +125,45 @@ public class Matcher<T extends ASTNode> {
   private ASTVisitor<?> matchVisitor = new ASTVoidVisitor() {
     @Override
     public Void visit(ASTNode node) {
-      if (!matches || matchIndex >= patternItemsSize) {
+      if (!matches || matchIndex >= patternItemsSize && activeListWildcard == null) {
         matches = false;
         return null;
       }
-      var patternItem = patternItems.get(matchIndex++);
+      var patternItem = matchIndex >= patternItemsSize ? null : patternItems.get(matchIndex++);
 
       // match either a wildcard node
-      if (nodeWildcards != null
-          && patternItem instanceof NodeWildcard wildcard
-          && wildcard.test(node)) {
-        if (collectMatches) {
-          nodeMatches.put(wildcard.name, node);
+      if (nodeWildcards != null) {
+        // regular wildcard match
+        if (patternItem instanceof NodeWildcard wildcard && wildcard.test(node)) {
+          if (collectMatches) {
+            nodeMatches.put(wildcard.name, node);
+          }
+
+          // signal list matching
+          if (wildcard.name.endsWith("*")) {
+            activeListWildcard = wildcard;
+          } else {
+            activeListWildcard = null;
+          }
+          return null;
         }
+        // list wildcard match
+        else if (activeListWildcard != null) {
+          if (activeListWildcard.test(node)) {
+            if (collectMatches) {
+              nodeMatches.put(activeListWildcard.name, node);
+            }
+            matchIndex--;
+            return null;
+          } else {
+            activeListWildcard = null;
+          }
+        }
+      }
+
+      // if the pattern item is null here, it failed to match a list at the end
+      if (patternItem == null) {
+        matches = false;
         return null;
       }
 
@@ -167,6 +194,7 @@ public class Matcher<T extends ASTNode> {
         if (collectMatches) {
           dataMatches.put(str.substring(wildcardPrefix.length()), data);
         }
+        activeListWildcard = null;
         return;
       }
 
