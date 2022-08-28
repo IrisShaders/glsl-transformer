@@ -6,6 +6,7 @@ import org.junit.jupiter.api.Test;
 
 import io.github.douira.glsl_transformer.ast.node.*;
 import io.github.douira.glsl_transformer.ast.node.basic.InnerASTNode;
+import io.github.douira.glsl_transformer.ast.node.declaration.DeclarationMember;
 import io.github.douira.glsl_transformer.ast.node.expression.*;
 import io.github.douira.glsl_transformer.ast.node.expression.binary.AdditionExpression;
 import io.github.douira.glsl_transformer.ast.node.expression.unary.FunctionCallExpression;
@@ -297,5 +298,21 @@ public class MatcherTest extends TestWithSingleASTTransformer {
     assertTransform("int x = texture(shadowtex0, shadowPos.xy + offset * shadowPos.w).r; ",
         "int x = texture(shadowtex0, shadowPos.xy + offset * shadowPos.w).r;");
     assertTransform("int x = texture(gtexture, vec2(0)); ", "int x = texture(texture, vec2(0));");
+  }
+
+  @Test
+  void testMatchList() {
+    var m = new Matcher<>("int a = foo + 4;", Matcher.externalDeclarationPattern) {
+      {
+        markClassWildcard("member*",
+            pattern.getRoot().identifierIndex.getOne("a").getAncestor(DeclarationMember.class),
+            DeclarationMember.class);
+      }
+    };
+
+    assertMatchED(m, "int foo, bar;");
+    assertMatchED(m, "int foo, bar, a, b, c, d;");
+    assertMatchED(m, "int foo;");
+    assertNoMatchED(m, "out int foo, bar;");
   }
 }
