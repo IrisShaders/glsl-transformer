@@ -70,3 +70,4 @@ fs.readFileSync("split").toString().split("//split_marker").map(str => str.trim(
 - Configuration of partial indexes can happen at construction
 - Make glsl-transformer thread safe so that it can be run in parallel on different transformation jobs
 - Try to remove double detachParent call when removing items from a list
+- More flexible list wildcards: nested wildcards that can run a predicate on how many times should be matched and other things
