@@ -80,6 +80,13 @@ public class ASTBuilder extends GLSLParserBaseVisitor<ASTNode> {
     return Root.indexNodes(() -> buildInternal(ctx, visitMethod));
   }
 
+  public static <TreeType extends ParseTree, ReturnType extends ASTNode> ReturnType build(
+      Root rootInstance,
+      TreeType ctx,
+      BiFunction<ASTBuilder, TreeType, ReturnType> visitMethod) {
+    return Root.indexNodes(rootInstance, () -> buildInternal(ctx, visitMethod));
+  }
+
   /**
    * Builds a subtree that has the same root as the given AST node.
    * 

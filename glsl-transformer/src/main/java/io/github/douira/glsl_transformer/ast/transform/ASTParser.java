@@ -13,6 +13,7 @@ import io.github.douira.glsl_transformer.ast.node.basic.ASTNode;
 import io.github.douira.glsl_transformer.ast.node.expression.Expression;
 import io.github.douira.glsl_transformer.ast.node.external_declaration.ExternalDeclaration;
 import io.github.douira.glsl_transformer.ast.node.statement.Statement;
+import io.github.douira.glsl_transformer.ast.query.EmptyRoot;
 import io.github.douira.glsl_transformer.basic.*;
 import io.github.douira.glsl_transformer.basic.EnhancedParser.ParsingStrategy;
 import io.github.douira.glsl_transformer.cst.token_filter.TokenFilter;
@@ -106,7 +107,7 @@ public class ASTParser implements ParserInterface {
     } else {
       // cache and possibly build, always clone to return new trees
       return (ReturnType) buildCache.cachedGet(input, ruleType,
-          () -> ASTBuilder.build(parser.parse(input, ruleType, parseMethod), visitMethod))
+          () -> ASTBuilder.build(new EmptyRoot(), parser.parse(input, ruleType, parseMethod), visitMethod))
           .cloneInto(parentTreeMember);
     }
   }
@@ -123,7 +124,7 @@ public class ASTParser implements ParserInterface {
       return ASTBuilder.build(parser.parse(input, ruleType, parseMethod), visitMethod);
     } else {
       return (ReturnType) buildCache.cachedGet(input, ruleType,
-          () -> ASTBuilder.build(parser.parse(input, ruleType, parseMethod), visitMethod))
+          () -> ASTBuilder.build(new EmptyRoot(), parser.parse(input, ruleType, parseMethod), visitMethod))
           .cloneSeparate();
     }
   }

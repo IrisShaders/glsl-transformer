@@ -165,20 +165,4 @@ public class NodeIndex implements Index<ASTNode> {
     var set = get(node);
     return set != null && set.contains(node);
   }
-
-  /**
-   * Merges the given node index into this one.
-   * 
-   * @param other the other index to merge
-   */
-  public void merge(NodeIndex other) {
-    for (var entry : other.index.entrySet()) {
-      var set = (Set<ASTNode>) index.get(entry.getKey());
-      if (set == null) {
-        set = bucketConstructor.get();
-        index.put(entry.getKey(), set);
-      }
-      set.addAll(entry.getValue());
-    }
-  }
 }

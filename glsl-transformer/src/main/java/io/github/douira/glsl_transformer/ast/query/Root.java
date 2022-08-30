@@ -33,10 +33,30 @@ public class Root {
    * query capabilities.
    */
   public final IdentifierIndex<?> identifierIndex;
+
+  // internal utility state
+  private static Deque<Root> activeBuildRoots = new ArrayDeque<>();
   private List<? extends ASTNode> nodeList;
   private boolean activity;
 
-  private static Deque<Root> activeBuildRoots = new ArrayDeque<>();
+  /**
+   * Constructs a new root with the given node and identifier indexes.
+   * 
+   * @param nodeIndex       The node index
+   * @param identifierIndex The identifier index
+   */
+  public Root(NodeIndex nodeIndex, IdentifierIndex<?> identifierIndex) {
+    this.nodeIndex = nodeIndex;
+    this.identifierIndex = identifierIndex;
+  }
+
+  /**
+   * Constructs a new root with the default node and identifier indexes which have
+   * the least amount of functionality but are also the most efficient.
+   */
+  public Root() {
+    this(new NodeIndex(), IdentifierIndex.withPrefix());
+  }
 
   /**
    * Returns the currently active build root. When nodes are constructed within a
@@ -195,25 +215,6 @@ public class Root {
   }
 
   /**
-   * Constructs a new root with the given node and identifier indexes.
-   * 
-   * @param nodeIndex       The node index
-   * @param identifierIndex The identifier index
-   */
-  public Root(NodeIndex nodeIndex, IdentifierIndex<?> identifierIndex) {
-    this.nodeIndex = nodeIndex;
-    this.identifierIndex = identifierIndex;
-  }
-
-  /**
-   * Constructs a new root with the default node and identifier indexes which have
-   * the least amount of functionality but are also the most efficient.
-   */
-  public Root() {
-    this(new NodeIndex(), IdentifierIndex.withPrefix());
-  }
-
-  /**
    * Registers the given node with this root.
    * 
    * @param node The node to register
@@ -237,15 +238,12 @@ public class Root {
     }
   }
 
-  /**
-   * Merges the given root into this root. This will merge the node index and the
-   * identifier index.
-   * 
-   * @param other The root to merge into this root
-   */
-  public void merge(Root other) {
-    nodeIndex.merge(other.nodeIndex);
-    identifierIndex.merge(other.identifierIndex);
+  public void unregisterIdentifierRename(Identifier identifier) {
+    identifierIndex.remove(identifier);
+  }
+
+  public void registerIdentifierRename(Identifier identifier) {
+    identifierIndex.add(identifier);
   }
 
   private void ensureEmptyNodeList() {

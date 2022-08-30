@@ -44,17 +44,6 @@ public class IdentifierIndex<I extends PatriciaTrie<Set<Identifier>>>
     }
   }
 
-  public void merge(IdentifierIndex<?> other) {
-    for (var entry : other.index.entrySet()) {
-      var set = index.get(entry.getKey());
-      if (set == null) {
-        set = new HashSet<>();
-        index.put(entry.getKey(), set);
-      }
-      set.addAll(entry.getValue());
-    }
-  }
-
   public Set<Identifier> get(String k) {
     var result = index.get(k);
     return result == null ? Collections.emptySet() : result;
