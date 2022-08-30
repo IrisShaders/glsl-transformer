@@ -27,9 +27,9 @@ public class Identifier extends ASTNode {
       return;
     }
     validateContents(name);
-    getRoot().identifierIndex.remove(this);
+    getRoot().unregisterIdentifierRename(this);
     this.name = name;
-    getRoot().identifierIndex.add(this);
+    getRoot().registerIdentifierRename(this);
   }
 
   /**

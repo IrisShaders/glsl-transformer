@@ -91,19 +91,6 @@ public class NodeIndexTest {
   }
 
   @Test
-  void testMerge() {
-    var other = new NodeIndex();
-    other.add(a);
-    other.add(b);
-    var e = new Identifier("e");
-    other.add(e);
-    index.add(a);
-    index.add(c);
-    index.merge(other);
-    assertEquals(Set.of(a, b, e, c), index.get(Identifier.class));
-  }
-
-  @Test
   void testRemove() {
     index.add(a);
     index.add(b);
