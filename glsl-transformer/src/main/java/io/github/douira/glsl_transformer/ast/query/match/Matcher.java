@@ -255,6 +255,7 @@ public class Matcher<T extends ASTNode> {
     preparePatternItems();
     matchIndex = 0;
     matches = true;
+    activeListWildcard = null;
     matchVisitor.startVisit(tree);
     return matches;
   }
