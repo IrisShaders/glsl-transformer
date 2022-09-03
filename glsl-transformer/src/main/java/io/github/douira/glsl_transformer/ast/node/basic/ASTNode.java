@@ -120,11 +120,11 @@ public abstract class ASTNode {
    * Checks if there is an ancestor of this node that is an instance of the given
    * class.
    * 
-   * @param clazz the class to check
+   * @param ancestorType the class to check
    * @return true if there is an ancestor that is an instance of the given class
    */
-  public boolean hasAncestor(Class<? extends ASTNode> clazz) {
-    return hasAncestor(clazz::isInstance);
+  public boolean hasAncestor(Class<? extends ASTNode> ancestorType) {
+    return hasAncestor(ancestorType::isInstance);
   }
 
   /**
@@ -176,12 +176,12 @@ public abstract class ASTNode {
   /**
    * Returns the first ancestor that is an instance of the given class.
    * 
-   * @param clazz the class to check
+   * @param ancestorType the class to check
    * @return the first ancestor that is an instance of the given class, or null
    *         otherwise
    */
-  public <T extends ASTNode> T getAncestor(Class<T> clazz) {
-    return clazz.cast(getAncestor(clazz::isInstance));
+  public <T extends ASTNode> T getAncestor(Class<T> ancestorType) {
+    return ancestorType.cast(getAncestor(ancestorType::isInstance));
   }
 
   public ASTNode getBranchAncestor(int limit, int skip, BiPredicate<ASTNode, ASTNode> predicate) {

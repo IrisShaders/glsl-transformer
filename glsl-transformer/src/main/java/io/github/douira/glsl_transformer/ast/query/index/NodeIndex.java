@@ -44,11 +44,11 @@ public class NodeIndex implements Index<ASTNode> {
   @Override
   @SuppressWarnings("unchecked")
   public void add(ASTNode node) {
-    var clazz = (Class<ASTNode>) node.getClass();
-    var set = index.get(clazz);
+    var nodeClass = (Class<ASTNode>) node.getClass();
+    var set = index.get(nodeClass);
     if (set == null) {
       set = bucketConstructor.get();
-      index.put(clazz, set);
+      index.put(nodeClass, set);
     }
     set.add(node);
   }
@@ -71,12 +71,12 @@ public class NodeIndex implements Index<ASTNode> {
    * Returns a set of all nodes with the given type.
    * 
    * @param <T>   the type of the class
-   * @param clazz the class of nodes to return
+   * @param type the class of nodes to return
    * @return a set of nodes with the given type
    */
   @SuppressWarnings("unchecked")
-  public <T extends ASTNode> Set<T> get(Class<T> clazz) {
-    var result = (Set<T>) index.get(clazz);
+  public <T extends ASTNode> Set<T> get(Class<T> type) {
+    var result = (Set<T>) index.get(type);
     return result == null ? Collections.emptySet() : result;
   }
 
@@ -84,12 +84,12 @@ public class NodeIndex implements Index<ASTNode> {
    * Returns a stream of all nodes with the given type.
    * 
    * @param <T>   the type of the class
-   * @param clazz the class of nodes to return
+   * @param type the class of nodes to return
    * @return a stream of nodes with the given type
    */
   @SuppressWarnings("unchecked")
-  public <T extends ASTNode> Stream<T> getStream(Class<T> clazz) {
-    var result = (Set<T>) index.get(clazz);
+  public <T extends ASTNode> Stream<T> getStream(Class<T> type) {
+    var result = (Set<T>) index.get(type);
     return result == null ? Stream.empty() : result.stream();
   }
 
@@ -97,12 +97,12 @@ public class NodeIndex implements Index<ASTNode> {
    * Returns an arbitrary node with the given type.
    * 
    * @param <T>   the type of the class
-   * @param clazz the class of the node to return
+   * @param type the class of the node to return
    * @return an arbitrary node with the given type
    */
   @SuppressWarnings("unchecked")
-  public <T extends ASTNode> T getOne(Class<T> clazz) {
-    var result = (Set<T>) index.get(clazz);
+  public <T extends ASTNode> T getOne(Class<T> type) {
+    var result = (Set<T>) index.get(type);
     if (result == null) {
       return null;
     }
@@ -113,11 +113,11 @@ public class NodeIndex implements Index<ASTNode> {
   /**
    * Checks if the index contains any nodes of the given type.
    * 
-   * @param clazz the class of the nodes to check for
+   * @param type the class of the nodes to check for
    * @return true if the index contains any nodes of the given type
    */
-  public boolean has(Class<? extends ASTNode> clazz) {
-    var result = index.get(clazz);
+  public boolean has(Class<? extends ASTNode> type) {
+    var result = index.get(type);
     return result != null && !result.isEmpty();
   }
 
