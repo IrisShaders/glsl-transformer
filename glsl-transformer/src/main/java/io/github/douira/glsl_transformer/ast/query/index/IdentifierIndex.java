@@ -44,39 +44,39 @@ public class IdentifierIndex<I extends PatriciaTrie<Set<Identifier>>>
     }
   }
 
-  public Set<Identifier> get(String k) {
-    var result = index.get(k);
+  public Set<Identifier> get(String key) {
+    var result = index.get(key);
     return result == null ? Collections.emptySet() : result;
   }
 
-  public Stream<Identifier> getStream(String k) {
-    var result = index.get(k);
+  public Stream<Identifier> getStream(String key) {
+    var result = index.get(key);
     return result == null ? Stream.empty() : result.stream();
   }
 
-  public <T extends ASTNode> Stream<T> getAncestors(String k, Class<T> clazz) {
-    return getStream(k)
-        .map(id -> id.getAncestor(clazz))
+  public <T extends ASTNode> Stream<T> getAncestors(String key, Class<T> ancestorType) {
+    return getStream(key)
+        .map(id -> id.getAncestor(ancestorType))
         .filter(Objects::nonNull);
   }
 
-  public Stream<ReferenceExpression> getReferenceExpressions(String k) {
-    return getStream(k)
+  public Stream<ReferenceExpression> getReferenceExpressions(String key) {
+    return getStream(key)
         .map(id -> id.getAncestor(ReferenceExpression.class))
         .filter(Objects::nonNull);
   }
 
-  public ReferenceExpression getOneReferenceExpression(String k) {
-    return getReferenceExpressions(k).findFirst().orElse(null);
+  public ReferenceExpression getOneReferenceExpression(String key) {
+    return getReferenceExpressions(key).findFirst().orElse(null);
   }
 
-  public Identifier getOne(String k) {
-    var iterator = index.get(k).iterator();
+  public Identifier getOne(String key) {
+    var iterator = index.get(key).iterator();
     return iterator.hasNext() ? iterator.next() : null;
   }
 
-  public boolean has(String k) {
-    var result = index.get(k);
+  public boolean has(String key) {
+    var result = index.get(key);
     return result != null && !result.isEmpty();
   }
 

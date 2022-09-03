@@ -118,8 +118,8 @@ public class Template<T extends ASTNode> {
     markReplacement(original, () -> localReplacements.get(index));
   }
 
-  public void markLocalReplacement(String tag, Class<? extends ASTNode> clazz) {
-    markLocalReplacement(source.getRoot().identifierIndex.getOne(tag).getAncestor(clazz));
+  public void markLocalReplacement(String tag, Class<? extends ASTNode> type) {
+    markLocalReplacement(source.getRoot().identifierIndex.getOne(tag).getAncestor(type));
   }
 
   public void markIdentifierReplacement(String tag) {
@@ -138,8 +138,8 @@ public class Template<T extends ASTNode> {
   }
 
   @SuppressWarnings("unchecked")
-  public <R extends ASTNode> void markReplacement(String tag, Class<R> clazz, Supplier<R> replacement) {
-    markReplacement(source.getRoot().identifierIndex.getOne(tag).getAncestor(clazz), (Supplier<ASTNode>) replacement);
+  public <R extends ASTNode> void markReplacement(String tag, Class<R> type, Supplier<R> replacement) {
+    markReplacement(source.getRoot().identifierIndex.getOne(tag).getAncestor(type), (Supplier<ASTNode>) replacement);
   }
 
   @SuppressWarnings("unchecked") // all ASTNodes clone themselves with the right type

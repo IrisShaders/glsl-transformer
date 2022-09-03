@@ -365,12 +365,12 @@ public class Matcher<T extends ASTNode> {
    * 
    * @param <R>   The type of the node match
    * @param name  The name of the node match
-   * @param clazz The class of the node match
+   * @param type The class of the node match
    * @return The node match or null if not found or not of the given class
    */
-  public <R extends ASTNode> R getNodeMatch(String name, Class<R> clazz) {
+  public <R extends ASTNode> R getNodeMatch(String name, Class<R> type) {
     var result = nodeMatches.get(name);
-    return clazz.isInstance(result) ? clazz.cast(result) : null;
+    return type.isInstance(result) ? type.cast(result) : null;
   }
 
   @SuppressWarnings("unchecked")
@@ -450,16 +450,16 @@ public class Matcher<T extends ASTNode> {
   }
 
   private static class ClassWildcard extends NodeWildcard {
-    final Class<? extends ASTNode> clazz;
+    final Class<? extends ASTNode> type;
 
-    ClassWildcard(String name, Class<? extends ASTNode> clazz) {
+    ClassWildcard(String name, Class<? extends ASTNode> type) {
       super(name);
-      this.clazz = clazz;
+      this.type = type;
     }
 
     @Override
     public boolean test(ASTNode node) {
-      return clazz.isInstance(node);
+      return type.isInstance(node);
     }
   }
 
@@ -471,13 +471,13 @@ public class Matcher<T extends ASTNode> {
    * 
    * @param name        The name of the wildcard
    * @param patternNode The node to mark as a class wildcard
-   * @param clazz       The class to match the node with
+   * @param type       The class to match the node with
    */
   public void markClassWildcard(
       String name,
       ASTNode patternNode,
-      Class<? extends ASTNode> clazz) {
-    markWildcard(patternNode, new ClassWildcard(name, clazz));
+      Class<? extends ASTNode> type) {
+    markWildcard(patternNode, new ClassWildcard(name, type));
   }
 
   /**
@@ -496,18 +496,18 @@ public class Matcher<T extends ASTNode> {
   }
 
   private static class ClassedPredicateWildcard<T extends ASTNode> extends NodeWildcard {
-    final Class<T> clazz;
+    final Class<T> type;
     final Predicate<T> predicate;
 
-    ClassedPredicateWildcard(String name, Class<T> clazz, Predicate<T> predicate) {
+    ClassedPredicateWildcard(String name, Class<T> type, Predicate<T> predicate) {
       super(name);
-      this.clazz = clazz;
+      this.type = type;
       this.predicate = predicate;
     }
 
     @Override
     public boolean test(ASTNode node) {
-      return clazz.isInstance(node) && predicate.test(clazz.cast(node));
+      return type.isInstance(node) && predicate.test(type.cast(node));
     }
   }
 
@@ -519,14 +519,14 @@ public class Matcher<T extends ASTNode> {
    * @param <R>         The type of the node match
    * @param name        The name of the wildcard
    * @param patternNode The node to mark as a classed predicate wildcard
-   * @param clazz       The class to match the node with
+   * @param type       The class to match the node with
    * @param predicate   The predicate to match the node with
    */
   public <R extends ASTNode> void markClassedPredicateWildcard(
       String name,
       ASTNode patternNode,
-      Class<R> clazz,
+      Class<R> type,
       Predicate<R> predicate) {
-    markWildcard(patternNode, new ClassedPredicateWildcard<>(name, clazz, predicate));
+    markWildcard(patternNode, new ClassedPredicateWildcard<>(name, type, predicate));
   }
 }

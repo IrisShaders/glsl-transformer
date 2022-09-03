@@ -30,24 +30,24 @@ public class SuperclassNodeIndex extends NodeIndex {
   protected void iterateClasses(
       ASTNode node,
       BiConsumer<Class<? extends ASTNode>, ASTNode> consumer) {
-    Class<? extends ASTNode> clazz = node.getClass();
-    while (clazz != null
-        && clazz != InnerASTNode.class
-        && clazz != ASTNode.class
-        && clazz != ListASTNode.class) {
-      consumer.accept(clazz, node);
-      clazz = (Class<? extends ASTNode>) clazz.getSuperclass();
+    Class<? extends ASTNode> nodeClass = node.getClass();
+    while (nodeClass != null
+        && nodeClass != InnerASTNode.class
+        && nodeClass != ASTNode.class
+        && nodeClass != ListASTNode.class) {
+      consumer.accept(nodeClass, node);
+      nodeClass = (Class<? extends ASTNode>) nodeClass.getSuperclass();
     }
   }
 
   @Override
   @SuppressWarnings("unchecked")
   public void add(ASTNode node) {
-    iterateClasses(node, (clazz, toAdd) -> {
-      var set = (Set<ASTNode>) index.get(clazz);
+    iterateClasses(node, (nodeClass, toAdd) -> {
+      var set = (Set<ASTNode>) index.get(nodeClass);
       if (set == null) {
         set = bucketConstructor.get();
-        index.put((Class<ASTNode>)clazz, set);
+        index.put((Class<ASTNode>)nodeClass, set);
       }
       set.add(toAdd);
     });
@@ -55,8 +55,8 @@ public class SuperclassNodeIndex extends NodeIndex {
 
   @Override
   public void remove(ASTNode node) {
-    iterateClasses(node, (clazz, toAdd) -> {
-      var set = (Set<ASTNode>) index.get(clazz);
+    iterateClasses(node, (nodeClass, toAdd) -> {
+      var set = (Set<ASTNode>) index.get(nodeClass);
       if (set == null) {
         return;
       }
