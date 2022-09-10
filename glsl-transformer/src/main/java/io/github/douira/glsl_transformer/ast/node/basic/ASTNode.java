@@ -4,9 +4,11 @@ import java.util.Objects;
 import java.util.function.*;
 import java.util.stream.Stream;
 
+import org.antlr.v4.runtime.misc.Interval;
+
 import io.github.douira.glsl_transformer.ast.data.ChildNodeList;
 import io.github.douira.glsl_transformer.ast.query.Root;
-import io.github.douira.glsl_transformer.ast.transform.Template;
+import io.github.douira.glsl_transformer.ast.transform.*;
 import io.github.douira.glsl_transformer.ast.traversal.*;
 import io.github.douira.glsl_transformer.util.CompatUtil;
 
@@ -37,6 +39,8 @@ public abstract class ASTNode {
   private Consumer<ASTNode> selfReplacer;
   private Root root = Root.getActiveBuildRoot();
   protected Template<?> template = null;
+  public static final Interval SYNTHETIC_SOURCE = new Interval(0, 0);
+  private final Interval sourceLines = ASTBuilder.getActiveSourceLines();
 
   /**
    * Whether this node has been registered with the root. This is only used when
@@ -49,6 +53,18 @@ public abstract class ASTNode {
   }
 
   public abstract <R> R accept(ASTVisitor<R> visitor);
+
+  public Interval getSourceLines() {
+    return sourceLines;
+  }
+
+  public int getStartLine() {
+    return sourceLines.a;
+  }
+
+  public int getEndLine() {
+    return sourceLines.b;
+  }
 
   public ASTNode getParent() {
     return parent;

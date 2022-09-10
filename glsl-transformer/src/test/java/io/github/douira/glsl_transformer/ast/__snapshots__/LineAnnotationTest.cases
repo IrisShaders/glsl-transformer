@@ -1,0 +1,6 @@
+§testLineAnnotation translationUnit:
+void foo() {
+	1;
+}
+
+§
