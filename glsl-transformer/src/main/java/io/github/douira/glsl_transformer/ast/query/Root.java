@@ -67,7 +67,7 @@ public class Root {
    * @return the currently active build root
    */
   public static Root getActiveBuildRoot() {
-    return activeBuildRoots.peekLast();
+    return activeBuildRoots.peekFirst();
   }
 
   /**
@@ -81,11 +81,11 @@ public class Root {
   protected static final synchronized <R> R withActiveBuildRoot(
       Root instance,
       Function<Root, R> rootConsumer) {
-    activeBuildRoots.addLast(instance);
+    activeBuildRoots.push(instance);
     try {
       return rootConsumer.apply(instance);
     } finally {
-      activeBuildRoots.removeLast();
+      activeBuildRoots.pop();
     }
   }
 
