@@ -6,7 +6,8 @@ public enum PrintType {
   SIMPLE(SimplePrinter::new),
   INDENTED(IndentingPrinter::new),
   COMPACT(CompactPrinter::new),
-  INDENTED_ANNOTATED(() -> new LineAnnotator(PrintType.INDENTED.getTokenProcessor()));
+  INDENTED_ANNOTATED(() -> new IndentingPrinter(new LineAnnotator())),
+  COMPAT_ANNOTATED(() -> new CompactPrinter(new LineAnnotator()));
 
   private final Supplier<TokenProcessor> printerSupplier;
 

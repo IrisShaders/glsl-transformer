@@ -3,7 +3,7 @@ package io.github.douira.glsl_transformer.ast.print;
 import io.github.douira.glsl_transformer.ast.print.token.*;
 import io.github.douira.glsl_transformer.cst.token_filter.TokenChannel;
 
-public class CompactPrinter extends DelegateTokenProcessor<TokenProcessor> {
+public class CompactPrinter extends DelegateTokenProcessor {
   public CompactPrinter(TokenProcessor delegate) {
     super(delegate);
   }
@@ -14,8 +14,7 @@ public class CompactPrinter extends DelegateTokenProcessor<TokenProcessor> {
 
   @Override
   public void appendToken(PrintToken token) {
-    if (token.getRole() == TokenRole.COMMON_FORMATTING
-        && token.getContent().equals("\n")) {
+    if (token.isCommonFormattingNewline()) {
       token = new LiteralToken(
           TokenChannel.WHITESPACE, TokenRole.COMMON_FORMATTING, " ");
     }

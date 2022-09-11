@@ -5,4 +5,14 @@ public class Marker extends PrintToken {
   public String getContent() {
     return null;
   }
+
+  @Override
+  public boolean isCommonFormattingNewline() {
+    return false;
+  }
+
+  @Override
+  public boolean endsWithNewline() {
+    return false;
+  }
 }

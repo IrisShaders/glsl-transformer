@@ -21,4 +21,14 @@ public class SimplePrinter implements TokenProcessor {
   public StringBuilder getBuilder() {
     return builder;
   }
+
+  @Override
+  public void appendDirectly(String content) {
+    builder.append(content);
+  }
+
+  @Override
+  public void appendDirectly(char content) {
+    builder.append(content);
+  }
 }
