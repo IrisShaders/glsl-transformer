@@ -2,10 +2,10 @@ package io.github.douira.glsl_transformer.ast.print;
 
 import io.github.douira.glsl_transformer.ast.print.token.PrintToken;
 
-public abstract class DelegateTokenProcessor<R extends TokenProcessor> implements TokenProcessor {
-  protected final R delegate;
+public abstract class DelegateTokenProcessor implements TokenProcessor {
+  protected final TokenProcessor delegate;
 
-  public DelegateTokenProcessor(R delegate) {
+  public DelegateTokenProcessor(TokenProcessor delegate) {
     this.delegate = delegate;
   }
 
@@ -17,5 +17,15 @@ public abstract class DelegateTokenProcessor<R extends TokenProcessor> implement
   @Override
   public void appendToken(PrintToken token) {
     delegate.appendToken(token);
+  }
+
+  @Override
+  public void appendDirectly(String content) {
+    delegate.appendDirectly(content);
+  }
+
+  @Override
+  public void appendDirectly(char content) {
+    delegate.appendDirectly(content);
   }
 }
