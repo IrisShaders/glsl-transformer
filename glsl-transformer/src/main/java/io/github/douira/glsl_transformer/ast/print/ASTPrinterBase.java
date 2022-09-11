@@ -11,14 +11,19 @@ import io.github.douira.glsl_transformer.cst.token_filter.TokenChannel;
 public abstract class ASTPrinterBase extends ASTListenerVisitor<Void> {
   private PrintToken lastToken;
   private ASTNode currentNode;
+  private TokenProcessor tokenProcessor;
 
-  protected ASTPrinterBase() {
-    super();
+  protected ASTPrinterBase(TokenProcessor tokenProcessor) {
+    this.tokenProcessor = tokenProcessor;
   }
 
-  protected abstract String generateString();
+  protected String generateString() {
+    return tokenProcessor.generateString();
+  }
 
-  protected abstract void appendToken(PrintToken token);
+  protected void appendToken(PrintToken token) {
+    tokenProcessor.appendToken(token);
+  }
 
   public void replaceToken(PrintToken replacement) {
     lastToken = replacement;
@@ -45,28 +50,6 @@ public abstract class ASTPrinterBase extends ASTListenerVisitor<Void> {
       appendToken(lastToken);
       lastToken = null;
     }
-  }
-
-  public static String printAST(ASTPrinter printer, ASTNode node) {
-    printer.startVisit(node);
-    printer.finalizePrinting();
-    return printer.generateString();
-  }
-
-  public static String print(PrintType type, ASTNode node) {
-    return printAST(type.getPrinter(node), node);
-  }
-
-  public static String printSimple(ASTNode node) {
-    return print(PrintType.SIMPLE, node);
-  }
-
-  public static String printIndented(ASTNode node) {
-    return print(PrintType.INDENTED, node);
-  }
-
-  public static String printCompact(ASTNode node) {
-    return print(PrintType.COMPACT, node);
   }
 
   protected void emitTokens(PrintToken... tokens) {

@@ -29,8 +29,35 @@ import io.github.douira.glsl_transformer.ast.print.token.EOFToken;
  * help of a few other utility classes. Information encoded about the string
  * content and printed structure of each node is encoded in this printer.
  */
-public abstract class ASTPrinter extends ASTPrinterBase {
+public class ASTPrinter extends ASTPrinterBase {
   private final Deque<Expression> precedenceWrapped = new ArrayDeque<>();
+
+  public ASTPrinter(TokenProcessor tokenProcessor) {
+    super(tokenProcessor);
+  }
+
+  public static String printAST(TokenProcessor tokenProcessor, ASTNode node) {
+    var printer = new ASTPrinter(tokenProcessor);
+    printer.startVisit(node);
+    printer.finalizePrinting();
+    return printer.generateString();
+  }
+
+  public static String print(PrintType type, ASTNode node) {
+    return printAST(type.getTokenProcessor(node), node);
+  }
+
+  public static String printSimple(ASTNode node) {
+    return print(PrintType.SIMPLE, node);
+  }
+
+  public static String printIndented(ASTNode node) {
+    return print(PrintType.INDENTED, node);
+  }
+
+  public static String printCompact(ASTNode node) {
+    return print(PrintType.COMPACT, node);
+  }
 
   @Override
   public Void startVisit(ASTNode node) {
