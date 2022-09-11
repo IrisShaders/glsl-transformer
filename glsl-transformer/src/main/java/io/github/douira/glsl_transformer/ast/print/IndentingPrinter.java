@@ -22,9 +22,8 @@ public class IndentingPrinter extends DelegateTokenProcessor<SimplePrinter> {
   public void appendToken(PrintToken token) {
     if (token instanceof IndentMarker indentMarker) {
       indentLevel += indentMarker.indentDelta;
-    } else {
-      var content = token.getContent();
-      var isNewline = content != null && content.endsWith("\n");
+    } else if (!(token instanceof Marker)) {
+      var isNewline = token.getContent().endsWith("\n");
 
       if (!indentationPrinted && !isNewline) {
         indentationPrinted = true;
