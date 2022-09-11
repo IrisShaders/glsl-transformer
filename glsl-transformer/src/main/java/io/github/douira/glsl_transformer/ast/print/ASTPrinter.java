@@ -44,7 +44,7 @@ public class ASTPrinter extends ASTPrinterBase {
   }
 
   public static String print(PrintType type, ASTNode node) {
-    return printAST(type.getTokenProcessor(node), node);
+    return printAST(type.getTokenProcessor(), node);
   }
 
   public static String printSimple(ASTNode node) {
@@ -57,6 +57,10 @@ public class ASTPrinter extends ASTPrinterBase {
 
   public static String printCompact(ASTNode node) {
     return print(PrintType.COMPACT, node);
+  }
+
+  public static String printIndentedAnnotated(ASTNode node) {
+    return print(PrintType.INDENTED_ANNOTATED, node);
   }
 
   @Override
