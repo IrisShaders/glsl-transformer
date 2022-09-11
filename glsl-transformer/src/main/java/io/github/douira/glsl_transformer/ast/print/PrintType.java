@@ -5,17 +5,17 @@ import java.util.function.Supplier;
 import io.github.douira.glsl_transformer.ast.node.basic.ASTNode;
 
 public enum PrintType {
-  SIMPLE(SimpleASTPrinter::new),
-  INDENTED(IndentingASTPrinter::new),
-  COMPACT(CompactASTPrinter::new);
+  SIMPLE(SimplePrinter::new),
+  INDENTED(IndentingPrinter::new),
+  COMPACT(CompactPrinter::new);
 
-  private final Supplier<ASTPrinter> printerSupplier;
+  private final Supplier<TokenProcessor> printerSupplier;
 
-  PrintType(Supplier<ASTPrinter> printerSupplier) {
+  PrintType(Supplier<TokenProcessor> printerSupplier) {
     this.printerSupplier = printerSupplier;
   }
 
-  public ASTPrinter getPrinter(ASTNode node) {
+  public TokenProcessor getTokenProcessor(ASTNode node) {
     return printerSupplier.get();
   }
 }
