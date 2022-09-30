@@ -86,7 +86,7 @@ in int bar;
 in float gam;
 in bool boo;
 void main() {
-	gam = 0.0;
+	gam = 0.0f;
 	boo = false;
 	bar = 0;
 	zou = 4;
