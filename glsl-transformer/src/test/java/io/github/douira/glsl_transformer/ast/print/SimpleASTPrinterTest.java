@@ -11,9 +11,9 @@ public class SimpleASTPrinterTest extends TestWithSingleASTTransformer {
   @Test
   void testCompactPrinting() {
     assertReprint(PrintType.SIMPLE, GLSLParser::translationUnit,
-        "void main() {\ngl_FragColor = vec4(1.0);\n}\n",
+        "void main() {\ngl_FragColor = vec4(1.0f);\n}\n",
         "void main() {\n"
-            + "  gl_FragColor = vec4(1.0);\n"
+            + "  gl_FragColor = vec4(1.0f);\n"
             + "}");
   }
 }
