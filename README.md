@@ -25,6 +25,10 @@ Transforming the AST requires the additional step of building the AST from the p
 - New nodes are treated as part of the existing parse tree
 - CST: Whitespace-preserving re-printing
 - CST: The original input is preserved if no changes are made
+- AST: Complex pattern matching
+- AST: Templating for subtree generation
+- AST: Printing with various formatting options
+- AST: Index-Based queries
 
 Further reading on [Abstract vs Concrete (Parse) Syntax Trees](https://eli.thegreenplace.net/2009/02/16/abstract-vs-concrete-syntax-trees/)
 
