@@ -314,7 +314,7 @@ public class ASTPrinter extends ASTPrinterBase {
             emitLiteral(Double.toString(node.getFloating()) + "hf");
             break;
           case FLOAT32:
-            emitLiteral(Double.toString(node.getFloating()));
+            emitLiteral(Double.toString(node.getFloating()) + "f");
             break;
           case FLOAT64:
             emitLiteral(Double.toString(node.getFloating()) + "lf");
