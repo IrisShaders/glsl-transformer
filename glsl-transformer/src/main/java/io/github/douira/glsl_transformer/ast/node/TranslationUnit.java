@@ -133,6 +133,12 @@ public class TranslationUnit extends ListASTNode<ExternalDeclaration> {
     appendMain(t.parseStatement(this, statement));
   }
 
+  public void ensureVersionStatement() {
+    if (versionStatement == null) {
+      setVersionStatement(VersionStatement.getDefault());
+    }
+  }
+
   @Override
   public <R> R accept(ASTVisitor<R> visitor) {
     return visitor.visitTranslationUnit(this);

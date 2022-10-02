@@ -287,11 +287,11 @@ public class SingleASTTransformerTest extends TestWithSingleASTTransformer {
       p.parseSeparateExternalDeclaration("void foo(sampler2D sample) { }");
     }, "It should throw if keywords are used as identifiers.");
     assertThrows(ParseCancellationException.class, () -> {
-      p.getLexer().version = Version.GL40;
+      p.getLexer().version = Version.GLSL40;
       p.parseSeparateExternalDeclaration("void foo(sampler2D sample) { }");
     }, "It should throw if keywords are used as identifiers.");
     assertDoesNotThrow(() -> {
-      p.getLexer().version = Version.GL33;
+      p.getLexer().version = Version.GLSL33;
       p.parseSeparateExternalDeclaration("void foo(sampler2D sample) { }");
     }, "It should not throw if disabled keywords are used as identifiers.");
   }
