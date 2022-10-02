@@ -28,7 +28,7 @@ public class ASTNodeTest extends TestWithSingleASTTransformer {
       assertEquals(a, parent.getLeft());
       assertEquals(b, parent.getRight());
 
-      // assert that b has a settter for the right side
+      // assert that b has a setter for the right side
       b.replaceBy(a);
       assertEquals(a, parent.getLeft());
       assertEquals(a, parent.getRight());
