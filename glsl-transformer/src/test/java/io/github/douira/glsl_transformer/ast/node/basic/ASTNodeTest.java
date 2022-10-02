@@ -5,6 +5,7 @@ import static org.junit.jupiter.api.Assertions.*;
 import org.junit.jupiter.api.Test;
 
 import io.github.douira.glsl_transformer.ast.node.expression.binary.AdditionExpression;
+import io.github.douira.glsl_transformer.ast.node.external_declaration.FunctionDefinition;
 import io.github.douira.glsl_transformer.test_util.TestWithSingleASTTransformer;
 
 public class ASTNodeTest extends TestWithSingleASTTransformer {
@@ -66,10 +67,22 @@ public class ASTNodeTest extends TestWithSingleASTTransformer {
   }
 
   @Test
-  void testClone() {
+  void testUnregisterEmptyReturn() {
     p.setTransformation((tree, root) -> {
-
+      root.nodeIndex.getOne(FunctionDefinition.class).detachAndDelete();
     });
-    p.transform("int x = a + b;");
+    assertDoesNotThrow(() -> p.transform("void main() { return; }"),
+        "It should not throw when unregistering a null member (null expression in return statement)");
+  }
+
+  @Test
+  void testChangeRootEmptyReturn() {
+    p.setTransformation((tree, root) -> {
+      var def = root.nodeIndex.getOne(FunctionDefinition.class);
+      def.detach();
+      p.parseTranslationUnit(";").getChildren().add(def);
+    });
+    assertDoesNotThrow(() -> p.transform("void main() { return; }"),
+        "It should not throw when changing the root of a null member (null expression in return statement)");
   }
 }

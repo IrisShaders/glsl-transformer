@@ -359,7 +359,7 @@ public interface ASTVisitor<R> extends GeneralASTVisitor<R> {
   }
 
   default R visitReturnStatement(ReturnStatement node) {
-    return visit(node.getExpression());
+    return visitSafe(initialResult(), node.getExpression());
   }
 
   default R visitDiscardStatement(DiscardStatement node) {
