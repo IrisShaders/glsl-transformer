@@ -18,8 +18,8 @@ public class VersionStatement extends ASTNode {
     this.profile = profile;
   }
 
-  public VersionStatement(Version version) {
-    this(version, Profile.CORE);
+  public static VersionStatement getDefault() {
+    return new VersionStatement(Version.GLSL11, null);
   }
 
   @Override

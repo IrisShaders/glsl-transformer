@@ -6,25 +6,25 @@ import io.github.douira.glsl_transformer.GLSLLexer;
 import io.github.douira.glsl_transformer.ast.data.*;
 
 public enum Version implements TokenTyped {
-  GL20(GLSLLexer.NR_GL_110, 110),
-  GL21(GLSLLexer.NR_GL_120, 120),
-  GLES20(GLSLLexer.NR_GLES_100, 100, true),
-  GL30(GLSLLexer.NR_GL_130, 130),
-  GL31(GLSLLexer.NR_GL_140, 140),
-  GL32(GLSLLexer.NR_GL_150, 150),
-  GL33(GLSLLexer.NR_GL_330, 330),
-  GLES30(GLSLLexer.NR_GLES_300, 300, true),
-  GLES31(GLSLLexer.NR_GLES_310, 310, true),
-  GLES32(GLSLLexer.NR_GLES_320, 320, true),
-  GL40(GLSLLexer.NR_GL_400, 400),
-  GL41(GLSLLexer.NR_GL_410, 410),
-  GL42(GLSLLexer.NR_GL_420, 420),
-  GL43(GLSLLexer.NR_GL_430, 430),
-  GL44(GLSLLexer.NR_GL_440, 440),
-  GL45(GLSLLexer.NR_GL_450, 450),
-  GL46(GLSLLexer.NR_GL_460, 460);
+  GLSLES10(GLSLLexer.NR_GLSLES_100, 100, true),
+  GLSLES30(GLSLLexer.NR_GLSLES_300, 300, true),
+  GLSLES31(GLSLLexer.NR_GLSLES_310, 310, true),
+  GLSLES32(GLSLLexer.NR_GLSLES_320, 320, true),
+  GLSL11(GLSLLexer.NR_GLSL_110, 110),
+  GLSL12(GLSLLexer.NR_GLSL_120, 120),
+  GLSL13(GLSLLexer.NR_GLSL_130, 130),
+  GLSL14(GLSLLexer.NR_GLSL_140, 140),
+  GLSL15(GLSLLexer.NR_GLSL_150, 150),
+  GLSL33(GLSLLexer.NR_GLSL_330, 330),
+  GLSL40(GLSLLexer.NR_GLSL_400, 400),
+  GLSL41(GLSLLexer.NR_GLSL_410, 410),
+  GLSL42(GLSLLexer.NR_GLSL_420, 420),
+  GLSL43(GLSLLexer.NR_GLSL_430, 430),
+  GLSL44(GLSLLexer.NR_GLSL_440, 440),
+  GLSL45(GLSLLexer.NR_GLSL_450, 450),
+  GLSL46(GLSLLexer.NR_GLSL_460, 460);
 
-  public static Version latest = GL46;
+  public static Version latest = Version.GLSL46;
 
   public final int tokenType;
   public final int number;
