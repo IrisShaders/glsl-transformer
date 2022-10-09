@@ -22,6 +22,12 @@ public class VersionStatement extends ASTNode {
     return new VersionStatement(Version.GLSL11, null);
   }
 
+  public Profile getNormalizedProfile() {
+    return profile == null
+        ? version.number >= 150 ? Profile.CORE : Profile.COMPATIBILITY
+        : profile;
+  }
+
   @Override
   public <R> R accept(ASTVisitor<R> visitor) {
     return visitor.visitVersionStatement(this);
