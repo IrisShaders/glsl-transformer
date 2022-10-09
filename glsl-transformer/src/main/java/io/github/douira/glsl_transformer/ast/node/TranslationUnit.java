@@ -11,11 +11,16 @@ import io.github.douira.glsl_transformer.ast.query.Root;
 import io.github.douira.glsl_transformer.ast.transform.*;
 import io.github.douira.glsl_transformer.ast.traversal.*;
 
+/**
+ * The translation unit is the entry point of a program and represents a single
+ * file of source code.
+ */
 public class TranslationUnit extends ListASTNode<ExternalDeclaration> {
   protected VersionStatement versionStatement;
   public final OutputOptions outputOptions;
 
-  public TranslationUnit(VersionStatement versionStatement, Stream<ExternalDeclaration> children, OutputOptions outputOptions) {
+  public TranslationUnit(VersionStatement versionStatement, Stream<ExternalDeclaration> children,
+      OutputOptions outputOptions) {
     super(children);
     this.versionStatement = setup(versionStatement, this::setVersionStatement);
     this.outputOptions = outputOptions;
