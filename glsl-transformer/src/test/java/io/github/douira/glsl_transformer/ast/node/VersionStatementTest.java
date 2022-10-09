@@ -56,4 +56,16 @@ public class VersionStatementTest extends TestWithSingleASTTransformer {
       assertEquals(Version.GLSL14, tu.versionStatement.version);
     });
   }
+
+  @Test
+  void testGetNormalizedProfile() {
+    Root.indexBuildSession(() -> {
+      var a = p.parseTranslationUnit("#version 330\n;");
+      assertEquals(Profile.CORE, a.versionStatement.getNormalizedProfile());
+      var b = p.parseTranslationUnit("#version 150\n;");
+      assertEquals(Profile.CORE, b.versionStatement.getNormalizedProfile());
+      var c = p.parseTranslationUnit("#version 140\n;");
+      assertEquals(Profile.COMPATIBILITY, c.versionStatement.getNormalizedProfile());
+    });
+  }
 }

@@ -16,6 +16,14 @@ public enum Profile implements TokenTyped {
     this.tokenType = tokenType;
   }
 
+  public boolean isCore() {
+    return this == CORE;
+  }
+
+  public boolean isCompatibility() {
+    return this == COMPATIBILITY;
+  }
+
   @Override
   public int getTokenType() {
     return tokenType;
