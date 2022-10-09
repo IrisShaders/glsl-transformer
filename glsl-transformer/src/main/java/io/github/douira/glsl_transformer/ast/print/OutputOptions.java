@@ -1,5 +1,8 @@
 package io.github.douira.glsl_transformer.ast.print;
 
+/**
+ * Controls the output of the {@link ASTPrinter}.
+ */
 public class OutputOptions {
   private boolean printInfo;
   private String headerSuffix;
