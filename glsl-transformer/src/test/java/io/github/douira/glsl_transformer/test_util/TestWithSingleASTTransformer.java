@@ -50,7 +50,7 @@ public abstract class TestWithSingleASTTransformer {
         // make sure it does the same as the original
         assertEquals(super.transform(str), result, "It should do the same as the original");
 
-        // // make sure results are the same if the result is cloned
+        // make sure results are the same if the result is cloned
         assertEquals(result, ASTPrinter.print(getPrintType(),
             translationUnit.cloneSeparate()));
 

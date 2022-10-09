@@ -70,8 +70,12 @@ public class ASTPrinter extends ASTPrinterBase {
   }
 
   @Override
-  public void exitTranslationUnit(TranslationUnit node) {
+  public Void visitTranslationUnit(TranslationUnit node) {
+    visitSafe(node.getVersionStatement());
+    emitLiteralSafe(node.outputOptions.getPrintHeader());
+    visitChildren(node);
     emitToken(new EOFToken());
+    return null;
   }
 
   @Override
