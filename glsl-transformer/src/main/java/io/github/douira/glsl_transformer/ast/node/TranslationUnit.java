@@ -6,20 +6,30 @@ import java.util.stream.Stream;
 import io.github.douira.glsl_transformer.ast.node.basic.ListASTNode;
 import io.github.douira.glsl_transformer.ast.node.external_declaration.*;
 import io.github.douira.glsl_transformer.ast.node.statement.*;
+import io.github.douira.glsl_transformer.ast.print.OutputOptions;
 import io.github.douira.glsl_transformer.ast.query.Root;
 import io.github.douira.glsl_transformer.ast.transform.*;
 import io.github.douira.glsl_transformer.ast.traversal.*;
 
 public class TranslationUnit extends ListASTNode<ExternalDeclaration> {
   protected VersionStatement versionStatement;
+  public final OutputOptions outputOptions;
+
+  public TranslationUnit(VersionStatement versionStatement, Stream<ExternalDeclaration> children, OutputOptions outputOptions) {
+    super(children);
+    this.versionStatement = setup(versionStatement, this::setVersionStatement);
+    this.outputOptions = outputOptions;
+  }
 
   public TranslationUnit(VersionStatement versionStatement, Stream<ExternalDeclaration> children) {
     super(children);
     this.versionStatement = setup(versionStatement, this::setVersionStatement);
+    this.outputOptions = new OutputOptions();
   }
 
   public TranslationUnit(Stream<ExternalDeclaration> children) {
     super(children);
+    this.outputOptions = new OutputOptions();
   }
 
   public VersionStatement getVersionStatement() {
@@ -156,7 +166,7 @@ public class TranslationUnit extends ListASTNode<ExternalDeclaration> {
 
   @Override
   public TranslationUnit clone() {
-    return new TranslationUnit(clone(versionStatement), getClonedChildren());
+    return new TranslationUnit(clone(versionStatement), getClonedChildren(), outputOptions.clone());
   }
 
   @Override
