@@ -249,7 +249,7 @@ public class ASTPrinter extends ASTPrinterBase {
 
   @Override
   public void exitLengthAccessExpression(LengthAccessExpression node) {
-    emitType(GLSLLexer.DOT_LENGTH, GLSLLexer.LPAREN, GLSLLexer.RPAREN);
+    emitType(GLSLLexer.DOT_LENGTH_METHOD_CALL);
   }
 
   @Override

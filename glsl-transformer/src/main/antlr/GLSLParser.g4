@@ -107,7 +107,7 @@ expression:
 	)																													# literalExpression
 	| LPAREN value = expression RPAREN												# groupingExpression
 	| left = expression LBRACKET right = expression RBRACKET	# arrayAccessExpression
-	| operand = expression DOT_LENGTH LPAREN RPAREN						# lengthAccessExpression
+	| operand = expression DOT_LENGTH_METHOD_CALL							# lengthAccessExpression
 	//Note: diverges from the spec by not allowing a prefixExpression as an identifier
 	//array-type function identfiers are handled by typeSpecifier
 	| (IDENTIFIER | typeSpecifier) LPAREN (

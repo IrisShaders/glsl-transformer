@@ -1035,4 +1035,10 @@ mat2 ang = mat2(-0.7373688220977783f, 0.6754903793334961f, -0.6754903793334961f,
 out float foo;
 in float bar;
 
+§testReprint statement:
+Ray.length = 4;
+
+§testReprint statement:
+foo.bar = baz.length();
+
 §
