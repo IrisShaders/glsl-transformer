@@ -55,7 +55,7 @@ VOLATILE: 'volatile';
 VARYING: 'varying';
 SHARED: 'shared';
 LAYOUT: 'layout';
-DOT_LENGTH: '.length';
+DOT_LENGTH_METHOD_CALL: '.length()';
 NOPERSPECTIVE: 'noperspective' {isAfter(130)}?; //ignores ES mode
 SAMPLE: 'sample' {isAfter(400)}?; //ignores ES mode
 PATCH: 'patch' {isAfter(400)}?; //ignores ES mode
