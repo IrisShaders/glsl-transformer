@@ -73,6 +73,15 @@ public class TranslationUnit extends ListASTNode<ExternalDeclaration> {
         externalDeclarations.map(str -> t.parseExternalDeclaration(this, str)));
   }
 
+  /**
+   * Injects an external declarations parsed from the given string into the
+   * translation unit at the given injection point. Note that if the external
+   * declaration begins with a # sign, it must be terminated by a newline.
+   * 
+   * @param t                   The parser to use
+   * @param injectionPoint      The injection point
+   * @param externalDeclaration The external declarations to parse and inject
+   */
   public void parseAndInjectNode(
       ASTParser t,
       ASTInjectionPoint injectionPoint,
@@ -83,6 +92,15 @@ public class TranslationUnit extends ListASTNode<ExternalDeclaration> {
             externalDeclaration));
   }
 
+  /**
+   * Injects the external declarations parsed from the given strings into the
+   * translation unit at the given injection point. Note that if an external
+   * declaration begins with a # sign, it must be terminated by a newline.
+   * 
+   * @param t                    The parser to use
+   * @param injectionPoint       The injection point
+   * @param externalDeclarations The external declarations to parse and inject
+   */
   public void parseAndInjectNodes(
       ASTParser t,
       ASTInjectionPoint injectionPoint,
