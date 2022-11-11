@@ -25,6 +25,12 @@ gpg --keyring secring.gpg --export-secret-keys > ~/.gnupg/secring.gpg
 gpg --list-keys --keyid-format short
 ```
 
+Testing only one class, in this case `GrammarDebugTest` can be done like this:
+
+```
+gradle test --tests GrammarDebugTest
+```
+
 # Development Notes
 
 ## AST Development
