@@ -21,7 +21,8 @@ public class GrammarDebugTest {
   }
 
   @Test
-  void testParseTree() {
+  @Disabled
+  void testDebugTree() {
     var t = new CSTTransformer<WrappedParameters<StringBuilder>>();
     t.addConcurrent(new PrintTreeDebug());
     t.getLexer().enableCustomDirective = true;

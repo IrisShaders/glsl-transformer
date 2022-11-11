@@ -113,6 +113,7 @@ public class CSTTransformerTest extends TestWithResource {
           var collectingListener = new CollectingErrorListener();
           manager.getLexer().addErrorListener(collectingListener);
           manager.getParser().addErrorListener(collectingListener);
+          manager.getLexer().enableIncludeDirective = true;
 
           var content = resource.content();
           var expectScenario = expect.scenario(resource.getScenarioName());

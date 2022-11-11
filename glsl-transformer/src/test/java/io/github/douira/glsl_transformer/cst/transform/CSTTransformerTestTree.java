@@ -23,6 +23,7 @@ public class CSTTransformerTestTree {
     t.setThrowParseErrors(false);
     t.setSLLOnly();
     t.addConcurrent(new PrintTreeSnapshot());
+    t.getLexer().enableIncludeDirective = true;
 
     Stream.concat(Stream.of(
         TestResourceManager.getResource(FileLocation.UNIFORM_TEST),
