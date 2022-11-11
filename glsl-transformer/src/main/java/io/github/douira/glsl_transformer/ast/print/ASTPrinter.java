@@ -80,7 +80,7 @@ public class ASTPrinter extends ASTPrinterBase {
 
   @Override
   public Void visitVersionStatement(VersionStatement node) {
-    emitType(GLSLLexer.NR, GLSLLexer.VERSION);
+    emitType(GLSLLexer.NR, GLSLLexer.NR_VERSION);
     emitExtendableSpace();
     emitType(node.version.tokenType);
     if (node.profile != null) {
@@ -107,7 +107,7 @@ public class ASTPrinter extends ASTPrinterBase {
 
   @Override
   public Void visitPragmaStatement(PragmaStatement node) {
-    emitType(GLSLLexer.NR, GLSLLexer.PRAGMA);
+    emitType(GLSLLexer.NR, GLSLLexer.NR_PRAGMA);
     emitExtendableSpace();
     if (node.stdGL) {
       emitType(GLSLLexer.NR_STDGL);
@@ -128,7 +128,7 @@ public class ASTPrinter extends ASTPrinterBase {
 
   @Override
   public Void visitExtensionStatement(ExtensionStatement node) {
-    emitType(GLSLLexer.NR, GLSLLexer.EXTENSION);
+    emitType(GLSLLexer.NR, GLSLLexer.NR_EXTENSION);
     emitExtendableSpace();
     emitLiteral(node.name);
     if (node.behavior != null) {
@@ -136,6 +136,35 @@ public class ASTPrinter extends ASTPrinterBase {
       emitExtendableSpace();
       emitType(node.behavior.tokenType);
     }
+    emitExactNewline();
+    return null;
+  }
+
+  @Override
+  public Void visitCustomDirectiveStatement(CustomDirectiveStatement node) {
+    var translationUnitParent = node.getAncestor(TranslationUnit.class);
+    if (translationUnitParent != null
+        && !translationUnitParent.outputOptions.printCustomDirectives) {
+      return null;
+    }
+    emitType(GLSLLexer.NR, GLSLLexer.NR_CUSTOM);
+    if (node.content != null) {
+      emitExtendableSpace();
+      emitLiteral(node.content);
+    }
+    emitExactNewline();
+    return null;
+  }
+
+  @Override
+  public Void visitIncludeStatement(IncludeStatement node) {
+    emitType(GLSLLexer.NR, GLSLLexer.NR_INCLUDE);
+    emitExtendableSpace();
+    emitType(GLSLLexer.NR_STRING_START);
+    if (node.content != null) {
+      emitLiteral(node.content);
+    }
+    emitType(GLSLLexer.S_STRING_END);
     emitExactNewline();
     return null;
   }

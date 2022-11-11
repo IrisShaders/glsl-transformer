@@ -241,6 +241,17 @@ public class ASTBuilder extends GLSLParserBaseVisitor<ASTNode> {
   }
 
   @Override
+  public CustomDirectiveStatement visitCustomDirectiveStatement(
+      CustomDirectiveStatementContext ctx) {
+    return new CustomDirectiveStatement(applySafe(ctx.content, Token::getText));
+  }
+
+  @Override
+  public IncludeStatement visitIncludeStatement(IncludeStatementContext ctx) {
+    return new IncludeStatement(applySafe(ctx.content, Token::getText));
+  }
+
+  @Override
   public LayoutDefaults visitLayoutDefaults(LayoutDefaultsContext ctx) {
     startConstruction(ctx);
     try {

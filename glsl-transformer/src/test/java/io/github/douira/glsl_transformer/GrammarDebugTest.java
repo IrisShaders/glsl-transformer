@@ -21,10 +21,11 @@ public class GrammarDebugTest {
   }
 
   @Test
-  @Disabled
   void testParseTree() {
     var t = new CSTTransformer<WrappedParameters<StringBuilder>>();
     t.addConcurrent(new PrintTreeDebug());
+    t.getLexer().enableCustomDirective = true;
+    t.getLexer().enableIncludeDirective = true;
 
     Stream.of(
         TestResourceManager.getResource(FileLocation.GRAMMAR_DEBUG))

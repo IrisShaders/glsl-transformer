@@ -10,6 +10,8 @@ public abstract class ExternalDeclaration extends InnerASTNode {
     DECLARATION,
     PRAGMA_STATEMENT,
     EXTENSION_STATEMENT,
+    CUSTOM_DIRECTIVE_STATEMENT,
+    INCLUDE_STATEMENT,
     LAYOUT_DEFAULTS,
     EMPTY_DECLARATION
   }

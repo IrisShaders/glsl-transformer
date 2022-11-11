@@ -14,6 +14,8 @@ import io.github.douira.glsl_transformer.ast.node.Version;
  */
 public abstract class VersionedGLSLLexer extends Lexer {
   public Version version = Version.latest;
+  public boolean enableCustomDirective = false;
+  public boolean enableIncludeDirective = false;
   // public Profile profile;
   // public EnumSet<Extension> extensions;
   // public boolean vulkan = true;

@@ -31,7 +31,7 @@ fragment IDENTIFIER_frag: ('a' .. 'z' | 'A' .. 'Z' | '_') (
 fragment WS_frag: [\t\r\u000C ]+;
 fragment NEWLINE: '\r'? '\n';
 fragment NO_NEWLINE: ~('\r' | '\n');
-fragment LINE_CONTINUE: '\\' NEWLINE;
+fragment LINE_CONTINUE_frag: '\\' NEWLINE;
 
 //GLSL tokens
 COLON: ':';
@@ -325,7 +325,6 @@ fragment NR_PP_PREFIX: '#' [\t ]*;
 PP_ENTER_MODE:
 	NR_PP_PREFIX (
 		'define'
-		| 'include'
 		| 'undef'
 		| 'if'
 		| 'ifdef'
@@ -337,18 +336,19 @@ PP_ENTER_MODE:
 		| 'line'
 	) -> channel(PREPROCESSOR), pushMode(Preprocessor);
 PP_EMPTY:
-	NR_PP_PREFIX (WS_frag | LINE_CONTINUE)* NEWLINE -> channel(PREPROCESSOR);
+	NR_PP_PREFIX (WS_frag | LINE_CONTINUE_frag)* NEWLINE -> channel(PREPROCESSOR);
 
 //preprocessor-related tokens
 NR: '#' -> pushMode(NR_Mode);
 IDENTIFIER: IDENTIFIER_frag;
 
-//performance testing suggests that using the .*? here is fine, alternatives were slower
 fragment LINE_COMMENT_frag: '//' NO_NEWLINE*;
+
+//performance testing suggests that using the .*? here is fine, alternatives were slower
 fragment BLOCK_COMMENT_frag: '/*' .*? '*/';
 
 //hidden comment and whitespace tokens
-LINE_CONTINUATION: LINE_CONTINUE -> channel(WHITESPACE);
+LINE_CONTINUE: LINE_CONTINUE_frag -> channel(WHITESPACE);
 LINE_COMMENT: LINE_COMMENT_frag NEWLINE -> channel(COMMENTS);
 BLOCK_COMMENT: BLOCK_COMMENT_frag -> channel(COMMENTS);
 WS: WS_frag -> channel(WHITESPACE);
@@ -356,12 +356,16 @@ EOL: NEWLINE -> channel(WHITESPACE);
 
 //nr-sign parsing mode
 mode NR_Mode;
-EXTENSION: 'extension';
-VERSION: 'version';
-PRAGMA: 'pragma';
-PRAGMA_DEBUG: 'debug';
-PRAGMA_OPTIMIZE: 'optimize';
-PRAGMA_INVARIANT: 'invariant';
+NR_EXTENSION: 'extension';
+NR_VERSION: 'version';
+NR_CUSTOM:
+	'custom' {enableCustomDirective}? -> pushMode(CustomDirective);
+NR_INCLUDE:
+	'include' {enableIncludeDirective}?;
+NR_PRAGMA: 'pragma';
+NR_PRAGMA_DEBUG: 'debug';
+NR_PRAGMA_OPTIMIZE: 'optimize';
+NR_PRAGMA_INVARIANT: 'invariant';
 NR_ON: 'on';
 NR_OFF: 'off';
 NR_ALL: 'all';
@@ -394,17 +398,29 @@ NR_GLSL_440: '440';
 NR_GLSL_450: '450';
 NR_GLSL_460: '460';
 
+NR_STRING_START: '"' {enableIncludeDirective}? -> pushMode(String);
 NR_INTCONSTANT: INTCONSTANT_frag;
 NR_IDENTIFIER: IDENTIFIER_frag;
+NR_LINE_CONTINUE: LINE_CONTINUE_frag -> channel(WHITESPACE);
 NR_LINE_COMMENT: LINE_COMMENT_frag -> channel(COMMENTS);
 NR_BLOCK_COMMENT: BLOCK_COMMENT_frag -> channel(COMMENTS);
-NR_WS: WS_frag -> channel(WHITESPACE);
-NR_LINE_CONTINUATION: LINE_CONTINUE -> channel(WHITESPACE);
 NR_EOL: NEWLINE -> popMode;
+NR_WS: WS_frag -> channel(WHITESPACE);
+
+mode String;
+S_CONTENT: ~["\r\n]+;
+S_STRING_END: '"' -> popMode;
+
+mode CustomDirective;
+C_LINE_COMMENT: LINE_COMMENT_frag -> channel(COMMENTS);
+C_BLOCK_COMMENT: BLOCK_COMMENT_frag -> channel(COMMENTS);
+C_EOL: NEWLINE -> popMode, popMode;
+C_WS: WS_frag -> channel(WHITESPACE);
+C_CONTENT: ~[\n\t\r\u000C ] NO_NEWLINE*;
 
 //gobble the preprocessor content only if started a preprocessor directive
 mode Preprocessor;
-PP_LINE_CONTINUE: LINE_CONTINUE -> channel(WHITESPACE);
+PP_LINE_CONTINUE: LINE_CONTINUE_frag -> channel(WHITESPACE);
 PP_LINE_COMMENT: LINE_COMMENT_frag -> channel(COMMENTS);
 PP_BLOCK_COMMENT: BLOCK_COMMENT_frag -> channel(COMMENTS);
 PP_EOL: NEWLINE -> channel(PREPROCESSOR), popMode;
