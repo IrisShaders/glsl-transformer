@@ -6,15 +6,17 @@ package io.github.douira.glsl_transformer.ast.print;
 public class OutputOptions {
   private boolean printInfo;
   private String headerSuffix;
+  public boolean printCustomDirectives = true;
 
   public OutputOptions() {
     this.printInfo = false;
     this.headerSuffix = null;
   }
 
-  public OutputOptions(boolean printLibraryVersionInfo, String headerSuffix) {
+  public OutputOptions(boolean printLibraryVersionInfo, String headerSuffix, boolean printCustomDirectives) {
     this.printInfo = printLibraryVersionInfo;
     this.headerSuffix = headerSuffix;
+    this.printCustomDirectives = printCustomDirectives;
   }
 
   public void enablePrintInfo() {
@@ -38,6 +40,6 @@ public class OutputOptions {
   }
 
   public OutputOptions clone() {
-    return new OutputOptions(printInfo, headerSuffix);
+    return new OutputOptions(printInfo, headerSuffix, printCustomDirectives);
   }
 }

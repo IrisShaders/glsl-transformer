@@ -1041,4 +1041,19 @@ Ray.length = 4;
 §testReprint statement:
 foo.bar = baz.length();
 
+§testReprint translationUnit:
+#include ""
+
+§testReprint translationUnit:
+#include "foo"
+
+§testReprint translationUnit:
+#custom "foo"
+
+§testReprint translationUnit:
+#custom
+
+§testReprint translationUnit:
+#custom fdsajfdsl j4kltj4 43_" fds
+
 §

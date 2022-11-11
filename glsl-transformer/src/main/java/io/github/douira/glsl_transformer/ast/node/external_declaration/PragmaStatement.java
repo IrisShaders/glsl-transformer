@@ -9,9 +9,9 @@ import io.github.douira.glsl_transformer.ast.traversal.*;
 
 public class PragmaStatement extends ExternalDeclaration {
   public enum PragmaType implements TokenTyped {
-    DEBUG(GLSLLexer.PRAGMA_DEBUG),
-    OPTIMIZE(GLSLLexer.PRAGMA_OPTIMIZE),
-    INVARIANT(GLSLLexer.PRAGMA_INVARIANT),
+    DEBUG(GLSLLexer.NR_PRAGMA_DEBUG),
+    OPTIMIZE(GLSLLexer.NR_PRAGMA_OPTIMIZE),
+    INVARIANT(GLSLLexer.NR_PRAGMA_INVARIANT),
     CUSTOM(GLSLLexer.NR_IDENTIFIER);
 
     public final int tokenType;

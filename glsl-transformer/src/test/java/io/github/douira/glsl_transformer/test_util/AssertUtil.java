@@ -30,6 +30,8 @@ public class AssertUtil {
       String expected,
       String input) {
     var parser = new EnhancedParser();
+    parser.getLexer().enableCustomDirective = true;
+    parser.getLexer().enableIncludeDirective = true;
     var parseTree = parser.parse(input, parseMethod);
     var ast = ASTBuilder.build(parseTree);
     var reprinted = ASTPrinter.print(printType, ast);

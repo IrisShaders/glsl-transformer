@@ -57,6 +57,14 @@ public interface ASTVisitor<R> extends GeneralASTVisitor<R> {
     return visitData(result, node.behavior);
   }
 
+  default R visitCustomDirectiveStatement(CustomDirectiveStatement node) {
+    return visitData(node.content);
+  }
+
+  default R visitIncludeStatement(IncludeStatement node) {
+    return visitData(node.content);
+  }
+
   default R visitDeclarationExternalDeclaration(DeclarationExternalDeclaration node) {
     return visit(node.getDeclaration());
   }

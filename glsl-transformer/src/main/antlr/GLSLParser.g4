@@ -35,7 +35,7 @@ translationUnit: versionStatement? externalDeclaration* EOF;
 
 //allows for EXT_null_initializer
 versionStatement:
-	NR VERSION version = (
+	NR NR_VERSION version = (
 		NR_GLSL_110
 		| NR_GLSL_120
 		| NR_GLSLES_100
@@ -60,23 +60,25 @@ externalDeclaration:
 	| declaration
 	| pragmaStatement
 	| extensionStatement
+	| customDirectiveStatement
+	| includeStatement
 	| layoutDefaults
 	| emptyDeclaration;
 
 emptyDeclaration: SEMICOLON;
 
 pragmaStatement:
-	NR PRAGMA stdGL = NR_STDGL? (
+	NR NR_PRAGMA stdGL = NR_STDGL? (
 		type = NR_IDENTIFIER
-		| type = (PRAGMA_DEBUG | PRAGMA_OPTIMIZE) NR_LPAREN state = (
+		| type = (NR_PRAGMA_DEBUG | NR_PRAGMA_OPTIMIZE) NR_LPAREN state = (
 			NR_ON
 			| NR_OFF
 		) NR_RPAREN
-		| type = PRAGMA_INVARIANT NR_LPAREN state = NR_ALL NR_RPAREN
+		| type = NR_PRAGMA_INVARIANT NR_LPAREN state = NR_ALL NR_RPAREN
 	) NR_EOL;
 
 extensionStatement:
-	NR EXTENSION extensionName = NR_IDENTIFIER (
+	NR NR_EXTENSION extensionName = NR_IDENTIFIER (
 		NR_COLON extensionBehavior = (
 			NR_REQUIRE
 			| NR_ENABLE
@@ -84,6 +86,11 @@ extensionStatement:
 			| NR_DISABLE
 		)
 	)? NR_EOL;
+
+customDirectiveStatement: NR NR_CUSTOM content = C_CONTENT? C_EOL;
+
+includeStatement:
+	NR NR_INCLUDE NR_STRING_START content = S_CONTENT? S_STRING_END NR_EOL;
 
 layoutDefaults:
 	layoutQualifier layoutMode = (UNIFORM | IN | OUT | BUFFER) SEMICOLON;

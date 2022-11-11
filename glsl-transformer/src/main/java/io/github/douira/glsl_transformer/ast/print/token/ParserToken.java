@@ -9,7 +9,8 @@ import io.github.douira.glsl_transformer.cst.token_filter.TokenChannel;
 public class ParserToken extends PrintToken {
   private static final Map<Integer, String> missingTokenStrings = new HashMap<>() {
     {
-      put(GLSLLexer.PRAGMA_INVARIANT, "invariant");
+      put(GLSLLexer.NR_PRAGMA_INVARIANT, "invariant");
+      put(GLSLLexer.NR_CUSTOM, "custom");
       put(GLSLLexer.INVARIANT, "invariant");
       put(GLSLLexer.LPAREN, "(");
       put(GLSLLexer.NR_LPAREN, "(");
@@ -18,6 +19,8 @@ public class ParserToken extends PrintToken {
       put(GLSLLexer.PP_EMPTY, "#\n");
       put(GLSLLexer.COLON, ":");
       put(GLSLLexer.NR_COLON, ":");
+      put(GLSLLexer.NR_STRING_START, "\"");
+      put(GLSLLexer.S_STRING_END, "\"");
     }
   };
 
