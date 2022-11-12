@@ -18,17 +18,13 @@ Transforming the AST requires the additional step of building the AST from the p
 
 - GLSL Lexing & Parsing
 - AST and CST transformation
-- CST: Composable parse tree transformations
-- CST: Pattern and XPath matching
 - Tree walking with visitors and listeners
 - Parse tree manipulation and declaration injection
 - New nodes are treated as part of the existing parse tree
-- CST: Whitespace-preserving re-printing
-- CST: The original input is preserved if no changes are made
 - AST: Complex pattern matching
 - AST: Templating for subtree generation
 - AST: Printing with various formatting options
-- AST: Index-Based queries
+- AST: Index-based queries
 
 Further reading on [Abstract vs Concrete (Parse) Syntax Trees](https://eli.thegreenplace.net/2009/02/16/abstract-vs-concrete-syntax-trees/)
 
@@ -44,7 +40,7 @@ It also doesn't validate that features aren't used which may not be available in
 
 This project uses semver for versioning. If there are frequent breaking API changes then the major version will change frequently. This is the way.
 
-This library is written in Java 16 and using [jabel](https://github.com/bsideup/jabel) compiled to Java 8 compatible classes. This means it doesn't use any newer Java language APIs. The tests are not affected by this and will only be run on the latest Java version (because it's annoying only use Java 8 in the tests). If nobody needs Java 8 support anymore in the future, it will be dropped with a major release. Currently, this is because Minecraft 1.16 uses Java 8.
+This library is written in Java 16 but without using Java language APIs beyond those of Java 8 and using [jabel](https://github.com/bsideup/jabel) it is compiled to Java 8 compatible classes. The tests are not affected by this and will only be run on the latest Java version (because it's annoying only use Java 8 in the tests). If nobody needs Java 8 support anymore in the future, it will be dropped with a major release. Currently, this is because Minecraft 1.16 uses Java 8.
 
 ## Credit
 
@@ -78,46 +74,33 @@ gradle javadoc
 
 ## Example
 
-CST Transformation
-
-```java
-// setup a transformer
-var transformer = new CSTTransformer<>();
-
-// register a transformation
-manager.addConcurrent(transformation);
-
-// after transformation
-System.out.println(transformer.transform(input));
-```
-
-AST Transformation
 ```java
 // setup a transformer
 var transformer = new ASTTransformer<>();
 
 // set the transformation
-transformer.setTransformation(translationUnit -> {
-  // do things
+transformer.setTransformation((translationUnit, root) -> {
+  // find addition expressions
+  root.nodeIndex.getStream(AdditionExpression.class).forEach(System.out::println);
+
+  // delete all statements that contain the identifier "bar"
+  root.process(
+    node.identifierIndex.getStream("bar"),
+    ASTNode::detachAndDelete
+  );
+
+  // find the "baz" reference expression
+  System.out.println(
+    root.identifierIndex.getOneReferenceExpression("baz").getIdentifier().getName());
+
+  // add a line to the program
+  translationUnit.parseAndInjectNode(
+    transformer, ASTInjectionPoint.BEFORE_FUNCTIONS, "uniform int foo = 4;");
 });
 
 // after transformation
 System.out.println(transformer.transform(input));
 ```
-
-## Permitted CST Operations
-
-- Adding a new parsed node anywhere (as a new local root)
-- Removing any node with its entire subtree
-- Replacing any node (remove, then add)
-- Moving a local root node anywhere
-- Moving a node strictly inside its local root scope (not a subscope)
-- Removing or moving a non-local-root node without touching its subtree, though this may break things that rely on grammar rules being followed
-
-### Not permitted (yet)
-
-- Moving a node out of the scope of its local root (it would be missing a token stream)
-- Entirely removing a local root node and replacing it with a new one, giving it the previous node's children
 
 # Documentation
 
