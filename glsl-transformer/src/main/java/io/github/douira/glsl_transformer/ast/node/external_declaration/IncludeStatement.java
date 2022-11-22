@@ -5,9 +5,15 @@ import io.github.douira.glsl_transformer.ast.traversal.*;
 
 public class IncludeStatement extends ExternalDeclaration {
   public String content;
+  public boolean isAngleBrackets;
+
+  public IncludeStatement(String content, boolean isAngleBrackets) {
+    this.content = content;
+    this.isAngleBrackets = isAngleBrackets;
+  }
 
   public IncludeStatement(String content) {
-    this.content = content;
+    this(content, false);
   }
 
   @Override
@@ -34,7 +40,7 @@ public class IncludeStatement extends ExternalDeclaration {
 
   @Override
   public IncludeStatement clone() {
-    return new IncludeStatement(content);
+    return new IncludeStatement(content, isAngleBrackets);
   }
 
   @Override

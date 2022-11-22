@@ -399,6 +399,7 @@ NR_GLSL_450: '450';
 NR_GLSL_460: '460';
 
 NR_STRING_START: '"' {enableIncludeDirective}? -> pushMode(String);
+NR_STRING_START_ANGLE: '<' {enableIncludeDirective}? -> pushMode(StringAngle);
 NR_INTCONSTANT: INTCONSTANT_frag;
 NR_IDENTIFIER: IDENTIFIER_frag;
 NR_LINE_CONTINUE: LINE_CONTINUE_frag -> channel(WHITESPACE);
@@ -410,6 +411,10 @@ NR_WS: WS_frag -> channel(WHITESPACE);
 mode String;
 S_CONTENT: ~["\r\n]+;
 S_STRING_END: '"' -> popMode;
+
+mode StringAngle;
+S_CONTENT_ANGLE: ~[>\r\n]+;
+S_STRING_END_ANGLE: '>' -> popMode;
 
 mode CustomDirective;
 C_LINE_COMMENT: LINE_COMMENT_frag -> channel(COMMENTS);
