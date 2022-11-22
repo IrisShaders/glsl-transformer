@@ -10,12 +10,12 @@ import java.util.stream.Stream;
  * underlying trie. The number of bits used to index an entry is quadratic in
  * the size of the key.
  */
-public class PermutermTrie<E> extends DuplicatorTrie<Set<E>>
-    implements PrefixQueryable<E>, SuffixQueryable<E>, InfixQueryable<E>, InvertedInfixQueryable<E> {
+public class PermutermTrie<S extends Set<E>, E> extends DuplicatorTrie<S>
+    implements PrefixQueryable<S, E>, SuffixQueryable<S, E>, InfixQueryable<S, E>, InvertedInfixQueryable<S, E> {
   public PermutermTrie() {
   }
 
-  public PermutermTrie(Map<? extends String, ? extends Set<E>> m) {
+  public PermutermTrie(Map<? extends String, ? extends S> m) {
     super(m);
   }
 
@@ -23,7 +23,7 @@ public class PermutermTrie<E> extends DuplicatorTrie<Set<E>>
     super(marker);
   }
 
-  public PermutermTrie(Map<? extends String, ? extends Set<E>> m, char marker) {
+  public PermutermTrie(Map<? extends String, ? extends S> m, char marker) {
     super(m, marker);
   }
 
@@ -47,7 +47,7 @@ public class PermutermTrie<E> extends DuplicatorTrie<Set<E>>
    * @return the elements that have the prefix
    */
   @Override
-  public Stream<Set<E>> prefixQuery(String prefix) {
+  public Stream<S> prefixQuery(String prefix) {
     return distinctPrefixQuery(marker + sanitizeKey(prefix));
   }
 
@@ -58,7 +58,7 @@ public class PermutermTrie<E> extends DuplicatorTrie<Set<E>>
    * @return the elements that have the suffix
    */
   @Override
-  public Stream<Set<E>> suffixQuery(String suffix) {
+  public Stream<S> suffixQuery(String suffix) {
     return distinctPrefixQuery(sanitizeKey(suffix) + marker);
   }
 
@@ -69,7 +69,7 @@ public class PermutermTrie<E> extends DuplicatorTrie<Set<E>>
    * @return the elements that have the infix
    */
   @Override
-  public Stream<Set<E>> infixQuery(String infix) {
+  public Stream<S> infixQuery(String infix) {
     return distinctPrefixQuery(sanitizeKey(infix));
   }
 
@@ -81,7 +81,7 @@ public class PermutermTrie<E> extends DuplicatorTrie<Set<E>>
    * @return the elements that have the prefix and suffix
    */
   @Override
-  public Stream<Set<E>> invertedInfixQuery(String prefix, String suffix) {
+  public Stream<S> invertedInfixQuery(String prefix, String suffix) {
     return distinctPrefixQuery(sanitizeKey(suffix) + marker + sanitizeKey(prefix));
   }
 }

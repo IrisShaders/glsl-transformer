@@ -7,6 +7,7 @@ import java.util.stream.Stream;
 import org.junit.jupiter.api.Test;
 
 import io.github.douira.glsl_transformer.ast.node.Identifier;
+import io.github.douira.glsl_transformer.ast.query.index.PrefixIdentifierIndex;
 import io.github.douira.glsl_transformer.ast.query.match.*;
 import io.github.douira.glsl_transformer.test_util.TestWithSingleASTTransformer;
 
@@ -45,14 +46,16 @@ public class RootTest extends TestWithSingleASTTransformer {
 
   @Test
   void testReplaceMultiple() {
+    Root.identifierIndexFactory = PrefixIdentifierIndex::withPrefix;
     p.setTransformation((tree, root) -> {
-      root.process(root.identifierIndex.prefixQueryFlat("f"),
+      root.process(((PrefixIdentifierIndex<?, ?>) root.identifierIndex).prefixQueryFlat("f"),
           id -> id.getParent().replaceByAndDelete(
               p.parseExpression(tree, "bam + spam")));
     });
     assertTransform(
         "int x = bam + spam + bar + bam + spam; ",
         "int x = foo + bar + fan;");
+    Root.resetRootFactories();
   }
 
   @Test
@@ -66,14 +69,16 @@ public class RootTest extends TestWithSingleASTTransformer {
 
   @Test
   void testReplaceReferenceExpressionsPrefix() {
+    Root.identifierIndexFactory = PrefixIdentifierIndex::withPrefix;
     p.setTransformation((tree, root) -> {
       root.replaceReferenceExpressions(p,
-          root.identifierIndex.prefixQueryFlat("f"),
+          ((PrefixIdentifierIndex<?, ?>) root.identifierIndex).prefixQueryFlat("f"),
           "bam + spam");
     });
     assertTransform(
         "int foo = bam + spam + bar + bam + spam; ",
         "int foo = foo + bar + fan;");
+    Root.resetRootFactories();
   }
 
   @Test

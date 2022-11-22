@@ -14,7 +14,7 @@ import io.github.douira.glsl_transformer.ast.node.type.qualifier.PreciseQualifie
 import io.github.douira.glsl_transformer.ast.query.index.NodeIndex;
 
 public class NodeIndexTest {
-  NodeIndex index = new NodeIndex();
+  NodeIndex<?> index = NodeIndex.withUnordered();
   ASTNode a = new Identifier("a");
   ASTNode b = new Identifier("b");
   ASTNode c = new Identifier("c");

@@ -5,11 +5,11 @@ import java.util.stream.Stream;
 
 import org.apache.commons.collections4.trie.PatriciaTrie;
 
-public class PrefixTrie<E> extends PatriciaTrie<Set<E>> implements PrefixQueryable<E> {
+public class PrefixTrie<S extends Set<E>, E> extends PatriciaTrie<S> implements PrefixQueryable<S, E> {
   public PrefixTrie() {
   }
 
-  public PrefixTrie(Map<? extends String, ? extends Set<E>> m) {
+  public PrefixTrie(Map<? extends String, ? extends S> m) {
     super(m);
   }
 
@@ -20,7 +20,7 @@ public class PrefixTrie<E> extends PatriciaTrie<Set<E>> implements PrefixQueryab
    * @return the elements that have the prefix
    */
   @Override
-  public Stream<Set<E>> prefixQuery(String prefix) {
+  public Stream<S> prefixQuery(String prefix) {
     return prefixMap(prefix).values().stream();
   }
 }

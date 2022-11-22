@@ -11,7 +11,7 @@ import io.github.douira.glsl_transformer.ast.node.type.qualifier.*;
 import io.github.douira.glsl_transformer.ast.query.index.*;
 
 public class SuperclassNodeIndexTest {
-  NodeIndex index = new SuperclassNodeIndex();
+  NodeIndex<?> index = SuperclassNodeIndex.withUnordered();
   ASTNode a = new PreciseQualifier();
   ASTNode b = new PreciseQualifier();
   ASTNode c = new PreciseQualifier();

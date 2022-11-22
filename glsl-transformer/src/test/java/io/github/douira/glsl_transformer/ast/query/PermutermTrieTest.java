@@ -11,7 +11,7 @@ import io.github.douira.glsl_transformer.ast.query.index.PermutermTrie;
 import io.github.douira.glsl_transformer.test_util.TestWithTrieObjects;
 
 public class PermutermTrieTest extends TestWithTrieObjects {
-  PermutermTrie<Object> trie;
+  PermutermTrie<Set<Object>, Object> trie;
 
   // setup before each test
   @BeforeEach

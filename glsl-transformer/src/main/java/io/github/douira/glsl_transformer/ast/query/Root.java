@@ -24,7 +24,7 @@ public class Root {
    * available node index implementations that provide different trade-offs
    * between performance, memory consumption and query capabilities.
    */
-  public final NodeIndex nodeIndex;
+  public final NodeIndex<?> nodeIndex;
 
   /**
    * The identifier index is used to query identifiers by their name or prefixes
@@ -32,7 +32,12 @@ public class Root {
    * that provide different trade-offs between performance, memory consumption and
    * query capabilities.
    */
-  public final IdentifierIndex<?> identifierIndex;
+  public final IdentifierIndex<?, ?> identifierIndex;
+
+  public static final Supplier<NodeIndex<?>> nodeIndexFactoryDefault = NodeIndex::withUnordered;
+  public static Supplier<IdentifierIndex<?, ?>> identifierIndexFactoryDefault = IdentifierIndex::withOnlyExact;
+  public static Supplier<NodeIndex<?>> nodeIndexFactory = nodeIndexFactoryDefault;
+  public static Supplier<IdentifierIndex<?, ?>> identifierIndexFactory = identifierIndexFactoryDefault;
 
   // internal utility state
   private static Deque<Root> activeBuildRoots = new ArrayDeque<>();
@@ -45,17 +50,46 @@ public class Root {
    * @param nodeIndex       The node index
    * @param identifierIndex The identifier index
    */
-  public Root(NodeIndex nodeIndex, IdentifierIndex<?> identifierIndex) {
+  public Root(NodeIndex<?> nodeIndex, IdentifierIndex<?, ?> identifierIndex) {
     this.nodeIndex = nodeIndex;
     this.identifierIndex = identifierIndex;
+  }
+  
+  public Root() {
+    this(nodeIndexFactory.get(), identifierIndexFactory.get());
   }
 
   /**
    * Constructs a new root with the default node and identifier indexes which have
    * the least amount of functionality but are also the most efficient.
    */
-  public Root() {
-    this(new NodeIndex(), IdentifierIndex.withPrefix());
+  public static Root withExactUnordered() {
+    return new Root(NodeIndex.withUnordered(), IdentifierIndex.withOnlyExact());
+  }
+
+  public static Root withExactOrdered() {
+    return new Root(NodeIndex.withOrdered(), IdentifierIndex.withOnlyExact());
+  }
+
+  public static Root withExactOrderedBoth() {
+    return new Root(NodeIndex.withOrdered(), IdentifierIndex.withOnlyExact(LinkedHashSet::new));
+  }
+
+  public static Root withPrefixUnordered() {
+    return new Root(NodeIndex.withUnordered(), PrefixIdentifierIndex.withPrefix());
+  }
+
+  public static Root withPrefixOrdered() {
+    return new Root(NodeIndex.withOrdered(), PrefixIdentifierIndex.withPrefix());
+  }
+
+  public static Root withPrefixOrderedBoth() {
+    return new Root(NodeIndex.withOrdered(), PrefixIdentifierIndex.withPrefix(LinkedHashSet::new));
+  }
+
+  public static void resetRootFactories() {
+    nodeIndexFactory = nodeIndexFactoryDefault;
+    identifierIndexFactory = identifierIndexFactoryDefault;
   }
 
   /**

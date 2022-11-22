@@ -1,9 +1,8 @@
 package io.github.douira.glsl_transformer.ast.query.index;
 
 import java.util.*;
+import java.util.function.Supplier;
 import java.util.stream.Stream;
-
-import org.apache.commons.collections4.trie.PatriciaTrie;
 
 import io.github.douira.glsl_transformer.ast.node.Identifier;
 import io.github.douira.glsl_transformer.ast.node.basic.ASTNode;
@@ -12,12 +11,13 @@ import io.github.douira.glsl_transformer.ast.node.expression.ReferenceExpression
 /**
  * Indexes identifiers based on their content and enabled fast string queries.
  */
-public class IdentifierIndex<I extends PatriciaTrie<Set<Identifier>>>
-    implements Index<Identifier>, PrefixQueryable<Identifier> {
+public class IdentifierIndex<S extends Set<Identifier>, I extends Map<String, S>> implements Index<Identifier> {
   public final I index;
+  public final Supplier<S> setFactory;
 
-  public IdentifierIndex(I index) {
+  public IdentifierIndex(I index, Supplier<S> setFactory) {
     this.index = index;
+    this.setFactory = setFactory;
   }
 
   @Override
@@ -25,7 +25,7 @@ public class IdentifierIndex<I extends PatriciaTrie<Set<Identifier>>>
     var name = node.getName();
     var set = index.get(name);
     if (set == null) {
-      set = new HashSet<>();
+      set = setFactory.get();
       index.put(name, set);
     }
     set.add(node);
@@ -112,29 +112,12 @@ public class IdentifierIndex<I extends PatriciaTrie<Set<Identifier>>>
     return true;
   }
 
-  public SortedMap<String, Set<Identifier>> prefixMap(String key) {
-    return index.prefixMap(key);
+  public static IdentifierIndex<HashSet<Identifier>, HashMap<String, HashSet<Identifier>>> withOnlyExact() {
+    return new IdentifierIndex<>(new HashMap<>(), HashSet::new);
   }
 
-  @Override
-  public Stream<Set<Identifier>> prefixQuery(String key) {
-    return index.prefixMap(key).values().stream();
-  }
-
-  @Override
-  public Stream<Identifier> prefixQueryFlat(String key) {
-    return prefixQuery(key).flatMap(Set::stream);
-  }
-
-  public static IdentifierIndex<PrefixTrie<Identifier>> withPrefix() {
-    return new IdentifierIndex<>(new PrefixTrie<>());
-  }
-
-  public static IdentifierIndex<PrefixSuffixTrie<Identifier>> withPrefixSuffix() {
-    return new IdentifierIndex<>(new PrefixSuffixTrie<>());
-  }
-
-  public static IdentifierIndex<PermutermTrie<Identifier>> withPermuterm() {
-    return new IdentifierIndex<>(new PermutermTrie<>());
+  public static <R extends Set<Identifier>> IdentifierIndex<R, HashMap<String, R>> withOnlyExact(
+      Supplier<R> setFactory) {
+    return new IdentifierIndex<>(new HashMap<>(), setFactory);
   }
 }
