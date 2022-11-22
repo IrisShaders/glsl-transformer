@@ -1048,6 +1048,12 @@ foo.bar = baz.length();
 #include "foo"
 
 §testReprint translationUnit:
+#include <foo "in angle>
+
+§testReprint translationUnit:
+#include "<fdsfds>>fdsfds"
+
+§testReprint translationUnit:
 #custom "foo"
 
 §testReprint translationUnit:

@@ -20,7 +20,10 @@ public class ParserToken extends PrintToken {
       put(GLSLLexer.COLON, ":");
       put(GLSLLexer.NR_COLON, ":");
       put(GLSLLexer.NR_STRING_START, "\"");
+      put(GLSLLexer.NR_STRING_START_ANGLE, "<");
       put(GLSLLexer.S_STRING_END, "\"");
+      put(GLSLLexer.S_STRING_END_ANGLE, ">");
+      put(GLSLLexer.GT_OP, ">");
     }
   };
 
@@ -55,7 +58,8 @@ public class ParserToken extends PrintToken {
         return replacement;
       }
       throw new IllegalStateException(
-          "Can't create a parser token for a token type that doesn't have a defined literal name!");
+          "Can't create a parser token for a token type that doesn't have a defined literal name! Resolving "
+              + tokenType + " failed.");
     }
     return literalName.substring(1, literalName.length() - 1);
   }

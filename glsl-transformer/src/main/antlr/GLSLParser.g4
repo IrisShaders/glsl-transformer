@@ -90,7 +90,10 @@ extensionStatement:
 customDirectiveStatement: NR NR_CUSTOM content = C_CONTENT? C_EOL;
 
 includeStatement:
-	NR NR_INCLUDE NR_STRING_START content = S_CONTENT? S_STRING_END NR_EOL;
+	NR NR_INCLUDE (
+		NR_STRING_START content = S_CONTENT? S_STRING_END
+		| angleStart = NR_STRING_START_ANGLE content = S_CONTENT_ANGLE? S_STRING_END_ANGLE
+	) NR_EOL;
 
 layoutDefaults:
 	layoutQualifier layoutMode = (UNIFORM | IN | OUT | BUFFER) SEMICOLON;

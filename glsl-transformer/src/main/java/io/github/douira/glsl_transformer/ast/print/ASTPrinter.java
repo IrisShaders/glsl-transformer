@@ -160,11 +160,11 @@ public class ASTPrinter extends ASTPrinterBase {
   public Void visitIncludeStatement(IncludeStatement node) {
     emitType(GLSLLexer.NR, GLSLLexer.NR_INCLUDE);
     emitExtendableSpace();
-    emitType(GLSLLexer.NR_STRING_START);
+    emitType(node.isAngleBrackets ? GLSLLexer.NR_STRING_START_ANGLE : GLSLLexer.NR_STRING_START);
     if (node.content != null) {
       emitLiteral(node.content);
     }
-    emitType(GLSLLexer.S_STRING_END);
+    emitType(node.isAngleBrackets ? GLSLLexer.S_STRING_END_ANGLE : GLSLLexer.S_STRING_END);
     emitExactNewline();
     return null;
   }

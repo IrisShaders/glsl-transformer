@@ -248,7 +248,7 @@ public class ASTBuilder extends GLSLParserBaseVisitor<ASTNode> {
 
   @Override
   public IncludeStatement visitIncludeStatement(IncludeStatementContext ctx) {
-    return new IncludeStatement(applySafe(ctx.content, Token::getText));
+    return new IncludeStatement(applySafe(ctx.content, Token::getText), ctx.angleStart != null);
   }
 
   @Override
