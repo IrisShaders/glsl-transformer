@@ -17,24 +17,20 @@ import io.github.douira.glsl_transformer.ast.query.Root;
  * Unchecked casts are used but they are safe because each set in the map only
  * has the right types of nodes.
  */
-public class NodeIndex implements Index<ASTNode> {
+public class NodeIndex<S extends Set<ASTNode>> implements Index<ASTNode> {
   public final Map<Class<ASTNode>, Set<ASTNode>> index = new HashMap<>();
-  public final Supplier<Set<ASTNode>> bucketConstructor;
+  public final Supplier<S> setFactory;
 
-  public NodeIndex(Supplier<Set<ASTNode>> bucketConstructor) {
-    this.bucketConstructor = bucketConstructor;
+  public NodeIndex(Supplier<S> setFactory) {
+    this.setFactory = setFactory;
   }
 
-  public NodeIndex() {
-    this(HashSet::new);
+  public static NodeIndex<HashSet<ASTNode>> withUnordered() {
+    return new NodeIndex<HashSet<ASTNode>>(HashSet::new);
   }
 
-  public static NodeIndex withHashSetBuckets() {
-    return new NodeIndex(HashSet::new);
-  }
-
-  public static NodeIndex withLinkedHashSetBuckets() {
-    return new NodeIndex(LinkedHashSet::new);
+  public static NodeIndex<LinkedHashSet<ASTNode>> withOrdered() {
+    return new NodeIndex<LinkedHashSet<ASTNode>>(LinkedHashSet::new);
   }
 
   /**
@@ -47,7 +43,7 @@ public class NodeIndex implements Index<ASTNode> {
     var nodeClass = (Class<ASTNode>) node.getClass();
     var set = index.get(nodeClass);
     if (set == null) {
-      set = bucketConstructor.get();
+      set = setFactory.get();
       index.put(nodeClass, set);
     }
     set.add(node);
@@ -70,7 +66,7 @@ public class NodeIndex implements Index<ASTNode> {
   /**
    * Returns a set of all nodes with the given type.
    * 
-   * @param <T>   the type of the class
+   * @param <T>  the type of the class
    * @param type the class of nodes to return
    * @return a set of nodes with the given type
    */
@@ -83,7 +79,7 @@ public class NodeIndex implements Index<ASTNode> {
   /**
    * Returns a stream of all nodes with the given type.
    * 
-   * @param <T>   the type of the class
+   * @param <T>  the type of the class
    * @param type the class of nodes to return
    * @return a stream of nodes with the given type
    */
@@ -96,7 +92,7 @@ public class NodeIndex implements Index<ASTNode> {
   /**
    * Returns an arbitrary node with the given type.
    * 
-   * @param <T>   the type of the class
+   * @param <T>  the type of the class
    * @param type the class of the node to return
    * @return an arbitrary node with the given type
    */

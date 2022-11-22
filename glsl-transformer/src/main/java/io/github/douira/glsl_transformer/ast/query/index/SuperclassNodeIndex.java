@@ -10,20 +10,17 @@ import io.github.douira.glsl_transformer.ast.node.basic.*;
  * all nodes. This means querying for Expression returns all nodes that extend
  * Expression.
  */
-public class SuperclassNodeIndex extends NodeIndex {
-  public SuperclassNodeIndex(Supplier<Set<ASTNode>> bucketConstructor) {
-    super(bucketConstructor);
+public class SuperclassNodeIndex<S extends Set<ASTNode>> extends NodeIndex<S> {
+  public SuperclassNodeIndex(Supplier<S> setFactory) {
+    super(setFactory);
   }
 
-  public SuperclassNodeIndex() {
+  public static SuperclassNodeIndex<HashSet<ASTNode>> withUnordered() {
+    return new SuperclassNodeIndex<HashSet<ASTNode>>(HashSet::new);
   }
 
-  public static SuperclassNodeIndex withHashSetBuckets() {
-    return new SuperclassNodeIndex(HashSet::new);
-  }
-
-  public static SuperclassNodeIndex withLinkedHashSetBuckets() {
-    return new SuperclassNodeIndex(LinkedHashSet::new);
+  public static SuperclassNodeIndex<LinkedHashSet<ASTNode>> withOrdered() {
+    return new SuperclassNodeIndex<LinkedHashSet<ASTNode>>(LinkedHashSet::new);
   }
 
   @SuppressWarnings("unchecked")
@@ -46,7 +43,7 @@ public class SuperclassNodeIndex extends NodeIndex {
     iterateClasses(node, (nodeClass, toAdd) -> {
       var set = (Set<ASTNode>) index.get(nodeClass);
       if (set == null) {
-        set = bucketConstructor.get();
+        set = setFactory.get();
         index.put((Class<ASTNode>)nodeClass, set);
       }
       set.add(toAdd);

@@ -11,14 +11,14 @@ import java.util.stream.Stream;
  * number of bits used to index an entry is not quadratic in the size of the key
  * but linear.
  */
-public class PrefixSuffixTrie<E> extends DuplicatorTrie<Set<E>> implements PrefixQueryable<E>, SuffixQueryable<E> {
+public class PrefixSuffixTrie<S extends Set<E>, E> extends DuplicatorTrie<S> implements PrefixQueryable<S, E>, SuffixQueryable<S, E> {
   private static final int removeThreshold = 200;
   private Map<String, String> reverses = new HashMap<>();
 
   public PrefixSuffixTrie() {
   }
 
-  public PrefixSuffixTrie(Map<? extends String, ? extends Set<E>> m) {
+  public PrefixSuffixTrie(Map<? extends String, ? extends S> m) {
     super(m);
   }
 
@@ -26,7 +26,7 @@ public class PrefixSuffixTrie<E> extends DuplicatorTrie<Set<E>> implements Prefi
     super(marker);
   }
 
-  public PrefixSuffixTrie(Map<? extends String, ? extends Set<E>> m, char marker) {
+  public PrefixSuffixTrie(Map<? extends String, ? extends S> m, char marker) {
     super(m, marker);
   }
 
@@ -47,7 +47,7 @@ public class PrefixSuffixTrie<E> extends DuplicatorTrie<Set<E>> implements Prefi
   }
 
   @Override
-  public Set<E> remove(Object k) {
+  public S remove(Object k) {
     var previous = super.remove(k);
     if (reverses.size() >= removeThreshold) {
       // remove both the key and the reverse of the key
@@ -57,12 +57,12 @@ public class PrefixSuffixTrie<E> extends DuplicatorTrie<Set<E>> implements Prefi
   }
 
   @Override
-  public Stream<Set<E>> prefixQuery(String prefix) {
+  public Stream<S> prefixQuery(String prefix) {
     return distinctPrefixQuery(sanitizeKey(prefix));
   }
 
   @Override
-  public Stream<Set<E>> suffixQuery(String suffix) {
+  public Stream<S> suffixQuery(String suffix) {
     return distinctPrefixQuery(marker + getReverse(sanitizeKey(suffix)));
   }
 }
