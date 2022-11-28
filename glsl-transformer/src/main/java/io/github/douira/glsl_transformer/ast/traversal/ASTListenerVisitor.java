@@ -10,4 +10,9 @@ public class ASTListenerVisitor<R> extends ASTWalker<R> implements ASTListener {
   public static <T> T walkAndListen(ASTNode node) {
     return new ASTListenerVisitor<T>().visit(node);
   }
+
+  @Override
+  public void enterContext(ASTNode node) {
+    // no nothing, to prevent infinite recursion
+  }
 }
