@@ -17,6 +17,11 @@ import io.github.douira.glsl_transformer.util.TriConsumer;
 public abstract class TestWithSingleASTTransformer {
   public SingleASTTransformer<JobParameters> p;
 
+  /**
+   * How many times the transform method is called on the transformer here.
+   */
+  public static final int REPEAT = 3;
+
   @BeforeEach
   public void setUp() {
     p = new SingleASTTransformer<>() {
