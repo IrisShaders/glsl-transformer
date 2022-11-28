@@ -6,7 +6,7 @@ import java.util.stream.Stream;
 
 import org.junit.jupiter.api.*;
 
-import io.github.douira.glsl_transformer.cst.transform.*;
+import io.github.douira.glsl_transformer.cst.transform.CSTTransformer;
 import io.github.douira.glsl_transformer.job_parameter.WrappedParameters;
 import io.github.douira.glsl_transformer.test_util.*;
 import io.github.douira.glsl_transformer.test_util.TestResourceManager.FileLocation;
@@ -24,7 +24,7 @@ public class GrammarDebugTest {
   @Disabled
   void testDebugTree() {
     var t = new CSTTransformer<WrappedParameters<StringBuilder>>();
-    t.addConcurrent(new PrintTreeDebug());
+    t.addConcurrent(new PrintCSTDebug());
     t.getLexer().enableCustomDirective = true;
     t.getLexer().enableIncludeDirective = true;
 

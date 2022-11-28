@@ -3,7 +3,7 @@ package io.github.douira.glsl_transformer.test_util;
 import org.antlr.v4.runtime.ParserRuleContext;
 import org.antlr.v4.runtime.tree.TerminalNode;
 
-public class PrintTreeSnapshot extends PrintTree {
+public class PrintTreeSnapshot extends PrintCST {
 
   @Override
   public void processEnterRule(ParserRuleContext ctx, StringBuilder builder) {

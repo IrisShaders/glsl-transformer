@@ -3,10 +3,10 @@ package io.github.douira.glsl_transformer.test_util;
 import org.antlr.v4.runtime.ParserRuleContext;
 import org.antlr.v4.runtime.tree.*;
 
-import io.github.douira.glsl_transformer.cst.transform.*;
+import io.github.douira.glsl_transformer.cst.transform.WalkPhase;
 import io.github.douira.glsl_transformer.job_parameter.WrappedParameters;
 
-public abstract class PrintTree extends WalkPhase<WrappedParameters<StringBuilder>> {
+public abstract class PrintCST extends WalkPhase<WrappedParameters<StringBuilder>> {
   int depth;
 
   private static final int nameSuffixLength = "Context".length();
