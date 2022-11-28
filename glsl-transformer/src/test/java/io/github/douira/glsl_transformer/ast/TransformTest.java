@@ -22,6 +22,7 @@ import io.github.douira.glsl_transformer.ast.node.type.struct.StructDeclarator;
 import io.github.douira.glsl_transformer.ast.query.Root;
 import io.github.douira.glsl_transformer.ast.query.match.*;
 import io.github.douira.glsl_transformer.ast.transform.*;
+import io.github.douira.glsl_transformer.job_parameter.JobParameters;
 import io.github.douira.glsl_transformer.test_util.*;
 import io.github.douira.glsl_transformer.test_util.TestCaseProvider.Spacing;
 
@@ -233,5 +234,89 @@ public class TransformTest extends TestWithSingleASTTransformer {
 
       p.transform("layout(binding = 0, binding = 4 + 4, baz = zam, foo, shared, bar) uniform sampler2D u_texture;");
     });
+  }
+
+  @Test
+  void testLayoutBindingSearch2() {
+    record BindingResult(
+        int binding, // the binding location
+        TypeQualifier qualifier, // the type qualifier (uniform etc.)
+        String declarationName, // the name of the declaration (identifier)
+        String typeName, // the name of the type (custom or builtin like sampler)
+        boolean isStruct) { // true if the type is from an interface block declaration
+    }
+
+    class ListJobParameter extends JobParameters {
+      List<BindingResult> results = new ArrayList<>();
+
+      @Override
+      public boolean equals(Object obj) {
+        if (this == obj)
+          return true;
+        if (obj == null)
+          return false;
+        if (getClass() != obj.getClass())
+          return false;
+        ListJobParameter other = (ListJobParameter) obj;
+        if (results == null) {
+          if (other.results != null)
+            return false;
+        } else if (!results.equals(other.results))
+          return false;
+        return true;
+      }
+
+      @Override
+      public int hashCode() {
+        final int prime = 31;
+        int result = 1;
+        result = prime * result + ((results == null) ? 0 : results.hashCode());
+        return result;
+      }
+    }
+
+    var t = new SingleASTTransformer<ListJobParameter>();
+    t.setTransformation((tree, root) -> {
+      // find layout qualifiers
+      for (LayoutQualifier layoutQualifier : root.nodeIndex.get(LayoutQualifier.class)) {
+        // find layout binding
+        Expression binding = null;
+        for (LayoutQualifierPart layoutQualifierPart : layoutQualifier.getParts()) {
+          // check if it's a named layout qualifier with the name "binding"
+          if (layoutQualifierPart instanceof NamedLayoutQualifierPart named
+              && named.getName().getName().equals("binding")) {
+            binding = named.getExpression();
+          }
+        }
+
+        // discard if there is no binding
+        if (binding == null) {
+          continue;
+        }
+
+        // get the enclosing fully specified type
+        var fullySpecifiedType = layoutQualifier.getAncestor(2, 0, FullySpecifiedType.class::isInstance);
+
+        // if it exists, we are in a regular type and init declaration
+        if (fullySpecifiedType != null) {
+        // get the enclosing external declaration
+        ExternalDeclaration externalDeclaration = null;
+        if (fullySpecifiedType != null) {
+          externalDeclaration = (ExternalDeclaration) fullySpecifiedType.getAncestor(2, 0, ExternalDeclaration.class::isInstance);
+        }
+        } else {
+          // this may be an interface block declaration
+
+        }
+
+
+      }
+
+    });
+
+    t.setJobParameters(new ListJobParameter());
+    t.transform(
+        "layout(binding = 0) uniform sampler2D u_texture; layout(binding = 2) readonly buffer BlasDataAddresses { uint64_t address[]; } quadBlobs; layout(binding = 1) uniform accelerationStructureEXT acc;");
+
   }
 }
