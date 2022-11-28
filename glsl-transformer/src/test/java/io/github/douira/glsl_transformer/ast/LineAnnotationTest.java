@@ -13,7 +13,7 @@ import io.github.douira.glsl_transformer.test_util.TestCaseSource;
 public class LineAnnotationTest {
   @Disabled
   @ParameterizedTest
-  @TestCaseSource(caseSet = "testLineAnnotation", spacing = Spacing.TRIM_SINGLE_BOTH)
+  @TestCaseSource(caseSet = "testLineAnnotationReprint", spacing = Spacing.TRIM_SINGLE_BOTH)
   void testASTIntegration(String type, String input, String output) {
     assertReprint(PrintType.INDENTED_ANNOTATED, GLSLParser::translationUnit,
         output, input);
