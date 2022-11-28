@@ -1,9 +1,11 @@
 package io.github.douira.glsl_transformer.ast;
 
+import static io.github.douira.glsl_transformer.test_util.AssertUtil.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.*;
 
+import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 
 import io.github.douira.glsl_transformer.ast.node.Identifier;
@@ -12,7 +14,8 @@ import io.github.douira.glsl_transformer.ast.node.declaration.*;
 import io.github.douira.glsl_transformer.ast.node.expression.*;
 import io.github.douira.glsl_transformer.ast.node.expression.unary.FunctionCallExpression;
 import io.github.douira.glsl_transformer.ast.node.external_declaration.*;
-import io.github.douira.glsl_transformer.ast.node.type.qualifier.StorageQualifier;
+import io.github.douira.glsl_transformer.ast.node.type.FullySpecifiedType;
+import io.github.douira.glsl_transformer.ast.node.type.qualifier.*;
 import io.github.douira.glsl_transformer.ast.node.type.qualifier.StorageQualifier.StorageType;
 import io.github.douira.glsl_transformer.ast.node.type.specifier.*;
 import io.github.douira.glsl_transformer.ast.node.type.struct.StructDeclarator;
@@ -187,5 +190,48 @@ public class TransformTest extends TestWithSingleASTTransformer {
           });
     });
     assertTransformI(output, input);
+  }
+
+  @Test
+  void testLayoutBindingSearch() {
+    // a: 6 layout qualifier parts + one external declaration,
+    // b: 2 binding layout qualifier parts
+    // c: 5 named layout qualifier parts
+    assertCall(7 * REPEAT, 2 * REPEAT, 5 * REPEAT, (a, b, c) -> {
+      p.setTransformation((tree, root) -> {
+        // find layout qualifiers
+        for (LayoutQualifier layoutQualifier : root.nodeIndex.get(LayoutQualifier.class)) {
+          // find layout binding
+          Expression binding = null;
+          for (LayoutQualifierPart layoutQualifierPart : layoutQualifier.getParts()) {
+            a.run();
+
+            // check if it's a named layout qualifier with the name "binding"
+            if (layoutQualifierPart instanceof NamedLayoutQualifierPart named) {
+              if (named.getName().getName().equals("binding")) {
+                binding = named.getExpression();
+                b.run();
+              }
+              c.run();
+            }
+          }
+
+          // get the enclosing fully specified type
+          var type = layoutQualifier.getAncestor(2, 0, FullySpecifiedType.class::isInstance);
+
+          // get the enclosing external declaration
+          ExternalDeclaration externalDeclaration = null;
+          if (type != null) {
+            externalDeclaration = (ExternalDeclaration) type.getAncestor(2, 0, ExternalDeclaration.class::isInstance);
+            a.run();
+          }
+          assertNotNull(binding, "It should find a binding layout qualifier");
+          assertNotNull(externalDeclaration, "It should find an external declaration");
+        }
+
+      });
+
+      p.transform("layout(binding = 0, binding = 4 + 4, baz = zam, foo, shared, bar) uniform sampler2D u_texture;");
+    });
   }
 }
