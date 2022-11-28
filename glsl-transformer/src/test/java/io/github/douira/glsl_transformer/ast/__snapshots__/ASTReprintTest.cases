@@ -1062,4 +1062,7 @@ foo.bar = baz.length();
 §testReprint translationUnit:
 #custom fdsajfdsl j4kltj4 43_" fds
 
+§testReprint translationUnit:
+layout(binding = 0, binding = 4 + 4, baz = zam, foo, shared, bar) uniform sampler2D u_texture;
+
 §
