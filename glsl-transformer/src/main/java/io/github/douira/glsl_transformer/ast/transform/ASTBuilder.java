@@ -1078,8 +1078,50 @@ public class ASTBuilder extends GLSLParserBaseVisitor<ASTNode> {
   public LayoutQualifier visitLayoutQualifier(LayoutQualifierContext ctx) {
     startConstruction(ctx);
     try {
-      return new LayoutQualifier(
-          ctx.layoutQualifiers.stream().map(this::visitLayoutQualifierPart));
+      var parts = new LinkedList<LayoutQualifierPart>();
+      for (var partContext : ctx.layoutQualifiers) {
+        var part = visitLayoutQualifierPart(partContext);
+
+        // named layout qualifiers require extra processing
+        if (part instanceof NamedLayoutQualifierPart named) {
+          // check for sequence expression that has to be flattened
+          if (named.getExpression() instanceof SequenceExpression sequence) {
+            // the first expression is for the first part
+            var expressions = sequence.getExpressions().iterator();
+            parts.add(new NamedLayoutQualifierPart(named.getName(), expressions.next()));
+
+            // any following assignment and reference expressions are named layout
+            // qualifiers,
+            // produce shared layout qualifiers if the name is "shared"
+            while (expressions.hasNext()) {
+              var expression = expressions.next();
+              if (expression instanceof AssignmentExpression assignment) {
+                var left = assignment.getLeft();
+                if (left instanceof ReferenceExpression ref) {
+                  parts.add(new NamedLayoutQualifierPart(ref.getIdentifier(), assignment.getRight()));
+                } else {
+                  throw new IllegalArgumentException("Unexpected left hand side in assignment expression of layout qualifier sequence: " + left);
+                }
+              } else if (expression instanceof ReferenceExpression reference) {
+                var id = reference.getIdentifier();
+                if (id.equals("shared")) {
+                  parts.add(new SharedLayoutQualifierPart());
+                } else {
+                  parts.add(new NamedLayoutQualifierPart(id));
+                }
+              } else {
+                throw new IllegalArgumentException("Unexpected expression in sequence expression in layout qualifier");
+              }
+            }
+          } else {
+            parts.add(named);
+          }
+        } else {
+          parts.add(part);
+        }
+      }
+
+      return new LayoutQualifier(parts.stream());
     } finally {
       endConstruction();
     }
