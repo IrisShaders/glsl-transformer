@@ -13,7 +13,7 @@ import io.github.douira.glsl_transformer.test_util.*;
 import io.github.douira.glsl_transformer.test_util.TestResourceManager.*;
 
 @ExtendWith({ SnapshotExtension.class })
-public class CSTTransformerTestTree {
+public class CSTTransformerTreeTest {
   private Expect expect;
 
   @Test
@@ -34,7 +34,8 @@ public class CSTTransformerTestTree {
           var content = resource.content();
           var builder = new StringBuilder();
           t.transform(content, new WrappedParameters<>(builder));
-          expect.scenario(resource.getScenarioName())
+          expect
+              .scenario(resource.getScenarioName())
               .toMatchSnapshot(SnapshotUtil.inputOutputSnapshot(content, builder.toString()));
         });
   }

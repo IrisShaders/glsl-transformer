@@ -7,8 +7,7 @@ import org.antlr.v4.runtime.tree.TerminalNode;
 
 import io.github.douira.glsl_transformer.util.CompatUtil;
 
-public class PrintTreeDebug extends PrintTree {
-
+public class PrintCSTDebug extends PrintCST {
   protected void addIndentation(StringBuilder builder) {
     builder.append(
         ansi()
