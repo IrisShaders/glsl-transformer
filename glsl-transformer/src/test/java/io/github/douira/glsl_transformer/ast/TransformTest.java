@@ -246,7 +246,7 @@ public class TransformTest extends TestWithSingleASTTransformer {
         boolean isStruct) { // true if the type is from an interface block declaration
     }
 
-    class ListJobParameter extends JobParameters {
+    class ListJobParameter implements JobParameters {
       List<BindingResult> results = new ArrayList<>();
 
       @Override

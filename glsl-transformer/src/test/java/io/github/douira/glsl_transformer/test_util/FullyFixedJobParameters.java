@@ -8,7 +8,7 @@ import io.github.douira.glsl_transformer.job_parameter.JobParameters;
  * and proper job parameters have to use their content in the equals and
  * hashCode methods.
  */
-public class FullyFixedJobParameters extends JobParameters {
+public class FullyFixedJobParameters implements JobParameters {
   private Object tag = new Object();
 
   @Override

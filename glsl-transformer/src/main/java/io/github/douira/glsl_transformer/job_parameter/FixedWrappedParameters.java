@@ -6,7 +6,7 @@ package io.github.douira.glsl_transformer.job_parameter;
  * execution plans. This class on the other hand causes execution plans to be
  * cached if the contained parameter object is the same.
  */
-public class FixedWrappedParameters<T> extends JobParameters {
+public class FixedWrappedParameters<T> implements JobParameters {
   private final T parameters;
 
   /**
