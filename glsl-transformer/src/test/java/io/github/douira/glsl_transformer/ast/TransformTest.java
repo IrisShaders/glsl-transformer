@@ -4,6 +4,7 @@ import static io.github.douira.glsl_transformer.test_util.AssertUtil.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -18,7 +19,8 @@ import io.github.douira.glsl_transformer.ast.node.type.FullySpecifiedType;
 import io.github.douira.glsl_transformer.ast.node.type.qualifier.*;
 import io.github.douira.glsl_transformer.ast.node.type.qualifier.StorageQualifier.StorageType;
 import io.github.douira.glsl_transformer.ast.node.type.specifier.*;
-import io.github.douira.glsl_transformer.ast.node.type.struct.StructDeclarator;
+import io.github.douira.glsl_transformer.ast.node.type.struct.*;
+import io.github.douira.glsl_transformer.ast.print.token.ParserToken;
 import io.github.douira.glsl_transformer.ast.query.Root;
 import io.github.douira.glsl_transformer.ast.query.match.*;
 import io.github.douira.glsl_transformer.ast.transform.*;
@@ -241,7 +243,7 @@ public class TransformTest extends TestWithSingleASTTransformer {
     record BindingResult(
         int binding, // the binding location
         TypeQualifier qualifier, // the type qualifier (uniform etc.)
-        String declarationName, // the name of the declaration (identifier)
+        List<String> declarationNames, // the name of the declaration (identifier)
         String typeName, // the name of the type (custom or builtin like sampler)
         boolean isStruct) { // true if the type is from an interface block declaration
     }
@@ -276,7 +278,7 @@ public class TransformTest extends TestWithSingleASTTransformer {
     }
 
     var t = new SingleASTTransformer<ListJobParameter>();
-    t.setTransformation((tree, root) -> {
+    t.setTransformation((tree, root, parameters) -> {
       // find layout qualifiers
       for (LayoutQualifier layoutQualifier : root.nodeIndex.get(LayoutQualifier.class)) {
         // find layout binding
@@ -289,34 +291,117 @@ public class TransformTest extends TestWithSingleASTTransformer {
           }
         }
 
-        // discard if there is no binding
-        if (binding == null) {
+        int bindingLocation;
+        if (binding instanceof LiteralExpression literal && literal.isInteger()) {
+          bindingLocation = (int) literal.getInteger();
+        } else {
           continue;
         }
 
         // get the enclosing fully specified type
-        var fullySpecifiedType = layoutQualifier.getAncestor(2, 0, FullySpecifiedType.class::isInstance);
+        FullySpecifiedType fullySpecifiedType = (FullySpecifiedType) layoutQualifier.getAncestor(2, 0,
+            FullySpecifiedType.class::isInstance);
 
         // if it exists, we are in a regular type and init declaration
         if (fullySpecifiedType != null) {
-        // get the enclosing external declaration
-        ExternalDeclaration externalDeclaration = null;
-        if (fullySpecifiedType != null) {
-          externalDeclaration = (ExternalDeclaration) fullySpecifiedType.getAncestor(2, 0, ExternalDeclaration.class::isInstance);
-        }
+          // get the enclosing type and init declaration
+          TypeAndInitDeclaration declaration = (TypeAndInitDeclaration) fullySpecifiedType.getAncestor(
+              1, 0,
+              TypeAndInitDeclaration.class::isInstance);
+          if (declaration == null) {
+            continue;
+          }
+
+          // make sure it's in an external declaration
+          if (!(declaration.hasAncestor(
+              1, 0, DeclarationExternalDeclaration.class::isInstance))) {
+            continue;
+          }
+
+          // determine the name of the type
+          var typeSpecifier = fullySpecifiedType.getTypeSpecifier();
+          boolean isStruct = false;
+          String typeName = null;
+          switch (typeSpecifier.getSpecifierType()) {
+            case BUILTIN_NUMERIC -> typeName = ((BuiltinNumericTypeSpecifier) typeSpecifier).type.getMostCompactName();
+            case BULTIN_FIXED ->
+              typeName = new ParserToken(
+                  ((BuiltinFixedTypeSpecifier) typeSpecifier).type.tokenType).getContent();
+            case STRUCT -> {
+              isStruct = true;
+              typeName = ((StructSpecifier) typeSpecifier)
+                  .getName().getName();
+            }
+            case REFERENCE -> typeName = ((TypeReference) typeSpecifier)
+                .getReference().getName();
+          }
+
+          parameters.results.add(new BindingResult(
+              bindingLocation,
+              fullySpecifiedType.getTypeQualifier(),
+              declaration
+                  .getMembers()
+                  .stream()
+                  .map(DeclarationMember::getName)
+                  .map(Identifier::getName)
+                  .collect(Collectors.toList()),
+              typeName,
+              isStruct));
         } else {
           // this may be an interface block declaration
+          // get the enclosing interface block declaration to check
+          InterfaceBlockDeclaration interfaceBlockDeclaration = (InterfaceBlockDeclaration) layoutQualifier
+              .getAncestor(2, 0, InterfaceBlockDeclaration.class::isInstance);
+          if (interfaceBlockDeclaration == null) {
+            continue;
+          }
 
+          // make sure it's in an external declaration
+          if (!(interfaceBlockDeclaration.hasAncestor(
+              1, 0, DeclarationExternalDeclaration.class::isInstance))) {
+            continue;
+          }
+
+          parameters.results.add(new BindingResult(
+              bindingLocation,
+              interfaceBlockDeclaration.getTypeQualifier(),
+              List.of(interfaceBlockDeclaration.getVariableName().getName()),
+              interfaceBlockDeclaration.getBlockName().getName(),
+              true));
         }
-
-
       }
-
     });
 
     t.setJobParameters(new ListJobParameter());
     t.transform(
-        "layout(binding = 0) uniform sampler2D u_texture; layout(binding = 2) readonly buffer BlasDataAddresses { uint64_t address[]; } quadBlobs; layout(binding = 1) uniform accelerationStructureEXT acc;");
+        "void main() { layout(binding = 4) int foo = 4; } layout(binding = 0) uniform sampler2D u_texture; layout(binding = 2) readonly buffer BlasDataAddresses { uint64_t address[]; } quadBlobs; layout(binding = 1) uniform accelerationStructureEXT acc;");
 
+    assertEquals(3, t.getJobParameters().results.size(), "It should find 3 bindings");
+    assertEquals(1,
+        t.getJobParameters().results.stream().filter(BindingResult::isStruct).count(),
+        "It should find one struct binding");
+    assertEquals(Set.of(0, 1, 2),
+        t.getJobParameters().results.stream().map(BindingResult::binding).collect(Collectors.toSet()),
+        "It should find bindings 0, 1 and 2");
+    assertEquals(Set.of("sampler2D", "BlasDataAddresses", "accelerationStructureEXT"),
+        t.getJobParameters().results.stream().map(BindingResult::typeName).collect(Collectors.toSet()),
+        "It should find bindings for sampler2D, BlasDataAddresses and accelerationStructureEXT");
+    assertEquals(Set.of("u_texture", "quadBlobs", "acc"),
+        t.getJobParameters().results.stream().map(BindingResult::declarationNames).flatMap(List::stream)
+            .collect(Collectors.toSet()),
+        "It should find bindings for u_texture, quadBlobs and acc");
+    assertEquals(List.of(1, 1, 1),
+        t.getJobParameters().results.stream().map(BindingResult::declarationNames).map(List::size)
+            .collect(Collectors.toList()),
+        "It should find 1 declaration name for each binding");
+    assertEquals(Map.of(
+        "sampler2D", 2,
+        "BlasDataAddresses", 3,
+        "accelerationStructureEXT", 2),
+        t.getJobParameters().results.stream()
+            .collect(Collectors.toMap(
+                BindingResult::typeName,
+                result -> result.qualifier().getParts().size())),
+        "It should find 3 or 2 type qualifiers for each binding");
   }
 }
