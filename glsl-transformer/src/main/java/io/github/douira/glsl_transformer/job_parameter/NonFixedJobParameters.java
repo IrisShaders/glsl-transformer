@@ -5,7 +5,7 @@ package io.github.douira.glsl_transformer.job_parameter;
  * execution plan can't be statically optimized for certain job parameter
  * combinations.
  */
-public class NonFixedJobParameters extends JobParameters {
+public class NonFixedJobParameters implements JobParameters {
   /**
    * An empty set non-fixed job parameters. This can be used if there are no job
    * parameters.

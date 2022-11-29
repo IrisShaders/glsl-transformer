@@ -8,14 +8,14 @@ package io.github.douira.glsl_transformer.job_parameter;
  * If no part of the job parameters is fixed, the class
  * {@link NonFixedJobParameters} can be used instead.
  */
-public abstract class JobParameters {
+public interface JobParameters {
   /**
    * Requires the implementation of the equals method.
    */
-  public abstract boolean equals(Object other);
+  boolean equals(Object other);
 
   /**
    * Requires the implementation of the hashCode method.
    */
-  public abstract int hashCode();
+  int hashCode();
 }
