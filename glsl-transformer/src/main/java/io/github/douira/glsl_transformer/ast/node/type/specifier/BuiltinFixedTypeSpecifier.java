@@ -10,7 +10,7 @@ import io.github.douira.glsl_transformer.ast.traversal.*;
 public class BuiltinFixedTypeSpecifier extends TypeSpecifier {
   public enum BuiltinType implements TokenTyped {
     VOID(GLSLLexer.VOID, TypeKind.VOID),
-    ATOMIC_UINT(GLSLLexer.ATOMIC_UINT, TypeKind.ATOMIC_UINT, ValueFormat.UNSIGNED_INTEGER),
+    ATOMIC_UINT(GLSLLexer.ATOMIC_UINT, TypeKind.ATOMIC_UINT),
     SAMPLER2D(GLSLLexer.SAMPLER2D, TypeKind.SAMPLER, ValueFormat.FLOATING_POINT),
     SAMPLER3D(GLSLLexer.SAMPLER3D, TypeKind.SAMPLER, ValueFormat.FLOATING_POINT),
     SAMPLERCUBE(GLSLLexer.SAMPLERCUBE, TypeKind.SAMPLER, ValueFormat.FLOATING_POINT),
@@ -156,17 +156,17 @@ public class BuiltinFixedTypeSpecifier extends TypeSpecifier {
   }
 
   @Override
-  public BuiltinFixedTypeSpecifierTest clone() {
-    return new BuiltinFixedTypeSpecifierTest(type, clone(arraySpecifier));
+  public BuiltinFixedTypeSpecifier clone() {
+    return new BuiltinFixedTypeSpecifier(type, clone(arraySpecifier));
   }
 
   @Override
-  public BuiltinFixedTypeSpecifierTest cloneInto(Root root) {
-    return (BuiltinFixedTypeSpecifierTest) super.cloneInto(root);
+  public BuiltinFixedTypeSpecifier cloneInto(Root root) {
+    return (BuiltinFixedTypeSpecifier) super.cloneInto(root);
   }
 
   @Override
-  public BuiltinFixedTypeSpecifierTest cloneSeparate() {
-    return (BuiltinFixedTypeSpecifierTest) super.cloneSeparate();
+  public BuiltinFixedTypeSpecifier cloneSeparate() {
+    return (BuiltinFixedTypeSpecifier) super.cloneSeparate();
   }
 }
