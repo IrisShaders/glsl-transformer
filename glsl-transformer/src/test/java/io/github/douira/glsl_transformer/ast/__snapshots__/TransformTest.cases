@@ -93,4 +93,53 @@ void main() {
 	void main();
 }
 
-§
+§sidecarInjection texture@tex1:
+uniform sampler3D tex1;
+uniform sampler2D tex2;
+uniform sampler3D tex3;
+void main() {
+  color = texture(tex1, coord3);
+  color = texture(tex2, coord2);
+  color = texture(tex3, coord3);
+}
+===
+uniform sampler3D tex1;
+uniform sampler2D tex2;
+uniform sampler3D tex3;
+vec4 redirected_texture(sampler3D tracked, int sidecar, vec3 coord) {
+  if (tracked == 1) {
+    return vec4(1.0);
+  } else if (tracked == 2) {
+    return vec4(2.0);
+  } else {
+    return texture(tracked, coord);
+  }
+}
+void main() {
+  color = redirected_texture(tex1, 1, coord3);
+  color = texture(tex2, coord2);
+  color = redirected_texture(tex3, 2, coord3);
+}
+
+§sidecarInjection texture@isampler1D@tex2:
+uniform sampler3D tex1;
+uniform isampler1D tex2;
+
+void main() {
+  color = texture(tex1, coord3);
+  color = texture(tex3, coord1);
+}
+===
+uniform sampler3D tex1;
+uniform isampler1D tex2;
+float redirected_texture(isampler1D tracked, int sidecar, float coord) {
+  if (tracked == 1) {
+    return 1.0
+  } else {
+    return texture(tracked, coord);
+  }
+}
+void main() {
+  color = texture(tex1, coord3);
+  color = redirected_texture(tex2, 1, coord1);
+}

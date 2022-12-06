@@ -404,4 +404,13 @@ public class TransformTest extends TestWithSingleASTTransformer {
                 result -> result.qualifier().getParts().size())),
         "It should find 3 or 2 type qualifiers for each binding");
   }
+
+  @ParameterizedTest
+  @TestCaseSource(caseSet = "sidecarInjection", spacing = Spacing.TRIM_SINGLE_BOTH)
+  void testSidecarInjection(String type, String input, String output) {
+    class SidecarInjector {
+      String targetFunction;
+      Set<String> targets;
+    }
+  }
 }
