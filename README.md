@@ -104,7 +104,7 @@ System.out.println(transformer.transform(input));
 
 # Documentation
 
-See the Javadocs for API documentation and some API-specific notes. See [the documentation overview](docs/overview.md) for detailed documentation. The tests also illustrate the usage of each individual feature. The `core` package uses `glsl-transformer`'s features and extends them to provide structures for common tasks.
+See the Javadocs for API documentation and some API-specific notes. See [the documentation overview](docs/overview.md) for detailed documentation. The tests also illustrate the usage of each individual feature.
 
 ## Todo
 
