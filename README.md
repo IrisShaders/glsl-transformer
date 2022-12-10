@@ -50,9 +50,11 @@ The files in `glslang-test` are from [glslang](https://github.com/KhronosGroup/g
 
 Of course all of this wouldn't be possible without ANTLR4 and its contributors, in particular Terence Parr, the creator of ANTLR and author of the ANTLR book. Thanks!
 
+This project includes parts of Apache Commons Collections in its respective package. Not all source files have been included since only those related to `Trie` are needed. Apache Commons Collections is licensed under the [Apache License 2.0](https://www.apache.org/licenses/LICENSE-2.0).
+
 ## Support
 
-If something breaks, please make an issue report with the details so I can fix the issue and add a test case. For more direct support, you can also ask in the `glsl-transformer` thread in the [Iris discord server](https://discord.gg/jQJnav2jPu). I'm also interested in hearing from anyone using this library in their projects!
+If something breaks, please make an issue report with the details so I can fix the issue and add a test case. For more direct support, you can also ask in the `#glsl-transformer` channel in the [Iris discord server](https://discord.gg/jQJnav2jPu). I'm also interested in hearing from anyone using this library in their projects!
 
 # Usage
 
