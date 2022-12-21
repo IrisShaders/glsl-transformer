@@ -107,6 +107,24 @@ public class NodeIndex<S extends Set<ASTNode>> implements Index<ASTNode> {
   }
 
   /**
+   * Returns the only node with the given type. Throws an exception if there is
+   * not exactly one node with the given type.
+   * 
+   * @param <T>  the type of the class
+   * @param type the class of the node to return
+   * @return the only node with the given type
+   */
+  @SuppressWarnings("unchecked")
+  public <T extends ASTNode> T getUnique(Class<T> type) {
+    var result = (Set<T>) index.get(type);
+    var resultCount = result == null ? 0 : result.size();
+    if (resultCount != 1) {
+      throw new IllegalStateException("Expected exactly one node of type " + type + " but found " + resultCount);
+    }
+    return result.iterator().next();
+  }
+
+  /**
    * Checks if the index contains any nodes of the given type.
    * 
    * @param type the class of the nodes to check for
@@ -139,6 +157,20 @@ public class NodeIndex<S extends Set<ASTNode>> implements Index<ASTNode> {
   @SuppressWarnings("unchecked")
   public <T extends ASTNode> T getOne(T node) {
     return (T) getOne(node.getClass());
+  }
+
+  /**
+   * Returns the only node that has the same class as the given node. Throws an
+   * exception if there is not exactly one node with the same class as the given
+   * node.
+   * 
+   * @param <T>  The type of the node
+   * @param node The node to get a node from the index for
+   * @return The only node that has the same class as the given node
+   */
+  @SuppressWarnings("unchecked")
+  public <T extends ASTNode> T getUnique(T node) {
+    return (T) getUnique(node.getClass());
   }
 
   /**
