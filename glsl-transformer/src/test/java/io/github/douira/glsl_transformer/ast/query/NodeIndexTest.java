@@ -49,6 +49,22 @@ public class NodeIndexTest {
   }
 
   @Test
+  void testGetUnique() {
+    index.add(a);
+    index.add(b);
+    index.add(c);
+    assertThrows(IllegalStateException.class, () -> index.getUnique(LiteralExpression.class));
+    assertThrows(IllegalStateException.class, () -> index.getUnique(Identifier.class));
+    index.remove(a);
+    index.remove(b);
+    assertEquals(c, index.getUnique(Identifier.class));
+    assertThrows(IllegalStateException.class, () -> index.getUnique(LiteralExpression.class));
+    index.remove(c);
+    assertThrows(IllegalStateException.class, () -> index.getUnique(Identifier.class));
+    assertThrows(IllegalStateException.class, () -> index.getUnique(LiteralExpression.class));
+  }
+
+  @Test
   void testGetStream() {
     index.add(a);
     index.add(b);
@@ -101,7 +117,7 @@ public class NodeIndexTest {
     index.remove(b);
     index.remove(c);
     assertEquals(1, index.get(Identifier.class).size());
-    assertTrue(index.has(a)); //class match
+    assertTrue(index.has(a)); // class match
     assertTrue(index.has(d));
     assertFalse(index.hasExact(a));
     assertTrue(index.hasExact(d));
