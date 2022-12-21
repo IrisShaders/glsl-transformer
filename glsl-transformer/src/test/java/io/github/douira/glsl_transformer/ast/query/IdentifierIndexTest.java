@@ -18,4 +18,14 @@ public class IdentifierIndexTest extends TestWithSingleASTTransformer {
     });
     p.transform("int a = 1;");
   }
+
+  @Test
+  void testGetUnique() {
+    p.setTransformation((tree, root) -> {
+      assertNotNull(root.identifierIndex.getUnique("a"));
+      assertThrows(IllegalStateException.class, () -> root.identifierIndex.getUnique("b"));
+      assertThrows(IllegalStateException.class, () -> root.identifierIndex.getUnique("f"));
+    });
+    p.transform("int a = 1, b, c, b;");
+  }
 }

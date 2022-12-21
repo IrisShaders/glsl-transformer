@@ -75,6 +75,15 @@ public class IdentifierIndex<S extends Set<Identifier>, I extends Map<String, S>
     return iterator.hasNext() ? iterator.next() : null;
   }
 
+  public Identifier getUnique(String key) {
+    var set = index.get(key);
+    var resultSize = set == null ? 0 : set.size();
+    if (resultSize != 1) {
+      throw new IllegalStateException("Expected exactly one identifier for key " + key + ", but got " + resultSize);
+    }
+    return set.iterator().next();
+  }
+
   public boolean has(String key) {
     var result = index.get(key);
     return result != null && !result.isEmpty();
