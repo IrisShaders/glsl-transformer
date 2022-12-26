@@ -16,7 +16,7 @@ public class IdentifierIndexTest extends TestWithSingleASTTransformer {
       assertFalse(root.identifierIndex.has("a"));
       assertTrue(root.identifierIndex.has("b"));
     });
-    p.transform("int a = 1;");
+   assertEquals("int b = 1; ", p.transform("int a = 1;"));
   }
 
   @Test
