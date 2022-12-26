@@ -22,7 +22,7 @@ import io.github.douira.glsl_transformer.ast.node.type.specifier.*;
 import io.github.douira.glsl_transformer.ast.node.type.struct.*;
 import io.github.douira.glsl_transformer.ast.print.token.ParserToken;
 import io.github.douira.glsl_transformer.ast.query.Root;
-import io.github.douira.glsl_transformer.ast.query.match.*;
+import io.github.douira.glsl_transformer.ast.query.match.Matcher;
 import io.github.douira.glsl_transformer.ast.transform.*;
 import io.github.douira.glsl_transformer.basic.JobParameters;
 import io.github.douira.glsl_transformer.test_util.*;
@@ -133,13 +133,13 @@ public class TransformTest extends TestWithSingleASTTransformer {
   @ParameterizedTest
   @TestCaseSource(caseSet = "outDeclarationModify", spacing = Spacing.TRIM_SINGLE_BOTH)
   void testOutDeclarationModify(String type, String input, String output) {
-    var outDeclarationMatcher = new AutoHintedMatcher<ExternalDeclaration>(
+    var outDeclarationMatcher = new Matcher<ExternalDeclaration>(
         "out float __name;", Matcher.externalDeclarationPattern, "__") {
       {
         markClassWildcard("type", pattern.getRoot().nodeIndex.getOne(BuiltinNumericTypeSpecifier.class));
       }
     };
-    var inDeclarationMatcher = new AutoHintedMatcher<ExternalDeclaration>(
+    var inDeclarationMatcher = new Matcher<ExternalDeclaration>(
         "in float __name;", Matcher.externalDeclarationPattern, "__") {
       {
         markClassWildcard("type", pattern.getRoot().nodeIndex.getOne(BuiltinNumericTypeSpecifier.class));
@@ -419,7 +419,7 @@ public class TransformTest extends TestWithSingleASTTransformer {
 
   @Test
   void testAttachLayout() {
-    var nonLayoutOutDeclarationMatcher = new AutoHintedMatcher<ExternalDeclaration>("out float name;",
+    var nonLayoutOutDeclarationMatcher = new Matcher<ExternalDeclaration>("out float name;",
         Matcher.externalDeclarationPattern) {
       {
         markClassWildcard("qualifier", pattern.getRoot().nodeIndex.getUnique(TypeQualifier.class));
