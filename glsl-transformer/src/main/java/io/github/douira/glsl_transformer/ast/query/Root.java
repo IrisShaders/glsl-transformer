@@ -54,7 +54,7 @@ public class Root {
     this.nodeIndex = nodeIndex;
     this.identifierIndex = identifierIndex;
   }
-  
+
   public Root() {
     this(nodeIndexFactory.get(), identifierIndexFactory.get());
   }
@@ -246,6 +246,20 @@ public class Root {
   public static <NodeType extends ASTNode> void indexSeparateTrees(
       ASTNode treeMember, Consumer<Passthrough<NodeType>> registerer) {
     indexSeparateTrees(treeMember.getRoot(), registerer);
+  }
+
+  /**
+   * Returns the identifier index as a prefix identifier index if it is one.
+   * Otherwise, it throws.
+   * 
+   * @return The prefix identifier index
+   */
+  public PrefixIdentifierIndex<?, ?> getPrefixIdentifierIndex() {
+    if (identifierIndex instanceof PrefixIdentifierIndex<?, ?> index) {
+      return index;
+    } else {
+      throw new IllegalStateException("The identifier index is not a prefix index");
+    }
   }
 
   /**
