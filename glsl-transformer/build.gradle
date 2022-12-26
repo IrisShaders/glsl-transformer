@@ -145,4 +145,5 @@ javadoc {
   exclude '**/GLSLParser*.java'
   exclude '**/GLSLLexer*.java'
   exclude '**/ast/Type.java'
+  exclude '**/org/apache/commons/**'
 }
