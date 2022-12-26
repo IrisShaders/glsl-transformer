@@ -1,12 +1,7 @@
 package io.github.douira.glsl_transformer.basic;
 
 /**
- * All job parameters have to extend this job parameter base class. It enforces
- * an equals and hashCode method in order to allow the "fixed" part job
- * parameters to be used in a map.
- * 
- * If no part of the job parameters is fixed, the class
- * {@link NonFixedJobParameters} can be used instead.
+ * All job parameters have to extend this job parameter base class.
  */
 public interface JobParameters {
   public static final JobParameters EMPTY = new JobParameters() {
