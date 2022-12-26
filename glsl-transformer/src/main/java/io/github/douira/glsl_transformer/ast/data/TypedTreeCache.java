@@ -2,8 +2,9 @@ package io.github.douira.glsl_transformer.ast.data;
 
 import java.util.function.*;
 
+import org.antlr.v4.runtime.ParserRuleContext;
+
 import io.github.douira.glsl_transformer.ast.data.TypedTreeCache.CacheKey;
-import io.github.douira.glsl_transformer.tree.ExtendedContext;
 import io.github.douira.glsl_transformer.util.LRUCache;
 
 public class TypedTreeCache<V> extends LRUCache<CacheKey, V> {
@@ -23,9 +24,9 @@ public class TypedTreeCache<V> extends LRUCache<CacheKey, V> {
 
   public static class CacheKey {
     final String input;
-    final Class<? extends ExtendedContext> ruleType;
+    final Class<? extends ParserRuleContext> ruleType;
 
-    public CacheKey(String input, Class<? extends ExtendedContext> ruleType) {
+    public CacheKey(String input, Class<? extends ParserRuleContext> ruleType) {
       this.input = input;
       this.ruleType = ruleType;
     }
@@ -62,12 +63,12 @@ public class TypedTreeCache<V> extends LRUCache<CacheKey, V> {
     }
   }
 
-  public V cachedGet(String str, Class<? extends ExtendedContext> ruleType,
+  public V cachedGet(String str, Class<? extends ParserRuleContext> ruleType,
       Supplier<V> supplier) {
     return super.cachedGet(new CacheKey(str, ruleType), supplier);
   }
 
-  public V cachedGetHydrateHit(String str, Class<? extends ExtendedContext> ruleType,
+  public V cachedGetHydrateHit(String str, Class<? extends ParserRuleContext> ruleType,
       Supplier<V> supplier, Function<V, V> hydrator) {
     return super.cachedGetHydrateHit(new CacheKey(str, ruleType), supplier, hydrator);
   }

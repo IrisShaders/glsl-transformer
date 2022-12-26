@@ -37,6 +37,7 @@ import io.github.douira.glsl_transformer.ast.node.type.specifier.BuiltinFixedTyp
 import io.github.douira.glsl_transformer.ast.node.type.struct.*;
 import io.github.douira.glsl_transformer.ast.query.Root;
 import io.github.douira.glsl_transformer.util.Type;
+import io.github.douira.glsl_transformer.util.Type.NumberType;
 
 /**
  * The AST builder is a visitor of the parse tree (not an AST visitor) that
@@ -409,7 +410,7 @@ public class ASTBuilder extends GLSLParserBaseVisitor<ASTNode> {
   }
 
   private static final Pattern intExtractor = Pattern.compile(
-      "(.*?)(?:us|ul|u|s)?$", Pattern.CASE_INSENSITIVE);
+      "(0x|0|)(.*?)(?:us|ul|u|s|l)?$", Pattern.CASE_INSENSITIVE);
   private static final Pattern floatExtractor = Pattern.compile(
       "(.*?)(?:f|hf|lf)?$", Pattern.CASE_INSENSITIVE);
 
@@ -421,39 +422,47 @@ public class ASTBuilder extends GLSLParserBaseVisitor<ASTNode> {
     var tokenContent = content.getText();
     startConstruction(ctx);
     try {
-      switch (literalType.getNumberType()) {
+      var numberType = literalType.getNumberType();
+      switch (numberType) {
         case BOOLEAN:
           return new LiteralExpression(tokenContent.equals("true"));
         case SIGNED_INTEGER:
         case UNSIGNED_INTEGER:
           var intMatcher = intExtractor.matcher(tokenContent);
           intMatcher.matches();
-          tokenContent = intMatcher.group(1);
-          if (tokenContent.equals("0")) {
-            return new LiteralExpression(
-                literalType, 0);
+          var prefix = intMatcher.group(1);
+          tokenContent = intMatcher.group(2);
+          if (tokenContent.isEmpty()) {
+            if (!prefix.equals("0")) {
+              throw new IllegalStateException("Unexpected prefix: " + prefix);
+            }
+            return new LiteralExpression(literalType, 0);
           }
-          if (tokenContent.startsWith("0x")) {
-            return new LiteralExpression(
-                literalType,
-                Long.parseLong(tokenContent.substring(2), 16),
-                IntegerFormat.HEXADECIMAL);
-          } else if (tokenContent.startsWith("0")) {
-            return new LiteralExpression(
-                literalType,
-                Long.parseLong(tokenContent.substring(1), 8),
-                IntegerFormat.OCTAL);
+          int radix;
+          IntegerFormat format;
+          if (prefix.equals("0x")) {
+            radix = 16;
+            format = IntegerFormat.HEXADECIMAL;
+          } else if (prefix.equals("0")) {
+            radix = 8;
+            format = IntegerFormat.OCTAL;
           } else {
-            return new LiteralExpression(
-                literalType,
-                Long.parseLong(tokenContent, 10), IntegerFormat.DECIMAL);
+            radix = 10;
+            format = IntegerFormat.DECIMAL;
           }
+          // TODO: parsing -9223372036854775808L doesn't work because the negative min
+          // value is larger than the positive max value but we aren't getting the
+          // negation sign in here
+          long value = Long.parseUnsignedLong(tokenContent, radix);
+          if (numberType == NumberType.SIGNED_INTEGER && (value < 0 || value > Long.MAX_VALUE)) {
+            throw new IllegalStateException("Integer literal too large: " + tokenContent);
+          }
+          return new LiteralExpression(literalType, value, format);
         case FLOATING_POINT:
           var floatMatcher = floatExtractor.matcher(tokenContent);
           floatMatcher.matches();
           tokenContent = floatMatcher.group(1);
-          return new LiteralExpression(
-              literalType, Double.parseDouble(tokenContent));
+          return new LiteralExpression(literalType, Double.parseDouble(tokenContent));
         default:
           throw new IllegalArgumentException("Unsupported literal type: " + literalType);
       }
@@ -1100,7 +1109,8 @@ public class ASTBuilder extends GLSLParserBaseVisitor<ASTNode> {
                 if (left instanceof ReferenceExpression ref) {
                   parts.add(new NamedLayoutQualifierPart(ref.getIdentifier(), assignment.getRight()));
                 } else {
-                  throw new IllegalArgumentException("Unexpected left hand side in assignment expression of layout qualifier sequence: " + left);
+                  throw new IllegalArgumentException(
+                      "Unexpected left hand side in assignment expression of layout qualifier sequence: " + left);
                 }
               } else if (expression instanceof ReferenceExpression reference) {
                 var id = reference.getIdentifier();

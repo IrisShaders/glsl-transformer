@@ -2,7 +2,7 @@ package io.github.douira.glsl_transformer.ast.print.token;
 
 import io.github.douira.glsl_transformer.ast.node.basic.ASTNode;
 import io.github.douira.glsl_transformer.ast.print.TokenRole;
-import io.github.douira.glsl_transformer.cst.token_filter.TokenChannel;
+import io.github.douira.glsl_transformer.token_filter.TokenChannel;
 
 public abstract class PrintToken {
   private ASTNode source;

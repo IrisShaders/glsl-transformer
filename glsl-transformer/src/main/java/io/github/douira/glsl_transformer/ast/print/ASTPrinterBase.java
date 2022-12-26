@@ -6,7 +6,7 @@ import io.github.douira.glsl_transformer.GLSLLexer;
 import io.github.douira.glsl_transformer.ast.node.basic.ASTNode;
 import io.github.douira.glsl_transformer.ast.print.token.*;
 import io.github.douira.glsl_transformer.ast.traversal.ASTListenerVisitor;
-import io.github.douira.glsl_transformer.cst.token_filter.TokenChannel;
+import io.github.douira.glsl_transformer.token_filter.TokenChannel;
 
 public abstract class ASTPrinterBase extends ASTListenerVisitor<Void> {
   private PrintToken lastToken;

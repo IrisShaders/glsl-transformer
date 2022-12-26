@@ -1,7 +1,7 @@
 lexer grammar GLSLLexer;
 
 @header {
-import io.github.douira.glsl_transformer.tree.VersionedGLSLLexer;
+import io.github.douira.glsl_transformer.basic.VersionedGLSLLexer;
 }
 
 options {
@@ -121,36 +121,36 @@ I8VEC2: 'i8vec2';
 I8VEC3: 'i8vec3';
 I8VEC4: 'i8vec4';
 UINT8: 'uint8_t';
-UI8VEC2: 'ui8vec2';
-UI8VEC3: 'ui8vec3';
-UI8VEC4: 'ui8vec4';
+U8VEC2: 'u8vec2';
+U8VEC3: 'u8vec3';
+U8VEC4: 'u8vec4';
 
 INT16: 'int16_t';
 I16VEC2: 'i16vec2';
 I16VEC3: 'i16vec3';
 I16VEC4: 'i16vec4';
 UINT16: 'uint16_t';
-UI16VEC2: 'ui16vec2';
-UI16VEC3: 'ui16vec3';
-UI16VEC4: 'ui16vec4';
+U16VEC2: 'u16vec2';
+U16VEC3: 'u16vec3';
+U16VEC4: 'u16vec4';
 
 INT32: 'int32_t' | 'int';
 I32VEC2: 'i32vec2' | 'ivec2';
 I32VEC3: 'i32vec3' | 'ivec3';
 I32VEC4: 'i32vec4' | 'ivec4';
 UINT32: 'uint32_t' | 'uint';
-UI32VEC2: 'ui32vec2' | 'uvec2';
-UI32VEC3: 'ui32vec3' | 'uvec3';
-UI32VEC4: 'ui32vec4' | 'uvec4';
+U32VEC2: 'u32vec2' | 'uvec2';
+U32VEC3: 'u32vec3' | 'uvec3';
+U32VEC4: 'u32vec4' | 'uvec4';
 
 INT64: 'int64_t';
 I64VEC2: 'i64vec2';
 I64VEC3: 'i64vec3';
 I64VEC4: 'i64vec4';
 UINT64: 'uint64_t';
-UI64VEC2: 'ui64vec2';
-UI64VEC3: 'ui64vec3';
-UI64VEC4: 'ui64vec4';
+U64VEC2: 'u64vec2';
+U64VEC3: 'u64vec3';
+U64VEC4: 'u64vec4';
 
 FLOAT16: 'float16_t';
 F16VEC2: 'f16vec2';
@@ -360,8 +360,7 @@ NR_EXTENSION: 'extension';
 NR_VERSION: 'version';
 NR_CUSTOM:
 	'custom' {enableCustomDirective}? -> pushMode(CustomDirective);
-NR_INCLUDE:
-	'include' {enableIncludeDirective}?;
+NR_INCLUDE: 'include' {enableIncludeDirective}?;
 NR_PRAGMA: 'pragma';
 NR_PRAGMA_DEBUG: 'debug';
 NR_PRAGMA_OPTIMIZE: 'optimize';
@@ -399,7 +398,8 @@ NR_GLSL_450: '450';
 NR_GLSL_460: '460';
 
 NR_STRING_START: '"' {enableIncludeDirective}? -> pushMode(String);
-NR_STRING_START_ANGLE: '<' {enableIncludeDirective}? -> pushMode(StringAngle);
+NR_STRING_START_ANGLE:
+	'<' {enableIncludeDirective}? -> pushMode(StringAngle);
 NR_INTCONSTANT: INTCONSTANT_frag;
 NR_IDENTIFIER: IDENTIFIER_frag;
 NR_LINE_CONTINUE: LINE_CONTINUE_frag -> channel(WHITESPACE);

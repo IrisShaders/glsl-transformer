@@ -4,7 +4,7 @@ import java.util.*;
 
 import io.github.douira.glsl_transformer.GLSLLexer;
 import io.github.douira.glsl_transformer.ast.print.TokenRole;
-import io.github.douira.glsl_transformer.cst.token_filter.TokenChannel;
+import io.github.douira.glsl_transformer.token_filter.TokenChannel;
 
 public class ParserToken extends PrintToken {
   private static final Map<Integer, String> missingTokenStrings = new HashMap<>() {

@@ -8,7 +8,7 @@ import org.junit.jupiter.api.BeforeEach;
 
 import io.github.douira.glsl_transformer.ast.print.PrintType;
 import io.github.douira.glsl_transformer.ast.transform.TriASTTransformer;
-import io.github.douira.glsl_transformer.job_parameter.JobParameters;
+import io.github.douira.glsl_transformer.basic.JobParameters;
 
 public class TestWithGroupedASTTransformer {
   public enum Part {

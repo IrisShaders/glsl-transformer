@@ -8,8 +8,7 @@ import org.antlr.v4.runtime.misc.ParseCancellationException;
 
 import io.github.douira.glsl_transformer.*;
 import io.github.douira.glsl_transformer.GLSLParser.TranslationUnitContext;
-import io.github.douira.glsl_transformer.cst.token_filter.TokenFilter;
-import io.github.douira.glsl_transformer.tree.ExtendedContext;
+import io.github.douira.glsl_transformer.token_filter.TokenFilter;
 
 /**
  * The enhanced parser does more than just parsing. It also does lexing,
@@ -89,7 +88,6 @@ public class EnhancedParser implements ParserInterface {
    * The contained token filter can be {@code null} if no filter is to be used.
    */
   private FilterTokenSource tokenSource = new FilterTokenSource(lexer);
-  private TokenFilter<?> parseTokenFilter;
 
   /**
    * Creates a new parser and specifies if parse errors should be
@@ -184,15 +182,10 @@ public class EnhancedParser implements ParserInterface {
    * Sets the token filter to use before parsing. It's placed between the lexer
    * and the token stream.
    * 
-   * @param parseTokenFilter The new parse token filter
+   * @param tokenFilter The new token filter
    */
-  public void setParseTokenFilter(TokenFilter<?> parseTokenFilter) {
-    this.parseTokenFilter = parseTokenFilter;
-    this.tokenSource.setTokenFilter(parseTokenFilter);
-  }
-
-  public TokenFilter<?> getParseTokenFilter() {
-    return parseTokenFilter;
+  public void setTokenFilter(TokenFilter<?> tokenFilter) {
+    this.tokenSource.setTokenFilter(tokenFilter);
   }
 
   /**
@@ -213,10 +206,17 @@ public class EnhancedParser implements ParserInterface {
    * @param parseMethod The parser method reference to use for parsing
    * @return The parsed string as a parse tree that has the given type
    */
-  public <RuleType extends ExtendedContext> RuleType parse(
+  public <RuleType extends ParserRuleContext> RuleType parse(
       String str,
       Function<GLSLParser, RuleType> parseMethod) {
-    return parse(str, null, parseMethod);
+    return parse(str, (ParserRuleContext) null, parseMethod);
+  }
+
+  public <RuleType extends ParserRuleContext> RuleType parse(
+      String str,
+      Class<RuleType> ruleType,
+      Function<GLSLParser, RuleType> parseMethod) {
+    return parse(str, (ParserRuleContext) null, parseMethod);
   }
 
   /**
@@ -228,9 +228,17 @@ public class EnhancedParser implements ParserInterface {
    * @param parseMethod The parser method reference to use for parsing
    * @return The parsed string as a parse tree that has the given type
    */
-  public <RuleType extends ExtendedContext> RuleType parse(
+  public <RuleType extends ParserRuleContext> RuleType parse(
       String str,
-      ExtendedContext parent,
+      ParserRuleContext parent,
+      Function<GLSLParser, RuleType> parseMethod) {
+    return parse(CharStreams.fromString(str), parent, parseMethod);
+  }
+
+  public <RuleType extends ParserRuleContext> RuleType parse(
+      String str,
+      ParserRuleContext parent,
+      Class<RuleType> ruleType,
       Function<GLSLParser, RuleType> parseMethod) {
     return parse(CharStreams.fromString(str), parent, parseMethod);
   }
@@ -246,14 +254,10 @@ public class EnhancedParser implements ParserInterface {
    * @param parseMethod The parser method reference to use for parsing
    * @return The parsed string as a parse tree that has the given type
    */
-  private <RuleType extends ExtendedContext> RuleType parse(
+  private <RuleType extends ParserRuleContext> RuleType parse(
       IntStream stream,
-      ExtendedContext parent,
+      ParserRuleContext parent,
       Function<GLSLParser, RuleType> parseMethod) {
-    if (parseTokenFilter != null) {
-      parseTokenFilter.resetState();
-    }
-
     // setup lexer
     input = stream;
     lexer.setInputStream(input);
@@ -265,6 +269,7 @@ public class EnhancedParser implements ParserInterface {
       lexer.removeErrorListener(ThrowingErrorListener.INSTANCE);
     }
     lexer.reset();
+    tokenSource.resetState();
     tokenStream = new CommonTokenStream(tokenSource);
     parser.setTokenStream(tokenStream);
     parser.reset();

@@ -131,9 +131,6 @@ public class LiteralExpression extends TerminalExpression {
     if (numberType != NumberType.SIGNED_INTEGER && numberType != NumberType.UNSIGNED_INTEGER) {
       throw new IllegalArgumentException("Literal type must be an integer!");
     }
-    if (integerValue < 0 && numberType == NumberType.UNSIGNED_INTEGER) {
-      throw new IllegalArgumentException("Unsigned integer cannot be negative!");
-    }
     this.integerValue = integerValue;
     this.booleanValue = false;
     this.integerFormat = integerFormat;

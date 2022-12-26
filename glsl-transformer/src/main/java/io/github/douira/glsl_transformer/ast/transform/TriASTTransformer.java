@@ -6,7 +6,7 @@ import java.util.function.Consumer;
 import org.antlr.v4.runtime.RecognitionException;
 
 import io.github.douira.glsl_transformer.ast.node.TranslationUnit;
-import io.github.douira.glsl_transformer.job_parameter.JobParameters;
+import io.github.douira.glsl_transformer.basic.JobParameters;
 import io.github.douira.glsl_transformer.util.*;
 
 public class TriASTTransformer<T extends JobParameters, E extends Enum<E>> extends EnumASTTransformer<T, E> {

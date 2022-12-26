@@ -4,22 +4,21 @@ import org.antlr.v4.runtime.ParserRuleContext;
 import org.antlr.v4.runtime.tree.TerminalNode;
 
 public class PrintTreeSnapshot extends PrintCST {
-
   @Override
-  public void processEnterRule(ParserRuleContext ctx, StringBuilder builder) {
+  public void processEnterRule(ParserRuleContext ctx) {
     builder.append('(');
-    super.processEnterRule(ctx, builder);
+    super.processEnterRule(ctx);
   }
 
   @Override
-  public void processExitRule(ParserRuleContext ctx, StringBuilder builder) {
+  public void processExitRule(ParserRuleContext ctx) {
     builder.append(')');
-    super.processExitRule(ctx, builder);
+    super.processExitRule(ctx);
   }
 
   @Override
-  public void processVisitTerminal(TerminalNode node, StringBuilder builder) {
+  public void processVisitTerminal(TerminalNode node) {
     builder.append("- ");
-    super.processVisitTerminal(node, builder);
+    super.processVisitTerminal(node);
   }
 }

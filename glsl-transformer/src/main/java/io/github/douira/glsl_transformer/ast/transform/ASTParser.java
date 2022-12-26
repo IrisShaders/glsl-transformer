@@ -3,7 +3,7 @@ package io.github.douira.glsl_transformer.ast.transform;
 import java.util.*;
 import java.util.function.*;
 
-import org.antlr.v4.runtime.RecognitionException;
+import org.antlr.v4.runtime.*;
 
 import io.github.douira.glsl_transformer.*;
 import io.github.douira.glsl_transformer.GLSLParser.*;
@@ -16,8 +16,7 @@ import io.github.douira.glsl_transformer.ast.node.statement.Statement;
 import io.github.douira.glsl_transformer.ast.query.EmptyRoot;
 import io.github.douira.glsl_transformer.basic.*;
 import io.github.douira.glsl_transformer.basic.EnhancedParser.ParsingStrategy;
-import io.github.douira.glsl_transformer.cst.token_filter.TokenFilter;
-import io.github.douira.glsl_transformer.tree.ExtendedContext;
+import io.github.douira.glsl_transformer.token_filter.TokenFilter;
 
 public class ASTParser implements ParserInterface {
   private static ASTParser INSTANCE;
@@ -29,13 +28,18 @@ public class ASTParser implements ParserInterface {
     return INSTANCE;
   }
 
-  private final CachingParser parser = new CachingParser();
+  private EnhancedParser parser = new CachingParser();
   private TypedTreeCache<ASTNode> buildCache = new TypedTreeCache<>();
-  private CacheStrategy cacheStrategy = CacheStrategy.ALL_EXCLUDING_TRANSLATION_UNIT;
+  private ASTCacheStrategy astCacheStrategy = ASTCacheStrategy.ALL_EXCLUDING_TRANSLATION_UNIT;
 
-  public enum CacheStrategy {
+  public enum ASTCacheStrategy {
     ALL,
     ALL_EXCLUDING_TRANSLATION_UNIT,
+    NONE
+  }
+
+  public enum ParsingCacheStrategy {
+    ALL,
     NONE
   }
 
@@ -44,11 +48,32 @@ public class ASTParser implements ParserInterface {
   }
 
   public void setParseCacheSizeAndClear(int size) {
-    parser.setParseCacheSizeAndClear(size);
+    if (parser instanceof CachingParser cachingParser) {
+      cachingParser.setParseCacheSizeAndClear(size);
+    }
   }
 
-  public void setCacheStrategy(CacheStrategy cacheStrategy) {
-    this.cacheStrategy = cacheStrategy;
+  /**
+   * Sets the AST cache strategy. If set to ALL, the parser will cache all
+   * generated ASTs. If set to ALL_EXCLUDING_TRANSLATION_UNIT, the parser will
+   * cache all generated ASTs except for the TranslationUnit. If set to NONE, the
+   * parser will cache nothing.
+   * 
+   * @param astCacheStrategy the AST cache strategy
+   */
+  public void setASTCacheStrategy(ASTCacheStrategy astCacheStrategy) {
+    this.astCacheStrategy = astCacheStrategy;
+  }
+
+  /**
+   * Sets the parsing cache strategy. If set to ALL, the parser will cache all
+   * parsed strings. If set to NONE, the parser will cache nothing. Only
+   * influences how the CST is parsed from the input and not the AST.
+   * 
+   * @param parsingCacheStrategy the parsing cache strategy
+   */
+  public void setParsingCacheStrategy(ParsingCacheStrategy parsingCacheStrategy) {
+    parser = parsingCacheStrategy == ParsingCacheStrategy.ALL ? new CachingParser() : new EnhancedParser();
   }
 
   @Override
@@ -82,17 +107,12 @@ public class ASTParser implements ParserInterface {
   }
 
   @Override
-  public void setParseTokenFilter(TokenFilter<?> parseTokenFilter) {
-    parser.setParseTokenFilter(parseTokenFilter);
-  }
-
-  @Override
-  public TokenFilter<?> getParseTokenFilter() {
-    return parser.getParseTokenFilter();
+  public void setTokenFilter(TokenFilter<?> setTokenFilter) {
+    parser.setTokenFilter(setTokenFilter);
   }
 
   @SuppressWarnings("unchecked") // consistent use of the cache results in the same type
-  public <RuleType extends ExtendedContext, ReturnType extends ASTNode> ReturnType parseNode(
+  public <RuleType extends ParserRuleContext, ReturnType extends ASTNode> ReturnType parseNode(
       String input,
       ASTNode parentTreeMember,
       Class<RuleType> ruleType,
@@ -102,7 +122,7 @@ public class ASTParser implements ParserInterface {
       throw new IllegalArgumentException("Translation units may not be parsed into another node, that makes no sense.");
     }
 
-    if (cacheStrategy == CacheStrategy.NONE) {
+    if (astCacheStrategy == ASTCacheStrategy.NONE) {
       return ASTBuilder.buildSubtree(parentTreeMember, parser.parse(input, ruleType, parseMethod), visitMethod);
     } else {
       // cache and possibly build, always clone to return new trees
@@ -113,13 +133,13 @@ public class ASTParser implements ParserInterface {
   }
 
   @SuppressWarnings("unchecked") // consistent use of the cache results in the same type
-  public <RuleType extends ExtendedContext, ReturnType extends ASTNode> ReturnType parseNodeSeparate(
+  public <RuleType extends ParserRuleContext, ReturnType extends ASTNode> ReturnType parseNodeSeparate(
       String input,
       Class<RuleType> ruleType,
       Function<GLSLParser, RuleType> parseMethod,
       BiFunction<ASTBuilder, RuleType, ReturnType> visitMethod) throws RecognitionException {
-    if (cacheStrategy == CacheStrategy.NONE
-        || cacheStrategy == CacheStrategy.ALL_EXCLUDING_TRANSLATION_UNIT
+    if (astCacheStrategy == ASTCacheStrategy.NONE
+        || astCacheStrategy == ASTCacheStrategy.ALL_EXCLUDING_TRANSLATION_UNIT
             && ruleType == TranslationUnitContext.class) {
       return ASTBuilder.build(parser.parse(input, ruleType, parseMethod), visitMethod);
     } else {

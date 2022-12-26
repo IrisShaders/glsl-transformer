@@ -2,11 +2,12 @@ package io.github.douira.glsl_transformer.ast.query.match;
 
 import java.util.function.*;
 
+import org.antlr.v4.runtime.ParserRuleContext;
+
 import io.github.douira.glsl_transformer.GLSLParser;
 import io.github.douira.glsl_transformer.ast.node.Identifier;
 import io.github.douira.glsl_transformer.ast.node.basic.ASTNode;
 import io.github.douira.glsl_transformer.ast.transform.ASTBuilder;
-import io.github.douira.glsl_transformer.tree.ExtendedContext;
 
 /**
  * The auto-hinted matcher is a matcher that automatically determines the hint
@@ -15,7 +16,8 @@ import io.github.douira.glsl_transformer.tree.ExtendedContext;
  * {@link HintedMatcher} should be used instead.
  */
 public class AutoHintedMatcher<T extends ASTNode> extends HintedMatcher<T> {
-  public <RuleType extends ExtendedContext> AutoHintedMatcher(String input, Function<GLSLParser, RuleType> parseMethod,
+  public <RuleType extends ParserRuleContext> AutoHintedMatcher(String input,
+      Function<GLSLParser, RuleType> parseMethod,
       BiFunction<ASTBuilder, RuleType, T> visitMethod, String wildcardPrefix) {
     super(input, parseMethod, visitMethod, wildcardPrefix, null);
   }
@@ -28,7 +30,8 @@ public class AutoHintedMatcher<T extends ASTNode> extends HintedMatcher<T> {
     super(pattern, null);
   }
 
-  public <RuleType extends ExtendedContext> AutoHintedMatcher(String input, Function<GLSLParser, RuleType> parseMethod,
+  public <RuleType extends ParserRuleContext> AutoHintedMatcher(String input,
+      Function<GLSLParser, RuleType> parseMethod,
       BiFunction<ASTBuilder, RuleType, T> visitMethod) {
     super(input, parseMethod, visitMethod, null);
   }

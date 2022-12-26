@@ -2,7 +2,7 @@ package io.github.douira.glsl_transformer.basic;
 
 import org.antlr.v4.runtime.*;
 
-import io.github.douira.glsl_transformer.cst.token_filter.TokenFilter;
+import io.github.douira.glsl_transformer.token_filter.TokenFilter;
 
 /**
  * The filter token source wraps another token source but reads tokens from it
@@ -23,16 +23,6 @@ public class FilterTokenSource implements TokenSource {
   }
 
   /**
-   * Sets the token source on this filtering token source wrapper. May not be
-   * {@code null}.
-   * 
-   * @param tokenSource The new token source
-   */
-  public void setTokenSource(TokenSource tokenSource) {
-    source = tokenSource;
-  }
-
-  /**
    * Sets the token filter on this filtering token source wrapper. Set to
    * {@code null} to effectively disable any manipulation of the tokens generated
    * by the contained token source.
@@ -41,7 +31,16 @@ public class FilterTokenSource implements TokenSource {
    */
   public void setTokenFilter(TokenFilter<?> tokenFilter) {
     filter = tokenFilter;
-    filter.initOnce();
+  }
+
+  public TokenFilter<?> getTokenFilter() {
+    return filter;
+  }
+
+  public void resetState() {
+    if (filter != null) {
+      filter.resetState();
+    }
   }
 
   /**

@@ -24,7 +24,7 @@ import io.github.douira.glsl_transformer.ast.print.token.ParserToken;
 import io.github.douira.glsl_transformer.ast.query.Root;
 import io.github.douira.glsl_transformer.ast.query.match.*;
 import io.github.douira.glsl_transformer.ast.transform.*;
-import io.github.douira.glsl_transformer.job_parameter.JobParameters;
+import io.github.douira.glsl_transformer.basic.JobParameters;
 import io.github.douira.glsl_transformer.test_util.*;
 import io.github.douira.glsl_transformer.test_util.TestCaseProvider.Spacing;
 import io.github.douira.glsl_transformer.util.Type;

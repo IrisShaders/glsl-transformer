@@ -2,7 +2,7 @@ package io.github.douira.glsl_transformer.ast.transform;
 
 import io.github.douira.glsl_transformer.ast.node.basic.ASTNode;
 import io.github.douira.glsl_transformer.ast.query.Root;
-import io.github.douira.glsl_transformer.job_parameter.JobParameters;
+import io.github.douira.glsl_transformer.basic.JobParameters;
 
 @FunctionalInterface
 public interface TriFullTransformation<A extends ASTNode, T extends JobParameters> {

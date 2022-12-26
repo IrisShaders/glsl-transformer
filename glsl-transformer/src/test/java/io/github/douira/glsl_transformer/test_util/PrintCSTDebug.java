@@ -27,18 +27,18 @@ public class PrintCSTDebug extends PrintCST {
   }
 
   @Override
-  public void processEnterRule(ParserRuleContext ctx, StringBuilder builder) {
+  public void processEnterRule(ParserRuleContext ctx) {
     addIndentation(builder);
-    super.processEnterRule(ctx, builder);
+    super.processEnterRule(ctx);
   }
 
   @Override
-  public void processExitRule(ParserRuleContext ctx, StringBuilder builder) {
+  public void processExitRule(ParserRuleContext ctx) {
   }
 
   @Override
-  public void processVisitTerminal(TerminalNode node, StringBuilder builder) {
+  public void processVisitTerminal(TerminalNode node) {
     addIndentation(builder);
-    super.processVisitTerminal(node, builder);
+    super.processVisitTerminal(node);
   }
 }

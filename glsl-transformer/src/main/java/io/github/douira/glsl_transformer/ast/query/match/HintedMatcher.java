@@ -2,10 +2,11 @@ package io.github.douira.glsl_transformer.ast.query.match;
 
 import java.util.function.*;
 
+import org.antlr.v4.runtime.ParserRuleContext;
+
 import io.github.douira.glsl_transformer.GLSLParser;
 import io.github.douira.glsl_transformer.ast.node.basic.ASTNode;
 import io.github.douira.glsl_transformer.ast.transform.ASTBuilder;
-import io.github.douira.glsl_transformer.tree.ExtendedContext;
 
 /**
  * A hinted matcher contains an additional string that can be used to find
@@ -15,7 +16,7 @@ import io.github.douira.glsl_transformer.tree.ExtendedContext;
 public class HintedMatcher<T extends ASTNode> extends Matcher<T> {
   protected String hint;
 
-  public <RuleType extends ExtendedContext> HintedMatcher(String input, Function<GLSLParser, RuleType> parseMethod,
+  public <RuleType extends ParserRuleContext> HintedMatcher(String input, Function<GLSLParser, RuleType> parseMethod,
       BiFunction<ASTBuilder, RuleType, T> visitMethod, String wildcardPrefix, String hint) {
     super(input, parseMethod, visitMethod, wildcardPrefix);
     this.hint = hint;
@@ -31,7 +32,7 @@ public class HintedMatcher<T extends ASTNode> extends Matcher<T> {
     this.hint = hint;
   }
 
-  public <RuleType extends ExtendedContext> HintedMatcher(String input, Function<GLSLParser, RuleType> parseMethod,
+  public <RuleType extends ParserRuleContext> HintedMatcher(String input, Function<GLSLParser, RuleType> parseMethod,
       BiFunction<ASTBuilder, RuleType, T> visitMethod, String hint) {
     super(input, parseMethod, visitMethod);
     this.hint = hint;
