@@ -10,7 +10,7 @@ This is an actively developed library that parses GLSL using an ANTLR4 grammar a
 
 ## License
 
-Licensed under [GPLv3](LICENSE) with [an exception](LICENSE.EXCEPTION) allowing the creation of derivative works in combination with LGPL code or linking with Minecraft. This means you are only allowed to distribute derivative works, which includes software that uses glsl-transformer through Mixin, uses its API without distributing a compiled version of glsl-transformer, or extends or uses it in some other way, if they are licensed with a compatible license (for example LGPL or GPL with exception). You are required to give attribution and provide the source code, which may be done by linking to this repository. See the license files for details.
+Licensed under [GPLv3](LICENSE) with [an exception](LICENSE.EXCEPTION) allowing the creation of derivative works in combination with LGPL code or linking with Minecraft. This means you are only allowed to distribute derivative works, including but not limited to software that uses glsl-transformer through Mixin, uses its API without distributing a compiled version of glsl-transformer, or extends or uses it in some other way, if they are licensed with a compatible license (for example LGPL or GPL with exception). You are required to give attribution and provide the source code, which may be done by linking to this repository. See the license files for details.
 
 ## Capabilities
 
