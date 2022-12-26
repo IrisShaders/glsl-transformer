@@ -8,6 +8,10 @@ This is an actively developed library that parses GLSL using an ANTLR4 grammar a
 
 `glsl-transformer` is developed and maintained by [douira](https://github.com/douira). This project was created as a hobby project initiated by the need for a more powerful GLSL shader patcher in the wonderful [Iris](https://github.com/IrisShaders/Iris/) shaders mod for Minecraft. This repo is now part of the IrisShaders org on GitHub.
 
+## License
+
+Licensed under [GPLv3](LICENSE) with [an exception](LICENSE.EXCEPTION) allowing the creation of derivative works in combination with LGPL code or linking with Minecraft. This means you are only allowed to distribute derivative works, which includes software that uses glsl-transformer through Mixin, uses its API without distributing a compiled version of glsl-transformer, or extends or uses it in some other way, if they are licensed with a compatible license (for example LGPL or GPL with exception). You are required to give attribution and provide the source code, which may be done by linking to this repository. See the license files for details.
+
 ## Capabilities
 
 `glsl-transformer` is a library for GLSL program transformation. It uses a parser generated with ANTLR based on a custom GLSL grammar to turn shader code into a parse tree. At this point there are two different ways of approaching transformation: The concrete syntax tree (CST) that is directly taken from the parser can be transformed. The other approach turns this CST into an abstract syntax tree (AST) and then does transformations on that. In both types of trees each syntactic piece of the code is represented as a node with children. However, the AST is a little closer to the semantic content of the code rather than how the parser understands it.
