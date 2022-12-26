@@ -35,7 +35,7 @@ public class Root {
   public final IdentifierIndex<?, ?> identifierIndex;
 
   public static final Supplier<NodeIndex<?>> nodeIndexFactoryDefault = NodeIndex::withUnordered;
-  public static Supplier<IdentifierIndex<?, ?>> identifierIndexFactoryDefault = IdentifierIndex::withOnlyExact;
+  public static final Supplier<IdentifierIndex<?, ?>> identifierIndexFactoryDefault = IdentifierIndex::withOnlyExact;
   public static Supplier<NodeIndex<?>> nodeIndexFactory = nodeIndexFactoryDefault;
   public static Supplier<IdentifierIndex<?, ?>> identifierIndexFactory = identifierIndexFactoryDefault;
 
