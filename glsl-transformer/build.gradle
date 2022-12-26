@@ -26,7 +26,7 @@ repositories {
   mavenCentral()
 }
 
-def antlrVersion = '4.10.1'
+def antlrVersion = '4.11.1'
 def jabelVersion = '0.4.2'
 
 dependencies {

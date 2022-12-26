@@ -16344,13 +16344,13 @@ void foo230920394()
 }
 
 <><><><><><><><><><><><><><><><><><><><><><><><><>
+4:8; [@13,44:49='errors',<IDENTIFIER>,4:8]; no viable alternative at input 'ains no errors'; NoViableAltException:null
+22:0; [@59,300:303='vec4',<F32VEC4>,22:0]; no viable alternative at input 'MAIN\n\nvec4'; NoViableAltException:null
+42:0; [@118,630:634='const',<'const'>,42:0]; no viable alternative at input 'FOO\n\n#define A int q1 = \ 1\n#define B int q2 = \1\n#define C int q3 = $ 1\n#define D int q4 = @ 1\n\nconst'; NoViableAltException:null
 42:21; <no symbol>; token recognition error at: '\ '; LexerNoViableAltException:null
 43:21; <no symbol>; token recognition error at: '@'; LexerNoViableAltException:null
 44:21; <no symbol>; token recognition error at: '$'; LexerNoViableAltException:null
 45:23; <no symbol>; token recognition error at: '\;'; LexerNoViableAltException:null
-4:8; [@13,44:49='errors',<IDENTIFIER>,4:8]; no viable alternative at input 'ains no errors'; NoViableAltException:null
-22:0; [@59,300:303='vec4',<F32VEC4>,22:0]; no viable alternative at input 'MAIN\n\nvec4'; NoViableAltException:null
-42:0; [@118,630:634='const',<'const'>,42:0]; no viable alternative at input 'FOO\n\n#define A int q1 = \ 1\n#define B int q2 = \1\n#define C int q3 = $ 1\n#define D int q4 = @ 1\n\nconst'; NoViableAltException:null
 47:0; [@175,775:775='A',<IDENTIFIER>,47:0]; extraneous input 'A' expecting {';', ','}; <no exception>
 55:4; [@193,801:805='error',<NR_IDENTIFIER>,55:4]; no viable alternative at input '# \\n    error'; NoViableAltException:null
 72:0; [@247,1011:1013='ece',<IDENTIFIER>,72:0]; extraneous input 'ece' expecting {';', ','}; <no exception>
@@ -16426,12 +16426,12 @@ D;
 cd"
 
 <><><><><><><><><><><><><><><><><><><><><><><><><>
+9:0; [@17,87:88='oo',<IDENTIFIER>,9:0]; no viable alternative at input 'float f\\r\noo'; NoViableAltException:null
+22:0; [@43,243:246='vec4',<F32VEC4>,22:0]; no viable alternative at input 'MAIN\r\n\r\nvec4'; NoViableAltException:null
 40:21; <no symbol>; token recognition error at: '\ '; LexerNoViableAltException:null
 41:21; <no symbol>; token recognition error at: '@'; LexerNoViableAltException:null
 42:21; <no symbol>; token recognition error at: '$'; LexerNoViableAltException:null
 43:23; <no symbol>; token recognition error at: '\;'; LexerNoViableAltException:null
-9:0; [@17,87:88='oo',<IDENTIFIER>,9:0]; no viable alternative at input 'float f\\r\noo'; NoViableAltException:null
-22:0; [@43,243:246='vec4',<F32VEC4>,22:0]; no viable alternative at input 'MAIN\r\n\r\nvec4'; NoViableAltException:null
 45:0; [@155,720:720='A',<IDENTIFIER>,45:0]; extraneous input 'A' expecting {';', ','}; <no exception>
 53:4; [@173,754:758='error',<NR_IDENTIFIER>,53:4]; no viable alternative at input '# \\r\n    error'; NoViableAltException:null
 ]
