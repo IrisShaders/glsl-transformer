@@ -2,7 +2,7 @@ package io.github.douira.glsl_transformer.basic;
 
 import io.github.douira.glsl_transformer.*;
 import io.github.douira.glsl_transformer.basic.EnhancedParser.ParsingStrategy;
-import io.github.douira.glsl_transformer.cst.token_filter.TokenFilter;
+import io.github.douira.glsl_transformer.token_filter.TokenFilter;
 
 /**
  * The parser interface provides the basic methods for interfacing with an
@@ -21,7 +21,5 @@ public interface ParserInterface {
 
   void setLLOnly();
 
-  void setParseTokenFilter(TokenFilter<?> parseTokenFilter);
-
-  TokenFilter<?> getParseTokenFilter();
+  void setTokenFilter(TokenFilter<?> parseTokenFilter);
 }

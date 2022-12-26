@@ -1,6 +1,6 @@
 package io.github.douira.glsl_transformer.test_util;
 
-import io.github.douira.glsl_transformer.job_parameter.JobParameters;
+import io.github.douira.glsl_transformer.basic.JobParameters;
 
 /**
  * Used to test execution plan caching with job parameters that are always

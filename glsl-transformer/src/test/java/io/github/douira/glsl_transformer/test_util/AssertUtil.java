@@ -6,12 +6,13 @@ import java.util.Set;
 import java.util.function.*;
 import java.util.stream.*;
 
+import org.antlr.v4.runtime.ParserRuleContext;
+
 import io.github.douira.glsl_transformer.GLSLParser;
 import io.github.douira.glsl_transformer.ast.node.basic.ASTNode;
 import io.github.douira.glsl_transformer.ast.print.*;
 import io.github.douira.glsl_transformer.ast.transform.ASTBuilder;
 import io.github.douira.glsl_transformer.basic.EnhancedParser;
-import io.github.douira.glsl_transformer.tree.ExtendedContext;
 import io.github.douira.glsl_transformer.util.TriConsumer;
 
 public class AssertUtil {
@@ -20,7 +21,7 @@ public class AssertUtil {
   }
 
   public static void assertReprint(
-      Function<GLSLParser, ? extends ExtendedContext> parseMethod,
+      Function<GLSLParser, ? extends ParserRuleContext> parseMethod,
       String expected,
       String input) {
     assertReprint(PrintType.INDENTED, parseMethod, expected, input);
@@ -28,10 +29,11 @@ public class AssertUtil {
 
   public static void assertReprint(
       PrintType printType,
-      Function<GLSLParser, ? extends ExtendedContext> parseMethod,
+      Function<GLSLParser, ? extends ParserRuleContext> parseMethod,
       String expected,
       String input) {
     var parser = new EnhancedParser();
+    parser.setThrowParseErrors(true);
     parser.getLexer().enableCustomDirective = true;
     parser.getLexer().enableIncludeDirective = true;
     var parseTree = parser.parse(input, parseMethod);
@@ -44,7 +46,7 @@ public class AssertUtil {
   }
 
   public static ASTNode parseAST(
-      Function<GLSLParser, ? extends ExtendedContext> parseMethod,
+      Function<GLSLParser, ? extends ParserRuleContext> parseMethod,
       String input) {
     var parser = new EnhancedParser();
     parser.getLexer().enableCustomDirective = true;

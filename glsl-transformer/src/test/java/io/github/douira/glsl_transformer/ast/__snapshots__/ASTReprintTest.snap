@@ -23,6 +23,147 @@ a[(a[b])]
 ]
 
 
+testASTTree[expression_0j1gvk7Qo/QksBgprZkZHrafxwc=]=[
+8 - 1 + (4-1) + (4 -1) + (4- 1) + 4 -1 + 4- 1 + 4 -1 + 4-1 + ((1)-4)
+<><><><><><><><><><><><><><><><><><><><><><><><><>
+(AdditionExpression
+(SubtractionExpression
+(AdditionExpression
+(SubtractionExpression
+(AdditionExpression
+(SubtractionExpression
+(AdditionExpression
+(SubtractionExpression
+(AdditionExpression
+(AdditionExpression
+(AdditionExpression
+(AdditionExpression
+(SubtractionExpression
+(LiteralExpression
+- Type INT32
+- Integer 8
+- IntegerFormat DECIMAL
+)LiteralExpression
+(LiteralExpression
+- Type INT32
+- Integer 1
+- IntegerFormat DECIMAL
+)LiteralExpression
+)SubtractionExpression
+(GroupingExpression
+(SubtractionExpression
+(LiteralExpression
+- Type INT32
+- Integer 4
+- IntegerFormat DECIMAL
+)LiteralExpression
+(LiteralExpression
+- Type INT32
+- Integer 1
+- IntegerFormat DECIMAL
+)LiteralExpression
+)SubtractionExpression
+)GroupingExpression
+)AdditionExpression
+(GroupingExpression
+(SubtractionExpression
+(LiteralExpression
+- Type INT32
+- Integer 4
+- IntegerFormat DECIMAL
+)LiteralExpression
+(LiteralExpression
+- Type INT32
+- Integer 1
+- IntegerFormat DECIMAL
+)LiteralExpression
+)SubtractionExpression
+)GroupingExpression
+)AdditionExpression
+(GroupingExpression
+(SubtractionExpression
+(LiteralExpression
+- Type INT32
+- Integer 4
+- IntegerFormat DECIMAL
+)LiteralExpression
+(LiteralExpression
+- Type INT32
+- Integer 1
+- IntegerFormat DECIMAL
+)LiteralExpression
+)SubtractionExpression
+)GroupingExpression
+)AdditionExpression
+(LiteralExpression
+- Type INT32
+- Integer 4
+- IntegerFormat DECIMAL
+)LiteralExpression
+)AdditionExpression
+(LiteralExpression
+- Type INT32
+- Integer 1
+- IntegerFormat DECIMAL
+)LiteralExpression
+)SubtractionExpression
+(LiteralExpression
+- Type INT32
+- Integer 4
+- IntegerFormat DECIMAL
+)LiteralExpression
+)AdditionExpression
+(LiteralExpression
+- Type INT32
+- Integer 1
+- IntegerFormat DECIMAL
+)LiteralExpression
+)SubtractionExpression
+(LiteralExpression
+- Type INT32
+- Integer 4
+- IntegerFormat DECIMAL
+)LiteralExpression
+)AdditionExpression
+(LiteralExpression
+- Type INT32
+- Integer 1
+- IntegerFormat DECIMAL
+)LiteralExpression
+)SubtractionExpression
+(LiteralExpression
+- Type INT32
+- Integer 4
+- IntegerFormat DECIMAL
+)LiteralExpression
+)AdditionExpression
+(LiteralExpression
+- Type INT32
+- Integer 1
+- IntegerFormat DECIMAL
+)LiteralExpression
+)SubtractionExpression
+(GroupingExpression
+(SubtractionExpression
+(GroupingExpression
+(LiteralExpression
+- Type INT32
+- Integer 1
+- IntegerFormat DECIMAL
+)LiteralExpression
+)GroupingExpression
+(LiteralExpression
+- Type INT32
+- Integer 4
+- IntegerFormat DECIMAL
+)LiteralExpression
+)SubtractionExpression
+)GroupingExpression
+)AdditionExpression
+
+]
+
+
 testASTTree[expression_17dphoYYoz/OV8j/tLZLAFM+zyQ=]=[
 a.b, b.foo, a.b.c.d
 <><><><><><><><><><><><><><><><><><><><><><><><><>
@@ -169,70 +310,6 @@ testASTTree[expression_9Unm5Vbq7G/lD5ck+4EWIti+Tls=]=[
 - Type INT32
 - Integer 2
 - IntegerFormat DECIMAL
-)LiteralExpression
-)AdditionExpression
-
-]
-
-
-testASTTree[expression_ACBk+b1nd6Py3SZfZp1dSrQMups=]=[
-1 + 2us + 3ul + 4u + 5s + 0.1 + 0.2f + 0.3hf + 0.4lf
-<><><><><><><><><><><><><><><><><><><><><><><><><>
-(AdditionExpression
-(AdditionExpression
-(AdditionExpression
-(AdditionExpression
-(AdditionExpression
-(AdditionExpression
-(AdditionExpression
-(AdditionExpression
-(LiteralExpression
-- Type INT32
-- Integer 1
-- IntegerFormat DECIMAL
-)LiteralExpression
-(LiteralExpression
-- Type UINT16
-- Short 2
-- IntegerFormat DECIMAL
-)LiteralExpression
-)AdditionExpression
-(LiteralExpression
-- Type UINT64
-- Long 3
-- IntegerFormat DECIMAL
-)LiteralExpression
-)AdditionExpression
-(LiteralExpression
-- Type UINT32
-- Integer 4
-- IntegerFormat DECIMAL
-)LiteralExpression
-)AdditionExpression
-(LiteralExpression
-- Type INT16
-- Short 5
-- IntegerFormat DECIMAL
-)LiteralExpression
-)AdditionExpression
-(LiteralExpression
-- Type FLOAT32
-- Float 0.1
-)LiteralExpression
-)AdditionExpression
-(LiteralExpression
-- Type FLOAT32
-- Float 0.2
-)LiteralExpression
-)AdditionExpression
-(LiteralExpression
-- Type FLOAT16
-- Float 0.3
-)LiteralExpression
-)AdditionExpression
-(LiteralExpression
-- Type FLOAT64
-- Double 0.4
 )LiteralExpression
 )AdditionExpression
 
@@ -545,6 +622,33 @@ testASTTree[expression_PbVjUEqXAEd3I8rmPBaoiyLdLNA=]=[
 ]
 
 
+testASTTree[expression_SL+26MBvH1AJZNoHfJhlRFCVn4M=]=[
+-(-3 - -3)
+<><><><><><><><><><><><><><><><><><><><><><><><><>
+(NegationExpression
+(GroupingExpression
+(SubtractionExpression
+(NegationExpression
+(LiteralExpression
+- Type INT32
+- Integer 3
+- IntegerFormat DECIMAL
+)LiteralExpression
+)NegationExpression
+(NegationExpression
+(LiteralExpression
+- Type INT32
+- Integer 3
+- IntegerFormat DECIMAL
+)LiteralExpression
+)NegationExpression
+)SubtractionExpression
+)GroupingExpression
+)NegationExpression
+
+]
+
+
 testASTTree[expression_ax4Fc/ji0Pyr4OdmnZGINQ/hq3s=]=[
 a.b.c.d.e.f.g.h.i.j.k.l.m.n.o.p.q.r.s
 <><><><><><><><><><><><><><><><><><><><><><><><><>
@@ -744,6 +848,114 @@ a == b != c < d <= e > f >= g
 )ReferenceExpression
 )GreaterThanEqualExpression
 )InequalityExpression
+
+]
+
+
+testASTTree[expression_fMcjCBQImNUuQGlygaJWEvOWDO0=]=[
+1 + 2us + 3ul + 5l + 4u + 5s + 0.1 + 0.2f + 0.3hf + 0.4lf
+<><><><><><><><><><><><><><><><><><><><><><><><><>
+(AdditionExpression
+(AdditionExpression
+(AdditionExpression
+(AdditionExpression
+(AdditionExpression
+(AdditionExpression
+(AdditionExpression
+(AdditionExpression
+(AdditionExpression
+(LiteralExpression
+- Type INT32
+- Integer 1
+- IntegerFormat DECIMAL
+)LiteralExpression
+(LiteralExpression
+- Type UINT16
+- Short 2
+- IntegerFormat DECIMAL
+)LiteralExpression
+)AdditionExpression
+(LiteralExpression
+- Type UINT64
+- Long 3
+- IntegerFormat DECIMAL
+)LiteralExpression
+)AdditionExpression
+(LiteralExpression
+- Type INT64
+- Long 5
+- IntegerFormat DECIMAL
+)LiteralExpression
+)AdditionExpression
+(LiteralExpression
+- Type UINT32
+- Integer 4
+- IntegerFormat DECIMAL
+)LiteralExpression
+)AdditionExpression
+(LiteralExpression
+- Type INT16
+- Short 5
+- IntegerFormat DECIMAL
+)LiteralExpression
+)AdditionExpression
+(LiteralExpression
+- Type FLOAT32
+- Float 0.1
+)LiteralExpression
+)AdditionExpression
+(LiteralExpression
+- Type FLOAT32
+- Float 0.2
+)LiteralExpression
+)AdditionExpression
+(LiteralExpression
+- Type FLOAT16
+- Float 0.3
+)LiteralExpression
+)AdditionExpression
+(LiteralExpression
+- Type FLOAT64
+- Double 0.4
+)LiteralExpression
+)AdditionExpression
+
+]
+
+
+testASTTree[expression_gya7qFI5Gs++x1D2WBXXmz7x6Uk=]=[
+-0x1111111111111111l + 0x1111111111111111ul + -9223372036854775808ul + 0xfffffffffffffffful
+<><><><><><><><><><><><><><><><><><><><><><><><><>
+(AdditionExpression
+(AdditionExpression
+(AdditionExpression
+(NegationExpression
+(LiteralExpression
+- Type INT64
+- Long 1229782938247303441
+- IntegerFormat HEXADECIMAL
+)LiteralExpression
+)NegationExpression
+(LiteralExpression
+- Type UINT64
+- Long 1229782938247303441
+- IntegerFormat HEXADECIMAL
+)LiteralExpression
+)AdditionExpression
+(NegationExpression
+(LiteralExpression
+- Type UINT64
+- Long -9223372036854775808
+- IntegerFormat DECIMAL
+)LiteralExpression
+)NegationExpression
+)AdditionExpression
+(LiteralExpression
+- Type UINT64
+- Long -1
+- IntegerFormat HEXADECIMAL
+)LiteralExpression
+)AdditionExpression
 
 ]
 
@@ -992,6 +1204,103 @@ a[(a)]
 )ReferenceExpression
 )GroupingExpression
 )ArrayAccessExpression
+
+]
+
+
+testASTTree[expression_w3yDHgEShJhK4Ge94J6l4oVbumI=]=[
+-(-(-(4))) - (-4654) - 5 + -4 - -4 + +-6 - -+4 - - - - -4
+<><><><><><><><><><><><><><><><><><><><><><><><><>
+(SubtractionExpression
+(SubtractionExpression
+(AdditionExpression
+(SubtractionExpression
+(AdditionExpression
+(SubtractionExpression
+(SubtractionExpression
+(NegationExpression
+(GroupingExpression
+(NegationExpression
+(GroupingExpression
+(NegationExpression
+(GroupingExpression
+(LiteralExpression
+- Type INT32
+- Integer 4
+- IntegerFormat DECIMAL
+)LiteralExpression
+)GroupingExpression
+)NegationExpression
+)GroupingExpression
+)NegationExpression
+)GroupingExpression
+)NegationExpression
+(GroupingExpression
+(NegationExpression
+(LiteralExpression
+- Type INT32
+- Integer 4654
+- IntegerFormat DECIMAL
+)LiteralExpression
+)NegationExpression
+)GroupingExpression
+)SubtractionExpression
+(LiteralExpression
+- Type INT32
+- Integer 5
+- IntegerFormat DECIMAL
+)LiteralExpression
+)SubtractionExpression
+(NegationExpression
+(LiteralExpression
+- Type INT32
+- Integer 4
+- IntegerFormat DECIMAL
+)LiteralExpression
+)NegationExpression
+)AdditionExpression
+(NegationExpression
+(LiteralExpression
+- Type INT32
+- Integer 4
+- IntegerFormat DECIMAL
+)LiteralExpression
+)NegationExpression
+)SubtractionExpression
+(IdentityExpression
+(NegationExpression
+(LiteralExpression
+- Type INT32
+- Integer 6
+- IntegerFormat DECIMAL
+)LiteralExpression
+)NegationExpression
+)IdentityExpression
+)AdditionExpression
+(NegationExpression
+(IdentityExpression
+(LiteralExpression
+- Type INT32
+- Integer 4
+- IntegerFormat DECIMAL
+)LiteralExpression
+)IdentityExpression
+)NegationExpression
+)SubtractionExpression
+(NegationExpression
+(NegationExpression
+(NegationExpression
+(NegationExpression
+(LiteralExpression
+- Type INT32
+- Integer 4
+- IntegerFormat DECIMAL
+)LiteralExpression
+)NegationExpression
+)NegationExpression
+)NegationExpression
+)NegationExpression
+)SubtractionExpression
 
 ]
 
@@ -11617,7 +11926,7 @@ layout(binding = 0) buffer Buffers {
 (StructMember
 (FullySpecifiedType
 (BuiltinNumericTypeSpecifier
-- Type UI32VEC4
+- Type U32VEC4
 )BuiltinNumericTypeSpecifier
 )FullySpecifiedType
 (StructDeclarator

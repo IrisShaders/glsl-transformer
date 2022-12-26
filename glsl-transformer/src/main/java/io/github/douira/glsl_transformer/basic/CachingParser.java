@@ -2,12 +2,13 @@ package io.github.douira.glsl_transformer.basic;
 
 import java.util.function.Function;
 
+import org.antlr.v4.runtime.ParserRuleContext;
+
 import io.github.douira.glsl_transformer.GLSLParser;
 import io.github.douira.glsl_transformer.GLSLParser.TranslationUnitContext;
 import io.github.douira.glsl_transformer.ast.data.TypedTreeCache;
 import io.github.douira.glsl_transformer.ast.transform.ASTBuilder;
-import io.github.douira.glsl_transformer.cst.token_filter.TokenFilter;
-import io.github.douira.glsl_transformer.tree.ExtendedContext;
+import io.github.douira.glsl_transformer.token_filter.TokenFilter;
 
 /**
  * The caching parser extends the enhanced parser and returns previous parse
@@ -17,7 +18,7 @@ import io.github.douira.glsl_transformer.tree.ExtendedContext;
  * is safe to use this.
  */
 public class CachingParser extends EnhancedParser {
-  private TypedTreeCache<ExtendedContext> parseCache;
+  private TypedTreeCache<ParserRuleContext> parseCache;
 
   public CachingParser(boolean throwParseErrors, int cacheSize) {
     super(throwParseErrors);
@@ -46,17 +47,19 @@ public class CachingParser extends EnhancedParser {
     return parse(str, TranslationUnitContext.class, GLSLParser::translationUnit);
   }
 
-  public <RuleType extends ExtendedContext> RuleType parse(
+  @Override
+  public <RuleType extends ParserRuleContext> RuleType parse(
       String str,
       Class<RuleType> ruleType,
       Function<GLSLParser, RuleType> parseMethod) {
     return parse(str, null, ruleType, parseMethod);
   }
 
+  @Override
   @SuppressWarnings("unchecked")
-  public <RuleType extends ExtendedContext> RuleType parse(
+  public <RuleType extends ParserRuleContext> RuleType parse(
       String str,
-      ExtendedContext parent,
+      ParserRuleContext parent,
       Class<RuleType> ruleType,
       Function<GLSLParser, RuleType> parseMethod) {
     return (RuleType) parseCache.cachedGet(str, ruleType,
@@ -64,8 +67,8 @@ public class CachingParser extends EnhancedParser {
   }
 
   @Override
-  public void setParseTokenFilter(TokenFilter<?> parseTokenFilter) {
-    super.setParseTokenFilter(parseTokenFilter);
+  public void setTokenFilter(TokenFilter<?> tokenFilter) {
+    super.setTokenFilter(tokenFilter);
     parseCache.clear();
   }
 }

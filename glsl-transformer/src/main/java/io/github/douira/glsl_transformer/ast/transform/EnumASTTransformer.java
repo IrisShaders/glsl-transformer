@@ -4,7 +4,7 @@ import java.util.EnumMap;
 import java.util.function.*;
 
 import io.github.douira.glsl_transformer.ast.node.TranslationUnit;
-import io.github.douira.glsl_transformer.job_parameter.JobParameters;
+import io.github.douira.glsl_transformer.basic.JobParameters;
 
 public class EnumASTTransformer<T extends JobParameters, E extends Enum<E>>
     extends GroupedASTTransformer<T, E, EnumMap<E, String>, EnumMap<E, TranslationUnit>> {

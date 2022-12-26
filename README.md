@@ -14,27 +14,23 @@ Licensed under [GPLv3](LICENSE) with [an exception](LICENSE.EXCEPTION) allowing 
 
 ## Capabilities
 
-`glsl-transformer` is a library for GLSL program transformation. It uses a parser generated with ANTLR based on a custom GLSL grammar to turn shader code into a parse tree. At this point there are two different ways of approaching transformation: The concrete syntax tree (CST) that is directly taken from the parser can be transformed. The other approach turns this CST into an abstract syntax tree (AST) and then does transformations on that. In both types of trees each syntactic piece of the code is represented as a node with children. However, the AST is a little closer to the semantic content of the code rather than how the parser understands it.
+`glsl-transformer` is a library for GLSL program transformation. It uses a parser generated with ANTLR based on a custom GLSL grammar to turn shader code into a parse tree, called the concrete syntax tree (CST). The CST is then turned into an abstract syntax tree (AST) and transformations are performed on it.
 
-For transforming the CST, the API facilitates the creation of composable transformations that can be used to manipulate this parse tree. Transformations can iterate through the parse tree, insert or remove nodes, match patterns and extract information from it. An execution planner optimizes at what time each step of the whole transformation process is performed. After the parse tree has been changed, it is printed back into a string while preserving the original whitespace.
-
-Transforming the AST requires the additional step of building the AST from the parse tree (the CST). Once the AST is available, transforming it is easier and more efficient since traversing the entire tree frequently (or even altogether) is avoided though the use of index structures that allow fast queries for specific identifiers and node types. After transformation the AST is directly printed into a string, optionally with some formatting applied. Since the AST only contains the semantically relevant data from the code, any non-code parts of the original string, such as comments and formatting whitespace, are not present in the re-printed string. AST transformations don't have an execution planner and dependency graph mechanism since they operate on the AST without traversal that needs synchronization and management.
+Transforming the AST requires building the AST from the parse tree (the CST). Once the AST is available, transforming it is easier and more efficient since traversing the entire CST frequently (or even altogether) is avoided though the use of index structures that allow fast queries for specific identifiers and node types. After transformation the AST is printed into a string, optionally with some formatting applied. Since the AST only contains the semantically relevant data from the code, any non-code parts of the original string, such as comments and formatting whitespace, are not present in the re-printed string.
 
 - GLSL Lexing & Parsing
-- AST and CST transformation
+- AST transformation
 - Tree walking with visitors and listeners
-- Parse tree manipulation and declaration injection
-- New nodes are treated as part of the existing parse tree
-- AST: Complex pattern matching
-- AST: Templating for subtree generation
-- AST: Printing with various formatting options
-- AST: Index-based queries
+- Complex pattern matching
+- Templating for subtree generation
+- Printing with various formatting options
+- Index-based queries
 
 Further reading on [Abstract vs Concrete (Parse) Syntax Trees](https://eli.thegreenplace.net/2009/02/16/abstract-vs-concrete-syntax-trees/)
 
 ## What `glsl-transformer` is not
 
-Currently, `glsl-transformer` mostly operates only on the syntactic level, even if an AST is constructed. This means it only knows how the code looks and what structure it has to have, not what it means and which structures are legal or not. It only has a limited semantic understanding of the code. Semantic processing of programs can be implemented by API users on a case-by-case basis for specific tasks. The implemented AST does not do type checking or check if the defined structures adhere to the GLSL spec. Implementing full semantics would require building what basically amounts to a GLSL compiler which is way out of scope for this project.
+Currently, `glsl-transformer` mostly operates only on the syntactic level, even if an AST is constructed. This means it only knows how the code looks and what structure it has to have, not what it means and which structures are legal or not. It only has a limited semantic understanding of the code. Semantic processing of programs can be implemented by API users on a case-by-case basis for specific tasks. The implemented AST does not do type checking or check if the defined structures adhere to the GLSL spec. Implementing full semantics would require building what basically amounts to a GLSL compiler which is out of scope for this project.
 
 `glsl-transformer` does not do semantic validation of the code and will not error on code that is actually invalid for semantic reasons. It will only error on syntax errors. In particular, it will not error on type errors like assigning a boolean to an integer. It supports GLSL 4.6 with some extensions such as explicit arithmetic types and some others. It won't error on modern syntax features even if your driver doesn't support them. Do not rely on `glsl-transformer` for shader validation, only for syntax transformation.
 

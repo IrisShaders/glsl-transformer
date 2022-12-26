@@ -7,7 +7,7 @@ import org.antlr.v4.runtime.RecognitionException;
 import io.github.douira.glsl_transformer.ast.node.TranslationUnit;
 import io.github.douira.glsl_transformer.ast.print.ASTPrinter;
 import io.github.douira.glsl_transformer.ast.query.Root;
-import io.github.douira.glsl_transformer.job_parameter.*;
+import io.github.douira.glsl_transformer.basic.*;
 import io.github.douira.glsl_transformer.util.TriConsumer;
 
 /**
@@ -15,6 +15,9 @@ import io.github.douira.glsl_transformer.util.TriConsumer;
  * it with the given transformation and then prints it back.
  */
 public class SingleASTTransformer<T extends JobParameters> extends ASTTransformer<T, String> {
+  public static final Consumer<TranslationUnit> IDENTITY_TRANSFORMATION = (tu) -> {
+  };
+
   private Consumer<TranslationUnit> transformation;
 
   public SingleASTTransformer() {

@@ -2,6 +2,8 @@
 
 As mentioned earlier, the JavaDoc contains detailed information on individual classes and methods. However, it doesn't fully discuss the general function and usage of `glsl-transformer` by API consumers. This section will attempt to give an overview of how it works.
 
+The documentation and code examples in it are governed by the same license the rest of the code is also under (GPLv3 with exception).
+
 The ANTLR4 grammars can be found in `src.main.antlr` and give a helpful overview of how lexing and parsing works. Note that the AST will be significantly different from the parsed CST.
 
 ## Packages
@@ -13,10 +15,8 @@ The ANTLR4 grammars can be found in `src.main.antlr` and give a helpful overview
   - `query`: `Root` and related index classes that allow for accelerated AST traversal
   - `transform`: The `ASTTransformer` and subclasses for single or multiple sources, classes for parsing the CST and building the AST
   - `traversal`: General AST visiting, listening and walking classes
-- `basic`: Shared transformation classes that do caching and CST parsing
-- `cst`: The CST nodes and CST transformation classes
-- `job_parameter`: Classes for specifying job parameters that are used to pass information to a transformation. These are mostly relevant to CST transformation.
-- `tree`: Extensions to ANTLR's parsing classes that are used to customize the parsing behavior
+- `basic`: Base classes for the parser and lexer, job parameter classes, abstractions for parsing and transformation
+- `token_filter`: Token filters that can be applied between lexing and parsing
 - `util`: Other classes, polyfills for Java 8 APIs, generic utility classes
 
 ## AST Transformation Pipeline

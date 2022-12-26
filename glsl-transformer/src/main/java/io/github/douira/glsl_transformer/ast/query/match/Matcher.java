@@ -3,6 +3,8 @@ package io.github.douira.glsl_transformer.ast.query.match;
 import java.util.*;
 import java.util.function.*;
 
+import org.antlr.v4.runtime.ParserRuleContext;
+
 import io.github.douira.glsl_transformer.GLSLParser;
 import io.github.douira.glsl_transformer.GLSLParser.*;
 import io.github.douira.glsl_transformer.ast.node.TranslationUnit;
@@ -13,7 +15,6 @@ import io.github.douira.glsl_transformer.ast.node.statement.Statement;
 import io.github.douira.glsl_transformer.ast.transform.*;
 import io.github.douira.glsl_transformer.ast.traversal.*;
 import io.github.douira.glsl_transformer.basic.EnhancedParser;
-import io.github.douira.glsl_transformer.tree.ExtendedContext;
 
 /**
  * Instances of the matcher can match a node against a stored pattern. This
@@ -66,7 +67,7 @@ public class Matcher<T extends ASTNode> {
    * @param visitMethod    The build visitor method to use
    * @param wildcardPrefix The wildcard prefix
    */
-  public <RuleType extends ExtendedContext> Matcher(String input,
+  public <RuleType extends ParserRuleContext> Matcher(String input,
       Function<GLSLParser, RuleType> parseMethod,
       BiFunction<ASTBuilder, RuleType, T> visitMethod,
       String wildcardPrefix) {
@@ -85,7 +86,7 @@ public class Matcher<T extends ASTNode> {
    * @param parseMethod The parser method to use
    * @param visitMethod The build visitor method to use
    */
-  public <RuleType extends ExtendedContext> Matcher(String input,
+  public <RuleType extends ParserRuleContext> Matcher(String input,
       Function<GLSLParser, RuleType> parseMethod,
       BiFunction<ASTBuilder, RuleType, T> visitMethod) {
     this(input, parseMethod, visitMethod, null);
@@ -99,7 +100,7 @@ public class Matcher<T extends ASTNode> {
     this(input, patternParser, null);
   }
 
-  private static <RuleType extends ExtendedContext, ReturnType extends ASTNode> Function<String, ReturnType> makePatternParser(
+  private static <RuleType extends ParserRuleContext, ReturnType extends ASTNode> Function<String, ReturnType> makePatternParser(
       Class<RuleType> ruleType,
       Function<GLSLParser, RuleType> parseMethod,
       BiFunction<ASTBuilder, RuleType, ReturnType> visitMethod) {
@@ -363,8 +364,8 @@ public class Matcher<T extends ASTNode> {
   /**
    * Gets a node match with the given name if it is available as the given class.
    * 
-   * @param <R>   The type of the node match
-   * @param name  The name of the node match
+   * @param <R>  The type of the node match
+   * @param name The name of the node match
    * @param type The class of the node match
    * @return The node match or null if not found or not of the given class
    */
@@ -471,7 +472,7 @@ public class Matcher<T extends ASTNode> {
    * 
    * @param name        The name of the wildcard
    * @param patternNode The node to mark as a class wildcard
-   * @param type       The class to match the node with
+   * @param type        The class to match the node with
    */
   public void markClassWildcard(
       String name,
@@ -519,7 +520,7 @@ public class Matcher<T extends ASTNode> {
    * @param <R>         The type of the node match
    * @param name        The name of the wildcard
    * @param patternNode The node to mark as a classed predicate wildcard
-   * @param type       The class to match the node with
+   * @param type        The class to match the node with
    * @param predicate   The predicate to match the node with
    */
   public <R extends ASTNode> void markClassedPredicateWildcard(

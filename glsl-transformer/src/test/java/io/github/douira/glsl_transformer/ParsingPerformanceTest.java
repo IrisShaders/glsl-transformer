@@ -12,7 +12,7 @@ import io.github.douira.glsl_transformer.basic.*;
 import io.github.douira.glsl_transformer.test_util.*;
 import io.github.douira.glsl_transformer.test_util.TestResourceManager.*;
 
-public class ParsingPerformanceTest extends TestWithBareCSTTransformer {
+public class ParsingPerformanceTest {
   static final boolean benchmark = false;
   static Duration unitTime;
   String displayName;

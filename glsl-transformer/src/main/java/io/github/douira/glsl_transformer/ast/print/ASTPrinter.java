@@ -23,6 +23,7 @@ import io.github.douira.glsl_transformer.ast.node.type.qualifier.*;
 import io.github.douira.glsl_transformer.ast.node.type.specifier.*;
 import io.github.douira.glsl_transformer.ast.node.type.struct.*;
 import io.github.douira.glsl_transformer.ast.print.token.EOFToken;
+import io.github.douira.glsl_transformer.util.Type.NumberType;
 
 /**
  * The AST printer emits tokens to convert an AST node into a string with the
@@ -240,8 +241,13 @@ public class ASTPrinter extends ASTPrinterBase {
   }
 
   @Override
-  public void enterNegationExpression(NegationExpression node) {
+  public Void visitNegationExpression(NegationExpression node) {
+    if (node.getParent() instanceof NegationExpression) {
+      emitBreakableSpace();
+    }
     emitType(GLSLLexer.MINUS_OP);
+    visit(node.getOperand());
+    return null;
   }
 
   @Override
@@ -305,18 +311,34 @@ public class ASTPrinter extends ASTPrinterBase {
   public Void visitLiteralExpression(LiteralExpression node) {
     // literal expressions are always positive, negation is handled with a negation
     // expression
-    switch (node.getNumberType()) {
+    var numberType = node.getNumberType();
+    switch (numberType) {
       case BOOLEAN:
         emitLiteral(node.getBoolean() ? "true" : "false");
         break;
       case SIGNED_INTEGER:
       case UNSIGNED_INTEGER:
         int radix = node.getIntegerRadix();
-        var intString = Long.toString(node.getInteger(), radix);
-        if (radix == 16) {
-          intString = "0x" + intString;
-        } else if (radix == 8) {
-          intString = "0" + intString;
+        var integer = node.getInteger();
+        var unsignedInt = numberType == NumberType.UNSIGNED_INTEGER;
+        var intString = unsignedInt
+            ? Long.toUnsignedString(integer, radix)
+            : Long.toString(integer, radix);
+        if (radix != 10) {
+          var negative = !unsignedInt && integer < 0;
+          var sign = intString.charAt(0);
+          if (negative) {
+            intString = intString.substring(1);
+          }
+          if (radix == 16) {
+            intString = "0x" + intString;
+          } else if (radix == 8) {
+            intString = "0" + intString;
+          }
+          if (negative) {
+            emitBreakableSpace();
+            intString = sign + intString;
+          }
         }
         switch (node.getType()) {
           case INT16:

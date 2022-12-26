@@ -7,7 +7,7 @@ import org.antlr.v4.runtime.RecognitionException;
 
 import io.github.douira.glsl_transformer.ast.node.TranslationUnit;
 import io.github.douira.glsl_transformer.ast.print.ASTPrinter;
-import io.github.douira.glsl_transformer.job_parameter.JobParameters;
+import io.github.douira.glsl_transformer.basic.JobParameters;
 
 /**
  * The grouped AST transformer parses multiple strings stored in an arbitrarily

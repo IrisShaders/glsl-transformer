@@ -66,13 +66,23 @@ a = b += b -= b *= b /= a
 §testReprint expression:
 a %= b &= b |= b ^= b <<= c <<= d
 §testReprint expression:
-1 + 2us + 3ul + 4u + 5s + 0.1 + 0.2f + 0.3hf + 0.4lf
+1 + 2us + 3ul + 5l + 4u + 5s + 0.1 + 0.2f + 0.3hf + 0.4lf
 ===
-1 + 2us + 3ul + 4u + 5s + 0.1f + 0.2f + 0.3hf + 0.4lf
+1 + 2us + 3ul + 5l + 4u + 5s + 0.1f + 0.2f + 0.3hf + 0.4lf
 §testReprint expression:
 0x54ae + 06453543 + 1.6e10 + 50.1e-10 + 1e+10
 ===
 0x54ae + 06453543 + 1.6E10f + 5.01E-9f + 1.0E10f
+§testReprint expression:
+-0x1111111111111111l + 0x1111111111111111ul + -9223372036854775808ul + 0xfffffffffffffffful
+§testReprint expression:
+8 - 1 + (4-1) + (4 -1) + (4- 1) + 4 -1 + 4- 1 + 4 -1 + 4-1 + ((1)-4)
+===
+8 - 1 + (4 - 1) + (4 - 1) + (4 - 1) + 4 - 1 + 4 - 1 + 4 - 1 + 4 - 1 + ((1) - 4)
+§testReprint expression:
+-(-(-(4))) - (-4654) - 5 + -4 - -4 + +-6 - -+4 - - - - -4
+§testReprint expression:
+-(-3 - -3)
 §testReprint expression:
 foo(1, 2, 3)
 §testReprint expression:
