@@ -74,7 +74,7 @@ public class TranslationUnit extends ListASTNode<ExternalDeclaration> {
   }
 
   /**
-   * Injects an external declarations parsed from the given string into the
+   * Injects an external declaration parsed from the given string into the
    * translation unit at the given injection point. Note that if the external
    * declaration begins with a # sign, it must be terminated by a newline.
    * 
@@ -108,62 +108,62 @@ public class TranslationUnit extends ListASTNode<ExternalDeclaration> {
     injectNodes(injectionPoint, t.parseExternalDeclarations(this, externalDeclarations));
   }
 
-  public CompoundStatement getFunctionDefinitionBody(String functionName) {
+  public CompoundStatement getOneFunctionDefinitionBody(String functionName) {
     return getRoot().identifierIndex.getStream(functionName)
         .map(id -> id.getBranchAncestor(FunctionDefinition.class, FunctionDefinition::getFunctionPrototype))
         .filter(Objects::nonNull).findAny().map(FunctionDefinition::getBody).orElse(null);
   }
 
-  public CompoundStatement getMainDefinitionBody() {
-    return getFunctionDefinitionBody("main");
+  public CompoundStatement getOneMainDefinitionBody() {
+    return getOneFunctionDefinitionBody("main");
   }
 
   public void prependFunctionBody(String functionName, Statement statement) {
-    getFunctionDefinitionBody(functionName).getStatements().add(0, statement);
+    getOneFunctionDefinitionBody(functionName).getStatements().add(0, statement);
   }
 
   public void prependFunctionBody(String functionName, Collection<Statement> statements) {
-    getFunctionDefinitionBody(functionName).getStatements().addAll(0, statements);
+    getOneFunctionDefinitionBody(functionName).getStatements().addAll(0, statements);
   }
 
   public void appendFunctionBody(String functionName, Statement statement) {
-    getFunctionDefinitionBody(functionName).getStatements().add(statement);
+    getOneFunctionDefinitionBody(functionName).getStatements().add(statement);
   }
 
   public void appendFunctionBody(String functionName, Collection<Statement> statements) {
-    getFunctionDefinitionBody(functionName).getStatements().addAll(statements);
+    getOneFunctionDefinitionBody(functionName).getStatements().addAll(statements);
   }
 
-  public void prependMain(Statement statement) {
+  public void prependMainFunctionBody(Statement statement) {
     prependFunctionBody("main", statement);
   }
 
-  public void prependMain(Collection<Statement> statements) {
+  public void prependMainFunctionBody(Collection<Statement> statements) {
     prependFunctionBody("main", statements);
   }
 
-  public void appendMain(Statement statement) {
+  public void appendMainFunctionBody(Statement statement) {
     appendFunctionBody("main", statement);
   }
 
-  public void appendMain(Collection<Statement> statements) {
+  public void appendMainFunctionBody(Collection<Statement> statements) {
     appendFunctionBody("main", statements);
   }
 
-  public void prependMain(ASTParser t, String... statements) {
-    prependMain(t.parseStatements(this, statements));
+  public void prependMainFunctionBody(ASTParser t, String... statements) {
+    prependMainFunctionBody(t.parseStatements(this, statements));
   }
 
-  public void prependMain(ASTParser t, String statement) {
-    prependMain(t.parseStatement(this, statement));
+  public void prependMainFunctionBody(ASTParser t, String statement) {
+    prependMainFunctionBody(t.parseStatement(this, statement));
   }
 
-  public void appendMain(ASTParser t, String... statements) {
-    appendMain(t.parseStatements(this, statements));
+  public void appendMainFunctionBody(ASTParser t, String... statements) {
+    appendMainFunctionBody(t.parseStatements(this, statements));
   }
 
-  public void appendMain(ASTParser t, String statement) {
-    appendMain(t.parseStatement(this, statement));
+  public void appendMainFunctionBody(ASTParser t, String statement) {
+    appendMainFunctionBody(t.parseStatement(this, statement));
   }
 
   public void ensureVersionStatement() {

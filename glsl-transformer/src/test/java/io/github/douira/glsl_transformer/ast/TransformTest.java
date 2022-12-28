@@ -162,7 +162,7 @@ public class TransformTest extends TestWithSingleASTTransformer {
       }
 
       // sanity check that there is a main function
-      assertNotNull(tree.getMainDefinitionBody());
+      assertNotNull(tree.getOneMainDefinitionBody());
 
       // add out declarations that are missing for in declarations
       root.process(root.nodeIndex
@@ -185,7 +185,7 @@ public class TransformTest extends TestWithSingleASTTransformer {
                         specifier.cloneInto(root),
                         new Identifier(name)));
 
-                tree.prependMain(initTemplate.getInstanceFor(root,
+                tree.prependMainFunctionBody(initTemplate.getInstanceFor(root,
                     new Identifier(name),
                     LiteralExpression.getDefaultValue(specifier.type)));
               }
