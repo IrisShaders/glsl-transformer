@@ -9,17 +9,17 @@ import io.github.douira.glsl_transformer.ast.node.external_declaration.ExternalD
 import io.github.douira.glsl_transformer.ast.node.statement.Statement;
 import io.github.douira.glsl_transformer.ast.query.Root;
 
-public class Template<T extends ASTNode> {
+public class Template<N extends ASTNode> {
   private final Map<ASTNode, Supplier<ASTNode>> replacements = new HashMap<>();
   private int localReplacementsMarked = 0;
   private List<ASTNode> localReplacements = Collections.emptyList();
-  protected final T source;
+  protected final N source;
 
-  public Template(T source) {
+  public Template(N source) {
     this.source = source;
   }
 
-  public T getSource() {
+  public N getSource() {
     return source;
   }
 
@@ -35,18 +35,18 @@ public class Template<T extends ASTNode> {
   }
 
   @SuppressWarnings("unchecked") // all ASTNodes clone themselves with the right type
-  public T getSeparateInstance() {
-    return (T) source.cloneSeparate();
+  public N getSeparateInstance() {
+    return (N) source.cloneSeparate();
   }
 
   @SuppressWarnings("unchecked") // all ASTNodes clone themselves with the right type
-  public T getInstanceFor(Root root) {
-    return (T) source.cloneInto(root);
+  public N getInstanceFor(Root root) {
+    return (N) source.cloneInto(root);
   }
 
   @SuppressWarnings("unchecked") // all ASTNodes clone themselves with the right type
-  public T getInstanceFor(ASTNode treeMember) {
-    return (T) source.cloneInto(treeMember);
+  public N getInstanceFor(ASTNode treeMember) {
+    return (N) source.cloneInto(treeMember);
   }
 
   public void supplyLocalReplacements(List<ASTNode> replacements) {
@@ -68,47 +68,47 @@ public class Template<T extends ASTNode> {
     supplyLocalReplacements(Arrays.asList(replacements));
   }
 
-  public T getSeparateInstance(List<ASTNode> localReplacements) {
+  public N getSeparateInstance(List<ASTNode> localReplacements) {
     supplyLocalReplacements(localReplacements);
     return getSeparateInstance();
   }
 
-  public T getInstanceFor(Root root, List<ASTNode> localReplacements) {
+  public N getInstanceFor(Root root, List<ASTNode> localReplacements) {
     supplyLocalReplacements(localReplacements);
     return getInstanceFor(root);
   }
 
-  public T getInstanceFor(ASTNode treeMember, List<ASTNode> localReplacements) {
+  public N getInstanceFor(ASTNode treeMember, List<ASTNode> localReplacements) {
     supplyLocalReplacements(localReplacements);
     return getInstanceFor(treeMember);
   }
 
-  public T getSeparateInstance(ASTNode localReplacement) {
+  public N getSeparateInstance(ASTNode localReplacement) {
     supplyLocalReplacements(localReplacement);
     return getSeparateInstance();
   }
 
-  public T getInstanceFor(Root root, ASTNode localReplacement) {
+  public N getInstanceFor(Root root, ASTNode localReplacement) {
     supplyLocalReplacements(localReplacement);
     return getInstanceFor(root);
   }
 
-  public T getInstanceFor(ASTNode treeMember, ASTNode localReplacement) {
+  public N getInstanceFor(ASTNode treeMember, ASTNode localReplacement) {
     supplyLocalReplacements(localReplacement);
     return getInstanceFor(treeMember);
   }
 
-  public T getSeparateInstance(ASTNode... localReplacements) {
+  public N getSeparateInstance(ASTNode... localReplacements) {
     supplyLocalReplacements(localReplacements);
     return getSeparateInstance();
   }
 
-  public T getInstanceFor(Root root, ASTNode... localReplacements) {
+  public N getInstanceFor(Root root, ASTNode... localReplacements) {
     supplyLocalReplacements(localReplacements);
     return getInstanceFor(root);
   }
 
-  public T getInstanceFor(ASTNode treeMember, ASTNode... localReplacements) {
+  public N getInstanceFor(ASTNode treeMember, ASTNode... localReplacements) {
     supplyLocalReplacements(localReplacements);
     return getInstanceFor(treeMember);
   }
@@ -138,13 +138,13 @@ public class Template<T extends ASTNode> {
   }
 
   @SuppressWarnings("unchecked")
-  public <R extends ASTNode> void markReplacement(String tag, Class<R> type, Supplier<R> replacement) {
+  public <NN extends ASTNode> void markReplacement(String tag, Class<NN> type, Supplier<NN> replacement) {
     markReplacement(source.getRoot().identifierIndex.getOne(tag).getAncestor(type), (Supplier<ASTNode>) replacement);
   }
 
   @SuppressWarnings("unchecked") // all ASTNodes clone themselves with the right type
-  public static <T extends ASTNode> Template<T> ofCloned(T source) {
-    return new Template<T>((T) source.cloneSeparate());
+  public static <N extends ASTNode> Template<N> ofCloned(N source) {
+    return new Template<N>((N) source.cloneSeparate());
   }
 
   public static Template<ExternalDeclaration> withExternalDeclaration(String input) {

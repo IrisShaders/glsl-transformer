@@ -130,13 +130,13 @@ public class Root {
    * either manually registered as it is being done here or added as a child to
    * another node with the root.
    * 
-   * @param <NodeType> The type of the node to build
-   * @param instance   The root to run the builder with
-   * @param builder    The builder to run
+   * @param <N>      The type of the node to build
+   * @param instance The root to run the builder with
+   * @param builder  The builder to run
    * @return The built and registered node
    */
-  public static synchronized <NodeType extends ASTNode> NodeType indexNodes(
-      Root instance, Supplier<NodeType> builder) {
+  public static synchronized <N extends ASTNode> N indexNodes(
+      Root instance, Supplier<N> builder) {
     return withActiveBuildRoot(instance, root -> {
       var result = builder.get();
       root.registerNode(result);
@@ -147,12 +147,12 @@ public class Root {
   /**
    * Runs the given builder supplier with a new root as the active build root.
    * 
-   * @param <NodeType> The type of the node to build
-   * @param builder    The builder to run
+   * @param <N>     The type of the node to build
+   * @param builder The builder to run
    * @return The built and registered node
    */
-  public static <NodeType extends ASTNode> NodeType indexNodes(
-      Supplier<NodeType> builder) {
+  public static <N extends ASTNode> N indexNodes(
+      Supplier<N> builder) {
     return indexNodes(new Root(), builder);
   }
 
@@ -160,13 +160,13 @@ public class Root {
    * Runs the given builder supplier with the same root as a given tree node as
    * the active build root.
    * 
-   * @param <NodeType>       The type of the node to build
+   * @param <N>              The type of the node to build
    * @param parentTreeMember The tree member to get the root from
    * @param builder          The builder to run
    * @return The built and registered node
    */
-  public static <NodeType extends ASTNode> NodeType indexNodes(
-      ASTNode parentTreeMember, Supplier<NodeType> builder) {
+  public static <N extends ASTNode> N indexNodes(
+      ASTNode parentTreeMember, Supplier<N> builder) {
     return indexNodes(parentTreeMember.getRoot(), builder);
   }
 
@@ -211,12 +211,12 @@ public class Root {
    * function that takes a constructed node and registers it with the root. This
    * is helpful for constructing trees manually and registering them inline.
    * 
-   * @param <NodeType>         The type of the nodes to register
+   * @param <N>                The type of the nodes to register
    * @param instance           the root to register the nodes with
    * @param registererConsumer The consumer to run
    */
-  public static synchronized <NodeType extends ASTNode> void indexSeparateTrees(
-      Root instance, Consumer<Passthrough<NodeType>> registererConsumer) {
+  public static synchronized <N extends ASTNode> void indexSeparateTrees(
+      Root instance, Consumer<Passthrough<N>> registererConsumer) {
     withActiveBuildRoot(instance, root -> {
       registererConsumer.accept(Passthrough.of(root::registerNode));
       return null;
@@ -227,11 +227,11 @@ public class Root {
    * Runs the given consumer of a registration pass-through function with a new
    * root as the active build root.
    * 
-   * @param <NodeType> The type of the nodes to register
+   * @param <N>        The type of the nodes to register
    * @param registerer The consumer to run
    */
-  public static <NodeType extends ASTNode> void indexSeparateTrees(
-      Consumer<Passthrough<NodeType>> registerer) {
+  public static <N extends ASTNode> void indexSeparateTrees(
+      Consumer<Passthrough<N>> registerer) {
     indexSeparateTrees(new Root(), registerer);
   }
 
@@ -239,12 +239,12 @@ public class Root {
    * Runs the given consumer of a registration pass-through function with the same
    * root as a given tree node as the active build root.
    * 
-   * @param <NodeType> The type of the nodes to register
+   * @param <N>        The type of the nodes to register
    * @param treeMember The tree member to get the root from
    * @param registerer The consumer to run
    */
-  public static <NodeType extends ASTNode> void indexSeparateTrees(
-      ASTNode treeMember, Consumer<Passthrough<NodeType>> registerer) {
+  public static <N extends ASTNode> void indexSeparateTrees(
+      ASTNode treeMember, Consumer<Passthrough<N>> registerer) {
     indexSeparateTrees(treeMember.getRoot(), registerer);
   }
 
@@ -318,21 +318,21 @@ public class Root {
    * This method ensures there is no concurrent modification of the node index by
    * collecting the stream into a shared list.
    * 
-   * @param <T>      The type of the target nodes
+   * @param <N>      The type of the target nodes
    * @param targets  The stream of target nodes to process
    * @param replacer The consumer to process the target nodes with
    * @return Whether anything was processed
    */
   @SuppressWarnings("unchecked")
-  public <T extends ASTNode> boolean process(Stream<? extends T> targets, Consumer<? super T> replacer) {
+  public <N extends ASTNode> boolean process(Stream<? extends N> targets, Consumer<? super N> replacer) {
     ensureEmptyNodeList();
     if (targets == null) {
       return false;
     }
-    var typedList = (List<T>) nodeList;
+    var typedList = (List<N>) nodeList;
     targets.forEach(typedList::add);
     var activity = false;
-    for (var node : typedList) {
+    for (N node : typedList) {
       if (node != null) {
         replacer.accept(node);
         activity = true;
@@ -485,18 +485,18 @@ public class Root {
    * Processes all matches of nodes from the given stream matched with the given
    * matcher.
    * 
-   * @param <T>                 The type of the matched nodes
+   * @param <N>                 The type of the matched nodes
    * @param t                   The AST transformer
    * @param matchTargetChildren The stream of nodes to match
    * @param matcher             The matcher to match the nodes with
    * @param replacer            The consumer to process the matched nodes with
    * @return Whether anything was processed
    */
-  public <T extends ASTNode> boolean processMatches(
+  public <N extends ASTNode> boolean processMatches(
       ASTParser t,
       Stream<? extends ASTNode> matchTargetChildren,
-      Matcher<T> matcher,
-      Consumer<? super T> replacer) {
+      Matcher<N> matcher,
+      Consumer<? super N> replacer) {
     var matchClass = matcher.getPatternClass();
     return process(matchTargetChildren
         .map(node -> node.getAncestor(matchClass))
@@ -509,16 +509,16 @@ public class Root {
    * Processes all matches of nodes in the tree that match the given hinted
    * matcher. The hint is used to identify the nodes to match.
    * 
-   * @param <T>           The type of the matched nodes
+   * @param <N>           The type of the matched nodes
    * @param t             The AST transformer
    * @param hintedMatcher The matcher to match the nodes with
    * @param replacer      The consumer to process the matched nodes with
    * @return Whether anything was processed
    */
-  public <T extends ASTNode> boolean processMatches(
+  public <N extends ASTNode> boolean processMatches(
       ASTParser t,
-      HintedMatcher<T> hintedMatcher,
-      Consumer<? super T> replacer) {
+      HintedMatcher<N> hintedMatcher,
+      Consumer<? super N> replacer) {
     return processMatches(t,
         identifierIndex.getStream(hintedMatcher.getHint()), hintedMatcher, replacer);
   }
@@ -527,17 +527,17 @@ public class Root {
    * Replaces expressions from the given stream that match the given matcher with
    * new expressions created from the given string.
    * 
-   * @param <T>                 The type of the matched expression nodes
+   * @param <N>                 The type of the matched expression nodes
    * @param t                   The AST transformer
    * @param matchTargetChildren The stream of nodes to match
    * @param matcher             The matcher to match the nodes with
    * @param expression          The content of the replacement expression
    * @return Whether anything was processed
    */
-  public <T extends Expression> boolean replaceExpressionMatches(
+  public <N extends Expression> boolean replaceExpressionMatches(
       ASTParser t,
       Stream<? extends ASTNode> matchTargetChildren,
-      Matcher<T> matcher,
+      Matcher<N> matcher,
       String expression) {
     var matchClass = matcher.getPatternClass();
     return replaceExpressions(t,
@@ -552,15 +552,15 @@ public class Root {
    * Replaces expressions all matches of expression nodes in the tree that match
    * the given hinted matcher with new expressions created from the given string.
    * 
-   * @param <T>           The type of the matched expression nodes
+   * @param <N>           The type of the matched expression nodes
    * @param t             The AST transformer
    * @param hintedMatcher The matcher to match the nodes with
    * @param expression    The content of the replacement expression
    * @return Whether anything was processed
    */
-  public <T extends Expression> boolean replaceExpressionMatches(
+  public <N extends Expression> boolean replaceExpressionMatches(
       ASTParser t,
-      HintedMatcher<T> hintedMatcher,
+      HintedMatcher<N> hintedMatcher,
       String expression) {
     return replaceExpressionMatches(t,
         identifierIndex.getStream(hintedMatcher.getHint()), hintedMatcher, expression);

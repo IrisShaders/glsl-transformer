@@ -10,8 +10,8 @@ import io.github.douira.glsl_transformer.ast.transform.JobParameters;
  * A token filter is an object that can check if given tokens should be printed
  * or not.
  */
-public abstract class TokenFilter<T extends JobParameters> {
-  private Supplier<T> jobParametersSupplier;
+public abstract class TokenFilter<J extends JobParameters> {
+  private Supplier<J> jobParametersSupplier;
 
   /**
    * Checks if the token should be printed.
@@ -32,7 +32,7 @@ public abstract class TokenFilter<T extends JobParameters> {
    * 
    * @param jobParametersSupplier The job parameters supplier
    */
-  public void setJobParametersSupplier(Supplier<T> jobParametersSupplier) {
+  public void setJobParametersSupplier(Supplier<J> jobParametersSupplier) {
     this.jobParametersSupplier = jobParametersSupplier;
   }
 
@@ -41,7 +41,7 @@ public abstract class TokenFilter<T extends JobParameters> {
    * 
    * @return The job parameters
    */
-  protected T getJobParameters() {
+  protected J getJobParameters() {
     return jobParametersSupplier.get();
   }
 
@@ -54,20 +54,20 @@ public abstract class TokenFilter<T extends JobParameters> {
    * If a multi filter is generated, the settings from the first multi filter in
    * the parameters are copied.
    * 
-   * @param <R> The job parameter type
+   * @param <J> The job parameter type
    * @param a   A token filter. May be {@code null}.
    * @param b   A token filter. May be {@code null}.
    * @return The joined token filter
    */
-  public static <R extends JobParameters> TokenFilter<R> join(TokenFilter<R> a, TokenFilter<R> b) {
+  public static <J extends JobParameters> TokenFilter<J> join(TokenFilter<J> a, TokenFilter<J> b) {
     if (a == null) {
       return b;
     } else if (b == null) {
       return a;
     } else if (MultiFilter.class.isInstance(b)) {
       if (MultiFilter.class.isInstance(a)) {
-        MultiFilter<R> bMulti = (MultiFilter<R>) b;
-        MultiFilter<R> aMulti = (MultiFilter<R>) a;
+        MultiFilter<J> bMulti = (MultiFilter<J>) b;
+        MultiFilter<J> aMulti = (MultiFilter<J>) a;
         var multi = aMulti.clone();
         multi.addAll(bMulti);
         return multi;
@@ -75,12 +75,12 @@ public abstract class TokenFilter<T extends JobParameters> {
         return join(b, a);
       }
     } else if (MultiFilter.class.isInstance(a)) {
-      MultiFilter<R> aMulti = (MultiFilter<R>) a;
+      MultiFilter<J> aMulti = (MultiFilter<J>) a;
       var multi = aMulti.clone();
       multi.add(b);
       return multi;
     } else {
-      var multi = new MultiFilter<R>();
+      var multi = new MultiFilter<J>();
       multi.add(a);
       multi.add(b);
       return multi;

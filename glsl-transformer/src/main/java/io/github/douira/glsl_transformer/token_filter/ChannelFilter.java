@@ -10,7 +10,7 @@ import io.github.douira.glsl_transformer.ast.transform.JobParameters;
  * The channel filter accepts all tokens that are not from a lexer channel that
  * is on the given list of disallowed channels.
  */
-public class ChannelFilter<T extends JobParameters> extends TokenFilter<T> {
+public class ChannelFilter<J extends JobParameters> extends TokenFilter<J> {
   private final EnumSet<TokenChannel> disallowedChannels;
 
   /**

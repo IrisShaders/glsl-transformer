@@ -7,8 +7,8 @@ public class ASTListenerVisitor<R> extends ASTWalker<R> implements ASTListener {
     this.listener = this;
   }
 
-  public static <T> T walkAndListen(ASTNode node) {
-    return new ASTListenerVisitor<T>().visit(node);
+  public static <R> R walkAndListen(ASTNode node) {
+    return new ASTListenerVisitor<R>().visit(node);
   }
 
   @Override

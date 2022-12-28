@@ -5,8 +5,8 @@ import java.util.function.*;
 
 import io.github.douira.glsl_transformer.ast.node.TranslationUnit;
 
-public class EnumASTTransformer<T extends JobParameters, E extends Enum<E>>
-    extends GroupedASTTransformer<T, E, EnumMap<E, String>, EnumMap<E, TranslationUnit>> {
+public class EnumASTTransformer<J extends JobParameters, E extends Enum<E>>
+    extends GroupedASTTransformer<J, E, EnumMap<E, String>, EnumMap<E, TranslationUnit>> {
   public EnumASTTransformer(Consumer<EnumMap<E, TranslationUnit>> transformation, Class<E> enumClass) {
     super(transformation, () -> new EnumMap<>(enumClass), () -> new EnumMap<>(enumClass));
   }

@@ -66,39 +66,39 @@ public class NodeIndex<S extends Set<ASTNode>> implements Index<ASTNode> {
   /**
    * Returns a set of all nodes with the given type.
    * 
-   * @param <T>  the type of the class
+   * @param <N>  the type of the class
    * @param type the class of nodes to return
    * @return a set of nodes with the given type
    */
   @SuppressWarnings("unchecked")
-  public <T extends ASTNode> Set<T> get(Class<T> type) {
-    var result = (Set<T>) index.get(type);
+  public <N extends ASTNode> Set<N> get(Class<N> type) {
+    var result = (Set<N>) index.get(type);
     return result == null ? Collections.emptySet() : result;
   }
 
   /**
    * Returns a stream of all nodes with the given type.
    * 
-   * @param <T>  the type of the class
+   * @param <N>  the type of the class
    * @param type the class of nodes to return
    * @return a stream of nodes with the given type
    */
   @SuppressWarnings("unchecked")
-  public <T extends ASTNode> Stream<T> getStream(Class<T> type) {
-    var result = (Set<T>) index.get(type);
+  public <N extends ASTNode> Stream<N> getStream(Class<N> type) {
+    var result = (Set<N>) index.get(type);
     return result == null ? Stream.empty() : result.stream();
   }
 
   /**
    * Returns an arbitrary node with the given type.
    * 
-   * @param <T>  the type of the class
+   * @param <N>  the type of the class
    * @param type the class of the node to return
    * @return an arbitrary node with the given type
    */
   @SuppressWarnings("unchecked")
-  public <T extends ASTNode> T getOne(Class<T> type) {
-    var result = (Set<T>) index.get(type);
+  public <N extends ASTNode> N getOne(Class<N> type) {
+    var result = (Set<N>) index.get(type);
     if (result == null) {
       return null;
     }
@@ -110,13 +110,13 @@ public class NodeIndex<S extends Set<ASTNode>> implements Index<ASTNode> {
    * Returns the only node with the given type. Throws an exception if there is
    * not exactly one node with the given type.
    * 
-   * @param <T>  the type of the class
+   * @param <N>  the type of the class
    * @param type the class of the node to return
    * @return the only node with the given type
    */
   @SuppressWarnings("unchecked")
-  public <T extends ASTNode> T getUnique(Class<T> type) {
-    var result = (Set<T>) index.get(type);
+  public <N extends ASTNode> N getUnique(Class<N> type) {
+    var result = (Set<N>) index.get(type);
     var resultCount = result == null ? 0 : result.size();
     if (resultCount != 1) {
       throw new IllegalStateException("Expected exactly one node of type " + type + " but found " + resultCount);
@@ -138,25 +138,25 @@ public class NodeIndex<S extends Set<ASTNode>> implements Index<ASTNode> {
   /**
    * Returns the set of nodes that have the same class as the given node.
    * 
-   * @param <T>  The type of the nodes
+   * @param <N>  The type of the nodes
    * @param node The node to get the set of
    * @return The set of nodes that have the same class as the given node
    */
   @SuppressWarnings("unchecked")
-  public <T extends ASTNode> Set<T> get(T node) {
-    return (Set<T>) get(node.getClass());
+  public <N extends ASTNode> Set<N> get(N node) {
+    return (Set<N>) get(node.getClass());
   }
 
   /**
    * Returns an arbitrary node that has the same class as the given node.
    * 
-   * @param <T>  The type of the node
+   * @param <N>  The type of the node
    * @param node The node to get a node from the index for
    * @return An arbitrary node that has the same class as the given node
    */
   @SuppressWarnings("unchecked")
-  public <T extends ASTNode> T getOne(T node) {
-    return (T) getOne(node.getClass());
+  public <N extends ASTNode> N getOne(N node) {
+    return (N) getOne(node.getClass());
   }
 
   /**
@@ -164,13 +164,13 @@ public class NodeIndex<S extends Set<ASTNode>> implements Index<ASTNode> {
    * exception if there is not exactly one node with the same class as the given
    * node.
    * 
-   * @param <T>  The type of the node
+   * @param <N>  The type of the node
    * @param node The node to get a node from the index for
    * @return The only node that has the same class as the given node
    */
   @SuppressWarnings("unchecked")
-  public <T extends ASTNode> T getUnique(T node) {
-    return (T) getUnique(node.getClass());
+  public <N extends ASTNode> N getUnique(N node) {
+    return (N) getUnique(node.getClass());
   }
 
   /**

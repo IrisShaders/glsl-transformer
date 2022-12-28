@@ -54,7 +54,7 @@ public class IdentifierIndex<S extends Set<Identifier>, I extends Map<String, S>
     return result == null ? Stream.empty() : result.stream();
   }
 
-  public <T extends ASTNode> Stream<T> getAncestors(String key, Class<T> ancestorType) {
+  public <N extends ASTNode> Stream<N> getAncestors(String key, Class<N> ancestorType) {
     return getStream(key)
         .map(id -> id.getAncestor(ancestorType))
         .filter(Objects::nonNull);

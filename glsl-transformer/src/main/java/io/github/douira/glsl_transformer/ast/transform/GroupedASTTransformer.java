@@ -11,8 +11,8 @@ import io.github.douira.glsl_transformer.ast.print.ASTPrinter;
 /**
  * The grouped AST transformer parses multiple strings stored in an arbitrarily
  */
-public class GroupedASTTransformer<T extends JobParameters, K, M extends Map<K, String>, N extends Map<K, TranslationUnit>>
-    extends ASTTransformer<T, Map<K, String>> {
+public class GroupedASTTransformer<J extends JobParameters, K, M extends Map<K, String>, N extends Map<K, TranslationUnit>>
+    extends ASTTransformer<J, Map<K, String>> {
   private Consumer<N> transformation;
   private Supplier<N> tuMapSupplier;
   private Supplier<M> resultMapSupplier;
@@ -34,7 +34,7 @@ public class GroupedASTTransformer<T extends JobParameters, K, M extends Map<K, 
   }
 
   public GroupedASTTransformer(
-      BiConsumer<N, T> transformation,
+      BiConsumer<N, J> transformation,
       Supplier<N> tuMapSupplier,
       Supplier<M> resultMapSupplier) {
     setTransformation(transformation);
@@ -53,7 +53,7 @@ public class GroupedASTTransformer<T extends JobParameters, K, M extends Map<K, 
     this.transformation = transformation;
   }
 
-  public void setTransformation(BiConsumer<N, T> transformation) {
+  public void setTransformation(BiConsumer<N, J> transformation) {
     this.transformation = trees -> transformation.accept(trees, getJobParameters());
   }
 

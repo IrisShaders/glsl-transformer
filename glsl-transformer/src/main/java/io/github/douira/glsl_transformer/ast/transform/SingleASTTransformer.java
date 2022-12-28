@@ -13,7 +13,7 @@ import io.github.douira.glsl_transformer.util.TriConsumer;
  * The AST transformer takes parses a string, turns it into an AST, transforms
  * it with the given transformation and then prints it back.
  */
-public class SingleASTTransformer<T extends JobParameters> extends ASTTransformer<T, String> {
+public class SingleASTTransformer<J extends JobParameters> extends ASTTransformer<J, String> {
   public static final Consumer<TranslationUnit> IDENTITY_TRANSFORMATION = (tu) -> {
   };
 
@@ -32,7 +32,7 @@ public class SingleASTTransformer<T extends JobParameters> extends ASTTransforme
     setTransformation(transformation);
   }
 
-  public SingleASTTransformer(TriConsumer<TranslationUnit, Root, T> transformation) {
+  public SingleASTTransformer(TriConsumer<TranslationUnit, Root, J> transformation) {
     super();
     setTransformation(transformation);
   }
@@ -45,7 +45,7 @@ public class SingleASTTransformer<T extends JobParameters> extends ASTTransforme
     this.transformation = wrapTransformation(this, transformation);
   }
 
-  public void setTransformation(TriConsumer<TranslationUnit, Root, T> transformation) {
+  public void setTransformation(TriConsumer<TranslationUnit, Root, J> transformation) {
     this.transformation = wrapTransformation(this, transformation);
   }
 

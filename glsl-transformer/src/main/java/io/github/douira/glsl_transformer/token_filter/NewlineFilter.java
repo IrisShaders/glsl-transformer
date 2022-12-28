@@ -9,7 +9,7 @@ import io.github.douira.glsl_transformer.ast.transform.JobParameters;
  * The newline filter filters out regular unnecessary newlines if there is more
  * than one.
  */
-public class NewlineFilter<T extends JobParameters> extends TokenFilter<T> {
+public class NewlineFilter<J extends JobParameters> extends TokenFilter<J> {
   private boolean lastWasNewline;
 
   @Override
