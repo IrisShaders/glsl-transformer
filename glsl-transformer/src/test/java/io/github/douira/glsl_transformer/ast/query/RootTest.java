@@ -48,7 +48,7 @@ public class RootTest extends TestWithSingleASTTransformer {
   void testReplaceMultiple() {
     Root.identifierIndexFactory = PrefixIdentifierIndex::withPrefix;
     p.setTransformation((tree, root) -> {
-      root.process(((PrefixIdentifierIndex<?, ?>) root.identifierIndex).prefixQueryFlat("f"),
+      root.process(root.getPrefixIdentifierIndex().prefixQueryFlat("f"),
           id -> id.getParent().replaceByAndDelete(
               p.parseExpression(tree, "bam + spam")));
     });
@@ -72,7 +72,7 @@ public class RootTest extends TestWithSingleASTTransformer {
     Root.identifierIndexFactory = PrefixIdentifierIndex::withPrefix;
     p.setTransformation((tree, root) -> {
       root.replaceReferenceExpressions(p,
-          ((PrefixIdentifierIndex<?, ?>) root.identifierIndex).prefixQueryFlat("f"),
+          root.getPrefixIdentifierIndex().prefixQueryFlat("f"),
           "bam + spam");
     });
     assertTransform(

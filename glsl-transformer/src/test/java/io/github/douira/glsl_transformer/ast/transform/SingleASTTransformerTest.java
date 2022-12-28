@@ -44,7 +44,7 @@ public class SingleASTTransformerTest extends TestWithSingleASTTransformer {
   void testIdentifierQuery() {
     Root.identifierIndexFactory = PrefixIdentifierIndex::withPrefix;
     p.setTransformation((tree, root) -> {
-      ((PrefixIdentifierIndex<?, ?>) root.identifierIndex).prefixQueryFlat("a").collect(Collectors.toList()).forEach(
+      root.getPrefixIdentifierIndex().prefixQueryFlat("a").collect(Collectors.toList()).forEach(
           node -> node.setName(node.getName() + "b"));
     });
     assertTransform(
