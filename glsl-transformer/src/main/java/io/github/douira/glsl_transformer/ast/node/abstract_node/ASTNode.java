@@ -196,7 +196,7 @@ public abstract class ASTNode {
    * @return the first ancestor that is an instance of the given class, or null
    *         otherwise
    */
-  public <T extends ASTNode> T getAncestor(Class<T> ancestorType) {
+  public <N extends ASTNode> N getAncestor(Class<N> ancestorType) {
     return ancestorType.cast(getAncestor(ancestorType::isInstance));
   }
 
@@ -217,9 +217,9 @@ public abstract class ASTNode {
   }
 
   @SuppressWarnings("unchecked")
-  public <T extends ASTNode> T getBranchAncestor(int limit, int skip, Class<T> branchClass,
-      Function<T, ? extends ASTNode> branchGetter) {
-    return (T) getBranchAncestor(limit, skip, (node, last) -> {
+  public <N extends ASTNode> N getBranchAncestor(int limit, int skip, Class<N> branchClass,
+      Function<N, ? extends ASTNode> branchGetter) {
+    return (N) getBranchAncestor(limit, skip, (node, last) -> {
       if (!branchClass.isInstance(node)) {
         return false;
       }
@@ -227,14 +227,14 @@ public abstract class ASTNode {
     });
   }
 
-  public <T extends ASTNode> T getBranchAncestor(Class<T> branchClass,
-      Function<T, ? extends ASTNode> branchGetter) {
+  public <N extends ASTNode> N getBranchAncestor(Class<N> branchClass,
+      Function<N, ? extends ASTNode> branchGetter) {
     return getBranchAncestor(Integer.MAX_VALUE, 0, branchClass, branchGetter);
   }
 
-  public <T extends ASTNode, R extends ASTNode> R getBranchAncestorContinue(Class<T> branchClass,
-      Function<T, ? extends ASTNode> branchGetter, Class<R> continueClass) {
-    var result = getBranchAncestor(branchClass, branchGetter);
+  public <N extends ASTNode, R extends ASTNode> R getBranchAncestorContinue(Class<N> branchClass,
+      Function<N, ? extends ASTNode> branchGetter, Class<R> continueClass) {
+    N result = getBranchAncestor(branchClass, branchGetter);
     return result == null ? null : result.getAncestor(continueClass);
   }
 
@@ -438,14 +438,14 @@ public abstract class ASTNode {
    * already have a reference to the current root but will not be registered to it
    * yet.
    * 
-   * @param <NodeType> Type of the node for passthrough
+   * @param <N> Type of the node for passthrough
    * @param node       The node to add
    * @param setter     The setter to replace the node in this parent
    * @return The node itself
    */
-  public <NodeType extends ASTNode> NodeType setup(
-      NodeType node,
-      Consumer<? extends NodeType> setter) {
+  public <N extends ASTNode> N setup(
+      N node,
+      Consumer<? extends N> setter) {
     if (node != null) {
       node.setParent(this, setter);
     }
@@ -457,17 +457,17 @@ public abstract class ASTNode {
    * node. Both of them may be null if either the existing value is being removed
    * or a new value is being set.
    * 
-   * @param <NodeType>  The type of the nodes for pass-through
+   * @param <N>  The type of the nodes for pass-through
    * @param currentNode The current node
    * @param newNode     The new node
    * @param setter      The setter to replace the node in this parent (this is
    *                    usually a method reference to a setter method of the
    *                    parent, this node)
    */
-  public <NodeType extends ASTNode> void updateParents(
-      NodeType currentNode,
-      NodeType newNode,
-      Consumer<? extends NodeType> setter) {
+  public <N extends ASTNode> void updateParents(
+      N currentNode,
+      N newNode,
+      Consumer<? extends N> setter) {
     if (currentNode == newNode && newNode.getParent() == this) {
       return;
     }
@@ -501,18 +501,18 @@ public abstract class ASTNode {
   }
 
   @SuppressWarnings("unchecked") // the nodes clone themselves correctly
-  public static <T extends ASTNode> T clone(T node) {
+  public static <N extends ASTNode> N clone(N node) {
     if (node == null) {
       return null;
     }
     if (node.template == null) {
-      return (T) node.clone();
+      return (N) node.clone();
     }
-    var replacement = node.template.getReplacement(node);
-    return replacement == null ? (T) node.clone() : replacement;
+    N replacement = node.template.getReplacement(node);
+    return replacement == null ? (N) node.clone() : replacement;
   }
 
-  public static <T extends ASTNode> Stream<T> clone(ChildNodeList<T> nodes) {
+  public static <N extends ASTNode> Stream<N> clone(ChildNodeList<N> nodes) {
     return nodes == null ? null : nodes.getClonedStream();
   }
 }

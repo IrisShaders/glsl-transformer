@@ -6,10 +6,10 @@ import java.util.stream.Stream;
 
 import io.github.douira.glsl_transformer.ast.node.abstract_node.ASTNode;
 
-public interface Index<T extends ASTNode> {
-  void add(T node);
+public interface Index<N extends ASTNode> {
+  void add(N node);
 
-  void remove(T node);
+  void remove(N node);
 
   public static <V> Consumer<Set<V>> iterate(Consumer<V> consumer) {
     return set -> set.stream().forEach(consumer);

@@ -8,8 +8,8 @@ import java.util.function.*;
  * is added or removed from the list. The notification methods should be
  * idempotent and reversible with the inverse other method.
  */
-public abstract class ProxyArrayList<T> extends ArrayList<T> {
-  private Set<T> elements = null;
+public abstract class ProxyArrayList<V> extends ArrayList<V> {
+  private Set<V> elements = null;
 
   public ProxyArrayList() {
   }
@@ -18,22 +18,22 @@ public abstract class ProxyArrayList<T> extends ArrayList<T> {
     super(initialCapacity);
   }
 
-  public ProxyArrayList(Collection<? extends T> c) {
+  public ProxyArrayList(Collection<? extends V> c) {
     this(c, true);
   }
 
-  public ProxyArrayList(Collection<? extends T> c, boolean notifyInitial) {
+  public ProxyArrayList(Collection<? extends V> c, boolean notifyInitial) {
     super(c);
     if (notifyInitial) {
       notifyAdditionSafe(c);
     }
   }
 
-  protected abstract void notifyAddition(T added);
+  protected abstract void notifyAddition(V added);
 
-  protected abstract void notifyRemoval(T removed);
+  protected abstract void notifyRemoval(V removed);
 
-  void notifyAdditionSafe(T added) {
+  void notifyAdditionSafe(V added) {
     if (added != null) {
       notifyAddition(added);
       if (elements != null) {
@@ -42,13 +42,13 @@ public abstract class ProxyArrayList<T> extends ArrayList<T> {
     }
   }
 
-  void notifyAdditionSafe(Collection<? extends T> collection) {
-    for (var element : collection) {
+  void notifyAdditionSafe(Collection<? extends V> collection) {
+    for (V element : collection) {
       notifyAdditionSafe(element);
     }
   }
 
-  private void notifyRemovalSafe(T removed) {
+  private void notifyRemovalSafe(V removed) {
     if (removed != null) {
       notifyRemoval(removed);
       if (elements != null) {
@@ -57,13 +57,13 @@ public abstract class ProxyArrayList<T> extends ArrayList<T> {
     }
   }
 
-  private void notifyRemovalSafe(Collection<? extends T> collection) {
-    for (var element : collection) {
+  private void notifyRemovalSafe(Collection<? extends V> collection) {
+    for (V element : collection) {
       notifyRemovalSafe(element);
     }
   }
 
-  private Set<T> getElements() {
+  private Set<V> getElements() {
     if (elements == null) {
       elements = new HashSet<>(this);
     }
@@ -71,8 +71,8 @@ public abstract class ProxyArrayList<T> extends ArrayList<T> {
   }
 
   @Override
-  public T set(int index, T element) {
-    var prev = super.set(index, element);
+  public V set(int index, V element) {
+    V prev = super.set(index, element);
     if (prev != element) {
       notifyRemovalSafe(prev);
       notifyAdditionSafe(element);
@@ -81,20 +81,20 @@ public abstract class ProxyArrayList<T> extends ArrayList<T> {
   }
 
   @Override
-  public boolean add(T e) {
+  public boolean add(V e) {
     var result = super.add(e);
     notifyAdditionSafe(e);
     return result;
   }
 
   @Override
-  public void add(int index, T element) {
+  public void add(int index, V element) {
     super.add(index, element);
     notifyAdditionSafe(element);
   }
 
   @Override
-  public boolean addAll(Collection<? extends T> c) {
+  public boolean addAll(Collection<? extends V> c) {
     var result = super.addAll(c);
     if (result) {
       notifyAdditionSafe(c);
@@ -103,7 +103,7 @@ public abstract class ProxyArrayList<T> extends ArrayList<T> {
   }
 
   @Override
-  public boolean addAll(int index, Collection<? extends T> c) {
+  public boolean addAll(int index, Collection<? extends V> c) {
     var result = super.addAll(index, c);
     if (result) {
       notifyAdditionSafe(c);
@@ -112,8 +112,8 @@ public abstract class ProxyArrayList<T> extends ArrayList<T> {
   }
 
   @Override
-  public T remove(int index) {
-    var removed = super.remove(index);
+  public V remove(int index) {
+    V removed = super.remove(index);
     notifyRemovalSafe(removed);
     return removed;
   }
@@ -124,7 +124,7 @@ public abstract class ProxyArrayList<T> extends ArrayList<T> {
     var result = super.remove(o);
     if (result) {
       // the cast is ok because only T-type elements could have been added
-      notifyRemovalSafe((T) o);
+      notifyRemovalSafe((V) o);
     }
     return result;
   }
@@ -136,7 +136,7 @@ public abstract class ProxyArrayList<T> extends ArrayList<T> {
     if (result) {
       for (Object element : this) {
         if (getElements().contains(element)) {
-          notifyRemovalSafe((T) element);
+          notifyRemovalSafe((V) element);
         }
       }
     }
@@ -144,7 +144,7 @@ public abstract class ProxyArrayList<T> extends ArrayList<T> {
   }
 
   @Override
-  public void replaceAll(UnaryOperator<T> operator) {
+  public void replaceAll(UnaryOperator<V> operator) {
     for (int i = 0; i < size(); i++) {
       set(i, operator.apply(get(i)));
     }
@@ -157,7 +157,7 @@ public abstract class ProxyArrayList<T> extends ArrayList<T> {
     if (result) {
       for (Object element : this) {
         if (!getElements().contains(element)) {
-          notifyRemovalSafe((T) element);
+          notifyRemovalSafe((V) element);
         }
       }
     }
@@ -165,10 +165,10 @@ public abstract class ProxyArrayList<T> extends ArrayList<T> {
   }
 
   @Override
-  public boolean removeIf(Predicate<? super T> filter) {
+  public boolean removeIf(Predicate<? super V> filter) {
     var result = super.removeIf(filter);
     if (result) {
-      for (var element : this) {
+      for (V element : this) {
         if (filter.test(element)) {
           notifyRemovalSafe(element);
         }
@@ -196,8 +196,8 @@ public abstract class ProxyArrayList<T> extends ArrayList<T> {
 
   @Override
   @SuppressWarnings("unchecked")
-  public ProxyArrayList<T> clone() {
-    var result = (ProxyArrayList<T>) super.clone();
+  public ProxyArrayList<V> clone() {
+    var result = (ProxyArrayList<V>) super.clone();
     result.elements = null;
     return result;
   }

@@ -11,15 +11,15 @@ import io.github.douira.glsl_transformer.util.CompatUtil;
 public class MultiFilterTest {
   int nextIndex;
 
-  static <T extends JobParameters> void assertPrintFilterResult(
-      String expected, String input, T parameters, TokenFilter<T> filter, String message) {
-    var t = new SingleASTTransformer<T>(SingleASTTransformer.IDENTITY_TRANSFORMATION);
+  static <J extends JobParameters> void assertPrintFilterResult(
+      String expected, String input, J parameters, TokenFilter<J> filter, String message) {
+    var t = new SingleASTTransformer<J>(SingleASTTransformer.IDENTITY_TRANSFORMATION);
     t.setTokenFilter(filter);
     assertEquals(expected, t.transform(input, parameters), message);
   }
 
-  static <T extends JobParameters> void assertPrintFilterResult(
-      String expected, String input, TokenFilter<T> filter, String message) {
+  static <J extends JobParameters> void assertPrintFilterResult(
+      String expected, String input, TokenFilter<J> filter, String message) {
     assertPrintFilterResult(expected, input, null, filter, message);
   }
 

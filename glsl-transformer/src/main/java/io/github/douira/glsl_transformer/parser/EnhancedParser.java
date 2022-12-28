@@ -201,45 +201,45 @@ public class EnhancedParser implements ParserInterface {
   /**
    * Parses a string using a parser method reference into a parse tree.
    * 
-   * @param <RuleType>  The type of the resulting parsed node
+   * @param <C>         The type of the resulting parsed node
    * @param str         The string to parse
    * @param parseMethod The parser method reference to use for parsing
    * @return The parsed string as a parse tree that has the given type
    */
-  public <RuleType extends ParserRuleContext> RuleType parse(
+  public <C extends ParserRuleContext> C parse(
       String str,
-      Function<GLSLParser, RuleType> parseMethod) {
+      Function<GLSLParser, C> parseMethod) {
     return parse(str, (ParserRuleContext) null, parseMethod);
   }
 
-  public <RuleType extends ParserRuleContext> RuleType parse(
+  public <C extends ParserRuleContext> C parse(
       String str,
-      Class<RuleType> ruleType,
-      Function<GLSLParser, RuleType> parseMethod) {
+      Class<C> ruleType,
+      Function<GLSLParser, C> parseMethod) {
     return parse(str, (ParserRuleContext) null, parseMethod);
   }
 
   /**
    * Parses a string using a parser method reference into a parse tree.
    * 
-   * @param <RuleType>  The type of the resulting parsed node
+   * @param <C>         The type of the resulting parsed node
    * @param str         The string to parse
    * @param parent      The parent to attach to the parsed node
    * @param parseMethod The parser method reference to use for parsing
    * @return The parsed string as a parse tree that has the given type
    */
-  public <RuleType extends ParserRuleContext> RuleType parse(
+  public <C extends ParserRuleContext> C parse(
       String str,
       ParserRuleContext parent,
-      Function<GLSLParser, RuleType> parseMethod) {
+      Function<GLSLParser, C> parseMethod) {
     return parse(CharStreams.fromString(str), parent, parseMethod);
   }
 
-  public <RuleType extends ParserRuleContext> RuleType parse(
+  public <C extends ParserRuleContext> C parse(
       String str,
       ParserRuleContext parent,
-      Class<RuleType> ruleType,
-      Function<GLSLParser, RuleType> parseMethod) {
+      Class<C> ruleType,
+      Function<GLSLParser, C> parseMethod) {
     return parse(CharStreams.fromString(str), parent, parseMethod);
   }
 
@@ -248,16 +248,16 @@ public class EnhancedParser implements ParserInterface {
    * reference into a parse tree. This method exists so non-string streams can
    * also be parsed.
    * 
-   * @param <RuleType>  The type of the resulting parsed node
+   * @param <C>         The type of the resulting parsed node
    * @param stream      The int stream to parse
    * @param parent      The parent to attach to the parsed node
    * @param parseMethod The parser method reference to use for parsing
    * @return The parsed string as a parse tree that has the given type
    */
-  private <RuleType extends ParserRuleContext> RuleType parse(
+  private <C extends ParserRuleContext> C parse(
       IntStream stream,
       ParserRuleContext parent,
-      Function<GLSLParser, RuleType> parseMethod) {
+      Function<GLSLParser, C> parseMethod) {
     // setup lexer
     input = stream;
     lexer.setInputStream(input);
@@ -274,7 +274,7 @@ public class EnhancedParser implements ParserInterface {
     parser.setTokenStream(tokenStream);
     parser.reset();
 
-    RuleType node;
+    C node;
     if (parsingStrategy == ParsingStrategy.SLL_AND_LL_ON_ERROR) {
       // never throw SLL errors
       parser.removeErrorListener(ThrowingErrorListener.INSTANCE);

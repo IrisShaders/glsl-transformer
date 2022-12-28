@@ -40,24 +40,24 @@ public class CompatUtil {
    * Creates a {@link java.util.HashSet} that contains the given items. The heap
    * pollution warning is suppressed as it is in {@link java.util.Arrays}.
    * 
-   * @param <T>   The type of the items
+   * @param <V>   The type of the items
    * @param items The items to add to the set
    * @return The set with the given items
    */
   @SafeVarargs
-  public static <T> Set<T> setOf(T... items) {
+  public static <V> Set<V> setOf(V... items) {
     return new HashSet<>(Arrays.asList(items));
   }
 
   /**
    * Creates a {@link java.util.HashSet} that contains the given item.
    * 
-   * @param <T>  The type of the item
+   * @param <V>  The type of the item
    * @param item The item to add to the set
    * @return The set with the given item
    */
-  public static <T> Set<T> setOf(T item) {
-    var set = new HashSet<T>();
+  public static <V> Set<V> setOf(V item) {
+    var set = new HashSet<V>();
     set.add(item);
     return set;
   }
@@ -65,13 +65,13 @@ public class CompatUtil {
   /**
    * Creates a {@link java.util.HashSet} that contains the given items.
    * 
-   * @param <T>   The type of the items
+   * @param <V>   The type of the items
    * @param itemA The first item to add to the set
    * @param itemB The second item to add to the set
    * @return The set with the given items
    */
-  public static <T> Set<T> setOf(T itemA, T itemB) {
-    var set = new HashSet<T>();
+  public static <V> Set<V> setOf(V itemA, V itemB) {
+    var set = new HashSet<V>();
     set.add(itemA);
     set.add(itemB);
     return set;
@@ -82,12 +82,12 @@ public class CompatUtil {
    * same order. This is likely cheaper for making a collection than using
    * {@link #setOf(Object...)}.
    * 
-   * @param <T>   The type of the items
+   * @param <V>   The type of the items
    * @param items The items to create the list out of
    * @return The list with the given items
    */
   @SafeVarargs
-  public static <T> List<T> listOf(T... items) {
+  public static <V> List<V> listOf(V... items) {
     return Arrays.asList(items);
   }
 
@@ -125,7 +125,7 @@ public class CompatUtil {
    * predicate for subsequent elements. For any given element an action may
    * be performed in whatever thread the library chooses.
    *
-   * @param <T>     the type of stream elements
+   * @param <V>     the type of stream elements
    * @param seed    the initial element
    * @param hasNext a predicate to apply to elements to determine when the
    *                stream must terminate.
@@ -134,20 +134,20 @@ public class CompatUtil {
    * @return a new sequential {@code Stream}
    * @implNote The implementation was taken from the JDK 9 source code.
    */
-  public static <T> Stream<T> iterateStream(T seed, Predicate<? super T> hasNext, UnaryOperator<T> next) {
+  public static <V> Stream<V> iterateStream(V seed, Predicate<? super V> hasNext, UnaryOperator<V> next) {
     Objects.requireNonNull(next);
     Objects.requireNonNull(hasNext);
-    Spliterator<T> spliterator = new Spliterators.AbstractSpliterator<>(Long.MAX_VALUE,
+    Spliterator<V> spliterator = new Spliterators.AbstractSpliterator<>(Long.MAX_VALUE,
         Spliterator.ORDERED | Spliterator.IMMUTABLE) {
-      T prev;
+      V prev;
       boolean started, finished;
 
       @Override
-      public boolean tryAdvance(Consumer<? super T> action) {
+      public boolean tryAdvance(Consumer<? super V> action) {
         Objects.requireNonNull(action);
         if (finished)
           return false;
-        T t;
+        V t;
         if (started)
           t = next.apply(prev);
         else {
@@ -164,12 +164,12 @@ public class CompatUtil {
       }
 
       @Override
-      public void forEachRemaining(Consumer<? super T> action) {
+      public void forEachRemaining(Consumer<? super V> action) {
         Objects.requireNonNull(action);
         if (finished)
           return;
         finished = true;
-        T t = started ? next.apply(prev) : seed;
+        V t = started ? next.apply(prev) : seed;
         prev = null;
         while (hasNext.test(t)) {
           action.accept(t);

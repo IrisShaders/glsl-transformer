@@ -15,32 +15,32 @@ import io.github.douira.glsl_transformer.ast.transform.ASTBuilder;
  * best (most distinguishing) hint, then the manually hinted
  * {@link HintedMatcher} should be used instead.
  */
-public class AutoHintedMatcher<T extends ASTNode> extends HintedMatcher<T> {
-  public <RuleType extends ParserRuleContext> AutoHintedMatcher(String input,
-      Function<GLSLParser, RuleType> parseMethod,
-      BiFunction<ASTBuilder, RuleType, T> visitMethod, String wildcardPrefix) {
+public class AutoHintedMatcher<N extends ASTNode> extends HintedMatcher<N> {
+  public <C extends ParserRuleContext> AutoHintedMatcher(String input,
+      Function<GLSLParser, C> parseMethod,
+      BiFunction<ASTBuilder, C, N> visitMethod, String wildcardPrefix) {
     super(input, parseMethod, visitMethod, wildcardPrefix, null);
   }
 
-  public AutoHintedMatcher(T pattern, String wildcardPrefix) {
+  public AutoHintedMatcher(N pattern, String wildcardPrefix) {
     super(pattern, wildcardPrefix, null);
   }
 
-  public AutoHintedMatcher(T pattern) {
+  public AutoHintedMatcher(N pattern) {
     super(pattern, null);
   }
 
-  public <RuleType extends ParserRuleContext> AutoHintedMatcher(String input,
-      Function<GLSLParser, RuleType> parseMethod,
-      BiFunction<ASTBuilder, RuleType, T> visitMethod) {
+  public <C extends ParserRuleContext> AutoHintedMatcher(String input,
+      Function<GLSLParser, C> parseMethod,
+      BiFunction<ASTBuilder, C, N> visitMethod) {
     super(input, parseMethod, visitMethod, null);
   }
 
-  public AutoHintedMatcher(String input, Function<String, T> patternParser, String wildcardPrefix) {
+  public AutoHintedMatcher(String input, Function<String, N> patternParser, String wildcardPrefix) {
     super(input, patternParser, wildcardPrefix, null);
   }
 
-  public AutoHintedMatcher(String input, Function<String, T> patternParser) {
+  public AutoHintedMatcher(String input, Function<String, N> patternParser) {
     super(input, patternParser, null);
   }
 

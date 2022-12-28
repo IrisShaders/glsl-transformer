@@ -8,7 +8,7 @@ import org.antlr.v4.runtime.RecognitionException;
 import io.github.douira.glsl_transformer.ast.node.TranslationUnit;
 import io.github.douira.glsl_transformer.util.*;
 
-public class TriASTTransformer<T extends JobParameters, E extends Enum<E>> extends EnumASTTransformer<T, E> {
+public class TriASTTransformer<J extends JobParameters, E extends Enum<E>> extends EnumASTTransformer<J, E> {
   private final E aType, bType, cType;
   private final Class<E> enumClass;
 
@@ -54,7 +54,7 @@ public class TriASTTransformer<T extends JobParameters, E extends Enum<E>> exten
   }
 
   public TriASTTransformer(
-      TriFullTransformation<TranslationUnit, T> transformation,
+      TriFullTransformation<TranslationUnit, J> transformation,
       Class<E> enumClass,
       E aType,
       E bType,
@@ -79,7 +79,7 @@ public class TriASTTransformer<T extends JobParameters, E extends Enum<E>> exten
     });
   }
 
-  public void setTransformation(TriFullTransformation<TranslationUnit, T> transformation) {
+  public void setTransformation(TriFullTransformation<TranslationUnit, J> transformation) {
     super.setTransformation(map -> {
       final var a = map.get(aType);
       final var b = map.get(bType);
@@ -106,7 +106,7 @@ public class TriASTTransformer<T extends JobParameters, E extends Enum<E>> exten
     return transform(items);
   }
 
-  public EnumMap<E, String> transform(String a, String b, String c, T parameters)
+  public EnumMap<E, String> transform(String a, String b, String c, J parameters)
       throws RecognitionException {
     return withJobParameters(parameters, () -> transform(a, b, c));
   }
@@ -116,7 +116,7 @@ public class TriASTTransformer<T extends JobParameters, E extends Enum<E>> exten
     return new Triple<>(result.get(aType), result.get(bType), result.get(cType));
   }
 
-  public Triple<String> transform(Triple<String> str, T parameters) throws RecognitionException {
+  public Triple<String> transform(Triple<String> str, J parameters) throws RecognitionException {
     return withJobParameters(parameters, () -> transform(str));
   }
 }

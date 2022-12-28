@@ -3,8 +3,8 @@ package io.github.douira.glsl_transformer.ast.data;
 import org.antlr.v4.runtime.Token;
 
 public class TypeUtil {
-  public static <T extends TokenTyped> T enumFromToken(T[] enumValues, Token token) {
-    for (T value : enumValues) {
+  public static <E extends TokenTyped> E enumFromToken(E[] enumValues, Token token) {
+    for (E value : enumValues) {
       if (value.getTokenType() == token.getType()) {
         return value;
       }
@@ -12,7 +12,7 @@ public class TypeUtil {
     throw new IllegalArgumentException("Unknown token: " + token.getText());
   }
 
-  public static <T> T enumFromToken(T[] values, int[] tokenTypes, Token token) {
+  public static <E> E enumFromToken(E[] values, int[] tokenTypes, Token token) {
     if (values.length != tokenTypes.length) {
       throw new IllegalArgumentException("values.length != tokenTypes.length");
     }

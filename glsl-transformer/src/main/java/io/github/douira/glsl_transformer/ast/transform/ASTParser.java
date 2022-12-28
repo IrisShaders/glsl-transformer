@@ -112,12 +112,12 @@ public class ASTParser implements ParserInterface {
   }
 
   @SuppressWarnings("unchecked") // consistent use of the cache results in the same type
-  public <RuleType extends ParserRuleContext, ReturnType extends ASTNode> ReturnType parseNode(
+  public <C extends ParserRuleContext, N extends ASTNode> N parseNode(
       String input,
       ASTNode parentTreeMember,
-      Class<RuleType> ruleType,
-      Function<GLSLParser, RuleType> parseMethod,
-      BiFunction<ASTBuilder, RuleType, ReturnType> visitMethod) throws RecognitionException {
+      Class<C> ruleType,
+      Function<GLSLParser, C> parseMethod,
+      BiFunction<ASTBuilder, C, N> visitMethod) throws RecognitionException {
     if (ruleType == TranslationUnitContext.class) {
       throw new IllegalArgumentException("Translation units may not be parsed into another node, that makes no sense.");
     }
@@ -126,24 +126,24 @@ public class ASTParser implements ParserInterface {
       return ASTBuilder.buildSubtree(parentTreeMember, parser.parse(input, ruleType, parseMethod), visitMethod);
     } else {
       // cache and possibly build, always clone to return new trees
-      return (ReturnType) buildCache.cachedGet(input, ruleType,
+      return (N) buildCache.cachedGet(input, ruleType,
           () -> ASTBuilder.build(new EmptyRoot(), parser.parse(input, ruleType, parseMethod), visitMethod))
           .cloneInto(parentTreeMember);
     }
   }
 
   @SuppressWarnings("unchecked") // consistent use of the cache results in the same type
-  public <RuleType extends ParserRuleContext, ReturnType extends ASTNode> ReturnType parseNodeSeparate(
+  public <C extends ParserRuleContext, N extends ASTNode> N parseNodeSeparate(
       String input,
-      Class<RuleType> ruleType,
-      Function<GLSLParser, RuleType> parseMethod,
-      BiFunction<ASTBuilder, RuleType, ReturnType> visitMethod) throws RecognitionException {
+      Class<C> ruleType,
+      Function<GLSLParser, C> parseMethod,
+      BiFunction<ASTBuilder, C, N> visitMethod) throws RecognitionException {
     if (astCacheStrategy == ASTCacheStrategy.NONE
         || astCacheStrategy == ASTCacheStrategy.ALL_EXCLUDING_TRANSLATION_UNIT
             && ruleType == TranslationUnitContext.class) {
       return ASTBuilder.build(parser.parse(input, ruleType, parseMethod), visitMethod);
     } else {
-      return (ReturnType) buildCache.cachedGet(input, ruleType,
+      return (N) buildCache.cachedGet(input, ruleType,
           () -> ASTBuilder.build(new EmptyRoot(), parser.parse(input, ruleType, parseMethod), visitMethod))
           .cloneSeparate();
     }

@@ -8,19 +8,19 @@ import io.github.douira.glsl_transformer.token_filter.TokenFilter;
  * the same kind of output. The implementations of this class determine how it
  * works in detail.
  */
-public abstract class ASTTransformer<T extends JobParameters, V> extends ASTParser
-    implements ParameterizedTransformer<T, V> {
-  private T jobParameters;
+public abstract class ASTTransformer<J extends JobParameters, V> extends ASTParser
+    implements ParameterizedTransformer<J, V> {
+  private J jobParameters;
   private static final PrintType defaultPrintType = PrintType.COMPACT;
   private PrintType printType = defaultPrintType;
 
   @Override
-  public T getJobParameters() {
+  public J getJobParameters() {
     return jobParameters;
   }
 
   @Override
-  public void setJobParameters(T parameters) {
+  public void setJobParameters(J parameters) {
     jobParameters = parameters;
   }
 
@@ -28,7 +28,7 @@ public abstract class ASTTransformer<T extends JobParameters, V> extends ASTPars
   @SuppressWarnings("unchecked")
   public void setTokenFilter(TokenFilter<?> tokenFilter) {
     super.setTokenFilter(tokenFilter);
-    ((TokenFilter<T>) tokenFilter).setJobParametersSupplier(this::getJobParameters);
+    ((TokenFilter<J>) tokenFilter).setJobParametersSupplier(this::getJobParameters);
   }
 
   public void setPrintType(PrintType printType) {

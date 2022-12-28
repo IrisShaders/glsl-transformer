@@ -18,8 +18,8 @@ import io.github.douira.glsl_transformer.ast.transform.JobParameters;
  * filter has disallowed it. Since filters can have state, it can be desirerable
  * to notify all of them of all tokens.
  */
-public class MultiFilter<T extends JobParameters> extends TokenFilter<T> {
-  private Collection<TokenFilter<T>> subfilters;
+public class MultiFilter<J extends JobParameters> extends TokenFilter<J> {
+  private Collection<TokenFilter<J>> subfilters;
 
   /**
    * If this is true, then it will require all filters to allow a token for it to
@@ -44,7 +44,7 @@ public class MultiFilter<T extends JobParameters> extends TokenFilter<T> {
    * @param conjunction  The conjunction flag state
    * @param shortCircuit The short circuit flag state
    */
-  public MultiFilter(Collection<TokenFilter<T>> subfilters, boolean conjunction, boolean shortCircuit) {
+  public MultiFilter(Collection<TokenFilter<J>> subfilters, boolean conjunction, boolean shortCircuit) {
     this(subfilters);
     this.conjunction = conjunction;
     this.shortCircuit = shortCircuit;
@@ -104,7 +104,7 @@ public class MultiFilter<T extends JobParameters> extends TokenFilter<T> {
    * 
    * @param subfilters The subfilters to add initially
    */
-  public MultiFilter(Collection<? extends TokenFilter<T>> subfilters) {
+  public MultiFilter(Collection<? extends TokenFilter<J>> subfilters) {
     this.subfilters = new ArrayList<>(subfilters);
   }
 
@@ -132,7 +132,7 @@ public class MultiFilter<T extends JobParameters> extends TokenFilter<T> {
    * @param filter The filter to add
    * @return {@code true} if the underlying collection changed
    */
-  public boolean add(TokenFilter<T> filter) {
+  public boolean add(TokenFilter<J> filter) {
     return subfilters.add(filter);
   }
 
@@ -142,7 +142,7 @@ public class MultiFilter<T extends JobParameters> extends TokenFilter<T> {
    * @param newSubfilters The filters to add
    * @return {@code true} if the underlying collection changed
    */
-  public boolean addAll(Collection<? extends TokenFilter<T>> newSubfilters) {
+  public boolean addAll(Collection<? extends TokenFilter<J>> newSubfilters) {
     return subfilters.addAll(newSubfilters);
   }
 
@@ -153,7 +153,7 @@ public class MultiFilter<T extends JobParameters> extends TokenFilter<T> {
    * @param other The other multi filter to take subfilters from
    * @return {@code true} if the underlying collection changed
    */
-  public boolean addAll(MultiFilter<T> other) {
+  public boolean addAll(MultiFilter<J> other) {
     return addAll(other.subfilters);
   }
 
@@ -161,8 +161,8 @@ public class MultiFilter<T extends JobParameters> extends TokenFilter<T> {
    * Creates a shallow clone of this multi filter. It copies over the collection
    * of subfilters shallowly and copies the settings.
    */
-  public MultiFilter<T> clone() {
-    return new MultiFilter<T>(subfilters, conjunction, shortCircuit);
+  public MultiFilter<J> clone() {
+    return new MultiFilter<J>(subfilters, conjunction, shortCircuit);
   }
 
   @Override
@@ -174,7 +174,7 @@ public class MultiFilter<T extends JobParameters> extends TokenFilter<T> {
   }
 
   @Override
-  public void setJobParametersSupplier(Supplier<T> jobParametersSupplier) {
+  public void setJobParametersSupplier(Supplier<J> jobParametersSupplier) {
     super.setJobParametersSupplier(jobParametersSupplier);
     for (var filter : subfilters) {
       filter.setJobParametersSupplier(jobParametersSupplier);

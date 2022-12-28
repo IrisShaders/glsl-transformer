@@ -13,37 +13,37 @@ import io.github.douira.glsl_transformer.ast.transform.ASTBuilder;
  * identifiers whose matching ancestor might match the pattern. This makes
  * working with matchers much less verbose.
  */
-public class HintedMatcher<T extends ASTNode> extends Matcher<T> {
+public class HintedMatcher<N extends ASTNode> extends Matcher<N> {
   protected String hint;
 
-  public <RuleType extends ParserRuleContext> HintedMatcher(String input, Function<GLSLParser, RuleType> parseMethod,
-      BiFunction<ASTBuilder, RuleType, T> visitMethod, String wildcardPrefix, String hint) {
+  public <C extends ParserRuleContext> HintedMatcher(String input, Function<GLSLParser, C> parseMethod,
+      BiFunction<ASTBuilder, C, N> visitMethod, String wildcardPrefix, String hint) {
     super(input, parseMethod, visitMethod, wildcardPrefix);
     this.hint = hint;
   }
 
-  public HintedMatcher(T pattern, String wildcardPrefix, String hint) {
+  public HintedMatcher(N pattern, String wildcardPrefix, String hint) {
     super(pattern, wildcardPrefix);
     this.hint = hint;
   }
 
-  public HintedMatcher(T pattern, String hint) {
+  public HintedMatcher(N pattern, String hint) {
     super(pattern);
     this.hint = hint;
   }
 
-  public <RuleType extends ParserRuleContext> HintedMatcher(String input, Function<GLSLParser, RuleType> parseMethod,
-      BiFunction<ASTBuilder, RuleType, T> visitMethod, String hint) {
+  public <C extends ParserRuleContext> HintedMatcher(String input, Function<GLSLParser, C> parseMethod,
+      BiFunction<ASTBuilder, C, N> visitMethod, String hint) {
     super(input, parseMethod, visitMethod);
     this.hint = hint;
   }
 
-  public HintedMatcher(String input, Function<String, T> patternParser, String wildcardPrefix, String hint) {
+  public HintedMatcher(String input, Function<String, N> patternParser, String wildcardPrefix, String hint) {
     super(input, patternParser, wildcardPrefix);
     this.hint = hint;
   }
 
-  public HintedMatcher(String input, Function<String, T> patternParser, String hint) {
+  public HintedMatcher(String input, Function<String, N> patternParser, String hint) {
     super(input, patternParser);
     this.hint = hint;
   }

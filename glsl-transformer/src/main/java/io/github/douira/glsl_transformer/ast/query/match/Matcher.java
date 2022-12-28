@@ -20,11 +20,11 @@ import io.github.douira.glsl_transformer.parser.EnhancedParser;
  * Instances of the matcher can match a node against a stored pattern. This
  * avoids a separate equality implementation for each node type.
  */
-public class Matcher<T extends ASTNode> {
+public class Matcher<N extends ASTNode> {
   /**
    * The node of the pattern being matched.
    */
-  protected final T pattern;
+  protected final N pattern;
 
   protected final String wildcardPrefix;
   private Map<String, Object> dataMatches;
@@ -43,7 +43,7 @@ public class Matcher<T extends ASTNode> {
    * @param pattern        The pattern to match
    * @param wildcardPrefix The prefix for wildcard identifiers
    */
-  public Matcher(T pattern, String wildcardPrefix) {
+  public Matcher(N pattern, String wildcardPrefix) {
     this.pattern = pattern;
     this.wildcardPrefix = wildcardPrefix;
   }
@@ -53,7 +53,7 @@ public class Matcher<T extends ASTNode> {
    * 
    * @param pattern The pattern to match
    */
-  public Matcher(T pattern) {
+  public Matcher(N pattern) {
     this(pattern, null);
   }
 
@@ -61,15 +61,15 @@ public class Matcher<T extends ASTNode> {
    * Creates a new matcher that matches the pattern parsed from the given string,
    * parser method and visitor method. There is also a given wildcard prefix.
    * 
-   * @param <RuleType>     The type of the parser rule context
+   * @param <C>            The type of the parser rule context
    * @param input          The string to parse
    * @param parseMethod    The parser method to use
    * @param visitMethod    The build visitor method to use
    * @param wildcardPrefix The wildcard prefix
    */
-  public <RuleType extends ParserRuleContext> Matcher(String input,
-      Function<GLSLParser, RuleType> parseMethod,
-      BiFunction<ASTBuilder, RuleType, T> visitMethod,
+  public <C extends ParserRuleContext> Matcher(String input,
+      Function<GLSLParser, C> parseMethod,
+      BiFunction<ASTBuilder, C, N> visitMethod,
       String wildcardPrefix) {
     this(ASTBuilder.build(
         EnhancedParser.getInternalInstance().parse(input, parseMethod),
@@ -81,29 +81,29 @@ public class Matcher<T extends ASTNode> {
    * Creates a new matcher that matches the pattern parsed from the given string,
    * parser method and visitor method. There is no wildcard prefix.
    * 
-   * @param <RuleType>  The type of the parser rule context
+   * @param <C>         The type of the parser rule context
    * @param input       The string to parse
    * @param parseMethod The parser method to use
    * @param visitMethod The build visitor method to use
    */
-  public <RuleType extends ParserRuleContext> Matcher(String input,
-      Function<GLSLParser, RuleType> parseMethod,
-      BiFunction<ASTBuilder, RuleType, T> visitMethod) {
+  public <C extends ParserRuleContext> Matcher(String input,
+      Function<GLSLParser, C> parseMethod,
+      BiFunction<ASTBuilder, C, N> visitMethod) {
     this(input, parseMethod, visitMethod, null);
   }
 
-  public Matcher(String input, Function<String, T> patternParser, String wildcardPrefix) {
+  public Matcher(String input, Function<String, N> patternParser, String wildcardPrefix) {
     this(patternParser.apply(input), wildcardPrefix);
   }
 
-  public Matcher(String input, Function<String, T> patternParser) {
+  public Matcher(String input, Function<String, N> patternParser) {
     this(input, patternParser, null);
   }
 
-  private static <RuleType extends ParserRuleContext, ReturnType extends ASTNode> Function<String, ReturnType> makePatternParser(
-      Class<RuleType> ruleType,
-      Function<GLSLParser, RuleType> parseMethod,
-      BiFunction<ASTBuilder, RuleType, ReturnType> visitMethod) {
+  private static <C extends ParserRuleContext, N extends ASTNode> Function<String, N> makePatternParser(
+      Class<C> ruleType,
+      Function<GLSLParser, C> parseMethod,
+      BiFunction<ASTBuilder, C, N> visitMethod) {
     return input -> ASTParser.getInternalInstance().parseNodeSeparate(input, ruleType, parseMethod, visitMethod);
   }
 
@@ -249,7 +249,7 @@ public class Matcher<T extends ASTNode> {
    * @param tree The tree to match
    * @return True if the tree matches the pattern, false otherwise
    */
-  public boolean matches(T tree) {
+  public boolean matches(N tree) {
     if (tree == null) {
       return false;
     }
@@ -277,7 +277,7 @@ public class Matcher<T extends ASTNode> {
    * @param tree The tree to match
    * @return True if the tree matches the pattern, false otherwise
    */
-  public boolean matchesExtract(T tree) {
+  public boolean matchesExtract(N tree) {
     ensureMatchMaps();
     dataMatches.clear();
     nodeMatches.clear();
@@ -301,7 +301,7 @@ public class Matcher<T extends ASTNode> {
    * @return
    */
   public boolean matchesExtract(
-      T tree,
+      N tree,
       Map<String, Object> dataMatches,
       Map<String, ASTNode> nodeMatches) {
     this.dataMatches = dataMatches;
@@ -364,19 +364,19 @@ public class Matcher<T extends ASTNode> {
   /**
    * Gets a node match with the given name if it is available as the given class.
    * 
-   * @param <R>  The type of the node match
+   * @param <NN> The type of the node match
    * @param name The name of the node match
    * @param type The class of the node match
    * @return The node match or null if not found or not of the given class
    */
-  public <R extends ASTNode> R getNodeMatch(String name, Class<R> type) {
+  public <NN extends ASTNode> NN getNodeMatch(String name, Class<NN> type) {
     var result = nodeMatches.get(name);
     return type.isInstance(result) ? type.cast(result) : null;
   }
 
   @SuppressWarnings("unchecked")
-  public Class<? extends T> getPatternClass() {
-    return (Class<? extends T>) pattern.getClass();
+  public Class<? extends N> getPatternClass() {
+    return (Class<? extends N>) pattern.getClass();
   }
 
   private void ensureWildcardMap() {
@@ -496,11 +496,11 @@ public class Matcher<T extends ASTNode> {
     nodeWildcards.put(patternNode, new ClassWildcard(name, patternNode.getClass()));
   }
 
-  private static class ClassedPredicateWildcard<T extends ASTNode> extends NodeWildcard {
-    final Class<T> type;
-    final Predicate<T> predicate;
+  private static class ClassedPredicateWildcard<N extends ASTNode> extends NodeWildcard {
+    final Class<N> type;
+    final Predicate<N> predicate;
 
-    ClassedPredicateWildcard(String name, Class<T> type, Predicate<T> predicate) {
+    ClassedPredicateWildcard(String name, Class<N> type, Predicate<N> predicate) {
       super(name);
       this.type = type;
       this.predicate = predicate;
@@ -517,17 +517,17 @@ public class Matcher<T extends ASTNode> {
    * wildcard will match any node in the same position in the tree that is an
    * instance of the given class and matches the predicate.
    * 
-   * @param <R>         The type of the node match
+   * @param <NN>        The type of the node match
    * @param name        The name of the wildcard
    * @param patternNode The node to mark as a classed predicate wildcard
    * @param type        The class to match the node with
    * @param predicate   The predicate to match the node with
    */
-  public <R extends ASTNode> void markClassedPredicateWildcard(
+  public <NN extends ASTNode> void markClassedPredicateWildcard(
       String name,
       ASTNode patternNode,
-      Class<R> type,
-      Predicate<R> predicate) {
+      Class<NN> type,
+      Predicate<NN> predicate) {
     markWildcard(patternNode, new ClassedPredicateWildcard<>(name, type, predicate));
   }
 }

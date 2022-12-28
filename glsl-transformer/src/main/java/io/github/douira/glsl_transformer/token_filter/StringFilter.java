@@ -11,7 +11,7 @@ import io.github.douira.glsl_transformer.util.CompatUtil;
  * The string token filter disallows tokens that are matched against a set of
  * disallowed strings.
  */
-public class StringFilter<T extends JobParameters> extends TokenFilter<T> {
+public class StringFilter<J extends JobParameters> extends TokenFilter<J> {
   private Set<String> disallowed;
 
   /**

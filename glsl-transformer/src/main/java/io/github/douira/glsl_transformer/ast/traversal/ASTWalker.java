@@ -12,8 +12,8 @@ public class ASTWalker<R> extends ASTBaseVisitor<R> {
     this.listener = listener;
   }
 
-  public static <T> T walk(ASTListener listener, ASTNode node) {
-    return new ASTWalker<T>(listener).startVisit(node);
+  public static <R> R walk(ASTListener listener, ASTNode node) {
+    return new ASTWalker<R>(listener).startVisit(node);
   }
 
   @Override

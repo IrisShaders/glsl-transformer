@@ -48,21 +48,21 @@ public class CachingParser extends EnhancedParser {
   }
 
   @Override
-  public <RuleType extends ParserRuleContext> RuleType parse(
+  public <C extends ParserRuleContext> C parse(
       String str,
-      Class<RuleType> ruleType,
-      Function<GLSLParser, RuleType> parseMethod) {
+      Class<C> ruleType,
+      Function<GLSLParser, C> parseMethod) {
     return parse(str, null, ruleType, parseMethod);
   }
 
   @Override
   @SuppressWarnings("unchecked")
-  public <RuleType extends ParserRuleContext> RuleType parse(
+  public <C extends ParserRuleContext> C parse(
       String str,
       ParserRuleContext parent,
-      Class<RuleType> ruleType,
-      Function<GLSLParser, RuleType> parseMethod) {
-    return (RuleType) parseCache.cachedGet(str, ruleType,
+      Class<C> ruleType,
+      Function<GLSLParser, C> parseMethod) {
+    return (C) parseCache.cachedGet(str, ruleType,
         () -> parse(str, parent, parseMethod));
   }
 

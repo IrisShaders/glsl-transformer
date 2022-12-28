@@ -4,6 +4,6 @@ import io.github.douira.glsl_transformer.ast.node.abstract_node.ASTNode;
 import io.github.douira.glsl_transformer.ast.query.Root;
 
 @FunctionalInterface
-public interface TriRootOnlyTransformation<A extends ASTNode> {
-  void accept(A a, A b, A c, Root rootA, Root rootB, Root rootC);
+public interface TriRootOnlyTransformation<N extends ASTNode> {
+  void accept(N a, N b, N c, Root rootA, Root rootB, Root rootC);
 }
