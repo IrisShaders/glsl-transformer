@@ -1,4 +1,4 @@
-package io.github.douira.glsl_transformer.ast.node.basic;
+package io.github.douira.glsl_transformer.ast.node.abstract_node;
 
 import static org.junit.jupiter.api.Assertions.*;
 
