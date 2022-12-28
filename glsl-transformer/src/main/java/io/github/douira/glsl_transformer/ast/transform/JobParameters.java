@@ -1,4 +1,4 @@
-package io.github.douira.glsl_transformer.basic;
+package io.github.douira.glsl_transformer.ast.transform;
 
 /**
  * All job parameters have to extend this job parameter base class.

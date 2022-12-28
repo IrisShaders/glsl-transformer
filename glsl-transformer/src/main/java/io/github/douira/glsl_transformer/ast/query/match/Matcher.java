@@ -8,13 +8,13 @@ import org.antlr.v4.runtime.ParserRuleContext;
 import io.github.douira.glsl_transformer.GLSLParser;
 import io.github.douira.glsl_transformer.GLSLParser.*;
 import io.github.douira.glsl_transformer.ast.node.TranslationUnit;
-import io.github.douira.glsl_transformer.ast.node.basic.ASTNode;
+import io.github.douira.glsl_transformer.ast.node.abstract_node.ASTNode;
 import io.github.douira.glsl_transformer.ast.node.expression.Expression;
 import io.github.douira.glsl_transformer.ast.node.external_declaration.ExternalDeclaration;
 import io.github.douira.glsl_transformer.ast.node.statement.Statement;
 import io.github.douira.glsl_transformer.ast.transform.*;
 import io.github.douira.glsl_transformer.ast.traversal.*;
-import io.github.douira.glsl_transformer.basic.EnhancedParser;
+import io.github.douira.glsl_transformer.parser.EnhancedParser;
 
 /**
  * Instances of the matcher can match a node against a stored pattern. This

@@ -1,7 +1,6 @@
 package io.github.douira.glsl_transformer.ast.transform;
 
 import io.github.douira.glsl_transformer.ast.print.PrintType;
-import io.github.douira.glsl_transformer.basic.*;
 import io.github.douira.glsl_transformer.token_filter.TokenFilter;
 
 /**

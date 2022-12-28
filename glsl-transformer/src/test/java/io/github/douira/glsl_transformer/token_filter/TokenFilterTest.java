@@ -5,9 +5,8 @@ import static org.junit.jupiter.api.Assertions.*;
 import org.antlr.v4.runtime.Token;
 import org.junit.jupiter.api.*;
 
+import io.github.douira.glsl_transformer.ast.transform.*;
 import io.github.douira.glsl_transformer.ast.transform.ASTParser.ParsingCacheStrategy;
-import io.github.douira.glsl_transformer.ast.transform.SingleASTTransformer;
-import io.github.douira.glsl_transformer.basic.JobParameters;
 
 public class TokenFilterTest {
   private int nextIndex;

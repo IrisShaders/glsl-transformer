@@ -4,7 +4,7 @@ import java.util.Collection;
 import java.util.function.Consumer;
 import java.util.stream.Stream;
 
-import io.github.douira.glsl_transformer.ast.node.basic.*;
+import io.github.douira.glsl_transformer.ast.node.abstract_node.*;
 
 /**
  * A child list that notifies the given parent of child additions.

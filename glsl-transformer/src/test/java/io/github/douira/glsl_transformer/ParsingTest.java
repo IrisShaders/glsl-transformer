@@ -16,7 +16,6 @@ import au.com.origin.snapshots.annotations.SnapshotName;
 import au.com.origin.snapshots.junit5.SnapshotExtension;
 import io.github.douira.glsl_transformer.ast.print.PrintType;
 import io.github.douira.glsl_transformer.ast.transform.*;
-import io.github.douira.glsl_transformer.basic.JobParameters;
 import io.github.douira.glsl_transformer.test_util.*;
 import io.github.douira.glsl_transformer.test_util.TestResourceManager.DirectoryLocation;
 

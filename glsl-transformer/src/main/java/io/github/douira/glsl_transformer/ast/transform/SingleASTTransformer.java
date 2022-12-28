@@ -7,7 +7,6 @@ import org.antlr.v4.runtime.RecognitionException;
 import io.github.douira.glsl_transformer.ast.node.TranslationUnit;
 import io.github.douira.glsl_transformer.ast.print.ASTPrinter;
 import io.github.douira.glsl_transformer.ast.query.Root;
-import io.github.douira.glsl_transformer.basic.*;
 import io.github.douira.glsl_transformer.util.TriConsumer;
 
 /**

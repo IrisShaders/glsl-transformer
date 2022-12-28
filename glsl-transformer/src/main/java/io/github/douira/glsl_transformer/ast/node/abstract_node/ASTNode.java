@@ -1,4 +1,4 @@
-package io.github.douira.glsl_transformer.ast.node.basic;
+package io.github.douira.glsl_transformer.ast.node.abstract_node;
 
 import java.util.Objects;
 import java.util.function.*;

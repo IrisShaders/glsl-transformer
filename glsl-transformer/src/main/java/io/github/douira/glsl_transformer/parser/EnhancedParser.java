@@ -1,4 +1,4 @@
-package io.github.douira.glsl_transformer.basic;
+package io.github.douira.glsl_transformer.parser;
 
 import java.util.function.*;
 

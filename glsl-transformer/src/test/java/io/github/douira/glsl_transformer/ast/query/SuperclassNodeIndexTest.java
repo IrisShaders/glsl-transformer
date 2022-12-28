@@ -6,7 +6,7 @@ import java.util.stream.Stream;
 
 import org.junit.jupiter.api.*;
 
-import io.github.douira.glsl_transformer.ast.node.basic.*;
+import io.github.douira.glsl_transformer.ast.node.abstract_node.*;
 import io.github.douira.glsl_transformer.ast.node.type.qualifier.*;
 import io.github.douira.glsl_transformer.ast.query.index.*;
 

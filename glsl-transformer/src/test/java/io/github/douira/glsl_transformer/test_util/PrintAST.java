@@ -1,6 +1,6 @@
 package io.github.douira.glsl_transformer.test_util;
 
-import io.github.douira.glsl_transformer.ast.node.basic.*;
+import io.github.douira.glsl_transformer.ast.node.abstract_node.*;
 import io.github.douira.glsl_transformer.ast.traversal.*;
 
 public class PrintAST extends ASTListenerVisitor<Void> {

@@ -3,7 +3,7 @@ package io.github.douira.glsl_transformer.token_filter;
 import org.antlr.v4.runtime.Token;
 
 import io.github.douira.glsl_transformer.GLSLLexer;
-import io.github.douira.glsl_transformer.basic.JobParameters;
+import io.github.douira.glsl_transformer.ast.transform.JobParameters;
 
 /**
  * The newline filter filters out regular unnecessary newlines if there is more

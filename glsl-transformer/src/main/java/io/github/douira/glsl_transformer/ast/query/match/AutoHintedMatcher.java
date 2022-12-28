@@ -6,7 +6,7 @@ import org.antlr.v4.runtime.ParserRuleContext;
 
 import io.github.douira.glsl_transformer.GLSLParser;
 import io.github.douira.glsl_transformer.ast.node.Identifier;
-import io.github.douira.glsl_transformer.ast.node.basic.ASTNode;
+import io.github.douira.glsl_transformer.ast.node.abstract_node.ASTNode;
 import io.github.douira.glsl_transformer.ast.transform.ASTBuilder;
 
 /**

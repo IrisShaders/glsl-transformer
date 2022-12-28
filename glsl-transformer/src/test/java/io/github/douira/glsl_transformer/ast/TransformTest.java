@@ -10,7 +10,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 
 import io.github.douira.glsl_transformer.ast.node.Identifier;
-import io.github.douira.glsl_transformer.ast.node.basic.ASTNode;
+import io.github.douira.glsl_transformer.ast.node.abstract_node.ASTNode;
 import io.github.douira.glsl_transformer.ast.node.declaration.*;
 import io.github.douira.glsl_transformer.ast.node.expression.*;
 import io.github.douira.glsl_transformer.ast.node.expression.unary.FunctionCallExpression;
@@ -24,7 +24,6 @@ import io.github.douira.glsl_transformer.ast.print.token.ParserToken;
 import io.github.douira.glsl_transformer.ast.query.Root;
 import io.github.douira.glsl_transformer.ast.query.match.Matcher;
 import io.github.douira.glsl_transformer.ast.transform.*;
-import io.github.douira.glsl_transformer.basic.JobParameters;
 import io.github.douira.glsl_transformer.test_util.*;
 import io.github.douira.glsl_transformer.test_util.TestCaseProvider.Spacing;
 import io.github.douira.glsl_transformer.util.Type;

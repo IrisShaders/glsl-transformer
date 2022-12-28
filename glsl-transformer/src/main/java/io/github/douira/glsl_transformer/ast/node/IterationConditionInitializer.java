@@ -1,6 +1,6 @@
 package io.github.douira.glsl_transformer.ast.node;
 
-import io.github.douira.glsl_transformer.ast.node.basic.InnerASTNode;
+import io.github.douira.glsl_transformer.ast.node.abstract_node.InnerASTNode;
 import io.github.douira.glsl_transformer.ast.node.type.FullySpecifiedType;
 import io.github.douira.glsl_transformer.ast.node.type.initializer.Initializer;
 import io.github.douira.glsl_transformer.ast.query.Root;

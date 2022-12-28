@@ -4,7 +4,7 @@ import java.util.function.Supplier;
 
 import org.antlr.v4.runtime.Token;
 
-import io.github.douira.glsl_transformer.basic.JobParameters;
+import io.github.douira.glsl_transformer.ast.transform.JobParameters;
 
 /**
  * A token filter is an object that can check if given tokens should be printed

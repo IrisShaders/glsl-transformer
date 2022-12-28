@@ -8,7 +8,7 @@ import java.util.stream.Collectors;
 import org.junit.jupiter.api.*;
 
 import io.github.douira.glsl_transformer.ast.node.Identifier;
-import io.github.douira.glsl_transformer.ast.node.basic.ASTNode;
+import io.github.douira.glsl_transformer.ast.node.abstract_node.ASTNode;
 import io.github.douira.glsl_transformer.ast.node.expression.*;
 import io.github.douira.glsl_transformer.ast.node.type.qualifier.PreciseQualifier;
 import io.github.douira.glsl_transformer.ast.query.index.NodeIndex;

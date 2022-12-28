@@ -4,7 +4,7 @@ import java.util.EnumSet;
 
 import org.antlr.v4.runtime.Token;
 
-import io.github.douira.glsl_transformer.basic.JobParameters;
+import io.github.douira.glsl_transformer.ast.transform.JobParameters;
 
 /**
  * The channel filter accepts all tokens that are not from a lexer channel that
