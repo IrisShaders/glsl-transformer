@@ -20,7 +20,7 @@ but is specifically built for this project*/
 parser grammar GLSLParser;
 
 @header {
-import io.github.douira.glsl_transformer.basic.ExtendedParser;
+import io.github.douira.glsl_transformer.parser.ExtendedParser;
 }
 
 options {
