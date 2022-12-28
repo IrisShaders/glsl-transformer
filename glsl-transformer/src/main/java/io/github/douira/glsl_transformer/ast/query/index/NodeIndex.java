@@ -18,7 +18,7 @@ import io.github.douira.glsl_transformer.ast.query.Root;
  * has the right types of nodes.
  */
 public class NodeIndex<S extends Set<ASTNode>> implements Index<ASTNode> {
-  public final Map<Class<ASTNode>, Set<ASTNode>> index = new HashMap<>();
+  public final Map<Class<ASTNode>, S> index = new HashMap<>();
   public final Supplier<S> setFactory;
 
   public NodeIndex(Supplier<S> setFactory) {
