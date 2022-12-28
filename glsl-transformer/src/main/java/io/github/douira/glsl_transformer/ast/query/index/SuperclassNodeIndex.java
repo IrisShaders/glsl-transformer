@@ -41,7 +41,7 @@ public class SuperclassNodeIndex<S extends Set<ASTNode>> extends NodeIndex<S> {
   @SuppressWarnings("unchecked")
   public void add(ASTNode node) {
     iterateClasses(node, (nodeClass, toAdd) -> {
-      var set = (Set<ASTNode>) index.get(nodeClass);
+      var set = index.get(nodeClass);
       if (set == null) {
         set = setFactory.get();
         index.put((Class<ASTNode>)nodeClass, set);
