@@ -98,7 +98,6 @@ public class IdentifierIndex<S extends Set<Identifier>, I extends Map<String, S>
    * @param newName the new name
    * @return Whether anything was renamed
    */
-  @SuppressWarnings("deprecation")
   public boolean rename(String oldName, String newName) {
     if (oldName.equals(newName)) {
       return false;
@@ -116,7 +115,7 @@ public class IdentifierIndex<S extends Set<Identifier>, I extends Map<String, S>
       existing.addAll(set);
     }
     for (var id : set) {
-      id.setNameInternal(newName);
+      id._setNameInternal(newName);
     }
     return true;
   }

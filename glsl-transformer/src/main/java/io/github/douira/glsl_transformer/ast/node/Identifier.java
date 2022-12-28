@@ -35,12 +35,11 @@ public class Identifier extends ASTNode {
   /**
    * Sets the name of this identifier without performing validation or registering
    * this change in the index. This method should only be called internally. Using
-   * it will lead to inconsistencies.
+   * it otherwise will lead to inconsistencies.
    * 
    * @param name The new name of this identifier.
    */
-  @Deprecated
-  public void setNameInternal(String name) {
+  public void _setNameInternal(String name) {
     this.name = name;
   }
 
