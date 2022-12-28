@@ -7,7 +7,7 @@ import java.util.stream.Stream;
 import org.antlr.v4.runtime.tree.ParseTreeWalker;
 import org.junit.jupiter.api.*;
 
-import io.github.douira.glsl_transformer.basic.EnhancedParser;
+import io.github.douira.glsl_transformer.parser.EnhancedParser;
 import io.github.douira.glsl_transformer.test_util.*;
 import io.github.douira.glsl_transformer.test_util.TestResourceManager.FileLocation;
 

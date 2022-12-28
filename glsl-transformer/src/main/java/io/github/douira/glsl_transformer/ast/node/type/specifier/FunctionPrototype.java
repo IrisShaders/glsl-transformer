@@ -4,7 +4,7 @@ import java.util.List;
 import java.util.stream.Stream;
 
 import io.github.douira.glsl_transformer.ast.node.Identifier;
-import io.github.douira.glsl_transformer.ast.node.basic.ListASTNode;
+import io.github.douira.glsl_transformer.ast.node.abstract_node.ListASTNode;
 import io.github.douira.glsl_transformer.ast.node.declaration.FunctionParameter;
 import io.github.douira.glsl_transformer.ast.node.type.FullySpecifiedType;
 import io.github.douira.glsl_transformer.ast.query.Root;

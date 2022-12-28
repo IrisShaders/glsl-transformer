@@ -9,13 +9,13 @@ import io.github.douira.glsl_transformer.*;
 import io.github.douira.glsl_transformer.GLSLParser.*;
 import io.github.douira.glsl_transformer.ast.data.TypedTreeCache;
 import io.github.douira.glsl_transformer.ast.node.TranslationUnit;
-import io.github.douira.glsl_transformer.ast.node.basic.ASTNode;
+import io.github.douira.glsl_transformer.ast.node.abstract_node.ASTNode;
 import io.github.douira.glsl_transformer.ast.node.expression.Expression;
 import io.github.douira.glsl_transformer.ast.node.external_declaration.ExternalDeclaration;
 import io.github.douira.glsl_transformer.ast.node.statement.Statement;
 import io.github.douira.glsl_transformer.ast.query.EmptyRoot;
-import io.github.douira.glsl_transformer.basic.*;
-import io.github.douira.glsl_transformer.basic.EnhancedParser.ParsingStrategy;
+import io.github.douira.glsl_transformer.parser.*;
+import io.github.douira.glsl_transformer.parser.EnhancedParser.ParsingStrategy;
 import io.github.douira.glsl_transformer.token_filter.TokenFilter;
 
 public class ASTParser implements ParserInterface {

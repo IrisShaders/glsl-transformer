@@ -10,8 +10,7 @@ import org.junit.jupiter.api.BeforeEach;
 import io.github.douira.glsl_transformer.ast.node.TranslationUnit;
 import io.github.douira.glsl_transformer.ast.print.*;
 import io.github.douira.glsl_transformer.ast.query.Root;
-import io.github.douira.glsl_transformer.ast.transform.SingleASTTransformer;
-import io.github.douira.glsl_transformer.basic.JobParameters;
+import io.github.douira.glsl_transformer.ast.transform.*;
 import io.github.douira.glsl_transformer.util.TriConsumer;
 
 public abstract class TestWithSingleASTTransformer {

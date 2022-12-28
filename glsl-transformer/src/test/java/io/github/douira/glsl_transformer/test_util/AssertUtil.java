@@ -9,10 +9,10 @@ import java.util.stream.*;
 import org.antlr.v4.runtime.ParserRuleContext;
 
 import io.github.douira.glsl_transformer.GLSLParser;
-import io.github.douira.glsl_transformer.ast.node.basic.ASTNode;
+import io.github.douira.glsl_transformer.ast.node.abstract_node.ASTNode;
 import io.github.douira.glsl_transformer.ast.print.*;
 import io.github.douira.glsl_transformer.ast.transform.ASTBuilder;
-import io.github.douira.glsl_transformer.basic.EnhancedParser;
+import io.github.douira.glsl_transformer.parser.EnhancedParser;
 import io.github.douira.glsl_transformer.util.TriConsumer;
 
 public class AssertUtil {

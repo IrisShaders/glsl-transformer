@@ -4,7 +4,7 @@ import java.util.Set;
 import java.util.function.*;
 import java.util.stream.Stream;
 
-import io.github.douira.glsl_transformer.ast.node.basic.ASTNode;
+import io.github.douira.glsl_transformer.ast.node.abstract_node.ASTNode;
 
 public interface Index<T extends ASTNode> {
   void add(T node);

@@ -3,7 +3,7 @@ package io.github.douira.glsl_transformer.ast.query.index;
 import java.util.*;
 import java.util.function.*;
 
-import io.github.douira.glsl_transformer.ast.node.basic.*;
+import io.github.douira.glsl_transformer.ast.node.abstract_node.*;
 
 /**
  * The superclass node index also creates index entries for the superclasses for

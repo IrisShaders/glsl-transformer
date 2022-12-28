@@ -9,7 +9,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import au.com.origin.snapshots.Expect;
 import au.com.origin.snapshots.annotations.SnapshotName;
 import au.com.origin.snapshots.junit5.SnapshotExtension;
-import io.github.douira.glsl_transformer.basic.EnhancedParser;
+import io.github.douira.glsl_transformer.parser.EnhancedParser;
 import io.github.douira.glsl_transformer.test_util.*;
 import io.github.douira.glsl_transformer.test_util.TestResourceManager.*;
 

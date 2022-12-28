@@ -3,7 +3,7 @@ package io.github.douira.glsl_transformer.ast.node;
 import java.util.*;
 import java.util.stream.Stream;
 
-import io.github.douira.glsl_transformer.ast.node.basic.ListASTNode;
+import io.github.douira.glsl_transformer.ast.node.abstract_node.ListASTNode;
 import io.github.douira.glsl_transformer.ast.node.external_declaration.*;
 import io.github.douira.glsl_transformer.ast.node.statement.*;
 import io.github.douira.glsl_transformer.ast.print.OutputOptions;

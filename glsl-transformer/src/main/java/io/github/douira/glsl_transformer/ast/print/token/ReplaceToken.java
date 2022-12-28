@@ -2,7 +2,7 @@ package io.github.douira.glsl_transformer.ast.print.token;
 
 import java.util.function.Function;
 
-import io.github.douira.glsl_transformer.ast.node.basic.ASTNode;
+import io.github.douira.glsl_transformer.ast.node.abstract_node.ASTNode;
 import io.github.douira.glsl_transformer.ast.print.*;
 
 public class ReplaceToken extends PrintToken {

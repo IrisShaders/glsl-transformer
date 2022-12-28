@@ -4,7 +4,7 @@ import java.util.Set;
 
 import org.antlr.v4.runtime.Token;
 
-import io.github.douira.glsl_transformer.basic.JobParameters;
+import io.github.douira.glsl_transformer.ast.transform.JobParameters;
 import io.github.douira.glsl_transformer.util.CompatUtil;
 
 /**

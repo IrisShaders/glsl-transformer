@@ -8,7 +8,7 @@ import java.util.stream.*;
 
 import org.junit.jupiter.api.*;
 
-import io.github.douira.glsl_transformer.basic.*;
+import io.github.douira.glsl_transformer.parser.*;
 import io.github.douira.glsl_transformer.test_util.*;
 import io.github.douira.glsl_transformer.test_util.TestResourceManager.*;
 
