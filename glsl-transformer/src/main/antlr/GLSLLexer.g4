@@ -1,7 +1,7 @@
 lexer grammar GLSLLexer;
 
 @header {
-import io.github.douira.glsl_transformer.basic.VersionedGLSLLexer;
+import io.github.douira.glsl_transformer.parser.VersionedGLSLLexer;
 }
 
 options {
