@@ -5,6 +5,7 @@ import java.util.List;
 import io.github.douira.glsl_transformer.GLSLLexer;
 import io.github.douira.glsl_transformer.ast.node.abstract_node.ASTNode;
 import io.github.douira.glsl_transformer.ast.print.token.*;
+import io.github.douira.glsl_transformer.ast.transform.SourceLocation;
 import io.github.douira.glsl_transformer.ast.traversal.ASTListenerVisitor;
 import io.github.douira.glsl_transformer.token_filter.TokenChannel;
 
@@ -139,6 +140,20 @@ public abstract class ASTPrinterBase extends ASTListenerVisitor<Void> {
   protected void emitStatementEnd() {
     emitType(GLSLLexer.SEMICOLON);
     emitCommonNewline();
+  }
+
+  protected void emitLineDirective(SourceLocation location) {
+    if (!location.hasLine()) {
+      throw new IllegalArgumentException("Location must have line");
+    }
+    emitType(GLSLLexer.NR, GLSLLexer.NR_LINE);
+    emitExactSpace();
+    emitLiteral(Integer.toString(location.line));
+    if (location.hasSource()) {
+      emitExactSpace();
+      emitLiteral(Integer.toString(location.source));
+    }
+    emitExactNewline();
   }
 
   protected void indent() {

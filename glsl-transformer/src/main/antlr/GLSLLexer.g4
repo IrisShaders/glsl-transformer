@@ -333,12 +333,13 @@ PP_ENTER_MODE:
 		| 'elif'
 		| 'endif'
 		| 'error'
-		| 'line'
 	) -> channel(PREPROCESSOR), pushMode(Preprocessor);
 PP_EMPTY:
 	NR_PP_PREFIX (WS_frag | LINE_CONTINUE_frag)* NEWLINE -> channel(PREPROCESSOR);
 
 //preprocessor-related tokens
+NR_LINE:
+	'#line' WS_frag DIGIT+ (WS_frag DIGIT+)? (NEWLINE | WS_frag)* NEWLINE -> channel(PREPROCESSOR);
 NR: '#' -> pushMode(NR_Mode);
 IDENTIFIER: IDENTIFIER_frag;
 

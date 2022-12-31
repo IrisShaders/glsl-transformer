@@ -45,23 +45,23 @@ public interface ASTVisitor<R> extends GeneralASTVisitor<R> {
     return defaultResult();
   }
 
-  default R visitPragmaStatement(PragmaStatement node) {
+  default R visitPragmaDirective(PragmaDirective node) {
     var result = visitData(node.stdGL);
     result = visitData(result, node.type);
     result = visitData(result, node.customName);
     return visitData(result, node.state);
   }
 
-  default R visitExtensionStatement(ExtensionStatement node) {
+  default R visitExtensionDirective(ExtensionDirective node) {
     var result = visitData(superNodeTypeResult(), node.name);
     return visitData(result, node.behavior);
   }
 
-  default R visitCustomDirectiveStatement(CustomDirectiveStatement node) {
+  default R visitCustomDirective(CustomDirective node) {
     return visitData(node.content);
   }
 
-  default R visitIncludeStatement(IncludeStatement node) {
+  default R visitIncludeDirective(IncludeDirective node) {
     return visitData(node.content);
   }
 
@@ -316,12 +316,7 @@ public interface ASTVisitor<R> extends GeneralASTVisitor<R> {
   }
 
   default R visitSelectionStatement(SelectionStatement node) {
-    var result = initialResult();
-    for (int i = 0, size = node.getStatements().size(); i < size; i++) {
-      result = visitSafe(result, node.getConditions().get(i));
-      result = visitSafe(result, node.getStatements().get(i));
-    }
-    return result;
+    return visitThreeChildren(node.getCondition(), node.getIfTrue(), node.getIfFalse());
   }
 
   default R visitSwitchStatement(SwitchStatement node) {

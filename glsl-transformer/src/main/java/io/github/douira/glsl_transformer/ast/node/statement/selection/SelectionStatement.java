@@ -1,45 +1,56 @@
 package io.github.douira.glsl_transformer.ast.node.statement.selection;
 
-import java.util.List;
-import java.util.stream.Stream;
-
-import io.github.douira.glsl_transformer.ast.data.ChildNodeList;
 import io.github.douira.glsl_transformer.ast.node.expression.Expression;
-import io.github.douira.glsl_transformer.ast.node.statement.*;
+import io.github.douira.glsl_transformer.ast.node.statement.Statement;
+import io.github.douira.glsl_transformer.ast.node.statement.terminal.SemiTerminalStatement;
 import io.github.douira.glsl_transformer.ast.query.Root;
 import io.github.douira.glsl_transformer.ast.traversal.*;
 
-public class SelectionStatement extends ManyStatement {
-  protected ChildNodeList<Expression> conditions; // TODO: last one may be null
-
-  public SelectionStatement(
-      Stream<Expression> conditions,
-      Stream<Statement> statements) {
-    super(statements);
-    this.conditions = ChildNodeList.collect(conditions, this);
-  }
-
-  public SelectionStatement(Expression condition, Statement statement) {
-    this(Stream.of(condition), Stream.of(statement));
-  }
+public class SelectionStatement extends SemiTerminalStatement {
+  protected Expression condition;
+  protected Statement ifTrue;
+  protected Statement ifFalse; // TODO: nullable
 
   public SelectionStatement(Expression condition, Statement ifTrue, Statement ifFalse) {
-    this(Stream.of(condition, null), Stream.of(ifTrue, ifFalse));
+    this.condition = setup(condition, this::setCondition);
+    this.ifTrue = setup(ifTrue, this::setIfTrue);
+    this.ifFalse = setup(ifFalse, this::setIfFalse);
   }
 
-  public SelectionStatement(
-      Expression firstCondition,
-      Statement firstStatement,
-      Expression secondCondition,
-      Statement secondStatement,
-      Statement elseStatement) {
-    this(
-        Stream.of(firstCondition, secondCondition, null),
-        Stream.of(firstStatement, secondStatement, elseStatement));
+  public SelectionStatement(Expression condition, Statement ifTrue) {
+    this.condition = setup(condition, this::setCondition);
+    this.ifTrue = setup(ifTrue, this::setIfTrue);
   }
 
-  public List<Expression> getConditions() {
-    return conditions;
+  public Expression getCondition() {
+    return condition;
+  }
+
+  public void setCondition(Expression condition) {
+    updateParents(this.condition, condition, this::setCondition);
+    this.condition = condition;
+  }
+
+  public Statement getIfTrue() {
+    return ifTrue;
+  }
+
+  public void setIfTrue(Statement ifTrue) {
+    updateParents(this.ifTrue, ifTrue, this::setIfTrue);
+    this.ifTrue = ifTrue;
+  }
+
+  public Statement getIfFalse() {
+    return ifFalse;
+  }
+
+  public void setIfFalse(Statement ifFalse) {
+    updateParents(this.ifFalse, ifFalse, this::setIfFalse);
+    this.ifFalse = ifFalse;
+  }
+
+  public boolean hasIfFalse() {
+    return ifFalse != null;
   }
 
   @Override
@@ -66,7 +77,7 @@ public class SelectionStatement extends ManyStatement {
 
   @Override
   public SelectionStatement clone() {
-    return new SelectionStatement(clone(conditions), clone(statements));
+    return new SelectionStatement(clone(condition), clone(ifTrue), clone(ifFalse));
   }
 
   @Override

@@ -56,16 +56,16 @@ versionStatement:
 externalDeclaration:
 	functionDefinition
 	| declaration
-	| pragmaStatement
-	| extensionStatement
-	| customDirectiveStatement
-	| includeStatement
+	| pragmaDirective
+	| extensionDirective
+	| customDirective
+	| includeDirective
 	| layoutDefaults
 	| emptyDeclaration;
 
 emptyDeclaration: SEMICOLON;
 
-pragmaStatement:
+pragmaDirective:
 	NR NR_PRAGMA stdGL = NR_STDGL? (
 		type = NR_IDENTIFIER
 		| type = (NR_PRAGMA_DEBUG | NR_PRAGMA_OPTIMIZE) NR_LPAREN state = (
@@ -75,7 +75,7 @@ pragmaStatement:
 		| type = NR_PRAGMA_INVARIANT NR_LPAREN state = NR_ALL NR_RPAREN
 	) NR_EOL;
 
-extensionStatement:
+extensionDirective:
 	NR NR_EXTENSION extensionName = NR_IDENTIFIER (
 		NR_COLON extensionBehavior = (
 			NR_REQUIRE
@@ -85,9 +85,9 @@ extensionStatement:
 		)
 	)? NR_EOL;
 
-customDirectiveStatement: NR NR_CUSTOM content = C_CONTENT? C_EOL;
+customDirective: NR NR_CUSTOM content = C_CONTENT? C_EOL;
 
-includeStatement:
+includeDirective:
 	NR NR_INCLUDE (
 		NR_STRING_START content = S_CONTENT? S_STRING_END
 		| angleStart = NR_STRING_START_ANGLE content = S_CONTENT_ANGLE? S_STRING_END_ANGLE
@@ -98,7 +98,7 @@ layoutDefaults:
 
 functionDefinition: functionPrototype compoundStatement;
 
-//Note: diverges from the spec by explicity adding a method call instead of handling it through postfixExpression in functionIdentifier
+// Note: diverges from the spec by explicity adding a method call instead of handling it through postfixExpression in functionIdentifier
 expression:
 	IDENTIFIER # referenceExpression
 	| (

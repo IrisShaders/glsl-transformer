@@ -12,7 +12,7 @@ import io.github.douira.glsl_transformer.ast.node.expression.Expression.Expressi
 import io.github.douira.glsl_transformer.ast.node.expression.binary.*;
 import io.github.douira.glsl_transformer.ast.node.expression.unary.*;
 import io.github.douira.glsl_transformer.ast.node.external_declaration.*;
-import io.github.douira.glsl_transformer.ast.node.external_declaration.PragmaStatement.PragmaType;
+import io.github.douira.glsl_transformer.ast.node.external_declaration.PragmaDirective.PragmaType;
 import io.github.douira.glsl_transformer.ast.node.statement.*;
 import io.github.douira.glsl_transformer.ast.node.statement.loop.*;
 import io.github.douira.glsl_transformer.ast.node.statement.selection.*;
@@ -107,7 +107,7 @@ public class ASTPrinter extends ASTPrinterBase {
   }
 
   @Override
-  public Void visitPragmaStatement(PragmaStatement node) {
+  public Void visitPragmaDirective(PragmaDirective node) {
     emitType(GLSLLexer.NR, GLSLLexer.NR_PRAGMA);
     emitExtendableSpace();
     if (node.stdGL) {
@@ -128,7 +128,7 @@ public class ASTPrinter extends ASTPrinterBase {
   }
 
   @Override
-  public Void visitExtensionStatement(ExtensionStatement node) {
+  public Void visitExtensionDirective(ExtensionDirective node) {
     emitType(GLSLLexer.NR, GLSLLexer.NR_EXTENSION);
     emitExtendableSpace();
     emitLiteral(node.name);
@@ -142,7 +142,7 @@ public class ASTPrinter extends ASTPrinterBase {
   }
 
   @Override
-  public Void visitCustomDirectiveStatement(CustomDirectiveStatement node) {
+  public Void visitCustomDirective(CustomDirective node) {
     var translationUnitParent = node.getAncestor(TranslationUnit.class);
     if (translationUnitParent != null
         && !translationUnitParent.outputOptions.printCustomDirectives) {
@@ -158,7 +158,7 @@ public class ASTPrinter extends ASTPrinterBase {
   }
 
   @Override
-  public Void visitIncludeStatement(IncludeStatement node) {
+  public Void visitIncludeDirective(IncludeDirective node) {
     emitType(GLSLLexer.NR, GLSLLexer.NR_INCLUDE);
     emitExtendableSpace();
     emitType(node.isAngleBrackets ? GLSLLexer.NR_STRING_START_ANGLE : GLSLLexer.NR_STRING_START);
@@ -735,26 +735,18 @@ public class ASTPrinter extends ASTPrinterBase {
    */
   @Override
   public Void visitSelectionStatement(SelectionStatement node) {
-    for (int i = 0, size = node.getStatements().size(); i < size; i++) {
-      if (i > 0) {
-        compactCommonNewline(CompoundStatement.class);
-      }
-      var condition = node.getConditions().get(i);
-      if (i > 0) {
-        emitType(GLSLLexer.ELSE);
-        if (condition != null) {
-          emitExactSpace();
-        }
-      }
-      if (condition != null) {
-        emitType(GLSLLexer.IF);
-        emitExtendableSpace();
-        emitType(GLSLLexer.LPAREN);
-        visit(node.getConditions().get(i));
-        emitType(GLSLLexer.RPAREN);
-      }
+    emitType(GLSLLexer.IF);
+    emitExtendableSpace();
+    emitType(GLSLLexer.LPAREN);
+    visit(node.getCondition());
+    emitType(GLSLLexer.RPAREN);
+    emitBreakableSpace();
+    visit(node.getIfTrue());
+    if (node.hasIfFalse()) {
+      compactCommonNewline(CompoundStatement.class);
+      emitType(GLSLLexer.ELSE);
       emitBreakableSpace();
-      visit(node.getStatements().get(i));
+      visit(node.getIfFalse());
     }
     return null;
   }

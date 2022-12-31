@@ -4,8 +4,6 @@ import java.util.Objects;
 import java.util.function.*;
 import java.util.stream.Stream;
 
-import org.antlr.v4.runtime.misc.Interval;
-
 import io.github.douira.glsl_transformer.ast.data.ChildNodeList;
 import io.github.douira.glsl_transformer.ast.query.Root;
 import io.github.douira.glsl_transformer.ast.transform.*;
@@ -39,8 +37,7 @@ public abstract class ASTNode {
   private Consumer<ASTNode> selfReplacer;
   private Root root = Root.getActiveBuildRoot();
   protected Template<?> template = null;
-  public static final Interval SYNTHETIC_SOURCE = new Interval(0, 0);
-  private final Interval sourceLines = ASTBuilder.getActiveSourceLines();
+  private final SourceLocation sourceLocation = ASTBuilder.getSourceLocation();
 
   /**
    * Whether this node has been registered with the root. This is only used when
@@ -54,16 +51,8 @@ public abstract class ASTNode {
 
   public abstract <R> R accept(ASTVisitor<R> visitor);
 
-  public Interval getSourceLines() {
-    return sourceLines;
-  }
-
-  public int getStartLine() {
-    return sourceLines.a;
-  }
-
-  public int getEndLine() {
-    return sourceLines.b;
+  public SourceLocation getSourceLocation() {
+    return sourceLocation;
   }
 
   public ASTNode getParent() {
@@ -438,9 +427,9 @@ public abstract class ASTNode {
    * already have a reference to the current root but will not be registered to it
    * yet.
    * 
-   * @param <N> Type of the node for passthrough
-   * @param node       The node to add
-   * @param setter     The setter to replace the node in this parent
+   * @param <N>    Type of the node for passthrough
+   * @param node   The node to add
+   * @param setter The setter to replace the node in this parent
    * @return The node itself
    */
   public <N extends ASTNode> N setup(
@@ -457,7 +446,7 @@ public abstract class ASTNode {
    * node. Both of them may be null if either the existing value is being removed
    * or a new value is being set.
    * 
-   * @param <N>  The type of the nodes for pass-through
+   * @param <N>         The type of the nodes for pass-through
    * @param currentNode The current node
    * @param newNode     The new node
    * @param setter      The setter to replace the node in this parent (this is

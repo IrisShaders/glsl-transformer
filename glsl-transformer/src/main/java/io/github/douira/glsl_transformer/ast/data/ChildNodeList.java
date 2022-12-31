@@ -66,6 +66,9 @@ public class ChildNodeList<Child extends ASTNode> extends ProxyArrayList<Child> 
     return stream.collect(
         () -> new ChildNodeList<Child>(parent),
         (list, child) -> {
+          // this null check is necessary to exluce nulls from the stream that were
+          // introduced by, for example, the line directive returning null from its visit
+          // method
           if (child != null) {
             // parent.setup(child, makeChildReplacer(list, child));
             parent.setup(child, null);

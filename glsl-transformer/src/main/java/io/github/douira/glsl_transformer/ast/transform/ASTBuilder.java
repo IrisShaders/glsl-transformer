@@ -3,10 +3,8 @@ package io.github.douira.glsl_transformer.ast.transform;
 import java.util.*;
 import java.util.function.*;
 import java.util.regex.Pattern;
-import java.util.stream.Stream;
 
-import org.antlr.v4.runtime.*;
-import org.antlr.v4.runtime.misc.Interval;
+import org.antlr.v4.runtime.Token;
 import org.antlr.v4.runtime.tree.*;
 
 import io.github.douira.glsl_transformer.*;
@@ -19,9 +17,9 @@ import io.github.douira.glsl_transformer.ast.node.expression.LiteralExpression.I
 import io.github.douira.glsl_transformer.ast.node.expression.binary.*;
 import io.github.douira.glsl_transformer.ast.node.expression.unary.*;
 import io.github.douira.glsl_transformer.ast.node.external_declaration.*;
-import io.github.douira.glsl_transformer.ast.node.external_declaration.ExtensionStatement.ExtensionBehavior;
+import io.github.douira.glsl_transformer.ast.node.external_declaration.ExtensionDirective.ExtensionBehavior;
 import io.github.douira.glsl_transformer.ast.node.external_declaration.LayoutDefaults.LayoutMode;
-import io.github.douira.glsl_transformer.ast.node.external_declaration.PragmaStatement.*;
+import io.github.douira.glsl_transformer.ast.node.external_declaration.PragmaDirective.*;
 import io.github.douira.glsl_transformer.ast.node.statement.*;
 import io.github.douira.glsl_transformer.ast.node.statement.loop.*;
 import io.github.douira.glsl_transformer.ast.node.statement.selection.*;
@@ -47,7 +45,7 @@ import io.github.douira.glsl_transformer.util.Type.NumberType;
  * relationship between a parse tree and an AST is encoded in this visitor.
  */
 public class ASTBuilder extends GLSLParserBaseVisitor<ASTNode> {
-  private static final Deque<Interval> sourceLineStack = new ArrayDeque<>();
+  private static SourceLocation sourceLocation = new SourceLocation();
 
   /**
    * Builds an AST from the given parse tree with a new root.
@@ -135,36 +133,8 @@ public class ASTBuilder extends GLSLParserBaseVisitor<ASTNode> {
     return ctx == null ? null : visitMethod.apply(ctx);
   }
 
-  private static void startConstruction(Token token) {
-    var line = token.getLine();
-    sourceLineStack.push(Interval.of(line, line));
-  }
-
-  private static void startConstruction(ParseTree tree) {
-    if (tree instanceof ParserRuleContext ctx) {
-      sourceLineStack.push(Interval.of(ctx.start.getLine(), ctx.stop.getLine()));
-    } else if (tree instanceof TerminalNodeImpl ctx) {
-      startConstruction(ctx.getSymbol());
-    } else {
-      throw new IllegalStateException("Can't handle unknown parse tree type " + tree.getClass());
-    }
-  }
-
-  private static void endConstruction() {
-    sourceLineStack.pop();
-  }
-
-  private static <N extends ASTNode> N constructSimple(
-      ParseTree ctx, Supplier<N> constructor) {
-    startConstruction(ctx);
-    N result = constructor.get();
-    endConstruction();
-    return result;
-  }
-
-  public static Interval getActiveSourceLines() {
-    var sourceLines = sourceLineStack.peekFirst();
-    return sourceLines == null ? ASTNode.SYNTHETIC_SOURCE : sourceLines;
+  public static SourceLocation getSourceLocation() {
+    return sourceLocation;
   }
 
   private static Identifier makeIdentifier(Token name) {
@@ -174,9 +144,7 @@ public class ASTBuilder extends GLSLParserBaseVisitor<ASTNode> {
     if (name.getType() != GLSLLexer.IDENTIFIER) {
       throw new IllegalStateException("Expected identifier, got: " + name.getText());
     }
-    startConstruction(name);
     var result = new Identifier(name);
-    endConstruction();
     return result;
   }
 
@@ -185,14 +153,9 @@ public class ASTBuilder extends GLSLParserBaseVisitor<ASTNode> {
     var versionStatement = visitVersionStatement(ctx.versionStatement());
     var externalDeclarations = ctx.externalDeclaration()
         .stream().map(this::visitExternalDeclaration);
-    startConstruction(ctx);
-    try {
-      return versionStatement == null
-          ? new TranslationUnit(externalDeclarations)
-          : new TranslationUnit(versionStatement, externalDeclarations);
-    } finally {
-      endConstruction();
-    }
+    return versionStatement == null
+        ? new TranslationUnit(externalDeclarations)
+        : new TranslationUnit(versionStatement, externalDeclarations);
   }
 
   @Override
@@ -200,81 +163,55 @@ public class ASTBuilder extends GLSLParserBaseVisitor<ASTNode> {
     if (ctx == null) {
       return null;
     }
-    startConstruction(ctx);
-    try {
-      return new VersionStatement(
-          applySafe(ctx.version, Version::fromToken),
-          applySafe(ctx.profile, Profile::fromToken));
-    } finally {
-      endConstruction();
-    }
+    return new VersionStatement(
+        applySafe(ctx.version, Version::fromToken),
+        applySafe(ctx.profile, Profile::fromToken));
   }
 
   @Override
   public EmptyDeclaration visitEmptyDeclaration(EmptyDeclarationContext ctx) {
-    return constructSimple(ctx, EmptyDeclaration::new);
+    return new EmptyDeclaration();
   }
 
   @Override
-  public PragmaStatement visitPragmaStatement(PragmaStatementContext ctx) {
+  public PragmaDirective visitPragmaDirective(PragmaDirectiveContext ctx) {
     var stdGL = ctx.stdGL != null;
     var type = PragmaType.fromToken(ctx.type);
-    startConstruction(ctx);
-    try {
-      return type == PragmaType.CUSTOM
-          ? new PragmaStatement(stdGL, ctx.type.getText())
-          : new PragmaStatement(stdGL, type, PragmaState.fromToken(ctx.state));
-    } finally {
-      endConstruction();
-    }
+    return type == PragmaType.CUSTOM
+        ? new PragmaDirective(stdGL, ctx.type.getText())
+        : new PragmaDirective(stdGL, type, PragmaState.fromToken(ctx.state));
   }
 
   @Override
-  public ExtensionStatement visitExtensionStatement(ExtensionStatementContext ctx) {
+  public ExtensionDirective visitExtensionDirective(ExtensionDirectiveContext ctx) {
     var extensionName = ctx.extensionName.getText();
-    startConstruction(ctx);
-    try {
-      return new ExtensionStatement(
-          extensionName, applySafe(ctx.extensionBehavior, ExtensionBehavior::fromToken));
-    } finally {
-      endConstruction();
-    }
+    return new ExtensionDirective(
+        extensionName, applySafe(ctx.extensionBehavior, ExtensionBehavior::fromToken));
   }
 
   @Override
-  public CustomDirectiveStatement visitCustomDirectiveStatement(
-      CustomDirectiveStatementContext ctx) {
-    return new CustomDirectiveStatement(applySafe(ctx.content, Token::getText));
+  public CustomDirective visitCustomDirective(CustomDirectiveContext ctx) {
+    return new CustomDirective(applySafe(ctx.content, Token::getText));
   }
 
   @Override
-  public IncludeStatement visitIncludeStatement(IncludeStatementContext ctx) {
-    return new IncludeStatement(applySafe(ctx.content, Token::getText), ctx.angleStart != null);
+  public IncludeDirective visitIncludeDirective(IncludeDirectiveContext ctx) {
+    return new IncludeDirective(applySafe(ctx.content, Token::getText), ctx.angleStart != null);
   }
 
   @Override
   public LayoutDefaults visitLayoutDefaults(LayoutDefaultsContext ctx) {
-    startConstruction(ctx);
-    try {
-      return new LayoutDefaults(
-          visitLayoutQualifier(ctx.layoutQualifier()),
-          LayoutMode.fromToken(ctx.layoutMode));
-    } finally {
-      endConstruction();
-    }
+    return new LayoutDefaults(
+        visitLayoutQualifier(ctx.layoutQualifier()),
+        LayoutMode.fromToken(ctx.layoutMode));
   }
 
   @Override
   public ConditionExpression visitConditionalExpression(ConditionalExpressionContext ctx) {
-    startConstruction(ctx);
-    try {
-      return new ConditionExpression(
-          visitExpression(ctx.condition),
-          visitExpression(ctx.trueAlternative),
-          visitExpression(ctx.falseAlternative));
-    } finally {
-      endConstruction();
-    }
+    return new ConditionExpression(
+        visitExpression(ctx.condition),
+        visitExpression(ctx.trueAlternative),
+        visitExpression(ctx.falseAlternative));
   }
 
   @Override
@@ -289,92 +226,62 @@ public class ASTBuilder extends GLSLParserBaseVisitor<ASTNode> {
     }
 
     var parameters = ctx.parameters.stream().map(this::visitExpression);
-    startConstruction(ctx);
-    try {
-      return functionName != null
-          ? new FunctionCallExpression(functionName, parameters)
-          : new FunctionCallExpression(functionType, parameters);
-    } finally {
-      endConstruction();
-    }
+    return functionName != null
+        ? new FunctionCallExpression(functionName, parameters)
+        : new FunctionCallExpression(functionType, parameters);
   }
 
   @Override
   public GroupingExpression visitGroupingExpression(GroupingExpressionContext ctx) {
     var expression = visitExpression(ctx.value);
-    startConstruction(ctx);
-    try {
-      return expression instanceof GroupingExpression grouping
-          ? grouping
-          : new GroupingExpression(expression);
-    } finally {
-      endConstruction();
-    }
+    return expression instanceof GroupingExpression grouping
+        ? grouping
+        : new GroupingExpression(expression);
   }
 
   @Override
   public MemberAccessExpression visitMemberAccessExpression(MemberAccessExpressionContext ctx) {
-    startConstruction(ctx);
-    try {
-      return new MemberAccessExpression(
-          visitExpression(ctx.operand),
-          new Identifier(ctx.member));
-    } finally {
-      endConstruction();
-    }
+    return new MemberAccessExpression(
+        visitExpression(ctx.operand),
+        new Identifier(ctx.member));
   }
 
   @Override
   public LengthAccessExpression visitLengthAccessExpression(LengthAccessExpressionContext ctx) {
-    startConstruction(ctx);
-    try {
-      return new LengthAccessExpression(visitExpression(ctx.operand));
-    } finally {
-      endConstruction();
-    }
+    return new LengthAccessExpression(visitExpression(ctx.operand));
   }
 
   @Override
   public UnaryExpression visitPostfixExpression(PostfixExpressionContext ctx) {
     var operand = visitExpression(ctx.operand);
-    startConstruction(ctx);
-    try {
-      switch (ctx.op.getType()) {
-        case GLSLParser.INC_OP:
-          return new IncrementPostfixExpression(operand);
-        case GLSLParser.DEC_OP:
-          return new DecrementPostfixExpression(operand);
-        default:
-          throw new IllegalArgumentException("Unknown postfix operator: " + ctx.op.getText());
-      }
-    } finally {
-      endConstruction();
+    switch (ctx.op.getType()) {
+      case GLSLParser.INC_OP:
+        return new IncrementPostfixExpression(operand);
+      case GLSLParser.DEC_OP:
+        return new DecrementPostfixExpression(operand);
+      default:
+        throw new IllegalArgumentException("Unknown postfix operator: " + ctx.op.getText());
     }
   }
 
   @Override
   public UnaryExpression visitPrefixExpression(PrefixExpressionContext ctx) {
     var operand = visitExpression(ctx.operand);
-    startConstruction(ctx);
-    try {
-      switch (ctx.op.getType()) {
-        case GLSLLexer.INC_OP:
-          return new IncrementPrefixExpression(operand);
-        case GLSLLexer.DEC_OP:
-          return new DecrementPrefixExpression(operand);
-        case GLSLLexer.PLUS_OP:
-          return new IdentityExpression(operand);
-        case GLSLLexer.MINUS_OP:
-          return new NegationExpression(operand);
-        case GLSLLexer.LOGICAL_NOT_OP:
-          return new BooleanNotExpression(operand);
-        case GLSLLexer.BITWISE_NEG_OP:
-          return new BitwiseNotExpression(operand);
-        default:
-          throw new IllegalStateException("Unexpected prefix operator type" + ctx.op.getText());
-      }
-    } finally {
-      endConstruction();
+    switch (ctx.op.getType()) {
+      case GLSLLexer.INC_OP:
+        return new IncrementPrefixExpression(operand);
+      case GLSLLexer.DEC_OP:
+        return new DecrementPrefixExpression(operand);
+      case GLSLLexer.PLUS_OP:
+        return new IdentityExpression(operand);
+      case GLSLLexer.MINUS_OP:
+        return new NegationExpression(operand);
+      case GLSLLexer.LOGICAL_NOT_OP:
+        return new BooleanNotExpression(operand);
+      case GLSLLexer.BITWISE_NEG_OP:
+        return new BitwiseNotExpression(operand);
+      default:
+        throw new IllegalStateException("Unexpected prefix operator type" + ctx.op.getText());
     }
   }
 
@@ -401,12 +308,7 @@ public class ASTBuilder extends GLSLParserBaseVisitor<ASTNode> {
 
     // converting to stream and back is fine
     // since the child list has to copy anyways
-    startConstruction(ctx);
-    try {
-      return new SequenceExpression(expressions.stream());
-    } finally {
-      endConstruction();
-    }
+    return new SequenceExpression(expressions.stream());
   }
 
   private static final Pattern intExtractor = Pattern.compile(
@@ -420,54 +322,49 @@ public class ASTBuilder extends GLSLParserBaseVisitor<ASTNode> {
     var content = ctx.getStart();
     var literalType = Type.ofLiteralTokenType(content.getType());
     var tokenContent = content.getText();
-    startConstruction(ctx);
-    try {
-      var numberType = literalType.getNumberType();
-      switch (numberType) {
-        case BOOLEAN:
-          return new LiteralExpression(tokenContent.equals("true"));
-        case SIGNED_INTEGER:
-        case UNSIGNED_INTEGER:
-          var intMatcher = intExtractor.matcher(tokenContent);
-          intMatcher.matches();
-          var prefix = intMatcher.group(1);
-          tokenContent = intMatcher.group(2);
-          if (tokenContent.isEmpty()) {
-            if (!prefix.equals("0")) {
-              throw new IllegalStateException("Unexpected prefix: " + prefix);
-            }
-            return new LiteralExpression(literalType, 0);
+    var numberType = literalType.getNumberType();
+    switch (numberType) {
+      case BOOLEAN:
+        return new LiteralExpression(tokenContent.equals("true"));
+      case SIGNED_INTEGER:
+      case UNSIGNED_INTEGER:
+        var intMatcher = intExtractor.matcher(tokenContent);
+        intMatcher.matches();
+        var prefix = intMatcher.group(1);
+        tokenContent = intMatcher.group(2);
+        if (tokenContent.isEmpty()) {
+          if (!prefix.equals("0")) {
+            throw new IllegalStateException("Unexpected prefix: " + prefix);
           }
-          int radix;
-          IntegerFormat format;
-          if (prefix.equals("0x")) {
-            radix = 16;
-            format = IntegerFormat.HEXADECIMAL;
-          } else if (prefix.equals("0")) {
-            radix = 8;
-            format = IntegerFormat.OCTAL;
-          } else {
-            radix = 10;
-            format = IntegerFormat.DECIMAL;
-          }
-          // TODO: parsing -9223372036854775808L doesn't work because the negative min
-          // value is larger than the positive max value but we aren't getting the
-          // negation sign in here
-          long value = Long.parseUnsignedLong(tokenContent, radix);
-          if (numberType == NumberType.SIGNED_INTEGER && (value < 0 || value > Long.MAX_VALUE)) {
-            throw new IllegalStateException("Integer literal too large: " + tokenContent);
-          }
-          return new LiteralExpression(literalType, value, format);
-        case FLOATING_POINT:
-          var floatMatcher = floatExtractor.matcher(tokenContent);
-          floatMatcher.matches();
-          tokenContent = floatMatcher.group(1);
-          return new LiteralExpression(literalType, Double.parseDouble(tokenContent));
-        default:
-          throw new IllegalArgumentException("Unsupported literal type: " + literalType);
-      }
-    } finally {
-      endConstruction();
+          return new LiteralExpression(literalType, 0);
+        }
+        int radix;
+        IntegerFormat format;
+        if (prefix.equals("0x")) {
+          radix = 16;
+          format = IntegerFormat.HEXADECIMAL;
+        } else if (prefix.equals("0")) {
+          radix = 8;
+          format = IntegerFormat.OCTAL;
+        } else {
+          radix = 10;
+          format = IntegerFormat.DECIMAL;
+        }
+        // TODO: parsing -9223372036854775808L doesn't work because the negative min
+        // value is larger than the positive max value but we aren't getting the
+        // negation sign in here
+        long value = Long.parseUnsignedLong(tokenContent, radix);
+        if (numberType == NumberType.SIGNED_INTEGER && (value < 0 || value > Long.MAX_VALUE)) {
+          throw new IllegalStateException("Integer literal too large: " + tokenContent);
+        }
+        return new LiteralExpression(literalType, value, format);
+      case FLOATING_POINT:
+        var floatMatcher = floatExtractor.matcher(tokenContent);
+        floatMatcher.matches();
+        tokenContent = floatMatcher.group(1);
+        return new LiteralExpression(literalType, Double.parseDouble(tokenContent));
+      default:
+        throw new IllegalArgumentException("Unsupported literal type: " + literalType);
     }
   }
 
@@ -475,181 +372,126 @@ public class ASTBuilder extends GLSLParserBaseVisitor<ASTNode> {
   public BinaryExpression visitAdditiveExpression(AdditiveExpressionContext ctx) {
     var left = visitExpression(ctx.left);
     var right = visitExpression(ctx.right);
-    startConstruction(ctx);
-    try {
-      switch (ctx.op.getType()) {
-        case GLSLLexer.PLUS_OP:
-          return new AdditionExpression(left, right);
-        case GLSLLexer.MINUS_OP:
-          return new SubtractionExpression(left, right);
-        default:
-          throw new IllegalArgumentException("Unknown additive operator: " + ctx.op.getText());
-      }
-    } finally {
-      endConstruction();
+    switch (ctx.op.getType()) {
+      case GLSLLexer.PLUS_OP:
+        return new AdditionExpression(left, right);
+      case GLSLLexer.MINUS_OP:
+        return new SubtractionExpression(left, right);
+      default:
+        throw new IllegalArgumentException("Unknown additive operator: " + ctx.op.getText());
     }
   }
 
   @Override
   public ArrayAccessExpression visitArrayAccessExpression(ArrayAccessExpressionContext ctx) {
-    startConstruction(ctx);
-    try {
-      return new ArrayAccessExpression(
-          visitExpression(ctx.left),
-          visitExpression(ctx.right));
-    } finally {
-      endConstruction();
-    }
+    return new ArrayAccessExpression(
+        visitExpression(ctx.left),
+        visitExpression(ctx.right));
   }
 
   @Override
   public BinaryExpression visitAssignmentExpression(AssignmentExpressionContext ctx) {
     var left = visitExpression(ctx.left);
     var right = visitExpression(ctx.right);
-    startConstruction(ctx);
-    try {
-      switch (ctx.op.getType()) {
-        case GLSLLexer.ASSIGN_OP:
-          return new AssignmentExpression(left, right);
-        case GLSLLexer.MUL_ASSIGN:
-          return new MultiplicationAssignmentExpression(left, right);
-        case GLSLLexer.DIV_ASSIGN:
-          return new DivisionAssignmentExpression(left, right);
-        case GLSLLexer.MOD_ASSIGN:
-          return new ModuloAssignmentExpression(left, right);
-        case GLSLLexer.ADD_ASSIGN:
-          return new AdditionAssignmentExpression(left, right);
-        case GLSLLexer.SUB_ASSIGN:
-          return new SubtractionAssignmentExpression(left, right);
-        case GLSLLexer.AND_ASSIGN:
-          return new BitwiseAndAssignmentExpression(left, right);
-        case GLSLLexer.XOR_ASSIGN:
-          return new BitwiseXorAssignmentExpression(left, right);
-        case GLSLLexer.OR_ASSIGN:
-          return new BitwiseOrAssignmentExpression(left, right);
-        case GLSLLexer.LEFT_ASSIGN:
-          return new LeftShiftAssignmentExpression(left, right);
-        case GLSLLexer.RIGHT_ASSIGN:
-          return new RightShiftAssignmentExpression(left, right);
-        default:
-          throw new IllegalArgumentException("Unknown assignment operator: " + ctx.op.getText());
-      }
-    } finally {
-      endConstruction();
+    switch (ctx.op.getType()) {
+      case GLSLLexer.ASSIGN_OP:
+        return new AssignmentExpression(left, right);
+      case GLSLLexer.MUL_ASSIGN:
+        return new MultiplicationAssignmentExpression(left, right);
+      case GLSLLexer.DIV_ASSIGN:
+        return new DivisionAssignmentExpression(left, right);
+      case GLSLLexer.MOD_ASSIGN:
+        return new ModuloAssignmentExpression(left, right);
+      case GLSLLexer.ADD_ASSIGN:
+        return new AdditionAssignmentExpression(left, right);
+      case GLSLLexer.SUB_ASSIGN:
+        return new SubtractionAssignmentExpression(left, right);
+      case GLSLLexer.AND_ASSIGN:
+        return new BitwiseAndAssignmentExpression(left, right);
+      case GLSLLexer.XOR_ASSIGN:
+        return new BitwiseXorAssignmentExpression(left, right);
+      case GLSLLexer.OR_ASSIGN:
+        return new BitwiseOrAssignmentExpression(left, right);
+      case GLSLLexer.LEFT_ASSIGN:
+        return new LeftShiftAssignmentExpression(left, right);
+      case GLSLLexer.RIGHT_ASSIGN:
+        return new RightShiftAssignmentExpression(left, right);
+      default:
+        throw new IllegalArgumentException("Unknown assignment operator: " + ctx.op.getText());
     }
   }
 
   @Override
   public BitwiseAndExpression visitBitwiseAndExpression(BitwiseAndExpressionContext ctx) {
-    startConstruction(ctx);
-    try {
-      return new BitwiseAndExpression(
-          visitExpression(ctx.left),
-          visitExpression(ctx.right));
-    } finally {
-      endConstruction();
-    }
+    return new BitwiseAndExpression(
+        visitExpression(ctx.left),
+        visitExpression(ctx.right));
   }
 
   @Override
   public BitwiseXorExpression visitBitwiseExclusiveOrExpression(BitwiseExclusiveOrExpressionContext ctx) {
-    startConstruction(ctx);
-    try {
-      return new BitwiseXorExpression(
-          visitExpression(ctx.left),
-          visitExpression(ctx.right));
-    } finally {
-      endConstruction();
-    }
+    return new BitwiseXorExpression(
+        visitExpression(ctx.left),
+        visitExpression(ctx.right));
   }
 
   @Override
   public BitwiseOrExpression visitBitwiseInclusiveOrExpression(BitwiseInclusiveOrExpressionContext ctx) {
-    startConstruction(ctx);
-    try {
-      return new BitwiseOrExpression(
-          visitExpression(ctx.left),
-          visitExpression(ctx.right));
-    } finally {
-      endConstruction();
-    }
+    return new BitwiseOrExpression(
+        visitExpression(ctx.left),
+        visitExpression(ctx.right));
   }
 
   @Override
   public BinaryExpression visitEqualityExpression(EqualityExpressionContext ctx) {
     var left = visitExpression(ctx.left);
     var right = visitExpression(ctx.right);
-    startConstruction(ctx);
-    try {
-      switch (ctx.op.getType()) {
-        case GLSLLexer.EQ_OP:
-          return new EqualityExpression(left, right);
-        case GLSLLexer.NE_OP:
-          return new InequalityExpression(left, right);
-        default:
-          throw new IllegalArgumentException("Unknown equality operator: " + ctx.op.getText());
-      }
-    } finally {
-      endConstruction();
+    switch (ctx.op.getType()) {
+      case GLSLLexer.EQ_OP:
+        return new EqualityExpression(left, right);
+      case GLSLLexer.NE_OP:
+        return new InequalityExpression(left, right);
+      default:
+        throw new IllegalArgumentException("Unknown equality operator: " + ctx.op.getText());
     }
   }
 
   @Override
   public BooleanAndExpression visitLogicalAndExpression(LogicalAndExpressionContext ctx) {
-    startConstruction(ctx);
-    try {
-      return new BooleanAndExpression(
-          visitExpression(ctx.left),
-          visitExpression(ctx.right));
-    } finally {
-      endConstruction();
-    }
+    return new BooleanAndExpression(
+        visitExpression(ctx.left),
+        visitExpression(ctx.right));
   }
 
   @Override
   public BooleanXorExpression visitLogicalExclusiveOrExpression(LogicalExclusiveOrExpressionContext ctx) {
-    startConstruction(ctx);
-    try {
-      return new BooleanXorExpression(
-          visitExpression(ctx.left),
-          visitExpression(ctx.right));
-    } finally {
-      endConstruction();
-    }
+    return new BooleanXorExpression(
+        visitExpression(ctx.left),
+        visitExpression(ctx.right));
   }
 
   @Override
   public BooleanOrExpression visitLogicalInclusiveOrExpression(LogicalInclusiveOrExpressionContext ctx) {
-    startConstruction(ctx);
-    try {
-      return new BooleanOrExpression(
-          visitExpression(ctx.left),
-          visitExpression(ctx.right));
-    } finally {
-      endConstruction();
-    }
+    return new BooleanOrExpression(
+        visitExpression(ctx.left),
+        visitExpression(ctx.right));
   }
 
   @Override
   public BinaryExpression visitRelationalExpression(RelationalExpressionContext ctx) {
     var left = visitExpression(ctx.left);
     var right = visitExpression(ctx.right);
-    startConstruction(ctx);
-    try {
-      switch (ctx.op.getType()) {
-        case GLSLLexer.LT_OP:
-          return new LessThanExpression(left, right);
-        case GLSLLexer.GT_OP:
-          return new GreaterThanExpression(left, right);
-        case GLSLLexer.LE_OP:
-          return new LessThanEqualExpression(left, right);
-        case GLSLLexer.GE_OP:
-          return new GreaterThanEqualExpression(left, right);
-        default:
-          throw new IllegalArgumentException("Unknown relational operator: " + ctx.op.getText());
-      }
-    } finally {
-      endConstruction();
+    switch (ctx.op.getType()) {
+      case GLSLLexer.LT_OP:
+        return new LessThanExpression(left, right);
+      case GLSLLexer.GT_OP:
+        return new GreaterThanExpression(left, right);
+      case GLSLLexer.LE_OP:
+        return new LessThanEqualExpression(left, right);
+      case GLSLLexer.GE_OP:
+        return new GreaterThanEqualExpression(left, right);
+      default:
+        throw new IllegalArgumentException("Unknown relational operator: " + ctx.op.getText());
     }
   }
 
@@ -657,18 +499,13 @@ public class ASTBuilder extends GLSLParserBaseVisitor<ASTNode> {
   public BinaryExpression visitShiftExpression(ShiftExpressionContext ctx) {
     var left = visitExpression(ctx.left);
     var right = visitExpression(ctx.right);
-    startConstruction(ctx);
-    try {
-      switch (ctx.op.getType()) {
-        case GLSLLexer.LEFT_OP:
-          return new LeftShiftExpression(left, right);
-        case GLSLLexer.RIGHT_OP:
-          return new RightShiftExpression(left, right);
-        default:
-          throw new IllegalArgumentException("Unknown shift operator: " + ctx.op.getText());
-      }
-    } finally {
-      endConstruction();
+    switch (ctx.op.getType()) {
+      case GLSLLexer.LEFT_OP:
+        return new LeftShiftExpression(left, right);
+      case GLSLLexer.RIGHT_OP:
+        return new RightShiftExpression(left, right);
+      default:
+        throw new IllegalArgumentException("Unknown shift operator: " + ctx.op.getText());
     }
   }
 
@@ -676,155 +513,91 @@ public class ASTBuilder extends GLSLParserBaseVisitor<ASTNode> {
   public BinaryExpression visitMultiplicativeExpression(MultiplicativeExpressionContext ctx) {
     var left = visitExpression(ctx.left);
     var right = visitExpression(ctx.right);
-    startConstruction(ctx);
-    try {
-      switch (ctx.op.getType()) {
-        case GLSLLexer.TIMES_OP:
-          return new MultiplicationExpression(left, right);
-        case GLSLLexer.DIV_OP:
-          return new DivisionExpression(left, right);
-        case GLSLLexer.MOD_OP:
-          return new ModuloExpression(left, right);
-        default:
-          throw new IllegalArgumentException("Unknown multiplicative operator: " + ctx.op.getText());
-      }
-    } finally {
-      endConstruction();
+    switch (ctx.op.getType()) {
+      case GLSLLexer.TIMES_OP:
+        return new MultiplicationExpression(left, right);
+      case GLSLLexer.DIV_OP:
+        return new DivisionExpression(left, right);
+      case GLSLLexer.MOD_OP:
+        return new ModuloExpression(left, right);
+      default:
+        throw new IllegalArgumentException("Unknown multiplicative operator: " + ctx.op.getText());
     }
   }
 
   @Override
   public ReferenceExpression visitReferenceExpression(ReferenceExpressionContext ctx) {
-    startConstruction(ctx);
-    try {
-      return new ReferenceExpression(visitIdentifier(ctx.IDENTIFIER()));
-    } finally {
-      endConstruction();
-    }
+    return new ReferenceExpression(visitIdentifier(ctx.IDENTIFIER()));
   }
 
   @Override
   public CompoundStatement visitCompoundStatement(CompoundStatementContext ctx) {
-    startConstruction(ctx);
-    try {
-      return new CompoundStatement(ctx.statement().stream().map(this::visitStatement));
-    } finally {
-      endConstruction();
-    }
+    return new CompoundStatement(ctx.statement().stream().map(this::visitStatement));
   }
 
   @Override
   public ContinueStatement visitContinueStatement(ContinueStatementContext ctx) {
-    return constructSimple(ctx, ContinueStatement::new);
+    return new ContinueStatement();
   }
 
   @Override
   public BreakStatement visitBreakStatement(BreakStatementContext ctx) {
-    return constructSimple(ctx, BreakStatement::new);
+    return new BreakStatement();
   }
 
   @Override
   public ReturnStatement visitReturnStatement(ReturnStatementContext ctx) {
-    startConstruction(ctx);
-    try {
-      return new ReturnStatement(applySafe(ctx.expression(), this::visitExpression));
-    } finally {
-      endConstruction();
-    }
+    return new ReturnStatement(applySafe(ctx.expression(), this::visitExpression));
   }
 
   @Override
   public DiscardStatement visitDiscardStatement(DiscardStatementContext ctx) {
-    return constructSimple(ctx, DiscardStatement::new);
+    return new DiscardStatement();
   }
 
   @Override
   public DemoteStatement visitDemoteStatement(DemoteStatementContext ctx) {
-    return constructSimple(ctx, DemoteStatement::new);
+    return new DemoteStatement();
   }
 
   @Override
   public DeclarationStatement visitDeclarationStatement(DeclarationStatementContext ctx) {
-    startConstruction(ctx);
-    try {
-      return new DeclarationStatement(visitDeclaration(ctx.declaration()));
-    } finally {
-      endConstruction();
-    }
+    return new DeclarationStatement(visitDeclaration(ctx.declaration()));
   }
 
   @Override
   public ExpressionStatement visitExpressionStatement(ExpressionStatementContext ctx) {
-    startConstruction(ctx);
-    try {
-      return new ExpressionStatement(visitExpression(ctx.expression()));
-    } finally {
-      endConstruction();
-    }
+    return new ExpressionStatement(visitExpression(ctx.expression()));
   }
 
   @Override
   public EmptyStatement visitEmptyStatement(EmptyStatementContext ctx) {
-    return constructSimple(ctx, EmptyStatement::new);
+    return new EmptyStatement();
   }
 
   @Override
   public SelectionStatement visitSelectionStatement(SelectionStatementContext ctx) {
-    // unwrap the nested selection statements that are created through "else if"
-    // chains
-    var conditions = Stream.<Expression>builder();
-    var statements = Stream.<Statement>builder();
-    SelectionStatementContext nextSelection = ctx;
-    do {
-      conditions.add(visitExpression(nextSelection.condition));
-      statements.add(visitStatement(nextSelection.ifTrue));
-      var ifFalse = nextSelection.ifFalse;
-      nextSelection = null;
-      if (ifFalse != null) {
-        var nestedSelectionStatement = ifFalse.selectionStatement();
-        if (nestedSelectionStatement != null) {
-          nextSelection = nestedSelectionStatement;
-        } else {
-          // add a regular else branch, has no control flow attribute
-          // since they are only present on the whole selection statement
-          conditions.add(null);
-          statements.add(visitStatement(ifFalse));
-        }
-      }
-    } while (nextSelection != null);
-    startConstruction(ctx);
-    try {
-      return new SelectionStatement(conditions.build(), statements.build());
-    } finally {
-      endConstruction();
-    }
+    return new SelectionStatement(
+        visitExpression(ctx.condition),
+        visitStatement(ctx.ifTrue),
+        applySafe(ctx.ifFalse, this::visitStatement));
   }
 
   @Override
   public SwitchStatement visitSwitchStatement(SwitchStatementContext ctx) {
-    startConstruction(ctx);
-    try {
-      return new SwitchStatement(
-          visitExpression(ctx.condition),
-          visitCompoundStatement(ctx.compoundStatement()));
-    } finally {
-      endConstruction();
-    }
+    return new SwitchStatement(
+        visitExpression(ctx.condition),
+        visitCompoundStatement(ctx.compoundStatement()));
   }
 
   @Override
   public DefaultStatement visitDefaultCaseLabel(DefaultCaseLabelContext ctx) {
-    return constructSimple(ctx, DefaultStatement::new);
+    return new DefaultStatement();
   }
 
   @Override
   public CaseStatement visitValuedCaseLabel(ValuedCaseLabelContext ctx) {
-    startConstruction(ctx);
-    try {
-      return new CaseStatement(visitExpression(ctx.expression()));
-    } finally {
-      endConstruction();
-    }
+    return new CaseStatement(visitExpression(ctx.expression()));
   }
 
   @Override
@@ -841,96 +614,61 @@ public class ASTBuilder extends GLSLParserBaseVisitor<ASTNode> {
         initDeclaration = visitDeclaration(initDeclarationStatement.declaration());
       }
     }
-    startConstruction(ctx);
-    try {
-      return new ForLoopStatement(
-          initExpression,
-          initDeclaration,
-          applySafe(ctx.condition, this::visitExpression),
-          applySafe(ctx.initCondition, this::visitIterationCondition),
-          applySafe(ctx.incrementer, this::visitExpression),
-          visitStatement(ctx.statement()));
-    } finally {
-      endConstruction();
-    }
+    return new ForLoopStatement(
+        initExpression,
+        initDeclaration,
+        applySafe(ctx.condition, this::visitExpression),
+        applySafe(ctx.initCondition, this::visitIterationCondition),
+        applySafe(ctx.incrementer, this::visitExpression),
+        visitStatement(ctx.statement()));
   }
 
   @Override
   public WhileLoopStatement visitWhileStatement(WhileStatementContext ctx) {
-    startConstruction(ctx);
-    try {
-      return ctx.condition != null
-          ? new WhileLoopStatement(
-              visitExpression(ctx.condition),
-              visitStatement(ctx.loopBody))
-          : new WhileLoopStatement(
-              visitIterationCondition(ctx.initCondition),
-              visitStatement(ctx.loopBody));
-    } finally {
-      endConstruction();
-    }
+    return ctx.condition != null
+        ? new WhileLoopStatement(
+            visitExpression(ctx.condition),
+            visitStatement(ctx.loopBody))
+        : new WhileLoopStatement(
+            visitIterationCondition(ctx.initCondition),
+            visitStatement(ctx.loopBody));
   }
 
   @Override
   public DoWhileLoopStatement visitDoWhileStatement(DoWhileStatementContext ctx) {
-    startConstruction(ctx);
-    try {
-      return new DoWhileLoopStatement(
-          visitStatement(ctx.loopBody),
-          visitExpression(ctx.condition));
-    } finally {
-      endConstruction();
-    }
+    return new DoWhileLoopStatement(
+        visitStatement(ctx.loopBody),
+        visitExpression(ctx.condition));
   }
 
   @Override
   public IterationConditionInitializer visitIterationCondition(IterationConditionContext ctx) {
-    startConstruction(ctx);
-    try {
-      return new IterationConditionInitializer(
-          visitFullySpecifiedType(ctx.fullySpecifiedType()),
-          new Identifier(ctx.name),
-          visitInitializer(ctx.initializer()));
-    } finally {
-      endConstruction();
-    }
+    return new IterationConditionInitializer(
+        visitFullySpecifiedType(ctx.fullySpecifiedType()),
+        new Identifier(ctx.name),
+        visitInitializer(ctx.initializer()));
   }
 
   @Override
   public ArraySpecifier visitArraySpecifier(ArraySpecifierContext ctx) {
-    startConstruction(ctx);
-    try {
-      return new ArraySpecifier(ctx.arraySpecifierSegment().stream()
-          .<Expression>map(child -> applySafe(child.expression(), this::visitExpression)));
-    } finally {
-      endConstruction();
-    }
+    return new ArraySpecifier(ctx.arraySpecifierSegment().stream()
+        .<Expression>map(child -> applySafe(child.expression(), this::visitExpression)));
   }
 
   @Override
   public FunctionDefinition visitFunctionDefinition(FunctionDefinitionContext ctx) {
-    startConstruction(ctx);
-    try {
-      return new FunctionDefinition(
-          visitFunctionPrototype(ctx.functionPrototype()),
-          visitCompoundStatement(ctx.compoundStatement()));
-    } finally {
-      endConstruction();
-    }
+    return new FunctionDefinition(
+        visitFunctionPrototype(ctx.functionPrototype()),
+        visitCompoundStatement(ctx.compoundStatement()));
   }
 
   @Override
   public FunctionPrototype visitFunctionPrototype(FunctionPrototypeContext ctx) {
     var returnType = visitFullySpecifiedType(ctx.fullySpecifiedType());
     var name = visitIdentifier(ctx.IDENTIFIER());
-    startConstruction(ctx);
-    try {
-      return new FunctionPrototype(returnType, name,
-          applySafe(ctx.functionParameterList().parameters,
-              parameters -> parameters.stream().map(this::visitParameterDeclaration)));
-    } finally {
-      endConstruction();
-    }
+    return new FunctionPrototype(returnType, name,
+        applySafe(ctx.functionParameterList().parameters,
+            parameters -> parameters.stream().map(this::visitParameterDeclaration)));
   }
 
   @Override
@@ -938,74 +676,44 @@ public class ASTBuilder extends GLSLParserBaseVisitor<ASTNode> {
     var arraySpecifier = ctx.arraySpecifier();
     var name = visitIdentifier(ctx.IDENTIFIER());
     var initializer = ctx.initializer();
-    startConstruction(ctx);
-    try {
-      return new DeclarationMember(
-          name,
-          applySafe(arraySpecifier, this::visitArraySpecifier),
-          applySafe(initializer, this::visitInitializer));
-    } finally {
-      endConstruction();
-    }
+    return new DeclarationMember(
+        name,
+        applySafe(arraySpecifier, this::visitArraySpecifier),
+        applySafe(initializer, this::visitInitializer));
   }
 
   @Override
   public FullySpecifiedType visitFullySpecifiedType(FullySpecifiedTypeContext ctx) {
-    startConstruction(ctx);
-    try {
-      return new FullySpecifiedType(
-          applySafe(ctx.typeQualifier(), this::visitTypeQualifier),
-          visitTypeSpecifier(ctx.typeSpecifier()));
-    } finally {
-      endConstruction();
-    }
+    return new FullySpecifiedType(
+        applySafe(ctx.typeQualifier(), this::visitTypeQualifier),
+        visitTypeSpecifier(ctx.typeSpecifier()));
   }
 
   @Override
   public FunctionParameter visitParameterDeclaration(ParameterDeclarationContext ctx) {
-    startConstruction(ctx);
-    try {
-      return new FunctionParameter(
-          visitFullySpecifiedType(ctx.fullySpecifiedType()),
-          makeIdentifier(ctx.parameterName),
-          applySafe(ctx.arraySpecifier(), this::visitArraySpecifier));
-    } finally {
-      endConstruction();
-    }
+    return new FunctionParameter(
+        visitFullySpecifiedType(ctx.fullySpecifiedType()),
+        makeIdentifier(ctx.parameterName),
+        applySafe(ctx.arraySpecifier(), this::visitArraySpecifier));
   }
 
   @Override
   public FunctionDeclaration visitFunctionDeclaration(FunctionDeclarationContext ctx) {
-    startConstruction(ctx);
-    try {
-      return new FunctionDeclaration(visitFunctionPrototype(ctx.functionPrototype()));
-    } finally {
-      endConstruction();
-    }
+    return new FunctionDeclaration(visitFunctionPrototype(ctx.functionPrototype()));
   }
 
   @Override
   public TypeAndInitDeclaration visitTypeAndInitDeclaration(TypeAndInitDeclarationContext ctx) {
-    startConstruction(ctx);
-    try {
-      return new TypeAndInitDeclaration(
-          visitFullySpecifiedType(ctx.fullySpecifiedType()),
-          ctx.declarationMembers.stream().map(this::visitDeclarationMember));
-    } finally {
-      endConstruction();
-    }
+    return new TypeAndInitDeclaration(
+        visitFullySpecifiedType(ctx.fullySpecifiedType()),
+        ctx.declarationMembers.stream().map(this::visitDeclarationMember));
   }
 
   @Override
   public PrecisionDeclaration visitPrecisionDeclaration(PrecisionDeclarationContext ctx) {
-    startConstruction(ctx);
-    try {
-      return new PrecisionDeclaration(
-          visitPrecisionQualifier(ctx.precisionQualifier()),
-          visitTypeSpecifier(ctx.typeSpecifier()));
-    } finally {
-      endConstruction();
-    }
+    return new PrecisionDeclaration(
+        visitPrecisionQualifier(ctx.precisionQualifier()),
+        visitTypeSpecifier(ctx.typeSpecifier()));
   }
 
   @Override
@@ -1013,70 +721,49 @@ public class ASTBuilder extends GLSLParserBaseVisitor<ASTNode> {
     var typeQualifier = visitTypeQualifier(ctx.typeQualifier());
     var name = new Identifier(ctx.blockName);
     var structBody = visitStructBody(ctx.structBody());
-    startConstruction(ctx);
-    try {
-      if (ctx.variableName != null) {
-        var variableName = new Identifier(ctx.variableName);
-        var arraySpecifierContext = ctx.arraySpecifier();
-        if (arraySpecifierContext != null) {
-          var arraySpecifier = visitArraySpecifier(arraySpecifierContext);
-          return new InterfaceBlockDeclaration(
-              typeQualifier, name, structBody, variableName, arraySpecifier);
-        } else {
-          return new InterfaceBlockDeclaration(typeQualifier, name, structBody, variableName);
-        }
+    if (ctx.variableName != null) {
+      var variableName = new Identifier(ctx.variableName);
+      var arraySpecifierContext = ctx.arraySpecifier();
+      if (arraySpecifierContext != null) {
+        var arraySpecifier = visitArraySpecifier(arraySpecifierContext);
+        return new InterfaceBlockDeclaration(
+            typeQualifier, name, structBody, variableName, arraySpecifier);
+      } else {
+        return new InterfaceBlockDeclaration(typeQualifier, name, structBody, variableName);
       }
-      return new InterfaceBlockDeclaration(typeQualifier, name, structBody);
-    } finally {
-      endConstruction();
     }
+    return new InterfaceBlockDeclaration(typeQualifier, name, structBody);
   }
 
   @Override
   public VariableDeclaration visitVariableDeclaration(VariableDeclarationContext ctx) {
-    startConstruction(ctx);
-    try {
-      return new VariableDeclaration(
-          visitTypeQualifier(ctx.typeQualifier()),
-          ctx.variableNames.stream().map(ASTBuilder::makeIdentifier));
-    } finally {
-      endConstruction();
-    }
+    return new VariableDeclaration(
+        visitTypeQualifier(ctx.typeQualifier()),
+        ctx.variableNames.stream().map(ASTBuilder::makeIdentifier));
   }
 
   @Override
   public Initializer visitInitializer(InitializerContext ctx) {
-    startConstruction(ctx);
-    try {
-      var expressionContext = ctx.expression();
-      if (expressionContext != null) {
-        return new ExpressionInitializer(visitExpression(expressionContext));
-      }
-      var initializers = ctx.initializers;
-      return initializers == null
-          ? new NestedInitializer()
-          : new NestedInitializer(initializers.stream().map(this::visitInitializer));
-    } finally {
-      endConstruction();
+    var expressionContext = ctx.expression();
+    if (expressionContext != null) {
+      return new ExpressionInitializer(visitExpression(expressionContext));
     }
-
+    var initializers = ctx.initializers;
+    return initializers == null
+        ? new NestedInitializer()
+        : new NestedInitializer(initializers.stream().map(this::visitInitializer));
   }
 
   @Override
   public NamedLayoutQualifierPart visitNamedLayoutQualifier(NamedLayoutQualifierContext ctx) {
-    startConstruction(ctx);
-    try {
-      return new NamedLayoutQualifierPart(
-          new Identifier(ctx.getStart()),
-          applySafe(ctx.expression(), this::visitExpression));
-    } finally {
-      endConstruction();
-    }
+    return new NamedLayoutQualifierPart(
+        new Identifier(ctx.getStart()),
+        applySafe(ctx.expression(), this::visitExpression));
   }
 
   @Override
   public SharedLayoutQualifierPart visitSharedLayoutQualifier(SharedLayoutQualifierContext ctx) {
-    return constructSimple(ctx, SharedLayoutQualifierPart::new);
+    return new SharedLayoutQualifierPart();
   }
 
   public LayoutQualifierPart visitLayoutQualifierPart(LayoutQualifierIdContext ctx) {
@@ -1085,177 +772,132 @@ public class ASTBuilder extends GLSLParserBaseVisitor<ASTNode> {
 
   @Override
   public LayoutQualifier visitLayoutQualifier(LayoutQualifierContext ctx) {
-    startConstruction(ctx);
-    try {
-      var parts = new LinkedList<LayoutQualifierPart>();
-      for (var partContext : ctx.layoutQualifiers) {
-        var part = visitLayoutQualifierPart(partContext);
+    var parts = new LinkedList<LayoutQualifierPart>();
+    for (var partContext : ctx.layoutQualifiers) {
+      var part = visitLayoutQualifierPart(partContext);
 
-        // named layout qualifiers require extra processing
-        if (part instanceof NamedLayoutQualifierPart named) {
-          // check for sequence expression that has to be flattened
-          if (named.getExpression() instanceof SequenceExpression sequence) {
-            // the first expression is for the first part
-            var expressions = sequence.getExpressions().iterator();
-            parts.add(new NamedLayoutQualifierPart(named.getName(), expressions.next()));
+      // named layout qualifiers require extra processing
+      if (part instanceof NamedLayoutQualifierPart named) {
+        // check for sequence expression that has to be flattened
+        if (named.getExpression() instanceof SequenceExpression sequence) {
+          // the first expression is for the first part
+          var expressions = sequence.getExpressions().iterator();
+          parts.add(new NamedLayoutQualifierPart(named.getName(), expressions.next()));
 
-            // any following assignment and reference expressions are named layout
-            // qualifiers,
-            // produce shared layout qualifiers if the name is "shared"
-            while (expressions.hasNext()) {
-              var expression = expressions.next();
-              if (expression instanceof AssignmentExpression assignment) {
-                var left = assignment.getLeft();
-                if (left instanceof ReferenceExpression ref) {
-                  parts.add(new NamedLayoutQualifierPart(ref.getIdentifier(), assignment.getRight()));
-                } else {
-                  throw new IllegalArgumentException(
-                      "Unexpected left hand side in assignment expression of layout qualifier sequence: " + left);
-                }
-              } else if (expression instanceof ReferenceExpression reference) {
-                var id = reference.getIdentifier();
-                if (id.equals("shared")) {
-                  parts.add(new SharedLayoutQualifierPart());
-                } else {
-                  parts.add(new NamedLayoutQualifierPart(id));
-                }
+          // any following assignment and reference expressions are named layout
+          // qualifiers,
+          // produce shared layout qualifiers if the name is "shared"
+          while (expressions.hasNext()) {
+            var expression = expressions.next();
+            if (expression instanceof AssignmentExpression assignment) {
+              var left = assignment.getLeft();
+              if (left instanceof ReferenceExpression ref) {
+                parts.add(new NamedLayoutQualifierPart(ref.getIdentifier(), assignment.getRight()));
               } else {
-                throw new IllegalArgumentException("Unexpected expression in sequence expression in layout qualifier");
+                throw new IllegalArgumentException(
+                    "Unexpected left hand side in assignment expression of layout qualifier sequence: " + left);
               }
+            } else if (expression instanceof ReferenceExpression reference) {
+              var id = reference.getIdentifier();
+              if (id.equals("shared")) {
+                parts.add(new SharedLayoutQualifierPart());
+              } else {
+                parts.add(new NamedLayoutQualifierPart(id));
+              }
+            } else {
+              throw new IllegalArgumentException("Unexpected expression in sequence expression in layout qualifier");
             }
-          } else {
-            parts.add(named);
           }
         } else {
-          parts.add(part);
+          parts.add(named);
         }
+      } else {
+        parts.add(part);
       }
-
-      return new LayoutQualifier(parts.stream());
-    } finally {
-      endConstruction();
     }
+
+    return new LayoutQualifier(parts.stream());
   }
 
   @Override
   public PreciseQualifier visitPreciseQualifier(PreciseQualifierContext ctx) {
-    return constructSimple(ctx, PreciseQualifier::new);
+    return new PreciseQualifier();
   }
 
   @Override
   public InvariantQualifier visitInvariantQualifier(InvariantQualifierContext ctx) {
-    return constructSimple(ctx, InvariantQualifier::new);
+    return new InvariantQualifier();
   }
 
   @Override
   public InterpolationQualifier visitInterpolationQualifier(InterpolationQualifierContext ctx) {
-    startConstruction(ctx);
-    try {
-      return new InterpolationQualifier(InterpolationType.fromToken(ctx.getStart()));
-    } finally {
-      endConstruction();
-    }
+    return new InterpolationQualifier(InterpolationType.fromToken(ctx.getStart()));
   }
 
   @Override
   public PrecisionQualifier visitPrecisionQualifier(PrecisionQualifierContext ctx) {
-    startConstruction(ctx);
-    try {
-      return new PrecisionQualifier(PrecisionLevel.fromToken(ctx.getStart()));
-    } finally {
-      endConstruction();
-    }
+    return new PrecisionQualifier(PrecisionLevel.fromToken(ctx.getStart()));
   }
 
   @Override
   public ASTNode visitStorageQualifier(StorageQualifierContext ctx) {
-    startConstruction(ctx);
-    try {
-      return ctx.typeNames.isEmpty()
-          ? new StorageQualifier(StorageType.fromToken(ctx.getStart()))
-          : new StorageQualifier(
-              ctx.typeNames.stream().map(ASTBuilder::makeIdentifier));
-    } finally {
-      endConstruction();
-    }
+    return ctx.typeNames.isEmpty()
+        ? new StorageQualifier(StorageType.fromToken(ctx.getStart()))
+        : new StorageQualifier(
+            ctx.typeNames.stream().map(ASTBuilder::makeIdentifier));
   }
 
   @Override
   public StructBody visitStructBody(StructBodyContext ctx) {
-    startConstruction(ctx);
-    try {
-      return new StructBody(ctx.structMember().stream().map(this::visitStructMember));
-    } finally {
-      endConstruction();
-    }
+    return new StructBody(ctx.structMember().stream().map(this::visitStructMember));
   }
 
   @Override
   public StructMember visitStructMember(StructMemberContext ctx) {
-    startConstruction(ctx);
-    try {
-      return new StructMember(
-          visitFullySpecifiedType(ctx.fullySpecifiedType()),
-          ctx.structDeclarators.stream().map(this::visitStructDeclarator));
-    } finally {
-      endConstruction();
-    }
+    return new StructMember(
+        visitFullySpecifiedType(ctx.fullySpecifiedType()),
+        ctx.structDeclarators.stream().map(this::visitStructDeclarator));
   }
 
   @Override
   public StructDeclarator visitStructDeclarator(StructDeclaratorContext ctx) {
-    startConstruction(ctx);
-    try {
-      return new StructDeclarator(
-          new Identifier(ctx.getStart()),
-          applySafe(ctx.arraySpecifier(), this::visitArraySpecifier));
-    } finally {
-      endConstruction();
-    }
+    return new StructDeclarator(
+        new Identifier(ctx.getStart()),
+        applySafe(ctx.arraySpecifier(), this::visitArraySpecifier));
   }
 
   @Override
   public TypeSpecifier visitTypeSpecifier(TypeSpecifierContext ctx) {
-    startConstruction(ctx);
-    try {
-      var arraySpecifier = applySafe(ctx.arraySpecifier(), this::visitArraySpecifier);
+    var arraySpecifier = applySafe(ctx.arraySpecifier(), this::visitArraySpecifier);
 
-      var builtinTypeFixed = ctx.builtinTypeSpecifierFixed();
-      if (builtinTypeFixed != null) {
-        var type = BuiltinType.fromToken(builtinTypeFixed.getStart());
-        return new BuiltinFixedTypeSpecifier(type, arraySpecifier);
-      }
-
-      var builtinNumericType = ctx.builtinTypeSpecifierParseable();
-      if (builtinNumericType != null) {
-        var type = Type.fromToken(builtinNumericType.getStart());
-        return new BuiltinNumericTypeSpecifier(type, arraySpecifier);
-      }
-
-      var structSpecifierContext = ctx.structSpecifier();
-      if (structSpecifierContext != null) {
-        return new StructSpecifier(
-            applySafe(structSpecifierContext.IDENTIFIER(), this::visitIdentifier),
-            visitStructBody(structSpecifierContext.structBody()),
-            arraySpecifier);
-      }
-
-      var identifier = visitIdentifier(ctx.IDENTIFIER());
-      return new TypeReference(identifier, arraySpecifier);
-    } finally {
-      endConstruction();
+    var builtinTypeFixed = ctx.builtinTypeSpecifierFixed();
+    if (builtinTypeFixed != null) {
+      var type = BuiltinType.fromToken(builtinTypeFixed.getStart());
+      return new BuiltinFixedTypeSpecifier(type, arraySpecifier);
     }
+
+    var builtinNumericType = ctx.builtinTypeSpecifierParseable();
+    if (builtinNumericType != null) {
+      var type = Type.fromToken(builtinNumericType.getStart());
+      return new BuiltinNumericTypeSpecifier(type, arraySpecifier);
+    }
+
+    var structSpecifierContext = ctx.structSpecifier();
+    if (structSpecifierContext != null) {
+      return new StructSpecifier(
+          applySafe(structSpecifierContext.IDENTIFIER(), this::visitIdentifier),
+          visitStructBody(structSpecifierContext.structBody()),
+          arraySpecifier);
+    }
+
+    var identifier = visitIdentifier(ctx.IDENTIFIER());
+    return new TypeReference(identifier, arraySpecifier);
   }
 
   @Override
   public TypeQualifier visitTypeQualifier(TypeQualifierContext ctx) {
-    startConstruction(ctx);
-    try {
-      return new TypeQualifier(
-          ctx.children.stream().map(child -> (TypeQualifierPart) visit(child)));
-    } finally {
-      endConstruction();
-    }
+    return new TypeQualifier(
+        ctx.children.stream().map(child -> (TypeQualifierPart) visit(child)));
   }
 
   public Expression visitExpression(ExpressionContext ctx) {
@@ -1273,12 +915,7 @@ public class ASTBuilder extends GLSLParserBaseVisitor<ASTNode> {
     // and declaration
     var result = super.visitExternalDeclaration(ctx);
     if (result instanceof Declaration declaration) {
-      startConstruction(ctx);
-      try {
-        return new DeclarationExternalDeclaration(declaration);
-      } finally {
-        endConstruction();
-      }
+      return new DeclarationExternalDeclaration(declaration);
     }
     return (ExternalDeclaration) result;
   }

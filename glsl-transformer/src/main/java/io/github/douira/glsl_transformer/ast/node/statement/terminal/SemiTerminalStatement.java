@@ -4,6 +4,9 @@ import io.github.douira.glsl_transformer.ast.node.statement.Statement;
 import io.github.douira.glsl_transformer.ast.query.Root;
 import io.github.douira.glsl_transformer.ast.traversal.*;
 
+/**
+ * A semi-terminal statement may have children but it isn't a list node.
+ */
 public abstract class SemiTerminalStatement extends Statement {
   @Override
   public <R> R accept(ASTVisitor<R> visitor) {

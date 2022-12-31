@@ -1509,6 +1509,7 @@ else if (c) 3;
 - IntegerFormat DECIMAL
 )LiteralExpression
 )ExpressionStatement
+(SelectionStatement
 (ReferenceExpression
 (Identifier)
 - String b
@@ -1520,6 +1521,7 @@ else if (c) 3;
 - IntegerFormat DECIMAL
 )LiteralExpression
 )ExpressionStatement
+(SelectionStatement
 (ReferenceExpression
 (Identifier)
 - String c
@@ -1531,6 +1533,8 @@ else if (c) 3;
 - IntegerFormat DECIMAL
 )LiteralExpression
 )ExpressionStatement
+)SelectionStatement
+)SelectionStatement
 )SelectionStatement
 
 ]
@@ -2363,6 +2367,7 @@ else 3;
 - IntegerFormat DECIMAL
 )LiteralExpression
 )ExpressionStatement
+(SelectionStatement
 (ReferenceExpression
 (Identifier)
 - String b
@@ -2381,6 +2386,7 @@ else 3;
 - IntegerFormat DECIMAL
 )LiteralExpression
 )ExpressionStatement
+)SelectionStatement
 )SelectionStatement
 
 ]
@@ -2728,6 +2734,7 @@ if (a) {
 )LiteralExpression
 )ExpressionStatement
 )CompoundStatement
+(SelectionStatement
 (ReferenceExpression
 (Identifier)
 - String b
@@ -2741,6 +2748,7 @@ if (a) {
 )LiteralExpression
 )ExpressionStatement
 )CompoundStatement
+)SelectionStatement
 )SelectionStatement
 
 ]
@@ -2770,6 +2778,7 @@ if (a) {
 )LiteralExpression
 )ExpressionStatement
 )CompoundStatement
+(SelectionStatement
 (ReferenceExpression
 (Identifier)
 - String b
@@ -2792,6 +2801,7 @@ if (a) {
 )LiteralExpression
 )ExpressionStatement
 )CompoundStatement
+)SelectionStatement
 )SelectionStatement
 
 ]
@@ -3015,6 +3025,7 @@ else 4;
 - IntegerFormat DECIMAL
 )LiteralExpression
 )ExpressionStatement
+(SelectionStatement
 (ReferenceExpression
 (Identifier)
 - String b
@@ -3026,6 +3037,7 @@ else 4;
 - IntegerFormat DECIMAL
 )LiteralExpression
 )ExpressionStatement
+(SelectionStatement
 (ReferenceExpression
 (Identifier)
 - String c
@@ -3037,6 +3049,7 @@ else 4;
 - IntegerFormat DECIMAL
 )LiteralExpression
 )ExpressionStatement
+(SelectionStatement
 (ReferenceExpression
 (Identifier)
 - String c
@@ -3048,6 +3061,7 @@ else 4;
 - IntegerFormat DECIMAL
 )LiteralExpression
 )ExpressionStatement
+(SelectionStatement
 (ReferenceExpression
 (Identifier)
 - String c
@@ -3059,6 +3073,7 @@ else 4;
 - IntegerFormat DECIMAL
 )LiteralExpression
 )ExpressionStatement
+(SelectionStatement
 (ReferenceExpression
 (Identifier)
 - String c
@@ -3070,6 +3085,7 @@ else 4;
 - IntegerFormat DECIMAL
 )LiteralExpression
 )ExpressionStatement
+(SelectionStatement
 (ReferenceExpression
 (Identifier)
 - String c
@@ -3081,6 +3097,7 @@ else 4;
 - IntegerFormat DECIMAL
 )LiteralExpression
 )ExpressionStatement
+(SelectionStatement
 (ReferenceExpression
 (Identifier)
 - String c
@@ -3092,6 +3109,7 @@ else 4;
 - IntegerFormat DECIMAL
 )LiteralExpression
 )ExpressionStatement
+(SelectionStatement
 (ReferenceExpression
 (Identifier)
 - String c
@@ -3103,6 +3121,7 @@ else 4;
 - IntegerFormat DECIMAL
 )LiteralExpression
 )ExpressionStatement
+(SelectionStatement
 (ReferenceExpression
 (Identifier)
 - String c
@@ -3121,6 +3140,15 @@ else 4;
 - IntegerFormat DECIMAL
 )LiteralExpression
 )ExpressionStatement
+)SelectionStatement
+)SelectionStatement
+)SelectionStatement
+)SelectionStatement
+)SelectionStatement
+)SelectionStatement
+)SelectionStatement
+)SelectionStatement
+)SelectionStatement
 )SelectionStatement
 
 ]
@@ -3614,6 +3642,7 @@ else if (b) 2;
 - IntegerFormat DECIMAL
 )LiteralExpression
 )ExpressionStatement
+(SelectionStatement
 (ReferenceExpression
 (Identifier)
 - String b
@@ -3625,6 +3654,7 @@ else if (b) 2;
 - IntegerFormat DECIMAL
 )LiteralExpression
 )ExpressionStatement
+)SelectionStatement
 )SelectionStatement
 
 ]
@@ -3828,6 +3858,7 @@ else 4;
 - IntegerFormat DECIMAL
 )LiteralExpression
 )ExpressionStatement
+(SelectionStatement
 (ReferenceExpression
 (Identifier)
 - String b
@@ -3839,6 +3870,7 @@ else 4;
 - IntegerFormat DECIMAL
 )LiteralExpression
 )ExpressionStatement
+(SelectionStatement
 (ReferenceExpression
 (Identifier)
 - String c
@@ -3857,6 +3889,8 @@ else 4;
 - IntegerFormat DECIMAL
 )LiteralExpression
 )ExpressionStatement
+)SelectionStatement
+)SelectionStatement
 )SelectionStatement
 
 ]
@@ -5365,10 +5399,10 @@ testASTTree[translationUnit_Dm+OdFX14xyDkQ3GEtZRqfwYtsI=]=[
 
 <><><><><><><><><><><><><><><><><><><><><><><><><>
 (TranslationUnit
-(ExtensionStatement
+(ExtensionDirective
 - String foobar
 - ExtensionBehavior WARN
-)ExtensionStatement
+)ExtensionDirective
 )TranslationUnit
 
 ]
@@ -5482,9 +5516,9 @@ testASTTree[translationUnit_FLVEl4tjFQm/pQDzQ6Bh63RQ5IU=]=[
 
 <><><><><><><><><><><><><><><><><><><><><><><><><>
 (TranslationUnit
-(IncludeStatement
+(IncludeDirective
 - String foo "in angle
-)IncludeStatement
+)IncludeDirective
 )TranslationUnit
 
 ]
@@ -5755,9 +5789,9 @@ testASTTree[translationUnit_HQQcBi7HBYmShqfC/wwg6xBuUmA=]=[
 
 <><><><><><><><><><><><><><><><><><><><><><><><><>
 (TranslationUnit
-(IncludeStatement
+(IncludeDirective
 - String foo
-)IncludeStatement
+)IncludeDirective
 )TranslationUnit
 
 ]
@@ -6079,12 +6113,12 @@ testASTTree[translationUnit_Jq/Owf6pZZRb4Ywb97IzFJ82Czw=]=[
 
 <><><><><><><><><><><><><><><><><><><><><><><><><>
 (TranslationUnit
-(PragmaStatement
+(PragmaDirective
 - Boolean false
 - PragmaType OPTIMIZE
 - null
 - PragmaState OFF
-)PragmaStatement
+)PragmaDirective
 )TranslationUnit
 
 ]
@@ -6095,12 +6129,12 @@ testASTTree[translationUnit_K9QGGTul4WNNNHMnzM2b3S9jWqA=]=[
 
 <><><><><><><><><><><><><><><><><><><><><><><><><>
 (TranslationUnit
-(PragmaStatement
+(PragmaDirective
 - Boolean true
 - PragmaType DEBUG
 - null
 - PragmaState ON
-)PragmaStatement
+)PragmaDirective
 )TranslationUnit
 
 ]
@@ -6111,10 +6145,10 @@ testASTTree[translationUnit_Md56Tl1p5YGJPf2xzJfcvqS6l30=]=[
 
 <><><><><><><><><><><><><><><><><><><><><><><><><>
 (TranslationUnit
-(ExtensionStatement
+(ExtensionDirective
 - String foobar
 - ExtensionBehavior DISABLE
-)ExtensionStatement
+)ExtensionDirective
 )TranslationUnit
 
 ]
@@ -6125,10 +6159,10 @@ testASTTree[translationUnit_NUILb4PV+FYOp3kJXVmR2mxxW3s=]=[
 
 <><><><><><><><><><><><><><><><><><><><><><><><><>
 (TranslationUnit
-(ExtensionStatement
+(ExtensionDirective
 - String foobar
 - ExtensionBehavior DEBUG
-)ExtensionStatement
+)ExtensionDirective
 )TranslationUnit
 
 ]
@@ -6959,9 +6993,9 @@ testASTTree[translationUnit_SPo6zCtQXwlfGXG47pS58y3BHa4=]=[
 
 <><><><><><><><><><><><><><><><><><><><><><><><><>
 (TranslationUnit
-(CustomDirectiveStatement
+(CustomDirective
 - String fdsajfdsl j4kltj4 43_" fds
-)CustomDirectiveStatement
+)CustomDirective
 )TranslationUnit
 
 ]
@@ -7313,9 +7347,9 @@ testASTTree[translationUnit_X9XRw80weC7lPid3sxwz0LkeiIU=]=[
 
 <><><><><><><><><><><><><><><><><><><><><><><><><>
 (TranslationUnit
-(CustomDirectiveStatement
+(CustomDirective
 - String "foo"
-)CustomDirectiveStatement
+)CustomDirective
 )TranslationUnit
 
 ]
@@ -7438,9 +7472,9 @@ testASTTree[translationUnit_bzo5RqTGfEV12vp6yI3AvJeJwMw=]=[
 
 <><><><><><><><><><><><><><><><><><><><><><><><><>
 (TranslationUnit
-(IncludeStatement
+(IncludeDirective
 - String <fdsfds>>fdsfds
-)IncludeStatement
+)IncludeDirective
 )TranslationUnit
 
 ]
@@ -7451,9 +7485,9 @@ testASTTree[translationUnit_cIWGpLfTBT11iH1083zYJU+F7xs=]=[
 
 <><><><><><><><><><><><><><><><><><><><><><><><><>
 (TranslationUnit
-(CustomDirectiveStatement
+(CustomDirective
 - null
-)CustomDirectiveStatement
+)CustomDirective
 )TranslationUnit
 
 ]
@@ -11417,10 +11451,10 @@ testASTTree[translationUnit_q9wlK78GuFZi6kgifd8ZyFnEiIU=]=[
 
 <><><><><><><><><><><><><><><><><><><><><><><><><>
 (TranslationUnit
-(ExtensionStatement
+(ExtensionDirective
 - String foobar
 - ExtensionBehavior ENABLE
-)ExtensionStatement
+)ExtensionDirective
 )TranslationUnit
 
 ]
@@ -12326,12 +12360,12 @@ testASTTree[translationUnit_y04Q1cMbMY2sj/19519kLQ5B0LY=]=[
 
 <><><><><><><><><><><><><><><><><><><><><><><><><>
 (TranslationUnit
-(PragmaStatement
+(PragmaDirective
 - Boolean false
 - PragmaType CUSTOM
 - String foobar
 - null
-)PragmaStatement
+)PragmaDirective
 )TranslationUnit
 
 ]
@@ -13469,12 +13503,12 @@ testASTTree[translationUnit_yy0HUZ4NHVmB12LjGwGpwVQ8nZA=]=[
 
 <><><><><><><><><><><><><><><><><><><><><><><><><>
 (TranslationUnit
-(PragmaStatement
+(PragmaDirective
 - Boolean false
 - PragmaType INVARIANT
 - null
 - PragmaState ALL
-)PragmaStatement
+)PragmaDirective
 )TranslationUnit
 
 ]
@@ -13532,9 +13566,9 @@ testASTTree[translationUnit_zZs4MeLdp1Ei2nHcEUU0pUwMpSg=]=[
 
 <><><><><><><><><><><><><><><><><><><><><><><><><>
 (TranslationUnit
-(IncludeStatement
+(IncludeDirective
 - null
-)IncludeStatement
+)IncludeDirective
 )TranslationUnit
 
 ]
