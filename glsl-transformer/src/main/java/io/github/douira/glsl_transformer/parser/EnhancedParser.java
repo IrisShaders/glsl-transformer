@@ -271,8 +271,7 @@ public class EnhancedParser implements ParserInterface {
     lexer.reset();
     tokenSource.resetState();
     tokenStream = new CommonTokenStream(tokenSource);
-    parser.setTokenStream(tokenStream);
-    parser.reset();
+    parser.setTokenStream(tokenStream); // this also resets the parser
 
     C node;
     if (parsingStrategy == ParsingStrategy.SLL_AND_LL_ON_ERROR) {
