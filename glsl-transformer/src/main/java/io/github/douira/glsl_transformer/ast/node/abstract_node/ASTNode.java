@@ -37,7 +37,7 @@ public abstract class ASTNode {
   private Consumer<ASTNode> selfReplacer;
   private Root root = Root.getActiveBuildRoot();
   protected Template<?> template = null;
-  private final SourceLocation sourceLocation = ASTBuilder.getSourceLocation();
+  private SourceLocation sourceLocation = ASTBuilder.getSourceLocation();
 
   /**
    * Whether this node has been registered with the root. This is only used when
@@ -53,6 +53,10 @@ public abstract class ASTNode {
 
   public SourceLocation getSourceLocation() {
     return sourceLocation;
+  }
+
+  void setSourceLocation(SourceLocation sourceLocation) {
+    this.sourceLocation = sourceLocation;
   }
 
   public ASTNode getParent() {
@@ -494,11 +498,15 @@ public abstract class ASTNode {
     if (node == null) {
       return null;
     }
+    N clone;
     if (node.template == null) {
-      return (N) node.clone();
+      clone = (N) node.clone();
+    } else {
+      N replacement = node.template.getReplacement(node);
+      clone = replacement == null ? (N) node.clone() : replacement;
     }
-    N replacement = node.template.getReplacement(node);
-    return replacement == null ? (N) node.clone() : replacement;
+    clone.setSourceLocation(node.getSourceLocation());
+    return clone;
   }
 
   public static <N extends ASTNode> Stream<N> clone(ChildNodeList<N> nodes) {
