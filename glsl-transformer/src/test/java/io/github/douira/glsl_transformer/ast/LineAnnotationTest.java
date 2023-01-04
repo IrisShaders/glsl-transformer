@@ -33,5 +33,6 @@ public class LineAnnotationTest {
    * - test line directives only working on statements and external declarations
    * - test line directives being ignored within other structures
    * - test throw on broken line directives (missing line, using strings, wrong syntax)
+   * - test cloning of source locations (from the cache but also just manually)
    */
 }
