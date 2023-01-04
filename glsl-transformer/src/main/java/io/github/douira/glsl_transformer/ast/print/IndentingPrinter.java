@@ -2,7 +2,7 @@ package io.github.douira.glsl_transformer.ast.print;
 
 import io.github.douira.glsl_transformer.ast.print.token.*;
 
-public class IndentingPrinter extends DelegateTokenProcessor{
+public class IndentingPrinter extends DelegateTokenProcessor {
   private final char indent;
   private final int indentMultiplier;
   private int indentLevel = 0;
