@@ -93,7 +93,7 @@ public class PragmaDirective extends ExternalDeclaration {
 
   @Override
   public void exitNode(ASTListener listener) {
-    super.enterNode(listener);
+    super.exitNode(listener);
     // terminal nodes have no children
   }
 

@@ -38,7 +38,7 @@ public class DeclarationExternalDeclaration extends ExternalDeclaration {
 
   @Override
   public void exitNode(ASTListener listener) {
-    super.enterNode(listener);
+    super.exitNode(listener);
     listener.exitDeclarationExternalDeclaration(this);
   }
 

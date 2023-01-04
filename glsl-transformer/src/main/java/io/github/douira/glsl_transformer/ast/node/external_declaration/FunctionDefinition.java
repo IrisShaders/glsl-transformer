@@ -50,7 +50,7 @@ public class FunctionDefinition extends ExternalDeclaration {
 
   @Override
   public void exitNode(ASTListener listener) {
-    super.enterNode(listener);
+    super.exitNode(listener);
     listener.exitFunctionDefinition(this);
   }
 
