@@ -1,7 +1,7 @@
 package io.github.douira.glsl_transformer.ast.print.token;
 
 public class IndentMarker extends Marker {
-  public int indentDelta;
+  public final int indentDelta;
 
   public IndentMarker(int indentDelta) {
     this.indentDelta = indentDelta;
