@@ -6,16 +6,9 @@ public enum PrintType {
   SIMPLE(SimplePrinter::new),
   INDENTED(IndentingPrinter::new),
   COMPACT(CompactPrinter::new),
-
-  /**
-   * Not implemented yet
-   */
-  INDENTED_ANNOTATED(() -> new IndentingPrinter(new LineAnnotator())),
-
-  /**
-   * Not implemented yet
-   */
-  COMPAT_ANNOTATED(() -> new CompactPrinter(new LineAnnotator()));
+  SIMPLE_ANNOTATED(() -> new LineAnnotator(new SimplePrinter())),
+  INDENTED_ANNOTATED(() -> new LineAnnotator(new IndentingPrinter())),
+  COMPACT_ANNOTATED(() -> new LineAnnotator(new CompactPrinter()));
 
   private final Supplier<TokenProcessor> printerSupplier;
 
