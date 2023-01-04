@@ -93,6 +93,18 @@ public class ASTPrinter extends ASTPrinterBase {
   }
 
   @Override
+  public void enterExternalDeclaration(ExternalDeclaration node) {
+    emitLineDirective(node.getSourceLocation());
+    super.enterExternalDeclaration(node);
+  }
+
+  @Override
+  public void enterStatement(Statement node) {
+    emitLineDirective(node.getSourceLocation());
+    super.visitStatement(node);
+  }
+
+  @Override
   public Void visitFunctionDefinition(FunctionDefinition node) {
     visit(node.getFunctionPrototype());
     emitBreakableSpace();

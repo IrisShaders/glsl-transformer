@@ -143,17 +143,13 @@ public abstract class ASTPrinterBase extends ASTListenerVisitor<Void> {
   }
 
   protected void emitLineDirective(SourceLocation location) {
+    if (location == null) {
+      return;
+    }
     if (!location.hasLine()) {
-      throw new IllegalArgumentException("Location must have line");
+      throw new IllegalArgumentException("Location must have line to be printed!");
     }
-    emitType(GLSLLexer.NR, GLSLLexer.NR_LINE);
-    emitExactSpace();
-    emitLiteral(Integer.toString(location.line));
-    if (location.hasSource()) {
-      emitExactSpace();
-      emitLiteral(Integer.toString(location.source));
-    }
-    emitExactNewline();
+    emitToken(new LineDirectiveMarker(location));
   }
 
   protected void indent() {

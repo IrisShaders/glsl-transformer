@@ -37,7 +37,9 @@ public class AssertUtil {
     parser.getLexer().enableCustomDirective = true;
     parser.getLexer().enableIncludeDirective = true;
     var parseTree = parser.parse(input, parseMethod);
+    ASTBuilder.setTokenStream(parser.getTokenStream());
     var ast = ASTBuilder.build(parseTree);
+    ASTBuilder.unsetTokenStream();
     var reprinted = ASTPrinter.print(printType, ast);
     assertEquals(expected, reprinted);
     ast = ast.cloneSeparate();
@@ -52,7 +54,12 @@ public class AssertUtil {
     parser.getLexer().enableCustomDirective = true;
     parser.getLexer().enableIncludeDirective = true;
     var parseTree = parser.parse(input, parseMethod);
-    return ASTBuilder.build(parseTree);
+    try {
+      ASTBuilder.setTokenStream(parser.getTokenStream());
+      return ASTBuilder.build(parseTree);
+    } finally {
+      ASTBuilder.unsetTokenStream();
+    }
   }
 
   public static void assertQuery(Set<Object> expected, Stream<Object> result) {

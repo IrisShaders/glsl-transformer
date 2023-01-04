@@ -23,6 +23,9 @@ public class SourceLocation {
   }
 
   public static SourceLocation fromPrevious(SourceLocation previous, int line) {
+    if (previous == null) {
+      return new SourceLocation(line);
+    }
     if (previous.line == line) {
       return previous;
     }
@@ -30,6 +33,9 @@ public class SourceLocation {
   }
 
   public static SourceLocation fromPrevious(SourceLocation previous, int line, int source) {
+    if (previous == null) {
+      return new SourceLocation(line, source);
+    }
     if (previous.line == line && previous.source == source) {
       return previous;
     }

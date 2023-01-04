@@ -31,6 +31,7 @@ public class ASTParser implements ParserInterface {
   private EnhancedParser parser = new CachingParser();
   private TypedTreeCache<ASTNode> buildCache = new TypedTreeCache<>();
   private ASTCacheStrategy astCacheStrategy = ASTCacheStrategy.ALL_EXCLUDING_TRANSLATION_UNIT;
+  private boolean parseLineDirectives = false;
 
   public enum ASTCacheStrategy {
     ALL,
@@ -76,6 +77,17 @@ public class ASTParser implements ParserInterface {
     parser = parsingCacheStrategy == ParsingCacheStrategy.ALL ? new CachingParser() : new EnhancedParser();
   }
 
+  /**
+   * Sets whether the AST parser should handle line directives. If set to true,
+   * the parser will parse line directives and add them to the AST. If set to
+   * false, the parser will ignore line directives and not add them to the AST.
+   * 
+   * @param parseLineDirectives whether the parser should parse line directives
+   */
+  public void setParseLineDirectives(boolean parseLineDirectives) {
+    this.parseLineDirectives = parseLineDirectives;
+  }
+
   @Override
   public GLSLLexer getLexer() {
     return parser.getLexer();
@@ -111,6 +123,34 @@ public class ASTParser implements ParserInterface {
     parser.setTokenFilter(setTokenFilter);
   }
 
+  private void setBuilderTokenStream() {
+    if (parseLineDirectives) {
+      ASTBuilder.setTokenStream(parser.getTokenStream());
+    }
+  }
+
+  private void unsetBuilderTokenStream() {
+    if (parseLineDirectives) {
+      ASTBuilder.unsetTokenStream();
+    }
+  }
+
+  @SuppressWarnings("unchecked")
+  private <C extends ParserRuleContext, N extends ASTNode> N parseNodeCachedUncloned(String input,
+      Class<C> ruleType,
+      Function<GLSLParser, C> parseMethod,
+      BiFunction<ASTBuilder, C, N> visitMethod) {
+    return (N) buildCache.cachedGet(input, ruleType,
+        () -> {
+          try {
+            setBuilderTokenStream();
+            return ASTBuilder.build(new EmptyRoot(), parser.parse(input, ruleType, parseMethod), visitMethod);
+          } finally {
+            unsetBuilderTokenStream();
+          }
+        });
+  }
+
   @SuppressWarnings("unchecked") // consistent use of the cache results in the same type
   public <C extends ParserRuleContext, N extends ASTNode> N parseNode(
       String input,
@@ -123,11 +163,15 @@ public class ASTParser implements ParserInterface {
     }
 
     if (astCacheStrategy == ASTCacheStrategy.NONE) {
-      return ASTBuilder.buildSubtree(parentTreeMember, parser.parse(input, ruleType, parseMethod), visitMethod);
+      try {
+        setBuilderTokenStream();
+        return ASTBuilder.buildSubtree(parentTreeMember, parser.parse(input, ruleType, parseMethod), visitMethod);
+      } finally {
+        unsetBuilderTokenStream();
+      }
     } else {
       // cache and possibly build, always clone to return new trees
-      return (N) buildCache.cachedGet(input, ruleType,
-          () -> ASTBuilder.build(new EmptyRoot(), parser.parse(input, ruleType, parseMethod), visitMethod))
+      return (N) parseNodeCachedUncloned(input, ruleType, parseMethod, visitMethod)
           .cloneInto(parentTreeMember);
     }
   }
@@ -141,10 +185,14 @@ public class ASTParser implements ParserInterface {
     if (astCacheStrategy == ASTCacheStrategy.NONE
         || astCacheStrategy == ASTCacheStrategy.ALL_EXCLUDING_TRANSLATION_UNIT
             && ruleType == TranslationUnitContext.class) {
-      return ASTBuilder.build(parser.parse(input, ruleType, parseMethod), visitMethod);
+      try {
+        setBuilderTokenStream();
+        return ASTBuilder.build(parser.parse(input, ruleType, parseMethod), visitMethod);
+      } finally {
+        unsetBuilderTokenStream();
+      }
     } else {
-      return (N) buildCache.cachedGet(input, ruleType,
-          () -> ASTBuilder.build(new EmptyRoot(), parser.parse(input, ruleType, parseMethod), visitMethod))
+      return (N) parseNodeCachedUncloned(input, ruleType, parseMethod, visitMethod)
           .cloneSeparate();
     }
   }

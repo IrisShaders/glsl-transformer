@@ -2,9 +2,9 @@ package io.github.douira.glsl_transformer.ast.transform;
 
 import java.util.*;
 import java.util.function.*;
-import java.util.regex.Pattern;
+import java.util.regex.*;
 
-import org.antlr.v4.runtime.Token;
+import org.antlr.v4.runtime.*;
 import org.antlr.v4.runtime.tree.*;
 
 import io.github.douira.glsl_transformer.*;
@@ -45,7 +45,16 @@ import io.github.douira.glsl_transformer.util.Type.NumberType;
  * relationship between a parse tree and an AST is encoded in this visitor.
  */
 public class ASTBuilder extends GLSLParserBaseVisitor<ASTNode> {
-  private static SourceLocation sourceLocation = new SourceLocation();
+  private static SourceLocation sourceLocation = null;
+  private static BufferedTokenStream tokenStream = null;
+
+  public static void setTokenStream(BufferedTokenStream tokenStream) {
+    ASTBuilder.tokenStream = tokenStream;
+  }
+
+  public static void unsetTokenStream() {
+    ASTBuilder.tokenStream = null;
+  }
 
   /**
    * Builds an AST from the given parse tree with a new root.
@@ -146,6 +155,36 @@ public class ASTBuilder extends GLSLParserBaseVisitor<ASTNode> {
     }
     var result = new Identifier(name);
     return result;
+  }
+
+  // ANTLR lexer grammar rule for line directives:
+  // '#line' WS_frag DIGIT+ (WS_frag DIGIT+)? (NEWLINE | WS_frag)* NEWLINE
+  private static Pattern lineDirective = Pattern.compile(
+      "#line[\\t\\r\\u000C ]+(\\d+)(?:[\\t\\r\\u000C ]+(\\d+))?.*", Pattern.DOTALL);
+
+  private static void readLineDirective(ParserRuleContext ctx) {
+    if (tokenStream != null) {
+      var tokens = tokenStream.getHiddenTokensToLeft(
+          ctx.start.getTokenIndex(), GLSLLexer.PREPROCESSOR);
+      if (tokens == null) {
+        return;
+      }
+      for (Token token : tokens) {
+        if (token.getType() == GLSLLexer.NR_LINE) {
+          // parse the line directive and update the current source location with it
+          Matcher matcher = lineDirective.matcher(token.getText());
+          if (matcher.matches()) {
+            var line = Integer.parseInt(matcher.group(1));
+            if (matcher.group(2) != null) {
+              var source = Integer.parseInt(matcher.group(2));
+              sourceLocation = SourceLocation.fromPrevious(sourceLocation, line, source);
+            } else {
+              sourceLocation = SourceLocation.fromPrevious(sourceLocation, line);
+            }
+          }
+        }
+      }
+    }
   }
 
   @Override
@@ -906,11 +945,14 @@ public class ASTBuilder extends GLSLParserBaseVisitor<ASTNode> {
 
   @Override
   public Statement visitStatement(StatementContext ctx) {
+    readLineDirective(ctx);
     return (Statement) super.visitStatement(ctx);
   }
 
   @Override
   public ExternalDeclaration visitExternalDeclaration(ExternalDeclarationContext ctx) {
+    readLineDirective(ctx);
+
     // wrap in an extra layer since we can't inherit from both external declaration
     // and declaration
     var result = super.visitExternalDeclaration(ctx);

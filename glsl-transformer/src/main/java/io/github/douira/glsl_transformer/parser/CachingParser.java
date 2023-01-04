@@ -2,7 +2,9 @@ package io.github.douira.glsl_transformer.parser;
 
 import java.util.function.Function;
 
-import org.antlr.v4.runtime.ParserRuleContext;
+import org.antlr.v4.runtime.*;
+
+import com.github.bsideup.jabel.Desugar;
 
 import io.github.douira.glsl_transformer.GLSLParser;
 import io.github.douira.glsl_transformer.GLSLParser.TranslationUnitContext;
@@ -18,7 +20,11 @@ import io.github.douira.glsl_transformer.token_filter.TokenFilter;
  * is safe to use this.
  */
 public class CachingParser extends EnhancedParser {
-  private TypedTreeCache<ParserRuleContext> parseCache;
+  @Desugar
+  record CacheContents(ParserRuleContext parseTree, BufferedTokenStream tokenStream) {
+  }
+
+  private TypedTreeCache<CacheContents> parseCache;
 
   public CachingParser(boolean throwParseErrors, int cacheSize) {
     super(throwParseErrors);
@@ -62,8 +68,19 @@ public class CachingParser extends EnhancedParser {
       ParserRuleContext parent,
       Class<C> ruleType,
       Function<GLSLParser, C> parseMethod) {
-    return (C) parseCache.cachedGet(str, ruleType,
-        () -> parse(str, parent, parseMethod));
+    var result = parseCache.cachedGet(str, ruleType,
+        () -> {
+          var node = parse(str, parent, parseMethod);
+          return new CacheContents(node, getTokenStream());
+        });
+    if (result != null) {
+      // so that when a cache hit happens, the getTokenStream method returns the
+      // correct token stream 
+      tokenStream = result.tokenStream;
+      return (C) result.parseTree;
+    } else {
+      return null;
+    }
   }
 
   @Override
