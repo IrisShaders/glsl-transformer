@@ -64,7 +64,7 @@ public abstract class ASTPrinterBase extends ASTListenerVisitor<Void> {
   }
 
   protected void emitLiteral(String literal) {
-    emitLiteral(TokenRole.DEFAULT, literal);
+    emitToken(new LiteralToken(literal));
   }
 
   protected void emitLiteralSafe(String literal) {

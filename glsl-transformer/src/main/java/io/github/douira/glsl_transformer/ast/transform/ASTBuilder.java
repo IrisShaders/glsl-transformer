@@ -45,7 +45,8 @@ import io.github.douira.glsl_transformer.util.Type.NumberType;
  * relationship between a parse tree and an AST is encoded in this visitor.
  */
 public class ASTBuilder extends GLSLParserBaseVisitor<ASTNode> {
-  private static SourceLocation sourceLocation = null;
+  private static Deque<SourceLocation> sourceLocations = new ArrayDeque<>(4);
+  private static SourceLocation lastSourceLocation = null;
   private static BufferedTokenStream tokenStream = null;
 
   public static void setTokenStream(BufferedTokenStream tokenStream) {
@@ -129,6 +130,8 @@ public class ASTBuilder extends GLSLParserBaseVisitor<ASTNode> {
   }
 
   private static ASTNode buildInternal(ParseTree ctx) {
+    sourceLocations.clear();
+    lastSourceLocation = null;
     return new ASTBuilder().visit(ctx);
   }
 
@@ -142,8 +145,9 @@ public class ASTBuilder extends GLSLParserBaseVisitor<ASTNode> {
     return ctx == null ? null : visitMethod.apply(ctx);
   }
 
-  public static SourceLocation getSourceLocation() {
-    return sourceLocation;
+  public static SourceLocation takeSourceLocation() {
+    var location = sourceLocations.isEmpty() ? null : sourceLocations.pop();
+    return location == SourceLocation.PLACEHOLDER ? null : location;
   }
 
   private static Identifier makeIdentifier(Token name) {
@@ -163,12 +167,14 @@ public class ASTBuilder extends GLSLParserBaseVisitor<ASTNode> {
       "#line[\\t\\r\\u000C ]+(\\d+)(?:[\\t\\r\\u000C ]+(\\d+))?.*", Pattern.DOTALL);
 
   private static void readLineDirective(ParserRuleContext ctx) {
-    if (tokenStream != null) {
-      var tokens = tokenStream.getHiddenTokensToLeft(
-          ctx.start.getTokenIndex(), GLSLLexer.PREPROCESSOR);
-      if (tokens == null) {
-        return;
-      }
+    if (tokenStream == null) {
+      return;
+    }
+
+    SourceLocation newSourceLocation = SourceLocation.PLACEHOLDER;
+    var tokens = tokenStream.getHiddenTokensToLeft(
+        ctx.start.getTokenIndex(), GLSLLexer.PREPROCESSOR);
+    if (tokens != null) {
       for (Token token : tokens) {
         if (token.getType() == GLSLLexer.NR_LINE) {
           // parse the line directive and update the current source location with it
@@ -177,14 +183,16 @@ public class ASTBuilder extends GLSLParserBaseVisitor<ASTNode> {
             var line = Integer.parseInt(matcher.group(1));
             if (matcher.group(2) != null) {
               var source = Integer.parseInt(matcher.group(2));
-              sourceLocation = SourceLocation.fromPrevious(sourceLocation, line, source);
+              lastSourceLocation = SourceLocation.fromPrevious(lastSourceLocation, line, source);
             } else {
-              sourceLocation = SourceLocation.fromPrevious(sourceLocation, line);
+              lastSourceLocation = SourceLocation.fromPrevious(lastSourceLocation, line);
             }
+            newSourceLocation = lastSourceLocation;
           }
         }
       }
     }
+    sourceLocations.push(newSourceLocation);
   }
 
   @Override
@@ -624,9 +632,11 @@ public class ASTBuilder extends GLSLParserBaseVisitor<ASTNode> {
 
   @Override
   public SwitchStatement visitSwitchStatement(SwitchStatementContext ctx) {
+    var compoundStatementCtx = ctx.compoundStatement();
+    readLineDirective(compoundStatementCtx);
     return new SwitchStatement(
         visitExpression(ctx.condition),
-        visitCompoundStatement(ctx.compoundStatement()));
+        visitCompoundStatement(compoundStatementCtx));
   }
 
   @Override
@@ -696,9 +706,11 @@ public class ASTBuilder extends GLSLParserBaseVisitor<ASTNode> {
 
   @Override
   public FunctionDefinition visitFunctionDefinition(FunctionDefinitionContext ctx) {
+    var compoundStatementCtx = ctx.compoundStatement();
+    readLineDirective(compoundStatementCtx);
     return new FunctionDefinition(
         visitFunctionPrototype(ctx.functionPrototype()),
-        visitCompoundStatement(ctx.compoundStatement()));
+        visitCompoundStatement(compoundStatementCtx));
   }
 
   @Override

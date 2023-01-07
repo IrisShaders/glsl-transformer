@@ -37,7 +37,7 @@ public abstract class ASTNode {
   private Consumer<ASTNode> selfReplacer;
   private Root root = Root.getActiveBuildRoot();
   protected Template<?> template = null;
-  private SourceLocation sourceLocation = ASTBuilder.getSourceLocation();
+  protected SourceLocation sourceLocation = null;
 
   /**
    * Whether this node has been registered with the root. This is only used when

@@ -5,6 +5,7 @@ package io.github.douira.glsl_transformer.ast.transform;
  */
 public class SourceLocation {
   public static final int NONE = -1;
+  public static final SourceLocation PLACEHOLDER = new SourceLocation();
 
   public final int line;
   public final int source;

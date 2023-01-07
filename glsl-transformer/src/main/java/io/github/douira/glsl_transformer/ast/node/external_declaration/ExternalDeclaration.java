@@ -2,9 +2,14 @@ package io.github.douira.glsl_transformer.ast.node.external_declaration;
 
 import io.github.douira.glsl_transformer.ast.node.abstract_node.InnerASTNode;
 import io.github.douira.glsl_transformer.ast.query.Root;
+import io.github.douira.glsl_transformer.ast.transform.ASTBuilder;
 import io.github.douira.glsl_transformer.ast.traversal.*;
 
 public abstract class ExternalDeclaration extends InnerASTNode {
+  public ExternalDeclaration() {
+    sourceLocation = ASTBuilder.takeSourceLocation();
+  }
+
   public enum ExternalDeclarationType {
     FUNCTION_DEFINITION,
     DECLARATION,

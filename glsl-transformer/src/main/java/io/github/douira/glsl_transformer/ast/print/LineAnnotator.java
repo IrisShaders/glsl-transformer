@@ -18,8 +18,13 @@ public class LineAnnotator extends DelegateTokenProcessor {
   public void appendToken(PrintToken token) {
     if (token instanceof LineDirectiveMarker lineDirectiveMarker) {
       var location = lineDirectiveMarker.location;
-      super.appendDirectly("#line " + Integer.toString(location.line)
-          + (location.hasSource() ? " " + Integer.toString(location.source) : "") + "\n");
+      super.appendToken(new LiteralToken("#line "));
+      super.appendToken(new LiteralToken(Integer.toString(location.line)));
+      if (location.hasSource()) {
+        super.appendToken(new LiteralToken(" "));
+        super.appendToken(new LiteralToken(Integer.toString(location.source)));
+      }
+      super.appendToken(new LiteralToken("\n"));
     } else {
       super.appendToken(token);
     }

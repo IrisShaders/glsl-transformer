@@ -10,4 +10,6 @@ public interface TokenProcessor {
   void appendDirectly(String content);
 
   void appendDirectly(char content);
+
+  
 }

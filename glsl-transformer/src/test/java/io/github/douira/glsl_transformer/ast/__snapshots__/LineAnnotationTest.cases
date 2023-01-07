@@ -1,92 +1,137 @@
 §testLineAnnotationReprint translationUnit:
-void foo() { 1; }
-===
-#line 0 1
-void foo() {
-#line 0
-	1;
-#line 0
-}
+#line 4 21
+;
 
 §testLineAnnotationReprint translationUnit:
-void foo() { 1;
-}
+#line 4 21
+#line 4 21
+;
+
 ===
-#line 0 1
-void foo() {
-#line 0
-	1;
-}
+#line 4 21
+;
 
 §testLineAnnotationReprint translationUnit:
-void foo() {
-  1;
-}
-===
-#line 0 1
-void foo() {
-	1;
-}
-
-§testLineAnnotationReprint translationUnit:
-void foo() {
-  1; }
-===
-#line 0 1
-void foo() {
-	1;
-#line 1
-}
-
-§testLineAnnotationReprint translationUnit:
-void foo() {
-
-  1;
-
-
-}
-===
-#line 0 1
-void foo() {
-#line 2
-	1;
+#line 4 21
 #line 5
-}
+;
+
+===
+#line 5 21
+;
 
 §testLineAnnotationReprint translationUnit:
-void foo() {
-
-  {
-
-    1;
-
-  }
-
-}
-===
-#line 0 1
-void foo() {
-#line 2
-  {
 #line 4
-	  1;
-#line 6
-  }
-#line 8
+#line 5
+;
+
+===
+#line 5
+;
+
+§testLineAnnotationReprint translationUnit:
+#line 4
+
+#line 5
+;
+
+===
+#line 5
+;
+
+§testLineAnnotationReprint translationUnit:
+;
+
+§testLineAnnotationReprint translationUnit:
+#line 4
+#line 1
+#line 4 4
+#line 5
+;
+
+===
+#line 5 4
+;
+
+§testLineAnnotationReprint translationUnit:
+;
+;
+#line 4
+;
+
+§testLineAnnotationReprint translationUnit:
+#line 4
+;
+;
+
+§testLineAnnotationReprint translationUnit:
+#line 4 5
+;
+;
+#line 4
+;
+===
+#line 4 5
+;
+;
+#line 4 5
+;
+
+§testLineAnnotationReprint translationUnit:
+;
+
+§testLineAnnotationReprint translationUnit:
+
+§testLineAnnotationReprint translationUnit:
+#line 4
+void main() {
 }
 
 §testLineAnnotationReprint translationUnit:
-int foo = a + b + c;
-===
-#line 0 1
-int foo = a + b + c;
+#line 1
+void main() {
+	#line 4
+	if (true) ;
+	#line 4
+	while (true) {
+		#line 5
+		;
+	}
+}
 
 §testLineAnnotationReprint translationUnit:
-int foo = a
-+ b
-
-+ c;
+#line 4 5
+void main() {
+	;
+	#line 1
+	;
+}
 ===
-#line 0 1
-int foo = a + b + c;
+#line 4 5
+void main() {
+	;
+	#line 1 5
+	;
+}
+
+§testLineAnnotationReprint.disabled translationUnit:
+#line 1
+void main() {
+	#line 4
+	if (true) {
+		#line 5
+		;
+	}
+	#line 4
+	if (true)
+	#line 4
+	;
+	while (true) 
+	#line 4
+	{
+		#line 5
+		;
+	}
+}
+
 §
