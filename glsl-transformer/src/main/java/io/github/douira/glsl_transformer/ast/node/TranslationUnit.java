@@ -108,10 +108,15 @@ public class TranslationUnit extends ListASTNode<ExternalDeclaration> {
     injectNodes(injectionPoint, t.parseExternalDeclarations(this, externalDeclarations));
   }
 
-  public CompoundStatement getOneFunctionDefinitionBody(String functionName) {
+  public Optional<CompoundStatement> getOneFunctionDefinitionBodyOptional(String functionName) {
     return getRoot().identifierIndex.getStream(functionName)
         .map(id -> id.getBranchAncestor(FunctionDefinition.class, FunctionDefinition::getFunctionPrototype))
-        .filter(Objects::nonNull).findAny().map(FunctionDefinition::getBody).orElse(null);
+        .filter(Objects::nonNull).findAny().map(FunctionDefinition::getBody);
+  }
+
+  public CompoundStatement getOneFunctionDefinitionBody(String functionName) {
+    return getOneFunctionDefinitionBodyOptional(functionName)
+        .orElseThrow(TransformationException.supplier("No function definition found for '" + functionName + "'"));
   }
 
   public CompoundStatement getOneMainDefinitionBody() {
