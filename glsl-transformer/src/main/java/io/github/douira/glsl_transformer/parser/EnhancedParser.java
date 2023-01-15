@@ -274,58 +274,94 @@ public class EnhancedParser implements ParserInterface {
     parser.setTokenStream(tokenStream); // this also resets the parser
 
     C node;
-    if (parsingStrategy == ParsingStrategy.SLL_AND_LL_ON_ERROR) {
-      // never throw SLL errors
-      parser.removeErrorListener(ThrowingErrorListener.INSTANCE);
-      parser.getInterpreter().setPredictionMode(PredictionMode.SLL);
-      parser.setErrorHandler(new BailErrorStrategy());
+    try {
+      if (parsingStrategy == ParsingStrategy.SLL_AND_LL_ON_ERROR) {
+        // never throw SLL errors
+        parser.removeErrorListener(ThrowingErrorListener.INSTANCE);
+        parser.getInterpreter().setPredictionMode(PredictionMode.SLL);
+        parser.setErrorHandler(new BailErrorStrategy());
 
-      // try to parse with SLL mode
-      try {
-        node = parseMethod.apply(parser);
-      } catch (ParseCancellationException SLLException) {
-        // if there was an error in the SLL strategy either there is an error in the
-        // string which should (possibly) be reported or the grammar is too difficult
-        // for the SLL strategy to handle and the LL strategy has to be used instead
-        // NOTE: it seems like the GLSL grammar never requires the LL strategy
-        lexer.reset();
-        parser.reset();
+        // try to parse with SLL mode
+        try {
+          node = parseMethod.apply(parser);
+        } catch (ParseCancellationException SLLException) {
+          // if there was an error in the SLL strategy either there is an error in the
+          // string which should (possibly) be reported or the grammar is too difficult
+          // for the SLL strategy to handle and the LL strategy has to be used instead
+          // NOTE: it seems like the GLSL grammar never requires the LL strategy
+          lexer.reset();
+          parser.reset();
 
-        // throw LL errors if enabled
+          // throw LL errors if enabled
+          if (throwParseErrors) {
+            parser.addErrorListener(ThrowingErrorListener.INSTANCE);
+          } else {
+            parser.removeErrorListener(ThrowingErrorListener.INSTANCE);
+          }
+          parser.setErrorHandler(new DefaultErrorStrategy());
+          parser.getInterpreter().setPredictionMode(PredictionMode.LL);
+
+          ParseCancellationException possibleLLException = null;
+          try {
+            node = parseMethod.apply(parser);
+          } catch (ParseCancellationException LLException) {
+            possibleLLException = LLException;
+            throw LLException;
+          } finally {
+            // notify the parse error consumer of both errors if they exist
+            if (internalErrorConsumer != null) {
+              internalErrorConsumer.accept(SLLException, possibleLLException);
+            }
+          }
+        }
+      } else {
+        parser.getInterpreter().setPredictionMode(
+            parsingStrategy == ParsingStrategy.SLL_ONLY ? PredictionMode.SLL : PredictionMode.LL);
         if (throwParseErrors) {
           parser.addErrorListener(ThrowingErrorListener.INSTANCE);
         } else {
           parser.removeErrorListener(ThrowingErrorListener.INSTANCE);
         }
         parser.setErrorHandler(new DefaultErrorStrategy());
-        parser.getInterpreter().setPredictionMode(PredictionMode.LL);
-
-        ParseCancellationException possibleLLException = null;
-        try {
-          node = parseMethod.apply(parser);
-        } catch (ParseCancellationException LLException) {
-          possibleLLException = LLException;
-          throw LLException;
-        } finally {
-          // notify the parse error consumer of both errors if they exist
-          if (internalErrorConsumer != null) {
-            internalErrorConsumer.accept(SLLException, possibleLLException);
-          }
-        }
+        node = parseMethod.apply(parser);
       }
-    } else {
-      parser.getInterpreter().setPredictionMode(
-          parsingStrategy == ParsingStrategy.SLL_ONLY ? PredictionMode.SLL : PredictionMode.LL);
-      if (throwParseErrors) {
-        parser.addErrorListener(ThrowingErrorListener.INSTANCE);
-      } else {
-        parser.removeErrorListener(ThrowingErrorListener.INSTANCE);
-      }
-      parser.setErrorHandler(new DefaultErrorStrategy());
-      node = parseMethod.apply(parser);
+    } catch (ParseCancellationException e) {
+      throw handleParseCancellationException(e);
     }
 
     node.setParent(parent);
     return node;
+  }
+
+  private RuntimeException handleParseCancellationException(ParseCancellationException e) {
+    if (e.getCause() instanceof RecognitionException recognitionException) {
+      // handle all the types of recognition exceptions
+      // if (recognitionException instanceof LexerNoViableAltException
+      // lexerNoViableAltException) {
+      // }
+      // else if (recognitionException instanceof NoViableAltException
+      // noViableAltException) {
+      // }
+      if (recognitionException instanceof InputMismatchException inputMismatchException) {
+        var expectedTokens = inputMismatchException.getExpectedTokens();
+        if (expectedTokens.size() == 2 && expectedTokens.contains(GLSLLexer.SEMICOLON)
+            && expectedTokens.contains(GLSLLexer.COMMA)) {
+          return new ParsingException("Missing semicolon or comma!", e);
+        } else {
+          var offendingToken = inputMismatchException.getOffendingToken();
+          if (offendingToken.getType() == GLSLLexer.EOF) {
+            return new ParsingException("Unexpected end of file!", e);
+          } else {
+            return new ParsingException(
+                "Unexpected token '" + inputMismatchException.getOffendingToken().getText() + "'", e);
+          }
+        }
+      }
+      // else if (recognitionException instanceof FailedPredicateException) {
+      // }
+    }
+
+    // return the original exception if it is not a recognition exception
+    return e;
   }
 }

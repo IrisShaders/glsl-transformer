@@ -5,7 +5,6 @@ import static org.junit.jupiter.api.Assertions.*;
 import java.util.ArrayList;
 import java.util.stream.Collectors;
 
-import org.antlr.v4.runtime.misc.ParseCancellationException;
 import org.junit.jupiter.api.Test;
 
 import io.github.douira.glsl_transformer.ast.node.*;
@@ -15,6 +14,7 @@ import io.github.douira.glsl_transformer.ast.node.external_declaration.ExternalD
 import io.github.douira.glsl_transformer.ast.print.PrintType;
 import io.github.douira.glsl_transformer.ast.query.Root;
 import io.github.douira.glsl_transformer.ast.query.index.PrefixIdentifierIndex;
+import io.github.douira.glsl_transformer.parser.ParsingException;
 import io.github.douira.glsl_transformer.test_util.TestWithSingleASTTransformer;
 import io.github.douira.glsl_transformer.util.Type;
 
@@ -281,20 +281,5 @@ public class SingleASTTransformerTest extends TestWithSingleASTTransformer {
     assertTransform(
         "int x = foo; int y = hello; ",
         "int x = bar; int y = foo;");
-  }
-
-  @Test
-  void testParseNewKeywords() {
-    assertThrows(ParseCancellationException.class, () -> {
-      p.parseSeparateExternalDeclaration("void foo(sampler2D sample) { }");
-    }, "It should throw if keywords are used as identifiers.");
-    assertThrows(ParseCancellationException.class, () -> {
-      p.getLexer().version = Version.GLSL40;
-      p.parseSeparateExternalDeclaration("void foo(sampler2D sample) { }");
-    }, "It should throw if keywords are used as identifiers.");
-    assertDoesNotThrow(() -> {
-      p.getLexer().version = Version.GLSL33;
-      p.parseSeparateExternalDeclaration("void foo(sampler2D sample) { }");
-    }, "It should not throw if disabled keywords are used as identifiers.");
   }
 }

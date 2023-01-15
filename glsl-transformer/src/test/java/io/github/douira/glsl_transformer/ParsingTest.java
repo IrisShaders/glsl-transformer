@@ -14,13 +14,15 @@ import org.junit.jupiter.api.function.Executable;
 import au.com.origin.snapshots.Expect;
 import au.com.origin.snapshots.annotations.SnapshotName;
 import au.com.origin.snapshots.junit5.SnapshotExtension;
+import io.github.douira.glsl_transformer.ast.node.Version;
 import io.github.douira.glsl_transformer.ast.print.PrintType;
 import io.github.douira.glsl_transformer.ast.transform.*;
+import io.github.douira.glsl_transformer.parser.ParsingException;
 import io.github.douira.glsl_transformer.test_util.*;
 import io.github.douira.glsl_transformer.test_util.TestResourceManager.DirectoryLocation;
 
 @ExtendWith({ SnapshotExtension.class })
-public class ParsingTest {
+public class ParsingTest extends TestWithSingleASTTransformer {
   private Expect expect;
   private Exception storeException;
   private SingleASTTransformer<JobParameters> manager;
@@ -49,6 +51,9 @@ public class ParsingTest {
       } catch (ParseCancellationException exception) {
         storeException = exception;
         throw exception;
+      } catch (ParsingException exception) {
+        storeException = exception.getCause();
+        throw exception.getCause();
       }
     });
     assertSame(type, storeException.getCause().getClass(),
@@ -149,5 +154,26 @@ public class ParsingTest {
           assertSame(parameters, man.getJobParameters(), "It should contain the job parameters again");
           return result;
         }), "It should return the value of the supplier function");
+  }
+
+  @Test
+  void testParseNewKeywords() {
+    assertThrows(ParseCancellationException.class, () -> {
+      p.parseSeparateExternalDeclaration("void foo(sampler2D sample) { }");
+    }, "It should throw if keywords are used as identifiers.");
+    assertThrows(ParseCancellationException.class, () -> {
+      p.getLexer().version = Version.GLSL40;
+      p.parseSeparateExternalDeclaration("void foo(sampler2D sample) { }");
+    }, "It should throw if keywords are used as identifiers.");
+    assertDoesNotThrow(() -> {
+      p.getLexer().version = Version.GLSL33;
+      p.parseSeparateExternalDeclaration("void foo(sampler2D sample) { }");
+    }, "It should not throw if disabled keywords are used as identifiers.");
+  }
+
+  @Test
+  @Disabled
+  void testParseExceptions() {
+    p.parseSeparateExternalDeclaration("int a");
   }
 }
