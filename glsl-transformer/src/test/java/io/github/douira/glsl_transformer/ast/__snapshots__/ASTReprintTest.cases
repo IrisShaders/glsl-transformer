@@ -42,6 +42,14 @@ true ? 1.0f : bar.length()
 §testReprint expression:
 a, b, c
 §testReprint expression:
+a, b, c + d, e, f
+§testReprint expression:
+a + b, c + d, e + f, (a, b, c, d, e, f) + e, e
+§testReprint expression:
+a,b,c,d,e,f
+===
+a, b, c, d, e, f
+§testReprint expression:
 (a, b, c, d)
 §testReprint expression:
 ++1, --1, 1++, 1--, +1, -1, ~1, !1

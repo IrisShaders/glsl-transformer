@@ -332,32 +332,6 @@ public class ASTBuilder extends GLSLParserBaseVisitor<ASTNode> {
     }
   }
 
-  @Override
-  public SequenceExpression visitSequenceExpression(SequenceExpressionContext ctx) {
-    // SequenceExpressions in the parse tree are nested in the left operand
-    ExpressionContext left = ctx;
-    var expressions = new ArrayList<Expression>();
-
-    // collect the nested sequence expressions
-    do {
-      var sequence = (SequenceExpressionContext) left;
-      if (sequence.right instanceof SequenceExpressionContext) {
-        throw new IllegalStateException("Sequence expressions should not be nested on the right operand!");
-      }
-      var right = visitExpression(sequence.right);
-      expressions.add(right);
-
-      left = sequence.left;
-    } while (left instanceof SequenceExpressionContext);
-
-    expressions.add(visitExpression(left));
-    Collections.reverse(expressions);
-
-    // converting to stream and back is fine
-    // since the child list has to copy anyways
-    return new SequenceExpression(expressions.stream());
-  }
-
   private static final Pattern intExtractor = Pattern.compile(
       "(0x|0|)(.*?)(?:us|ul|u|s|l)?$", Pattern.CASE_INSENSITIVE);
   private static final Pattern floatExtractor = Pattern.compile(
@@ -951,7 +925,14 @@ public class ASTBuilder extends GLSLParserBaseVisitor<ASTNode> {
         ctx.children.stream().map(child -> (TypeQualifierPart) visit(child)));
   }
 
+  @Override
   public Expression visitExpression(ExpressionContext ctx) {
+    return ctx.items.size() == 1
+        ? visitExpression(ctx.items.get(0))
+        : new SequenceExpression(ctx.items.stream().map(this::visitExpression));
+  }
+
+  public Expression visitExpression(FiniteExpressionContext ctx) {
     return (Expression) visit(ctx);
   }
 

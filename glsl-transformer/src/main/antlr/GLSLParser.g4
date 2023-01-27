@@ -98,8 +98,8 @@ layoutDefaults:
 
 functionDefinition: functionPrototype compoundStatement;
 
-// Note: diverges from the spec by explicity adding a method call instead of handling it through postfixExpression in functionIdentifier
-expression:
+//Note: diverges from the spec by explicity adding a method call instead of handling it through postfixExpression in functionIdentifier
+finiteExpression:
 	IDENTIFIER # referenceExpression
 	| (
 		INT16CONSTANT
@@ -112,18 +112,23 @@ expression:
 		| FLOAT32CONSTANT
 		| FLOAT64CONSTANT
 		| BOOLCONSTANT
-	)																													# literalExpression
-	| LPAREN value = expression RPAREN												# groupingExpression
-	| left = expression LBRACKET right = expression RBRACKET	# arrayAccessExpression
-	| operand = expression DOT_LENGTH_METHOD_CALL							# lengthAccessExpression
+	) # literalExpression
+	//only the grouping expression allows the sequence expression since the sequence expression
+  //has the lowest precendence and not putting it in parentheses would simply create a
+  //sequence expression around the whole expression
+	| LPAREN value = expression RPAREN																		# groupingExpression
+	| left = finiteExpression LBRACKET right = expression RBRACKET	# arrayAccessExpression
+	| operand = finiteExpression DOT_LENGTH_METHOD_CALL										# lengthAccessExpression
 	//Note: diverges from the spec by not allowing a prefixExpression as an identifier
 	//array-type function identfiers are handled by typeSpecifier
 	| (IDENTIFIER | typeSpecifier) LPAREN (
 		| VOID
-		| parameters += expression (COMMA parameters += expression)*
-	) RPAREN																				# functionCallExpression
-	| operand = expression DOT member = IDENTIFIER	# memberAccessExpression
-	| operand = expression op = (INC_OP | DEC_OP)		# postfixExpression
+		| parameters += finiteExpression (
+			COMMA parameters += finiteExpression
+		)*
+	) RPAREN																							# functionCallExpression
+	| operand = finiteExpression DOT member = IDENTIFIER	# memberAccessExpression
+	| operand = finiteExpression op = (INC_OP | DEC_OP)		# postfixExpression
 	| <assoc = right> op = (
 		INC_OP
 		| DEC_OP
@@ -131,21 +136,23 @@ expression:
 		| MINUS_OP
 		| LOGICAL_NOT_OP
 		| BITWISE_NEG_OP
-	) operand = expression																											# prefixExpression
-	| left = expression op = (TIMES_OP | DIV_OP | MOD_OP) right = expression		# multiplicativeExpression
-	| left = expression op = (PLUS_OP | MINUS_OP) right = expression						# additiveExpression
-	| left = expression op = (LEFT_OP | RIGHT_OP) right = expression						# shiftExpression
-	| left = expression op = (LT_OP | GT_OP | LE_OP | GE_OP) right = expression	# relationalExpression
-	| left = expression op = (EQ_OP | NE_OP) right = expression									# equalityExpression
-	| left = expression op = BITWISE_AND_OP right = expression									# bitwiseAndExpression
-	| left = expression op = BITWISE_XOR_OP right = expression									# bitwiseExclusiveOrExpression
-	| left = expression op = BITWISE_OR_OP right = expression										# bitwiseInclusiveOrExpression
-	| left = expression op = LOGICAL_AND_OP right = expression									# logicalAndExpression
-	| left = expression op = LOGICAL_XOR_OP right = expression									# logicalExclusiveOrExpression
-	| left = expression op = LOGICAL_OR_OP right = expression										# logicalInclusiveOrExpression
-	| <assoc = right> condition = expression QUERY_OP trueAlternative = expression COLON falseAlternative =
-		expression # conditionalExpression
-	| <assoc = right> left = expression op = (
+	) operand = finiteExpression																													# prefixExpression
+	| left = finiteExpression op = (TIMES_OP | DIV_OP | MOD_OP) right = finiteExpression	#
+		multiplicativeExpression
+	| left = finiteExpression op = (PLUS_OP | MINUS_OP) right = finiteExpression						# additiveExpression
+	| left = finiteExpression op = (LEFT_OP | RIGHT_OP) right = finiteExpression						# shiftExpression
+	| left = finiteExpression op = (LT_OP | GT_OP | LE_OP | GE_OP) right = finiteExpression	#
+		relationalExpression
+	| left = finiteExpression op = (EQ_OP | NE_OP) right = finiteExpression	# equalityExpression
+	| left = finiteExpression op = BITWISE_AND_OP right = finiteExpression	# bitwiseAndExpression
+	| left = finiteExpression op = BITWISE_XOR_OP right = finiteExpression	# bitwiseExclusiveOrExpression
+	| left = finiteExpression op = BITWISE_OR_OP right = finiteExpression		# bitwiseInclusiveOrExpression
+	| left = finiteExpression op = LOGICAL_AND_OP right = finiteExpression	# logicalAndExpression
+	| left = finiteExpression op = LOGICAL_XOR_OP right = finiteExpression	# logicalExclusiveOrExpression
+	| left = finiteExpression op = LOGICAL_OR_OP right = finiteExpression		# logicalInclusiveOrExpression
+	| <assoc = right> condition = finiteExpression QUERY_OP trueAlternative = finiteExpression COLON
+		falseAlternative = finiteExpression # conditionalExpression
+	| <assoc = right> left = finiteExpression op = (
 		ASSIGN_OP
 		| MUL_ASSIGN
 		| DIV_ASSIGN
@@ -157,8 +164,10 @@ expression:
 		| AND_ASSIGN
 		| XOR_ASSIGN
 		| OR_ASSIGN
-	) right = expression													# assignmentExpression
-	| left = expression COMMA right = expression	# sequenceExpression;
+	) right = finiteExpression # assignmentExpression;
+
+expression:
+	items += finiteExpression (COMMA items += finiteExpression)*;
 
 declaration:
 	functionPrototype SEMICOLON # functionDeclaration

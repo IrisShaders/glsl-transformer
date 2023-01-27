@@ -487,6 +487,83 @@ a && b || c ^^ c
 ]
 
 
+testASTTree[expression_E25YWQPJopozQwuDjj0hXjnjEs8=]=[
+a + b, c + d, e + f, (a, b, c, d, e, f) + e, e
+<><><><><><><><><><><><><><><><><><><><><><><><><>
+(SequenceExpression
+(AdditionExpression
+(ReferenceExpression
+(Identifier)
+- String a
+)ReferenceExpression
+(ReferenceExpression
+(Identifier)
+- String b
+)ReferenceExpression
+)AdditionExpression
+(AdditionExpression
+(ReferenceExpression
+(Identifier)
+- String c
+)ReferenceExpression
+(ReferenceExpression
+(Identifier)
+- String d
+)ReferenceExpression
+)AdditionExpression
+(AdditionExpression
+(ReferenceExpression
+(Identifier)
+- String e
+)ReferenceExpression
+(ReferenceExpression
+(Identifier)
+- String f
+)ReferenceExpression
+)AdditionExpression
+(AdditionExpression
+(GroupingExpression
+(SequenceExpression
+(ReferenceExpression
+(Identifier)
+- String a
+)ReferenceExpression
+(ReferenceExpression
+(Identifier)
+- String b
+)ReferenceExpression
+(ReferenceExpression
+(Identifier)
+- String c
+)ReferenceExpression
+(ReferenceExpression
+(Identifier)
+- String d
+)ReferenceExpression
+(ReferenceExpression
+(Identifier)
+- String e
+)ReferenceExpression
+(ReferenceExpression
+(Identifier)
+- String f
+)ReferenceExpression
+)SequenceExpression
+)GroupingExpression
+(ReferenceExpression
+(Identifier)
+- String e
+)ReferenceExpression
+)AdditionExpression
+(ReferenceExpression
+(Identifier)
+- String e
+)ReferenceExpression
+)SequenceExpression
+
+]
+
+
 testASTTree[expression_IwRwU5CpvXUYFm5baAJDpzTGvsA=]=[
 vec3(1, 2, 3)
 <><><><><><><><><><><><><><><><><><><><><><><><><>
@@ -494,7 +571,6 @@ vec3(1, 2, 3)
 (BuiltinNumericTypeSpecifier
 - Type F32VEC3
 )BuiltinNumericTypeSpecifier
-(SequenceExpression
 (LiteralExpression
 - Type INT32
 - Integer 1
@@ -510,7 +586,6 @@ vec3(1, 2, 3)
 - Integer 3
 - IntegerFormat DECIMAL
 )LiteralExpression
-)SequenceExpression
 )FunctionCallExpression
 
 ]
@@ -645,6 +720,39 @@ testASTTree[expression_SL+26MBvH1AJZNoHfJhlRFCVn4M=]=[
 )SubtractionExpression
 )GroupingExpression
 )NegationExpression
+
+]
+
+
+testASTTree[expression_VQc1aOOJChedA4dD6w658iRMsDw=]=[
+a,b,c,d,e,f
+<><><><><><><><><><><><><><><><><><><><><><><><><>
+(SequenceExpression
+(ReferenceExpression
+(Identifier)
+- String a
+)ReferenceExpression
+(ReferenceExpression
+(Identifier)
+- String b
+)ReferenceExpression
+(ReferenceExpression
+(Identifier)
+- String c
+)ReferenceExpression
+(ReferenceExpression
+(Identifier)
+- String d
+)ReferenceExpression
+(ReferenceExpression
+(Identifier)
+- String e
+)ReferenceExpression
+(ReferenceExpression
+(Identifier)
+- String f
+)ReferenceExpression
+)SequenceExpression
 
 ]
 
@@ -1098,13 +1206,47 @@ a << b >> c
 ]
 
 
+testASTTree[expression_lxUnE87vFxcva90ULrkz9G3CELQ=]=[
+a, b, c + d, e, f
+<><><><><><><><><><><><><><><><><><><><><><><><><>
+(SequenceExpression
+(ReferenceExpression
+(Identifier)
+- String a
+)ReferenceExpression
+(ReferenceExpression
+(Identifier)
+- String b
+)ReferenceExpression
+(AdditionExpression
+(ReferenceExpression
+(Identifier)
+- String c
+)ReferenceExpression
+(ReferenceExpression
+(Identifier)
+- String d
+)ReferenceExpression
+)AdditionExpression
+(ReferenceExpression
+(Identifier)
+- String e
+)ReferenceExpression
+(ReferenceExpression
+(Identifier)
+- String f
+)ReferenceExpression
+)SequenceExpression
+
+]
+
+
 testASTTree[expression_mEyU7bJEsM+E+YkHa5+HECxY/K0=]=[
 foo(1, bar(), baz(1, 2))
 <><><><><><><><><><><><><><><><><><><><><><><><><>
 (FunctionCallExpression
 (Identifier)
 - String foo
-(SequenceExpression
 (LiteralExpression
 - Type INT32
 - Integer 1
@@ -1117,7 +1259,6 @@ foo(1, bar(), baz(1, 2))
 (FunctionCallExpression
 (Identifier)
 - String baz
-(SequenceExpression
 (LiteralExpression
 - Type INT32
 - Integer 1
@@ -1128,9 +1269,7 @@ foo(1, bar(), baz(1, 2))
 - Integer 2
 - IntegerFormat DECIMAL
 )LiteralExpression
-)SequenceExpression
 )FunctionCallExpression
-)SequenceExpression
 )FunctionCallExpression
 
 ]
@@ -1440,7 +1579,6 @@ foo(1, 2, 3)
 (FunctionCallExpression
 (Identifier)
 - String foo
-(SequenceExpression
 (LiteralExpression
 - Type INT32
 - Integer 1
@@ -1456,7 +1594,6 @@ foo(1, 2, 3)
 - Integer 3
 - IntegerFormat DECIMAL
 )LiteralExpression
-)SequenceExpression
 )FunctionCallExpression
 
 ]
@@ -1603,15 +1740,12 @@ if (ColorTmp.a > 0.0f) {
 (BuiltinNumericTypeSpecifier
 - Type F32VEC4
 )BuiltinNumericTypeSpecifier
-(SequenceExpression
 (FunctionCallExpression
 (Identifier)
 - String mix
-(SequenceExpression
 (FunctionCallExpression
 (Identifier)
 - String mix
-(SequenceExpression
 (MemberAccessExpression
 (ReferenceExpression
 (Identifier)
@@ -1636,7 +1770,6 @@ if (ColorTmp.a > 0.0f) {
 (Identifier)
 - String a
 )MemberAccessExpression
-)SequenceExpression
 )FunctionCallExpression
 (MemberAccessExpression
 (ReferenceExpression
@@ -1654,7 +1787,6 @@ if (ColorTmp.a > 0.0f) {
 (Identifier)
 - String a
 )MemberAccessExpression
-)SequenceExpression
 )FunctionCallExpression
 (SubtractionExpression
 (LiteralExpression
@@ -1696,7 +1828,6 @@ if (ColorTmp.a > 0.0f) {
 )GroupingExpression
 )MultiplicationExpression
 )SubtractionExpression
-)SequenceExpression
 )FunctionCallExpression
 )AssignmentExpression
 )ExpressionStatement
@@ -1725,7 +1856,6 @@ float diffuseDepth = texture2D(DiffuseDepthSampler, texCoord).r;
 (FunctionCallExpression
 (Identifier)
 - String texture2D
-(SequenceExpression
 (ReferenceExpression
 (Identifier)
 - String DiffuseDepthSampler
@@ -1734,7 +1864,6 @@ float diffuseDepth = texture2D(DiffuseDepthSampler, texCoord).r;
 (Identifier)
 - String texCoord
 )ReferenceExpression
-)SequenceExpression
 )FunctionCallExpression
 (Identifier)
 - String r
@@ -2584,7 +2713,6 @@ mat2 ang = mat2(-.73736882209777832,.67549037933349609,-.67549037933349609,-.737
 (BuiltinNumericTypeSpecifier
 - Type F32MAT2X2
 )BuiltinNumericTypeSpecifier
-(SequenceExpression
 (NegationExpression
 (LiteralExpression
 - Type FLOAT32
@@ -2607,7 +2735,6 @@ mat2 ang = mat2(-.73736882209777832,.67549037933349609,-.67549037933349609,-.737
 - Float 0.7373688
 )LiteralExpression
 )NegationExpression
-)SequenceExpression
 )FunctionCallExpression
 )ExpressionInitializer
 )DeclarationMember
@@ -2927,11 +3054,9 @@ la[0] = A(texture2D(DS, t), texture2D(TDS, t).r, 0.0f);
 (FunctionCallExpression
 (Identifier)
 - String A
-(SequenceExpression
 (FunctionCallExpression
 (Identifier)
 - String texture2D
-(SequenceExpression
 (ReferenceExpression
 (Identifier)
 - String DS
@@ -2940,13 +3065,11 @@ la[0] = A(texture2D(DS, t), texture2D(TDS, t).r, 0.0f);
 (Identifier)
 - String t
 )ReferenceExpression
-)SequenceExpression
 )FunctionCallExpression
 (MemberAccessExpression
 (FunctionCallExpression
 (Identifier)
 - String texture2D
-(SequenceExpression
 (ReferenceExpression
 (Identifier)
 - String TDS
@@ -2955,7 +3078,6 @@ la[0] = A(texture2D(DS, t), texture2D(TDS, t).r, 0.0f);
 (Identifier)
 - String t
 )ReferenceExpression
-)SequenceExpression
 )FunctionCallExpression
 (Identifier)
 - String r
@@ -2964,7 +3086,6 @@ la[0] = A(texture2D(DS, t), texture2D(TDS, t).r, 0.0f);
 - Type FLOAT32
 - Float 0.0
 )LiteralExpression
-)SequenceExpression
 )FunctionCallExpression
 )AssignmentExpression
 )ExpressionStatement
@@ -4166,7 +4287,6 @@ data[invocation].i8.x = subgroupClusteredAdd(data[0].i8.x, 1);
 (FunctionCallExpression
 (Identifier)
 - String subgroupClusteredAdd
-(SequenceExpression
 (MemberAccessExpression
 (MemberAccessExpression
 (ArrayAccessExpression
@@ -4191,7 +4311,6 @@ data[invocation].i8.x = subgroupClusteredAdd(data[0].i8.x, 1);
 - Integer 1
 - IntegerFormat DECIMAL
 )LiteralExpression
-)SequenceExpression
 )FunctionCallExpression
 )AssignmentExpression
 )ExpressionStatement
@@ -4509,7 +4628,6 @@ void foo(sampler2D t) {
 (FunctionCallExpression
 (Identifier)
 - String texture
-(SequenceExpression
 (ReferenceExpression
 (Identifier)
 - String t
@@ -4523,7 +4641,6 @@ void foo(sampler2D t) {
 - Float 0.5
 )LiteralExpression
 )FunctionCallExpression
-)SequenceExpression
 )FunctionCallExpression
 )ExpressionStatement
 )CompoundStatement
@@ -5636,12 +5753,10 @@ const vec2 longList[75] = vec2[75](vec2(1, 2), vec2(1, 2), vec2(1, 2), vec2(1, 2
 (BuiltinNumericTypeSpecifier
 - Type F32VEC2
 )BuiltinNumericTypeSpecifier
-(SequenceExpression
 (FunctionCallExpression
 (BuiltinNumericTypeSpecifier
 - Type F32VEC2
 )BuiltinNumericTypeSpecifier
-(SequenceExpression
 (LiteralExpression
 - Type INT32
 - Integer 1
@@ -5652,13 +5767,11 @@ const vec2 longList[75] = vec2[75](vec2(1, 2), vec2(1, 2), vec2(1, 2), vec2(1, 2
 - Integer 2
 - IntegerFormat DECIMAL
 )LiteralExpression
-)SequenceExpression
 )FunctionCallExpression
 (FunctionCallExpression
 (BuiltinNumericTypeSpecifier
 - Type F32VEC2
 )BuiltinNumericTypeSpecifier
-(SequenceExpression
 (LiteralExpression
 - Type INT32
 - Integer 1
@@ -5669,13 +5782,11 @@ const vec2 longList[75] = vec2[75](vec2(1, 2), vec2(1, 2), vec2(1, 2), vec2(1, 2
 - Integer 2
 - IntegerFormat DECIMAL
 )LiteralExpression
-)SequenceExpression
 )FunctionCallExpression
 (FunctionCallExpression
 (BuiltinNumericTypeSpecifier
 - Type F32VEC2
 )BuiltinNumericTypeSpecifier
-(SequenceExpression
 (LiteralExpression
 - Type INT32
 - Integer 1
@@ -5686,13 +5797,11 @@ const vec2 longList[75] = vec2[75](vec2(1, 2), vec2(1, 2), vec2(1, 2), vec2(1, 2
 - Integer 2
 - IntegerFormat DECIMAL
 )LiteralExpression
-)SequenceExpression
 )FunctionCallExpression
 (FunctionCallExpression
 (BuiltinNumericTypeSpecifier
 - Type F32VEC2
 )BuiltinNumericTypeSpecifier
-(SequenceExpression
 (LiteralExpression
 - Type INT32
 - Integer 1
@@ -5703,13 +5812,11 @@ const vec2 longList[75] = vec2[75](vec2(1, 2), vec2(1, 2), vec2(1, 2), vec2(1, 2
 - Integer 2
 - IntegerFormat DECIMAL
 )LiteralExpression
-)SequenceExpression
 )FunctionCallExpression
 (FunctionCallExpression
 (BuiltinNumericTypeSpecifier
 - Type F32VEC2
 )BuiltinNumericTypeSpecifier
-(SequenceExpression
 (LiteralExpression
 - Type INT32
 - Integer 1
@@ -5720,13 +5827,11 @@ const vec2 longList[75] = vec2[75](vec2(1, 2), vec2(1, 2), vec2(1, 2), vec2(1, 2
 - Integer 2
 - IntegerFormat DECIMAL
 )LiteralExpression
-)SequenceExpression
 )FunctionCallExpression
 (FunctionCallExpression
 (BuiltinNumericTypeSpecifier
 - Type F32VEC2
 )BuiltinNumericTypeSpecifier
-(SequenceExpression
 (LiteralExpression
 - Type INT32
 - Integer 1
@@ -5737,13 +5842,11 @@ const vec2 longList[75] = vec2[75](vec2(1, 2), vec2(1, 2), vec2(1, 2), vec2(1, 2
 - Integer 2
 - IntegerFormat DECIMAL
 )LiteralExpression
-)SequenceExpression
 )FunctionCallExpression
 (FunctionCallExpression
 (BuiltinNumericTypeSpecifier
 - Type F32VEC2
 )BuiltinNumericTypeSpecifier
-(SequenceExpression
 (LiteralExpression
 - Type INT32
 - Integer 1
@@ -5754,13 +5857,11 @@ const vec2 longList[75] = vec2[75](vec2(1, 2), vec2(1, 2), vec2(1, 2), vec2(1, 2
 - Integer 2
 - IntegerFormat DECIMAL
 )LiteralExpression
-)SequenceExpression
 )FunctionCallExpression
 (FunctionCallExpression
 (BuiltinNumericTypeSpecifier
 - Type F32VEC2
 )BuiltinNumericTypeSpecifier
-(SequenceExpression
 (LiteralExpression
 - Type INT32
 - Integer 1
@@ -5771,9 +5872,7 @@ const vec2 longList[75] = vec2[75](vec2(1, 2), vec2(1, 2), vec2(1, 2), vec2(1, 2
 - Integer 2
 - IntegerFormat DECIMAL
 )LiteralExpression
-)SequenceExpression
 )FunctionCallExpression
-)SequenceExpression
 )FunctionCallExpression
 )ExpressionInitializer
 )DeclarationMember
@@ -5879,7 +5978,6 @@ uniform struct e {
 (BuiltinNumericTypeSpecifier
 - Type F32VEC2
 )BuiltinNumericTypeSpecifier
-(SequenceExpression
 (LiteralExpression
 - Type INT32
 - Integer 0
@@ -5890,7 +5988,6 @@ uniform struct e {
 - Integer 0
 - IntegerFormat DECIMAL
 )LiteralExpression
-)SequenceExpression
 )FunctionCallExpression
 )ExpressionInitializer
 )DeclarationMember
@@ -8110,7 +8207,6 @@ precision highp uimageBuffer;
 (BuiltinNumericTypeSpecifier
 - Type I32VEC2
 )BuiltinNumericTypeSpecifier
-(SequenceExpression
 (FunctionCallExpression
 (BuiltinNumericTypeSpecifier
 - Type I32VEC2
@@ -8147,7 +8243,6 @@ precision highp uimageBuffer;
 - Float 0.4
 )LiteralExpression
 )FunctionCallExpression
-)SequenceExpression
 )FunctionCallExpression
 )ExpressionInitializer
 )DeclarationMember
@@ -8870,7 +8965,6 @@ layout(input_attachment_index = 2) uniform subpassInputMS subDMS;
 (BuiltinFixedTypeSpecifier
 - BuiltinType SAMPLER2D
 )BuiltinFixedTypeSpecifier
-(SequenceExpression
 (ReferenceExpression
 (Identifier)
 - String s
@@ -8879,7 +8973,6 @@ layout(input_attachment_index = 2) uniform subpassInputMS subDMS;
 (Identifier)
 - String s
 )ReferenceExpression
-)SequenceExpression
 )FunctionCallExpression
 )ExpressionStatement
 (ExpressionStatement
@@ -8887,7 +8980,6 @@ layout(input_attachment_index = 2) uniform subpassInputMS subDMS;
 (BuiltinFixedTypeSpecifier
 - BuiltinType SAMPLER2D
 )BuiltinFixedTypeSpecifier
-(SequenceExpression
 (ReferenceExpression
 (Identifier)
 - String i
@@ -8896,7 +8988,6 @@ layout(input_attachment_index = 2) uniform subpassInputMS subDMS;
 (Identifier)
 - String i
 )ReferenceExpression
-)SequenceExpression
 )FunctionCallExpression
 )ExpressionStatement
 (ExpressionStatement
@@ -8904,7 +8995,6 @@ layout(input_attachment_index = 2) uniform subpassInputMS subDMS;
 (BuiltinFixedTypeSpecifier
 - BuiltinType SAMPLER2D
 )BuiltinFixedTypeSpecifier
-(SequenceExpression
 (ReferenceExpression
 (Identifier)
 - String t2d
@@ -8913,7 +9003,6 @@ layout(input_attachment_index = 2) uniform subpassInputMS subDMS;
 (Identifier)
 - String i
 )ReferenceExpression
-)SequenceExpression
 )FunctionCallExpression
 )ExpressionStatement
 (ExpressionStatement
@@ -8921,7 +9010,6 @@ layout(input_attachment_index = 2) uniform subpassInputMS subDMS;
 (BuiltinFixedTypeSpecifier
 - BuiltinType SAMPLER2D
 )BuiltinFixedTypeSpecifier
-(SequenceExpression
 (ReferenceExpression
 (Identifier)
 - String t2d
@@ -8930,7 +9018,6 @@ layout(input_attachment_index = 2) uniform subpassInputMS subDMS;
 (Identifier)
 - String t2d
 )ReferenceExpression
-)SequenceExpression
 )FunctionCallExpression
 )ExpressionStatement
 (ExpressionStatement
@@ -8938,7 +9025,6 @@ layout(input_attachment_index = 2) uniform subpassInputMS subDMS;
 (BuiltinFixedTypeSpecifier
 - BuiltinType SAMPLER2D
 )BuiltinFixedTypeSpecifier
-(SequenceExpression
 (ReferenceExpression
 (Identifier)
 - String t2d
@@ -8947,7 +9033,6 @@ layout(input_attachment_index = 2) uniform subpassInputMS subDMS;
 (Identifier)
 - String sA
 )ReferenceExpression
-)SequenceExpression
 )FunctionCallExpression
 )ExpressionStatement
 (ExpressionStatement
@@ -8955,7 +9040,6 @@ layout(input_attachment_index = 2) uniform subpassInputMS subDMS;
 (BuiltinFixedTypeSpecifier
 - BuiltinType SAMPLER3D
 )BuiltinFixedTypeSpecifier
-(SequenceExpression
 (ReferenceExpression
 (Identifier)
 - String t3d5
@@ -8971,7 +9055,6 @@ layout(input_attachment_index = 2) uniform subpassInputMS subDMS;
 - IntegerFormat DECIMAL
 )LiteralExpression
 )ArrayAccessExpression
-)SequenceExpression
 )FunctionCallExpression
 )ExpressionStatement
 (ExpressionStatement
@@ -8979,7 +9062,6 @@ layout(input_attachment_index = 2) uniform subpassInputMS subDMS;
 (BuiltinFixedTypeSpecifier
 - BuiltinType SAMPLER2D
 )BuiltinFixedTypeSpecifier
-(SequenceExpression
 (ReferenceExpression
 (Identifier)
 - String i2d
@@ -8988,7 +9070,6 @@ layout(input_attachment_index = 2) uniform subpassInputMS subDMS;
 (Identifier)
 - String s
 )ReferenceExpression
-)SequenceExpression
 )FunctionCallExpression
 )ExpressionStatement
 (ExpressionStatement
@@ -8996,7 +9077,6 @@ layout(input_attachment_index = 2) uniform subpassInputMS subDMS;
 (BuiltinFixedTypeSpecifier
 - BuiltinType SAMPLER2D
 )BuiltinFixedTypeSpecifier
-(SequenceExpression
 (ArrayAccessExpression
 (ReferenceExpression
 (Identifier)
@@ -9012,7 +9092,6 @@ layout(input_attachment_index = 2) uniform subpassInputMS subDMS;
 (Identifier)
 - String s
 )ReferenceExpression
-)SequenceExpression
 )FunctionCallExpression
 )ExpressionStatement
 (ExpressionStatement
@@ -9020,7 +9099,6 @@ layout(input_attachment_index = 2) uniform subpassInputMS subDMS;
 (BuiltinFixedTypeSpecifier
 - BuiltinType SAMPLER2D
 )BuiltinFixedTypeSpecifier
-(SequenceExpression
 (ReferenceExpression
 (Identifier)
 - String t2d
@@ -9029,7 +9107,6 @@ layout(input_attachment_index = 2) uniform subpassInputMS subDMS;
 (Identifier)
 - String sShadow
 )ReferenceExpression
-)SequenceExpression
 )FunctionCallExpression
 )ExpressionStatement
 (ExpressionStatement
@@ -9037,7 +9114,6 @@ layout(input_attachment_index = 2) uniform subpassInputMS subDMS;
 (BuiltinFixedTypeSpecifier
 - BuiltinType SAMPLER2DSHADOW
 )BuiltinFixedTypeSpecifier
-(SequenceExpression
 (ReferenceExpression
 (Identifier)
 - String t2d
@@ -9046,7 +9122,6 @@ layout(input_attachment_index = 2) uniform subpassInputMS subDMS;
 (Identifier)
 - String s
 )ReferenceExpression
-)SequenceExpression
 )FunctionCallExpression
 )ExpressionStatement
 )CompoundStatement
@@ -9066,7 +9141,6 @@ layout(input_attachment_index = 2) uniform subpassInputMS subDMS;
 (BuiltinFixedTypeSpecifier
 - BuiltinType SAMPLER2D
 )BuiltinFixedTypeSpecifier
-(SequenceExpression
 (ReferenceExpression
 (Identifier)
 - String t2d
@@ -9075,7 +9149,6 @@ layout(input_attachment_index = 2) uniform subpassInputMS subDMS;
 (Identifier)
 - String s
 )ReferenceExpression
-)SequenceExpression
 )FunctionCallExpression
 )ExpressionInitializer
 )DeclarationMember
@@ -9103,7 +9176,6 @@ layout(input_attachment_index = 2) uniform subpassInputMS subDMS;
 (BuiltinFixedTypeSpecifier
 - BuiltinType SAMPLER3D
 )BuiltinFixedTypeSpecifier
-(SequenceExpression
 (ReferenceExpression
 (Identifier)
 - String t3d
@@ -9119,7 +9191,6 @@ layout(input_attachment_index = 2) uniform subpassInputMS subDMS;
 - IntegerFormat DECIMAL
 )LiteralExpression
 )ArrayAccessExpression
-)SequenceExpression
 )FunctionCallExpression
 )ExpressionInitializer
 )DeclarationMember
@@ -9163,7 +9234,6 @@ layout(input_attachment_index = 2) uniform subpassInputMS subDMS;
 (FunctionCallExpression
 (Identifier)
 - String texture
-(SequenceExpression
 (ReferenceExpression
 (Identifier)
 - String s2D
@@ -9177,7 +9247,6 @@ layout(input_attachment_index = 2) uniform subpassInputMS subDMS;
 - Float 0.5
 )LiteralExpression
 )FunctionCallExpression
-)SequenceExpression
 )FunctionCallExpression
 )AssignmentExpression
 )ExpressionStatement
@@ -9190,7 +9259,6 @@ layout(input_attachment_index = 2) uniform subpassInputMS subDMS;
 (FunctionCallExpression
 (Identifier)
 - String texture
-(SequenceExpression
 (ArrayAccessExpression
 (ReferenceExpression
 (Identifier)
@@ -9210,7 +9278,6 @@ layout(input_attachment_index = 2) uniform subpassInputMS subDMS;
 - Float 0.5
 )LiteralExpression
 )FunctionCallExpression
-)SequenceExpression
 )FunctionCallExpression
 )AdditionAssignmentExpression
 )ExpressionStatement
@@ -9673,7 +9740,6 @@ int foob__vn8[4] = int[](21, 22, 23, 24), foob__vp;
 (BuiltinNumericTypeSpecifier
 - Type INT32
 )BuiltinNumericTypeSpecifier
-(SequenceExpression
 (LiteralExpression
 - Type INT32
 - Integer 1
@@ -9694,7 +9760,6 @@ int foob__vn8[4] = int[](21, 22, 23, 24), foob__vp;
 - Integer 4
 - IntegerFormat DECIMAL
 )LiteralExpression
-)SequenceExpression
 )FunctionCallExpression
 )ExpressionInitializer
 )DeclarationMember
@@ -9726,7 +9791,6 @@ int foob__vn8[4] = int[](21, 22, 23, 24), foob__vp;
 (BuiltinNumericTypeSpecifier
 - Type INT32
 )BuiltinNumericTypeSpecifier
-(SequenceExpression
 (LiteralExpression
 - Type INT32
 - Integer 5
@@ -9752,7 +9816,6 @@ int foob__vn8[4] = int[](21, 22, 23, 24), foob__vp;
 - Integer 9
 - IntegerFormat DECIMAL
 )LiteralExpression
-)SequenceExpression
 )FunctionCallExpression
 )ExpressionInitializer
 )DeclarationMember
@@ -9781,7 +9844,6 @@ int foob__vn8[4] = int[](21, 22, 23, 24), foob__vp;
 (BuiltinNumericTypeSpecifier
 - Type INT32
 )BuiltinNumericTypeSpecifier
-(SequenceExpression
 (LiteralExpression
 - Type INT32
 - Integer 10
@@ -9792,7 +9854,6 @@ int foob__vn8[4] = int[](21, 22, 23, 24), foob__vp;
 - Integer 11
 - IntegerFormat DECIMAL
 )LiteralExpression
-)SequenceExpression
 )FunctionCallExpression
 (AssignmentExpression
 (ArrayAccessExpression
@@ -9810,7 +9871,6 @@ int foob__vn8[4] = int[](21, 22, 23, 24), foob__vp;
 (BuiltinNumericTypeSpecifier
 - Type INT32
 )BuiltinNumericTypeSpecifier
-(SequenceExpression
 (LiteralExpression
 - Type INT32
 - Integer 12
@@ -9826,7 +9886,6 @@ int foob__vn8[4] = int[](21, 22, 23, 24), foob__vp;
 - Integer 14
 - IntegerFormat DECIMAL
 )LiteralExpression
-)SequenceExpression
 )FunctionCallExpression
 )AssignmentExpression
 )SequenceExpression
@@ -9857,7 +9916,6 @@ int foob__vn8[4] = int[](21, 22, 23, 24), foob__vp;
 (BuiltinNumericTypeSpecifier
 - Type INT32
 )BuiltinNumericTypeSpecifier
-(SequenceExpression
 (LiteralExpression
 - Type INT32
 - Integer 21
@@ -9878,7 +9936,6 @@ int foob__vn8[4] = int[](21, 22, 23, 24), foob__vp;
 - Integer 24
 - IntegerFormat DECIMAL
 )LiteralExpression
-)SequenceExpression
 )FunctionCallExpression
 (ReferenceExpression
 (Identifier)
@@ -9911,7 +9968,6 @@ int foob__vn8[4] = int[](21, 22, 23, 24), foob__vp;
 (BuiltinNumericTypeSpecifier
 - Type INT32
 )BuiltinNumericTypeSpecifier
-(SequenceExpression
 (LiteralExpression
 - Type INT32
 - Integer 1
@@ -9932,7 +9988,6 @@ int foob__vn8[4] = int[](21, 22, 23, 24), foob__vp;
 - Integer 4
 - IntegerFormat DECIMAL
 )LiteralExpression
-)SequenceExpression
 )FunctionCallExpression
 )ExpressionInitializer
 )DeclarationMember
@@ -9964,7 +10019,6 @@ int foob__vn8[4] = int[](21, 22, 23, 24), foob__vp;
 (BuiltinNumericTypeSpecifier
 - Type INT32
 )BuiltinNumericTypeSpecifier
-(SequenceExpression
 (LiteralExpression
 - Type INT32
 - Integer 5
@@ -9990,7 +10044,6 @@ int foob__vn8[4] = int[](21, 22, 23, 24), foob__vp;
 - Integer 9
 - IntegerFormat DECIMAL
 )LiteralExpression
-)SequenceExpression
 )FunctionCallExpression
 )ExpressionInitializer
 )DeclarationMember
@@ -10019,7 +10072,6 @@ int foob__vn8[4] = int[](21, 22, 23, 24), foob__vp;
 (BuiltinNumericTypeSpecifier
 - Type INT32
 )BuiltinNumericTypeSpecifier
-(SequenceExpression
 (LiteralExpression
 - Type INT32
 - Integer 10
@@ -10030,7 +10082,6 @@ int foob__vn8[4] = int[](21, 22, 23, 24), foob__vp;
 - Integer 11
 - IntegerFormat DECIMAL
 )LiteralExpression
-)SequenceExpression
 )FunctionCallExpression
 (AssignmentExpression
 (ArrayAccessExpression
@@ -10048,7 +10099,6 @@ int foob__vn8[4] = int[](21, 22, 23, 24), foob__vp;
 (BuiltinNumericTypeSpecifier
 - Type INT32
 )BuiltinNumericTypeSpecifier
-(SequenceExpression
 (LiteralExpression
 - Type INT32
 - Integer 12
@@ -10064,7 +10114,6 @@ int foob__vn8[4] = int[](21, 22, 23, 24), foob__vp;
 - Integer 14
 - IntegerFormat DECIMAL
 )LiteralExpression
-)SequenceExpression
 )FunctionCallExpression
 )AssignmentExpression
 )SequenceExpression
@@ -10095,7 +10144,6 @@ int foob__vn8[4] = int[](21, 22, 23, 24), foob__vp;
 (BuiltinNumericTypeSpecifier
 - Type INT32
 )BuiltinNumericTypeSpecifier
-(SequenceExpression
 (LiteralExpression
 - Type INT32
 - Integer 21
@@ -10116,7 +10164,6 @@ int foob__vn8[4] = int[](21, 22, 23, 24), foob__vp;
 - Integer 24
 - IntegerFormat DECIMAL
 )LiteralExpression
-)SequenceExpression
 )FunctionCallExpression
 (ReferenceExpression
 (Identifier)
@@ -10154,7 +10201,6 @@ int foob__vn8[4] = int[](21, 22, 23, 24), foob__vp;
 (BuiltinNumericTypeSpecifier
 - Type INT32
 )BuiltinNumericTypeSpecifier
-(SequenceExpression
 (LiteralExpression
 - Type INT32
 - Integer 1
@@ -10175,7 +10221,6 @@ int foob__vn8[4] = int[](21, 22, 23, 24), foob__vp;
 - Integer 4
 - IntegerFormat DECIMAL
 )LiteralExpression
-)SequenceExpression
 )FunctionCallExpression
 )ExpressionInitializer
 )DeclarationMember
@@ -10212,7 +10257,6 @@ int foob__vn8[4] = int[](21, 22, 23, 24), foob__vp;
 (BuiltinNumericTypeSpecifier
 - Type INT32
 )BuiltinNumericTypeSpecifier
-(SequenceExpression
 (LiteralExpression
 - Type INT32
 - Integer 5
@@ -10238,7 +10282,6 @@ int foob__vn8[4] = int[](21, 22, 23, 24), foob__vp;
 - Integer 9
 - IntegerFormat DECIMAL
 )LiteralExpression
-)SequenceExpression
 )FunctionCallExpression
 )ExpressionInitializer
 )DeclarationMember
@@ -10272,7 +10315,6 @@ int foob__vn8[4] = int[](21, 22, 23, 24), foob__vp;
 (BuiltinNumericTypeSpecifier
 - Type INT32
 )BuiltinNumericTypeSpecifier
-(SequenceExpression
 (LiteralExpression
 - Type INT32
 - Integer 10
@@ -10283,7 +10325,6 @@ int foob__vn8[4] = int[](21, 22, 23, 24), foob__vp;
 - Integer 11
 - IntegerFormat DECIMAL
 )LiteralExpression
-)SequenceExpression
 )FunctionCallExpression
 (AssignmentExpression
 (ArrayAccessExpression
@@ -10301,7 +10342,6 @@ int foob__vn8[4] = int[](21, 22, 23, 24), foob__vp;
 (BuiltinNumericTypeSpecifier
 - Type INT32
 )BuiltinNumericTypeSpecifier
-(SequenceExpression
 (LiteralExpression
 - Type INT32
 - Integer 12
@@ -10317,7 +10357,6 @@ int foob__vn8[4] = int[](21, 22, 23, 24), foob__vp;
 - Integer 14
 - IntegerFormat DECIMAL
 )LiteralExpression
-)SequenceExpression
 )FunctionCallExpression
 )AssignmentExpression
 )SequenceExpression
@@ -10353,7 +10392,6 @@ int foob__vn8[4] = int[](21, 22, 23, 24), foob__vp;
 (BuiltinNumericTypeSpecifier
 - Type INT32
 )BuiltinNumericTypeSpecifier
-(SequenceExpression
 (LiteralExpression
 - Type INT32
 - Integer 21
@@ -10374,7 +10412,6 @@ int foob__vn8[4] = int[](21, 22, 23, 24), foob__vp;
 - Integer 24
 - IntegerFormat DECIMAL
 )LiteralExpression
-)SequenceExpression
 )FunctionCallExpression
 (ReferenceExpression
 (Identifier)
@@ -10412,7 +10449,6 @@ int foob__vn8[4] = int[](21, 22, 23, 24), foob__vp;
 (BuiltinNumericTypeSpecifier
 - Type INT32
 )BuiltinNumericTypeSpecifier
-(SequenceExpression
 (LiteralExpression
 - Type INT32
 - Integer 1
@@ -10433,7 +10469,6 @@ int foob__vn8[4] = int[](21, 22, 23, 24), foob__vp;
 - Integer 4
 - IntegerFormat DECIMAL
 )LiteralExpression
-)SequenceExpression
 )FunctionCallExpression
 )ExpressionInitializer
 )DeclarationMember
@@ -10470,7 +10505,6 @@ int foob__vn8[4] = int[](21, 22, 23, 24), foob__vp;
 (BuiltinNumericTypeSpecifier
 - Type INT32
 )BuiltinNumericTypeSpecifier
-(SequenceExpression
 (LiteralExpression
 - Type INT32
 - Integer 5
@@ -10496,7 +10530,6 @@ int foob__vn8[4] = int[](21, 22, 23, 24), foob__vp;
 - Integer 9
 - IntegerFormat DECIMAL
 )LiteralExpression
-)SequenceExpression
 )FunctionCallExpression
 )ExpressionInitializer
 )DeclarationMember
@@ -10530,7 +10563,6 @@ int foob__vn8[4] = int[](21, 22, 23, 24), foob__vp;
 (BuiltinNumericTypeSpecifier
 - Type INT32
 )BuiltinNumericTypeSpecifier
-(SequenceExpression
 (LiteralExpression
 - Type INT32
 - Integer 10
@@ -10541,7 +10573,6 @@ int foob__vn8[4] = int[](21, 22, 23, 24), foob__vp;
 - Integer 11
 - IntegerFormat DECIMAL
 )LiteralExpression
-)SequenceExpression
 )FunctionCallExpression
 (AssignmentExpression
 (ArrayAccessExpression
@@ -10559,7 +10590,6 @@ int foob__vn8[4] = int[](21, 22, 23, 24), foob__vp;
 (BuiltinNumericTypeSpecifier
 - Type INT32
 )BuiltinNumericTypeSpecifier
-(SequenceExpression
 (LiteralExpression
 - Type INT32
 - Integer 12
@@ -10575,7 +10605,6 @@ int foob__vn8[4] = int[](21, 22, 23, 24), foob__vp;
 - Integer 14
 - IntegerFormat DECIMAL
 )LiteralExpression
-)SequenceExpression
 )FunctionCallExpression
 )AssignmentExpression
 )SequenceExpression
@@ -10611,7 +10640,6 @@ int foob__vn8[4] = int[](21, 22, 23, 24), foob__vp;
 (BuiltinNumericTypeSpecifier
 - Type INT32
 )BuiltinNumericTypeSpecifier
-(SequenceExpression
 (LiteralExpression
 - Type INT32
 - Integer 21
@@ -10632,7 +10660,6 @@ int foob__vn8[4] = int[](21, 22, 23, 24), foob__vp;
 - Integer 24
 - IntegerFormat DECIMAL
 )LiteralExpression
-)SequenceExpression
 )FunctionCallExpression
 (ReferenceExpression
 (Identifier)
@@ -10665,7 +10692,6 @@ int foob__vn8[4] = int[](21, 22, 23, 24), foob__vp;
 (BuiltinNumericTypeSpecifier
 - Type INT32
 )BuiltinNumericTypeSpecifier
-(SequenceExpression
 (LiteralExpression
 - Type INT32
 - Integer 1
@@ -10686,7 +10712,6 @@ int foob__vn8[4] = int[](21, 22, 23, 24), foob__vp;
 - Integer 4
 - IntegerFormat DECIMAL
 )LiteralExpression
-)SequenceExpression
 )FunctionCallExpression
 )ExpressionInitializer
 )DeclarationMember
@@ -10718,7 +10743,6 @@ int foob__vn8[4] = int[](21, 22, 23, 24), foob__vp;
 (BuiltinNumericTypeSpecifier
 - Type INT32
 )BuiltinNumericTypeSpecifier
-(SequenceExpression
 (LiteralExpression
 - Type INT32
 - Integer 5
@@ -10744,7 +10768,6 @@ int foob__vn8[4] = int[](21, 22, 23, 24), foob__vp;
 - Integer 9
 - IntegerFormat DECIMAL
 )LiteralExpression
-)SequenceExpression
 )FunctionCallExpression
 )ExpressionInitializer
 )DeclarationMember
@@ -10773,7 +10796,6 @@ int foob__vn8[4] = int[](21, 22, 23, 24), foob__vp;
 (BuiltinNumericTypeSpecifier
 - Type INT32
 )BuiltinNumericTypeSpecifier
-(SequenceExpression
 (LiteralExpression
 - Type INT32
 - Integer 10
@@ -10784,7 +10806,6 @@ int foob__vn8[4] = int[](21, 22, 23, 24), foob__vp;
 - Integer 11
 - IntegerFormat DECIMAL
 )LiteralExpression
-)SequenceExpression
 )FunctionCallExpression
 (AssignmentExpression
 (ArrayAccessExpression
@@ -10802,7 +10823,6 @@ int foob__vn8[4] = int[](21, 22, 23, 24), foob__vp;
 (BuiltinNumericTypeSpecifier
 - Type INT32
 )BuiltinNumericTypeSpecifier
-(SequenceExpression
 (LiteralExpression
 - Type INT32
 - Integer 12
@@ -10818,7 +10838,6 @@ int foob__vn8[4] = int[](21, 22, 23, 24), foob__vp;
 - Integer 14
 - IntegerFormat DECIMAL
 )LiteralExpression
-)SequenceExpression
 )FunctionCallExpression
 )AssignmentExpression
 )SequenceExpression
@@ -10849,7 +10868,6 @@ int foob__vn8[4] = int[](21, 22, 23, 24), foob__vp;
 (BuiltinNumericTypeSpecifier
 - Type INT32
 )BuiltinNumericTypeSpecifier
-(SequenceExpression
 (LiteralExpression
 - Type INT32
 - Integer 21
@@ -10870,7 +10888,6 @@ int foob__vn8[4] = int[](21, 22, 23, 24), foob__vp;
 - Integer 24
 - IntegerFormat DECIMAL
 )LiteralExpression
-)SequenceExpression
 )FunctionCallExpression
 (ReferenceExpression
 (Identifier)
@@ -10928,7 +10945,6 @@ int foob__vn8[4] = int[](21, 22, 23, 24), foob__vp;
 (BuiltinNumericTypeSpecifier
 - Type INT32
 )BuiltinNumericTypeSpecifier
-(SequenceExpression
 (LiteralExpression
 - Type INT32
 - Integer 1
@@ -10949,7 +10965,6 @@ int foob__vn8[4] = int[](21, 22, 23, 24), foob__vp;
 - Integer 4
 - IntegerFormat DECIMAL
 )LiteralExpression
-)SequenceExpression
 )FunctionCallExpression
 )ExpressionInitializer
 )DeclarationMember
@@ -10981,7 +10996,6 @@ int foob__vn8[4] = int[](21, 22, 23, 24), foob__vp;
 (BuiltinNumericTypeSpecifier
 - Type INT32
 )BuiltinNumericTypeSpecifier
-(SequenceExpression
 (LiteralExpression
 - Type INT32
 - Integer 5
@@ -11007,7 +11021,6 @@ int foob__vn8[4] = int[](21, 22, 23, 24), foob__vp;
 - Integer 9
 - IntegerFormat DECIMAL
 )LiteralExpression
-)SequenceExpression
 )FunctionCallExpression
 )ExpressionInitializer
 )DeclarationMember
@@ -11036,7 +11049,6 @@ int foob__vn8[4] = int[](21, 22, 23, 24), foob__vp;
 (BuiltinNumericTypeSpecifier
 - Type INT32
 )BuiltinNumericTypeSpecifier
-(SequenceExpression
 (LiteralExpression
 - Type INT32
 - Integer 10
@@ -11047,7 +11059,6 @@ int foob__vn8[4] = int[](21, 22, 23, 24), foob__vp;
 - Integer 11
 - IntegerFormat DECIMAL
 )LiteralExpression
-)SequenceExpression
 )FunctionCallExpression
 (AssignmentExpression
 (ArrayAccessExpression
@@ -11065,7 +11076,6 @@ int foob__vn8[4] = int[](21, 22, 23, 24), foob__vp;
 (BuiltinNumericTypeSpecifier
 - Type INT32
 )BuiltinNumericTypeSpecifier
-(SequenceExpression
 (LiteralExpression
 - Type INT32
 - Integer 12
@@ -11081,7 +11091,6 @@ int foob__vn8[4] = int[](21, 22, 23, 24), foob__vp;
 - Integer 14
 - IntegerFormat DECIMAL
 )LiteralExpression
-)SequenceExpression
 )FunctionCallExpression
 )AssignmentExpression
 )SequenceExpression
@@ -11112,7 +11121,6 @@ int foob__vn8[4] = int[](21, 22, 23, 24), foob__vp;
 (BuiltinNumericTypeSpecifier
 - Type INT32
 )BuiltinNumericTypeSpecifier
-(SequenceExpression
 (LiteralExpression
 - Type INT32
 - Integer 21
@@ -11133,7 +11141,6 @@ int foob__vn8[4] = int[](21, 22, 23, 24), foob__vp;
 - Integer 24
 - IntegerFormat DECIMAL
 )LiteralExpression
-)SequenceExpression
 )FunctionCallExpression
 (ReferenceExpression
 (Identifier)
@@ -11823,7 +11830,6 @@ layout(location = 0) out vec4 FragColor;
 (FunctionCallExpression
 (Identifier)
 - String imageLoad
-(SequenceExpression
 (ReferenceExpression
 (Identifier)
 - String image
@@ -11832,7 +11838,6 @@ layout(location = 0) out vec4 FragColor;
 (Identifier)
 - String in_coords
 )ReferenceExpression
-)SequenceExpression
 )FunctionCallExpression
 )ReturnStatement
 )CompoundStatement
@@ -12110,7 +12115,6 @@ const mat4x2 m42 = mat4x2(1.0f, 2.0f, 3.0f, 4.0f, 5.0f, 6.0f, 7.0f, 8.0f);
 (BuiltinNumericTypeSpecifier
 - Type F32VEC2
 )BuiltinNumericTypeSpecifier
-(SequenceExpression
 (LiteralExpression
 - Type FLOAT32
 - Float 10.0
@@ -12119,7 +12123,6 @@ const mat4x2 m42 = mat4x2(1.0f, 2.0f, 3.0f, 4.0f, 5.0f, 6.0f, 7.0f, 8.0f);
 - Type FLOAT32
 - Float 20.0
 )LiteralExpression
-)SequenceExpression
 )FunctionCallExpression
 )ExpressionInitializer
 )DeclarationMember
@@ -12174,7 +12177,6 @@ const mat4x2 m42 = mat4x2(1.0f, 2.0f, 3.0f, 4.0f, 5.0f, 6.0f, 7.0f, 8.0f);
 (BuiltinNumericTypeSpecifier
 - Type F32MAT4X2
 )BuiltinNumericTypeSpecifier
-(SequenceExpression
 (LiteralExpression
 - Type FLOAT32
 - Float 1.0
@@ -12207,7 +12209,6 @@ const mat4x2 m42 = mat4x2(1.0f, 2.0f, 3.0f, 4.0f, 5.0f, 6.0f, 7.0f, 8.0f);
 - Type FLOAT32
 - Float 8.0
 )LiteralExpression
-)SequenceExpression
 )FunctionCallExpression
 )ExpressionInitializer
 )DeclarationMember
