@@ -6,7 +6,7 @@ import static org.junit.jupiter.api.Assertions.*;
 import java.util.*;
 import java.util.stream.*;
 
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.*;
 import org.junit.jupiter.params.ParameterizedTest;
 
 import io.github.douira.glsl_transformer.ast.node.Identifier;
@@ -557,5 +557,35 @@ public class TransformTest extends TestWithSingleASTTransformer {
     assertTransform(
         "out layout(location = 4) vec4 outColor4; out layout(location = 0) vec3 outColor0; out layout(location = 5) vec3 outColor5; out layout(location = 1) vec3 outColor1; out vec3 outColor10, fooBar; ",
         "out vec4 outColor4; out vec3 outColor0, outColor5, outColor10, fooBar, outColor1;");
+  }
+
+  @Test
+  @Disabled
+  void testMoveInitializers() {
+    // move all initializers from the declarations to the beginning of the main
+    // method
+    // in the same order as the declarations
+    p.setTransformation((tree, root) -> {
+      for (ExternalDeclaration externalDeclaration : tree.getChildren()) {
+        // check for a declaration with an initializer
+        if (externalDeclaration instanceof DeclarationExternalDeclaration declarationExternalDeclaration) {
+          // check that it's a type and init declaration that has an initializer
+          if (declarationExternalDeclaration.getDeclaration() instanceof TypeAndInitDeclaration declaration) {
+            // iterate the members and check for initializers
+            for (DeclarationMember member : declaration.getMembers()) {
+              if (member.getInitializer() != null) {
+                // move the initializer to the main method
+                // TODO: there are problems with nested initializers
+                // array initializers like { ... }, which are only allowed in initializers
+                // and not possible in expressions. We would have to create new local
+                // declarations using them and then re-assign the value.
+                // Another problem is that const declarations can't be assigned to after
+                // declaration.
+              }
+            }
+          }
+        }
+      }
+    });
   }
 }
