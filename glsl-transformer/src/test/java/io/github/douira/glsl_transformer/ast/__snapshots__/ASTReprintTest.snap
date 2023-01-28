@@ -5628,6 +5628,154 @@ int f(
 ]
 
 
+testASTTree[translationUnit_EbGyT5HZuGQ04hcA0Oeyj0F9fWg=]=[
+#version 460 core
+#extension GL_EXT_ray_tracing: enable
+layout(location = 0) callableDataInEXT float outColor;
+layout(shaderRecordEXT) buffer block { uvec2 blendWeight; };
+void main() {
+	outColor = float((blendWeight.x >> 5u) & 0x7u + blendWeight.y & 0x3u);
+}
+
+<><><><><><><><><><><><><><><><><><><><><><><><><>
+(TranslationUnit
+(VersionStatement)
+- Profile CORE
+(ExtensionDirective
+- String GL_EXT_ray_tracing
+- ExtensionBehavior ENABLE
+)ExtensionDirective
+(DeclarationExternalDeclaration
+(TypeAndInitDeclaration
+(FullySpecifiedType
+(TypeQualifier
+(LayoutQualifier
+(NamedLayoutQualifierPart
+(Identifier)
+- String location
+(LiteralExpression
+- Type INT32
+- Integer 0
+- IntegerFormat DECIMAL
+)LiteralExpression
+)NamedLayoutQualifierPart
+)LayoutQualifier
+(StorageQualifier
+- StorageType CALLABLE_DATA_IN_EXT
+)StorageQualifier
+)TypeQualifier
+(BuiltinNumericTypeSpecifier
+- Type FLOAT32
+)BuiltinNumericTypeSpecifier
+)FullySpecifiedType
+(DeclarationMember
+(Identifier)
+- String outColor
+)DeclarationMember
+)TypeAndInitDeclaration
+)DeclarationExternalDeclaration
+(DeclarationExternalDeclaration
+(InterfaceBlockDeclaration
+(TypeQualifier
+(LayoutQualifier
+(NamedLayoutQualifierPart
+(Identifier)
+- String shaderRecordEXT
+)NamedLayoutQualifierPart
+)LayoutQualifier
+(StorageQualifier
+- StorageType BUFFER
+)StorageQualifier
+)TypeQualifier
+(Identifier)
+- String block
+(StructBody
+(StructMember
+(FullySpecifiedType
+(BuiltinNumericTypeSpecifier
+- Type U32VEC2
+)BuiltinNumericTypeSpecifier
+)FullySpecifiedType
+(StructDeclarator
+(Identifier)
+- String blendWeight
+)StructDeclarator
+)StructMember
+)StructBody
+)InterfaceBlockDeclaration
+)DeclarationExternalDeclaration
+(FunctionDefinition
+(FunctionPrototype
+(FullySpecifiedType
+(BuiltinFixedTypeSpecifier
+- BuiltinType VOID
+)BuiltinFixedTypeSpecifier
+)FullySpecifiedType
+(Identifier)
+- String main
+)FunctionPrototype
+(CompoundStatement
+(ExpressionStatement
+(AssignmentExpression
+(ReferenceExpression
+(Identifier)
+- String outColor
+)ReferenceExpression
+(FunctionCallExpression
+(BuiltinNumericTypeSpecifier
+- Type FLOAT32
+)BuiltinNumericTypeSpecifier
+(BitwiseAndExpression
+(BitwiseAndExpression
+(GroupingExpression
+(RightShiftExpression
+(MemberAccessExpression
+(ReferenceExpression
+(Identifier)
+- String blendWeight
+)ReferenceExpression
+(Identifier)
+- String x
+)MemberAccessExpression
+(LiteralExpression
+- Type UINT32
+- Integer 5
+- IntegerFormat DECIMAL
+)LiteralExpression
+)RightShiftExpression
+)GroupingExpression
+(AdditionExpression
+(LiteralExpression
+- Type UINT32
+- Integer 7
+- IntegerFormat HEXADECIMAL
+)LiteralExpression
+(MemberAccessExpression
+(ReferenceExpression
+(Identifier)
+- String blendWeight
+)ReferenceExpression
+(Identifier)
+- String y
+)MemberAccessExpression
+)AdditionExpression
+)BitwiseAndExpression
+(LiteralExpression
+- Type UINT32
+- Integer 3
+- IntegerFormat HEXADECIMAL
+)LiteralExpression
+)BitwiseAndExpression
+)FunctionCallExpression
+)AssignmentExpression
+)ExpressionStatement
+)CompoundStatement
+)FunctionDefinition
+)TranslationUnit
+
+]
+
+
 testASTTree[translationUnit_FLVEl4tjFQm/pQDzQ6Bh63RQ5IU=]=[
 #include <foo "in angle>
 
@@ -6232,6 +6380,505 @@ testASTTree[translationUnit_K9QGGTul4WNNNHMnzM2b3S9jWqA=]=[
 - null
 - PragmaState ON
 )PragmaDirective
+)TranslationUnit
+
+]
+
+
+testASTTree[translationUnit_KHAM1bA53BV9UwKXM0Ib6+3gzzs=]=[
+#version 460 core
+#extension GL_EXT_ray_tracing: enable
+layout(location = 0) rayPayloadEXT vec4 payload;
+layout(location = 0) callableDataEXT float blendColor;
+layout(binding = 0, set = 0) uniform accelerationStructureEXT acc;
+layout(binding = 1, rgba32f) uniform image2D img;
+layout(binding = 2, set = 0) uniform rayParams {
+	vec3 rayOrigin;
+	vec3 rayDir;
+	uint sbtOffset;
+	uint sbtStride;
+	uint missIndex;
+	uint callableSbtIndex;
+};
+vec3 computeDir(vec3 inDir, uvec3 launchID, uvec3 launchSize) {
+	inDir = normalize(inDir);
+	return inDir;
+}
+void main() {
+	vec4 imgColor = vec4(0);
+	traceRayEXT(acc, gl_RayFlagsOpaqueEXT, 0xff, sbtOffset, sbtStride, missIndex, rayOrigin, 0.0f, computeDir(rayDir, gl_LaunchIDEXT, gl_LaunchSizeEXT), 100.0f, 0);
+	executeCallableEXT(callableSbtIndex, 0);
+	imgColor = payload + vec4(blendColor);
+	imageStore(img, ivec2(gl_LaunchIDEXT), imgColor);
+	ignoreIntersectionEXT;
+	terminateRayEXT;
+}
+
+<><><><><><><><><><><><><><><><><><><><><><><><><>
+(TranslationUnit
+(VersionStatement)
+- Profile CORE
+(ExtensionDirective
+- String GL_EXT_ray_tracing
+- ExtensionBehavior ENABLE
+)ExtensionDirective
+(DeclarationExternalDeclaration
+(TypeAndInitDeclaration
+(FullySpecifiedType
+(TypeQualifier
+(LayoutQualifier
+(NamedLayoutQualifierPart
+(Identifier)
+- String location
+(LiteralExpression
+- Type INT32
+- Integer 0
+- IntegerFormat DECIMAL
+)LiteralExpression
+)NamedLayoutQualifierPart
+)LayoutQualifier
+(StorageQualifier
+- StorageType RAY_PAYLOAD_EXT
+)StorageQualifier
+)TypeQualifier
+(BuiltinNumericTypeSpecifier
+- Type F32VEC4
+)BuiltinNumericTypeSpecifier
+)FullySpecifiedType
+(DeclarationMember
+(Identifier)
+- String payload
+)DeclarationMember
+)TypeAndInitDeclaration
+)DeclarationExternalDeclaration
+(DeclarationExternalDeclaration
+(TypeAndInitDeclaration
+(FullySpecifiedType
+(TypeQualifier
+(LayoutQualifier
+(NamedLayoutQualifierPart
+(Identifier)
+- String location
+(LiteralExpression
+- Type INT32
+- Integer 0
+- IntegerFormat DECIMAL
+)LiteralExpression
+)NamedLayoutQualifierPart
+)LayoutQualifier
+(StorageQualifier
+- StorageType CALLABLE_DATA_EXT
+)StorageQualifier
+)TypeQualifier
+(BuiltinNumericTypeSpecifier
+- Type FLOAT32
+)BuiltinNumericTypeSpecifier
+)FullySpecifiedType
+(DeclarationMember
+(Identifier)
+- String blendColor
+)DeclarationMember
+)TypeAndInitDeclaration
+)DeclarationExternalDeclaration
+(DeclarationExternalDeclaration
+(TypeAndInitDeclaration
+(FullySpecifiedType
+(TypeQualifier
+(LayoutQualifier
+(NamedLayoutQualifierPart
+(Identifier)
+- String binding
+(LiteralExpression
+- Type INT32
+- Integer 0
+- IntegerFormat DECIMAL
+)LiteralExpression
+)NamedLayoutQualifierPart
+(NamedLayoutQualifierPart
+(Identifier)
+- String set
+(LiteralExpression
+- Type INT32
+- Integer 0
+- IntegerFormat DECIMAL
+)LiteralExpression
+)NamedLayoutQualifierPart
+)LayoutQualifier
+(StorageQualifier
+- StorageType UNIFORM
+)StorageQualifier
+)TypeQualifier
+(BuiltinFixedTypeSpecifier
+- BuiltinType ACCELERATION_STRUCTURE
+)BuiltinFixedTypeSpecifier
+)FullySpecifiedType
+(DeclarationMember
+(Identifier)
+- String acc
+)DeclarationMember
+)TypeAndInitDeclaration
+)DeclarationExternalDeclaration
+(DeclarationExternalDeclaration
+(TypeAndInitDeclaration
+(FullySpecifiedType
+(TypeQualifier
+(LayoutQualifier
+(NamedLayoutQualifierPart
+(Identifier)
+- String binding
+(LiteralExpression
+- Type INT32
+- Integer 1
+- IntegerFormat DECIMAL
+)LiteralExpression
+)NamedLayoutQualifierPart
+(NamedLayoutQualifierPart
+(Identifier)
+- String rgba32f
+)NamedLayoutQualifierPart
+)LayoutQualifier
+(StorageQualifier
+- StorageType UNIFORM
+)StorageQualifier
+)TypeQualifier
+(BuiltinFixedTypeSpecifier
+- BuiltinType IMAGE2D
+)BuiltinFixedTypeSpecifier
+)FullySpecifiedType
+(DeclarationMember
+(Identifier)
+- String img
+)DeclarationMember
+)TypeAndInitDeclaration
+)DeclarationExternalDeclaration
+(DeclarationExternalDeclaration
+(InterfaceBlockDeclaration
+(TypeQualifier
+(LayoutQualifier
+(NamedLayoutQualifierPart
+(Identifier)
+- String binding
+(LiteralExpression
+- Type INT32
+- Integer 2
+- IntegerFormat DECIMAL
+)LiteralExpression
+)NamedLayoutQualifierPart
+(NamedLayoutQualifierPart
+(Identifier)
+- String set
+(LiteralExpression
+- Type INT32
+- Integer 0
+- IntegerFormat DECIMAL
+)LiteralExpression
+)NamedLayoutQualifierPart
+)LayoutQualifier
+(StorageQualifier
+- StorageType UNIFORM
+)StorageQualifier
+)TypeQualifier
+(Identifier)
+- String rayParams
+(StructBody
+(StructMember
+(FullySpecifiedType
+(BuiltinNumericTypeSpecifier
+- Type F32VEC3
+)BuiltinNumericTypeSpecifier
+)FullySpecifiedType
+(StructDeclarator
+(Identifier)
+- String rayOrigin
+)StructDeclarator
+)StructMember
+(StructMember
+(FullySpecifiedType
+(BuiltinNumericTypeSpecifier
+- Type F32VEC3
+)BuiltinNumericTypeSpecifier
+)FullySpecifiedType
+(StructDeclarator
+(Identifier)
+- String rayDir
+)StructDeclarator
+)StructMember
+(StructMember
+(FullySpecifiedType
+(BuiltinNumericTypeSpecifier
+- Type UINT32
+)BuiltinNumericTypeSpecifier
+)FullySpecifiedType
+(StructDeclarator
+(Identifier)
+- String sbtOffset
+)StructDeclarator
+)StructMember
+(StructMember
+(FullySpecifiedType
+(BuiltinNumericTypeSpecifier
+- Type UINT32
+)BuiltinNumericTypeSpecifier
+)FullySpecifiedType
+(StructDeclarator
+(Identifier)
+- String sbtStride
+)StructDeclarator
+)StructMember
+(StructMember
+(FullySpecifiedType
+(BuiltinNumericTypeSpecifier
+- Type UINT32
+)BuiltinNumericTypeSpecifier
+)FullySpecifiedType
+(StructDeclarator
+(Identifier)
+- String missIndex
+)StructDeclarator
+)StructMember
+(StructMember
+(FullySpecifiedType
+(BuiltinNumericTypeSpecifier
+- Type UINT32
+)BuiltinNumericTypeSpecifier
+)FullySpecifiedType
+(StructDeclarator
+(Identifier)
+- String callableSbtIndex
+)StructDeclarator
+)StructMember
+)StructBody
+)InterfaceBlockDeclaration
+)DeclarationExternalDeclaration
+(FunctionDefinition
+(FunctionPrototype
+(FullySpecifiedType
+(BuiltinNumericTypeSpecifier
+- Type F32VEC3
+)BuiltinNumericTypeSpecifier
+)FullySpecifiedType
+(Identifier)
+- String computeDir
+(FunctionParameter
+(FullySpecifiedType
+(BuiltinNumericTypeSpecifier
+- Type F32VEC3
+)BuiltinNumericTypeSpecifier
+)FullySpecifiedType
+(Identifier)
+- String inDir
+)FunctionParameter
+(FunctionParameter
+(FullySpecifiedType
+(BuiltinNumericTypeSpecifier
+- Type U32VEC3
+)BuiltinNumericTypeSpecifier
+)FullySpecifiedType
+(Identifier)
+- String launchID
+)FunctionParameter
+(FunctionParameter
+(FullySpecifiedType
+(BuiltinNumericTypeSpecifier
+- Type U32VEC3
+)BuiltinNumericTypeSpecifier
+)FullySpecifiedType
+(Identifier)
+- String launchSize
+)FunctionParameter
+)FunctionPrototype
+(CompoundStatement
+(ExpressionStatement
+(AssignmentExpression
+(ReferenceExpression
+(Identifier)
+- String inDir
+)ReferenceExpression
+(FunctionCallExpression
+(Identifier)
+- String normalize
+(ReferenceExpression
+(Identifier)
+- String inDir
+)ReferenceExpression
+)FunctionCallExpression
+)AssignmentExpression
+)ExpressionStatement
+(ReturnStatement
+(ReferenceExpression
+(Identifier)
+- String inDir
+)ReferenceExpression
+)ReturnStatement
+)CompoundStatement
+)FunctionDefinition
+(FunctionDefinition
+(FunctionPrototype
+(FullySpecifiedType
+(BuiltinFixedTypeSpecifier
+- BuiltinType VOID
+)BuiltinFixedTypeSpecifier
+)FullySpecifiedType
+(Identifier)
+- String main
+)FunctionPrototype
+(CompoundStatement
+(DeclarationStatement
+(TypeAndInitDeclaration
+(FullySpecifiedType
+(BuiltinNumericTypeSpecifier
+- Type F32VEC4
+)BuiltinNumericTypeSpecifier
+)FullySpecifiedType
+(DeclarationMember
+(Identifier)
+- String imgColor
+(ExpressionInitializer
+(FunctionCallExpression
+(BuiltinNumericTypeSpecifier
+- Type F32VEC4
+)BuiltinNumericTypeSpecifier
+(LiteralExpression
+- Type INT32
+- Integer 0
+- IntegerFormat DECIMAL
+)LiteralExpression
+)FunctionCallExpression
+)ExpressionInitializer
+)DeclarationMember
+)TypeAndInitDeclaration
+)DeclarationStatement
+(ExpressionStatement
+(FunctionCallExpression
+(Identifier)
+- String traceRayEXT
+(ReferenceExpression
+(Identifier)
+- String acc
+)ReferenceExpression
+(ReferenceExpression
+(Identifier)
+- String gl_RayFlagsOpaqueEXT
+)ReferenceExpression
+(LiteralExpression
+- Type INT32
+- Integer 255
+- IntegerFormat HEXADECIMAL
+)LiteralExpression
+(ReferenceExpression
+(Identifier)
+- String sbtOffset
+)ReferenceExpression
+(ReferenceExpression
+(Identifier)
+- String sbtStride
+)ReferenceExpression
+(ReferenceExpression
+(Identifier)
+- String missIndex
+)ReferenceExpression
+(ReferenceExpression
+(Identifier)
+- String rayOrigin
+)ReferenceExpression
+(LiteralExpression
+- Type FLOAT32
+- Float 0.0
+)LiteralExpression
+(FunctionCallExpression
+(Identifier)
+- String computeDir
+(ReferenceExpression
+(Identifier)
+- String rayDir
+)ReferenceExpression
+(ReferenceExpression
+(Identifier)
+- String gl_LaunchIDEXT
+)ReferenceExpression
+(ReferenceExpression
+(Identifier)
+- String gl_LaunchSizeEXT
+)ReferenceExpression
+)FunctionCallExpression
+(LiteralExpression
+- Type FLOAT32
+- Float 100.0
+)LiteralExpression
+(LiteralExpression
+- Type INT32
+- Integer 0
+- IntegerFormat DECIMAL
+)LiteralExpression
+)FunctionCallExpression
+)ExpressionStatement
+(ExpressionStatement
+(FunctionCallExpression
+(Identifier)
+- String executeCallableEXT
+(ReferenceExpression
+(Identifier)
+- String callableSbtIndex
+)ReferenceExpression
+(LiteralExpression
+- Type INT32
+- Integer 0
+- IntegerFormat DECIMAL
+)LiteralExpression
+)FunctionCallExpression
+)ExpressionStatement
+(ExpressionStatement
+(AssignmentExpression
+(ReferenceExpression
+(Identifier)
+- String imgColor
+)ReferenceExpression
+(AdditionExpression
+(ReferenceExpression
+(Identifier)
+- String payload
+)ReferenceExpression
+(FunctionCallExpression
+(BuiltinNumericTypeSpecifier
+- Type F32VEC4
+)BuiltinNumericTypeSpecifier
+(ReferenceExpression
+(Identifier)
+- String blendColor
+)ReferenceExpression
+)FunctionCallExpression
+)AdditionExpression
+)AssignmentExpression
+)ExpressionStatement
+(ExpressionStatement
+(FunctionCallExpression
+(Identifier)
+- String imageStore
+(ReferenceExpression
+(Identifier)
+- String img
+)ReferenceExpression
+(FunctionCallExpression
+(BuiltinNumericTypeSpecifier
+- Type I32VEC2
+)BuiltinNumericTypeSpecifier
+(ReferenceExpression
+(Identifier)
+- String gl_LaunchIDEXT
+)ReferenceExpression
+)FunctionCallExpression
+(ReferenceExpression
+(Identifier)
+- String imgColor
+)ReferenceExpression
+)FunctionCallExpression
+)ExpressionStatement
+(IgnoreIntersectionStatement
+)IgnoreIntersectionStatement
+(TerminateRayStatement
+)TerminateRayStatement
+)CompoundStatement
+)FunctionDefinition
 )TranslationUnit
 
 ]
