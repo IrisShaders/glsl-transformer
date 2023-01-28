@@ -114,11 +114,11 @@ finiteExpression:
 		| BOOLCONSTANT
 	) # literalExpression
 	//only the grouping expression allows the sequence expression since the sequence expression
-  //has the lowest precendence and not putting it in parentheses would simply create a
-  //sequence expression around the whole expression
-	| LPAREN value = expression RPAREN																		# groupingExpression
+	//has the lowest precendence and not putting it in parentheses would simply create a
+	//sequence expression around the whole expression
+	| LPAREN value = expression RPAREN															# groupingExpression
 	| left = finiteExpression LBRACKET right = expression RBRACKET	# arrayAccessExpression
-	| operand = finiteExpression DOT_LENGTH_METHOD_CALL										# lengthAccessExpression
+	| operand = finiteExpression DOT_LENGTH_METHOD_CALL							# lengthAccessExpression
 	//Note: diverges from the spec by not allowing a prefixExpression as an identifier
 	//array-type function identfiers are handled by typeSpecifier
 	| (IDENTIFIER | typeSpecifier) LPAREN (
@@ -239,7 +239,12 @@ storageQualifier:
 	| QUEUEFAMILYCOHERENT
 	| WORKGROUPCOHERENT
 	| SUBGROUPCOHERENT
-	| NONPRIVATE;
+	| NONPRIVATE
+	| RAY_PAYLOAD_EXT
+	| RAY_PAYLOAD_IN_EXT
+	| HIT_ATTRIBUTE_EXT
+	| CALLABLE_DATA_EXT
+	| CALLABLE_DATA_IN_EXT;
 
 layoutQualifier:
 	LAYOUT LPAREN layoutQualifiers += layoutQualifierId (
@@ -433,7 +438,8 @@ builtinTypeSpecifierFixed:
 	| UIMAGE2DMS
 	| IMAGE2DMSARRAY
 	| IIMAGE2DMSARRAY
-	| UIMAGE2DMSARRAY;
+	| UIMAGE2DMSARRAY
+	| ACCELERATION_STRUCTURE_EXT;
 
 structSpecifier: STRUCT IDENTIFIER? structBody;
 
@@ -507,9 +513,11 @@ forStatement:
 		loopBody = statement;
 
 jumpStatement:
-	CONTINUE SEMICOLON							# continueStatement
-	| BREAK SEMICOLON								# breakStatement
-	| RETURN expression? SEMICOLON	# returnStatement
-	| DISCARD SEMICOLON							# discardStatement;
+	CONTINUE SEMICOLON									# continueStatement
+	| BREAK SEMICOLON										# breakStatement
+	| RETURN expression? SEMICOLON			# returnStatement
+	| DISCARD SEMICOLON									# discardStatement
+	| IGNORE_INTERSECTION_EXT SEMICOLON	# ignoreIntersectionStatement
+	| TERMINATE_RAY_EXT SEMICOLON				# terminateRayStatement;
 
 demoteStatement: DEMOTE SEMICOLON;

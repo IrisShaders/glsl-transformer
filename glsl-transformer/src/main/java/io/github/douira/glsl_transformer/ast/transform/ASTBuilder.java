@@ -577,6 +577,16 @@ public class ASTBuilder extends GLSLParserBaseVisitor<ASTNode> {
   }
 
   @Override
+  public ASTNode visitIgnoreIntersectionStatement(IgnoreIntersectionStatementContext ctx) {
+    return new IgnoreIntersectionStatement();
+  }
+
+  @Override
+  public ASTNode visitTerminateRayStatement(TerminateRayStatementContext ctx) {
+    return new TerminateRayStatement();
+  }
+
+  @Override
   public DemoteStatement visitDemoteStatement(DemoteStatementContext ctx) {
     return new DemoteStatement();
   }

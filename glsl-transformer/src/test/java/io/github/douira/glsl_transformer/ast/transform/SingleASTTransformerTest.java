@@ -7,14 +7,13 @@ import java.util.stream.Collectors;
 
 import org.junit.jupiter.api.Test;
 
-import io.github.douira.glsl_transformer.ast.node.*;
+import io.github.douira.glsl_transformer.ast.node.Identifier;
 import io.github.douira.glsl_transformer.ast.node.abstract_node.ASTNode;
 import io.github.douira.glsl_transformer.ast.node.expression.*;
 import io.github.douira.glsl_transformer.ast.node.external_declaration.ExternalDeclaration;
 import io.github.douira.glsl_transformer.ast.print.PrintType;
 import io.github.douira.glsl_transformer.ast.query.Root;
 import io.github.douira.glsl_transformer.ast.query.index.PrefixIdentifierIndex;
-import io.github.douira.glsl_transformer.parser.ParsingException;
 import io.github.douira.glsl_transformer.test_util.TestWithSingleASTTransformer;
 import io.github.douira.glsl_transformer.util.Type;
 

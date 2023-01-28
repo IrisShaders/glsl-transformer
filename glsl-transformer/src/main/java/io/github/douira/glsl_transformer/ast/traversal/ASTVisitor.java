@@ -369,6 +369,14 @@ public interface ASTVisitor<R> extends GeneralASTVisitor<R> {
     return defaultResult();
   }
 
+  default R visitIgnoreIntersectionStatement(IgnoreIntersectionStatement node) {
+    return defaultResult();
+  }
+
+  default R visitTerminateRayStatement(TerminateRayStatement node) {
+    return defaultResult();
+  }
+
   default R visitDemoteStatement(DemoteStatement node) {
     return defaultResult();
   }

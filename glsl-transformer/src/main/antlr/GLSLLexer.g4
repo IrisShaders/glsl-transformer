@@ -73,6 +73,14 @@ WORKGROUPCOHERENT:
 SUBGROUPCOHERENT:
 	'subgroupcoherent' {isAfter(130)}?; //unclear, depends on extension
 NONPRIVATE: 'nonprivate' {isAfter(130)}?; //unclear, depends on extension
+RAY_PAYLOAD_EXT: 'rayPayloadEXT';
+RAY_PAYLOAD_IN_EXT: 'rayPayloadInEXT';
+HIT_ATTRIBUTE_EXT: 'hitAttributeEXT';
+CALLABLE_DATA_EXT: 'callableDataEXT';
+CALLABLE_DATA_IN_EXT: 'callableDataInEXT';
+IGNORE_INTERSECTION_EXT: 'ignoreIntersectionEXT';
+TERMINATE_RAY_EXT: 'terminateRayEXT';
+ACCELERATION_STRUCTURE_EXT: 'accelerationStructureEXT';
 
 ATOMIC_UINT: 'atomic_uint' {isAfter(420)}?; //ignores ES mode
 STRUCT: 'struct';

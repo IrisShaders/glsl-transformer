@@ -926,6 +926,20 @@ public class ASTPrinter extends ASTPrinterBase {
   }
 
   @Override
+  public Void visitIgnoreIntersectionStatement(IgnoreIntersectionStatement node) {
+    emitType(GLSLLexer.IGNORE_INTERSECTION_EXT);
+    emitStatementEnd();
+    return null;
+  }
+
+  @Override
+  public Void visitTerminateRayStatement(TerminateRayStatement node) {
+    emitType(GLSLLexer.TERMINATE_RAY_EXT);
+    emitStatementEnd();
+    return null;
+  }
+
+  @Override
   public Void visitDemoteStatement(DemoteStatement node) {
     emitType(GLSLLexer.DEMOTE);
     emitStatementEnd();

@@ -26,7 +26,9 @@ public abstract class Statement extends InnerASTNode {
     BREAK(StructureType.TERMINAL), // terminal
     RETURN(StructureType.SEMI_TERMINAL), // semi-terminal
     DISCARD(StructureType.TERMINAL), // terminal
-    DEMOTE(StructureType.TERMINAL); // terminal
+    DEMOTE(StructureType.TERMINAL), // terminal
+    IGNORE_INTERSECTION(StructureType.TERMINAL), // terminal
+    TERMINATE_RAY(StructureType.TERMINAL); // terminal
 
     public enum StructureType {
       SEMI_TERMINAL, // no nested statements but not a terminal AST node

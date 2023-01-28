@@ -1083,4 +1083,42 @@ foo.bar = baz.length();
 §testReprint translationUnit:
 layout(binding = 0, binding = 4 + 4, baz = zam, foo, shared, bar) uniform sampler2D u_texture;
 
+§testReprint translationUnit:
+#version 460 core
+#extension GL_EXT_ray_tracing: enable
+layout(location = 0) rayPayloadEXT vec4 payload;
+layout(location = 0) callableDataEXT float blendColor;
+layout(binding = 0, set = 0) uniform accelerationStructureEXT acc;
+layout(binding = 1, rgba32f) uniform image2D img;
+layout(binding = 2, set = 0) uniform rayParams {
+	vec3 rayOrigin;
+	vec3 rayDir;
+	uint sbtOffset;
+	uint sbtStride;
+	uint missIndex;
+	uint callableSbtIndex;
+};
+vec3 computeDir(vec3 inDir, uvec3 launchID, uvec3 launchSize) {
+	inDir = normalize(inDir);
+	return inDir;
+}
+void main() {
+	vec4 imgColor = vec4(0);
+	traceRayEXT(acc, gl_RayFlagsOpaqueEXT, 0xff, sbtOffset, sbtStride, missIndex, rayOrigin, 0.0f, computeDir(rayDir, gl_LaunchIDEXT, gl_LaunchSizeEXT), 100.0f, 0);
+	executeCallableEXT(callableSbtIndex, 0);
+	imgColor = payload + vec4(blendColor);
+	imageStore(img, ivec2(gl_LaunchIDEXT), imgColor);
+	ignoreIntersectionEXT;
+	terminateRayEXT;
+}
+
+§testReprint translationUnit:
+#version 460 core
+#extension GL_EXT_ray_tracing: enable
+layout(location = 0) callableDataInEXT float outColor;
+layout(shaderRecordEXT) buffer block { uvec2 blendWeight; };
+void main() {
+	outColor = float((blendWeight.x >> 5u) & 0x7u + blendWeight.y & 0x3u);
+}
+
 §
