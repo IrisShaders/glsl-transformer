@@ -580,7 +580,10 @@ public class TransformTest extends TestWithSingleASTTransformer {
                 // and not possible in expressions. We would have to create new local
                 // declarations using them and then re-assign the value.
                 // Another problem is that const declarations can't be assigned to after
-                // declaration.
+                // declaration. This can be solved by simply not moving const declarations
+                // as they can't have side effects and therefore messing up their ordering
+                // doesn't matter. (and they can't be calling functions since they are
+                // side-effect free)
               }
             }
           }
