@@ -9,6 +9,8 @@ import java.util.stream.*;
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.params.ParameterizedTest;
 
+import com.github.bsideup.jabel.Desugar;
+
 import io.github.douira.glsl_transformer.ast.node.Identifier;
 import io.github.douira.glsl_transformer.ast.node.abstract_node.ASTNode;
 import io.github.douira.glsl_transformer.ast.node.declaration.*;
@@ -490,23 +492,13 @@ public class TransformTest extends TestWithSingleASTTransformer {
     };
 
     var layoutedOutDeclarationTemplate = Template.withExternalDeclaration("out __type __name;");
-    layoutedOutDeclarationTemplate
-        .markLocalReplacement(layoutedOutDeclarationTemplate.getSourceRoot().nodeIndex.getOne(TypeQualifier.class));
+    layoutedOutDeclarationTemplate.markLocalReplacement(
+        layoutedOutDeclarationTemplate.getSourceRoot().nodeIndex.getOne(TypeQualifier.class));
     layoutedOutDeclarationTemplate.markLocalReplacement("__type", TypeSpecifier.class);
     layoutedOutDeclarationTemplate.markLocalReplacement("__name", DeclarationMember.class);
 
-    class NewDeclarationData {
-      TypeQualifier qualifier;
-      TypeSpecifier type;
-      DeclarationMember member;
-      int number;
-
-      NewDeclarationData(TypeQualifier qualifier, TypeSpecifier type, DeclarationMember member, int number) {
-        this.qualifier = qualifier;
-        this.type = type;
-        this.member = member;
-        this.number = number;
-      }
+    @Desugar
+    record NewDeclarationData(TypeQualifier qualifier, TypeSpecifier type, DeclarationMember member, int number) {
     }
 
     var prefix = "outColor";
@@ -546,7 +538,7 @@ public class TransformTest extends TestWithSingleASTTransformer {
           } catch (NumberFormatException e) {
             continue;
           }
-          if (number < 0 || number > 7) {
+          if (number < 0 || 7 < number) {
             continue;
           }
 
