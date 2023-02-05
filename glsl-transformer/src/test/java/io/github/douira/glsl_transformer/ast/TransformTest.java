@@ -9,8 +9,6 @@ import java.util.stream.*;
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.params.ParameterizedTest;
 
-import com.github.bsideup.jabel.Desugar;
-
 import io.github.douira.glsl_transformer.ast.node.Identifier;
 import io.github.douira.glsl_transformer.ast.node.abstract_node.ASTNode;
 import io.github.douira.glsl_transformer.ast.node.declaration.*;
@@ -497,7 +495,6 @@ public class TransformTest extends TestWithSingleASTTransformer {
     layoutedOutDeclarationTemplate.markLocalReplacement("__type", TypeSpecifier.class);
     layoutedOutDeclarationTemplate.markLocalReplacement("__name", DeclarationMember.class);
 
-    @Desugar
     record NewDeclarationData(TypeQualifier qualifier, TypeSpecifier type, DeclarationMember member, int number) {
     }
 
