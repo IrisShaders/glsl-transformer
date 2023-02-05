@@ -405,15 +405,53 @@ public class TransformTest extends TestWithSingleASTTransformer {
         "It should find 3 or 2 type qualifiers for each binding");
   }
 
+  /**
+   * TODO: Unfinished, WIP
+   * Sidecar injection procedure:
+   * - Find the external declarations of the targets and their types (they must be
+   * sampler-type)
+   * - Assign a sidecar value (integer starting at 1) to each target, 0 means none
+   * - Find all functions that have parameters of the target types
+   * - Also include all functions that have the same name and the same number of
+   * parameters (since without type inference we can't determine which of the
+   * overloaded functions is being called). Mark these functions as affected by
+   * sidecar injection.
+   * - Find compatible sampler-type parameters in marked functions and insert
+   * sidecar parameters after them.
+   * - In the marked functions, find all declarations of the
+   * same type as any of the sampler-type parameters and add a sidecar variable to
+   * them that includes their name. In the main function, do this with any
+   * declarations that have the same type as any of the targets.
+   * - Optional support: Ternary expressions in the right-hand of assignment
+   * expressions are converted into if-else structures that produce the same
+   * value. Add these statements to a list that the next step uses to generate
+   * sidecar assignment statements.
+   * - Functions that return targeted sampler types: Unsupported
+   * - Nested assignment expressions: Unsupported
+   * - In the main function and marked functions, find all assignment expression
+   * statements and append a sidecar assignment statement that performs the same
+   * assignment with the sidecar variables.
+   * - In the main function and marked functions, find all function calls of the
+   * marked functions and insert the corresponding sidecar variables after their
+   * sampler-type parameters if they are local variables or the globally chosen
+   * sidecar integer if they are global variables.
+   * - Find all function calls of the target function (the texture function) and
+   * replace it with a new function that has the same signature as the original,
+   * but with an additional sidecar parameter after the sampler parameter. The new
+   * function acts depending on the value of the sidecar parameter and calls the
+   * original function or does something else.
+   */
   @ParameterizedTest
   @TestCaseSource(caseSet = "sidecarInjection", spacing = Spacing.TRIM_SINGLE_BOTH)
   void testSidecarInjection(String type, String input, String output) {
     class SidecarInjector {
-      String targetFunction;
-      Set<String> targets;
+      String targetFunction; // targeting for example, "texture" calls
+      Set<String> targets; // the targeted declarations, usually sampler uniforms
     }
 
-    // TODO: unfinished
+    p.setTransformation((tree, root) -> {
+      // TODO
+    });
   }
 
   @Test

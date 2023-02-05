@@ -93,7 +93,7 @@ void main() {
 	void main();
 }
 
-§sidecarInjection texture@tex1:
+§sidecarInjection texture@tex1,tex3:
 uniform sampler3D tex1;
 uniform sampler2D tex2;
 uniform sampler3D tex3;
@@ -121,13 +121,13 @@ void main() {
   color = redirected_texture(tex3, 2, coord3);
 }
 
-§sidecarInjection texture@isampler1D@tex2:
+§sidecarInjection texture@tex2:
 uniform sampler3D tex1;
 uniform isampler1D tex2;
 
 void main() {
-  color = texture(tex1, coord3);
-  color = texture(tex3, coord1);
+  color = texture(tex1, coord1);
+  color = texture(tex2, coord2);
 }
 ===
 uniform sampler3D tex1;
@@ -140,6 +140,53 @@ float redirected_texture(isampler1D tracked, int sidecar, float coord) {
   }
 }
 void main() {
-  color = texture(tex1, coord3);
-  color = redirected_texture(tex2, 1, coord1);
+  color = texture(tex1, coord1);
+  color = redirected_texture(tex2, 1, coord2);
 }
+
+§sidecarInjection texture@tex2:
+uniform sampler3D tex1;
+uniform isampler1D tex2;
+
+int foo(isampler1D tex, float coord) {
+  isampler1D bar;
+  bar = tex;
+  return texture(bar, coord);
+}
+
+float foo(sampler3D tex, vec3 coord) {
+  sampler3D bar;
+  bar = tex;
+  return texture(bar, coord);
+}
+
+void main() {
+  color = foo(tex1, coord1);
+  color = foo(tex2, coord2);
+}
+===
+uniform sampler3D tex1;
+uniform isampler1D tex2;
+int foo(isampler1D tex, float coord) {
+  isampler1D bar;
+  bar = tex;
+  return texture(bar, coord);
+}
+float foo(sampler3D tex, vec3 coord) {
+  sampler3D bar;
+  bar = tex;
+  return texture(bar, coord);
+}
+float redirected_texture(isampler1D tracked, int sidecar, float coord) {
+  if (tracked == 1) {
+    return 1.0
+  } else {
+    return texture(tracked, coord);
+  }
+}
+void main() {
+  color = foo(tex1, 1, coord1);
+  color = foo(tex2, 2, coord2);
+}
+
+§
