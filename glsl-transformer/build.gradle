@@ -27,14 +27,14 @@ repositories {
 }
 
 def antlrVersion = '4.11.1'
-def jabelVersion = '0.4.2'
+def jabelVersion = '1.0.0'
 
 dependencies {
   antlr group: 'org.antlr', name: 'antlr4', version: antlrVersion
   api group: 'org.antlr', name: 'antlr4-runtime', version: antlrVersion
 
   testImplementation group: 'io.github.origin-energy', name:'java-snapshot-testing-junit5', version: '3.2.+'
-  testImplementation group: 'org.slf4j', name: 'slf4j-simple', version: '2.0.0-alpha5'
+  testImplementation group: 'org.slf4j', name: 'slf4j-simple', version: '2.0.+'
   testImplementation group: 'org.fusesource.jansi', name:'jansi', version:'2.4.0'
 
   annotationProcessor group: 'com.github.bsideup.jabel', name:'jabel-javac-plugin', version: jabelVersion
