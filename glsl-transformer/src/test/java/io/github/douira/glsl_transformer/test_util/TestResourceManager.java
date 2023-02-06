@@ -1,20 +1,15 @@
 package io.github.douira.glsl_transformer.test_util;
 
-import static org.junit.jupiter.api.Assertions.*;
-
-import java.nio.charset.*;
 import java.nio.file.*;
-import java.util.*;
-import java.util.stream.*;
+import java.util.Set;
+import java.util.stream.Stream;
 
 import io.github.douira.glsl_transformer.util.CompatUtil;
 
 /**
  * Knows about the various code resource files and can load them.
  */
-public class TestResourceManager {
-  private static final Map<Path, Resource> RESOURCE_CACHE = new HashMap<>();
-
+public class TestResourceManager extends TestResourceManagerBase {
   public static enum FileLocation {
     TINY("/tiny.glsl"),
     DIRECTIVE_TEST("/directiveTest.glsl"),
@@ -58,26 +53,9 @@ public class TestResourceManager {
     Path path;
     Set<String> excludeInFiles;
 
-    private static final Set<String> GLOBAL_EXCLUDE = CompatUtil.setOf(".ds_store", "disable_");
-
     private DirectoryLocation(String path, Set<String> excludeInFiles) {
       this.path = Paths.get(path);
       this.excludeInFiles = excludeInFiles;
-    }
-
-    private static boolean checkFileNameWith(String fileName, Set<String> excludes) {
-      for (var excluded : excludes) {
-        if (fileName.contains(excluded)) {
-          return false;
-        }
-      }
-      return true;
-    }
-
-    public boolean allowPath(Path path) {
-      var fileName = path.getFileName().toString().toLowerCase();
-      return checkFileNameWith(fileName, GLOBAL_EXCLUDE)
-          && checkFileNameWith(fileName, excludeInFiles);
     }
   }
 
@@ -88,61 +66,14 @@ public class TestResourceManager {
   }
 
   private TestResourceManager() {
+    super();
   }
 
   public static Resource getResource(FileLocation location) {
-    return getPathResource(location.path);
+    return TestResourceManagerBase.getPathResource(location.path);
   }
 
   public static Stream<Resource> getDirectoryResources(DirectoryLocation location) {
-    var resourcePath = getResourcePath(location.path);
-    return assertDoesNotThrow(
-        () -> Files.walk(resourcePath),
-        "The resource directory at " + resourcePath + " could not be enumerated.")
-        .filter(path -> {
-          if (!location.allowPath(path)) {
-            return false;
-          }
-
-          var file = path.toFile();
-          if (file.isDirectory()) {
-            return false;
-          }
-
-          return true;
-        })
-        .map(TestResourceManager::getPathResource)
-        .filter(resource -> resource.content() != null);
-  }
-
-  private static Resource getPathResource(Path path) {
-    return Optional
-        .ofNullable(RESOURCE_CACHE.get(path))
-        .orElseGet(() -> new Resource(path, getFileContent(path)));
-  }
-
-  private static String getFileContent(Path path) {
-    var resourcePath = getResourcePath(path);
-    return assertDoesNotThrow(
-        () -> {
-          try {
-            return Files.readString(resourcePath, StandardCharsets.UTF_8);
-          } catch (MalformedInputException e) {
-            return null;
-          }
-        },
-        "The file at " + resourcePath.toString() + " could not be read.");
-  }
-
-  private static Path getResourcePath(Path resource) {
-    return getResourcePath(resource.toString());
-  }
-
-  private static Path getResourcePath(String resource) {
-    try {
-      return Paths.get(TestResourceManager.class.getResource(resource).toURI());
-    } catch (Exception e) {
-      return Paths.get(resource);
-    }
+    return getDirectoryResources(location.path, location.excludeInFiles);
   }
 }
