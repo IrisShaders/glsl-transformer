@@ -27,7 +27,7 @@ import io.github.douira.glsl_transformer.ast.transform.*;
 import io.github.douira.glsl_transformer.parser.ParseShape;
 import io.github.douira.glsl_transformer.test_util.*;
 import io.github.douira.glsl_transformer.test_util.TestCaseProvider.Spacing;
-import io.github.douira.glsl_transformer.util.Type;
+import io.github.douira.glsl_transformer.util.NumericType;
 
 public class TransformTest extends TestWithSingleASTTransformer {
   @ParameterizedTest
@@ -70,7 +70,7 @@ public class TransformTest extends TestWithSingleASTTransformer {
 
           // verify that it's actually a uniform declaration and cache this result
           if (!uniformDeclarations.contains(externalDeclaration)) {
-            var qualifier = typeAndInit.getType().getTypeQualifier();
+            var qualifier = typeAndInit.getSpecifiedType().getTypeQualifier();
             if (qualifier == null
                 || qualifier.getChildren().stream().noneMatch(
                     qualifierPart -> qualifierPart instanceof StorageQualifier storageQualifier
@@ -572,7 +572,7 @@ public class TransformTest extends TestWithSingleASTTransformer {
           newQualifier.getChildren()
               .add(new LayoutQualifier(Stream.of(new NamedLayoutQualifierPart(
                   new Identifier("location"),
-                  new LiteralExpression(Type.INT32, data.number)))));
+                  new LiteralExpression(NumericType.INT32, data.number)))));
           var newDeclaration = layoutedOutDeclarationTemplate.getInstanceFor(root,
               newQualifier,
               data.type.cloneInto(root),

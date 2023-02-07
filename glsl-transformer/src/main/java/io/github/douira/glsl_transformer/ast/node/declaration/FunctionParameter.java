@@ -30,7 +30,7 @@ public class FunctionParameter extends InnerASTNode {
     this.type = setup(type, this::setType);
   }
 
-  public FullySpecifiedType getType() {
+  public FullySpecifiedType getSpecifiedType() {
     return type;
   }
 

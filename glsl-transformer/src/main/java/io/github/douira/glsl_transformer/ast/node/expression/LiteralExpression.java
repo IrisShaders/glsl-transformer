@@ -4,11 +4,11 @@ import java.util.Objects;
 
 import io.github.douira.glsl_transformer.ast.query.Root;
 import io.github.douira.glsl_transformer.ast.traversal.*;
-import io.github.douira.glsl_transformer.util.Type;
-import io.github.douira.glsl_transformer.util.Type.NumberType;
+import io.github.douira.glsl_transformer.util.NumericType;
+import io.github.douira.glsl_transformer.util.NumericType.NumberType;
 
 public class LiteralExpression extends TerminalExpression {
-  private Type literalType;
+  private NumericType literalType;
   private boolean booleanValue;
   private long integerValue;
   private IntegerFormat integerFormat;
@@ -27,7 +27,7 @@ public class LiteralExpression extends TerminalExpression {
   }
 
   private LiteralExpression(
-      Type literalType,
+      NumericType literalType,
       boolean booleanValue,
       long integerValue,
       IntegerFormat integerFormat,
@@ -43,19 +43,19 @@ public class LiteralExpression extends TerminalExpression {
     setBoolean(booleanValue);
   }
 
-  public LiteralExpression(Type literalType, long integerValue) {
+  public LiteralExpression(NumericType literalType, long integerValue) {
     setInteger(literalType, integerValue);
   }
 
-  public LiteralExpression(Type literalType, long integerValue, IntegerFormat integerFormat) {
+  public LiteralExpression(NumericType literalType, long integerValue, IntegerFormat integerFormat) {
     setInteger(literalType, integerValue, integerFormat);
   }
 
-  public LiteralExpression(Type literalType, double floatingValue) {
+  public LiteralExpression(NumericType literalType, double floatingValue) {
     setFloating(literalType, floatingValue);
   }
 
-  private void validateLiteralType(Type type) {
+  private void validateLiteralType(NumericType type) {
     if (type == null) {
       throw new NullPointerException("Literal type cannot be null!");
     }
@@ -93,11 +93,11 @@ public class LiteralExpression extends TerminalExpression {
     }
   }
 
-  public Type getType() {
+  public NumericType getNumericType() {
     return literalType;
   }
 
-  public Type.NumberType getNumberType() {
+  public NumericType.NumberType getNumberType() {
     return literalType.getNumberType();
   }
 
@@ -110,7 +110,7 @@ public class LiteralExpression extends TerminalExpression {
     this.integerFormat = null;
     this.integerValue = 0;
     this.floatingValue = 0;
-    this.literalType = Type.BOOL;
+    this.literalType = NumericType.BOOL;
   }
 
   public void changeBoolean(boolean booleanValue) {
@@ -124,7 +124,7 @@ public class LiteralExpression extends TerminalExpression {
     return integerValue;
   }
 
-  public void setInteger(Type integerType, long integerValue, IntegerFormat integerFormat) {
+  public void setInteger(NumericType integerType, long integerValue, IntegerFormat integerFormat) {
     Objects.requireNonNull(integerFormat, "Integer format cannot be null!");
     validateLiteralType(integerType);
     var numberType = integerType.getNumberType();
@@ -138,12 +138,12 @@ public class LiteralExpression extends TerminalExpression {
     this.literalType = integerType;
   }
 
-  public void setInteger(Type integerType, long integerValue) {
+  public void setInteger(NumericType integerType, long integerValue) {
     setInteger(integerType, integerValue, IntegerFormat.DECIMAL);
   }
 
   public void setInteger(int integerValue) {
-    setInteger(Type.INT32, integerValue);
+    setInteger(NumericType.INT32, integerValue);
   }
 
   public void changeInteger(long integerValue) {
@@ -172,7 +172,7 @@ public class LiteralExpression extends TerminalExpression {
     return floatingValue;
   }
 
-  public void setFloating(Type floatingType, double floatingValue) {
+  public void setFloating(NumericType floatingType, double floatingValue) {
     validateLiteralType(floatingType);
     if (floatingType.getNumberType() != NumberType.FLOATING_POINT) {
       throw new IllegalArgumentException("Literal type must be a floating point!");
@@ -185,7 +185,7 @@ public class LiteralExpression extends TerminalExpression {
   }
 
   public void setFloating(float floatingValue) {
-    setFloating(Type.FLOAT32, floatingValue);
+    setFloating(NumericType.FLOAT32, floatingValue);
   }
 
   public void changeFloating(double floatingValue) {
@@ -242,15 +242,15 @@ public class LiteralExpression extends TerminalExpression {
         return new LiteralExpression(false);
       case SIGNED_INTEGER:
       case UNSIGNED_INTEGER:
-        return new LiteralExpression(Type.INT32, 0);
+        return new LiteralExpression(NumericType.INT32, 0);
       case FLOATING_POINT:
-        return new LiteralExpression(Type.FLOAT32, 0.0d);
+        return new LiteralExpression(NumericType.FLOAT32, 0.0d);
       default:
         throw new IllegalArgumentException("Unsupported literal type: " + numberType);
     }
   }
 
-  public static LiteralExpression getDefaultValue(Type type) {
+  public static LiteralExpression getDefaultValue(NumericType type) {
     return getDefaultValue(type.getNumberType());
   }
 

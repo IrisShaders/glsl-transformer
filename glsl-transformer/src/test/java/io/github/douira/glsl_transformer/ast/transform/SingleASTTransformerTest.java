@@ -16,7 +16,7 @@ import io.github.douira.glsl_transformer.ast.print.PrintType;
 import io.github.douira.glsl_transformer.ast.query.*;
 import io.github.douira.glsl_transformer.parser.ParsingException;
 import io.github.douira.glsl_transformer.test_util.TestWithSingleASTTransformer;
-import io.github.douira.glsl_transformer.util.Type;
+import io.github.douira.glsl_transformer.util.NumericType;
 
 public class SingleASTTransformerTest extends TestWithSingleASTTransformer {
   void assertInjectExternalDeclaration(int index, String input, String output) {
@@ -76,7 +76,7 @@ public class SingleASTTransformerTest extends TestWithSingleASTTransformer {
         for (var sequence : root.nodeIndex
             .get(SequenceExpression.class)) {
           sequence.getExpressions().add(
-              new LiteralExpression(Type.INT32, 1));
+              new LiteralExpression(NumericType.INT32, 1));
         }
       });
       root.nodeIndex.getStream(LiteralExpression.class)

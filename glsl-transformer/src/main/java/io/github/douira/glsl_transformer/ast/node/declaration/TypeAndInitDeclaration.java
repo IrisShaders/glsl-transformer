@@ -21,7 +21,7 @@ public class TypeAndInitDeclaration extends Declaration {
     this.members = new ChildNodeList<>(this);
   }
 
-  public FullySpecifiedType getType() {
+  public FullySpecifiedType getSpecifiedType() {
     return type;
   }
 

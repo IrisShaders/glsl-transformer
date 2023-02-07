@@ -17,7 +17,7 @@ public class StructMember extends InnerASTNode {
     this.declarators = ChildNodeList.collect(declarators, this);
   }
 
-  public FullySpecifiedType getType() {
+  public FullySpecifiedType getSpecifiedType() {
     return type;
   }
 
