@@ -23,7 +23,7 @@ import io.github.douira.glsl_transformer.ast.node.type.qualifier.*;
 import io.github.douira.glsl_transformer.ast.node.type.specifier.*;
 import io.github.douira.glsl_transformer.ast.node.type.struct.*;
 import io.github.douira.glsl_transformer.ast.print.token.EOFToken;
-import io.github.douira.glsl_transformer.ast.typing.NumericType.NumberType;
+import io.github.douira.glsl_transformer.ast.typing.NumberType;
 
 /**
  * The AST printer emits tokens to convert an AST node into a string with the

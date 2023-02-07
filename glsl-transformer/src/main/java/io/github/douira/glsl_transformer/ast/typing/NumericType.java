@@ -8,7 +8,8 @@ import io.github.douira.glsl_transformer.GLSLLexer;
 import io.github.douira.glsl_transformer.ast.data.TokenTyped;
 
 /**
- * This enum represents the type of a value in GLSL and contains easily accessible
+ * This enum represents the type of a value in GLSL and contains easily
+ * accessible
  * data about each of them.
  * 
  * The shape is an array of up to three integers describing how big this
@@ -99,57 +100,6 @@ public enum NumericType implements TokenTyped {
   F64MAT4X2(GLSLLexer.F64MAT4X2, NumberType.FLOATING_POINT, "dmat4x2", "f64mat4x2", 64, 4, 2),
   F64MAT4X3(GLSLLexer.F64MAT4X3, NumberType.FLOATING_POINT, "dmat4x3", "f64mat4x3", 64, 4, 3),
   F64MAT4X4(GLSLLexer.F64MAT4X4, NumberType.FLOATING_POINT, "dmat4", "f64mat4x4", 64, 4, 4);
-
-  /**
-   * The different ways bits in a tensor can be interpreted.
-   */
-  public enum NumberType {
-    /**
-     * boolean bit usage
-     */
-    BOOLEAN(1, 4),
-
-    /**
-     * unsigned integer bit usage
-     */
-    UNSIGNED_INTEGER(64, 4),
-
-    /**
-     * integer bit usage
-     */
-    SIGNED_INTEGER(64, 4),
-
-    /**
-     * floating point bit usage
-     */
-    FLOATING_POINT(64, 4, 4);
-
-    private final int maxBitDepth;
-    private final int[] maxDimensions;
-    private EnumSet<NumericType> registeredTypes; // lazy init
-
-    NumberType(int maxBitDepth, int... maxDimensions) {
-      this.maxBitDepth = maxBitDepth;
-      this.maxDimensions = maxDimensions;
-    }
-
-    public int getMaxBitDepth() {
-      return maxBitDepth;
-    }
-
-    public int[] getMaxDimensions() {
-      return maxDimensions;
-    }
-
-    /**
-     * @return An EnumSet of all the Types which use this number type. This is
-     *         created
-     *         after all Types have been created.
-     */
-    public EnumSet<NumericType> getRegisteredTypes() {
-      return registeredTypes;
-    }
-  }
 
   private final int tokenType;
   private final int literalTokenType;
@@ -304,16 +254,6 @@ public enum NumericType implements TokenTyped {
     return explicitName;
   }
 
-  /**
-   * Returns the set of types that this type can be converted to without a
-   * constructor or swizzling.
-   *
-   * @return the set of types that this type can be implicitly converted to.
-   */
-  public EnumSet<NumericType> getImplicitCasts() {
-    return implicitCastTypes;
-  }
-
   private static final NumericType[] tokenTypesToValues;
   private static final Map<Integer, NumericType> literalTokenTypesToValues;
   private static final int minIndex;
@@ -362,30 +302,54 @@ public enum NumericType implements TokenTyped {
     }
 
     // calculate possible implicit casts for each type
-    for (NumericType t1 : values()) {
+    // promotion tables:
+    // https://github.com/KhronosGroup/GLSL/blob/3d48ca20f65b7fad91baab3dcadd224ce4655f05/extensions/ext/GL_EXT_shader_explicit_arithmetic_types.txt#L409
+    for (NumericType from : values()) {
       EnumSet<NumericType> implicitCastTypes = EnumSet.noneOf(NumericType.class);
-      t1.implicitCastTypes = implicitCastTypes;
-      for (NumericType t2 : values()) {
-        boolean canCast = t1.equals(t2) || (Arrays.equals(t1.dimensions, t2.dimensions) && switch (t1.numberType) {
-          case BOOLEAN -> false;
-          case SIGNED_INTEGER -> switch (t2.numberType) {
-            case UNSIGNED_INTEGER, SIGNED_INTEGER, FLOATING_POINT -> t2.bitDepth >= t1.bitDepth;
-            default -> false;
-          };
-          case UNSIGNED_INTEGER -> switch (t2.numberType) {
-            case UNSIGNED_INTEGER, SIGNED_INTEGER -> t2.bitDepth > t1.bitDepth;
-            case FLOATING_POINT -> t2.bitDepth >= t1.bitDepth;
-            default -> false;
-          };
-          case FLOATING_POINT -> t2.numberType.equals(NumberType.FLOATING_POINT) && t2.bitDepth >= t1.bitDepth;
-        });
+      from.implicitCastTypes = implicitCastTypes;
+      for (NumericType to : values()) {
+        boolean canCast = from == to
+            || (Arrays.equals(from.dimensions, to.dimensions) && switch (from.numberType) {
+              case BOOLEAN -> false;
+              case SIGNED_INTEGER -> switch (to.numberType) {
+                case UNSIGNED_INTEGER, SIGNED_INTEGER, FLOATING_POINT -> to.bitDepth >= from.bitDepth;
+                default -> false;
+              };
+              case UNSIGNED_INTEGER -> switch (to.numberType) {
+                case UNSIGNED_INTEGER, SIGNED_INTEGER -> to.bitDepth > from.bitDepth;
+                case FLOATING_POINT -> to.bitDepth >= from.bitDepth;
+                default -> false;
+              };
+              case FLOATING_POINT -> to.numberType == NumberType.FLOATING_POINT && to.bitDepth >= from.bitDepth;
+            });
 
         if (canCast) {
-          implicitCastTypes.add(t2);
+          implicitCastTypes.add(to);
         }
       }
     }
   }
+
+  /**
+   * Returns the set of types that this type can be converted to without a
+   * constructor or swizzling.
+   *
+   * @return the set of types that this type can be implicitly converted to.
+   */
+  public EnumSet<NumericType> getImplicitCasts() {
+    return implicitCastTypes;
+  }
+
+  public boolean isImplicitlyCastableTo(NumericType other) {
+    return implicitCastTypes.contains(other);
+  }
+
+  /**
+   * TODO: function that checks for (constant) integral numbers
+   * 
+   * implicit cast for binary operations:
+   * https://github.com/KhronosGroup/GLSL/blob/3d48ca20f65b7fad91baab3dcadd224ce4655f05/extensions/ext/GL_EXT_shader_explicit_arithmetic_types.txt#L574
+   */
 
   public static NumericType fromToken(Token token) {
     return ofTokenType(token.getType());

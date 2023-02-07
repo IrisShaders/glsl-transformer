@@ -4,8 +4,7 @@ import java.util.Objects;
 
 import io.github.douira.glsl_transformer.ast.query.Root;
 import io.github.douira.glsl_transformer.ast.traversal.*;
-import io.github.douira.glsl_transformer.ast.typing.NumericType;
-import io.github.douira.glsl_transformer.ast.typing.NumericType.NumberType;
+import io.github.douira.glsl_transformer.ast.typing.*;
 
 public class LiteralExpression extends TerminalExpression {
   private NumericType literalType;
@@ -97,7 +96,7 @@ public class LiteralExpression extends TerminalExpression {
     return literalType;
   }
 
-  public NumericType.NumberType getNumberType() {
+  public NumberType getNumberType() {
     return literalType.getNumberType();
   }
 
@@ -200,8 +199,7 @@ public class LiteralExpression extends TerminalExpression {
   }
 
   public boolean isInteger() {
-    return getNumberType() == NumberType.SIGNED_INTEGER
-        || getNumberType() == NumberType.UNSIGNED_INTEGER;
+    return getNumberType().isInteger();
   }
 
   public boolean isFloatingPoint() {
