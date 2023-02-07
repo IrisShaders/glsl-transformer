@@ -2,16 +2,16 @@ package io.github.douira.glsl_transformer.ast.node.type.specifier;
 
 import io.github.douira.glsl_transformer.ast.query.Root;
 import io.github.douira.glsl_transformer.ast.traversal.*;
-import io.github.douira.glsl_transformer.util.Type;
+import io.github.douira.glsl_transformer.util.NumericType;
 
 public class BuiltinNumericTypeSpecifier extends TypeSpecifier {
-  public Type type;
+  public NumericType type;
 
-  public BuiltinNumericTypeSpecifier(Type type) {
+  public BuiltinNumericTypeSpecifier(NumericType type) {
     this.type = type;
   }
 
-  public BuiltinNumericTypeSpecifier(Type type, ArraySpecifier arraySpecifier) {
+  public BuiltinNumericTypeSpecifier(NumericType type, ArraySpecifier arraySpecifier) {
     super(arraySpecifier);
     this.type = type;
   }

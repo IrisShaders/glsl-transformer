@@ -34,8 +34,8 @@ import io.github.douira.glsl_transformer.ast.node.type.specifier.*;
 import io.github.douira.glsl_transformer.ast.node.type.specifier.BuiltinFixedTypeSpecifier.BuiltinType;
 import io.github.douira.glsl_transformer.ast.node.type.struct.*;
 import io.github.douira.glsl_transformer.ast.query.Root;
-import io.github.douira.glsl_transformer.util.Type;
-import io.github.douira.glsl_transformer.util.Type.NumberType;
+import io.github.douira.glsl_transformer.util.NumericType;
+import io.github.douira.glsl_transformer.util.NumericType.NumberType;
 
 /**
  * The AST builder is a visitor of the parse tree (not an AST visitor) that
@@ -361,7 +361,7 @@ public class ASTBuilder extends GLSLParserBaseVisitor<ASTNode> {
       return new LiteralExpression(builder.toString());
     }
 
-    var literalType = Type.ofLiteralTokenType(content.getType());
+    var literalType = NumericType.ofLiteralTokenType(content.getType());
     var tokenContent = content.getText();
     var numberType = literalType.getNumberType();
     switch (numberType) {
@@ -911,7 +911,7 @@ public class ASTBuilder extends GLSLParserBaseVisitor<ASTNode> {
 
     var builtinNumericType = ctx.builtinTypeSpecifierParseable();
     if (builtinNumericType != null) {
-      var type = Type.fromToken(builtinNumericType.getStart());
+      var type = NumericType.fromToken(builtinNumericType.getStart());
       return new BuiltinNumericTypeSpecifier(type, arraySpecifier);
     }
 

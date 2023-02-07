@@ -23,7 +23,7 @@ import io.github.douira.glsl_transformer.ast.node.type.qualifier.*;
 import io.github.douira.glsl_transformer.ast.node.type.specifier.*;
 import io.github.douira.glsl_transformer.ast.node.type.struct.*;
 import io.github.douira.glsl_transformer.ast.print.token.EOFToken;
-import io.github.douira.glsl_transformer.util.Type.NumberType;
+import io.github.douira.glsl_transformer.util.NumericType.NumberType;
 
 /**
  * The AST printer emits tokens to convert an AST node into a string with the
@@ -368,7 +368,7 @@ public class ASTPrinter extends ASTPrinterBase {
             intString = sign + intString;
           }
         }
-        switch (node.getType()) {
+        switch (node.getNumericType()) {
           case INT16:
             emitLiteral(intString + "s");
             break;
@@ -388,11 +388,11 @@ public class ASTPrinter extends ASTPrinterBase {
             emitLiteral(intString + "ul");
             break;
           default:
-            throw new IllegalStateException("Unexpected int type: " + node.getType());
+            throw new IllegalStateException("Unexpected int type: " + node.getNumericType());
         }
         break;
       case FLOATING_POINT:
-        switch (node.getType()) {
+        switch (node.getNumericType()) {
           case FLOAT16:
             emitLiteral(Double.toString(node.getFloating()) + "hf");
             break;
@@ -403,7 +403,7 @@ public class ASTPrinter extends ASTPrinterBase {
             emitLiteral(Double.toString(node.getFloating()) + "lf");
             break;
           default:
-            throw new IllegalStateException("Unexpected float type: " + node.getType());
+            throw new IllegalStateException("Unexpected float type: " + node.getNumericType());
         }
         break;
     }
@@ -999,7 +999,7 @@ public class ASTPrinter extends ASTPrinterBase {
 
   @Override
   public Void visitFunctionParameter(FunctionParameter node) {
-    visit(node.getType());
+    visit(node.getSpecifiedType());
     if (node.getName() != null) {
       emitBreakableSpace();
       visit(node.getName());
@@ -1062,7 +1062,7 @@ public class ASTPrinter extends ASTPrinterBase {
 
   @Override
   public Void visitTypeAndInitDeclaration(TypeAndInitDeclaration node) {
-    visit(node.getType());
+    visit(node.getSpecifiedType());
     if (!node.getMembers().isEmpty()) {
       emitBreakableSpace();
       visitCommaSpaced(node.getMembers());
@@ -1217,7 +1217,7 @@ public class ASTPrinter extends ASTPrinterBase {
 
   @Override
   public Void visitStructMember(StructMember node) {
-    visit(node.getType());
+    visit(node.getSpecifiedType());
     emitBreakableSpace();
     visitCommaSpaced(node.getDeclarators());
     emitType(GLSLLexer.SEMICOLON);
@@ -1248,7 +1248,7 @@ public class ASTPrinter extends ASTPrinterBase {
 
   @Override
   public Void visitIterationConditionInitializer(IterationConditionInitializer node) {
-    visit(node.getType());
+    visit(node.getSpecifiedType());
     emitBreakableSpace();
     visit(node.getName());
     emitBreakableSpace();

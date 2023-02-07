@@ -17,9 +17,8 @@ import io.github.douira.glsl_transformer.ast.data.TokenTyped;
  * of each value and the following dimensions describe the actual dimensions of
  * the tensor.
  */
-public enum Type implements TokenTyped {
+public enum NumericType implements TokenTyped {
   STRING(NumberType.STRING, "string", "string"),
-
   BOOL(GLSLLexer.BOOL, GLSLLexer.BOOLCONSTANT, NumberType.BOOLEAN, "bool", "bool", 1),
   BVEC2(GLSLLexer.BVEC2, NumberType.BOOLEAN, "bvec2", "bvec2", 1, 2),
   BVEC3(GLSLLexer.BVEC3, NumberType.BOOLEAN, "bvec3", "bvec3", 1, 3),
@@ -131,7 +130,7 @@ public enum Type implements TokenTyped {
 
     private final int maxBitDepth;
     private final int[] maxDimensions;
-    private EnumSet<Type> registeredTypes; // lazy init
+    private EnumSet<NumericType> registeredTypes; // lazy init
 
     NumberType(int maxBitDepth, int... maxDimensions) {
       this.maxBitDepth = maxBitDepth;
@@ -151,7 +150,7 @@ public enum Type implements TokenTyped {
      *         created
      *         after all Types have been created.
      */
-    public EnumSet<Type> getRegisteredTypes() {
+    public EnumSet<NumericType> getRegisteredTypes() {
       return registeredTypes;
     }
   }
@@ -165,12 +164,12 @@ public enum Type implements TokenTyped {
   private final String explicitName;
 
   // lazily created
-  private EnumSet<Type> implicitCastTypes;
+  private EnumSet<NumericType> implicitCastTypes;
 
   // can't be static
   private final int[] SCALAR_DIMENSIONS = { 1 };
 
-  Type(int tokenType,
+  NumericType(int tokenType,
       NumberType numberType,
       String compactName,
       String explicitName,
@@ -191,7 +190,7 @@ public enum Type implements TokenTyped {
    * @param bitDepth     The bit depth
    * @param dimensions   The size of each dimension
    */
-  Type(int tokenType,
+  NumericType(int tokenType,
       int literalTokenType,
       NumberType numberType,
       String compactName,
@@ -325,19 +324,19 @@ public enum Type implements TokenTyped {
    *
    * @return the set of types that this type can be implicitly converted to.
    */
-  public EnumSet<Type> getImplicitCasts() {
+  public EnumSet<NumericType> getImplicitCasts() {
     return implicitCastTypes;
   }
 
-  private static final Type[] tokenTypesToValues;
-  private static final Map<Integer, Type> literalTokenTypesToValues;
+  private static final NumericType[] tokenTypesToValues;
+  private static final Map<Integer, NumericType> literalTokenTypesToValues;
   private static final int minIndex;
 
   static {
     // figure out the token indexes of the token types used for the type enum
     int localMinIndex = Integer.MAX_VALUE;
     int localMaxIndex = Integer.MIN_VALUE;
-    for (Type entry : values()) {
+    for (NumericType entry : values()) {
       int tokenType = entry.getTokenType();
       if (tokenType < localMinIndex) {
         localMinIndex = tokenType;
@@ -349,9 +348,9 @@ public enum Type implements TokenTyped {
 
     // create a mapping array between the token types and the type enum
     minIndex = localMinIndex;
-    Type[] localTokensTypesToValues = new Type[localMaxIndex - localMinIndex + 1];
+    NumericType[] localTokensTypesToValues = new NumericType[localMaxIndex - localMinIndex + 1];
     literalTokenTypesToValues = new HashMap<>();
-    for (Type entry : values()) {
+    for (NumericType entry : values()) {
       int index = entry.tokenType - minIndex;
       if (localTokensTypesToValues[index] != null) {
         throw new AssertionError(
@@ -367,8 +366,8 @@ public enum Type implements TokenTyped {
 
     // register the types to enum sets for each of the number types
     // (inverse mapping)
-    for (Type entry : values()) {
-      EnumSet<Type> registeredTypes = entry.numberType.registeredTypes;
+    for (NumericType entry : values()) {
+      EnumSet<NumericType> registeredTypes = entry.numberType.registeredTypes;
       if (registeredTypes != null) {
         registeredTypes.add(entry);
       } else {
@@ -377,10 +376,10 @@ public enum Type implements TokenTyped {
     }
 
     // calculate possible implicit casts for each type
-    for (Type t1 : values()) {
-      EnumSet<Type> implicitCastTypes = EnumSet.noneOf(Type.class);
+    for (NumericType t1 : values()) {
+      EnumSet<NumericType> implicitCastTypes = EnumSet.noneOf(NumericType.class);
       t1.implicitCastTypes = implicitCastTypes;
-      for (Type t2 : values()) {
+      for (NumericType t2 : values()) {
         boolean canCast = t1.equals(t2) || (Arrays.equals(t1.dimensions, t2.dimensions) && switch (t1.numberType) {
           case STRING -> false;
           case BOOLEAN -> false;
@@ -403,7 +402,7 @@ public enum Type implements TokenTyped {
     }
   }
 
-  public static Type fromToken(Token token) {
+  public static NumericType fromToken(Token token) {
     return ofTokenType(token.getType());
   }
 
@@ -413,7 +412,7 @@ public enum Type implements TokenTyped {
    * @param tokenType The token type in the parser
    * @return The type for the given token type index
    */
-  public static Type ofTokenType(int tokenType) {
+  public static NumericType ofTokenType(int tokenType) {
     return tokenTypesToValues[tokenType - minIndex];
   }
 
@@ -423,7 +422,7 @@ public enum Type implements TokenTyped {
    * @param literalTokenType The literal token type
    * @return The type for the given literal token type
    */
-  public static Type ofLiteralTokenType(int literalTokenType) {
+  public static NumericType ofLiteralTokenType(int literalTokenType) {
     var type = literalTokenTypesToValues.get(literalTokenType);
     if (type == null) {
       throw new IllegalArgumentException("Token type has no literal type: " + literalTokenType);

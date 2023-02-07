@@ -291,7 +291,7 @@ public interface ASTVisitor<R> extends GeneralASTVisitor<R> {
   }
 
   default R visitLiteralExpression(LiteralExpression node) {
-    var result = visitData(node.getType());
+    var result = visitData(node.getNumericType());
     result = visitData(result, node.isString() ? node.getString() : node.getNumber());
     return node.isInteger() ? visitData(result, node.getIntegerFormat()) : result;
   }
@@ -411,7 +411,7 @@ public interface ASTVisitor<R> extends GeneralASTVisitor<R> {
   }
 
   default R visitFunctionParameter(FunctionParameter node) {
-    return visitThreeChildren(node.getType(), node.getName(), node.getArraySpecifier());
+    return visitThreeChildren(node.getSpecifiedType(), node.getName(), node.getArraySpecifier());
   }
 
   default R visitInterfaceBlockDeclaration(InterfaceBlockDeclaration node) {
@@ -427,7 +427,7 @@ public interface ASTVisitor<R> extends GeneralASTVisitor<R> {
   }
 
   default R visitTypeAndInitDeclaration(TypeAndInitDeclaration node) {
-    return visitChildren(visit(node.getType()), node.getMembers());
+    return visitChildren(visit(node.getSpecifiedType()), node.getMembers());
   }
 
   default R visitVariableDeclaration(VariableDeclaration node) {
@@ -520,7 +520,7 @@ public interface ASTVisitor<R> extends GeneralASTVisitor<R> {
   }
 
   default R visitStructMember(StructMember node) {
-    return visitChildren(visit(node.getType()), node.getDeclarators());
+    return visitChildren(visit(node.getSpecifiedType()), node.getDeclarators());
   }
 
   default R visitStructSpecifier(StructSpecifier node) {
@@ -532,7 +532,7 @@ public interface ASTVisitor<R> extends GeneralASTVisitor<R> {
   }
 
   default R visitIterationConditionInitializer(IterationConditionInitializer node) {
-    return visitThreeChildren(node.getType(), node.getName(), node.getInitializer());
+    return visitThreeChildren(node.getSpecifiedType(), node.getName(), node.getInitializer());
   }
 
   default R visitFunctionPrototype(FunctionPrototype node) {

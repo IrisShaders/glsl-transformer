@@ -17,7 +17,7 @@ public class IterationConditionInitializer extends InnerASTNode {
     this.initializer = setup(initializer, this::setInitializer);
   }
 
-  public FullySpecifiedType getType() {
+  public FullySpecifiedType getSpecifiedType() {
     return type;
   }
 
