@@ -2,7 +2,6 @@ package io.github.douira.glsl_transformer.ast;
 
 import static io.github.douira.glsl_transformer.test_util.AssertUtil.*;
 
-import java.security.MessageDigest;
 import java.util.*;
 import java.util.function.Function;
 
@@ -51,15 +50,8 @@ public class ASTReprintTest {
     var ast = parseAST(getParseMethod(type), input);
     var astPrinter = new PrintAST();
     astPrinter.visit(ast);
-    MessageDigest digest;
-    try {
-      digest = MessageDigest.getInstance("SHA-1");
-    } catch (Exception e) {
-      throw new RuntimeException(e);
-    }
-    digest.update(input.getBytes());
     expect
-        .scenario(type + "_" + Base64.getEncoder().encodeToString(digest.digest()))
+        .scenario(type + "_" + getBase64Hash(input))
         .toMatchSnapshot(
             SnapshotUtil.inputOutputSnapshot(input, astPrinter.getResult()));
   }

@@ -2,7 +2,8 @@ package io.github.douira.glsl_transformer.test_util;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-import java.util.Set;
+import java.security.MessageDigest;
+import java.util.*;
 import java.util.function.*;
 import java.util.stream.*;
 
@@ -118,5 +119,16 @@ public class AssertUtil {
     for (int i = 0; i < times.length; i++) {
       assertEquals(times[i], counter.counts[i], "It should call the callback " + i + " " + times[i] + " times");
     }
+  }
+
+  public static String getBase64Hash(String content) {
+    MessageDigest digest;
+    try {
+      digest = MessageDigest.getInstance("SHA-1");
+    } catch (Exception e) {
+      throw new RuntimeException(e);
+    }
+    digest.update(content.getBytes());
+    return Base64.getEncoder().encodeToString(digest.digest());
   }
 }
