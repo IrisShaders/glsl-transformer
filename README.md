@@ -32,6 +32,8 @@ Currently, `glsl-transformer` mostly operates only on the syntactic level, even 
 
 It also doesn't validate that features aren't used which may not be available in older GLSL versions. The `#version` directive is not semantically interpreted. It may also fail to parse code that is technically legal in old GLSL version where certain tokens weren't declared as reserved words yet. Just don't use reserved words as tokens in this case. If it's really necessary, preprocess the code by simply replacing the reserved words with some placeholder before parsing.
 
+`glsl-transformer` does not preprocess the code before parsing and will throw parsing exceptions if it encounters preprocessor directives like `#define`, `#if`, and `#include` etc. A few GLSL-specific and other directives such as `#version`, `#extension`, `#pragma`, `#line`, and `#custom` are supported as they have special roles. You can use [`glsl-preprocessor`](https://github.com/IrisShaders/glsl-preprocessor) to preprocess the GLSL code while preserving relevant directives before passing it to `glsl-transformer`.
+
 ## Versioning
 
 This project uses semver for versioning. If there are frequent breaking API changes then the major version will change frequently. This is the way.
