@@ -57,7 +57,7 @@ public class ParseShape<C extends ParserRuleContext, N extends ASTNode> {
     this.visitMethod = visitMethod;
   }
 
-  public N parseNodeSeparateInternal(String input) {
-    return ASTParser.getInternalInstance().parseNodeSeparate(RootSupplier.DEFAULT, this, input);
+  public N _parseNodeSeparateInternal(String input) {
+    return ASTParser._getInternalInstance().parseNodeSeparate(RootSupplier.DEFAULT, this, input);
   }
 }

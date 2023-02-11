@@ -109,14 +109,14 @@ public class Template<N extends ASTNode> {
   }
 
   public static Template<ExternalDeclaration> withExternalDeclaration(String input) {
-    return new Template<>(ParseShape.EXTERNAL_DECLARATION.parseNodeSeparateInternal(input));
+    return new Template<>(ParseShape.EXTERNAL_DECLARATION._parseNodeSeparateInternal(input));
   }
 
   public static Template<Statement> withStatement(String input) {
-    return new Template<>(ParseShape.STATEMENT.parseNodeSeparateInternal(input));
+    return new Template<>(ParseShape.STATEMENT._parseNodeSeparateInternal(input));
   }
 
   public static Template<Expression> withExpression(String input) {
-    return new Template<>(ParseShape.EXPRESSION.parseNodeSeparateInternal(input));
+    return new Template<>(ParseShape.EXPRESSION._parseNodeSeparateInternal(input));
   }
 }

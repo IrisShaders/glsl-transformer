@@ -1,7 +1,7 @@
 package io.github.douira.glsl_transformer.ast.query.match;
 
 import java.util.*;
-import java.util.function.*;
+import java.util.function.Predicate;
 
 import io.github.douira.glsl_transformer.ast.node.abstract_node.ASTNode;
 import io.github.douira.glsl_transformer.ast.traversal.*;
@@ -49,7 +49,7 @@ public class Matcher<N extends ASTNode> {
   }
 
   public Matcher(String input, ParseShape<?, N> parseShape, String wildcardPrefix) {
-    this(parseShape.parseNodeSeparateInternal(input), wildcardPrefix);
+    this(parseShape._parseNodeSeparateInternal(input), wildcardPrefix);
   }
 
   public Matcher(String input, ParseShape<?, N> parseShape) {

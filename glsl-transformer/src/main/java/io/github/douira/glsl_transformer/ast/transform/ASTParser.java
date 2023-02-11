@@ -20,7 +20,7 @@ import io.github.douira.glsl_transformer.token_filter.TokenFilter;
 public class ASTParser implements ParserInterface {
   private static ASTParser INSTANCE;
 
-  public static ASTParser getInternalInstance() {
+  public static ASTParser _getInternalInstance() {
     if (INSTANCE == null) {
       INSTANCE = new ASTParser();
     }
