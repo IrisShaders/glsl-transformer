@@ -22,7 +22,7 @@ public class TranslationUnitTest extends TestWithSingleASTTransformer {
   void testInjection() {
     p.setTransformation(tree -> tree.injectNode(
         ASTInjectionPoint.BEFORE_FUNCTIONS,
-        p.parseExternalDeclaration(tree, "float x;")));
+        p.parseExternalDeclaration(tree.getRoot(), "float x;")));
     assertTransformI(
         "int a;\nfloat x;\nvoid main() {\n}\n",
         "int a;\nvoid main() {\n}\n");

@@ -19,9 +19,9 @@ import io.github.douira.glsl_transformer.util.Type;
 
 public class SingleASTTransformerTest extends TestWithSingleASTTransformer {
   void assertInjectExternalDeclaration(int index, String input, String output) {
-    p.setTransformation(translationUnit -> {
+    p.setTransformation((translationUnit, root) -> {
       translationUnit.getChildren().add(index, p.parseExternalDeclaration(
-          translationUnit, "int a;"));
+          root, "int a;"));
     });
     assertTransform(output, input);
   }
@@ -72,7 +72,7 @@ public class SingleASTTransformerTest extends TestWithSingleASTTransformer {
   @Test
   void testNodeQueryAfterModification() {
     p.setTransformation((tree, root) -> {
-      Root.indexBuildSession(tree, () -> {
+      Root.indexBuildSession(root, () -> {
         for (var sequence : root.nodeIndex
             .get(SequenceExpression.class)) {
           sequence.getExpressions().add(
@@ -93,7 +93,7 @@ public class SingleASTTransformerTest extends TestWithSingleASTTransformer {
   @Test
   void testSelfReplacement() {
     p.setTransformation((tree, root) -> {
-      Root.indexBuildSession(tree, () -> {
+      Root.indexBuildSession(root, () -> {
         var toReplace = new ArrayList<LiteralExpression>();
         for (var node : root.nodeIndex
             .get(LiteralExpression.class)) {
@@ -161,7 +161,7 @@ public class SingleASTTransformerTest extends TestWithSingleASTTransformer {
           continue;
         }
       }
-      var secondDeclaration = p.parseExternalDeclaration(tree, "int x = 4, 4;");
+      var secondDeclaration = p.parseExternalDeclaration(root, "int x = 4, 4;");
       var sequenceExpression = secondDeclaration.getRoot().nodeIndex
           .getStream(SequenceExpression.class)
           .filter(e -> e.hasAncestor(secondDeclaration)).findAny().get();
@@ -180,7 +180,7 @@ public class SingleASTTransformerTest extends TestWithSingleASTTransformer {
   @Test
   void testAddMatchingRootTree() {
     p.setTransformation((tree, root) -> {
-      Root.indexBuildSession(tree, () -> {
+      Root.indexBuildSession(root, () -> {
         assertTrue(root.identifierIndex.has("bar"));
         root.identifierIndex.getOne("bar").replaceByAndDelete(new Identifier("foo"));
         assertFalse(root.identifierIndex.has("bar"));
@@ -196,7 +196,7 @@ public class SingleASTTransformerTest extends TestWithSingleASTTransformer {
   @Test
   void testAddMatchingRootTreeNested() {
     p.setTransformation((tree, root) -> {
-      Root.indexBuildSession(tree, () -> {
+      Root.indexBuildSession(root, () -> {
         assertTrue(root.identifierIndex.has("bar"));
         root.nodeIndex.getOne(ReferenceExpression.class).replaceByAndDelete(
             new ReferenceExpression(new Identifier("foo")));
@@ -267,7 +267,7 @@ public class SingleASTTransformerTest extends TestWithSingleASTTransformer {
       assertTrue(root.identifierIndex.has("foo"));
       var foo = root.identifierIndex.getOne("foo")
           .getAncestor(ReferenceExpression.class);
-      Root.indexBuildSession(tree, () -> {
+      Root.indexBuildSession(root, () -> {
         foo.replaceBy(new ReferenceExpression(new Identifier("hello")));
       });
       root.identifierIndex.getOne("bar")

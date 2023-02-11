@@ -3,7 +3,7 @@ package io.github.douira.glsl_transformer.ast.transform;
 import java.util.*;
 import java.util.function.*;
 
-import org.antlr.v4.runtime.*;
+import org.antlr.v4.runtime.ParserRuleContext;
 
 import io.github.douira.glsl_transformer.*;
 import io.github.douira.glsl_transformer.GLSLParser.*;
@@ -13,7 +13,7 @@ import io.github.douira.glsl_transformer.ast.node.abstract_node.ASTNode;
 import io.github.douira.glsl_transformer.ast.node.expression.Expression;
 import io.github.douira.glsl_transformer.ast.node.external_declaration.ExternalDeclaration;
 import io.github.douira.glsl_transformer.ast.node.statement.Statement;
-import io.github.douira.glsl_transformer.ast.query.EmptyRoot;
+import io.github.douira.glsl_transformer.ast.query.*;
 import io.github.douira.glsl_transformer.parser.*;
 import io.github.douira.glsl_transformer.parser.EnhancedParser.ParsingStrategy;
 import io.github.douira.glsl_transformer.token_filter.TokenFilter;
@@ -154,10 +154,10 @@ public class ASTParser implements ParserInterface {
   @SuppressWarnings("unchecked") // consistent use of the cache results in the same type
   public <C extends ParserRuleContext, N extends ASTNode> N parseNode(
       String input,
-      ASTNode parentTreeMember,
+      Root rootInstance,
       Class<C> ruleType,
       Function<GLSLParser, C> parseMethod,
-      BiFunction<ASTBuilder, C, N> visitMethod) throws RecognitionException {
+      BiFunction<ASTBuilder, C, N> visitMethod) {
     if (ruleType == TranslationUnitContext.class) {
       throw new IllegalArgumentException("Translation units may not be parsed into another node, that makes no sense.");
     }
@@ -165,14 +165,14 @@ public class ASTParser implements ParserInterface {
     if (astCacheStrategy == ASTCacheStrategy.NONE) {
       try {
         setBuilderTokenStream();
-        return ASTBuilder.buildSubtree(parentTreeMember, parser.parse(input, ruleType, parseMethod), visitMethod);
+        return ASTBuilder.buildSubtree(rootInstance, parser.parse(input, ruleType, parseMethod), visitMethod);
       } finally {
         unsetBuilderTokenStream();
       }
     } else {
       // cache and possibly build, always clone to return new trees
       return (N) parseNodeCachedUncloned(input, ruleType, parseMethod, visitMethod)
-          .cloneInto(parentTreeMember);
+          .cloneInto(rootInstance);
     }
   }
 
@@ -181,7 +181,7 @@ public class ASTParser implements ParserInterface {
       String input,
       Class<C> ruleType,
       Function<GLSLParser, C> parseMethod,
-      BiFunction<ASTBuilder, C, N> visitMethod) throws RecognitionException {
+      BiFunction<ASTBuilder, C, N> visitMethod) {
     if (astCacheStrategy == ASTCacheStrategy.NONE
         || astCacheStrategy == ASTCacheStrategy.ALL_EXCLUDING_TRANSLATION_UNIT
             && ruleType == TranslationUnitContext.class) {
@@ -197,76 +197,77 @@ public class ASTParser implements ParserInterface {
     }
   }
 
-  public TranslationUnit parseTranslationUnit(String input) throws RecognitionException {
+  public TranslationUnit parseTranslationUnit(String input) {
     return parseNodeSeparate(input,
         TranslationUnitContext.class,
         GLSLParser::translationUnit,
         ASTBuilder::visitTranslationUnit);
   }
 
-  public ExternalDeclaration parseExternalDeclaration(ASTNode treeMember, String input)
-      throws RecognitionException {
-    return parseNode(input, treeMember,
+  public ExternalDeclaration parseExternalDeclaration(Root rootInstance, String input) {
+    return parseNode(input,
+        rootInstance,
         ExternalDeclarationContext.class,
         GLSLParser::externalDeclaration,
         ASTBuilder::visitExternalDeclaration);
   }
 
-  public Expression parseExpression(ASTNode treeMember, String input) throws RecognitionException {
-    return parseNode(input, treeMember,
+  public Expression parseExpression(Root rootInstance, String input) {
+    return parseNode(input,
+        rootInstance,
         ExpressionContext.class,
         GLSLParser::expression,
         ASTBuilder::visitExpression);
   }
 
-  public Statement parseStatement(ASTNode treeMember, String input) throws RecognitionException {
-    return parseNode(input, treeMember,
+  public Statement parseStatement(Root rootInstance, String input) {
+    return parseNode(input, rootInstance,
         StatementContext.class,
         GLSLParser::statement,
         ASTBuilder::visitStatement);
   }
 
-  public ExternalDeclaration parseSeparateExternalDeclaration(String input) throws RecognitionException {
+  public ExternalDeclaration parseSeparateExternalDeclaration(String input) {
     return parseNodeSeparate(input,
         ExternalDeclarationContext.class,
         GLSLParser::externalDeclaration,
         ASTBuilder::visitExternalDeclaration);
   }
 
-  public Expression parseSeparateExpression(String input) throws RecognitionException {
+  public Expression parseSeparateExpression(String input) {
     return parseNodeSeparate(input,
         ExpressionContext.class,
         GLSLParser::expression,
         ASTBuilder::visitExpression);
   }
 
-  public Statement parseSeparateStatement(String input) throws RecognitionException {
+  public Statement parseSeparateStatement(String input) {
     return parseNodeSeparate(input,
         StatementContext.class,
         GLSLParser::statement,
         ASTBuilder::visitStatement);
   }
 
-  public List<ExternalDeclaration> parseExternalDeclarations(ASTNode treeMember, String... inputs) {
+  public List<ExternalDeclaration> parseExternalDeclarations(Root rootInstance, String... inputs) {
     var nodes = new ArrayList<ExternalDeclaration>(inputs.length);
     for (var input : inputs) {
-      nodes.add(parseExternalDeclaration(treeMember, input));
+      nodes.add(parseExternalDeclaration(rootInstance, input));
     }
     return nodes;
   }
 
-  public List<Expression> parseExpression(ASTNode treeMember, String... inputs) {
+  public List<Expression> parseExpression(Root rootInstance, String... inputs) {
     var nodes = new ArrayList<Expression>(inputs.length);
     for (var input : inputs) {
-      nodes.add(parseExpression(treeMember, input));
+      nodes.add(parseExpression(rootInstance, input));
     }
     return nodes;
   }
 
-  public List<Statement> parseStatements(ASTNode treeMember, String... inputs) {
+  public List<Statement> parseStatements(Root rootInstance, String... inputs) {
     var nodes = new ArrayList<Statement>(inputs.length);
     for (var input : inputs) {
-      nodes.add(parseStatement(treeMember, input));
+      nodes.add(parseStatement(rootInstance, input));
     }
     return nodes;
   }

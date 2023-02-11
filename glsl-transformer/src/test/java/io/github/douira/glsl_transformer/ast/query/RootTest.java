@@ -37,7 +37,7 @@ public class RootTest extends TestWithSingleASTTransformer {
     p.setTransformation((tree, root) -> {
       root.process("foo",
           id -> id.getParent().replaceByAndDelete(
-              p.parseExpression(tree, "bam + spam")));
+              p.parseExpression(root, "bam + spam")));
     });
     assertTransform(
         "int x = bam + spam + bar + fooo; ",
@@ -50,7 +50,7 @@ public class RootTest extends TestWithSingleASTTransformer {
     p.setTransformation((tree, root) -> {
       root.process(root.getPrefixIdentifierIndex().prefixQueryFlat("f"),
           id -> id.getParent().replaceByAndDelete(
-              p.parseExpression(tree, "bam + spam")));
+              p.parseExpression(root, "bam + spam")));
     });
     assertTransform(
         "int x = bam + spam + bar + bam + spam; ",

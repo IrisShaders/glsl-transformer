@@ -101,32 +101,31 @@ public class ASTBuilder extends GLSLParserBaseVisitor<ASTNode> {
   }
 
   /**
-   * Builds a subtree that has the same root as the given AST node.
+   * Builds a subtree with the given root.
    * 
-   * @param parentTreeMember The parent tree member
-   * @param ctx              The parse tree
+   * @param rootInstance The root instance
+   * @param ctx          The parse tree
    * @return The built AST
    */
-  public static ASTNode buildSubtree(ASTNode parentTreeMember, ParseTree ctx) {
-    return Root.indexNodes(parentTreeMember, () -> buildInternal(ctx));
+  public static ASTNode buildSubtree(Root rootInstance, ParseTree ctx) {
+    return Root.indexNodes(rootInstance, () -> buildInternal(ctx));
   }
 
   /**
-   * Builds a subtree of a specific type that has the same root as the given AST
-   * node.
+   * Builds a subtree of a specific type with a given root instance.
    * 
-   * @param <T>              The type of the parse tree
-   * @param <N>              The type of the AST node
-   * @param parentTreeMember The parent tree member
-   * @param ctx              The parse tree
-   * @param visitMethod      The build method reference to this class
+   * @param <T>          The type of the parse tree
+   * @param <N>          The type of the AST node
+   * @param rootInstance The root instance
+   * @param ctx          The parse tree
+   * @param visitMethod  The build method reference to this class
    * @return The built AST
    */
   public static <T extends ParseTree, N extends ASTNode> N buildSubtree(
-      ASTNode parentTreeMember,
+      Root rootInstance,
       T ctx,
       BiFunction<ASTBuilder, T, N> visitMethod) {
-    return Root.indexNodes(parentTreeMember, () -> buildInternal(ctx, visitMethod));
+    return Root.indexNodes(rootInstance, () -> buildInternal(ctx, visitMethod));
   }
 
   private static ASTNode buildInternal(ParseTree ctx) {

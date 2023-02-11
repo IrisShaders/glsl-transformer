@@ -12,7 +12,7 @@ public class GroupedASTTransformerTest extends TestWithGroupedASTTransformer {
   void testGroupedTransformation() {
     p.setTransformation((a, b, c, rootA, rootB, rootC) -> {
       var index = rootB.nodeIndex.getOne(LiteralExpression.class).getInteger();
-      a.getChildren().add((int) index, p.parseExternalDeclaration(a, "int z;"));
+      a.getChildren().add((int) index, p.parseExternalDeclaration(a.getRoot(), "int z;"));
       assertTrue(rootA.identifierIndex.has("z"));
 
       b.getChildren().add(c.getChildren().get(0));

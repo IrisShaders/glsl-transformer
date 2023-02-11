@@ -114,7 +114,7 @@ public class TransformTest extends TestWithSingleASTTransformer {
         id -> {
           FunctionCallExpression functionCall = (FunctionCallExpression) id.getParent();
           functionCall.getFunctionName().setName(innerName);
-          FunctionCallExpression wrapper = (FunctionCallExpression) p.parseExpression(id, "vec4()");
+          FunctionCallExpression wrapper = (FunctionCallExpression) p.parseExpression(root, "vec4()");
           functionCall.replaceBy(wrapper);
           wrapper.getParameters().add(functionCall);
         });

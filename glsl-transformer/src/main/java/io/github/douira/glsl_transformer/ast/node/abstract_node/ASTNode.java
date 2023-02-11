@@ -485,10 +485,6 @@ public abstract class ASTNode {
     return Root.indexNodes(root, this::clone);
   }
 
-  public ASTNode cloneInto(ASTNode treeMember) {
-    return Root.indexNodes(treeMember, this::clone);
-  }
-
   public ASTNode cloneSeparate() {
     return Root.indexNodes(this::clone);
   }

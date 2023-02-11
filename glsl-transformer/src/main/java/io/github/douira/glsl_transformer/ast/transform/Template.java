@@ -44,11 +44,6 @@ public class Template<N extends ASTNode> {
     return (N) source.cloneInto(root);
   }
 
-  @SuppressWarnings("unchecked") // all ASTNodes clone themselves with the right type
-  public N getInstanceFor(ASTNode treeMember) {
-    return (N) source.cloneInto(treeMember);
-  }
-
   public void supplyLocalReplacements(List<ASTNode> replacements) {
     Objects.requireNonNull(replacements);
     if (replacements.size() < localReplacementsMarked) {
@@ -78,11 +73,6 @@ public class Template<N extends ASTNode> {
     return getInstanceFor(root);
   }
 
-  public N getInstanceFor(ASTNode treeMember, List<ASTNode> localReplacements) {
-    supplyLocalReplacements(localReplacements);
-    return getInstanceFor(treeMember);
-  }
-
   public N getSeparateInstance(ASTNode localReplacement) {
     supplyLocalReplacements(localReplacement);
     return getSeparateInstance();
@@ -93,11 +83,6 @@ public class Template<N extends ASTNode> {
     return getInstanceFor(root);
   }
 
-  public N getInstanceFor(ASTNode treeMember, ASTNode localReplacement) {
-    supplyLocalReplacements(localReplacement);
-    return getInstanceFor(treeMember);
-  }
-
   public N getSeparateInstance(ASTNode... localReplacements) {
     supplyLocalReplacements(localReplacements);
     return getSeparateInstance();
@@ -106,11 +91,6 @@ public class Template<N extends ASTNode> {
   public N getInstanceFor(Root root, ASTNode... localReplacements) {
     supplyLocalReplacements(localReplacements);
     return getInstanceFor(root);
-  }
-
-  public N getInstanceFor(ASTNode treeMember, ASTNode... localReplacements) {
-    supplyLocalReplacements(localReplacements);
-    return getInstanceFor(treeMember);
   }
 
   public void markLocalReplacement(ASTNode original) {

@@ -157,20 +157,6 @@ public class Root {
   }
 
   /**
-   * Runs the given builder supplier with the same root as a given tree node as
-   * the active build root.
-   * 
-   * @param <N>              The type of the node to build
-   * @param parentTreeMember The tree member to get the root from
-   * @param builder          The builder to run
-   * @return The built and registered node
-   */
-  public static <N extends ASTNode> N indexNodes(
-      ASTNode parentTreeMember, Supplier<N> builder) {
-    return indexNodes(parentTreeMember.getRoot(), builder);
-  }
-
-  /**
    * Runs a given runnable with the given root as the active build root. This is
    * used for constructing nodes with children without registering the constructed
    * root node with the root or for registering it manually.
@@ -192,17 +178,6 @@ public class Root {
    */
   public static void indexBuildSession(Runnable session) {
     indexBuildSession(new Root(), session);
-  }
-
-  /**
-   * Runs the given runnable with the same root as a given tree node as the active
-   * build root.
-   * 
-   * @param treeMember The tree member to get the root from
-   * @param session    The runnable to run
-   */
-  public static void indexBuildSession(ASTNode treeMember, Runnable session) {
-    indexBuildSession(treeMember.getRoot(), session);
   }
 
   /**
@@ -233,19 +208,6 @@ public class Root {
   public static <N extends ASTNode> void indexSeparateTrees(
       Consumer<Passthrough<N>> registerer) {
     indexSeparateTrees(new Root(), registerer);
-  }
-
-  /**
-   * Runs the given consumer of a registration pass-through function with the same
-   * root as a given tree node as the active build root.
-   * 
-   * @param <N>        The type of the nodes to register
-   * @param treeMember The tree member to get the root from
-   * @param registerer The consumer to run
-   */
-  public static <N extends ASTNode> void indexSeparateTrees(
-      ASTNode treeMember, Consumer<Passthrough<N>> registerer) {
-    indexSeparateTrees(treeMember.getRoot(), registerer);
   }
 
   /**
@@ -411,7 +373,7 @@ public class Root {
         return;
       }
       parent.replaceByAndDelete(
-          t.parseExpression(identifier, expression));
+          t.parseExpression(identifier.getRoot(), expression));
     });
   }
 
@@ -435,7 +397,7 @@ public class Root {
         return;
       }
       parent.replaceByAndDelete(
-          t.parseExpression(identifier, expression));
+          t.parseExpression(identifier.getRoot(), expression));
       activity = true;
     });
     return activity;
@@ -456,7 +418,7 @@ public class Root {
       String expression) {
     return process(targets, node -> {
       node.replaceByAndDelete(
-          t.parseExpression(node, expression));
+          t.parseExpression(node.getRoot(), expression));
     });
   }
 
@@ -476,7 +438,7 @@ public class Root {
       String expression) {
     for (var node : targets) {
       node.replaceByAndDelete(
-          t.parseExpression(node, expression));
+          t.parseExpression(node.getRoot(), expression));
     }
     return !targets.isEmpty();
   }
