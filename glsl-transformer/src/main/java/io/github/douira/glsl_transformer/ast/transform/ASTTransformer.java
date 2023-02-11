@@ -64,6 +64,16 @@ public abstract class ASTTransformer<J extends JobParameters, V> extends ASTPars
     return transform(rootSupplier, input);
   }
 
+  /**
+   * Transforms the given input and returns the result using a root supplier. This
+   * method adds the root supplier parameter so that downstream transformers can
+   * pass it on to the parser. This class implements the generic version of this
+   * method by calling this method with the stored root supplier.
+   * 
+   * @param rootSupplier The root supplier to use
+   * @param input        The input to transform
+   * @return The transformed input
+   */
   public abstract V transform(RootSupplier rootSupplier, V input);
 
   public TranslationUnit parseSeparateTranslationUnit(String input) {
