@@ -5,7 +5,7 @@ import java.util.*;
 import org.antlr.v4.runtime.ParserRuleContext;
 
 import io.github.douira.glsl_transformer.*;
-import io.github.douira.glsl_transformer.GLSLParser.*;
+import io.github.douira.glsl_transformer.GLSLParser.TranslationUnitContext;
 import io.github.douira.glsl_transformer.ast.data.TypedTreeCache;
 import io.github.douira.glsl_transformer.ast.node.TranslationUnit;
 import io.github.douira.glsl_transformer.ast.node.abstract_node.ASTNode;
@@ -16,7 +16,6 @@ import io.github.douira.glsl_transformer.ast.query.*;
 import io.github.douira.glsl_transformer.parser.*;
 import io.github.douira.glsl_transformer.parser.EnhancedParser.ParsingStrategy;
 import io.github.douira.glsl_transformer.token_filter.TokenFilter;
-import io.github.douira.glsl_transformer.util.ParseShape;
 
 public class ASTParser implements ParserInterface {
   private static ASTParser INSTANCE;
@@ -153,14 +152,12 @@ public class ASTParser implements ParserInterface {
 
   @SuppressWarnings("unchecked") // consistent use of the cache results in the same type
   public <C extends ParserRuleContext, N extends ASTNode> N parseNode(
-      String input,
       Root rootInstance,
-      ParseShape<C, N> parseShape) {
-    if (parseShape.ruleType == TranslationUnitContext.class) {
-      throw new IllegalArgumentException("Translation units may not be parsed into another node, that makes no sense.");
-    }
-
-    if (astCacheStrategy == ASTCacheStrategy.NONE) {
+      ParseShape<C, N> parseShape,
+      String input) {
+    if (astCacheStrategy == ASTCacheStrategy.NONE
+        || astCacheStrategy == ASTCacheStrategy.ALL_EXCLUDING_TRANSLATION_UNIT
+            && parseShape.ruleType == TranslationUnitContext.class) {
       try {
         setBuilderTokenStream();
         return ASTBuilder.buildSubtree(
@@ -174,50 +171,43 @@ public class ASTParser implements ParserInterface {
     }
   }
 
-  @SuppressWarnings("unchecked") // consistent use of the cache results in the same type
   public <C extends ParserRuleContext, N extends ASTNode> N parseNodeSeparate(
-      String input,
-      ParseShape<C, N> parseShape) {
-    if (astCacheStrategy == ASTCacheStrategy.NONE
-        || astCacheStrategy == ASTCacheStrategy.ALL_EXCLUDING_TRANSLATION_UNIT
-            && parseShape.ruleType == TranslationUnitContext.class) {
-      try {
-        setBuilderTokenStream();
-        return ASTBuilder.build(parser.parse(input, parseShape), parseShape.visitMethod);
-      } finally {
-        unsetBuilderTokenStream();
-      }
-    } else {
-      return (N) parseNodeCachedUncloned(input, parseShape).cloneSeparate();
-    }
+      RootSupplier rootSupplier,
+      ParseShape<C, N> parseShape,
+      String input) {
+    return parseNode(rootSupplier.get(), parseShape, input);
   }
 
-  public TranslationUnit parseTranslationUnit(String input) {
-    return parseNodeSeparate(input, ParseShape.TRANSLATION_UNIT);
+  public TranslationUnit parseTranslationUnit(Root rootInstance, String input) {
+    return parseNode(rootInstance, ParseShape.TRANSLATION_UNIT, input);
   }
 
   public ExternalDeclaration parseExternalDeclaration(Root rootInstance, String input) {
-    return parseNode(input, rootInstance, ParseShape.EXTERNAL_DECLARATION);
+    return parseNode(rootInstance, ParseShape.EXTERNAL_DECLARATION, input);
   }
 
   public Expression parseExpression(Root rootInstance, String input) {
-    return parseNode(input, rootInstance, ParseShape.EXPRESSION);
+    return parseNode(rootInstance, ParseShape.EXPRESSION, input);
   }
 
   public Statement parseStatement(Root rootInstance, String input) {
-    return parseNode(input, rootInstance, ParseShape.STATEMENT);
+    return parseNode(rootInstance, ParseShape.STATEMENT, input);
   }
 
-  public ExternalDeclaration parseSeparateExternalDeclaration(String input) {
-    return parseNodeSeparate(input, ParseShape.EXTERNAL_DECLARATION);
+  public TranslationUnit parseTranslationUnit(RootSupplier rootSupplier, String input) {
+    return parseTranslationUnit(rootSupplier.get(), input);
   }
 
-  public Expression parseSeparateExpression(String input) {
-    return parseNodeSeparate(input, ParseShape.EXPRESSION);
+  public ExternalDeclaration parseExternalDeclaration(RootSupplier rootSupplier, String input) {
+    return parseExternalDeclaration(rootSupplier.get(), input);
   }
 
-  public Statement parseSeparateStatement(String input) {
-    return parseNodeSeparate(input, ParseShape.STATEMENT);
+  public Expression parseExpression(RootSupplier rootSupplier, String input) {
+    return parseExpression(rootSupplier.get(), input);
+  }
+
+  public Statement parseStatement(RootSupplier rootSupplier, String input) {
+    return parseStatement(rootSupplier.get(), input);
   }
 
   public List<ExternalDeclaration> parseExternalDeclarations(Root rootInstance, String... inputs) {

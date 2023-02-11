@@ -56,9 +56,4 @@ public class CaseStatement extends CaseLabelStatement {
   public CaseStatement cloneInto(Root root) {
     return (CaseStatement) super.cloneInto(root);
   }
-
-  @Override
-  public CaseStatement cloneSeparate() {
-    return (CaseStatement) super.cloneSeparate();
-  }
 }

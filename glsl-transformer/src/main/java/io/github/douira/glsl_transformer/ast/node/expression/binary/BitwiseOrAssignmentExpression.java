@@ -40,9 +40,4 @@ public class BitwiseOrAssignmentExpression extends BinaryExpression {
   public BitwiseOrAssignmentExpression cloneInto(Root root) {
     return (BitwiseOrAssignmentExpression) super.cloneInto(root);
   }
-
-  @Override
-  public BitwiseOrAssignmentExpression cloneSeparate() {
-    return (BitwiseOrAssignmentExpression) super.cloneSeparate();
-  }
 }

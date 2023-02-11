@@ -166,9 +166,4 @@ public class BuiltinFixedTypeSpecifier extends TypeSpecifier {
   public BuiltinFixedTypeSpecifier cloneInto(Root root) {
     return (BuiltinFixedTypeSpecifier) super.cloneInto(root);
   }
-
-  @Override
-  public BuiltinFixedTypeSpecifier cloneSeparate() {
-    return (BuiltinFixedTypeSpecifier) super.cloneSeparate();
-  }
 }

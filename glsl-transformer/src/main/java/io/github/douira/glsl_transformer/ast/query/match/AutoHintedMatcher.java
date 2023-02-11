@@ -2,7 +2,7 @@ package io.github.douira.glsl_transformer.ast.query.match;
 
 import io.github.douira.glsl_transformer.ast.node.Identifier;
 import io.github.douira.glsl_transformer.ast.node.abstract_node.ASTNode;
-import io.github.douira.glsl_transformer.util.ParseShape;
+import io.github.douira.glsl_transformer.parser.ParseShape;
 
 /**
  * The auto-hinted matcher is a matcher that automatically determines the hint

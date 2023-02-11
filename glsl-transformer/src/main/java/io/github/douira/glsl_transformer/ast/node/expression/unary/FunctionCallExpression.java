@@ -132,9 +132,4 @@ public class FunctionCallExpression extends TerminalExpression {
   public FunctionCallExpression cloneInto(Root root) {
     return (FunctionCallExpression) super.cloneInto(root);
   }
-
-  @Override
-  public FunctionCallExpression cloneSeparate() {
-    return (FunctionCallExpression) super.cloneSeparate();
-  }
 }

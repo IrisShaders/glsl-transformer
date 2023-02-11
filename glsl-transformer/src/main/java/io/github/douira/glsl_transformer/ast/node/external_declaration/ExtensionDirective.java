@@ -73,9 +73,4 @@ public class ExtensionDirective extends ExternalDeclaration {
   public ExtensionDirective cloneInto(Root root) {
     return (ExtensionDirective) super.cloneInto(root);
   }
-
-  @Override
-  public ExtensionDirective cloneSeparate() {
-    return (ExtensionDirective) super.cloneSeparate();
-  }
 }

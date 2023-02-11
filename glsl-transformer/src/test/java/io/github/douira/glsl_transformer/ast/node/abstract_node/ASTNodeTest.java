@@ -80,7 +80,7 @@ public class ASTNodeTest extends TestWithSingleASTTransformer {
     p.setTransformation((tree, root) -> {
       var def = root.nodeIndex.getOne(FunctionDefinition.class);
       def.detach();
-      p.parseTranslationUnit(";").getChildren().add(def);
+      p.parseTranslationUnit(root, ";").getChildren().add(def);
     });
     assertDoesNotThrow(() -> p.transform("void main() { return; }"),
         "It should not throw when changing the root of a null member (null expression in return statement)");

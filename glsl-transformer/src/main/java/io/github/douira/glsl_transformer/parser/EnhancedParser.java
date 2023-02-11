@@ -9,7 +9,6 @@ import org.antlr.v4.runtime.misc.ParseCancellationException;
 import io.github.douira.glsl_transformer.*;
 import io.github.douira.glsl_transformer.GLSLParser.TranslationUnitContext;
 import io.github.douira.glsl_transformer.token_filter.TokenFilter;
-import io.github.douira.glsl_transformer.util.ParseShape;
 
 /**
  * The enhanced parser does more than just parsing. It also does lexing,

@@ -51,9 +51,4 @@ public class ExpressionStatement extends SemiTerminalStatement {
   public ExpressionStatement cloneInto(Root root) {
     return (ExpressionStatement) super.cloneInto(root);
   }
-
-  @Override
-  public ExpressionStatement cloneSeparate() {
-    return (ExpressionStatement) super.cloneSeparate();
-  }
 }

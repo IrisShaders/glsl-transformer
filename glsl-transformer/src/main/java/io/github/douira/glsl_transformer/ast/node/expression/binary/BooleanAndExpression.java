@@ -40,9 +40,4 @@ public class BooleanAndExpression extends BinaryExpression {
   public BooleanAndExpression cloneInto(Root root) {
     return (BooleanAndExpression) super.cloneInto(root);
   }
-
-  @Override
-  public BooleanAndExpression cloneSeparate() {
-    return (BooleanAndExpression) super.cloneSeparate();
-  }
 }

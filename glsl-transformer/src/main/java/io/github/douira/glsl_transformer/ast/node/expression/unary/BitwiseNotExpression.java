@@ -40,9 +40,4 @@ public class BitwiseNotExpression extends UnaryExpression {
   public BitwiseNotExpression cloneInto(Root root) {
     return (BitwiseNotExpression) super.cloneInto(root);
   }
-
-  @Override
-  public BitwiseNotExpression cloneSeparate() {
-    return (BitwiseNotExpression) super.cloneSeparate();
-  }
 }

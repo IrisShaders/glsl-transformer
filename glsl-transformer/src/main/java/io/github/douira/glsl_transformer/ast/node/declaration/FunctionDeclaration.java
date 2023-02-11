@@ -51,9 +51,4 @@ public class FunctionDeclaration extends Declaration {
   public FunctionDeclaration cloneInto(Root root) {
     return (FunctionDeclaration) super.cloneInto(root);
   }
-
-  @Override
-  public FunctionDeclaration cloneSeparate() {
-    return (FunctionDeclaration) super.cloneSeparate();
-  }
 }

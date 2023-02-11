@@ -51,9 +51,4 @@ public abstract class ManyExpression extends Expression implements ListNode<Expr
   public ManyExpression cloneInto(Root root) {
     return (ManyExpression) super.cloneInto(root);
   }
-
-  @Override
-  public ManyExpression cloneSeparate() {
-    return (ManyExpression) super.cloneSeparate();
-  }
 }

@@ -74,9 +74,4 @@ public class Identifier extends ASTNode {
   public Identifier cloneInto(Root root) {
     return (Identifier) super.cloneInto(root);
   }
-
-  @Override
-  public Identifier cloneSeparate() {
-    return (Identifier) super.cloneSeparate();
-  }
 }

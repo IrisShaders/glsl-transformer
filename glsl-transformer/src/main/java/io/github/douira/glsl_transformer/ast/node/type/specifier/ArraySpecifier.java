@@ -42,9 +42,4 @@ public class ArraySpecifier extends ListASTNode<Expression> {
   public ArraySpecifier cloneInto(Root root) {
     return (ArraySpecifier) super.cloneInto(root);
   }
-
-  @Override
-  public ArraySpecifier cloneSeparate() {
-    return (ArraySpecifier) super.cloneSeparate();
-  }
 }

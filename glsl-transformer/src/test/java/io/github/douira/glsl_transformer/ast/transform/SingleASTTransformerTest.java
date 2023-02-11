@@ -12,8 +12,7 @@ import io.github.douira.glsl_transformer.ast.node.abstract_node.ASTNode;
 import io.github.douira.glsl_transformer.ast.node.expression.*;
 import io.github.douira.glsl_transformer.ast.node.external_declaration.ExternalDeclaration;
 import io.github.douira.glsl_transformer.ast.print.PrintType;
-import io.github.douira.glsl_transformer.ast.query.Root;
-import io.github.douira.glsl_transformer.ast.query.index.PrefixIdentifierIndex;
+import io.github.douira.glsl_transformer.ast.query.*;
 import io.github.douira.glsl_transformer.test_util.TestWithSingleASTTransformer;
 import io.github.douira.glsl_transformer.util.Type;
 
@@ -41,7 +40,7 @@ public class SingleASTTransformerTest extends TestWithSingleASTTransformer {
 
   @Test
   void testIdentifierQuery() {
-    Root.identifierIndexFactory = PrefixIdentifierIndex::withPrefix;
+    p.setRootSupplier(RootSupplier.PREFIX_UNORDERED);
     p.setTransformation((tree, root) -> {
       root.getPrefixIdentifierIndex().prefixQueryFlat("a").collect(Collectors.toList()).forEach(
           node -> node.setName(node.getName() + "b"));
@@ -52,7 +51,6 @@ public class SingleASTTransformerTest extends TestWithSingleASTTransformer {
     assertTransform(
         "int ab = 4 + ab + aab, ab, c; ",
         "int a = 4 + a + aa, a, c; ");
-    Root.resetRootFactories();
   }
 
   @Test
@@ -213,7 +211,7 @@ public class SingleASTTransformerTest extends TestWithSingleASTTransformer {
   @Test
   void testAddNewRootTree() {
     p.setTransformation((tree, root) -> {
-      Root.indexSeparateTrees(register -> {
+      Root.indexSeparateTrees(p.supplyRoot(), register -> {
         assertTrue(root.identifierIndex.has("bar"));
         root.nodeIndex.getOne(ReferenceExpression.class).replaceByAndDelete(
             register.apply(new ReferenceExpression(new Identifier("foo"))));

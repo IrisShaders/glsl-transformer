@@ -40,9 +40,4 @@ public class ArrayAccessExpression extends BinaryExpression {
   public ArrayAccessExpression cloneInto(Root root) {
     return (ArrayAccessExpression) super.cloneInto(root);
   }
-
-  @Override
-  public ArrayAccessExpression cloneSeparate() {
-    return (ArrayAccessExpression) super.cloneSeparate();
-  }
 }

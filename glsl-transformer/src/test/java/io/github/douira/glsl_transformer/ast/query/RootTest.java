@@ -7,15 +7,14 @@ import java.util.stream.Stream;
 import org.junit.jupiter.api.Test;
 
 import io.github.douira.glsl_transformer.ast.node.Identifier;
-import io.github.douira.glsl_transformer.ast.query.index.PrefixIdentifierIndex;
 import io.github.douira.glsl_transformer.ast.query.match.*;
+import io.github.douira.glsl_transformer.parser.ParseShape;
 import io.github.douira.glsl_transformer.test_util.TestWithSingleASTTransformer;
-import io.github.douira.glsl_transformer.util.ParseShape;
 
 public class RootTest extends TestWithSingleASTTransformer {
   @Test
   void testRename() {
-    Root.indexSeparateTrees(register -> {
+    Root.indexSeparateTrees(p.supplyRoot(), register -> {
       var a = new Identifier("a");
       var b = new Identifier("b");
       register.apply(a);
@@ -47,7 +46,7 @@ public class RootTest extends TestWithSingleASTTransformer {
 
   @Test
   void testReplaceMultiple() {
-    Root.identifierIndexFactory = PrefixIdentifierIndex::withPrefix;
+    p.setRootSupplier(RootSupplier.PREFIX_UNORDERED);
     p.setTransformation((tree, root) -> {
       root.process(root.getPrefixIdentifierIndex().prefixQueryFlat("f"),
           id -> id.getParent().replaceByAndDelete(
@@ -56,7 +55,6 @@ public class RootTest extends TestWithSingleASTTransformer {
     assertTransform(
         "int x = bam + spam + bar + bam + spam; ",
         "int x = foo + bar + fan;");
-    Root.resetRootFactories();
   }
 
   @Test
@@ -70,7 +68,7 @@ public class RootTest extends TestWithSingleASTTransformer {
 
   @Test
   void testReplaceReferenceExpressionsPrefix() {
-    Root.identifierIndexFactory = PrefixIdentifierIndex::withPrefix;
+    p.setRootSupplier(RootSupplier.PREFIX_UNORDERED);
     p.setTransformation((tree, root) -> {
       root.replaceReferenceExpressions(p,
           root.getPrefixIdentifierIndex().prefixQueryFlat("f"),
@@ -79,7 +77,6 @@ public class RootTest extends TestWithSingleASTTransformer {
     assertTransform(
         "int foo = bam + spam + bar + bam + spam; ",
         "int foo = foo + bar + fan;");
-    Root.resetRootFactories();
   }
 
   @Test

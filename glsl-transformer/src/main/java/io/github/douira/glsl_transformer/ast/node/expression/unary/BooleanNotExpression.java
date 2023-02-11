@@ -40,9 +40,4 @@ public class BooleanNotExpression extends UnaryExpression {
   public BooleanNotExpression cloneInto(Root root) {
     return (BooleanNotExpression) super.cloneInto(root);
   }
-
-  @Override
-  public BooleanNotExpression cloneSeparate() {
-    return (BooleanNotExpression) super.cloneSeparate();
-  }
 }

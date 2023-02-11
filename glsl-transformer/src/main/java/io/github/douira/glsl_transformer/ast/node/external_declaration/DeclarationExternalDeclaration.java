@@ -51,9 +51,4 @@ public class DeclarationExternalDeclaration extends ExternalDeclaration {
   public DeclarationExternalDeclaration cloneInto(Root root) {
     return (DeclarationExternalDeclaration) super.cloneInto(root);
   }
-
-  @Override
-  public DeclarationExternalDeclaration cloneSeparate() {
-    return (DeclarationExternalDeclaration) super.cloneSeparate();
-  }
 }

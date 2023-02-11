@@ -41,9 +41,4 @@ public class CustomDirective extends ExternalDeclaration {
   public CustomDirective cloneInto(Root root) {
     return (CustomDirective) super.cloneInto(root);
   }
-
-  @Override
-  public CustomDirective cloneSeparate() {
-    return (CustomDirective) super.cloneSeparate();
-  }
 }

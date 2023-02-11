@@ -160,9 +160,4 @@ public class ForLoopStatement extends LoopStatement {
   public ForLoopStatement cloneInto(Root root) {
     return (ForLoopStatement) super.cloneInto(root);
   }
-
-  @Override
-  public ForLoopStatement cloneSeparate() {
-    return (ForLoopStatement) super.cloneSeparate();
-  }
 }

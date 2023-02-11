@@ -63,9 +63,4 @@ public class FunctionDefinition extends ExternalDeclaration {
   public FunctionDefinition cloneInto(Root root) {
     return (FunctionDefinition) super.cloneInto(root);
   }
-
-  @Override
-  public FunctionDefinition cloneSeparate() {
-    return (FunctionDefinition) super.cloneSeparate();
-  }
 }

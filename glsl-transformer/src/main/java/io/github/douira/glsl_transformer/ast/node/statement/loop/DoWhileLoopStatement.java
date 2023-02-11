@@ -41,9 +41,4 @@ public class DoWhileLoopStatement extends ConditionLoopStatement {
   public DoWhileLoopStatement cloneInto(Root root) {
     return (DoWhileLoopStatement) super.cloneInto(root);
   }
-
-  @Override
-  public DoWhileLoopStatement cloneSeparate() {
-    return (DoWhileLoopStatement) super.cloneSeparate();
-  }
 }

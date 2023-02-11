@@ -12,6 +12,7 @@ import org.antlr.v4.runtime.ParserRuleContext;
 import io.github.douira.glsl_transformer.GLSLParser;
 import io.github.douira.glsl_transformer.ast.node.abstract_node.ASTNode;
 import io.github.douira.glsl_transformer.ast.print.*;
+import io.github.douira.glsl_transformer.ast.query.RootSupplier;
 import io.github.douira.glsl_transformer.ast.transform.ASTBuilder;
 import io.github.douira.glsl_transformer.parser.EnhancedParser;
 import io.github.douira.glsl_transformer.util.TriConsumer;
@@ -39,11 +40,11 @@ public class AssertUtil {
     parser.getLexer().enableIncludeDirective = true;
     var parseTree = parser.parse(input, parseMethod);
     ASTBuilder.setTokenStream(parser.getTokenStream());
-    var ast = ASTBuilder.build(parseTree);
+    var ast = ASTBuilder.build(RootSupplier.supplyDefault(), parseTree);
     ASTBuilder.unsetTokenStream();
     var reprinted = ASTPrinter.print(printType, ast);
     assertEquals(expected, reprinted);
-    ast = ast.cloneSeparate();
+    ast = ast.cloneInto(RootSupplier.supplyDefault());
     reprinted = ASTPrinter.print(printType, ast);
     assertEquals(expected, reprinted);
   }
@@ -57,7 +58,7 @@ public class AssertUtil {
     var parseTree = parser.parse(input, parseMethod);
     try {
       ASTBuilder.setTokenStream(parser.getTokenStream());
-      return ASTBuilder.build(parseTree);
+      return ASTBuilder.build(RootSupplier.supplyDefault(), parseTree);
     } finally {
       ASTBuilder.unsetTokenStream();
     }

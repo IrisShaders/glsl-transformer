@@ -7,7 +7,6 @@ import com.github.bsideup.jabel.Desugar;
 import io.github.douira.glsl_transformer.ast.data.TypedTreeCache;
 import io.github.douira.glsl_transformer.ast.transform.ASTBuilder;
 import io.github.douira.glsl_transformer.token_filter.TokenFilter;
-import io.github.douira.glsl_transformer.util.ParseShape;
 
 /**
  * The caching parser extends the enhanced parser and returns previous parse

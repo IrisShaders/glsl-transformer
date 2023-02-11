@@ -41,9 +41,4 @@ public abstract class Declaration extends InnerASTNode {
   public Declaration cloneInto(Root root) {
     return (Declaration) super.cloneInto(root);
   }
-
-  @Override
-  public Declaration cloneSeparate() {
-    return (Declaration) super.cloneSeparate();
-  }
 }

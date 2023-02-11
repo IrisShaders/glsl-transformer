@@ -1,4 +1,4 @@
-package io.github.douira.glsl_transformer.util;
+package io.github.douira.glsl_transformer.parser;
 
 import java.util.function.*;
 
@@ -12,6 +12,7 @@ import io.github.douira.glsl_transformer.ast.node.expression.Expression;
 import io.github.douira.glsl_transformer.ast.node.external_declaration.ExternalDeclaration;
 import io.github.douira.glsl_transformer.ast.node.statement.Statement;
 import io.github.douira.glsl_transformer.ast.node.type.FullySpecifiedType;
+import io.github.douira.glsl_transformer.ast.query.RootSupplier;
 import io.github.douira.glsl_transformer.ast.transform.*;
 
 /**
@@ -57,6 +58,6 @@ public class ParseShape<C extends ParserRuleContext, N extends ASTNode> {
   }
 
   public N parseNodeSeparateInternal(String input) {
-    return ASTParser.getInternalInstance().parseNodeSeparate(input, this);
+    return ASTParser.getInternalInstance().parseNodeSeparate(RootSupplier.DEFAULT, this, input);
   }
 }

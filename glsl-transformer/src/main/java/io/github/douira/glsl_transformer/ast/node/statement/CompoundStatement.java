@@ -41,9 +41,4 @@ public class CompoundStatement extends ManyStatement {
   public CompoundStatement cloneInto(Root root) {
     return (CompoundStatement) super.cloneInto(root);
   }
-
-  @Override
-  public CompoundStatement cloneSeparate() {
-    return (CompoundStatement) super.cloneSeparate();
-  }
 }

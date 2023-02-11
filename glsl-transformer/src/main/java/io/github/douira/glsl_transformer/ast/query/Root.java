@@ -34,11 +34,6 @@ public class Root {
    */
   public final IdentifierIndex<?, ?> identifierIndex;
 
-  public static final Supplier<NodeIndex<?>> nodeIndexFactoryDefault = NodeIndex::withUnordered;
-  public static final Supplier<IdentifierIndex<?, ?>> identifierIndexFactoryDefault = IdentifierIndex::withOnlyExact;
-  public static Supplier<NodeIndex<?>> nodeIndexFactory = nodeIndexFactoryDefault;
-  public static Supplier<IdentifierIndex<?, ?>> identifierIndexFactory = identifierIndexFactoryDefault;
-
   // internal utility state
   private static Deque<Root> activeBuildRoots = new ArrayDeque<>();
   private List<? extends ASTNode> nodeList;
@@ -53,43 +48,6 @@ public class Root {
   public Root(NodeIndex<?> nodeIndex, IdentifierIndex<?, ?> identifierIndex) {
     this.nodeIndex = nodeIndex;
     this.identifierIndex = identifierIndex;
-  }
-
-  public Root() {
-    this(nodeIndexFactory.get(), identifierIndexFactory.get());
-  }
-
-  /**
-   * Constructs a new root with the default node and identifier indexes which have
-   * the least amount of functionality but are also the most efficient.
-   */
-  public static Root withExactUnordered() {
-    return new Root(NodeIndex.withUnordered(), IdentifierIndex.withOnlyExact());
-  }
-
-  public static Root withExactOrdered() {
-    return new Root(NodeIndex.withOrdered(), IdentifierIndex.withOnlyExact());
-  }
-
-  public static Root withExactOrderedBoth() {
-    return new Root(NodeIndex.withOrdered(), IdentifierIndex.withOnlyExact(LinkedHashSet::new));
-  }
-
-  public static Root withPrefixUnordered() {
-    return new Root(NodeIndex.withUnordered(), PrefixIdentifierIndex.withPrefix());
-  }
-
-  public static Root withPrefixOrdered() {
-    return new Root(NodeIndex.withOrdered(), PrefixIdentifierIndex.withPrefix());
-  }
-
-  public static Root withPrefixOrderedBoth() {
-    return new Root(NodeIndex.withOrdered(), PrefixIdentifierIndex.withPrefix(LinkedHashSet::new));
-  }
-
-  public static void resetRootFactories() {
-    nodeIndexFactory = nodeIndexFactoryDefault;
-    identifierIndexFactory = identifierIndexFactoryDefault;
   }
 
   /**
@@ -145,18 +103,6 @@ public class Root {
   }
 
   /**
-   * Runs the given builder supplier with a new root as the active build root.
-   * 
-   * @param <N>     The type of the node to build
-   * @param builder The builder to run
-   * @return The built and registered node
-   */
-  public static <N extends ASTNode> N indexNodes(
-      Supplier<N> builder) {
-    return indexNodes(new Root(), builder);
-  }
-
-  /**
    * Runs a given runnable with the given root as the active build root. This is
    * used for constructing nodes with children without registering the constructed
    * root node with the root or for registering it manually.
@@ -171,13 +117,11 @@ public class Root {
     });
   }
 
-  /**
-   * Runs the given runnable with a new root as the active build root.
-   * 
-   * @param session The runnable to run
-   */
-  public static void indexBuildSession(Runnable session) {
-    indexBuildSession(new Root(), session);
+  public static void indexBuildSession(Root instance, Consumer<Root> session) {
+    withActiveBuildRoot(instance, root -> {
+      session.accept(root);
+      return null;
+    });
   }
 
   /**
@@ -196,18 +140,6 @@ public class Root {
       registererConsumer.accept(Passthrough.of(root::registerNode));
       return null;
     });
-  }
-
-  /**
-   * Runs the given consumer of a registration pass-through function with a new
-   * root as the active build root.
-   * 
-   * @param <N>                The type of the nodes to register
-   * @param registererConsumer The consumer to run
-   */
-  public static <N extends ASTNode> void indexSeparateTrees(
-      Consumer<Passthrough<N>> registererConsumer) {
-    indexSeparateTrees(new Root(), registererConsumer);
   }
 
   /**

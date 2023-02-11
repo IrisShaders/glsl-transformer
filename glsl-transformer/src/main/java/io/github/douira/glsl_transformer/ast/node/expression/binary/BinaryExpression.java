@@ -58,9 +58,4 @@ public abstract class BinaryExpression extends Expression {
   public BinaryExpression cloneInto(Root root) {
     return (BinaryExpression) super.cloneInto(root);
   }
-
-  @Override
-  public BinaryExpression cloneSeparate() {
-    return (BinaryExpression) super.cloneSeparate();
-  }
 }

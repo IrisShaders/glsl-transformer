@@ -12,8 +12,8 @@ import io.github.douira.glsl_transformer.ast.node.expression.binary.AdditionExpr
 import io.github.douira.glsl_transformer.ast.node.expression.unary.FunctionCallExpression;
 import io.github.douira.glsl_transformer.ast.node.external_declaration.*;
 import io.github.douira.glsl_transformer.ast.query.match.*;
+import io.github.douira.glsl_transformer.parser.ParseShape;
 import io.github.douira.glsl_transformer.test_util.TestWithSingleASTTransformer;
-import io.github.douira.glsl_transformer.util.ParseShape;
 
 public class MatcherTest extends TestWithSingleASTTransformer {
   private void assertNoMatchED(Matcher<ExternalDeclaration> m, String input) {
@@ -29,19 +29,19 @@ public class MatcherTest extends TestWithSingleASTTransformer {
   }
 
   private void assertNoExtractTU(Matcher<TranslationUnit> m, String input) {
-    assertFalse(m.matchesExtract(p.parseTranslationUnit(input)));
+    assertFalse(m.matchesExtract(p.parseSeparateTranslationUnit(input)));
   }
 
   private void assertExtractTU(Matcher<TranslationUnit> m, String input) {
-    assertTrue(m.matchesExtract(p.parseTranslationUnit(input)));
+    assertTrue(m.matchesExtract(p.parseSeparateTranslationUnit(input)));
   }
 
   private void assertMatchTU(Matcher<TranslationUnit> m, String input) {
-    assertTrue(m.matches(p.parseTranslationUnit(input)));
+    assertTrue(m.matches(p.parseSeparateTranslationUnit(input)));
   }
 
   private void assertNoMatchTU(Matcher<TranslationUnit> m, String input) {
-    assertFalse(m.matches(p.parseTranslationUnit(input)));
+    assertFalse(m.matches(p.parseSeparateTranslationUnit(input)));
   }
 
   private void assertMatchEx(Matcher<Expression> m, String input) {

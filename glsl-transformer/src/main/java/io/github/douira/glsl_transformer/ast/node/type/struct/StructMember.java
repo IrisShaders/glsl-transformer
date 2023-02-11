@@ -55,9 +55,4 @@ public class StructMember extends InnerASTNode {
   public StructMember cloneInto(Root root) {
     return (StructMember) super.cloneInto(root);
   }
-
-  @Override
-  public StructMember cloneSeparate() {
-    return (StructMember) super.cloneSeparate();
-  }
 }

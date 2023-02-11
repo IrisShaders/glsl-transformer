@@ -24,9 +24,10 @@ import io.github.douira.glsl_transformer.ast.print.token.ParserToken;
 import io.github.douira.glsl_transformer.ast.query.Root;
 import io.github.douira.glsl_transformer.ast.query.match.Matcher;
 import io.github.douira.glsl_transformer.ast.transform.*;
+import io.github.douira.glsl_transformer.parser.ParseShape;
 import io.github.douira.glsl_transformer.test_util.*;
 import io.github.douira.glsl_transformer.test_util.TestCaseProvider.Spacing;
-import io.github.douira.glsl_transformer.util.*;
+import io.github.douira.glsl_transformer.util.Type;
 
 public class TransformTest extends TestWithSingleASTTransformer {
   @ParameterizedTest

@@ -66,9 +66,4 @@ public class VariableDeclaration extends Declaration {
   public VariableDeclaration cloneInto(Root root) {
     return (VariableDeclaration) super.cloneInto(root);
   }
-
-  @Override
-  public VariableDeclaration cloneSeparate() {
-    return (VariableDeclaration) super.cloneSeparate();
-  }
 }

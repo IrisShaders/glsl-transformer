@@ -51,9 +51,4 @@ public class ExpressionInitializer extends Initializer {
   public ExpressionInitializer cloneInto(Root root) {
     return (ExpressionInitializer) super.cloneInto(root);
   }
-
-  @Override
-  public ExpressionInitializer cloneSeparate() {
-    return (ExpressionInitializer) super.cloneSeparate();
-  }
 }

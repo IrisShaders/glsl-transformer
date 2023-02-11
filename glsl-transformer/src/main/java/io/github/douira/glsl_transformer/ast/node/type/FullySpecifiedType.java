@@ -61,9 +61,4 @@ public class FullySpecifiedType extends InnerASTNode {
   public FullySpecifiedType cloneInto(Root root) {
     return (FullySpecifiedType) super.cloneInto(root);
   }
-
-  @Override
-  public FullySpecifiedType cloneSeparate() {
-    return (FullySpecifiedType) super.cloneSeparate();
-  }
 }

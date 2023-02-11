@@ -40,9 +40,4 @@ public class GroupingExpression extends UnaryExpression {
   public GroupingExpression cloneInto(Root root) {
     return (GroupingExpression) super.cloneInto(root);
   }
-
-  @Override
-  public GroupingExpression cloneSeparate() {
-    return (GroupingExpression) super.cloneSeparate();
-  }
 }

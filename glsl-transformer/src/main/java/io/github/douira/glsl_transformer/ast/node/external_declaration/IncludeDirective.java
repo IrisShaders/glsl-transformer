@@ -47,9 +47,4 @@ public class IncludeDirective extends ExternalDeclaration {
   public IncludeDirective cloneInto(Root root) {
     return (IncludeDirective) super.cloneInto(root);
   }
-
-  @Override
-  public IncludeDirective cloneSeparate() {
-    return (IncludeDirective) super.cloneSeparate();
-  }
 }

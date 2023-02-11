@@ -83,9 +83,4 @@ public class DeclarationMember extends InnerASTNode {
   public DeclarationMember cloneInto(Root root) {
     return (DeclarationMember) super.cloneInto(root);
   }
-
-  @Override
-  public DeclarationMember cloneSeparate() {
-    return (DeclarationMember) super.cloneSeparate();
-  }
 }

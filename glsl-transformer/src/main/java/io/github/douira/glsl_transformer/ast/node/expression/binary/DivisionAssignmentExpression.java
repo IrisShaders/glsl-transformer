@@ -40,9 +40,4 @@ public class DivisionAssignmentExpression extends BinaryExpression {
   public DivisionAssignmentExpression cloneInto(Root root) {
     return (DivisionAssignmentExpression) super.cloneInto(root);
   }
-
-  @Override
-  public DivisionAssignmentExpression cloneSeparate() {
-    return (DivisionAssignmentExpression) super.cloneSeparate();
-  }
 }

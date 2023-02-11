@@ -115,9 +115,4 @@ public abstract class Expression extends InnerASTNode {
   public Expression cloneInto(Root root) {
     return (Expression) super.cloneInto(root);
   }
-
-  @Override
-  public Expression cloneSeparate() {
-    return (Expression) super.cloneSeparate();
-  }
 }

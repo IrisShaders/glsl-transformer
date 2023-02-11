@@ -4,7 +4,6 @@ import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.function.*;
 
-import org.antlr.v4.runtime.RecognitionException;
 import org.junit.jupiter.api.BeforeEach;
 
 import io.github.douira.glsl_transformer.ast.node.TranslationUnit;
@@ -45,9 +44,9 @@ public abstract class TestWithSingleASTTransformer {
       }
 
       @Override
-      public String transform(String str) throws RecognitionException {
-        var translationUnit = parseTranslationUnit(str);
-        var tuClone = translationUnit.cloneSeparate();
+      public String transform(String str) {
+        var translationUnit = parseSeparateTranslationUnit(str);
+        var tuClone = translationUnit.cloneInto(supplyRoot());
         localTransformation.accept(translationUnit);
         var result = ASTPrinter.print(getPrintType(), translationUnit);
 
@@ -56,7 +55,7 @@ public abstract class TestWithSingleASTTransformer {
 
         // make sure results are the same if the result is cloned
         assertEquals(result, ASTPrinter.print(getPrintType(),
-            translationUnit.cloneSeparate()));
+            translationUnit.cloneInto(supplyRoot())));
 
         // make sure cloning and then transforming also works
         localTransformation.accept(tuClone);

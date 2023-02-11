@@ -1,7 +1,7 @@
 package io.github.douira.glsl_transformer.ast.query.match;
 
 import io.github.douira.glsl_transformer.ast.node.abstract_node.ASTNode;
-import io.github.douira.glsl_transformer.util.ParseShape;
+import io.github.douira.glsl_transformer.parser.ParseShape;
 
 /**
  * A hinted matcher contains an additional string that can be used to find

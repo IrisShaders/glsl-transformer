@@ -49,9 +49,4 @@ public class LayoutQualifier extends TypeQualifierPart {
   public LayoutQualifier cloneInto(Root root) {
     return (LayoutQualifier) super.cloneInto(root);
   }
-
-  @Override
-  public LayoutQualifier cloneSeparate() {
-    return (LayoutQualifier) super.cloneSeparate();
-  }
 }

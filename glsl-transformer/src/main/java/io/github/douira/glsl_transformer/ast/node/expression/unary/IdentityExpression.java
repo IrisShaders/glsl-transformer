@@ -40,9 +40,4 @@ public class IdentityExpression extends UnaryExpression {
   public IdentityExpression cloneInto(Root root) {
     return (IdentityExpression) super.cloneInto(root);
   }
-
-  @Override
-  public IdentityExpression cloneSeparate() {
-    return (IdentityExpression) super.cloneSeparate();
-  }
 }

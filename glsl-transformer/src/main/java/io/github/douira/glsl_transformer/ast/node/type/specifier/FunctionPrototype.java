@@ -69,9 +69,4 @@ public class FunctionPrototype extends ListASTNode<FunctionParameter> {
   public FunctionPrototype cloneInto(Root root) {
     return (FunctionPrototype) super.cloneInto(root);
   }
-
-  @Override
-  public FunctionPrototype cloneSeparate() {
-    return (FunctionPrototype) super.cloneSeparate();
-  }
 }

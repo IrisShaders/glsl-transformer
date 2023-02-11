@@ -40,9 +40,4 @@ public class DecrementPostfixExpression extends UnaryExpression {
   public DecrementPostfixExpression cloneInto(Root root) {
     return (DecrementPostfixExpression) super.cloneInto(root);
   }
-
-  @Override
-  public DecrementPostfixExpression cloneSeparate() {
-    return (DecrementPostfixExpression) super.cloneSeparate();
-  }
 }

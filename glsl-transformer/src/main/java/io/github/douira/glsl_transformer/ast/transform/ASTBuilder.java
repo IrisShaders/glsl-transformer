@@ -58,16 +58,6 @@ public class ASTBuilder extends GLSLParserBaseVisitor<ASTNode> {
   }
 
   /**
-   * Builds an AST from the given parse tree with a new root.
-   * 
-   * @param ctx The parse tree
-   * @return The built AST
-   */
-  public static ASTNode build(ParseTree ctx) {
-    return Root.indexNodes(() -> buildInternal(ctx));
-  }
-
-  /**
    * Builds an AST from the given parse tree with the given root.
    * 
    * @param rootInstance The root instance
@@ -79,20 +69,15 @@ public class ASTBuilder extends GLSLParserBaseVisitor<ASTNode> {
   }
 
   /**
-   * Builds an AST of a specific type from the given parse tree with a new root.
+   * Builds an AST of a specific type from the given parse tree with a given root.
    * 
-   * @param <T>         The type of the parse tree
-   * @param <N>         The type of the AST node
-   * @param ctx         The parse tree
-   * @param visitMethod The build method reference to this class
+   * @param <T>          The type of the parse tree
+   * @param <N>          The type of the AST node
+   * @param rootInstance The root instance
+   * @param ctx          The parse tree
+   * @param visitMethod  The build method reference to this class
    * @return The built AST
    */
-  public static <T extends ParseTree, N extends ASTNode> N build(
-      T ctx,
-      BiFunction<ASTBuilder, T, N> visitMethod) {
-    return Root.indexNodes(() -> buildInternal(ctx, visitMethod));
-  }
-
   public static <T extends ParseTree, N extends ASTNode> N build(
       Root rootInstance,
       T ctx,

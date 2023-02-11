@@ -40,9 +40,4 @@ public class GreaterThanEqualExpression extends BinaryExpression {
   public GreaterThanEqualExpression cloneInto(Root root) {
     return (GreaterThanEqualExpression) super.cloneInto(root);
   }
-
-  @Override
-  public GreaterThanEqualExpression cloneSeparate() {
-    return (GreaterThanEqualExpression) super.cloneSeparate();
-  }
 }

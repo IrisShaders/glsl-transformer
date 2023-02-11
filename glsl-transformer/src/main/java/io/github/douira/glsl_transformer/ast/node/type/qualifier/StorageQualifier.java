@@ -111,9 +111,4 @@ public class StorageQualifier extends TypeQualifierPart {
   public StorageQualifier cloneInto(Root root) {
     return (StorageQualifier) super.cloneInto(root);
   }
-
-  @Override
-  public StorageQualifier cloneSeparate() {
-    return (StorageQualifier) super.cloneSeparate();
-  }
 }

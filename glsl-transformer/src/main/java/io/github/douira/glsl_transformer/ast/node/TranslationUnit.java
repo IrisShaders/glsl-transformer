@@ -201,9 +201,4 @@ public class TranslationUnit extends ListASTNode<ExternalDeclaration> {
   public TranslationUnit cloneInto(Root root) {
     return (TranslationUnit) super.cloneInto(root);
   }
-
-  @Override
-  public TranslationUnit cloneSeparate() {
-    return (TranslationUnit) super.cloneSeparate();
-  }
 }

@@ -51,9 +51,4 @@ public class ConditionExpression extends TernaryExpression {
   public ConditionExpression cloneInto(Root root) {
     return (ConditionExpression) super.cloneInto(root);
   }
-
-  @Override
-  public ConditionExpression cloneSeparate() {
-    return (ConditionExpression) super.cloneSeparate();
-  }
 }

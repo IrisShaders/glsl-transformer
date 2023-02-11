@@ -51,9 +51,4 @@ public class DeclarationStatement extends SemiTerminalStatement {
   public DeclarationStatement cloneInto(Root root) {
     return (DeclarationStatement) super.cloneInto(root);
   }
-
-  @Override
-  public DeclarationStatement cloneSeparate() {
-    return (DeclarationStatement) super.cloneSeparate();
-  }
 }

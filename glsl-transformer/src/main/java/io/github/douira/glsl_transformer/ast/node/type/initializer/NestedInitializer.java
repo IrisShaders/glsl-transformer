@@ -53,9 +53,4 @@ public class NestedInitializer extends Initializer {
   public NestedInitializer cloneInto(Root root) {
     return (NestedInitializer) super.cloneInto(root);
   }
-
-  @Override
-  public NestedInitializer cloneSeparate() {
-    return (NestedInitializer) super.cloneSeparate();
-  }
 }

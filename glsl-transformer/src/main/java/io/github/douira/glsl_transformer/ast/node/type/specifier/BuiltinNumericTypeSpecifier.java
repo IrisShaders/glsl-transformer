@@ -47,9 +47,4 @@ public class BuiltinNumericTypeSpecifier extends TypeSpecifier {
   public BuiltinNumericTypeSpecifier cloneInto(Root root) {
     return (BuiltinNumericTypeSpecifier) super.cloneInto(root);
   }
-
-  @Override
-  public BuiltinNumericTypeSpecifier cloneSeparate() {
-    return (BuiltinNumericTypeSpecifier) super.cloneSeparate();
-  }
 }

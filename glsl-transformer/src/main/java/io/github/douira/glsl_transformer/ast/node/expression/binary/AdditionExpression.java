@@ -40,9 +40,4 @@ public class AdditionExpression extends BinaryExpression {
   public AdditionExpression cloneInto(Root root) {
     return (AdditionExpression) super.cloneInto(root);
   }
-
-  @Override
-  public AdditionExpression cloneSeparate() {
-    return (AdditionExpression) super.cloneSeparate();
-  }
 }

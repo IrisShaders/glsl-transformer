@@ -81,9 +81,4 @@ public class FunctionParameter extends InnerASTNode {
   public FunctionParameter cloneInto(Root root) {
     return (FunctionParameter) super.cloneInto(root);
   }
-
-  @Override
-  public FunctionParameter cloneSeparate() {
-    return (FunctionParameter) super.cloneSeparate();
-  }
 }

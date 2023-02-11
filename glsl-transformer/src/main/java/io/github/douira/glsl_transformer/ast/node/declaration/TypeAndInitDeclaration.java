@@ -66,9 +66,4 @@ public class TypeAndInitDeclaration extends Declaration {
   public TypeAndInitDeclaration cloneInto(Root root) {
     return (TypeAndInitDeclaration) super.cloneInto(root);
   }
-
-  @Override
-  public TypeAndInitDeclaration cloneSeparate() {
-    return (TypeAndInitDeclaration) super.cloneSeparate();
-  }
 }

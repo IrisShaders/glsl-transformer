@@ -5,7 +5,7 @@ import java.util.function.*;
 import java.util.stream.Stream;
 
 import io.github.douira.glsl_transformer.ast.data.ChildNodeList;
-import io.github.douira.glsl_transformer.ast.query.Root;
+import io.github.douira.glsl_transformer.ast.query.*;
 import io.github.douira.glsl_transformer.ast.transform.*;
 import io.github.douira.glsl_transformer.ast.traversal.*;
 import io.github.douira.glsl_transformer.util.CompatUtil;
@@ -483,10 +483,6 @@ public abstract class ASTNode {
 
   public ASTNode cloneInto(Root root) {
     return Root.indexNodes(root, this::clone);
-  }
-
-  public ASTNode cloneSeparate() {
-    return Root.indexNodes(this::clone);
   }
 
   @SuppressWarnings("unchecked") // the nodes clone themselves correctly

@@ -51,9 +51,4 @@ public abstract class ManyStatement extends Statement implements ListNode<Statem
   public ManyStatement cloneInto(Root root) {
     return (ManyStatement) super.cloneInto(root);
   }
-
-  @Override
-  public ManyStatement cloneSeparate() {
-    return (ManyStatement) super.cloneSeparate();
-  }
 }

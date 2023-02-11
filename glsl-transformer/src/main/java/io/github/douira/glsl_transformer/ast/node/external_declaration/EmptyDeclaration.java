@@ -35,9 +35,4 @@ public class EmptyDeclaration extends ExternalDeclaration {
   public EmptyDeclaration cloneInto(Root root) {
     return (EmptyDeclaration) super.cloneInto(root);
   }
-
-  @Override
-  public EmptyDeclaration cloneSeparate() {
-    return (EmptyDeclaration) super.cloneSeparate();
-  }
 }

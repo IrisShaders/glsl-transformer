@@ -40,9 +40,4 @@ public class EqualityExpression extends BinaryExpression {
   public EqualityExpression cloneInto(Root root) {
     return (EqualityExpression) super.cloneInto(root);
   }
-
-  @Override
-  public EqualityExpression cloneSeparate() {
-    return (EqualityExpression) super.cloneSeparate();
-  }
 }

@@ -3,10 +3,9 @@ package io.github.douira.glsl_transformer.ast.transform;
 import java.util.Map;
 import java.util.function.*;
 
-import org.antlr.v4.runtime.RecognitionException;
-
 import io.github.douira.glsl_transformer.ast.node.TranslationUnit;
 import io.github.douira.glsl_transformer.ast.print.ASTPrinter;
+import io.github.douira.glsl_transformer.ast.query.RootSupplier;
 
 /**
  * The grouped AST transformer parses multiple strings stored in an arbitrarily
@@ -66,12 +65,12 @@ public class GroupedASTTransformer<J extends JobParameters, K, M extends Map<K, 
   }
 
   @Override
-  public M transform(Map<K, String> items) throws RecognitionException {
+  public M transform(RootSupplier rootSupplier, Map<K, String> items) {
     // parse all items
     var translationUnits = tuMapSupplier.get();
     for (var entry : items.entrySet()) {
       var value = entry.getValue();
-      translationUnits.put(entry.getKey(), value == null ? null : parseTranslationUnit(value));
+      translationUnits.put(entry.getKey(), value == null ? null : parseTranslationUnit(rootSupplier, value));
     }
 
     // transform them all at once

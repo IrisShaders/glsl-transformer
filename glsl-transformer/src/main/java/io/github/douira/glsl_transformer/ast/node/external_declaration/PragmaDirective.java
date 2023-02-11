@@ -106,9 +106,4 @@ public class PragmaDirective extends ExternalDeclaration {
   public PragmaDirective cloneInto(Root root) {
     return (PragmaDirective) super.cloneInto(root);
   }
-
-  @Override
-  public PragmaDirective cloneSeparate() {
-    return (PragmaDirective) super.cloneSeparate();
-  }
 }
