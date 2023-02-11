@@ -13,6 +13,7 @@ import io.github.douira.glsl_transformer.ast.node.expression.unary.FunctionCallE
 import io.github.douira.glsl_transformer.ast.node.external_declaration.*;
 import io.github.douira.glsl_transformer.ast.query.match.*;
 import io.github.douira.glsl_transformer.test_util.TestWithSingleASTTransformer;
+import io.github.douira.glsl_transformer.util.ParseShape;
 
 public class MatcherTest extends TestWithSingleASTTransformer {
   private void assertNoMatchED(Matcher<ExternalDeclaration> m, String input) {
@@ -54,7 +55,7 @@ public class MatcherTest extends TestWithSingleASTTransformer {
   @Test
   void testMatches() {
     var m = new Matcher<>("uniform vec4 entityColor;",
-        Matcher.externalDeclarationPattern);
+        ParseShape.EXTERNAL_DECLARATION);
 
     assertFalse(m.matches(null));
     assertMatchED(m, "uniform vec4 entityColor;");
@@ -68,7 +69,7 @@ public class MatcherTest extends TestWithSingleASTTransformer {
   @Test
   void testMatchesDataWildcard() {
     var m = new Matcher<>("uniform vec4 ___ = foo + ___;",
-        Matcher.externalDeclarationPattern, "___");
+        ParseShape.EXTERNAL_DECLARATION, "___");
 
     assertFalse(m.matches(null));
     assertMatchED(m, "uniform vec4 foo = foo + foo;");
@@ -82,7 +83,7 @@ public class MatcherTest extends TestWithSingleASTTransformer {
   @Test
   void testExtractDataWildcards() {
     var m = new Matcher<>("uniform vec4 ___a = foo + ___b;",
-        Matcher.externalDeclarationPattern, "___");
+        ParseShape.EXTERNAL_DECLARATION, "___");
 
     assertFalse(m.matchesExtract(null));
     assertTrue(m.getDataMatches().isEmpty());
@@ -103,7 +104,7 @@ public class MatcherTest extends TestWithSingleASTTransformer {
 
   @Test
   void testExtractNodeWildcards() {
-    var m = new Matcher<>("uniform vec4 a = foo + b;", Matcher.externalDeclarationPattern) {
+    var m = new Matcher<>("uniform vec4 a = foo + b;", ParseShape.EXTERNAL_DECLARATION) {
       {
         markAnyWildcard("aNode",
             pattern.getRoot().identifierIndex.getOne("a"));
@@ -135,7 +136,7 @@ public class MatcherTest extends TestWithSingleASTTransformer {
 
   @Test
   void testExtractNodeWildcardsList() {
-    var m = new Matcher<>("int ___a; int x = a; b; float ___b;", Matcher.translationUnitPattern, "___") {
+    var m = new Matcher<>("int ___a; int x = a; b; float ___b;", ParseShape.TRANSLATION_UNIT, "___") {
       {
         markAnyWildcard("aNode", pattern.getRoot().identifierIndex
             .getOne("a").getAncestor(Expression.class));
@@ -156,7 +157,7 @@ public class MatcherTest extends TestWithSingleASTTransformer {
 
   @Test
   void testPredicatedWildcard() {
-    var m = new Matcher<>("a;", Matcher.translationUnitPattern) {
+    var m = new Matcher<>("a;", ParseShape.TRANSLATION_UNIT) {
       {
         markPredicatedWildcard("bNode",
             pattern.getAncestor(TranslationUnit.class)
@@ -171,7 +172,7 @@ public class MatcherTest extends TestWithSingleASTTransformer {
 
   @Test
   void testClassWildcard1() {
-    var m = new Matcher<>("a;", Matcher.translationUnitPattern) {
+    var m = new Matcher<>("a;", ParseShape.TRANSLATION_UNIT) {
       {
         markClassWildcard("bNode",
             pattern.getAncestor(TranslationUnit.class)
@@ -186,7 +187,7 @@ public class MatcherTest extends TestWithSingleASTTransformer {
 
   @Test
   void testNodeWildcardWithoutExtract() {
-    var m = new Matcher<>("a;", Matcher.translationUnitPattern) {
+    var m = new Matcher<>("a;", ParseShape.TRANSLATION_UNIT) {
       {
         markClassWildcard("bNode",
             pattern.getAncestor(TranslationUnit.class)
@@ -201,7 +202,7 @@ public class MatcherTest extends TestWithSingleASTTransformer {
 
   @Test
   void testClassWildcard2() {
-    var m = new Matcher<>("a;", Matcher.translationUnitPattern) {
+    var m = new Matcher<>("a;", ParseShape.TRANSLATION_UNIT) {
       {
         markClassWildcard("bNode",
             pattern.getAncestor(TranslationUnit.class)
@@ -216,7 +217,7 @@ public class MatcherTest extends TestWithSingleASTTransformer {
 
   @Test
   void testClassedPredicateWildcard() {
-    var m = new Matcher<>("a;", Matcher.translationUnitPattern) {
+    var m = new Matcher<>("a;", ParseShape.TRANSLATION_UNIT) {
       {
         markClassedPredicateWildcard("bNode",
             pattern.getAncestor(TranslationUnit.class)
@@ -235,7 +236,7 @@ public class MatcherTest extends TestWithSingleASTTransformer {
 
   @Test
   void testLiteralExpressionWildcard() {
-    var m = new Matcher<>("int x = foo[index];", Matcher.translationUnitPattern) {
+    var m = new Matcher<>("int x = foo[index];", ParseShape.TRANSLATION_UNIT) {
       {
         markClassedPredicateWildcard("index",
             pattern.getRoot().identifierIndex.getOne("index").getAncestor(ReferenceExpression.class),
@@ -264,7 +265,7 @@ public class MatcherTest extends TestWithSingleASTTransformer {
   @Test
   void testAutoHintedMatcher() {
     var m = new AutoHintedMatcher<Expression>(
-        "gl_TextureMatrix[index]", Matcher.expressionPattern) {
+        "gl_TextureMatrix[index]", ParseShape.EXPRESSION) {
       {
         markClassedPredicateWildcard("index",
             pattern.getRoot().identifierIndex.getOne("index").getAncestor(ReferenceExpression.class),
@@ -302,7 +303,7 @@ public class MatcherTest extends TestWithSingleASTTransformer {
 
   @Test
   void testMatchList() {
-    var m = new Matcher<>("int a = foo + 4;", Matcher.externalDeclarationPattern) {
+    var m = new Matcher<>("int a = foo + 4;", ParseShape.EXTERNAL_DECLARATION) {
       {
         markClassWildcard("member*",
             pattern.getRoot().identifierIndex.getOne("a").getAncestor(DeclarationMember.class),

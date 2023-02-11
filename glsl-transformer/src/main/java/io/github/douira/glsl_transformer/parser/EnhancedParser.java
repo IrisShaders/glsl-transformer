@@ -9,6 +9,7 @@ import org.antlr.v4.runtime.misc.ParseCancellationException;
 import io.github.douira.glsl_transformer.*;
 import io.github.douira.glsl_transformer.GLSLParser.TranslationUnitContext;
 import io.github.douira.glsl_transformer.token_filter.TokenFilter;
+import io.github.douira.glsl_transformer.util.ParseShape;
 
 /**
  * The enhanced parser does more than just parsing. It also does lexing,
@@ -26,8 +27,6 @@ public class EnhancedParser implements ParserInterface {
       throw new ParseCancellationException("line " + line + ":" + charPositionInLine + " " + msg, e);
     }
   }
-
-  private static EnhancedParser INSTANCE;
 
   // initialized with null since they need an argument
   private final GLSLLexer lexer = new GLSLLexer(null);
@@ -120,17 +119,6 @@ public class EnhancedParser implements ParserInterface {
   }
 
   /**
-   * Gets the internal singleton instance of the parser. This should generally not
-   * be used by external library users.
-   */
-  public static EnhancedParser getInternalInstance() {
-    if (INSTANCE == null) {
-      INSTANCE = new CachingParser(true);
-    }
-    return INSTANCE;
-  }
-
-  /**
    * Sets if the parser should be re-run in LL parsing mode if the SLL parsing
    * mode return an error. This is generally only necessary if it's important that
    * errors are only reported if there are actually errors. Keep in mind that LL
@@ -195,7 +183,7 @@ public class EnhancedParser implements ParserInterface {
    * @return The parsed string as a translation unit parse tree
    */
   public TranslationUnitContext parse(String str) {
-    return parse(str, GLSLParser::translationUnit);
+    return parse(str, ParseShape.TRANSLATION_UNIT);
   }
 
   /**
@@ -214,9 +202,8 @@ public class EnhancedParser implements ParserInterface {
 
   public <C extends ParserRuleContext> C parse(
       String str,
-      Class<C> ruleType,
-      Function<GLSLParser, C> parseMethod) {
-    return parse(str, (ParserRuleContext) null, parseMethod);
+      ParseShape<C, ?> parseShape) {
+    return parse(str, (ParserRuleContext) null, parseShape.parseMethod);
   }
 
   /**
@@ -238,9 +225,8 @@ public class EnhancedParser implements ParserInterface {
   public <C extends ParserRuleContext> C parse(
       String str,
       ParserRuleContext parent,
-      Class<C> ruleType,
-      Function<GLSLParser, C> parseMethod) {
-    return parse(CharStreams.fromString(str), parent, parseMethod);
+      ParseShape<C, ?> parseShape) {
+    return parse(CharStreams.fromString(str), parent, parseShape.parseMethod);
   }
 
   /**

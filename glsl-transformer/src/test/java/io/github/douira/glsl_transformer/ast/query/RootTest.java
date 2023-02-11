@@ -10,6 +10,7 @@ import io.github.douira.glsl_transformer.ast.node.Identifier;
 import io.github.douira.glsl_transformer.ast.query.index.PrefixIdentifierIndex;
 import io.github.douira.glsl_transformer.ast.query.match.*;
 import io.github.douira.glsl_transformer.test_util.TestWithSingleASTTransformer;
+import io.github.douira.glsl_transformer.util.ParseShape;
 
 public class RootTest extends TestWithSingleASTTransformer {
   @Test
@@ -95,7 +96,7 @@ public class RootTest extends TestWithSingleASTTransformer {
 
   @Test
   void testHintedMatcherProcessing() {
-    var matcher = new HintedMatcher<>("foo[1]", Matcher.expressionPattern, "foo");
+    var matcher = new HintedMatcher<>("foo[1]", ParseShape.EXPRESSION, "foo");
     p.setTransformation((tree, root) -> {
       root.replaceExpressionMatches(p, matcher, "bar + 4");
     });
@@ -106,7 +107,7 @@ public class RootTest extends TestWithSingleASTTransformer {
 
   @Test
   void testHintedMatcherProcessingHintSpecificity() {
-    var matcher = new HintedMatcher<>("foo[1]", Matcher.expressionPattern, "bar");
+    var matcher = new HintedMatcher<>("foo[1]", ParseShape.EXPRESSION, "bar");
     p.setTransformation((tree, root) -> {
       root.replaceExpressionMatches(p, matcher, "bar + 4");
     });
@@ -117,7 +118,7 @@ public class RootTest extends TestWithSingleASTTransformer {
 
   @Test
   void testAutoHintedMatcherProcessing() {
-    var matcher = new AutoHintedMatcher<>("foo[1]", Matcher.expressionPattern);
+    var matcher = new AutoHintedMatcher<>("foo[1]", ParseShape.EXPRESSION);
     p.setTransformation((tree, root) -> {
       root.replaceExpressionMatches(p, matcher, "bar + 4");
     });
@@ -128,7 +129,7 @@ public class RootTest extends TestWithSingleASTTransformer {
 
   @Test
   void testAutoHintedMatcherProcessingWildcard() {
-    var matcher = new AutoHintedMatcher<>("a[___f + 5]", Matcher.expressionPattern, "___");
+    var matcher = new AutoHintedMatcher<>("a[___f + 5]", ParseShape.EXPRESSION, "___");
     p.setTransformation((tree, root) -> {
       root.replaceExpressionMatches(p, matcher, "bar + 4");
     });

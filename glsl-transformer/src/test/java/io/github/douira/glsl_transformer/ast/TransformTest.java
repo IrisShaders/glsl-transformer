@@ -26,7 +26,7 @@ import io.github.douira.glsl_transformer.ast.query.match.Matcher;
 import io.github.douira.glsl_transformer.ast.transform.*;
 import io.github.douira.glsl_transformer.test_util.*;
 import io.github.douira.glsl_transformer.test_util.TestCaseProvider.Spacing;
-import io.github.douira.glsl_transformer.util.Type;
+import io.github.douira.glsl_transformer.util.*;
 
 public class TransformTest extends TestWithSingleASTTransformer {
   @ParameterizedTest
@@ -133,13 +133,13 @@ public class TransformTest extends TestWithSingleASTTransformer {
   @TestCaseSource(caseSet = "outDeclarationModify", spacing = Spacing.TRIM_SINGLE_BOTH)
   void testOutDeclarationModify(String type, String input, String output) {
     var outDeclarationMatcher = new Matcher<ExternalDeclaration>(
-        "out float __name;", Matcher.externalDeclarationPattern, "__") {
+        "out float __name;", ParseShape.EXTERNAL_DECLARATION, "__") {
       {
         markClassWildcard("type", pattern.getRoot().nodeIndex.getOne(BuiltinNumericTypeSpecifier.class));
       }
     };
     var inDeclarationMatcher = new Matcher<ExternalDeclaration>(
-        "in float __name;", Matcher.externalDeclarationPattern, "__") {
+        "in float __name;", ParseShape.EXTERNAL_DECLARATION, "__") {
       {
         markClassWildcard("type", pattern.getRoot().nodeIndex.getOne(BuiltinNumericTypeSpecifier.class));
       }
@@ -457,7 +457,7 @@ public class TransformTest extends TestWithSingleASTTransformer {
   @Test
   void testAttachLayout() {
     var nonLayoutOutDeclarationMatcher = new Matcher<ExternalDeclaration>("out float name;",
-        Matcher.externalDeclarationPattern) {
+        ParseShape.EXTERNAL_DECLARATION) {
       {
         markClassWildcard("qualifier", pattern.getRoot().nodeIndex.getUnique(TypeQualifier.class));
         markClassWildcard("type", pattern.getRoot().nodeIndex.getUnique(BuiltinNumericTypeSpecifier.class));
