@@ -51,6 +51,60 @@ public class Root {
   }
 
   /**
+   * Returns the identifier index as a prefix identifier index if it is one.
+   * Otherwise, it throws.
+   * 
+   * @return The prefix identifier index
+   */
+  public PrefixIdentifierIndex<?, ?> getPrefixIdentifierIndex() {
+    if (identifierIndex instanceof PrefixIdentifierIndex<?, ?> index) {
+      return index;
+    } else {
+      throw new IllegalStateException("The identifier index is not a prefix index");
+    }
+  }
+
+  /**
+   * Registers the given node with this root.
+   * 
+   * @param node The node to register
+   */
+  public void registerNode(ASTNode node) {
+    nodeIndex.add(node);
+    if (node instanceof Identifier identifier) {
+      identifierIndex.add(identifier);
+    }
+  }
+
+  /**
+   * Unregisters the given node from this root.
+   * 
+   * @param node The node to unregister
+   */
+  public void unregisterNode(ASTNode node) {
+    nodeIndex.remove(node);
+    if (node instanceof Identifier identifier) {
+      identifierIndex.remove(identifier);
+    }
+  }
+
+  public void unregisterIdentifierRename(Identifier identifier) {
+    identifierIndex.remove(identifier);
+  }
+
+  public void registerIdentifierRename(Identifier identifier) {
+    identifierIndex.add(identifier);
+  }
+
+  private void ensureEmptyNodeList() {
+    if (nodeList == null) {
+      nodeList = new ArrayList<>();
+    } else {
+      nodeList.clear();
+    }
+  }
+
+  /**
    * Returns the currently active build root. When nodes are constructed within a
    * build session, this method returns the root of the build session. Nodes can't
    * be constructed with children if they have no root since the children must be
@@ -140,60 +194,6 @@ public class Root {
       registererConsumer.accept(Passthrough.of(root::registerNode));
       return null;
     });
-  }
-
-  /**
-   * Returns the identifier index as a prefix identifier index if it is one.
-   * Otherwise, it throws.
-   * 
-   * @return The prefix identifier index
-   */
-  public PrefixIdentifierIndex<?, ?> getPrefixIdentifierIndex() {
-    if (identifierIndex instanceof PrefixIdentifierIndex<?, ?> index) {
-      return index;
-    } else {
-      throw new IllegalStateException("The identifier index is not a prefix index");
-    }
-  }
-
-  /**
-   * Registers the given node with this root.
-   * 
-   * @param node The node to register
-   */
-  public void registerNode(ASTNode node) {
-    nodeIndex.add(node);
-    if (node instanceof Identifier identifier) {
-      identifierIndex.add(identifier);
-    }
-  }
-
-  /**
-   * Unregisters the given node from this root.
-   * 
-   * @param node The node to unregister
-   */
-  public void unregisterNode(ASTNode node) {
-    nodeIndex.remove(node);
-    if (node instanceof Identifier identifier) {
-      identifierIndex.remove(identifier);
-    }
-  }
-
-  public void unregisterIdentifierRename(Identifier identifier) {
-    identifierIndex.remove(identifier);
-  }
-
-  public void registerIdentifierRename(Identifier identifier) {
-    identifierIndex.add(identifier);
-  }
-
-  private void ensureEmptyNodeList() {
-    if (nodeList == null) {
-      nodeList = new ArrayList<>();
-    } else {
-      nodeList.clear();
-    }
   }
 
   /**
