@@ -203,11 +203,11 @@ public class Root {
    * root as the active build root.
    * 
    * @param <N>        The type of the nodes to register
-   * @param registerer The consumer to run
+   * @param registererConsumer The consumer to run
    */
   public static <N extends ASTNode> void indexSeparateTrees(
-      Consumer<Passthrough<N>> registerer) {
-    indexSeparateTrees(new Root(), registerer);
+      Consumer<Passthrough<N>> registererConsumer) {
+    indexSeparateTrees(new Root(), registererConsumer);
   }
 
   /**
