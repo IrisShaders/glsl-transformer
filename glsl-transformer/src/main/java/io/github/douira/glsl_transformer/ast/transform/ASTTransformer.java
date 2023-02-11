@@ -11,8 +11,7 @@ import io.github.douira.glsl_transformer.token_filter.TokenFilter;
 public abstract class ASTTransformer<J extends JobParameters, V> extends ASTParser
     implements ParameterizedTransformer<J, V> {
   private J jobParameters;
-  private static final PrintType defaultPrintType = PrintType.COMPACT;
-  private PrintType printType = defaultPrintType;
+  private PrintType printType = PrintType.COMPACT;
 
   @Override
   public J getJobParameters() {
