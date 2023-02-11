@@ -4,7 +4,9 @@ import static org.junit.jupiter.api.Assertions.*;
 
 import org.junit.jupiter.api.Test;
 
-public class IdentifierTest {
+import io.github.douira.glsl_transformer.test_util.TestWithSingleASTTransformer;
+
+public class IdentifierTest extends TestWithSingleASTTransformer {
   private void assertIdentifierThrows(String name) {
     assertThrows(IllegalArgumentException.class, () -> new Identifier(name));
   }
@@ -39,5 +41,10 @@ public class IdentifierTest {
     assertIdentifierThrows("fds fds");
     assertIdentifierThrows("fds-fds");
     assertIdentifierThrows("fds-fds");
+
+    p.setTransformation((tu, root) -> {
+      root.identifierIndex.rename("foo", "int i = 4;");
+    });
+    assertThrows(IllegalArgumentException.class, () -> p.transform("int foo = 4;"));
   }
 }
