@@ -202,7 +202,7 @@ public class Root {
    * Runs the given consumer of a registration pass-through function with a new
    * root as the active build root.
    * 
-   * @param <N>        The type of the nodes to register
+   * @param <N>                The type of the nodes to register
    * @param registererConsumer The consumer to run
    */
   public static <N extends ASTNode> void indexSeparateTrees(
