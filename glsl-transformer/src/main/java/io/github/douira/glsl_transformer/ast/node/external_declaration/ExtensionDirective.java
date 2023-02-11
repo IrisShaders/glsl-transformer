@@ -44,7 +44,7 @@ public class ExtensionDirective extends ExternalDeclaration {
 
   @Override
   public ExternalDeclarationType getExternalDeclarationType() {
-    return ExternalDeclarationType.EXTENSION_STATEMENT;
+    return ExternalDeclarationType.EXTENSION_DIRECTIVE;
   }
 
   @Override

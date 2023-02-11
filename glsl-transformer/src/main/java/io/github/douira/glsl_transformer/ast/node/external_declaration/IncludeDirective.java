@@ -18,7 +18,7 @@ public class IncludeDirective extends ExternalDeclaration {
 
   @Override
   public ExternalDeclarationType getExternalDeclarationType() {
-    return ExternalDeclarationType.INCLUDE_STATEMENT;
+    return ExternalDeclarationType.INCLUDE_DIRECTIVE;
   }
 
   @Override

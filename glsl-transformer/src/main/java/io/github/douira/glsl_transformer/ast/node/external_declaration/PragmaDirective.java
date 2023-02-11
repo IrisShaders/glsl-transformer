@@ -77,7 +77,7 @@ public class PragmaDirective extends ExternalDeclaration {
 
   @Override
   public ExternalDeclarationType getExternalDeclarationType() {
-    return ExternalDeclarationType.PRAGMA_STATEMENT;
+    return ExternalDeclarationType.PRAGMA_DIRECTIVE;
   }
 
   @Override

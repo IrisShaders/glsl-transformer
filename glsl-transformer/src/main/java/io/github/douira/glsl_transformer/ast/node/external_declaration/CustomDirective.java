@@ -12,7 +12,7 @@ public class CustomDirective extends ExternalDeclaration {
 
   @Override
   public ExternalDeclarationType getExternalDeclarationType() {
-    return ExternalDeclarationType.CUSTOM_DIRECTIVE_STATEMENT;
+    return ExternalDeclarationType.CUSTOM_DIRECTIVE;
   }
 
   @Override
