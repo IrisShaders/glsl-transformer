@@ -112,7 +112,7 @@ public class Root {
    * @param rootConsumer The consumer to run
    * @return The return value of the consumer
    */
-  protected static final synchronized <R> R withActiveBuildRoot(
+  protected static final <R> R withActiveBuildRoot(
       Root instance,
       Function<Root, R> rootConsumer) {
     activeBuildRoots.push(instance);
@@ -135,7 +135,7 @@ public class Root {
    * @param builder  The builder to run
    * @return The built and registered node
    */
-  public static synchronized <N extends ASTNode> N indexNodes(
+  public static <N extends ASTNode> N indexNodes(
       Root instance, Supplier<N> builder) {
     return withActiveBuildRoot(instance, root -> {
       var result = builder.get();
@@ -164,7 +164,7 @@ public class Root {
    * @param instance The root to use as the active build root
    * @param session  The runnable to run
    */
-  public static synchronized void indexBuildSession(Root instance, Runnable session) {
+  public static void indexBuildSession(Root instance, Runnable session) {
     withActiveBuildRoot(instance, root -> {
       session.run();
       return null;
@@ -190,7 +190,7 @@ public class Root {
    * @param instance           the root to register the nodes with
    * @param registererConsumer The consumer to run
    */
-  public static synchronized <N extends ASTNode> void indexSeparateTrees(
+  public static <N extends ASTNode> void indexSeparateTrees(
       Root instance, Consumer<Passthrough<N>> registererConsumer) {
     withActiveBuildRoot(instance, root -> {
       registererConsumer.accept(Passthrough.of(root::registerNode));
