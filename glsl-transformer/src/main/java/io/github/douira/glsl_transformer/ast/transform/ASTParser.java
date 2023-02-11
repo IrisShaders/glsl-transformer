@@ -7,7 +7,7 @@ import org.antlr.v4.runtime.ParserRuleContext;
 import io.github.douira.glsl_transformer.*;
 import io.github.douira.glsl_transformer.GLSLParser.TranslationUnitContext;
 import io.github.douira.glsl_transformer.ast.data.TypedTreeCache;
-import io.github.douira.glsl_transformer.ast.node.TranslationUnit;
+import io.github.douira.glsl_transformer.ast.node.*;
 import io.github.douira.glsl_transformer.ast.node.abstract_node.ASTNode;
 import io.github.douira.glsl_transformer.ast.node.expression.Expression;
 import io.github.douira.glsl_transformer.ast.node.external_declaration.ExternalDeclaration;
@@ -134,6 +134,28 @@ public class ASTParser implements ParserInterface {
     }
   }
 
+  private class EmptyRoot extends Root {
+    public EmptyRoot() {
+      super(null, null);
+    }
+
+    @Override
+    public void registerIdentifierRename(Identifier identifier) {
+    }
+
+    @Override
+    public void registerNode(ASTNode node) {
+    }
+
+    @Override
+    public void unregisterIdentifierRename(Identifier identifier) {
+    }
+
+    @Override
+    public void unregisterNode(ASTNode node) {
+    }
+  }
+
   @SuppressWarnings("unchecked")
   private <C extends ParserRuleContext, N extends ASTNode> N parseNodeCachedUncloned(
       String input, ParseShape<C, N> parseShape) {
@@ -142,8 +164,8 @@ public class ASTParser implements ParserInterface {
         () -> {
           try {
             setBuilderTokenStream();
-            return ASTBuilder.build(
-                new EmptyRoot(), parser.parse(input, parseShape), parseShape.visitMethod);
+            return ASTBuilder.build(new EmptyRoot(),
+                parser.parse(input, parseShape), parseShape.visitMethod);
           } finally {
             unsetBuilderTokenStream();
           }
