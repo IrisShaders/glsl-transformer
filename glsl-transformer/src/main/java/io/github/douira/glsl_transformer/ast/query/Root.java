@@ -70,8 +70,10 @@ public class Root {
    * @param node The node to register
    */
   public void registerNode(ASTNode node) {
-    nodeIndex.add(node);
-    if (node instanceof Identifier identifier) {
+    if (nodeIndex != null) {
+      nodeIndex.add(node);
+    }
+    if (identifierIndex != null && node instanceof Identifier identifier) {
       identifierIndex.add(identifier);
     }
   }
@@ -82,18 +84,24 @@ public class Root {
    * @param node The node to unregister
    */
   public void unregisterNode(ASTNode node) {
-    nodeIndex.remove(node);
-    if (node instanceof Identifier identifier) {
+    if (nodeIndex != null) {
+      nodeIndex.remove(node);
+    }
+    if (identifierIndex != null && node instanceof Identifier identifier) {
       identifierIndex.remove(identifier);
     }
   }
 
   public void unregisterIdentifierRename(Identifier identifier) {
-    identifierIndex.remove(identifier);
+    if (identifierIndex != null) {
+      identifierIndex.remove(identifier);
+    }
   }
 
   public void registerIdentifierRename(Identifier identifier) {
-    identifierIndex.add(identifier);
+    if (identifierIndex != null) {
+      identifierIndex.add(identifier);
+    }
   }
 
   private void ensureEmptyNodeList() {

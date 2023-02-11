@@ -1,5 +1,6 @@
 package io.github.douira.glsl_transformer.ast.query;
 
+import static io.github.douira.glsl_transformer.test_util.AssertUtil.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.stream.Stream;
@@ -134,5 +135,38 @@ public class RootTest extends TestWithSingleASTTransformer {
     assertTransform(
         "int foo = bam + bar + 4 + a[bar + 4]; ",
         "int foo = bam + a[bar + 5] + a[bar + 4];");
+  }
+
+  @Test
+  void testNullIndexes() {
+    assertCall(3, (callback) -> {
+      Root.indexBuildSession(RootSupplier.EMPTY.get(), (root) -> {
+        new Identifier("a");
+        new Identifier("b");
+
+        var index = root.identifierIndex;
+        assertThrows(NullPointerException.class, () -> index.has("a"));
+        assertThrows(NullPointerException.class, () -> root.rename("foo", "c"));
+        callback.run();
+      });
+      Root.indexBuildSession(RootSupplier.ONLY_IDENTIFIER_INDEX.get(), (root) -> {
+        new Identifier("a");
+        new Identifier("b");
+
+        var index = root.identifierIndex;
+        assertDoesNotThrow(() -> index.has("a"));
+        assertThrows(NullPointerException.class, () -> root.nodeIndex.has(Identifier.class));
+        callback.run();
+      });
+      Root.indexBuildSession(RootSupplier.ONLY_NODE_INDEX.get(), (root) -> {
+        new Identifier("a");
+        new Identifier("b");
+
+        var index = root.identifierIndex;
+        assertThrows(NullPointerException.class, () -> index.has("a"));
+        assertDoesNotThrow(() -> root.nodeIndex.has(Identifier.class));
+        callback.run();
+      });
+    });
   }
 }

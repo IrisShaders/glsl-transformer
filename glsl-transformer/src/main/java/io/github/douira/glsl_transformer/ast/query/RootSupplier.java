@@ -24,7 +24,17 @@ public class RootSupplier implements Supplier<Root> {
   public static final RootSupplier PREFIX_ORDERED_BOTH = new RootSupplier(NodeIndex::withOrdered,
       () -> IdentifierIndex.withOnlyExact(LinkedHashSet::new));
 
+  public static final RootSupplier EMPTY = new RootSupplier(supplier(null), supplier(null));
+  public static final RootSupplier ONLY_NODE_INDEX = new RootSupplier(
+      NodeIndex::withUnordered, supplier(null));
+  public static final RootSupplier ONLY_IDENTIFIER_INDEX = new RootSupplier(
+      supplier(null), IdentifierIndex::withOnlyExact);
+
   public static final RootSupplier DEFAULT = EXACT_UNORDERED;
+
+  private static final <V> Supplier<V> supplier(V value) {
+    return () -> value;
+  }
 
   public static Root supplyDefault() {
     return DEFAULT.get();
