@@ -136,7 +136,7 @@ public class ASTParser implements ParserInterface {
 
   private class EmptyRoot extends Root {
     public EmptyRoot() {
-      super(null, null);
+      super(null, null, null);
     }
 
     @Override
@@ -144,7 +144,7 @@ public class ASTParser implements ParserInterface {
     }
 
     @Override
-    public void registerNode(ASTNode node) {
+    public void registerNode(ASTNode node, boolean isSubtreeRoot) {
     }
 
     @Override
@@ -152,7 +152,7 @@ public class ASTParser implements ParserInterface {
     }
 
     @Override
-    public void unregisterNode(ASTNode node) {
+    public void unregisterNode(ASTNode node, boolean isSubtreeRoot) {
     }
   }
 

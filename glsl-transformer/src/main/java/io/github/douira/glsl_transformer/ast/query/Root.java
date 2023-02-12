@@ -4,9 +4,10 @@ import java.util.*;
 import java.util.function.*;
 import java.util.stream.Stream;
 
-import io.github.douira.glsl_transformer.ast.node.Identifier;
+import io.github.douira.glsl_transformer.ast.node.*;
 import io.github.douira.glsl_transformer.ast.node.abstract_node.ASTNode;
 import io.github.douira.glsl_transformer.ast.node.expression.*;
+import io.github.douira.glsl_transformer.ast.node.external_declaration.ExternalDeclaration;
 import io.github.douira.glsl_transformer.ast.query.index.*;
 import io.github.douira.glsl_transformer.ast.query.match.*;
 import io.github.douira.glsl_transformer.ast.transform.ASTParser;
@@ -34,6 +35,13 @@ public class Root {
    */
   public final IdentifierIndex<?, ?> identifierIndex;
 
+  /**
+   * The external declaration index indexes the external declarations by their
+   * name. Each node may appear multiple times if it contains multiple members
+   * with different names.
+   */
+  public final ExternalDeclarationIndex<?, ?> externalDeclarationIndex;
+
   // internal utility state
   private static Deque<Root> activeBuildRoots = new ArrayDeque<>();
   private List<? extends ASTNode> nodeList;
@@ -42,12 +50,16 @@ public class Root {
   /**
    * Constructs a new root with the given node and identifier indexes.
    * 
-   * @param nodeIndex       The node index
-   * @param identifierIndex The identifier index
+   * @param nodeIndex                The node index
+   * @param identifierIndex          The identifier index
+   * @param externalDeclarationIndex The external declaration index
    */
-  public Root(NodeIndex<?> nodeIndex, IdentifierIndex<?, ?> identifierIndex) {
+  public Root(NodeIndex<?> nodeIndex,
+      IdentifierIndex<?, ?> identifierIndex,
+      ExternalDeclarationIndex<?, ?> externalDeclarationIndex) {
     this.nodeIndex = nodeIndex;
     this.identifierIndex = identifierIndex;
+    this.externalDeclarationIndex = externalDeclarationIndex;
   }
 
   /**
@@ -67,28 +79,46 @@ public class Root {
   /**
    * Registers the given node with this root.
    * 
-   * @param node The node to register
+   * @param node          The node to register
+   * @param isSubtreeRoot Whether the node is the root of a subtree that is being
+   *                      added
    */
-  public void registerNode(ASTNode node) {
+  public void registerNode(ASTNode node, boolean isSubtreeRoot) {
     if (nodeIndex != null) {
       nodeIndex.add(node);
     }
     if (identifierIndex != null && node instanceof Identifier identifier) {
       identifierIndex.add(identifier);
     }
+    if (externalDeclarationIndex != null) {
+      if (node instanceof ExternalDeclaration externalDeclaration) {
+        externalDeclarationIndex.add(externalDeclaration);
+      } else if (isSubtreeRoot && !(node instanceof TranslationUnit)) {
+        externalDeclarationIndex.notifySubtreeAdd(node);
+      }
+    }
   }
 
   /**
    * Unregisters the given node from this root.
    * 
-   * @param node The node to unregister
+   * @param node          The node to unregister
+   * @param isSubtreeRoot Whether the node is the root of a subtree that is being
+   *                      removed
    */
-  public void unregisterNode(ASTNode node) {
+  public void unregisterNode(ASTNode node, boolean isSubtreeRoot) {
     if (nodeIndex != null) {
       nodeIndex.remove(node);
     }
     if (identifierIndex != null && node instanceof Identifier identifier) {
       identifierIndex.remove(identifier);
+    }
+    if (externalDeclarationIndex != null) {
+      if (node instanceof ExternalDeclaration externalDeclaration) {
+        externalDeclarationIndex.remove(externalDeclaration);
+      } else if (isSubtreeRoot && !(node instanceof TranslationUnit)) {
+        externalDeclarationIndex.notifySubtreeRemove(node);
+      }
     }
   }
 
@@ -96,11 +126,17 @@ public class Root {
     if (identifierIndex != null) {
       identifierIndex.remove(identifier);
     }
+    if (externalDeclarationIndex != null) {
+      externalDeclarationIndex.notifySubtreeRemove(identifier);
+    }
   }
 
   public void registerIdentifierRename(Identifier identifier) {
     if (identifierIndex != null) {
       identifierIndex.add(identifier);
+    }
+    if (externalDeclarationIndex != null) {
+      externalDeclarationIndex.notifySubtreeAdd(identifier);
     }
   }
 
@@ -159,7 +195,7 @@ public class Root {
       Root instance, Supplier<N> builder) {
     return withActiveBuildRoot(instance, root -> {
       var result = builder.get();
-      root.registerNode(result);
+      root.registerNode(result, true);
       return result;
     });
   }
@@ -199,7 +235,10 @@ public class Root {
   public static <N extends ASTNode> void indexSeparateTrees(
       Root instance, Consumer<Passthrough<N>> registererConsumer) {
     withActiveBuildRoot(instance, root -> {
-      registererConsumer.accept(Passthrough.of(root::registerNode));
+      registererConsumer.accept(node -> {
+        root.registerNode(node, true);
+        return node;
+      });
       return null;
     });
   }

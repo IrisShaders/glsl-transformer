@@ -42,16 +42,37 @@ public class RootSupplier implements Supplier<Root> {
 
   private final Supplier<NodeIndex<?>> nodeIndexSupplier;
   private final Supplier<IdentifierIndex<?, ?>> identifierIndexSupplier;
+  private final Supplier<ExternalDeclarationIndex<?, ?>> externalDeclarationIndexSupplier;
+
+  public RootSupplier(
+      Supplier<NodeIndex<?>> nodeIndexSupplier,
+      Supplier<IdentifierIndex<?, ?>> identifierIndexSupplier,
+      Supplier<ExternalDeclarationIndex<?, ?>> externalDeclarationIndexSupplier) {
+    this.nodeIndexSupplier = nodeIndexSupplier;
+    this.identifierIndexSupplier = identifierIndexSupplier;
+    this.externalDeclarationIndexSupplier = externalDeclarationIndexSupplier;
+  }
 
   public RootSupplier(
       Supplier<NodeIndex<?>> nodeIndexSupplier,
       Supplier<IdentifierIndex<?, ?>> identifierIndexSupplier) {
-    this.nodeIndexSupplier = nodeIndexSupplier;
-    this.identifierIndexSupplier = identifierIndexSupplier;
+    this(nodeIndexSupplier, identifierIndexSupplier, supplier(null));
   }
 
   @Override
   public Root get() {
-    return new Root(nodeIndexSupplier.get(), identifierIndexSupplier.get());
+    return new Root(
+        nodeIndexSupplier.get(),
+        identifierIndexSupplier.get(),
+        externalDeclarationIndexSupplier.get());
+  }
+
+  public RootSupplier setNodeIndex(Supplier<NodeIndex<?>> nodeIndexSupplier) {
+    return new RootSupplier(nodeIndexSupplier, identifierIndexSupplier);
+  }
+
+  public RootSupplier setIdentifierIndex(
+      Supplier<IdentifierIndex<?, ?>> identifierIndexSupplier) {
+    return new RootSupplier(nodeIndexSupplier, identifierIndexSupplier);
   }
 }

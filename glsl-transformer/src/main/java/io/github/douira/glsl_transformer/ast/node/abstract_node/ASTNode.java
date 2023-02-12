@@ -5,7 +5,7 @@ import java.util.function.*;
 import java.util.stream.Stream;
 
 import io.github.douira.glsl_transformer.ast.data.ChildNodeList;
-import io.github.douira.glsl_transformer.ast.query.*;
+import io.github.douira.glsl_transformer.ast.query.Root;
 import io.github.douira.glsl_transformer.ast.transform.*;
 import io.github.douira.glsl_transformer.ast.traversal.*;
 import io.github.douira.glsl_transformer.util.CompatUtil;
@@ -31,9 +31,18 @@ import io.github.douira.glsl_transformer.util.CompatUtil;
  * the tree (at which point the tree becomes a DAG), this is discuraged since it
  * violates common expectations like the fact that removing a node doesn't also
  * affect other parts of the tree.
+ * 
+ * The tree is constructed from the buttom up in the {@link ASTBuilder}. The
+ * roots are set on each of the nodes by getting the current active build root
+ * from the {@link Root}'s global method.
  */
 public abstract class ASTNode {
   private ASTNode parent;
+  // the parent this node had before it was replaced, used for ensuring index
+  // consistency during replacement of this node with another one in the parent.
+  // In some cases, the index needs to look up the parent of this node even after
+  // it has been replaced.
+  private ASTNode lastParent;
   private Consumer<ASTNode> selfReplacer;
   private Root root = Root.getActiveBuildRoot();
   protected Template<?> template = null;
@@ -61,6 +70,10 @@ public abstract class ASTNode {
 
   public ASTNode getParent() {
     return parent;
+  }
+
+  public ASTNode getLastParent() {
+    return lastParent;
   }
 
   public boolean hasParent() {
@@ -249,44 +262,24 @@ public abstract class ASTNode {
     return root;
   }
 
-  private static class ChangeRootVisitor extends ASTVoidVisitor {
-    private Root root;
-
-    public ChangeRootVisitor(Root root) {
-      this.root = root;
-    }
-
-    @Override
-    public void visitVoid(ASTNode node) {
-      node.setRoot(root);
-    }
-  }
-
-  private static class UnregisterVisitor extends ASTVoidVisitor {
-    @Override
-    public void visitVoid(ASTNode node) {
-      node.unregister();
-    }
-  }
-
-  private void setRoot(Root root) {
+  private void setRoot(Root root, boolean isSubtreeRoot) {
     if (this.root == root) {
       return;
     }
     if (registered) {
-      unregister();
+      unregister(isSubtreeRoot);
     }
     this.root = root;
-    register();
+    register(isSubtreeRoot);
   }
 
-  private void unregister() {
-    root.unregisterNode(this);
+  private void unregister(boolean isSubtreeRoot) {
+    root.unregisterNode(this, isSubtreeRoot);
     registered = false;
   }
 
-  private void register() {
-    root.registerNode(this);
+  private void register(boolean isSubtreeRoot) {
+    root.registerNode(this, isSubtreeRoot);
     registered = true;
   }
 
@@ -310,23 +303,42 @@ public abstract class ASTNode {
       return false;
     }
 
-    // if the roots are the same nothing important happens
+    // if the roots are the same, no change in registration is necessary
     // this is the normal case for building the AST or moving nodes around
     if (root == parent.root) {
+      this.lastParent = this.parent;
       this.parent = parent;
 
       // when the root node of a newly built subtree that already has the same root
       // references is added to the main tree, only the root node isn't registered yet
       if (!registered) {
-        register();
+        // this node is the root of a subtree if the parent is already registered
+        // otherwise its part of a construction process and isn't the root of a subtree
+        // as nodes are registered from the bottom up
+        register(parent.registered);
       }
-      return true;
+    } else {
+      // set the parent to the given parent and re-register the subtree in the new
+      // root by unregistering and registering in the new root
+      this.lastParent = this.parent;
+      this.parent = parent;
+      changeRootRecursive(parent.root);
     }
-
-    this.parent = parent;
-    changeRootRecursive(parent.root);
     return true;
   }
+
+  private class ChangeRootVisitor extends ASTVoidVisitor {
+    private Root rootToSet;
+
+    ChangeRootVisitor(Root rootToSet) {
+      this.rootToSet = rootToSet;
+    }
+
+    @Override
+    public void visitVoid(ASTNode node) {
+      node.setRoot(rootToSet, node == ASTNode.this);
+    }
+  };
 
   private void changeRootRecursive(Root root) {
     new ChangeRootVisitor(root).visit(this);
@@ -334,7 +346,8 @@ public abstract class ASTNode {
 
   /**
    * Uses the stored replacer function to remove this node from the parent and
-   * remove the parent from this node. It does not unregister the subtree.
+   * remove the parent from this node. It does not unregister the
+   * subtree but it does detach it.
    * 
    * @param replacement The node to replace this node with
    * @return {@code true} if the parent was changed, {@code false} otherwise.
@@ -387,19 +400,25 @@ public abstract class ASTNode {
    * been (efficiently) removed from the parent.
    */
   public void detachParent() {
+    lastParent = parent;
     parent = null;
     selfReplacer = null;
   }
 
+  private class UnregisterVisitor extends ASTVoidVisitor {
+    @Override
+    public void visitVoid(ASTNode node) {
+      node.unregister(node == ASTNode.this);
+    }
+  };
+
   /**
-   * This unregisters this node and all its children from its root.
-   * 
-   * @return {@code true} if there was unregistering, {@code false} otherwise.
+   * Detaches the node from the parent, then unregisters this node and all its
+   * children from its root.
    */
-  public boolean unregisterSubtree() {
+  public void unregisterSubtree() {
     detachParent();
     new UnregisterVisitor().visit(this);
-    return true;
   }
 
   /**
@@ -436,9 +455,7 @@ public abstract class ASTNode {
    * @param setter The setter to replace the node in this parent
    * @return The node itself
    */
-  public <N extends ASTNode> N setup(
-      N node,
-      Consumer<? extends N> setter) {
+  public <N extends ASTNode> N setup(N node, Consumer<? extends N> setter) {
     if (node != null) {
       node.setParent(this, setter);
     }
@@ -458,9 +475,7 @@ public abstract class ASTNode {
    *                    parent, this node)
    */
   public <N extends ASTNode> void updateParents(
-      N currentNode,
-      N newNode,
-      Consumer<? extends N> setter) {
+      N currentNode, N newNode, Consumer<? extends N> setter) {
     if (currentNode == newNode && newNode.getParent() == this) {
       return;
     }
