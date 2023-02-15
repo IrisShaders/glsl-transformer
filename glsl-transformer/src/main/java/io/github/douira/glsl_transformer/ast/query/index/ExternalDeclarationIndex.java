@@ -180,4 +180,17 @@ public class ExternalDeclarationIndex<S extends Set<DeclarationEntry>, I extends
       removeEntry(keyMember.getAncestor(ExternalDeclaration.class), keyMember, key);
     });
   }
+
+  public static ExternalDeclarationIndex<HashSet<DeclarationEntry>, HashMap<String, HashSet<DeclarationEntry>>> withOnlyExact() {
+    return new ExternalDeclarationIndex<>(new HashMap<>(), HashSet::new);
+  }
+
+  public static ExternalDeclarationIndex<LinkedHashSet<DeclarationEntry>, HashMap<String, LinkedHashSet<DeclarationEntry>>> withOnlyExactOrdered() {
+    return new ExternalDeclarationIndex<>(new HashMap<>(), LinkedHashSet::new);
+  }
+
+  public static <R extends Set<DeclarationEntry>> ExternalDeclarationIndex<R, HashMap<String, R>> withOnlyExact(
+      Supplier<R> setFactory) {
+    return new ExternalDeclarationIndex<>(new HashMap<>(), setFactory);
+  }
 }

@@ -75,6 +75,10 @@ public class IdentifierIndex<S extends Set<Identifier>, I extends Map<String, S>
     return new IdentifierIndex<>(new HashMap<>(), HashSet::new);
   }
 
+  public static IdentifierIndex<LinkedHashSet<Identifier>, HashMap<String, LinkedHashSet<Identifier>>> withOnlyExactOrdered() {
+    return new IdentifierIndex<>(new HashMap<>(), LinkedHashSet::new);
+  }
+
   public static <R extends Set<Identifier>> IdentifierIndex<R, HashMap<String, R>> withOnlyExact(
       Supplier<R> setFactory) {
     return new IdentifierIndex<>(new HashMap<>(), setFactory);

@@ -8,7 +8,12 @@ import io.github.douira.glsl_transformer.ast.node.abstract_node.ASTNode;
 import io.github.douira.glsl_transformer.ast.node.expression.ReferenceExpression;
 
 /**
- * Indexes nodes based on their content and enabled fast string queries.
+ * Indexes nodes based on their content and provides some utilities for querying them.
+ * 
+ * @param <V> The entry type stored in the index, the "value".
+ * @param <N> The node type of the entry.
+ * @param <S> The set type used to store entries.
+ * @param <I> The index type used to store sets.
  */
 public abstract class StringKeyedIndex<V, N extends ASTNode, S extends Set<V>, I extends Map<String, S>>
     implements Index<N> {
