@@ -5,4 +5,4 @@
 *.bat text eol=crlf
 
 # make all the glsl test files not show up by marking them as vendored
-glsl-transformer/src/test/resources/glslang-test/** linguist-vendored
+glsl-transformer/src/test/resources/glslang-test/* linguist-vendored
