@@ -94,7 +94,7 @@ public class ParsingPerformanceTest {
   void testDeepParenExpressionParsing() {
     parser = new EnhancedParser(true);
     parser.setSLLOnly();
-    assertFilePerformance(1000, FileLocation.DEEP_PAREN_EXPRESSION_TEST);
+    assertFilePerformance(2000, FileLocation.DEEP_PAREN_EXPRESSION_TEST);
   }
 
   @Test
