@@ -76,6 +76,14 @@ public class Root {
     }
   }
 
+  public PrefixExternalDeclarationIndex<?, ?> getPrefixExternalDeclarationIndex() {
+    if (externalDeclarationIndex instanceof PrefixExternalDeclarationIndex<?, ?> index) {
+      return index;
+    } else {
+      throw new IllegalStateException("The external declaration index is not a prefix index");
+    }
+  }
+
   /**
    * Registers the given node with this root.
    * 
