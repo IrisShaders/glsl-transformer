@@ -150,7 +150,8 @@ public class ExternalDeclarationIndex<S extends Set<DeclarationEntry>, I extends
         || node instanceof InterfaceBlockDeclaration) {
       node = node.getParent();
 
-      // set the parent back to the parent
+      // set the parent back to the parent because for these types of declarations
+      // there are no specific key members and the ED is the key member itself
       keyMember = node;
     }
     if (node instanceof DeclarationExternalDeclaration) {
