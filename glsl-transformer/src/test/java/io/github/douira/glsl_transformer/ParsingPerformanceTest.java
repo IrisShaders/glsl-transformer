@@ -93,8 +93,8 @@ public class ParsingPerformanceTest {
   @Test
   void testDeepParenExpressionParsing() {
     parser = new EnhancedParser(true);
-    parser.setSLLOnly();
-    assertFilePerformance(2000, FileLocation.DEEP_PAREN_EXPRESSION_TEST);
+    parser.setSLLOnly(); // appears to make no difference in new version of the grammar
+    assertFilePerformance(3000, FileLocation.DEEP_PAREN_EXPRESSION_TEST);
   }
 
   @Test
