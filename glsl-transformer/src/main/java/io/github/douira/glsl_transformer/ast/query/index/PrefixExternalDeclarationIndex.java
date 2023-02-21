@@ -15,6 +15,14 @@ public class PrefixExternalDeclarationIndex<S extends Set<DeclarationEntry>, I e
     super(index, setFactory);
   }
 
+  /**
+   * Returns a map of all entries with keys that start with the given key. Note
+   * that if the index is a special type of suffix/infix trie (like permuterm)
+   * then this won't make any sense.
+   * 
+   * @param key the key to search for
+   * @return a map of all entries with keys that start with the given key
+   */
   public SortedMap<String, S> prefixMap(String key) {
     return index.prefixMap(key);
   }
