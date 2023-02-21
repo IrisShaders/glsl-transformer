@@ -30,7 +30,7 @@ public class ExtensionDirective extends ExternalDeclaration {
     }
   }
 
-  public String name;
+  private String name;
   public ExtensionBehavior behavior; // TODO: nullable
 
   public ExtensionDirective(String name, ExtensionBehavior behavior) {
@@ -40,6 +40,16 @@ public class ExtensionDirective extends ExternalDeclaration {
 
   public ExtensionDirective(String name) {
     this.name = name;
+  }
+
+  public String getName() {
+    return name;
+  }
+
+  public void setName(String name) {
+    getRoot().unregisterFastRename(this);
+    this.name = name;
+    getRoot().registerFastRename(this);
   }
 
   @Override

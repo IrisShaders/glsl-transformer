@@ -53,7 +53,7 @@ public class PragmaDirective extends ExternalDeclaration {
 
   public boolean stdGL;
   public PragmaType type;
-  public String customName;
+  private String customName;
   public PragmaState state;
 
   private PragmaDirective(boolean stdGL, PragmaType type, String customName, PragmaState state) {
@@ -73,6 +73,16 @@ public class PragmaDirective extends ExternalDeclaration {
     this.stdGL = stdGL;
     this.type = type;
     this.state = state;
+  }
+
+  public String getCustomName() {
+    return customName;
+  }
+
+  public void setCustomName(String customName) {
+    // since pragma directives aren't indexed by the external declaration index, no
+    // registering is needed
+    this.customName = customName;
   }
 
   @Override

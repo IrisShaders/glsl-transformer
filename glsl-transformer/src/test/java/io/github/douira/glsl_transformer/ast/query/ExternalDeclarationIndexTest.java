@@ -5,8 +5,9 @@ import static org.junit.jupiter.api.Assertions.*;
 
 import org.junit.jupiter.api.Test;
 
+import io.github.douira.glsl_transformer.ast.node.Identifier;
 import io.github.douira.glsl_transformer.ast.node.declaration.DeclarationMember;
-import io.github.douira.glsl_transformer.ast.node.external_declaration.ExternalDeclaration;
+import io.github.douira.glsl_transformer.ast.node.external_declaration.*;
 import io.github.douira.glsl_transformer.ast.transform.ASTInjectionPoint;
 import io.github.douira.glsl_transformer.test_util.TestWithSingleASTTransformer;
 
@@ -58,52 +59,176 @@ public class ExternalDeclarationIndexTest extends TestWithSingleASTTransformer {
   }
 
   @Test
-  void testQueryAfterMove() {
-    // test querying after moving an ED around
-    // TODO
+  void testQueryAfterMoveAndDetach() {
+    // test querying after moving an ED around, also detaching it
+    p.setRootSupplier(RootSupplier.EXACT_UNORDERED_ED_EXACT);
+    p.setTransformation((tree, root) -> {
+      var edi = root.externalDeclarationIndex;
+      assertTrue(edi.has("a"));
+      assertTrue(edi.has("b"));
+      assertTrue(edi.has("c"));
+
+      var a = tree.getChildren().get(0);
+      a.detach();
+
+      assertTrue(edi.has("a"));
+      assertTrue(edi.has("b"));
+      assertTrue(edi.has("c"));
+
+      tree.getChildren().add(0, a);
+
+      assertTrue(edi.has("a"));
+      assertTrue(edi.has("b"));
+      assertTrue(edi.has("c"));
+
+      a.detachAndDelete();
+
+      assertFalse(edi.has("a"));
+
+      tree.getChildren().add(1, a);
+
+      assertTrue(edi.has("a"));
+      assertTrue(edi.has("b"));
+
+      var tree2 = p.parseSeparateTranslationUnit("int d = 4;");
+      a.detachAndDelete();
+      tree2.getChildren().add(a);
+
+      assertFalse(edi.has("a"));
+      assertFalse(edi.has("d"));
+      assertTrue(tree2.getRoot().externalDeclarationIndex.has("a"));
+    });
+    p.transform("int a = 1; int b = 2; int c = 3;");
   }
 
   @Test
   void testQueryAfterRelevantIdentifierRename() {
     // test querying after renaming an identifier that changes the name of an ED
     // (using root.rename)
-    // TODO
+    p.setRootSupplier(RootSupplier.EXACT_UNORDERED_ED_EXACT);
+    p.setTransformation((tree, root) -> {
+      var edi = root.externalDeclarationIndex;
+      assertTrue(edi.has("a"));
+
+      root.rename("a", "d");
+
+      assertFalse(edi.has("a"));
+      assertTrue(edi.has("d"));
+    });
+    p.transform("int a = 1; int b = 2; int c = 3;");
   }
 
   @Test
   void testQueryAfterIdentifierNameChange() {
     // test querying after manually changing the name of an ED's name-giving
     // identifier
-    // TODO
+    p.setRootSupplier(RootSupplier.EXACT_UNORDERED_ED_EXACT);
+    p.setTransformation((tree, root) -> {
+      var edi = root.externalDeclarationIndex;
+
+      // test renaming an identifier in a type and init declaration
+      assertTrue(edi.has("a"));
+
+      ((DeclarationMember) edi.getOne("a").keyMember()).getName().setName("d");
+
+      assertFalse(edi.has("a"));
+      assertTrue(edi.has("d"));
+
+      // test renaming an identifier in a variable declaration
+      assertTrue(edi.has("u"));
+
+      ((Identifier) edi.getOne("u").keyMember()).setName("e");
+
+      assertFalse(edi.has("u"));
+      assertTrue(edi.has("e"));
+    });
+    p.transform("int a = 1; int b = 2; int c = 3; uniform u;");
   }
 
   @Test
   void testQueryAddSeparateRootSubtree() {
     // test querying after adding a subtree that was parsed into a separate tree
     // first
-    // TODO
-  }
+    p.setRootSupplier(RootSupplier.EXACT_UNORDERED_ED_EXACT);
+    p.setTransformation((tree, root) -> {
+      var edi = root.externalDeclarationIndex;
+      assertFalse(edi.has("b"));
+      assertFalse(edi.has("c"));
 
-  @Test
-  void testQuerySeparateSubtreeOut() {
-    // test querying after moving a subtree into a separate tree without deleting
-    // it, and then moving it back
-    // TODO
+      tree.getChildren().add(p.parseSeparateExternalDeclaration("int b = 3;"));
+      tree.getChildren().add(p.parseSeparateExternalDeclaration("void main() { int c = 4; }"));
+
+      assertTrue(edi.has("b"));
+      assertFalse(edi.has("c"));
+
+      ((FunctionDefinition) tree.getChildren().get(tree.getChildren().size() - 1))
+          .getFunctionPrototype().getName().setName("foo");
+
+      assertTrue(edi.has("b"));
+      assertFalse(edi.has("c"));
+      assertTrue(edi.has("foo"));
+
+      root.identifierIndex.getOne("c").setName("bar");
+      assertFalse(edi.has("c"));
+      assertFalse(edi.has("bar"));
+    });
+    p.transform("int a = 1;");
   }
 
   @Test
   void testQueryWithTypes() {
     // test querying for an ED of the types: type and init, function definition,
     // function declaration, variable declaration, interface block, extension,
-    // pragma, custom, include
-    // TODO
-  }
+    // custom, include
+    p.setRootSupplier(RootSupplier.EXACT_UNORDERED_ED_EXACT);
+    p.getLexer().enableCustomDirective = true;
+    p.getLexer().enableIncludeDirective = true;
+    p.setTransformation((tree, root) -> {
+      var edi = root.externalDeclarationIndex;
+      assertTrue(edi.has("typeAndInit"));
+      assertTrue(edi.has("functionDef"));
+      assertTrue(edi.has("uni"));
+      assertTrue(edi.has("interfaceBlockDecl"));
+      assertFalse(edi.has("interfaceBlockDeclName"));
+      assertTrue(edi.has("variableDecl"));
+      assertTrue(edi.has("ext"));
+      assertFalse(edi.has("prag"));
+      assertTrue(edi.has("cust"));
+      assertTrue(edi.has("incl"));
 
-  @Test
-  void testQueryAfterRenameTypeSpecific() {
-    // test querying for an ED after renaming it by changing the name in each of the
-    // above types
-    // TODO
+      // test renaming each one
+      root.rename("typeAndInit", "a");
+      root.rename("functionDef", "b");
+      root.rename("functionDecl", "bb");
+      root.rename("uni", "c");
+      root.rename("interfaceBlockDecl", "d");
+      root.rename("interfaceBlockDeclName", "d_");
+      root.rename("variableDecl", "e");
+      root.nodeIndex.getOne(ExtensionDirective.class).setName("f");
+      root.nodeIndex.getOne(CustomDirective.class).setContent("h");
+      root.nodeIndex.getOne(IncludeDirective.class).setContent("i");
+
+      assertFalse(root.identifierIndex.has("typeAndInit"));
+      assertFalse(root.identifierIndex.has("functionDef"));
+      assertFalse(root.identifierIndex.has("functionDecl"));
+      assertFalse(root.identifierIndex.has("uni"));
+      assertFalse(root.identifierIndex.has("interfaceBlockDecl"));
+      assertFalse(root.identifierIndex.has("interfaceBlockDeclName"));
+      assertFalse(root.identifierIndex.has("variableDecl"));
+
+      assertFalse(edi.has("typeAndInit"));
+      assertFalse(edi.has("functionDef"));
+      assertFalse(edi.has("functionDecl"));
+      assertFalse(edi.has("uni"));
+      assertFalse(edi.has("interfaceBlockDecl"));
+      assertFalse(edi.has("interfaceBlockDeclName"));
+      assertFalse(edi.has("variableDecl"));
+      assertFalse(edi.has("ext"));
+      assertFalse(edi.has("cust"));
+      assertFalse(edi.has("incl"));
+    });
+    p.transform(
+        "int typeAndInit = 1; void functionDef() {} void functionDecl(); uniform uni; precise interfaceBlockDecl { int a; } interfaceBlockDeclName; in variableDecl; #extension ext\n #pragma prag\n #custom cust\n #include <incl>\n");
   }
 
   @Test

@@ -37,7 +37,6 @@ public class ExternalDeclarationIndex<S extends Set<DeclarationEntry>, I extends
       } else if (declaration instanceof FunctionDeclaration functionDeclaration) {
         memberConsumer.accept(node, functionDeclaration.getFunctionPrototype().getName().getName());
       } else if (declaration instanceof InterfaceBlockDeclaration interfaceBlockDeclaration) {
-        // TODO: use the block name or the variable name (which can be null)?
         memberConsumer.accept(node, interfaceBlockDeclaration.getBlockName().getName());
       } else if (declaration instanceof VariableDeclaration variableDeclaration) {
         for (var name : variableDeclaration.getNames()) {
@@ -49,11 +48,11 @@ public class ExternalDeclarationIndex<S extends Set<DeclarationEntry>, I extends
     } else if (node instanceof FunctionDefinition functionDefinition) {
       memberConsumer.accept(node, functionDefinition.getFunctionPrototype().getName().getName());
     } else if (node instanceof ExtensionDirective extensionDirective) {
-      memberConsumer.accept(node, extensionDirective.name);
+      memberConsumer.accept(node, extensionDirective.getName());
     } else if (node instanceof CustomDirective customDirective) {
-      memberConsumer.accept(node, customDirective.content);
+      memberConsumer.accept(node, customDirective.getContent());
     } else if (node instanceof IncludeDirective includeDirective) {
-      memberConsumer.accept(node, includeDirective.content);
+      memberConsumer.accept(node, includeDirective.getContent());
     }
 
     // skips PragmaDirective, LayoutDefaults, EmptyDeclaration
@@ -120,14 +119,21 @@ public class ExternalDeclarationIndex<S extends Set<DeclarationEntry>, I extends
 
     // from this point on, only a singe key member will be generated
 
+    // the key member needs to be tracked separately since in the case of
+    // identifiers and declaration members changing the parent isn't the key member
+    // that's stored in the index since they're part of declarations that can have
+    // multiple entries, one for each member
     String singleKey = null;
+    ASTNode keyMember = node;
     if (node instanceof Identifier identifier) {
       singleKey = identifier.getName();
+      keyMember = node;
       node = node.getParent();
     }
 
     // step up through the various admissable node types
     if (node instanceof DeclarationMember) {
+      keyMember = node;
       node = node.getParent();
     }
     if (node instanceof FunctionPrototype) {
@@ -138,13 +144,17 @@ public class ExternalDeclarationIndex<S extends Set<DeclarationEntry>, I extends
       return;
     }
     if (node instanceof VariableDeclaration
-        || node instanceof TypeAndInitDeclaration
-        || node instanceof InterfaceBlockDeclaration
-        || node instanceof FunctionDeclaration) {
+        || node instanceof TypeAndInitDeclaration) {
       node = node.getParent();
+    } else if (node instanceof FunctionDeclaration
+        || node instanceof InterfaceBlockDeclaration) {
+      node = node.getParent();
+
+      // set the parent back to the parent
+      keyMember = node;
     }
     if (node instanceof DeclarationExternalDeclaration) {
-      memberConsumer.accept(node, singleKey);
+      memberConsumer.accept(keyMember, singleKey);
       return;
     }
   }
@@ -161,6 +171,10 @@ public class ExternalDeclarationIndex<S extends Set<DeclarationEntry>, I extends
    * @param subtreeRoot the node that was added, not an external declaration
    */
   public void notifySubtreeAdd(ASTNode subtreeRoot) {
+    if (subtreeRoot instanceof ExternalDeclaration externalDeclaration) {
+      add(externalDeclaration);
+    }
+
     iterateSubtreeEntries(subtreeRoot, subtreeRoot.getParent(), (keyMember, key) -> {
       addEntry(keyMember.getAncestor(ExternalDeclaration.class), keyMember, key);
     });
@@ -174,6 +188,10 @@ public class ExternalDeclarationIndex<S extends Set<DeclarationEntry>, I extends
    * @param subtreeRoot the node that was removed, not an external declaration
    */
   public void notifySubtreeRemove(ASTNode subtreeRoot) {
+    if (subtreeRoot instanceof ExternalDeclaration externalDeclaration) {
+      remove(externalDeclaration);
+    }
+
     // when the node is unregistered, the parent has already been removed. The last
     // parent (the one that was just removed) must be used instead.
     iterateSubtreeEntries(subtreeRoot, subtreeRoot.getLastParent(), (keyMember, key) -> {

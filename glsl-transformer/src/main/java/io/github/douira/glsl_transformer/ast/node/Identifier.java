@@ -40,7 +40,9 @@ public class Identifier extends ASTNode {
    * @param name The new name of this identifier.
    */
   public void _setNameInternal(String name) {
+    getRoot().unregisterFastRename(this);
     this.name = name;
+    getRoot().registerFastRename(this);
   }
 
   public static final void validateContents(String str) {

@@ -4,10 +4,20 @@ import io.github.douira.glsl_transformer.ast.query.Root;
 import io.github.douira.glsl_transformer.ast.traversal.*;
 
 public class CustomDirective extends ExternalDeclaration {
-  public String content;
+  private String content;
 
   public CustomDirective(String content) {
     this.content = content;
+  }
+
+  public String getContent() {
+    return content;
+  }
+
+  public void setContent(String content) {
+    getRoot().unregisterFastRename(this);
+    this.content = content;
+    getRoot().registerFastRename(this);
   }
 
   @Override

@@ -48,21 +48,21 @@ public interface ASTVisitor<R> extends GeneralASTVisitor<R> {
   default R visitPragmaDirective(PragmaDirective node) {
     var result = visitData(node.stdGL);
     result = visitData(result, node.type);
-    result = visitData(result, node.customName);
+    result = visitData(result, node.getCustomName());
     return visitData(result, node.state);
   }
 
   default R visitExtensionDirective(ExtensionDirective node) {
-    var result = visitData(superNodeTypeResult(), node.name);
+    var result = visitData(superNodeTypeResult(), node.getName());
     return visitData(result, node.behavior);
   }
 
   default R visitCustomDirective(CustomDirective node) {
-    return visitData(node.content);
+    return visitData(node.getContent());
   }
 
   default R visitIncludeDirective(IncludeDirective node) {
-    return visitData(node.content);
+    return visitData(node.getContent());
   }
 
   default R visitDeclarationExternalDeclaration(DeclarationExternalDeclaration node) {

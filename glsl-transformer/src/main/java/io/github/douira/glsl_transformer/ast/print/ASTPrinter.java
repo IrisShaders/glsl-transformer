@@ -127,7 +127,7 @@ public class ASTPrinter extends ASTPrinterBase {
       emitExtendableSpace();
     }
     if (node.type == PragmaType.CUSTOM) {
-      emitLiteral(node.customName);
+      emitLiteral(node.getCustomName());
     } else {
       emitType(
           node.type.tokenType,
@@ -143,7 +143,7 @@ public class ASTPrinter extends ASTPrinterBase {
   public Void visitExtensionDirective(ExtensionDirective node) {
     emitType(GLSLLexer.NR, GLSLLexer.NR_EXTENSION);
     emitExtendableSpace();
-    emitLiteral(node.name);
+    emitLiteral(node.getName());
     if (node.behavior != null) {
       emitType(GLSLLexer.NR_COLON);
       emitExtendableSpace();
@@ -161,9 +161,10 @@ public class ASTPrinter extends ASTPrinterBase {
       return null;
     }
     emitType(GLSLLexer.NR, GLSLLexer.NR_CUSTOM);
-    if (node.content != null) {
+    var content = node.getContent();
+    if (content != null) {
       emitExtendableSpace();
-      emitLiteral(node.content);
+      emitLiteral(content);
     }
     emitExactNewline();
     return null;
@@ -174,8 +175,9 @@ public class ASTPrinter extends ASTPrinterBase {
     emitType(GLSLLexer.NR, GLSLLexer.NR_INCLUDE);
     emitExtendableSpace();
     emitType(node.isAngleBrackets ? GLSLLexer.NR_STRING_START_ANGLE : GLSLLexer.NR_STRING_START);
-    if (node.content != null) {
-      emitLiteral(node.content);
+    var content = node.getContent();
+    if (content != null) {
+      emitLiteral(content);
     }
     emitType(node.isAngleBrackets ? GLSLLexer.S_STRING_END_ANGLE : GLSLLexer.S_STRING_END);
     emitExactNewline();

@@ -126,6 +126,10 @@ public class Root {
     if (identifierIndex != null) {
       identifierIndex.remove(identifier);
     }
+    unregisterFastRename(identifier);
+  }
+
+  public void unregisterFastRename(ASTNode identifier) {
     if (externalDeclarationIndex != null) {
       externalDeclarationIndex.notifySubtreeRemove(identifier);
     }
@@ -135,6 +139,10 @@ public class Root {
     if (identifierIndex != null) {
       identifierIndex.add(identifier);
     }
+    registerFastRename(identifier);
+  }
+
+  public void registerFastRename(ASTNode identifier) {
     if (externalDeclarationIndex != null) {
       externalDeclarationIndex.notifySubtreeAdd(identifier);
     }
