@@ -1,13 +1,16 @@
 package io.github.douira.glsl_transformer.ast.query;
 
-// import static io.github.douira.glsl_transformer.test_util.AssertUtil.*;
 import static org.junit.jupiter.api.Assertions.*;
+
+import java.util.HashSet;
 
 import org.junit.jupiter.api.Test;
 
 import io.github.douira.glsl_transformer.ast.node.Identifier;
 import io.github.douira.glsl_transformer.ast.node.declaration.DeclarationMember;
 import io.github.douira.glsl_transformer.ast.node.external_declaration.*;
+import io.github.douira.glsl_transformer.ast.query.index.*;
+import io.github.douira.glsl_transformer.ast.query.index.ExternalDeclarationIndex.DeclarationEntry;
 import io.github.douira.glsl_transformer.ast.transform.ASTInjectionPoint;
 import io.github.douira.glsl_transformer.test_util.TestWithSingleASTTransformer;
 
@@ -232,29 +235,69 @@ public class ExternalDeclarationIndexTest extends TestWithSingleASTTransformer {
   }
 
   @Test
+  @SuppressWarnings("unchecked")
   void testQueryPrefixIndex() {
     // test querying for an ED with a prefix index
-    // TODO
+    p.setRootSupplier(new RootSupplier(
+        NodeIndex::withUnordered,
+        IdentifierIndex::withOnlyExact,
+        PrefixExternalDeclarationIndex::withPrefix));
+    p.setTransformation((tree, root) -> {
+      var edi = root.getPrefixExternalDeclarationIndex();
+      assertEquals(4, edi.prefixQuery("a").count());
+      assertEquals(1, edi.prefixQuery("ab").count());
+      assertEquals(1, edi.prefixQuery("aa").count());
+      assertEquals(0, edi.prefixQuery("abb").count());
+    });
+    p.transform("int a = 1; int aabb = 2; int abc = 3; void amain() {} uniform uni;");
+
+    p.setRootSupplier(new RootSupplier(
+        NodeIndex::withUnordered,
+        IdentifierIndex::withOnlyExact,
+        PrefixExternalDeclarationIndex::withPermuterm));
+    p.setTransformation((tree, root) -> {
+      var edi = (PrefixExternalDeclarationIndex<HashSet<DeclarationEntry>, PermutermTrie<HashSet<DeclarationEntry>, DeclarationEntry>>) root.externalDeclarationIndex;
+      assertEquals(5, edi.index.prefixQueryFlat("a").count());
+      assertEquals(1, edi.index.prefixQueryFlat("ab").count());
+      assertEquals(1, edi.index.prefixQueryFlat("aa").count());
+      assertEquals(0, edi.index.prefixQueryFlat("abb").count());
+
+      assertEquals(6, edi.index.infixQueryFlat("a").count());
+      assertEquals(2, edi.index.infixQueryFlat("bb").count());
+      assertEquals(4, edi.index.suffixQueryFlat("a").count());
+
+    });
+    p.transform("int a = 1; int a = 1; int aabba = 2; int abc = 3; void amain() {} uniform uni; void babba();");
   }
 
   @Test
-  void testQurySwapTypeAndInitMemberSet() {
+  void testQuerySwapTypeAndInitMemberSet() {
     // test querying after swapping out a TypeAndInitDeclaration that has a
     // different set of declaration members (to test the iterate subtree entries
     // special case)
-    // TODO
+    p.setRootSupplier(RootSupplier.EXACT_UNORDERED_ED_EXACT);
+    p.setTransformation((tree, root) -> {
+      var edi = root.externalDeclarationIndex;
+      assertTrue(edi.has("a"));
+      assertTrue(edi.has("b"));
+      assertTrue(edi.has("c"));
+      assertEquals(2, edi.get("c").size());
+
+      tree.getChildren().get(0).replaceByAndDelete(p.parseSeparateExternalDeclaration("int a = 1, e = 2, f = 3;"));
+
+      assertTrue(edi.has("a"));
+      assertTrue(edi.has("e"));
+      assertTrue(edi.has("f"));
+      assertFalse(edi.has("b"));
+      assertEquals(1, edi.get("c").size());
+    });
+    p.transform("int a = 1, b = 2, c = 3; int c = 4;");
   }
 
   @Test
   void testQueryMultipleEntries() {
     // test querying for the same ED with multiple different names (multi-member
     // declarations)
-    // TODO
-  }
-
-  @Test
-  void test__() {
-    // check for coverage and test that
     // TODO
   }
 }

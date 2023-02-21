@@ -453,7 +453,7 @@ structMember:
 structDeclarator: IDENTIFIER arraySpecifier?;
 
 initializer:
-	expression
+	finiteExpression
 	| LBRACE (
 		initializers += initializer (COMMA initializers += initializer)* COMMA?
 	)? RBRACE;

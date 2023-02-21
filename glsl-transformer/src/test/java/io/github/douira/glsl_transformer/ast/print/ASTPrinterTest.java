@@ -69,9 +69,6 @@ public class ASTPrinterTest extends TestWithSingleASTTransformer {
     assertTransform(
         "int x = (a, c, d); ",
         "int x = (a, b);");
-    assertTransform(
-        "int x = a, c, d; ",
-        "int x = a, b;");
   }
 
   @Test

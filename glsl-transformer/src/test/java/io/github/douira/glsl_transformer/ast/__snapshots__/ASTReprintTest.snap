@@ -8142,17 +8142,17 @@ struct {
 - String e
 (NestedInitializer
 (ExpressionInitializer
-(SequenceExpression
 (LiteralExpression
 - Type FLOAT32
 - Float 1.2
 )LiteralExpression
+)ExpressionInitializer
+(ExpressionInitializer
 (LiteralExpression
 - Type INT32
 - Integer 2
 - IntegerFormat DECIMAL
 )LiteralExpression
-)SequenceExpression
 )ExpressionInitializer
 )NestedInitializer
 )DeclarationMember
@@ -8398,38 +8398,42 @@ layout(location = 0) uniform struct {
 (NestedInitializer
 (NestedInitializer
 (ExpressionInitializer
-(SequenceExpression
 (LiteralExpression
 - Type FLOAT32
 - Float 1.0
 )LiteralExpression
+)ExpressionInitializer
+(ExpressionInitializer
 (LiteralExpression
 - Type FLOAT32
 - Float 1.0
 )LiteralExpression
+)ExpressionInitializer
+(ExpressionInitializer
 (LiteralExpression
 - Type FLOAT32
 - Float 1.0
 )LiteralExpression
-)SequenceExpression
 )ExpressionInitializer
 )NestedInitializer
 (NestedInitializer
 (ExpressionInitializer
-(SequenceExpression
 (LiteralExpression
 - Type FLOAT32
 - Float 0.0
 )LiteralExpression
+)ExpressionInitializer
+(ExpressionInitializer
 (LiteralExpression
 - Type FLOAT32
 - Float 1.0
 )LiteralExpression
+)ExpressionInitializer
+(ExpressionInitializer
 (LiteralExpression
 - Type FLOAT32
 - Float 0.0
 )LiteralExpression
-)SequenceExpression
 )ExpressionInitializer
 )NestedInitializer
 )NestedInitializer
@@ -9147,28 +9151,34 @@ float b[] = { 3.4f, 4.2f, 5.0f, 5.2f, 1.1f };
 )ArraySpecifier
 (NestedInitializer
 (ExpressionInitializer
-(SequenceExpression
 (LiteralExpression
 - Type FLOAT32
 - Float 3.4
 )LiteralExpression
+)ExpressionInitializer
+(ExpressionInitializer
 (LiteralExpression
 - Type FLOAT32
 - Float 4.2
 )LiteralExpression
+)ExpressionInitializer
+(ExpressionInitializer
 (LiteralExpression
 - Type FLOAT32
 - Float 5.0
 )LiteralExpression
+)ExpressionInitializer
+(ExpressionInitializer
 (LiteralExpression
 - Type FLOAT32
 - Float 5.2
 )LiteralExpression
+)ExpressionInitializer
+(ExpressionInitializer
 (LiteralExpression
 - Type FLOAT32
 - Float 1.1
 )LiteralExpression
-)SequenceExpression
 )ExpressionInitializer
 )NestedInitializer
 )DeclarationMember
@@ -10486,7 +10496,6 @@ int foob__vn8[4] = int[](21, 22, 23, 24), foob__vp;
 )LiteralExpression
 )ArraySpecifier
 (ExpressionInitializer
-(SequenceExpression
 (FunctionCallExpression
 (BuiltinNumericTypeSpecifier
 - Type INT32
@@ -10502,18 +10511,19 @@ int foob__vn8[4] = int[](21, 22, 23, 24), foob__vp;
 - IntegerFormat DECIMAL
 )LiteralExpression
 )FunctionCallExpression
-(AssignmentExpression
-(ArrayAccessExpression
-(ReferenceExpression
+)ExpressionInitializer
+)DeclarationMember
+(DeclarationMember
 (Identifier)
 - String im3
-)ReferenceExpression
+(ArraySpecifier
 (LiteralExpression
 - Type INT32
 - Integer 3
 - IntegerFormat DECIMAL
 )LiteralExpression
-)ArrayAccessExpression
+)ArraySpecifier
+(ExpressionInitializer
 (FunctionCallExpression
 (BuiltinNumericTypeSpecifier
 - Type INT32
@@ -10534,8 +10544,6 @@ int foob__vn8[4] = int[](21, 22, 23, 24), foob__vp;
 - IntegerFormat DECIMAL
 )LiteralExpression
 )FunctionCallExpression
-)AssignmentExpression
-)SequenceExpression
 )ExpressionInitializer
 )DeclarationMember
 )TypeAndInitDeclaration
@@ -10558,7 +10566,6 @@ int foob__vn8[4] = int[](21, 22, 23, 24), foob__vp;
 )LiteralExpression
 )ArraySpecifier
 (ExpressionInitializer
-(SequenceExpression
 (FunctionCallExpression
 (BuiltinNumericTypeSpecifier
 - Type INT32
@@ -10584,12 +10591,11 @@ int foob__vn8[4] = int[](21, 22, 23, 24), foob__vp;
 - IntegerFormat DECIMAL
 )LiteralExpression
 )FunctionCallExpression
-(ReferenceExpression
+)ExpressionInitializer
+)DeclarationMember
+(DeclarationMember
 (Identifier)
 - String ip
-)ReferenceExpression
-)SequenceExpression
-)ExpressionInitializer
 )DeclarationMember
 )TypeAndInitDeclaration
 )DeclarationExternalDeclaration
@@ -10714,7 +10720,6 @@ int foob__vn8[4] = int[](21, 22, 23, 24), foob__vp;
 )LiteralExpression
 )ArraySpecifier
 (ExpressionInitializer
-(SequenceExpression
 (FunctionCallExpression
 (BuiltinNumericTypeSpecifier
 - Type INT32
@@ -10730,18 +10735,19 @@ int foob__vn8[4] = int[](21, 22, 23, 24), foob__vp;
 - IntegerFormat DECIMAL
 )LiteralExpression
 )FunctionCallExpression
-(AssignmentExpression
-(ArrayAccessExpression
-(ReferenceExpression
+)ExpressionInitializer
+)DeclarationMember
+(DeclarationMember
 (Identifier)
 - String vm3
-)ReferenceExpression
+(ArraySpecifier
 (LiteralExpression
 - Type INT32
 - Integer 3
 - IntegerFormat DECIMAL
 )LiteralExpression
-)ArrayAccessExpression
+)ArraySpecifier
+(ExpressionInitializer
 (FunctionCallExpression
 (BuiltinNumericTypeSpecifier
 - Type INT32
@@ -10762,8 +10768,6 @@ int foob__vn8[4] = int[](21, 22, 23, 24), foob__vp;
 - IntegerFormat DECIMAL
 )LiteralExpression
 )FunctionCallExpression
-)AssignmentExpression
-)SequenceExpression
 )ExpressionInitializer
 )DeclarationMember
 )TypeAndInitDeclaration
@@ -10786,7 +10790,6 @@ int foob__vn8[4] = int[](21, 22, 23, 24), foob__vp;
 )LiteralExpression
 )ArraySpecifier
 (ExpressionInitializer
-(SequenceExpression
 (FunctionCallExpression
 (BuiltinNumericTypeSpecifier
 - Type INT32
@@ -10812,12 +10815,11 @@ int foob__vn8[4] = int[](21, 22, 23, 24), foob__vp;
 - IntegerFormat DECIMAL
 )LiteralExpression
 )FunctionCallExpression
-(ReferenceExpression
+)ExpressionInitializer
+)DeclarationMember
+(DeclarationMember
 (Identifier)
 - String vp
-)ReferenceExpression
-)SequenceExpression
-)ExpressionInitializer
 )DeclarationMember
 )TypeAndInitDeclaration
 )DeclarationExternalDeclaration
@@ -10957,7 +10959,6 @@ int foob__vn8[4] = int[](21, 22, 23, 24), foob__vp;
 )LiteralExpression
 )ArraySpecifier
 (ExpressionInitializer
-(SequenceExpression
 (FunctionCallExpression
 (BuiltinNumericTypeSpecifier
 - Type INT32
@@ -10973,18 +10974,19 @@ int foob__vn8[4] = int[](21, 22, 23, 24), foob__vp;
 - IntegerFormat DECIMAL
 )LiteralExpression
 )FunctionCallExpression
-(AssignmentExpression
-(ArrayAccessExpression
-(ReferenceExpression
+)ExpressionInitializer
+)DeclarationMember
+(DeclarationMember
 (Identifier)
 - String cim3
-)ReferenceExpression
+(ArraySpecifier
 (LiteralExpression
 - Type INT32
 - Integer 3
 - IntegerFormat DECIMAL
 )LiteralExpression
-)ArrayAccessExpression
+)ArraySpecifier
+(ExpressionInitializer
 (FunctionCallExpression
 (BuiltinNumericTypeSpecifier
 - Type INT32
@@ -11005,8 +11007,6 @@ int foob__vn8[4] = int[](21, 22, 23, 24), foob__vp;
 - IntegerFormat DECIMAL
 )LiteralExpression
 )FunctionCallExpression
-)AssignmentExpression
-)SequenceExpression
 )ExpressionInitializer
 )DeclarationMember
 )TypeAndInitDeclaration
@@ -11034,7 +11034,6 @@ int foob__vn8[4] = int[](21, 22, 23, 24), foob__vp;
 )LiteralExpression
 )ArraySpecifier
 (ExpressionInitializer
-(SequenceExpression
 (FunctionCallExpression
 (BuiltinNumericTypeSpecifier
 - Type INT32
@@ -11060,12 +11059,11 @@ int foob__vn8[4] = int[](21, 22, 23, 24), foob__vp;
 - IntegerFormat DECIMAL
 )LiteralExpression
 )FunctionCallExpression
-(ReferenceExpression
+)ExpressionInitializer
+)DeclarationMember
+(DeclarationMember
 (Identifier)
 - String cip
-)ReferenceExpression
-)SequenceExpression
-)ExpressionInitializer
 )DeclarationMember
 )TypeAndInitDeclaration
 )DeclarationExternalDeclaration
@@ -11205,7 +11203,6 @@ int foob__vn8[4] = int[](21, 22, 23, 24), foob__vp;
 )LiteralExpression
 )ArraySpecifier
 (ExpressionInitializer
-(SequenceExpression
 (FunctionCallExpression
 (BuiltinNumericTypeSpecifier
 - Type INT32
@@ -11221,18 +11218,19 @@ int foob__vn8[4] = int[](21, 22, 23, 24), foob__vp;
 - IntegerFormat DECIMAL
 )LiteralExpression
 )FunctionCallExpression
-(AssignmentExpression
-(ArrayAccessExpression
-(ReferenceExpression
+)ExpressionInitializer
+)DeclarationMember
+(DeclarationMember
 (Identifier)
 - String uim3
-)ReferenceExpression
+(ArraySpecifier
 (LiteralExpression
 - Type INT32
 - Integer 3
 - IntegerFormat DECIMAL
 )LiteralExpression
-)ArrayAccessExpression
+)ArraySpecifier
+(ExpressionInitializer
 (FunctionCallExpression
 (BuiltinNumericTypeSpecifier
 - Type INT32
@@ -11253,8 +11251,6 @@ int foob__vn8[4] = int[](21, 22, 23, 24), foob__vp;
 - IntegerFormat DECIMAL
 )LiteralExpression
 )FunctionCallExpression
-)AssignmentExpression
-)SequenceExpression
 )ExpressionInitializer
 )DeclarationMember
 )TypeAndInitDeclaration
@@ -11282,7 +11278,6 @@ int foob__vn8[4] = int[](21, 22, 23, 24), foob__vp;
 )LiteralExpression
 )ArraySpecifier
 (ExpressionInitializer
-(SequenceExpression
 (FunctionCallExpression
 (BuiltinNumericTypeSpecifier
 - Type INT32
@@ -11308,12 +11303,11 @@ int foob__vn8[4] = int[](21, 22, 23, 24), foob__vp;
 - IntegerFormat DECIMAL
 )LiteralExpression
 )FunctionCallExpression
-(ReferenceExpression
+)ExpressionInitializer
+)DeclarationMember
+(DeclarationMember
 (Identifier)
 - String uip
-)ReferenceExpression
-)SequenceExpression
-)ExpressionInitializer
 )DeclarationMember
 )TypeAndInitDeclaration
 )DeclarationExternalDeclaration
@@ -11438,7 +11432,6 @@ int foob__vn8[4] = int[](21, 22, 23, 24), foob__vp;
 )LiteralExpression
 )ArraySpecifier
 (ExpressionInitializer
-(SequenceExpression
 (FunctionCallExpression
 (BuiltinNumericTypeSpecifier
 - Type INT32
@@ -11454,18 +11447,19 @@ int foob__vn8[4] = int[](21, 22, 23, 24), foob__vp;
 - IntegerFormat DECIMAL
 )LiteralExpression
 )FunctionCallExpression
-(AssignmentExpression
-(ArrayAccessExpression
-(ReferenceExpression
+)ExpressionInitializer
+)DeclarationMember
+(DeclarationMember
 (Identifier)
 - String gl_vm3
-)ReferenceExpression
+(ArraySpecifier
 (LiteralExpression
 - Type INT32
 - Integer 3
 - IntegerFormat DECIMAL
 )LiteralExpression
-)ArrayAccessExpression
+)ArraySpecifier
+(ExpressionInitializer
 (FunctionCallExpression
 (BuiltinNumericTypeSpecifier
 - Type INT32
@@ -11486,8 +11480,6 @@ int foob__vn8[4] = int[](21, 22, 23, 24), foob__vp;
 - IntegerFormat DECIMAL
 )LiteralExpression
 )FunctionCallExpression
-)AssignmentExpression
-)SequenceExpression
 )ExpressionInitializer
 )DeclarationMember
 )TypeAndInitDeclaration
@@ -11510,7 +11502,6 @@ int foob__vn8[4] = int[](21, 22, 23, 24), foob__vp;
 )LiteralExpression
 )ArraySpecifier
 (ExpressionInitializer
-(SequenceExpression
 (FunctionCallExpression
 (BuiltinNumericTypeSpecifier
 - Type INT32
@@ -11536,12 +11527,11 @@ int foob__vn8[4] = int[](21, 22, 23, 24), foob__vp;
 - IntegerFormat DECIMAL
 )LiteralExpression
 )FunctionCallExpression
-(ReferenceExpression
+)ExpressionInitializer
+)DeclarationMember
+(DeclarationMember
 (Identifier)
 - String gl_vp
-)ReferenceExpression
-)SequenceExpression
-)ExpressionInitializer
 )DeclarationMember
 )TypeAndInitDeclaration
 )DeclarationExternalDeclaration
@@ -11691,7 +11681,6 @@ int foob__vn8[4] = int[](21, 22, 23, 24), foob__vp;
 )LiteralExpression
 )ArraySpecifier
 (ExpressionInitializer
-(SequenceExpression
 (FunctionCallExpression
 (BuiltinNumericTypeSpecifier
 - Type INT32
@@ -11707,18 +11696,19 @@ int foob__vn8[4] = int[](21, 22, 23, 24), foob__vp;
 - IntegerFormat DECIMAL
 )LiteralExpression
 )FunctionCallExpression
-(AssignmentExpression
-(ArrayAccessExpression
-(ReferenceExpression
+)ExpressionInitializer
+)DeclarationMember
+(DeclarationMember
 (Identifier)
 - String __foobvm3
-)ReferenceExpression
+(ArraySpecifier
 (LiteralExpression
 - Type INT32
 - Integer 3
 - IntegerFormat DECIMAL
 )LiteralExpression
-)ArrayAccessExpression
+)ArraySpecifier
+(ExpressionInitializer
 (FunctionCallExpression
 (BuiltinNumericTypeSpecifier
 - Type INT32
@@ -11739,8 +11729,6 @@ int foob__vn8[4] = int[](21, 22, 23, 24), foob__vp;
 - IntegerFormat DECIMAL
 )LiteralExpression
 )FunctionCallExpression
-)AssignmentExpression
-)SequenceExpression
 )ExpressionInitializer
 )DeclarationMember
 )TypeAndInitDeclaration
@@ -11763,7 +11751,6 @@ int foob__vn8[4] = int[](21, 22, 23, 24), foob__vp;
 )LiteralExpression
 )ArraySpecifier
 (ExpressionInitializer
-(SequenceExpression
 (FunctionCallExpression
 (BuiltinNumericTypeSpecifier
 - Type INT32
@@ -11789,12 +11776,11 @@ int foob__vn8[4] = int[](21, 22, 23, 24), foob__vp;
 - IntegerFormat DECIMAL
 )LiteralExpression
 )FunctionCallExpression
-(ReferenceExpression
+)ExpressionInitializer
+)DeclarationMember
+(DeclarationMember
 (Identifier)
 - String foob__vp
-)ReferenceExpression
-)SequenceExpression
-)ExpressionInitializer
 )DeclarationMember
 )TypeAndInitDeclaration
 )DeclarationExternalDeclaration

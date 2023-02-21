@@ -763,7 +763,7 @@ public class ASTBuilder extends GLSLParserBaseVisitor<ASTNode> {
 
   @Override
   public Initializer visitInitializer(InitializerContext ctx) {
-    var expressionContext = ctx.expression();
+    var expressionContext = ctx.finiteExpression();
     if (expressionContext != null) {
       return new ExpressionInitializer(visitExpression(expressionContext));
     }

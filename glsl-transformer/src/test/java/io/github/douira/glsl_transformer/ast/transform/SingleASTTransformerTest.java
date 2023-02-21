@@ -9,10 +9,12 @@ import org.junit.jupiter.api.Test;
 
 import io.github.douira.glsl_transformer.ast.node.Identifier;
 import io.github.douira.glsl_transformer.ast.node.abstract_node.ASTNode;
+import io.github.douira.glsl_transformer.ast.node.declaration.DeclarationMember;
 import io.github.douira.glsl_transformer.ast.node.expression.*;
 import io.github.douira.glsl_transformer.ast.node.external_declaration.ExternalDeclaration;
 import io.github.douira.glsl_transformer.ast.print.PrintType;
 import io.github.douira.glsl_transformer.ast.query.*;
+import io.github.douira.glsl_transformer.parser.ParsingException;
 import io.github.douira.glsl_transformer.test_util.TestWithSingleASTTransformer;
 import io.github.douira.glsl_transformer.util.Type;
 
@@ -63,8 +65,8 @@ public class SingleASTTransformerTest extends TestWithSingleASTTransformer {
         "int a = 2, b = 3, c = 4; ",
         "int a = 1, b = 2, c = 3; ");
     assertTransform(
-        "int a = 2, 3, 4; ",
-        "int a = 1, 2, 3; ");
+        "int a = (2, 3, 4); ",
+        "int a = (1, 2, 3); ");
   }
 
   @Test
@@ -81,11 +83,11 @@ public class SingleASTTransformerTest extends TestWithSingleASTTransformer {
           .forEach(literal -> literal.changeInteger(literal.getInteger() + 1));
     });
     assertTransform(
-        "int a = 2, b = 3, c = 4, 2; ",
-        "int a = 1, b = 2, c = 3; ");
+        "int a = 2, b = 3, c = (4, 2, 2); ",
+        "int a = 1, b = 2, c = (3, 1); ");
     assertTransform(
-        "int a = 2, 3, 4, 2; ",
-        "int a = 1, 2, 3; ");
+        "int a = (2, 3, 4, 2); ",
+        "int a = (1, 2, 3); ");
   }
 
   @Test
@@ -108,9 +110,7 @@ public class SingleASTTransformerTest extends TestWithSingleASTTransformer {
     assertTransform(
         "int a = 1, b = 2, c = foo; ",
         "int a = 1, b = 2, c = 3; ");
-    assertTransform(
-        "int a = foo, 2, foo, 5 + foo + b; ",
-        "int a = 3, 2, 3, 5 + 3 + b; ");
+    assertThrows(ParsingException.class, () -> p.transform("int a = foo, 2, foo, 5 + foo + b; "));
   }
 
   @Test
@@ -129,8 +129,8 @@ public class SingleASTTransformerTest extends TestWithSingleASTTransformer {
       assertTrue(root.identifierIndex.get("a").isEmpty());
     });
     assertTransform(
-        "int x = b, c, d; ",
-        "int x = a, b, c, a, d; ");
+        "int x = (b, c, d); ",
+        "int x = (a, b, c, a, d); ");
   }
 
   @Test
@@ -159,7 +159,7 @@ public class SingleASTTransformerTest extends TestWithSingleASTTransformer {
           continue;
         }
       }
-      var secondDeclaration = p.parseExternalDeclaration(root, "int x = 4, 4;");
+      var secondDeclaration = p.parseExternalDeclaration(root, "int x = (4, 4);");
       var sequenceExpression = secondDeclaration.getRoot().nodeIndex
           .getStream(SequenceExpression.class)
           .filter(e -> e.hasAncestor(secondDeclaration)).findAny().get();
@@ -171,8 +171,8 @@ public class SingleASTTransformerTest extends TestWithSingleASTTransformer {
       }
     });
     assertTransform(
-        "int y = 1, 2, 4, 5; int x = 3, 3; ",
-        "int y = 1, 2, 3, 4, 3, 5; ");
+        "int y = (1, 2, 4, 5); int x = (3, 3); ",
+        "int y = (1, 2, 3, 4, 3, 5); ");
   }
 
   @Test
@@ -248,13 +248,13 @@ public class SingleASTTransformerTest extends TestWithSingleASTTransformer {
       assertTrue(root.identifierIndex.has("bar"));
       assertTrue(root.identifierIndex.has("foo"));
       root.identifierIndex.getOne("bar")
-          .getAncestor(ReferenceExpression.class).detachAndDelete();
+          .getAncestor(DeclarationMember.class).detachAndDelete();
       assertFalse(root.identifierIndex.has("bar"));
       assertTrue(root.identifierIndex.has("foo"));
     });
     assertTransform(
-        "int x = foo; ",
-        "int x = bar, foo;");
+        "int y = foo; ",
+        "int x = bar, y = foo;");
   }
 
   // move subtree without swapping with another subtree
