@@ -293,11 +293,4 @@ public class ExternalDeclarationIndexTest extends TestWithSingleASTTransformer {
     });
     p.transform("int a = 1, b = 2, c = 3; int c = 4;");
   }
-
-  @Test
-  void testQueryMultipleEntries() {
-    // test querying for the same ED with multiple different names (multi-member
-    // declarations)
-    // TODO
-  }
 }
