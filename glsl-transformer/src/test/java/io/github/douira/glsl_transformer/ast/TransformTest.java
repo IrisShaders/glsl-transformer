@@ -564,7 +564,7 @@ public class TransformTest extends TestWithSingleASTTransformer {
 
       // generate new declarations with layout qualifiers for each outColor member
       var newDeclarations = new ArrayList<ExternalDeclaration>();
-      Root.indexBuildSession(root, () -> {
+      root.indexBuildSession(() -> {
         for (NewDeclarationData data : newDeclarationData) {
           var member = data.member;
           member.detach();

@@ -65,7 +65,7 @@ public class ASTBuilder extends GLSLParserBaseVisitor<ASTNode> {
    * @return The built AST
    */
   public static ASTNode build(Root rootInstance, ParseTree ctx) {
-    return Root.indexNodes(rootInstance, () -> buildInternal(ctx));
+    return rootInstance.indexNodes(() -> buildInternal(ctx));
   }
 
   /**
@@ -82,7 +82,7 @@ public class ASTBuilder extends GLSLParserBaseVisitor<ASTNode> {
       Root rootInstance,
       T ctx,
       BiFunction<ASTBuilder, T, N> visitMethod) {
-    return Root.indexNodes(rootInstance, () -> buildInternal(ctx, visitMethod));
+    return rootInstance.indexNodes(() -> buildInternal(ctx, visitMethod));
   }
 
   /**
@@ -93,7 +93,7 @@ public class ASTBuilder extends GLSLParserBaseVisitor<ASTNode> {
    * @return The built AST
    */
   public static ASTNode buildSubtree(Root rootInstance, ParseTree ctx) {
-    return Root.indexNodes(rootInstance, () -> buildInternal(ctx));
+    return rootInstance.indexNodes(() -> buildInternal(ctx));
   }
 
   /**
@@ -110,7 +110,7 @@ public class ASTBuilder extends GLSLParserBaseVisitor<ASTNode> {
       Root rootInstance,
       T ctx,
       BiFunction<ASTBuilder, T, N> visitMethod) {
-    return Root.indexNodes(rootInstance, () -> buildInternal(ctx, visitMethod));
+    return rootInstance.indexNodes(() -> buildInternal(ctx, visitMethod));
   }
 
   private static ASTNode buildInternal(ParseTree ctx) {

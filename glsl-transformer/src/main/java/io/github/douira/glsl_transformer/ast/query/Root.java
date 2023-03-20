@@ -180,16 +180,14 @@ public class Root {
    * Runs the given consumer with the given root as the active build root.
    * 
    * @param <R>          The return type of the consumer
-   * @param instance     The root to run the consumer with
    * @param rootConsumer The consumer to run
    * @return The return value of the consumer
    */
-  protected static final <R> R withActiveBuildRoot(
-      Root instance,
+  protected final <R> R withActiveBuildRoot(
       Function<Root, R> rootConsumer) {
-    activeBuildRoots.push(instance);
+    activeBuildRoots.push(this);
     try {
-      return rootConsumer.apply(instance);
+      return rootConsumer.apply(this);
     } finally {
       activeBuildRoots.pop();
     }
@@ -207,9 +205,8 @@ public class Root {
    * @param builder  The builder to run
    * @return The built and registered node
    */
-  public static <N extends ASTNode> N indexNodes(
-      Root instance, Supplier<N> builder) {
-    return withActiveBuildRoot(instance, root -> {
+  public <N extends ASTNode> N indexNodes(Supplier<N> builder) {
+    return withActiveBuildRoot(root -> {
       var result = builder.get();
       root.registerNode(result, true);
       return result;
@@ -224,15 +221,15 @@ public class Root {
    * @param instance The root to use as the active build root
    * @param session  The runnable to run
    */
-  public static void indexBuildSession(Root instance, Runnable session) {
-    withActiveBuildRoot(instance, root -> {
+  public void indexBuildSession(Runnable session) {
+    withActiveBuildRoot(root -> {
       session.run();
       return null;
     });
   }
 
-  public static void indexBuildSession(Root instance, Consumer<Root> session) {
-    withActiveBuildRoot(instance, root -> {
+  public void indexBuildSession(Consumer<Root> session) {
+    withActiveBuildRoot(root -> {
       session.accept(root);
       return null;
     });
@@ -248,9 +245,8 @@ public class Root {
    * @param instance           the root to register the nodes with
    * @param registererConsumer The consumer to run
    */
-  public static <N extends ASTNode> void indexSeparateTrees(
-      Root instance, Consumer<Passthrough<N>> registererConsumer) {
-    withActiveBuildRoot(instance, root -> {
+  public <N extends ASTNode> void indexSeparateTrees(Consumer<Passthrough<N>> registererConsumer) {
+    withActiveBuildRoot(root -> {
       registererConsumer.accept(node -> {
         root.registerNode(node, true);
         return node;

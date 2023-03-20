@@ -497,7 +497,7 @@ public abstract class ASTNode {
   protected abstract ASTNode clone();
 
   public ASTNode cloneInto(Root root) {
-    return Root.indexNodes(root, this::clone);
+    return root.indexNodes(this::clone);
   }
 
   @SuppressWarnings("unchecked") // the nodes clone themselves correctly

@@ -72,7 +72,7 @@ public class SingleASTTransformerTest extends TestWithSingleASTTransformer {
   @Test
   void testNodeQueryAfterModification() {
     p.setTransformation((tree, root) -> {
-      Root.indexBuildSession(root, () -> {
+      root.indexBuildSession(() -> {
         for (var sequence : root.nodeIndex
             .get(SequenceExpression.class)) {
           sequence.getExpressions().add(
@@ -93,7 +93,7 @@ public class SingleASTTransformerTest extends TestWithSingleASTTransformer {
   @Test
   void testSelfReplacement() {
     p.setTransformation((tree, root) -> {
-      Root.indexBuildSession(root, () -> {
+      root.indexBuildSession(() -> {
         var toReplace = new ArrayList<LiteralExpression>();
         for (var node : root.nodeIndex
             .get(LiteralExpression.class)) {
@@ -178,7 +178,7 @@ public class SingleASTTransformerTest extends TestWithSingleASTTransformer {
   @Test
   void testAddMatchingRootTree() {
     p.setTransformation((tree, root) -> {
-      Root.indexBuildSession(root, () -> {
+      root.indexBuildSession(() -> {
         assertTrue(root.identifierIndex.has("bar"));
         root.identifierIndex.getOne("bar").replaceByAndDelete(new Identifier("foo"));
         assertFalse(root.identifierIndex.has("bar"));
@@ -194,7 +194,7 @@ public class SingleASTTransformerTest extends TestWithSingleASTTransformer {
   @Test
   void testAddMatchingRootTreeNested() {
     p.setTransformation((tree, root) -> {
-      Root.indexBuildSession(root, () -> {
+      root.indexBuildSession(() -> {
         assertTrue(root.identifierIndex.has("bar"));
         root.nodeIndex.getOne(ReferenceExpression.class).replaceByAndDelete(
             new ReferenceExpression(new Identifier("foo")));
@@ -211,7 +211,7 @@ public class SingleASTTransformerTest extends TestWithSingleASTTransformer {
   @Test
   void testAddNewRootTree() {
     p.setTransformation((tree, root) -> {
-      Root.indexSeparateTrees(p.supplyRoot(), register -> {
+      p.supplyRoot().indexSeparateTrees(register -> {
         assertTrue(root.identifierIndex.has("bar"));
         root.nodeIndex.getOne(ReferenceExpression.class).replaceByAndDelete(
             register.apply(new ReferenceExpression(new Identifier("foo"))));
@@ -265,7 +265,7 @@ public class SingleASTTransformerTest extends TestWithSingleASTTransformer {
       assertTrue(root.identifierIndex.has("foo"));
       var foo = root.identifierIndex.getOne("foo")
           .getAncestor(ReferenceExpression.class);
-      Root.indexBuildSession(root, () -> {
+      root.indexBuildSession(() -> {
         foo.replaceBy(new ReferenceExpression(new Identifier("hello")));
       });
       root.identifierIndex.getOne("bar")

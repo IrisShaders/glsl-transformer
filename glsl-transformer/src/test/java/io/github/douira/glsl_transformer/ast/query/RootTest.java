@@ -15,7 +15,7 @@ import io.github.douira.glsl_transformer.test_util.TestWithSingleASTTransformer;
 public class RootTest extends TestWithSingleASTTransformer {
   @Test
   void testRename() {
-    Root.indexSeparateTrees(p.supplyRoot(), register -> {
+    p.supplyRoot().indexSeparateTrees(register -> {
       var a = new Identifier("a");
       var b = new Identifier("b");
       register.apply(a);
@@ -140,7 +140,7 @@ public class RootTest extends TestWithSingleASTTransformer {
   @Test
   void testNullIndexes() {
     assertCall(3, (callback) -> {
-      Root.indexBuildSession(RootSupplier.EMPTY.get(), (root) -> {
+      RootSupplier.EMPTY.get().indexBuildSession((root) -> {
         new Identifier("a");
         new Identifier("b");
 
@@ -149,7 +149,7 @@ public class RootTest extends TestWithSingleASTTransformer {
         assertThrows(NullPointerException.class, () -> root.rename("foo", "c"));
         callback.run();
       });
-      Root.indexBuildSession(RootSupplier.ONLY_IDENTIFIER_INDEX.get(), (root) -> {
+      RootSupplier.ONLY_IDENTIFIER_INDEX.get().indexBuildSession((root) -> {
         new Identifier("a");
         new Identifier("b");
 
@@ -158,7 +158,7 @@ public class RootTest extends TestWithSingleASTTransformer {
         assertThrows(NullPointerException.class, () -> root.nodeIndex.has(Identifier.class));
         callback.run();
       });
-      Root.indexBuildSession(RootSupplier.ONLY_NODE_INDEX.get(), (root) -> {
+      RootSupplier.ONLY_NODE_INDEX.get().indexBuildSession((root) -> {
         new Identifier("a");
         new Identifier("b");
 
