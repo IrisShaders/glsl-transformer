@@ -19,6 +19,10 @@ public class RootSupplier implements Supplier<Root> {
       NodeIndex::withUnordered,
       IdentifierIndex::withOnlyExact,
       ExternalDeclarationIndex::withOnlyExact);
+  public static final RootSupplier PREFIX_UNORDERED_ED_EXACT = new RootSupplier(
+      NodeIndex::withUnordered,
+      PrefixIdentifierIndex::withOnlyExact,
+      ExternalDeclarationIndex::withOnlyExact);
   public static final RootSupplier PREFIX_UNORDERED_ED_PREFIX = new RootSupplier(
       NodeIndex::withUnordered,
       PrefixIdentifierIndex::withOnlyExact,
