@@ -201,7 +201,6 @@ public class Root {
    * another node with the root.
    * 
    * @param <N>      The type of the node to build
-   * @param instance The root to run the builder with
    * @param builder  The builder to run
    * @return The built and registered node
    */
@@ -218,7 +217,6 @@ public class Root {
    * used for constructing nodes with children without registering the constructed
    * root node with the root or for registering it manually.
    * 
-   * @param instance The root to use as the active build root
    * @param session  The runnable to run
    */
   public void indexBuildSession(Runnable session) {
@@ -242,7 +240,6 @@ public class Root {
    * is helpful for constructing trees manually and registering them inline.
    * 
    * @param <N>                The type of the nodes to register
-   * @param instance           the root to register the nodes with
    * @param registererConsumer The consumer to run
    */
   public <N extends ASTNode> void indexSeparateTrees(Consumer<Passthrough<N>> registererConsumer) {
