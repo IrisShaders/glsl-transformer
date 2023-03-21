@@ -21,12 +21,12 @@ public class RootSupplier implements Supplier<Root> {
       ExternalDeclarationIndex::withOnlyExact);
   public static final RootSupplier PREFIX_UNORDERED_ED_EXACT = new RootSupplier(
       NodeIndex::withUnordered,
-      PrefixIdentifierIndex::withOnlyExact,
+      PrefixIdentifierIndex::withPrefix,
       ExternalDeclarationIndex::withOnlyExact);
   public static final RootSupplier PREFIX_UNORDERED_ED_PREFIX = new RootSupplier(
       NodeIndex::withUnordered,
-      PrefixIdentifierIndex::withOnlyExact,
-      PrefixExternalDeclarationIndex::withOnlyExact);
+      PrefixIdentifierIndex::withPrefix,
+      PrefixExternalDeclarationIndex::withPrefix);
 
   public static final RootSupplier EMPTY = new RootSupplier(supplier(null), supplier(null));
   public static final RootSupplier ONLY_NODE_INDEX = new RootSupplier(
