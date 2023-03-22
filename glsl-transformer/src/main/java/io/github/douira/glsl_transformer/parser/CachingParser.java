@@ -2,8 +2,6 @@ package io.github.douira.glsl_transformer.parser;
 
 import org.antlr.v4.runtime.*;
 
-import com.github.bsideup.jabel.Desugar;
-
 import io.github.douira.glsl_transformer.ast.data.TypedTreeCache;
 import io.github.douira.glsl_transformer.ast.transform.ASTBuilder;
 import io.github.douira.glsl_transformer.token_filter.TokenFilter;
@@ -16,7 +14,6 @@ import io.github.douira.glsl_transformer.token_filter.TokenFilter;
  * is safe to use this.
  */
 public class CachingParser extends EnhancedParser {
-  @Desugar
   record CacheContents(ParserRuleContext parseTree, BufferedTokenStream tokenStream) {
   }
 

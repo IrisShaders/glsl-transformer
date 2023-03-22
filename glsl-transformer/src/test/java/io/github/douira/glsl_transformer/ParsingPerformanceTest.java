@@ -107,6 +107,10 @@ public class ParsingPerformanceTest {
 
   @Test
   void testDeepExpressionParsing() {
+    // NOTE: a previous version of the deep expression test (as in 151bcc45) caused
+    // a stack overflow but only in gradle using java 16. It's unclear why this was
+    // happening but in the following commit the benchmark file has been changed to
+    // avoid this.
     parser = new EnhancedParser(true);
     parser.setSLLOnly();
     assertFilePerformance(300, FileLocation.DEEP_EXPRESSION_TEST);

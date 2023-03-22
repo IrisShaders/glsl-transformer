@@ -3,8 +3,6 @@ package io.github.douira.glsl_transformer.ast.query.index;
 import java.util.*;
 import java.util.function.*;
 
-import com.github.bsideup.jabel.Desugar;
-
 import io.github.douira.glsl_transformer.ast.node.Identifier;
 import io.github.douira.glsl_transformer.ast.node.abstract_node.ASTNode;
 import io.github.douira.glsl_transformer.ast.node.declaration.*;
@@ -18,7 +16,6 @@ public class ExternalDeclarationIndex<S extends Set<DeclarationEntry>, I extends
     super(index, setFactory);
   }
 
-  @Desugar
   public static record DeclarationEntry(ExternalDeclaration declaration, ASTNode keyMember) {
   }
 

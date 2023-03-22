@@ -38,7 +38,7 @@ It also doesn't validate that features aren't used which may not be available in
 
 This project uses semver for versioning. If there are frequent breaking API changes then the major version will change frequently. This is the way.
 
-This library is written in Java 16 but without using Java language APIs beyond those of Java 8 and using [jabel](https://github.com/bsideup/jabel) it is compiled to Java 8 compatible classes. The tests are not affected by this and will only be run on the latest Java version (because it's annoying only use Java 8 in the tests). If nobody needs Java 8 support anymore in the future, it will be dropped with a major release. Currently, this is because Minecraft 1.16 uses Java 8.
+The library is written in and published for Java 16.
 
 ## Credit
 

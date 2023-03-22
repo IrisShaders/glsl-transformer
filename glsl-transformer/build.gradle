@@ -27,7 +27,6 @@ repositories {
 }
 
 def antlrVersion = '4.11.1'
-def jabelVersion = '1.0.0'
 
 dependencies {
   antlr group: 'org.antlr', name: 'antlr4', version: antlrVersion
@@ -36,9 +35,6 @@ dependencies {
   testImplementation group: 'io.github.origin-energy', name:'java-snapshot-testing-junit5', version: '3.2.+'
   testImplementation group: 'org.slf4j', name: 'slf4j-simple', version: '2.0.+'
   testImplementation group: 'org.fusesource.jansi', name:'jansi', version:'2.4.0'
-
-  annotationProcessor group: 'com.github.bsideup.jabel', name:'jabel-javac-plugin', version: jabelVersion
-  compileOnly group: 'com.github.bsideup.jabel', name:'jabel-javac-plugin', version: jabelVersion
 }
 
 generateGrammarSource {
@@ -93,12 +89,9 @@ jacocoTestReport {
   }
 }
 
-configure([tasks.compileJava]) {
-  sourceCompatibility = 16 // for the IDE support
-  options.release = 8
-
-  javaCompiler = javaToolchains.compilerFor {
-    languageVersion = JavaLanguageVersion.of(16)
+java {
+  toolchain {
+    languageVersion.set(JavaLanguageVersion.of(16))
   }
 }
 
@@ -140,7 +133,6 @@ javadoc {
       'apiNote:a:API Usage Note:'
     )
     links "https://javadoc.io/doc/org.antlr/antlr4-runtime/$antlrVersion/"
-    links "https://javadoc.io/doc/com.github.bsideup.jabel/jabel-javac-plugin/$jabelVersion/"
   }
   exclude '**/GLSLParser*.java'
   exclude '**/GLSLLexer*.java'
