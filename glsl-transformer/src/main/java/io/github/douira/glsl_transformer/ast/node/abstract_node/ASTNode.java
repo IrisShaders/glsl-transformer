@@ -8,7 +8,6 @@ import io.github.douira.glsl_transformer.ast.data.ChildNodeList;
 import io.github.douira.glsl_transformer.ast.query.Root;
 import io.github.douira.glsl_transformer.ast.transform.*;
 import io.github.douira.glsl_transformer.ast.traversal.*;
-import io.github.douira.glsl_transformer.util.CompatUtil;
 
 /**
  * The AST node represents a node in the abstract syntax tree. Each AST node has
@@ -250,7 +249,7 @@ public abstract class ASTNode {
    * @return a stream of the ancestors
    */
   public Stream<ASTNode> getAncestors() {
-    return CompatUtil.iterateStream(this, ASTNode::hasParent, ASTNode::getParent);
+    return Stream.iterate(this, ASTNode::hasParent, ASTNode::getParent);
   }
 
   /**

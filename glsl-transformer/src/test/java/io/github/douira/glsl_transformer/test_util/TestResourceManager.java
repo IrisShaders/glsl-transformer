@@ -4,8 +4,6 @@ import java.nio.file.*;
 import java.util.Set;
 import java.util.stream.Stream;
 
-import io.github.douira.glsl_transformer.util.CompatUtil;
-
 /**
  * Knows about the various code resource files and can load them.
  */
@@ -48,7 +46,7 @@ public class TestResourceManager extends TestResourceManagerBase {
   }
 
   public static enum DirectoryLocation {
-    GLSLANG_TESTS("/glslang-test", CompatUtil.setOf("ray", "preprocessor"));
+    GLSLANG_TESTS("/glslang-test", Set.of("ray", "preprocessor"));
 
     Path path;
     Set<String> excludeInFiles;

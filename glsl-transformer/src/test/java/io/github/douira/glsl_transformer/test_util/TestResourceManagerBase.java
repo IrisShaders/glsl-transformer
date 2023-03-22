@@ -8,14 +8,13 @@ import java.util.*;
 import java.util.stream.Stream;
 
 import io.github.douira.glsl_transformer.test_util.TestResourceManager.Resource;
-import io.github.douira.glsl_transformer.util.CompatUtil;
 
 /**
  * Knows about the various code resource files and can load them.
  */
 public class TestResourceManagerBase {
   private static final Map<Path, Resource> RESOURCE_CACHE = new HashMap<>();
-  private static final Set<String> GLOBAL_EXCLUDE = CompatUtil.setOf(".ds_store", "disable_");
+  private static final Set<String> GLOBAL_EXCLUDE = Set.of(".ds_store", "disable_");
 
   TestResourceManagerBase() {
   }

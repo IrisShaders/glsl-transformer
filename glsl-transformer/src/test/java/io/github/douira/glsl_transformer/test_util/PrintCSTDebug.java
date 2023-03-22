@@ -5,14 +5,12 @@ import static org.fusesource.jansi.Ansi.*;
 import org.antlr.v4.runtime.ParserRuleContext;
 import org.antlr.v4.runtime.tree.TerminalNode;
 
-import io.github.douira.glsl_transformer.util.CompatUtil;
-
 public class PrintCSTDebug extends PrintCST {
   protected void addIndentation(StringBuilder builder) {
     builder.append(
         ansi()
             .fgBrightBlack()
-            .a(CompatUtil.repeat("│", depth - 1) + (depth > 0 ? "├" : ""))
+            .a("│".repeat(depth - 1) + (depth > 0 ? "├" : ""))
             .reset().toString());
   }
 

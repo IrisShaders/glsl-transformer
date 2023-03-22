@@ -2,11 +2,12 @@ package io.github.douira.glsl_transformer.token_filter;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+import java.util.List;
+
 import org.antlr.v4.runtime.Token;
 import org.junit.jupiter.api.Test;
 
 import io.github.douira.glsl_transformer.ast.transform.*;
-import io.github.douira.glsl_transformer.util.CompatUtil;
 
 public class MultiFilterTest {
   int nextIndex;
@@ -41,8 +42,7 @@ public class MultiFilterTest {
     var multiFilter = new MultiFilter<>();
     assertPrintFilterResult(
         "b; a; ", "b;a;", multiFilter, "It should not do anything when it's empty");
-    multiFilter.addAll(
-        CompatUtil.listOf(new StringFilter<>("a"), new StringFilter<>("b")));
+    multiFilter.addAll(List.of(new StringFilter<>("a"), new StringFilter<>("b")));
     assertPrintFilterResult(
         "; ; ", "b;a;", multiFilter, "It should filter both things");
     var multiFilter2 = new MultiFilter<>();
