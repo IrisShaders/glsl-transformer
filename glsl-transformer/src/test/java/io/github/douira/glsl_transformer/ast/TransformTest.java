@@ -9,7 +9,7 @@ import java.util.stream.*;
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.params.ParameterizedTest;
 
-import io.github.douira.glsl_transformer.ast.node.Identifier;
+import io.github.douira.glsl_transformer.ast.node.*;
 import io.github.douira.glsl_transformer.ast.node.abstract_node.ASTNode;
 import io.github.douira.glsl_transformer.ast.node.declaration.*;
 import io.github.douira.glsl_transformer.ast.node.expression.*;
@@ -21,7 +21,7 @@ import io.github.douira.glsl_transformer.ast.node.type.qualifier.StorageQualifie
 import io.github.douira.glsl_transformer.ast.node.type.specifier.*;
 import io.github.douira.glsl_transformer.ast.node.type.struct.*;
 import io.github.douira.glsl_transformer.ast.print.token.ParserToken;
-import io.github.douira.glsl_transformer.ast.query.Root;
+import io.github.douira.glsl_transformer.ast.query.*;
 import io.github.douira.glsl_transformer.ast.query.match.Matcher;
 import io.github.douira.glsl_transformer.ast.transform.*;
 import io.github.douira.glsl_transformer.parser.ParseShape;
@@ -618,5 +618,40 @@ public class TransformTest extends TestWithSingleASTTransformer {
         }
       }
     });
+  }
+
+  private static final Template<ExternalDeclaration> inputDeclarationTemplate = Template.withExternalDeclaration(
+      "uniform int __name;");
+
+  static {
+    inputDeclarationTemplate.markLocalReplacement(
+        inputDeclarationTemplate.getSourceRoot().nodeIndex.getOne(StorageQualifier.class));
+    inputDeclarationTemplate.markLocalReplacement(
+        inputDeclarationTemplate.getSourceRoot().nodeIndex.getOne(BuiltinNumericTypeSpecifier.class));
+    inputDeclarationTemplate.markIdentifierReplacement("__name");
+  }
+
+  private static void addIfNotExists(Root root, ASTParser t, TranslationUnit tree, String name, Type type,
+      StorageType storageType) {
+    if (root.externalDeclarationIndex.getStream(name)
+        .noneMatch((entry) -> entry.declaration() instanceof DeclarationExternalDeclaration)) {
+      tree.injectNode(ASTInjectionPoint.BEFORE_DECLARATIONS, inputDeclarationTemplate.getInstanceFor(root,
+          new StorageQualifier(storageType),
+          new BuiltinNumericTypeSpecifier(type),
+          new Identifier(name)));
+    }
+  }
+
+  @Test
+  void testAddIfNotExists() {
+    p.setRootSupplier(RootSupplier.EXACT_UNORDERED_ED_EXACT);
+    p.setTransformation((tree, root) -> {
+      addIfNotExists(root, p, tree, "foo", Type.F32VEC2, StorageType.IN);
+      addIfNotExists(root, p, tree, "bar", Type.F32VEC2, StorageType.IN);
+      addIfNotExists(root, p, tree, "zub", Type.F32MAT2X2, StorageType.UNIFORM);
+    });
+    assertTransform(
+        "uniform mat2 zub; in vec2 foo; in vec2 bar; ",
+        "in vec2 bar;");
   }
 }
