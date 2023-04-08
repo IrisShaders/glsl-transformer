@@ -44,6 +44,23 @@ public class ChildNodeList<Child extends ASTNode> extends ProxyArrayList<Child> 
     removed.detachParent();
   }
 
+  /**
+   * Returns true if the list is empty or contains only null elements.
+   * 
+   * @return true if the list is empty or contains only null elements
+   */
+  public boolean isNullEmpty() {
+    if (isEmpty()) {
+      return true;
+    }
+    for (var child : this) {
+      if (child != null) {
+        return false;
+      }
+    }
+    return true;
+  }
+
   protected static <Child extends ASTNode> Consumer<Child> makeChildReplacer(ChildNodeList<Child> list, Child child) {
     return newNode -> {
       if (newNode == child) {
