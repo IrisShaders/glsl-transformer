@@ -1,10 +1,9 @@
 package io.github.douira.glsl_transformer.ast.node.abstract_node;
 
-import java.util.List;
 import java.util.stream.Stream;
 
 import io.github.douira.glsl_transformer.ast.data.ChildNodeList;
-import io.github.douira.glsl_transformer.ast.query.*;
+import io.github.douira.glsl_transformer.ast.query.Root;
 
 public abstract class ListASTNode<Child extends ASTNode>
     extends InnerASTNode
@@ -16,7 +15,7 @@ public abstract class ListASTNode<Child extends ASTNode>
   }
 
   @Override
-  public List<Child> getChildren() {
+  public ChildNodeList<Child> getChildren() {
     return children;
   }
 

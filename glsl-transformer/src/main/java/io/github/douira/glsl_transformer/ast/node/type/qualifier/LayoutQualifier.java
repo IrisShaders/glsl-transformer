@@ -1,6 +1,5 @@
 package io.github.douira.glsl_transformer.ast.node.type.qualifier;
 
-import java.util.List;
 import java.util.stream.Stream;
 
 import io.github.douira.glsl_transformer.ast.data.ChildNodeList;
@@ -14,7 +13,7 @@ public class LayoutQualifier extends TypeQualifierPart {
     this.parts = ChildNodeList.collect(parts, this);
   }
 
-  public List<LayoutQualifierPart> getParts() {
+  public ChildNodeList<LayoutQualifierPart> getParts() {
     return parts;
   }
 

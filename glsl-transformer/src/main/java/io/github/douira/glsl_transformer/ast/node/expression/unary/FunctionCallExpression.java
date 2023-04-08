@@ -1,6 +1,5 @@
 package io.github.douira.glsl_transformer.ast.node.expression.unary;
 
-import java.util.List;
 import java.util.stream.Stream;
 
 import io.github.douira.glsl_transformer.ast.data.ChildNodeList;
@@ -97,7 +96,7 @@ public class FunctionCallExpression extends TerminalExpression {
     return referenceType == FunctionReferenceType.NAME ? functionName : functionSpecifier;
   }
 
-  public List<Expression> getParameters() {
+  public ChildNodeList<Expression> getParameters() {
     return parameters;
   }
 

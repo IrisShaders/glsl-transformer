@@ -1,6 +1,5 @@
 package io.github.douira.glsl_transformer.ast.node.type.initializer;
 
-import java.util.List;
 import java.util.stream.Stream;
 
 import io.github.douira.glsl_transformer.ast.data.ChildNodeList;
@@ -18,7 +17,7 @@ public class NestedInitializer extends Initializer {
     this.initializers = new ChildNodeList<>(this);
   }
 
-  public List<Initializer> getInitializers() {
+  public ChildNodeList<Initializer> getInitializers() {
     return initializers;
   }
 

@@ -1,6 +1,5 @@
 package io.github.douira.glsl_transformer.ast.node.declaration;
 
-import java.util.List;
 import java.util.stream.Stream;
 
 import io.github.douira.glsl_transformer.ast.data.ChildNodeList;
@@ -31,7 +30,7 @@ public class TypeAndInitDeclaration extends Declaration {
     this.type = type;
   }
 
-  public List<DeclarationMember> getMembers() {
+  public ChildNodeList<DeclarationMember> getMembers() {
     return members;
   }
 

@@ -1,6 +1,5 @@
 package io.github.douira.glsl_transformer.ast.node.type.qualifier;
 
-import java.util.List;
 import java.util.stream.Stream;
 
 import org.antlr.v4.runtime.Token;
@@ -76,7 +75,7 @@ public class StorageQualifier extends TypeQualifierPart {
     this.storageType = storageType;
   }
 
-  public List<Identifier> getTypeNames() {
+  public ChildNodeList<Identifier> getTypeNames() {
     return typeNames;
   }
 
