@@ -654,4 +654,49 @@ public class TransformTest extends TestWithSingleASTTransformer {
         "uniform mat2 zub; in vec2 foo; in vec2 bar; ",
         "in vec2 bar;");
   }
+
+  @Test
+  void testMoveUnsizedArraySpecifier() {
+    // test transform that moves unsized array specifiers from the type to the
+    // identifier of a type and init declaration. Some drivers appear to not be able
+    // to detect the unsized array if it's on the type.
+    p.setTransformation((tree, root) -> {
+      for (ExternalDeclaration externalDeclaration : tree.getChildren()) {
+        if (externalDeclaration instanceof DeclarationExternalDeclaration declarationExternalDeclaration) {
+          if (declarationExternalDeclaration.getDeclaration() instanceof TypeAndInitDeclaration declaration) {
+            // check if the type specifier has an array specifier
+            var typeSpecifier = declaration.getType().getTypeSpecifier();
+            var arraySpecifier = typeSpecifier.getArraySpecifier();
+            if (arraySpecifier == null) {
+              continue;
+            }
+
+            // check if the array specifier is unsized
+            if (!arraySpecifier.getChildren().isNullEmpty()) {
+              continue;
+            }
+
+            // remove itself from the parent (makes it null)
+            arraySpecifier.detach();
+
+            // move the empty array specifier to all members
+            var reusedOriginal = false;
+            for (DeclarationMember member : declaration.getMembers()) {
+              if (member.getArraySpecifier() != null) {
+                throw new IllegalStateException("Member already has an array specifier");
+              }
+
+              // clone the array specifier into this member, re-use if possible
+              member.setArraySpecifier(reusedOriginal ? arraySpecifier.cloneInto(root) : arraySpecifier);
+              reusedOriginal = true;
+            }
+          }
+        }
+      }
+    });
+
+    assertTransform(
+        "int[7] foo[5]; int[5] foo; int foo[]; int foo[], bar[]; int foo; Type foo[]; Type foo[], bar[]; ",
+        "int[7] foo[5]; int[5] foo; int[] foo; int[] foo, bar; int foo; Type[] foo; Type[] foo, bar;");
+  }
 }
