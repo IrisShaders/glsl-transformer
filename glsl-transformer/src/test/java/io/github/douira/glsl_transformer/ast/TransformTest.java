@@ -698,4 +698,47 @@ public class TransformTest extends TestWithSingleASTTransformer {
         "int[7] foo[5]; int[5] foo; int foo[]; int foo[], bar[]; int foo; Type foo[]; Type foo[], bar[]; ",
         "int[7] foo[5]; int[5] foo; int[] foo; int[] foo, bar; int foo; Type[] foo; Type[] foo, bar;");
   }
+
+  @Test
+  void testMovedUnsizedArraySpecifierInterfaceBlock() {
+    // same as the above transform, but for struct members instead of external
+    // declarations
+    p.setTransformation((tree, root) -> {
+      for (StructMember structMember : root.nodeIndex.get(StructMember.class)) {
+        // check if the type specifier has an array specifier
+        var typeSpecifier = structMember.getType().getTypeSpecifier();
+        var arraySpecifier = typeSpecifier.getArraySpecifier();
+        if (arraySpecifier == null) {
+          continue;
+        }
+
+        // check if the array specifier is unsized
+        if (!arraySpecifier.getChildren().isNullEmpty()) {
+          continue;
+        }
+
+        // remove itself from the parent (makes it null)
+        arraySpecifier.detach();
+
+        // move the empty array specifier to all members
+        var reusedOriginal = false;
+        for (StructDeclarator declarator : structMember.getDeclarators()) {
+          if (declarator.getArraySpecifier() != null) {
+            throw new IllegalStateException("Member already has an array specifier");
+          }
+
+          // clone the array specifier into this member, re-use if possible
+          declarator.setArraySpecifier(reusedOriginal ? arraySpecifier.cloneInto(root) : arraySpecifier);
+          reusedOriginal = true;
+        }
+      }
+    });
+
+    assertTransform(
+        "out Foo { int[7] foo[5]; int[5] foo; int foo[]; int foo[], bar[]; int foo; Type foo[]; Type foo[], bar[]; }; ",
+        "out Foo { int[7] foo[5]; int[5] foo; int[] foo; int[] foo, bar; int foo; Type[] foo; Type[] foo, bar; };");
+    assertTransform(
+        "struct Foo { int[7] foo[5]; int[5] foo; int foo[]; int foo[], bar[]; int foo; Type foo[]; Type foo[], bar[]; } foo; ",
+        "struct Foo { int[7] foo[5]; int[5] foo; int[] foo; int[] foo, bar; int foo; Type[] foo; Type[] foo, bar; } foo;");
+  }
 }
