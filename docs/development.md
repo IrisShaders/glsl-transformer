@@ -37,12 +37,12 @@ gradle test --tests GrammarDebugTest
 
 ### Generic Type Parameters
 
-Generic type parameters are named with the follwing rules:
+Generic type parameters are named with the following rules:
 
 - `N` for `extends ASTNode`
 - `C` for `extends ParserRuleContext`
 - `T` for `extends ParseTree`
-- `Child` for `extends ASTNode` if it's the child parameter of an `ASTNode` sub class
+- `Child` for `extends ASTNode` if it's the child parameter of an `ASTNode` subclass
 - `J` for `extends JobParameters`
 - `E` for extending some kind of Enum
 - `R` for some other return type
@@ -89,7 +89,7 @@ fs.readFileSync("split").toString().split("//split_marker").map(str => str.trim(
 ### TODO
 - Enum value index (index that finds nodes based on their enum values)
 - Optional indexes: option to turn off indexes for performance reasons and only if necessary
-- Partial indexes: indexes that only index certain enum values, class types or identifiers to reduce memory usage and improve ast build performance
+- Partial indexes: indexes that only index certain enum values, class types or identifiers to reduce memory usage and improve AST build performance
 - Configuration of partial indexes can happen at construction
 - Make glsl-transformer thread safe so that it can be run in parallel on different transformation jobs
 - Try to remove double detachParent call when removing items from a list
