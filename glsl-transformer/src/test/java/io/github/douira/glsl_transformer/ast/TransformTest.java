@@ -631,7 +631,7 @@ public class TransformTest extends TestWithSingleASTTransformer {
     inputDeclarationTemplate.markIdentifierReplacement("__name");
   }
 
-  private static void addIfNotExists(Root root, ASTParser t, TranslationUnit tree, String name, Type type,
+  private static void addIfNotExists(Root root, ASTParser t, TranslationUnit tree, String name, NumericType type,
       StorageType storageType) {
     if (root.externalDeclarationIndex.getStream(name)
         .noneMatch((entry) -> entry.declaration() instanceof DeclarationExternalDeclaration)) {
@@ -646,9 +646,9 @@ public class TransformTest extends TestWithSingleASTTransformer {
   void testAddIfNotExists() {
     p.setRootSupplier(RootSupplier.EXACT_UNORDERED_ED_EXACT);
     p.setTransformation((tree, root) -> {
-      addIfNotExists(root, p, tree, "foo", Type.F32VEC2, StorageType.IN);
-      addIfNotExists(root, p, tree, "bar", Type.F32VEC2, StorageType.IN);
-      addIfNotExists(root, p, tree, "zub", Type.F32MAT2X2, StorageType.UNIFORM);
+      addIfNotExists(root, p, tree, "foo", NumericType.F32VEC2, StorageType.IN);
+      addIfNotExists(root, p, tree, "bar", NumericType.F32VEC2, StorageType.IN);
+      addIfNotExists(root, p, tree, "zub", NumericType.F32MAT2X2, StorageType.UNIFORM);
     });
     assertTransform(
         "uniform mat2 zub; in vec2 foo; in vec2 bar; ",
@@ -665,7 +665,7 @@ public class TransformTest extends TestWithSingleASTTransformer {
           .get(DeclarationExternalDeclaration.class)) {
         if (declarationExternalDeclaration.getDeclaration() instanceof TypeAndInitDeclaration declaration) {
           // check if the type specifier has an array specifier
-          var typeSpecifier = declaration.getType().getTypeSpecifier();
+          var typeSpecifier = declaration.getSpecifiedType().getTypeSpecifier();
           var arraySpecifier = typeSpecifier.getArraySpecifier();
           if (arraySpecifier == null) {
             continue;
@@ -706,7 +706,7 @@ public class TransformTest extends TestWithSingleASTTransformer {
     p.setTransformation((tree, root) -> {
       for (StructMember structMember : root.nodeIndex.get(StructMember.class)) {
         // check if the type specifier has an array specifier
-        var typeSpecifier = structMember.getType().getTypeSpecifier();
+        var typeSpecifier = structMember.getSpecifiedType().getTypeSpecifier();
         var arraySpecifier = typeSpecifier.getArraySpecifier();
         if (arraySpecifier == null) {
           continue;
