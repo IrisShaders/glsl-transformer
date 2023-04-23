@@ -494,11 +494,11 @@ public interface ASTVisitor<R> extends GeneralASTVisitor<R> {
     return visitChildren(node);
   }
 
-  default R visitBuiltinFixedTypeSpecifier(BuiltinFixedTypeSpecifier node) {
+  default R visitFixedTypeSpecifier(FixedTypeSpecifier node) {
     return visitData(node.type);
   }
 
-  default R visitBuiltinNumericTypeSpecifier(BuiltinNumericTypeSpecifier node) {
+  default R visitNumericTypeSpecifier(NumericTypeSpecifier node) {
     return visitData(node.type);
   }
 

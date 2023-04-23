@@ -4,8 +4,8 @@ import java.util.Objects;
 
 import io.github.douira.glsl_transformer.ast.query.Root;
 import io.github.douira.glsl_transformer.ast.traversal.*;
-import io.github.douira.glsl_transformer.util.NumericType;
-import io.github.douira.glsl_transformer.util.NumericType.NumberType;
+import io.github.douira.glsl_transformer.ast.typing.NumericType;
+import io.github.douira.glsl_transformer.ast.typing.NumericType.NumberType;
 
 public class LiteralExpression extends TerminalExpression {
   private NumericType literalType;

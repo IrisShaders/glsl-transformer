@@ -23,7 +23,7 @@ import io.github.douira.glsl_transformer.ast.node.type.qualifier.*;
 import io.github.douira.glsl_transformer.ast.node.type.specifier.*;
 import io.github.douira.glsl_transformer.ast.node.type.struct.*;
 import io.github.douira.glsl_transformer.ast.print.token.EOFToken;
-import io.github.douira.glsl_transformer.util.NumericType.NumberType;
+import io.github.douira.glsl_transformer.ast.typing.NumericType.NumberType;
 
 /**
  * The AST printer emits tokens to convert an AST node into a string with the
@@ -1163,13 +1163,13 @@ public class ASTPrinter extends ASTPrinterBase {
   }
 
   @Override
-  public Void visitBuiltinFixedTypeSpecifier(BuiltinFixedTypeSpecifier node) {
+  public Void visitFixedTypeSpecifier(FixedTypeSpecifier node) {
     emitType(node.type.tokenType);
     return null;
   }
 
   @Override
-  public Void visitBuiltinNumericTypeSpecifier(BuiltinNumericTypeSpecifier node) {
+  public Void visitNumericTypeSpecifier(NumericTypeSpecifier node) {
     emitLiteral(node.type.getMostCompactName());
     return null;
   }

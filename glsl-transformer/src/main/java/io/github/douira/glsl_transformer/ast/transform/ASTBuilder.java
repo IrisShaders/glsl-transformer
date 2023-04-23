@@ -31,11 +31,10 @@ import io.github.douira.glsl_transformer.ast.node.type.qualifier.InterpolationQu
 import io.github.douira.glsl_transformer.ast.node.type.qualifier.PrecisionQualifier.PrecisionLevel;
 import io.github.douira.glsl_transformer.ast.node.type.qualifier.StorageQualifier.StorageType;
 import io.github.douira.glsl_transformer.ast.node.type.specifier.*;
-import io.github.douira.glsl_transformer.ast.node.type.specifier.BuiltinFixedTypeSpecifier.BuiltinType;
 import io.github.douira.glsl_transformer.ast.node.type.struct.*;
 import io.github.douira.glsl_transformer.ast.query.Root;
-import io.github.douira.glsl_transformer.util.NumericType;
-import io.github.douira.glsl_transformer.util.NumericType.NumberType;
+import io.github.douira.glsl_transformer.ast.typing.*;
+import io.github.douira.glsl_transformer.ast.typing.NumericType.NumberType;
 
 /**
  * The AST builder is a visitor of the parse tree (not an AST visitor) that
@@ -889,16 +888,16 @@ public class ASTBuilder extends GLSLParserBaseVisitor<ASTNode> {
   public TypeSpecifier visitTypeSpecifier(TypeSpecifierContext ctx) {
     var arraySpecifier = applySafe(ctx.arraySpecifier(), this::visitArraySpecifier);
 
-    var builtinTypeFixed = ctx.builtinTypeSpecifierFixed();
-    if (builtinTypeFixed != null) {
-      var type = BuiltinType.fromToken(builtinTypeFixed.getStart());
-      return new BuiltinFixedTypeSpecifier(type, arraySpecifier);
+    var fixedTypeSpecifier = ctx.fixedTypeSpecifier();
+    if (fixedTypeSpecifier != null) {
+      var type = FixedType.fromToken(fixedTypeSpecifier.getStart());
+      return new FixedTypeSpecifier(type, arraySpecifier);
     }
 
-    var builtinNumericType = ctx.builtinTypeSpecifierParseable();
-    if (builtinNumericType != null) {
-      var type = NumericType.fromToken(builtinNumericType.getStart());
-      return new BuiltinNumericTypeSpecifier(type, arraySpecifier);
+    var numericTypeSpecifier = ctx.numericTypeSpecifier();
+    if (numericTypeSpecifier != null) {
+      var type = NumericType.fromToken(numericTypeSpecifier.getStart());
+      return new NumericTypeSpecifier(type, arraySpecifier);
     }
 
     var structSpecifierContext = ctx.structSpecifier();

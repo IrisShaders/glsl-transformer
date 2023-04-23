@@ -24,10 +24,10 @@ import io.github.douira.glsl_transformer.ast.print.token.ParserToken;
 import io.github.douira.glsl_transformer.ast.query.*;
 import io.github.douira.glsl_transformer.ast.query.match.Matcher;
 import io.github.douira.glsl_transformer.ast.transform.*;
+import io.github.douira.glsl_transformer.ast.typing.NumericType;
 import io.github.douira.glsl_transformer.parser.ParseShape;
 import io.github.douira.glsl_transformer.test_util.*;
 import io.github.douira.glsl_transformer.test_util.TestCaseProvider.Spacing;
-import io.github.douira.glsl_transformer.util.NumericType;
 
 public class TransformTest extends TestWithSingleASTTransformer {
   @ParameterizedTest
@@ -136,13 +136,13 @@ public class TransformTest extends TestWithSingleASTTransformer {
     var outDeclarationMatcher = new Matcher<ExternalDeclaration>(
         "out float __name;", ParseShape.EXTERNAL_DECLARATION, "__") {
       {
-        markClassWildcard("type", pattern.getRoot().nodeIndex.getOne(BuiltinNumericTypeSpecifier.class));
+        markClassWildcard("type", pattern.getRoot().nodeIndex.getOne(NumericTypeSpecifier.class));
       }
     };
     var inDeclarationMatcher = new Matcher<ExternalDeclaration>(
         "in float __name;", ParseShape.EXTERNAL_DECLARATION, "__") {
       {
-        markClassWildcard("type", pattern.getRoot().nodeIndex.getOne(BuiltinNumericTypeSpecifier.class));
+        markClassWildcard("type", pattern.getRoot().nodeIndex.getOne(NumericTypeSpecifier.class));
       }
     };
 
@@ -178,7 +178,7 @@ public class TransformTest extends TestWithSingleASTTransformer {
           declaration -> {
             if (inDeclarationMatcher.matchesExtract(declaration)) {
               var name = inDeclarationMatcher.getStringDataMatch("name");
-              var specifier = inDeclarationMatcher.getNodeMatch("type", BuiltinNumericTypeSpecifier.class);
+              var specifier = inDeclarationMatcher.getNodeMatch("type", NumericTypeSpecifier.class);
 
               if (specifier != null && !outDeclarations.contains(name)) {
                 tree.injectNode(ASTInjectionPoint.BEFORE_DECLARATIONS,
@@ -324,10 +324,10 @@ public class TransformTest extends TestWithSingleASTTransformer {
           boolean isStruct = false;
           String typeName = null;
           switch (typeSpecifier.getSpecifierType()) {
-            case BUILTIN_NUMERIC -> typeName = ((BuiltinNumericTypeSpecifier) typeSpecifier).type.getMostCompactName();
-            case BULTIN_FIXED ->
+            case NUMERIC -> typeName = ((NumericTypeSpecifier) typeSpecifier).type.getMostCompactName();
+            case FIXED ->
               typeName = new ParserToken(
-                  ((BuiltinFixedTypeSpecifier) typeSpecifier).type.tokenType).getContent();
+                  ((FixedTypeSpecifier) typeSpecifier).type.tokenType).getContent();
             case STRUCT -> {
               isStruct = true;
               typeName = ((StructSpecifier) typeSpecifier)
@@ -445,10 +445,10 @@ public class TransformTest extends TestWithSingleASTTransformer {
   @ParameterizedTest
   @TestCaseSource(caseSet = "sidecarInjection", spacing = Spacing.TRIM_SINGLE_BOTH)
   void testSidecarInjection(String type, String input, String output) {
-    class SidecarInjector {
-      String targetFunction; // targeting for example, "texture" calls
-      Set<String> targets; // the targeted declarations, usually sampler uniforms
-    }
+    // class SidecarInjector {
+    // String targetFunction; // targeting for example, "texture" calls
+    // Set<String> targets; // the targeted declarations, usually sampler uniforms
+    // }
 
     p.setTransformation((tree, root) -> {
       // TODO
@@ -461,7 +461,7 @@ public class TransformTest extends TestWithSingleASTTransformer {
         ParseShape.EXTERNAL_DECLARATION) {
       {
         markClassWildcard("qualifier", pattern.getRoot().nodeIndex.getUnique(TypeQualifier.class));
-        markClassWildcard("type", pattern.getRoot().nodeIndex.getUnique(BuiltinNumericTypeSpecifier.class));
+        markClassWildcard("type", pattern.getRoot().nodeIndex.getUnique(NumericTypeSpecifier.class));
         markClassWildcard("name*",
             pattern.getRoot().identifierIndex.getUnique("name").getAncestor(DeclarationMember.class));
       }
@@ -515,7 +515,7 @@ public class TransformTest extends TestWithSingleASTTransformer {
             .getAncestor(TypeAndInitDeclaration.class)
             .getMembers();
         var typeQualifier = nonLayoutOutDeclarationMatcher.getNodeMatch("qualifier", TypeQualifier.class);
-        var typeSpecifier = nonLayoutOutDeclarationMatcher.getNodeMatch("type", BuiltinNumericTypeSpecifier.class);
+        var typeSpecifier = nonLayoutOutDeclarationMatcher.getNodeMatch("type", NumericTypeSpecifier.class);
         int addedDeclarations = 0;
         for (DeclarationMember member : members) {
           var name = member.getName().getName();
@@ -627,7 +627,7 @@ public class TransformTest extends TestWithSingleASTTransformer {
     inputDeclarationTemplate.markLocalReplacement(
         inputDeclarationTemplate.getSourceRoot().nodeIndex.getOne(StorageQualifier.class));
     inputDeclarationTemplate.markLocalReplacement(
-        inputDeclarationTemplate.getSourceRoot().nodeIndex.getOne(BuiltinNumericTypeSpecifier.class));
+        inputDeclarationTemplate.getSourceRoot().nodeIndex.getOne(NumericTypeSpecifier.class));
     inputDeclarationTemplate.markIdentifierReplacement("__name");
   }
 
@@ -637,7 +637,7 @@ public class TransformTest extends TestWithSingleASTTransformer {
         .noneMatch((entry) -> entry.declaration() instanceof DeclarationExternalDeclaration)) {
       tree.injectNode(ASTInjectionPoint.BEFORE_DECLARATIONS, inputDeclarationTemplate.getInstanceFor(root,
           new StorageQualifier(storageType),
-          new BuiltinNumericTypeSpecifier(type),
+          new NumericTypeSpecifier(type),
           new Identifier(name)));
     }
   }

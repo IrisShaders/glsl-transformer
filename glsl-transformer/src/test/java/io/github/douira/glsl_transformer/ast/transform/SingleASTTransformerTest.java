@@ -14,9 +14,9 @@ import io.github.douira.glsl_transformer.ast.node.expression.*;
 import io.github.douira.glsl_transformer.ast.node.external_declaration.ExternalDeclaration;
 import io.github.douira.glsl_transformer.ast.print.PrintType;
 import io.github.douira.glsl_transformer.ast.query.*;
+import io.github.douira.glsl_transformer.ast.typing.NumericType;
 import io.github.douira.glsl_transformer.parser.ParsingException;
 import io.github.douira.glsl_transformer.test_util.TestWithSingleASTTransformer;
-import io.github.douira.glsl_transformer.util.NumericType;
 
 public class SingleASTTransformerTest extends TestWithSingleASTTransformer {
   void assertInjectExternalDeclaration(int index, String input, String output) {

@@ -6,8 +6,8 @@ import io.github.douira.glsl_transformer.ast.traversal.*;
 
 public abstract class TypeSpecifier extends InnerASTNode {
   public enum SpecifierType {
-    BUILTIN_NUMERIC, // like int32, f32mat3x3 etc
-    BULTIN_FIXED, // like sampler2D, image1d etc
+    NUMERIC, // like int32, f32mat3x3 etc
+    FIXED, // like sampler2D, image1d etc
     STRUCT, // like struct { float x; float y; }
     REFERENCE // custom type references
   }
