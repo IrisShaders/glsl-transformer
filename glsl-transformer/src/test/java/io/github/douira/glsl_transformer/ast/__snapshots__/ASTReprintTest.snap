@@ -320,9 +320,9 @@ testASTTree[expression_AFsWBaKBRFIB68PU91Au/+2pQ7o=]=[
 vec3(((1, 2, 3)))
 <><><><><><><><><><><><><><><><><><><><><><><><><>
 (FunctionCallExpression
-(BuiltinNumericTypeSpecifier
+(NumericTypeSpecifier
 - NumericType F32VEC3
-)BuiltinNumericTypeSpecifier
+)NumericTypeSpecifier
 (GroupingExpression
 (SequenceExpression
 (LiteralExpression
@@ -568,9 +568,9 @@ testASTTree[expression_IwRwU5CpvXUYFm5baAJDpzTGvsA=]=[
 vec3(1, 2, 3)
 <><><><><><><><><><><><><><><><><><><><><><><><><>
 (FunctionCallExpression
-(BuiltinNumericTypeSpecifier
+(NumericTypeSpecifier
 - NumericType F32VEC3
-)BuiltinNumericTypeSpecifier
+)NumericTypeSpecifier
 (LiteralExpression
 - NumericType INT32
 - Integer 1
@@ -618,9 +618,9 @@ testASTTree[expression_MFr6JxyVT74WMfqyshIAO+1BfKQ=]=[
 vec3((1, 2, 3))
 <><><><><><><><><><><><><><><><><><><><><><><><><>
 (FunctionCallExpression
-(BuiltinNumericTypeSpecifier
+(NumericTypeSpecifier
 - NumericType F32VEC3
-)BuiltinNumericTypeSpecifier
+)NumericTypeSpecifier
 (GroupingExpression
 (SequenceExpression
 (LiteralExpression
@@ -1620,9 +1620,9 @@ testASTTree[fullySpecifiedType_Glyq/Xzj6HkU/IbYx32qJp5lr/g=]=[
 vec2
 <><><><><><><><><><><><><><><><><><><><><><><><><>
 (FullySpecifiedType
-(BuiltinNumericTypeSpecifier
+(NumericTypeSpecifier
 - NumericType F32VEC2
-)BuiltinNumericTypeSpecifier
+)NumericTypeSpecifier
 )FullySpecifiedType
 
 ]
@@ -1737,9 +1737,9 @@ if (ColorTmp.a > 0.0f) {
 - String outColor
 )ReferenceExpression
 (FunctionCallExpression
-(BuiltinNumericTypeSpecifier
+(NumericTypeSpecifier
 - NumericType F32VEC4
-)BuiltinNumericTypeSpecifier
+)NumericTypeSpecifier
 (FunctionCallExpression
 (Identifier)
 - String mix
@@ -1844,9 +1844,9 @@ float diffuseDepth = texture2D(DiffuseDepthSampler, texCoord).r;
 (DeclarationStatement
 (TypeAndInitDeclaration
 (FullySpecifiedType
-(BuiltinNumericTypeSpecifier
+(NumericTypeSpecifier
 - NumericType FLOAT32
-)BuiltinNumericTypeSpecifier
+)NumericTypeSpecifier
 )FullySpecifiedType
 (DeclarationMember
 (Identifier)
@@ -2082,9 +2082,9 @@ for (int a = 0; a < b; );
 (ForLoopStatement
 (TypeAndInitDeclaration
 (FullySpecifiedType
-(BuiltinNumericTypeSpecifier
+(NumericTypeSpecifier
 - NumericType INT32
-)BuiltinNumericTypeSpecifier
+)NumericTypeSpecifier
 )FullySpecifiedType
 (DeclarationMember
 (Identifier)
@@ -2293,9 +2293,9 @@ for (int a = 0; int x = a < b; a++);
 (ForLoopStatement
 (TypeAndInitDeclaration
 (FullySpecifiedType
-(BuiltinNumericTypeSpecifier
+(NumericTypeSpecifier
 - NumericType INT32
-)BuiltinNumericTypeSpecifier
+)NumericTypeSpecifier
 )FullySpecifiedType
 (DeclarationMember
 (Identifier)
@@ -2311,9 +2311,9 @@ for (int a = 0; int x = a < b; a++);
 )TypeAndInitDeclaration
 (IterationConditionInitializer
 (FullySpecifiedType
-(BuiltinNumericTypeSpecifier
+(NumericTypeSpecifier
 - NumericType INT32
-)BuiltinNumericTypeSpecifier
+)NumericTypeSpecifier
 )FullySpecifiedType
 (Identifier)
 - String x
@@ -2701,18 +2701,18 @@ mat2 ang = mat2(-.73736882209777832,.67549037933349609,-.67549037933349609,-.737
 (DeclarationStatement
 (TypeAndInitDeclaration
 (FullySpecifiedType
-(BuiltinNumericTypeSpecifier
+(NumericTypeSpecifier
 - NumericType F32MAT2X2
-)BuiltinNumericTypeSpecifier
+)NumericTypeSpecifier
 )FullySpecifiedType
 (DeclarationMember
 (Identifier)
 - String ang
 (ExpressionInitializer
 (FunctionCallExpression
-(BuiltinNumericTypeSpecifier
+(NumericTypeSpecifier
 - NumericType F32MAT2X2
-)BuiltinNumericTypeSpecifier
+)NumericTypeSpecifier
 (NegationExpression
 (LiteralExpression
 - NumericType FLOAT32
@@ -3100,9 +3100,9 @@ float op = 0.0f;
 (DeclarationStatement
 (TypeAndInitDeclaration
 (FullySpecifiedType
-(BuiltinNumericTypeSpecifier
+(NumericTypeSpecifier
 - NumericType FLOAT32
-)BuiltinNumericTypeSpecifier
+)NumericTypeSpecifier
 )FullySpecifiedType
 (DeclarationMember
 (Identifier)
@@ -3310,9 +3310,9 @@ for (int a = 0; a < b; a++);
 (ForLoopStatement
 (TypeAndInitDeclaration
 (FullySpecifiedType
-(BuiltinNumericTypeSpecifier
+(NumericTypeSpecifier
 - NumericType INT32
-)BuiltinNumericTypeSpecifier
+)NumericTypeSpecifier
 )FullySpecifiedType
 (DeclarationMember
 (Identifier)
@@ -3441,9 +3441,9 @@ for (int ii = 0; ii < NUM_LAYERS; ++ii) {
 (ForLoopStatement
 (TypeAndInitDeclaration
 (FullySpecifiedType
-(BuiltinNumericTypeSpecifier
+(NumericTypeSpecifier
 - NumericType INT32
-)BuiltinNumericTypeSpecifier
+)NumericTypeSpecifier
 )FullySpecifiedType
 (DeclarationMember
 (Identifier)
@@ -3477,9 +3477,9 @@ for (int ii = 0; ii < NUM_LAYERS; ++ii) {
 (ForLoopStatement
 (TypeAndInitDeclaration
 (FullySpecifiedType
-(BuiltinNumericTypeSpecifier
+(NumericTypeSpecifier
 - NumericType INT32
-)BuiltinNumericTypeSpecifier
+)NumericTypeSpecifier
 )FullySpecifiedType
 (DeclarationMember
 (Identifier)
@@ -3577,9 +3577,9 @@ for (int ii = 0; ii < NUM_LAYERS; ++ii) {
 (DeclarationStatement
 (TypeAndInitDeclaration
 (FullySpecifiedType
-(BuiltinNumericTypeSpecifier
+(NumericTypeSpecifier
 - NumericType INT32
-)BuiltinNumericTypeSpecifier
+)NumericTypeSpecifier
 )FullySpecifiedType
 (DeclarationMember
 (Identifier)
@@ -4092,9 +4092,9 @@ for ( ; int x = a < b; a++);
 (ForLoopStatement
 (IterationConditionInitializer
 (FullySpecifiedType
-(BuiltinNumericTypeSpecifier
+(NumericTypeSpecifier
 - NumericType INT32
-)BuiltinNumericTypeSpecifier
+)NumericTypeSpecifier
 )FullySpecifiedType
 (Identifier)
 - String x
@@ -4186,9 +4186,9 @@ testASTTree[statement_qdAGT7AyHhO++cISWj+vPEL8qIU=]=[
 (DeclarationStatement
 (TypeAndInitDeclaration
 (FullySpecifiedType
-(BuiltinNumericTypeSpecifier
+(NumericTypeSpecifier
 - NumericType FLOAT16
-)BuiltinNumericTypeSpecifier
+)NumericTypeSpecifier
 )FullySpecifiedType
 (DeclarationMember
 (Identifier)
@@ -4206,9 +4206,9 @@ testASTTree[statement_qdAGT7AyHhO++cISWj+vPEL8qIU=]=[
 (DeclarationStatement
 (TypeAndInitDeclaration
 (FullySpecifiedType
-(BuiltinNumericTypeSpecifier
+(NumericTypeSpecifier
 - NumericType INT32
-)BuiltinNumericTypeSpecifier
+)NumericTypeSpecifier
 )FullySpecifiedType
 (DeclarationMember
 (Identifier)
@@ -4219,9 +4219,9 @@ testASTTree[statement_qdAGT7AyHhO++cISWj+vPEL8qIU=]=[
 (DeclarationStatement
 (TypeAndInitDeclaration
 (FullySpecifiedType
-(BuiltinNumericTypeSpecifier
+(NumericTypeSpecifier
 - NumericType UINT32
-)BuiltinNumericTypeSpecifier
+)NumericTypeSpecifier
 )FullySpecifiedType
 (DeclarationMember
 (Identifier)
@@ -4232,9 +4232,9 @@ testASTTree[statement_qdAGT7AyHhO++cISWj+vPEL8qIU=]=[
 (DeclarationStatement
 (TypeAndInitDeclaration
 (FullySpecifiedType
-(BuiltinNumericTypeSpecifier
+(NumericTypeSpecifier
 - NumericType UINT16
-)BuiltinNumericTypeSpecifier
+)NumericTypeSpecifier
 )FullySpecifiedType
 (DeclarationMember
 (Identifier)
@@ -4245,9 +4245,9 @@ testASTTree[statement_qdAGT7AyHhO++cISWj+vPEL8qIU=]=[
 (DeclarationStatement
 (TypeAndInitDeclaration
 (FullySpecifiedType
-(BuiltinNumericTypeSpecifier
+(NumericTypeSpecifier
 - NumericType FLOAT32
-)BuiltinNumericTypeSpecifier
+)NumericTypeSpecifier
 )FullySpecifiedType
 (DeclarationMember
 (Identifier)
@@ -4427,9 +4427,9 @@ for (int a = b; ; a++);
 (ForLoopStatement
 (TypeAndInitDeclaration
 (FullySpecifiedType
-(BuiltinNumericTypeSpecifier
+(NumericTypeSpecifier
 - NumericType INT32
-)BuiltinNumericTypeSpecifier
+)NumericTypeSpecifier
 )FullySpecifiedType
 (DeclarationMember
 (Identifier)
@@ -4479,9 +4479,9 @@ for (int a = b; ; );
 (ForLoopStatement
 (TypeAndInitDeclaration
 (FullySpecifiedType
-(BuiltinNumericTypeSpecifier
+(NumericTypeSpecifier
 - NumericType INT32
-)BuiltinNumericTypeSpecifier
+)NumericTypeSpecifier
 )FullySpecifiedType
 (DeclarationMember
 (Identifier)
@@ -4525,9 +4525,9 @@ out toFragment { out vec3 color; } toF;
 - StorageType IN
 )StorageQualifier
 )TypeQualifier
-(BuiltinNumericTypeSpecifier
+(NumericTypeSpecifier
 - NumericType F32VEC3
-)BuiltinNumericTypeSpecifier
+)NumericTypeSpecifier
 )FullySpecifiedType
 (StructDeclarator
 (Identifier)
@@ -4549,9 +4549,9 @@ out toFragment { out vec3 color; } toF;
 - StorageType IN
 )StorageQualifier
 )TypeQualifier
-(BuiltinNumericTypeSpecifier
+(NumericTypeSpecifier
 - NumericType F32VEC4
-)BuiltinNumericTypeSpecifier
+)NumericTypeSpecifier
 )FullySpecifiedType
 (DeclarationMember
 (Identifier)
@@ -4578,9 +4578,9 @@ out toFragment { out vec3 color; } toF;
 - StorageType OUT
 )StorageQualifier
 )TypeQualifier
-(BuiltinNumericTypeSpecifier
+(NumericTypeSpecifier
 - NumericType F32VEC3
-)BuiltinNumericTypeSpecifier
+)NumericTypeSpecifier
 )FullySpecifiedType
 (StructDeclarator
 (Identifier)
@@ -4607,17 +4607,17 @@ void foo(sampler2D t) {
 (FunctionDefinition
 (FunctionPrototype
 (FullySpecifiedType
-(BuiltinFixedTypeSpecifier
-- BuiltinType VOID
-)BuiltinFixedTypeSpecifier
+(FixedTypeSpecifier
+- FixedType VOID
+)FixedTypeSpecifier
 )FullySpecifiedType
 (Identifier)
 - String foo
 (FunctionParameter
 (FullySpecifiedType
-(BuiltinFixedTypeSpecifier
-- BuiltinType SAMPLER2D
-)BuiltinFixedTypeSpecifier
+(FixedTypeSpecifier
+- FixedType SAMPLER2D
+)FixedTypeSpecifier
 )FullySpecifiedType
 (Identifier)
 - String t
@@ -4633,9 +4633,9 @@ void foo(sampler2D t) {
 - String t
 )ReferenceExpression
 (FunctionCallExpression
-(BuiltinNumericTypeSpecifier
+(NumericTypeSpecifier
 - NumericType F32VEC2
-)BuiltinNumericTypeSpecifier
+)NumericTypeSpecifier
 (LiteralExpression
 - NumericType FLOAT32
 - Float 0.5
@@ -4664,9 +4664,9 @@ const bool constDecl = true;
 - StorageType UNIFORM
 )StorageQualifier
 )TypeQualifier
-(BuiltinNumericTypeSpecifier
+(NumericTypeSpecifier
 - NumericType BOOL
-)BuiltinNumericTypeSpecifier
+)NumericTypeSpecifier
 )FullySpecifiedType
 (DeclarationMember
 (Identifier)
@@ -4688,9 +4688,9 @@ const bool constDecl = true;
 - StorageType CONST
 )StorageQualifier
 )TypeQualifier
-(BuiltinNumericTypeSpecifier
+(NumericTypeSpecifier
 - NumericType BOOL
-)BuiltinNumericTypeSpecifier
+)NumericTypeSpecifier
 )FullySpecifiedType
 (DeclarationMember
 (Identifier)
@@ -4738,9 +4738,9 @@ uniform sampler2D DiffuseDepthSampler;
 - StorageType UNIFORM
 )StorageQualifier
 )TypeQualifier
-(BuiltinFixedTypeSpecifier
-- BuiltinType SAMPLER2D
-)BuiltinFixedTypeSpecifier
+(FixedTypeSpecifier
+- FixedType SAMPLER2D
+)FixedTypeSpecifier
 )FullySpecifiedType
 (DeclarationMember
 (Identifier)
@@ -4756,9 +4756,9 @@ uniform sampler2D DiffuseDepthSampler;
 - StorageType UNIFORM
 )StorageQualifier
 )TypeQualifier
-(BuiltinFixedTypeSpecifier
-- BuiltinType SAMPLER2D
-)BuiltinFixedTypeSpecifier
+(FixedTypeSpecifier
+- FixedType SAMPLER2D
+)FixedTypeSpecifier
 )FullySpecifiedType
 (DeclarationMember
 (Identifier)
@@ -4792,9 +4792,9 @@ in highp float x;
 (PrecisionQualifier
 - PrecisionLevel HIGH
 )PrecisionQualifier
-(BuiltinNumericTypeSpecifier
+(NumericTypeSpecifier
 - NumericType FLOAT32
-)BuiltinNumericTypeSpecifier
+)NumericTypeSpecifier
 )PrecisionDeclaration
 )DeclarationExternalDeclaration
 (DeclarationExternalDeclaration
@@ -4805,9 +4805,9 @@ in highp float x;
 - StorageType UNIFORM
 )StorageQualifier
 )TypeQualifier
-(BuiltinNumericTypeSpecifier
+(NumericTypeSpecifier
 - NumericType INT32
-)BuiltinNumericTypeSpecifier
+)NumericTypeSpecifier
 )FullySpecifiedType
 (DeclarationMember
 (Identifier)
@@ -4830,9 +4830,9 @@ in highp float x;
 - PrecisionLevel HIGH
 )PrecisionQualifier
 )TypeQualifier
-(BuiltinNumericTypeSpecifier
+(NumericTypeSpecifier
 - NumericType FLOAT32
-)BuiltinNumericTypeSpecifier
+)NumericTypeSpecifier
 )FullySpecifiedType
 (DeclarationMember
 (Identifier)
@@ -4865,9 +4865,9 @@ buffer BufferName {
 (StructBody
 (StructMember
 (FullySpecifiedType
-(BuiltinNumericTypeSpecifier
+(NumericTypeSpecifier
 - NumericType FLOAT32
-)BuiltinNumericTypeSpecifier
+)NumericTypeSpecifier
 )FullySpecifiedType
 (StructDeclarator
 (Identifier)
@@ -4876,9 +4876,9 @@ buffer BufferName {
 )StructMember
 (StructMember
 (FullySpecifiedType
-(BuiltinNumericTypeSpecifier
+(NumericTypeSpecifier
 - NumericType INT32
-)BuiltinNumericTypeSpecifier
+)NumericTypeSpecifier
 )FullySpecifiedType
 (StructDeclarator
 (Identifier)
@@ -4957,44 +4957,44 @@ int foo(
 (FunctionDefinition
 (FunctionPrototype
 (FullySpecifiedType
-(BuiltinNumericTypeSpecifier
+(NumericTypeSpecifier
 - NumericType INT32
-)BuiltinNumericTypeSpecifier
+)NumericTypeSpecifier
 )FullySpecifiedType
 (Identifier)
 - String foo
 (FunctionParameter
 (FullySpecifiedType
-(BuiltinNumericTypeSpecifier
+(NumericTypeSpecifier
 - NumericType INT32
-)BuiltinNumericTypeSpecifier
+)NumericTypeSpecifier
 )FullySpecifiedType
 (Identifier)
 - String a
 )FunctionParameter
 (FunctionParameter
 (FullySpecifiedType
-(BuiltinNumericTypeSpecifier
+(NumericTypeSpecifier
 - NumericType INT32
-)BuiltinNumericTypeSpecifier
+)NumericTypeSpecifier
 )FullySpecifiedType
 (Identifier)
 - String b
 )FunctionParameter
 (FunctionParameter
 (FullySpecifiedType
-(BuiltinNumericTypeSpecifier
+(NumericTypeSpecifier
 - NumericType INT32
-)BuiltinNumericTypeSpecifier
+)NumericTypeSpecifier
 )FullySpecifiedType
 (Identifier)
 - String c
 )FunctionParameter
 (FunctionParameter
 (FullySpecifiedType
-(BuiltinNumericTypeSpecifier
+(NumericTypeSpecifier
 - NumericType INT32
-)BuiltinNumericTypeSpecifier
+)NumericTypeSpecifier
 )FullySpecifiedType
 (Identifier)
 - String d
@@ -5006,62 +5006,62 @@ int foo(
 (FunctionDefinition
 (FunctionPrototype
 (FullySpecifiedType
-(BuiltinNumericTypeSpecifier
+(NumericTypeSpecifier
 - NumericType INT32
-)BuiltinNumericTypeSpecifier
+)NumericTypeSpecifier
 )FullySpecifiedType
 (Identifier)
 - String foo
 (FunctionParameter
 (FullySpecifiedType
-(BuiltinNumericTypeSpecifier
+(NumericTypeSpecifier
 - NumericType INT32
-)BuiltinNumericTypeSpecifier
+)NumericTypeSpecifier
 )FullySpecifiedType
 (Identifier)
 - String a
 )FunctionParameter
 (FunctionParameter
 (FullySpecifiedType
-(BuiltinNumericTypeSpecifier
+(NumericTypeSpecifier
 - NumericType INT32
-)BuiltinNumericTypeSpecifier
+)NumericTypeSpecifier
 )FullySpecifiedType
 (Identifier)
 - String b
 )FunctionParameter
 (FunctionParameter
 (FullySpecifiedType
-(BuiltinNumericTypeSpecifier
+(NumericTypeSpecifier
 - NumericType INT32
-)BuiltinNumericTypeSpecifier
+)NumericTypeSpecifier
 )FullySpecifiedType
 (Identifier)
 - String c
 )FunctionParameter
 (FunctionParameter
 (FullySpecifiedType
-(BuiltinNumericTypeSpecifier
+(NumericTypeSpecifier
 - NumericType INT32
-)BuiltinNumericTypeSpecifier
+)NumericTypeSpecifier
 )FullySpecifiedType
 (Identifier)
 - String d
 )FunctionParameter
 (FunctionParameter
 (FullySpecifiedType
-(BuiltinNumericTypeSpecifier
+(NumericTypeSpecifier
 - NumericType INT32
-)BuiltinNumericTypeSpecifier
+)NumericTypeSpecifier
 )FullySpecifiedType
 (Identifier)
 - String e
 )FunctionParameter
 (FunctionParameter
 (FullySpecifiedType
-(BuiltinNumericTypeSpecifier
+(NumericTypeSpecifier
 - NumericType INT32
-)BuiltinNumericTypeSpecifier
+)NumericTypeSpecifier
 )FullySpecifiedType
 (Identifier)
 - String f
@@ -5073,71 +5073,71 @@ int foo(
 (FunctionDefinition
 (FunctionPrototype
 (FullySpecifiedType
-(BuiltinNumericTypeSpecifier
+(NumericTypeSpecifier
 - NumericType INT32
-)BuiltinNumericTypeSpecifier
+)NumericTypeSpecifier
 )FullySpecifiedType
 (Identifier)
 - String foo
 (FunctionParameter
 (FullySpecifiedType
-(BuiltinNumericTypeSpecifier
+(NumericTypeSpecifier
 - NumericType INT32
-)BuiltinNumericTypeSpecifier
+)NumericTypeSpecifier
 )FullySpecifiedType
 (Identifier)
 - String a
 )FunctionParameter
 (FunctionParameter
 (FullySpecifiedType
-(BuiltinNumericTypeSpecifier
+(NumericTypeSpecifier
 - NumericType INT32
-)BuiltinNumericTypeSpecifier
+)NumericTypeSpecifier
 )FullySpecifiedType
 (Identifier)
 - String b
 )FunctionParameter
 (FunctionParameter
 (FullySpecifiedType
-(BuiltinNumericTypeSpecifier
+(NumericTypeSpecifier
 - NumericType INT32
-)BuiltinNumericTypeSpecifier
+)NumericTypeSpecifier
 )FullySpecifiedType
 (Identifier)
 - String c
 )FunctionParameter
 (FunctionParameter
 (FullySpecifiedType
-(BuiltinNumericTypeSpecifier
+(NumericTypeSpecifier
 - NumericType INT32
-)BuiltinNumericTypeSpecifier
+)NumericTypeSpecifier
 )FullySpecifiedType
 (Identifier)
 - String d
 )FunctionParameter
 (FunctionParameter
 (FullySpecifiedType
-(BuiltinNumericTypeSpecifier
+(NumericTypeSpecifier
 - NumericType INT32
-)BuiltinNumericTypeSpecifier
+)NumericTypeSpecifier
 )FullySpecifiedType
 (Identifier)
 - String c
 )FunctionParameter
 (FunctionParameter
 (FullySpecifiedType
-(BuiltinNumericTypeSpecifier
+(NumericTypeSpecifier
 - NumericType INT32
-)BuiltinNumericTypeSpecifier
+)NumericTypeSpecifier
 )FullySpecifiedType
 (Identifier)
 - String d
 )FunctionParameter
 (FunctionParameter
 (FullySpecifiedType
-(BuiltinNumericTypeSpecifier
+(NumericTypeSpecifier
 - NumericType INT32
-)BuiltinNumericTypeSpecifier
+)NumericTypeSpecifier
 )FullySpecifiedType
 (Identifier)
 - String e
@@ -5149,125 +5149,125 @@ int foo(
 (FunctionDefinition
 (FunctionPrototype
 (FullySpecifiedType
-(BuiltinNumericTypeSpecifier
+(NumericTypeSpecifier
 - NumericType INT32
-)BuiltinNumericTypeSpecifier
+)NumericTypeSpecifier
 )FullySpecifiedType
 (Identifier)
 - String foo
 (FunctionParameter
 (FullySpecifiedType
-(BuiltinNumericTypeSpecifier
+(NumericTypeSpecifier
 - NumericType INT32
-)BuiltinNumericTypeSpecifier
+)NumericTypeSpecifier
 )FullySpecifiedType
 (Identifier)
 - String a
 )FunctionParameter
 (FunctionParameter
 (FullySpecifiedType
-(BuiltinNumericTypeSpecifier
+(NumericTypeSpecifier
 - NumericType INT32
-)BuiltinNumericTypeSpecifier
+)NumericTypeSpecifier
 )FullySpecifiedType
 (Identifier)
 - String b
 )FunctionParameter
 (FunctionParameter
 (FullySpecifiedType
-(BuiltinNumericTypeSpecifier
+(NumericTypeSpecifier
 - NumericType INT32
-)BuiltinNumericTypeSpecifier
+)NumericTypeSpecifier
 )FullySpecifiedType
 (Identifier)
 - String c
 )FunctionParameter
 (FunctionParameter
 (FullySpecifiedType
-(BuiltinNumericTypeSpecifier
+(NumericTypeSpecifier
 - NumericType INT32
-)BuiltinNumericTypeSpecifier
+)NumericTypeSpecifier
 )FullySpecifiedType
 (Identifier)
 - String d
 )FunctionParameter
 (FunctionParameter
 (FullySpecifiedType
-(BuiltinNumericTypeSpecifier
+(NumericTypeSpecifier
 - NumericType INT32
-)BuiltinNumericTypeSpecifier
+)NumericTypeSpecifier
 )FullySpecifiedType
 (Identifier)
 - String c
 )FunctionParameter
 (FunctionParameter
 (FullySpecifiedType
-(BuiltinNumericTypeSpecifier
+(NumericTypeSpecifier
 - NumericType INT32
-)BuiltinNumericTypeSpecifier
+)NumericTypeSpecifier
 )FullySpecifiedType
 (Identifier)
 - String d
 )FunctionParameter
 (FunctionParameter
 (FullySpecifiedType
-(BuiltinNumericTypeSpecifier
+(NumericTypeSpecifier
 - NumericType INT32
-)BuiltinNumericTypeSpecifier
+)NumericTypeSpecifier
 )FullySpecifiedType
 (Identifier)
 - String e
 )FunctionParameter
 (FunctionParameter
 (FullySpecifiedType
-(BuiltinNumericTypeSpecifier
+(NumericTypeSpecifier
 - NumericType INT32
-)BuiltinNumericTypeSpecifier
+)NumericTypeSpecifier
 )FullySpecifiedType
 (Identifier)
 - String c
 )FunctionParameter
 (FunctionParameter
 (FullySpecifiedType
-(BuiltinNumericTypeSpecifier
+(NumericTypeSpecifier
 - NumericType INT32
-)BuiltinNumericTypeSpecifier
+)NumericTypeSpecifier
 )FullySpecifiedType
 (Identifier)
 - String d
 )FunctionParameter
 (FunctionParameter
 (FullySpecifiedType
-(BuiltinNumericTypeSpecifier
+(NumericTypeSpecifier
 - NumericType INT32
-)BuiltinNumericTypeSpecifier
+)NumericTypeSpecifier
 )FullySpecifiedType
 (Identifier)
 - String c
 )FunctionParameter
 (FunctionParameter
 (FullySpecifiedType
-(BuiltinNumericTypeSpecifier
+(NumericTypeSpecifier
 - NumericType INT32
-)BuiltinNumericTypeSpecifier
+)NumericTypeSpecifier
 )FullySpecifiedType
 (Identifier)
 - String d
 )FunctionParameter
 (FunctionParameter
 (FullySpecifiedType
-(BuiltinNumericTypeSpecifier
+(NumericTypeSpecifier
 - NumericType INT32
-)BuiltinNumericTypeSpecifier
+)NumericTypeSpecifier
 )FullySpecifiedType
 (Identifier)
 - String e
 )FunctionParameter
 (FunctionParameter
 (FullySpecifiedType
-(BuiltinNumericTypeSpecifier
+(NumericTypeSpecifier
 - NumericType INT32
-)BuiltinNumericTypeSpecifier
+)NumericTypeSpecifier
 )FullySpecifiedType
 (Identifier)
 - String e
@@ -5305,9 +5305,9 @@ layout(location = 0) out vec3 layoutOne;
 - StorageType OUT
 )StorageQualifier
 )TypeQualifier
-(BuiltinNumericTypeSpecifier
+(NumericTypeSpecifier
 - NumericType F32VEC3
-)BuiltinNumericTypeSpecifier
+)NumericTypeSpecifier
 )FullySpecifiedType
 (DeclarationMember
 (Identifier)
@@ -5336,9 +5336,9 @@ const in float p;
 - StorageType IN
 )StorageQualifier
 )TypeQualifier
-(BuiltinNumericTypeSpecifier
+(NumericTypeSpecifier
 - NumericType FLOAT32
-)BuiltinNumericTypeSpecifier
+)NumericTypeSpecifier
 )FullySpecifiedType
 (DeclarationMember
 (Identifier)
@@ -5374,9 +5374,9 @@ layout(std140) uniform ColorBlock { vec4 color1; } uC;
 (StructBody
 (StructMember
 (FullySpecifiedType
-(BuiltinNumericTypeSpecifier
+(NumericTypeSpecifier
 - NumericType F32VEC4
-)BuiltinNumericTypeSpecifier
+)NumericTypeSpecifier
 )FullySpecifiedType
 (StructDeclarator
 (Identifier)
@@ -5402,17 +5402,17 @@ void foo(int p[14]) {
 (FunctionDefinition
 (FunctionPrototype
 (FullySpecifiedType
-(BuiltinFixedTypeSpecifier
-- BuiltinType VOID
-)BuiltinFixedTypeSpecifier
+(FixedTypeSpecifier
+- FixedType VOID
+)FixedTypeSpecifier
 )FullySpecifiedType
 (Identifier)
 - String foo
 (FunctionParameter
 (FullySpecifiedType
-(BuiltinNumericTypeSpecifier
+(NumericTypeSpecifier
 - NumericType INT32
-)BuiltinNumericTypeSpecifier
+)NumericTypeSpecifier
 )FullySpecifiedType
 (Identifier)
 - String p
@@ -5496,9 +5496,9 @@ writeonly uniform image2D i2d;
 - StorageType UNIFORM
 )StorageQualifier
 )TypeQualifier
-(BuiltinFixedTypeSpecifier
-- BuiltinType IMAGE2D
-)BuiltinFixedTypeSpecifier
+(FixedTypeSpecifier
+- FixedType IMAGE2D
+)FixedTypeSpecifier
 )FullySpecifiedType
 (DeclarationMember
 (Identifier)
@@ -5543,71 +5543,71 @@ int f(
 (FunctionDefinition
 (FunctionPrototype
 (FullySpecifiedType
-(BuiltinNumericTypeSpecifier
+(NumericTypeSpecifier
 - NumericType INT32
-)BuiltinNumericTypeSpecifier
+)NumericTypeSpecifier
 )FullySpecifiedType
 (Identifier)
 - String f
 (FunctionParameter
 (FullySpecifiedType
-(BuiltinNumericTypeSpecifier
+(NumericTypeSpecifier
 - NumericType INT8
-)BuiltinNumericTypeSpecifier
+)NumericTypeSpecifier
 )FullySpecifiedType
 (Identifier)
 - String i8
 )FunctionParameter
 (FunctionParameter
 (FullySpecifiedType
-(BuiltinNumericTypeSpecifier
+(NumericTypeSpecifier
 - NumericType UINT8
-)BuiltinNumericTypeSpecifier
+)NumericTypeSpecifier
 )FullySpecifiedType
 (Identifier)
 - String u8
 )FunctionParameter
 (FunctionParameter
 (FullySpecifiedType
-(BuiltinNumericTypeSpecifier
+(NumericTypeSpecifier
 - NumericType INT16
-)BuiltinNumericTypeSpecifier
+)NumericTypeSpecifier
 )FullySpecifiedType
 (Identifier)
 - String i16
 )FunctionParameter
 (FunctionParameter
 (FullySpecifiedType
-(BuiltinNumericTypeSpecifier
+(NumericTypeSpecifier
 - NumericType UINT16
-)BuiltinNumericTypeSpecifier
+)NumericTypeSpecifier
 )FullySpecifiedType
 (Identifier)
 - String u16
 )FunctionParameter
 (FunctionParameter
 (FullySpecifiedType
-(BuiltinNumericTypeSpecifier
+(NumericTypeSpecifier
 - NumericType INT64
-)BuiltinNumericTypeSpecifier
+)NumericTypeSpecifier
 )FullySpecifiedType
 (Identifier)
 - String i64
 )FunctionParameter
 (FunctionParameter
 (FullySpecifiedType
-(BuiltinNumericTypeSpecifier
+(NumericTypeSpecifier
 - NumericType UINT64
-)BuiltinNumericTypeSpecifier
+)NumericTypeSpecifier
 )FullySpecifiedType
 (Identifier)
 - String u64
 )FunctionParameter
 (FunctionParameter
 (FullySpecifiedType
-(BuiltinNumericTypeSpecifier
+(NumericTypeSpecifier
 - NumericType FLOAT16
-)BuiltinNumericTypeSpecifier
+)NumericTypeSpecifier
 )FullySpecifiedType
 (Identifier)
 - String f16
@@ -5664,9 +5664,9 @@ void main() {
 - StorageType CALLABLE_DATA_IN_EXT
 )StorageQualifier
 )TypeQualifier
-(BuiltinNumericTypeSpecifier
+(NumericTypeSpecifier
 - NumericType FLOAT32
-)BuiltinNumericTypeSpecifier
+)NumericTypeSpecifier
 )FullySpecifiedType
 (DeclarationMember
 (Identifier)
@@ -5692,9 +5692,9 @@ void main() {
 (StructBody
 (StructMember
 (FullySpecifiedType
-(BuiltinNumericTypeSpecifier
+(NumericTypeSpecifier
 - NumericType U32VEC2
-)BuiltinNumericTypeSpecifier
+)NumericTypeSpecifier
 )FullySpecifiedType
 (StructDeclarator
 (Identifier)
@@ -5707,9 +5707,9 @@ void main() {
 (FunctionDefinition
 (FunctionPrototype
 (FullySpecifiedType
-(BuiltinFixedTypeSpecifier
-- BuiltinType VOID
-)BuiltinFixedTypeSpecifier
+(FixedTypeSpecifier
+- FixedType VOID
+)FixedTypeSpecifier
 )FullySpecifiedType
 (Identifier)
 - String main
@@ -5722,9 +5722,9 @@ void main() {
 - String outColor
 )ReferenceExpression
 (FunctionCallExpression
-(BuiltinNumericTypeSpecifier
+(NumericTypeSpecifier
 - NumericType FLOAT32
-)BuiltinNumericTypeSpecifier
+)NumericTypeSpecifier
 (BitwiseAndExpression
 (BitwiseAndExpression
 (GroupingExpression
@@ -5798,17 +5798,17 @@ void foo(int foo) {
 (FunctionDefinition
 (FunctionPrototype
 (FullySpecifiedType
-(BuiltinFixedTypeSpecifier
-- BuiltinType VOID
-)BuiltinFixedTypeSpecifier
+(FixedTypeSpecifier
+- FixedType VOID
+)FixedTypeSpecifier
 )FullySpecifiedType
 (Identifier)
 - String foo
 (FunctionParameter
 (FullySpecifiedType
-(BuiltinNumericTypeSpecifier
+(NumericTypeSpecifier
 - NumericType INT32
-)BuiltinNumericTypeSpecifier
+)NumericTypeSpecifier
 )FullySpecifiedType
 (Identifier)
 - String foo
@@ -5839,9 +5839,9 @@ struct S {
 (StructBody
 (StructMember
 (FullySpecifiedType
-(BuiltinNumericTypeSpecifier
+(NumericTypeSpecifier
 - NumericType FLOAT32
-)BuiltinNumericTypeSpecifier
+)NumericTypeSpecifier
 )FullySpecifiedType
 (StructDeclarator
 (Identifier)
@@ -5850,9 +5850,9 @@ struct S {
 )StructMember
 (StructMember
 (FullySpecifiedType
-(BuiltinNumericTypeSpecifier
+(NumericTypeSpecifier
 - NumericType INT32
-)BuiltinNumericTypeSpecifier
+)NumericTypeSpecifier
 )FullySpecifiedType
 (StructDeclarator
 (Identifier)
@@ -5882,9 +5882,9 @@ const vec2 longList[75] = vec2[75](vec2(1, 2), vec2(1, 2), vec2(1, 2), vec2(1, 2
 - StorageType CONST
 )StorageQualifier
 )TypeQualifier
-(BuiltinNumericTypeSpecifier
+(NumericTypeSpecifier
 - NumericType F32VEC2
-)BuiltinNumericTypeSpecifier
+)NumericTypeSpecifier
 )FullySpecifiedType
 (DeclarationMember
 (Identifier)
@@ -5898,13 +5898,13 @@ const vec2 longList[75] = vec2[75](vec2(1, 2), vec2(1, 2), vec2(1, 2), vec2(1, 2
 )ArraySpecifier
 (ExpressionInitializer
 (FunctionCallExpression
-(BuiltinNumericTypeSpecifier
+(NumericTypeSpecifier
 - NumericType F32VEC2
-)BuiltinNumericTypeSpecifier
+)NumericTypeSpecifier
 (FunctionCallExpression
-(BuiltinNumericTypeSpecifier
+(NumericTypeSpecifier
 - NumericType F32VEC2
-)BuiltinNumericTypeSpecifier
+)NumericTypeSpecifier
 (LiteralExpression
 - NumericType INT32
 - Integer 1
@@ -5917,9 +5917,9 @@ const vec2 longList[75] = vec2[75](vec2(1, 2), vec2(1, 2), vec2(1, 2), vec2(1, 2
 )LiteralExpression
 )FunctionCallExpression
 (FunctionCallExpression
-(BuiltinNumericTypeSpecifier
+(NumericTypeSpecifier
 - NumericType F32VEC2
-)BuiltinNumericTypeSpecifier
+)NumericTypeSpecifier
 (LiteralExpression
 - NumericType INT32
 - Integer 1
@@ -5932,9 +5932,9 @@ const vec2 longList[75] = vec2[75](vec2(1, 2), vec2(1, 2), vec2(1, 2), vec2(1, 2
 )LiteralExpression
 )FunctionCallExpression
 (FunctionCallExpression
-(BuiltinNumericTypeSpecifier
+(NumericTypeSpecifier
 - NumericType F32VEC2
-)BuiltinNumericTypeSpecifier
+)NumericTypeSpecifier
 (LiteralExpression
 - NumericType INT32
 - Integer 1
@@ -5947,9 +5947,9 @@ const vec2 longList[75] = vec2[75](vec2(1, 2), vec2(1, 2), vec2(1, 2), vec2(1, 2
 )LiteralExpression
 )FunctionCallExpression
 (FunctionCallExpression
-(BuiltinNumericTypeSpecifier
+(NumericTypeSpecifier
 - NumericType F32VEC2
-)BuiltinNumericTypeSpecifier
+)NumericTypeSpecifier
 (LiteralExpression
 - NumericType INT32
 - Integer 1
@@ -5962,9 +5962,9 @@ const vec2 longList[75] = vec2[75](vec2(1, 2), vec2(1, 2), vec2(1, 2), vec2(1, 2
 )LiteralExpression
 )FunctionCallExpression
 (FunctionCallExpression
-(BuiltinNumericTypeSpecifier
+(NumericTypeSpecifier
 - NumericType F32VEC2
-)BuiltinNumericTypeSpecifier
+)NumericTypeSpecifier
 (LiteralExpression
 - NumericType INT32
 - Integer 1
@@ -5977,9 +5977,9 @@ const vec2 longList[75] = vec2[75](vec2(1, 2), vec2(1, 2), vec2(1, 2), vec2(1, 2
 )LiteralExpression
 )FunctionCallExpression
 (FunctionCallExpression
-(BuiltinNumericTypeSpecifier
+(NumericTypeSpecifier
 - NumericType F32VEC2
-)BuiltinNumericTypeSpecifier
+)NumericTypeSpecifier
 (LiteralExpression
 - NumericType INT32
 - Integer 1
@@ -5992,9 +5992,9 @@ const vec2 longList[75] = vec2[75](vec2(1, 2), vec2(1, 2), vec2(1, 2), vec2(1, 2
 )LiteralExpression
 )FunctionCallExpression
 (FunctionCallExpression
-(BuiltinNumericTypeSpecifier
+(NumericTypeSpecifier
 - NumericType F32VEC2
-)BuiltinNumericTypeSpecifier
+)NumericTypeSpecifier
 (LiteralExpression
 - NumericType INT32
 - Integer 1
@@ -6007,9 +6007,9 @@ const vec2 longList[75] = vec2[75](vec2(1, 2), vec2(1, 2), vec2(1, 2), vec2(1, 2
 )LiteralExpression
 )FunctionCallExpression
 (FunctionCallExpression
-(BuiltinNumericTypeSpecifier
+(NumericTypeSpecifier
 - NumericType F32VEC2
-)BuiltinNumericTypeSpecifier
+)NumericTypeSpecifier
 (LiteralExpression
 - NumericType INT32
 - Integer 1
@@ -6060,9 +6060,9 @@ patch out vec4 patchOut;
 - StorageType OUT
 )StorageQualifier
 )TypeQualifier
-(BuiltinNumericTypeSpecifier
+(NumericTypeSpecifier
 - NumericType F32VEC4
-)BuiltinNumericTypeSpecifier
+)NumericTypeSpecifier
 )FullySpecifiedType
 (DeclarationMember
 (Identifier)
@@ -6096,9 +6096,9 @@ uniform struct e {
 - StorageType UNIFORM
 )StorageQualifier
 )TypeQualifier
-(BuiltinNumericTypeSpecifier
+(NumericTypeSpecifier
 - NumericType F32VEC4
-)BuiltinNumericTypeSpecifier
+)NumericTypeSpecifier
 )FullySpecifiedType
 (DeclarationMember
 (Identifier)
@@ -6114,18 +6114,18 @@ uniform struct e {
 - StorageType UNIFORM
 )StorageQualifier
 )TypeQualifier
-(BuiltinNumericTypeSpecifier
+(NumericTypeSpecifier
 - NumericType F32VEC2
-)BuiltinNumericTypeSpecifier
+)NumericTypeSpecifier
 )FullySpecifiedType
 (DeclarationMember
 (Identifier)
 - String b
 (ExpressionInitializer
 (FunctionCallExpression
-(BuiltinNumericTypeSpecifier
+(NumericTypeSpecifier
 - NumericType F32VEC2
-)BuiltinNumericTypeSpecifier
+)NumericTypeSpecifier
 (LiteralExpression
 - NumericType INT32
 - Integer 0
@@ -6160,9 +6160,9 @@ uniform struct e {
 - StorageType UNIFORM
 )StorageQualifier
 )TypeQualifier
-(BuiltinNumericTypeSpecifier
+(NumericTypeSpecifier
 - NumericType F32VEC2
-)BuiltinNumericTypeSpecifier
+)NumericTypeSpecifier
 )FullySpecifiedType
 (DeclarationMember
 (Identifier)
@@ -6178,9 +6178,9 @@ uniform struct e {
 - StorageType UNIFORM
 )StorageQualifier
 )TypeQualifier
-(BuiltinNumericTypeSpecifier
+(NumericTypeSpecifier
 - NumericType F32VEC4
-)BuiltinNumericTypeSpecifier
+)NumericTypeSpecifier
 )FullySpecifiedType
 (DeclarationMember
 (Identifier)
@@ -6209,9 +6209,9 @@ uniform struct e {
 (StructBody
 (StructMember
 (FullySpecifiedType
-(BuiltinNumericTypeSpecifier
+(NumericTypeSpecifier
 - NumericType F32VEC2
-)BuiltinNumericTypeSpecifier
+)NumericTypeSpecifier
 )FullySpecifiedType
 (StructDeclarator
 (Identifier)
@@ -6220,9 +6220,9 @@ uniform struct e {
 )StructMember
 (StructMember
 (FullySpecifiedType
-(BuiltinNumericTypeSpecifier
+(NumericTypeSpecifier
 - NumericType FLOAT32
-)BuiltinNumericTypeSpecifier
+)NumericTypeSpecifier
 )FullySpecifiedType
 (StructDeclarator
 (Identifier)
@@ -6231,9 +6231,9 @@ uniform struct e {
 )StructMember
 (StructMember
 (FullySpecifiedType
-(BuiltinNumericTypeSpecifier
+(NumericTypeSpecifier
 - NumericType UINT32
-)BuiltinNumericTypeSpecifier
+)NumericTypeSpecifier
 )FullySpecifiedType
 (StructDeclarator
 (Identifier)
@@ -6294,9 +6294,9 @@ precise out B2 {
 )StructMember
 (StructMember
 (FullySpecifiedType
-(BuiltinNumericTypeSpecifier
+(NumericTypeSpecifier
 - NumericType FLOAT32
-)BuiltinNumericTypeSpecifier
+)NumericTypeSpecifier
 )FullySpecifiedType
 (StructDeclarator
 (Identifier)
@@ -6334,9 +6334,9 @@ precise out B2 {
 )StructMember
 (StructMember
 (FullySpecifiedType
-(BuiltinNumericTypeSpecifier
+(NumericTypeSpecifier
 - NumericType FLOAT32
-)BuiltinNumericTypeSpecifier
+)NumericTypeSpecifier
 )FullySpecifiedType
 (StructDeclarator
 (Identifier)
@@ -6441,9 +6441,9 @@ void main() {
 - StorageType RAY_PAYLOAD_EXT
 )StorageQualifier
 )TypeQualifier
-(BuiltinNumericTypeSpecifier
+(NumericTypeSpecifier
 - NumericType F32VEC4
-)BuiltinNumericTypeSpecifier
+)NumericTypeSpecifier
 )FullySpecifiedType
 (DeclarationMember
 (Identifier)
@@ -6470,9 +6470,9 @@ void main() {
 - StorageType CALLABLE_DATA_EXT
 )StorageQualifier
 )TypeQualifier
-(BuiltinNumericTypeSpecifier
+(NumericTypeSpecifier
 - NumericType FLOAT32
-)BuiltinNumericTypeSpecifier
+)NumericTypeSpecifier
 )FullySpecifiedType
 (DeclarationMember
 (Identifier)
@@ -6508,9 +6508,9 @@ void main() {
 - StorageType UNIFORM
 )StorageQualifier
 )TypeQualifier
-(BuiltinFixedTypeSpecifier
-- BuiltinType ACCELERATION_STRUCTURE
-)BuiltinFixedTypeSpecifier
+(FixedTypeSpecifier
+- FixedType ACCELERATION_STRUCTURE
+)FixedTypeSpecifier
 )FullySpecifiedType
 (DeclarationMember
 (Identifier)
@@ -6541,9 +6541,9 @@ void main() {
 - StorageType UNIFORM
 )StorageQualifier
 )TypeQualifier
-(BuiltinFixedTypeSpecifier
-- BuiltinType IMAGE2D
-)BuiltinFixedTypeSpecifier
+(FixedTypeSpecifier
+- FixedType IMAGE2D
+)FixedTypeSpecifier
 )FullySpecifiedType
 (DeclarationMember
 (Identifier)
@@ -6583,9 +6583,9 @@ void main() {
 (StructBody
 (StructMember
 (FullySpecifiedType
-(BuiltinNumericTypeSpecifier
+(NumericTypeSpecifier
 - NumericType F32VEC3
-)BuiltinNumericTypeSpecifier
+)NumericTypeSpecifier
 )FullySpecifiedType
 (StructDeclarator
 (Identifier)
@@ -6594,9 +6594,9 @@ void main() {
 )StructMember
 (StructMember
 (FullySpecifiedType
-(BuiltinNumericTypeSpecifier
+(NumericTypeSpecifier
 - NumericType F32VEC3
-)BuiltinNumericTypeSpecifier
+)NumericTypeSpecifier
 )FullySpecifiedType
 (StructDeclarator
 (Identifier)
@@ -6605,9 +6605,9 @@ void main() {
 )StructMember
 (StructMember
 (FullySpecifiedType
-(BuiltinNumericTypeSpecifier
+(NumericTypeSpecifier
 - NumericType UINT32
-)BuiltinNumericTypeSpecifier
+)NumericTypeSpecifier
 )FullySpecifiedType
 (StructDeclarator
 (Identifier)
@@ -6616,9 +6616,9 @@ void main() {
 )StructMember
 (StructMember
 (FullySpecifiedType
-(BuiltinNumericTypeSpecifier
+(NumericTypeSpecifier
 - NumericType UINT32
-)BuiltinNumericTypeSpecifier
+)NumericTypeSpecifier
 )FullySpecifiedType
 (StructDeclarator
 (Identifier)
@@ -6627,9 +6627,9 @@ void main() {
 )StructMember
 (StructMember
 (FullySpecifiedType
-(BuiltinNumericTypeSpecifier
+(NumericTypeSpecifier
 - NumericType UINT32
-)BuiltinNumericTypeSpecifier
+)NumericTypeSpecifier
 )FullySpecifiedType
 (StructDeclarator
 (Identifier)
@@ -6638,9 +6638,9 @@ void main() {
 )StructMember
 (StructMember
 (FullySpecifiedType
-(BuiltinNumericTypeSpecifier
+(NumericTypeSpecifier
 - NumericType UINT32
-)BuiltinNumericTypeSpecifier
+)NumericTypeSpecifier
 )FullySpecifiedType
 (StructDeclarator
 (Identifier)
@@ -6653,35 +6653,35 @@ void main() {
 (FunctionDefinition
 (FunctionPrototype
 (FullySpecifiedType
-(BuiltinNumericTypeSpecifier
+(NumericTypeSpecifier
 - NumericType F32VEC3
-)BuiltinNumericTypeSpecifier
+)NumericTypeSpecifier
 )FullySpecifiedType
 (Identifier)
 - String computeDir
 (FunctionParameter
 (FullySpecifiedType
-(BuiltinNumericTypeSpecifier
+(NumericTypeSpecifier
 - NumericType F32VEC3
-)BuiltinNumericTypeSpecifier
+)NumericTypeSpecifier
 )FullySpecifiedType
 (Identifier)
 - String inDir
 )FunctionParameter
 (FunctionParameter
 (FullySpecifiedType
-(BuiltinNumericTypeSpecifier
+(NumericTypeSpecifier
 - NumericType U32VEC3
-)BuiltinNumericTypeSpecifier
+)NumericTypeSpecifier
 )FullySpecifiedType
 (Identifier)
 - String launchID
 )FunctionParameter
 (FunctionParameter
 (FullySpecifiedType
-(BuiltinNumericTypeSpecifier
+(NumericTypeSpecifier
 - NumericType U32VEC3
-)BuiltinNumericTypeSpecifier
+)NumericTypeSpecifier
 )FullySpecifiedType
 (Identifier)
 - String launchSize
@@ -6715,9 +6715,9 @@ void main() {
 (FunctionDefinition
 (FunctionPrototype
 (FullySpecifiedType
-(BuiltinFixedTypeSpecifier
-- BuiltinType VOID
-)BuiltinFixedTypeSpecifier
+(FixedTypeSpecifier
+- FixedType VOID
+)FixedTypeSpecifier
 )FullySpecifiedType
 (Identifier)
 - String main
@@ -6726,18 +6726,18 @@ void main() {
 (DeclarationStatement
 (TypeAndInitDeclaration
 (FullySpecifiedType
-(BuiltinNumericTypeSpecifier
+(NumericTypeSpecifier
 - NumericType F32VEC4
-)BuiltinNumericTypeSpecifier
+)NumericTypeSpecifier
 )FullySpecifiedType
 (DeclarationMember
 (Identifier)
 - String imgColor
 (ExpressionInitializer
 (FunctionCallExpression
-(BuiltinNumericTypeSpecifier
+(NumericTypeSpecifier
 - NumericType F32VEC4
-)BuiltinNumericTypeSpecifier
+)NumericTypeSpecifier
 (LiteralExpression
 - NumericType INT32
 - Integer 0
@@ -6839,9 +6839,9 @@ void main() {
 - String payload
 )ReferenceExpression
 (FunctionCallExpression
-(BuiltinNumericTypeSpecifier
+(NumericTypeSpecifier
 - NumericType F32VEC4
-)BuiltinNumericTypeSpecifier
+)NumericTypeSpecifier
 (ReferenceExpression
 (Identifier)
 - String blendColor
@@ -6859,9 +6859,9 @@ void main() {
 - String img
 )ReferenceExpression
 (FunctionCallExpression
-(BuiltinNumericTypeSpecifier
+(NumericTypeSpecifier
 - NumericType I32VEC2
-)BuiltinNumericTypeSpecifier
+)NumericTypeSpecifier
 (ReferenceExpression
 (Identifier)
 - String gl_LaunchIDEXT
@@ -6931,9 +6931,9 @@ precise S {
 (StructBody
 (StructMember
 (FullySpecifiedType
-(BuiltinNumericTypeSpecifier
+(NumericTypeSpecifier
 - NumericType FLOAT32
-)BuiltinNumericTypeSpecifier
+)NumericTypeSpecifier
 )FullySpecifiedType
 (StructDeclarator
 (Identifier)
@@ -6942,9 +6942,9 @@ precise S {
 )StructMember
 (StructMember
 (FullySpecifiedType
-(BuiltinNumericTypeSpecifier
+(NumericTypeSpecifier
 - NumericType INT32
-)BuiltinNumericTypeSpecifier
+)NumericTypeSpecifier
 )FullySpecifiedType
 (StructDeclarator
 (Identifier)
@@ -6974,9 +6974,9 @@ uniform vec4 otherColor;
 - StorageType UNIFORM
 )StorageQualifier
 )TypeQualifier
-(BuiltinNumericTypeSpecifier
+(NumericTypeSpecifier
 - NumericType FLOAT32
-)BuiltinNumericTypeSpecifier
+)NumericTypeSpecifier
 )FullySpecifiedType
 (DeclarationMember
 (Identifier)
@@ -6992,9 +6992,9 @@ uniform vec4 otherColor;
 - StorageType UNIFORM
 )StorageQualifier
 )TypeQualifier
-(BuiltinNumericTypeSpecifier
+(NumericTypeSpecifier
 - NumericType F32VEC4
-)BuiltinNumericTypeSpecifier
+)NumericTypeSpecifier
 )FullySpecifiedType
 (DeclarationMember
 (Identifier)
@@ -7014,9 +7014,9 @@ uniform vec4 otherColor;
 - StorageType UNIFORM
 )StorageQualifier
 )TypeQualifier
-(BuiltinNumericTypeSpecifier
+(NumericTypeSpecifier
 - NumericType F32VEC4
-)BuiltinNumericTypeSpecifier
+)NumericTypeSpecifier
 )FullySpecifiedType
 (DeclarationMember
 (Identifier)
@@ -7071,9 +7071,9 @@ layout(std430, set = 0, binding = 1) buffer ssbo { bool bo[2][3]; };
 (StructBody
 (StructMember
 (FullySpecifiedType
-(BuiltinNumericTypeSpecifier
+(NumericTypeSpecifier
 - NumericType BOOL
-)BuiltinNumericTypeSpecifier
+)NumericTypeSpecifier
 )FullySpecifiedType
 (StructDeclarator
 (Identifier)
@@ -7131,9 +7131,9 @@ layout(std430, set = 0, binding = 1) buffer ssbo { bool bo[2][3]; };
 (StructBody
 (StructMember
 (FullySpecifiedType
-(BuiltinNumericTypeSpecifier
+(NumericTypeSpecifier
 - NumericType BOOL
-)BuiltinNumericTypeSpecifier
+)NumericTypeSpecifier
 )FullySpecifiedType
 (StructDeclarator
 (Identifier)
@@ -7183,9 +7183,9 @@ invariant out imo { int i; } imon;
 (StructBody
 (StructMember
 (FullySpecifiedType
-(BuiltinNumericTypeSpecifier
+(NumericTypeSpecifier
 - NumericType INT32
-)BuiltinNumericTypeSpecifier
+)NumericTypeSpecifier
 )FullySpecifiedType
 (StructDeclarator
 (Identifier)
@@ -7212,9 +7212,9 @@ invariant out imo { int i; } imon;
 (StructBody
 (StructMember
 (FullySpecifiedType
-(BuiltinNumericTypeSpecifier
+(NumericTypeSpecifier
 - NumericType INT32
-)BuiltinNumericTypeSpecifier
+)NumericTypeSpecifier
 )FullySpecifiedType
 (StructDeclarator
 (Identifier)
@@ -7241,9 +7241,9 @@ invariant out imo { int i; } imon;
 (StructBody
 (StructMember
 (FullySpecifiedType
-(BuiltinNumericTypeSpecifier
+(NumericTypeSpecifier
 - NumericType INT32
-)BuiltinNumericTypeSpecifier
+)NumericTypeSpecifier
 )FullySpecifiedType
 (StructDeclarator
 (Identifier)
@@ -7269,9 +7269,9 @@ invariant out imo { int i; } imon;
 (StructBody
 (StructMember
 (FullySpecifiedType
-(BuiltinNumericTypeSpecifier
+(NumericTypeSpecifier
 - NumericType INT32
-)BuiltinNumericTypeSpecifier
+)NumericTypeSpecifier
 )FullySpecifiedType
 (StructDeclarator
 (Identifier)
@@ -7306,9 +7306,9 @@ out gl_PerVertex { float gl_CullDistance[3]; } gl_out[4];
 (StructBody
 (StructMember
 (FullySpecifiedType
-(BuiltinNumericTypeSpecifier
+(NumericTypeSpecifier
 - NumericType FLOAT32
-)BuiltinNumericTypeSpecifier
+)NumericTypeSpecifier
 )FullySpecifiedType
 (StructDeclarator
 (Identifier)
@@ -7345,9 +7345,9 @@ out gl_PerVertex { float gl_CullDistance[3]; } gl_out[4];
 (StructBody
 (StructMember
 (FullySpecifiedType
-(BuiltinNumericTypeSpecifier
+(NumericTypeSpecifier
 - NumericType FLOAT32
-)BuiltinNumericTypeSpecifier
+)NumericTypeSpecifier
 )FullySpecifiedType
 (StructDeclarator
 (Identifier)
@@ -7386,9 +7386,9 @@ int layerIndices[NUM_LAYERS];
 (DeclarationExternalDeclaration
 (TypeAndInitDeclaration
 (FullySpecifiedType
-(BuiltinNumericTypeSpecifier
+(NumericTypeSpecifier
 - NumericType INT32
-)BuiltinNumericTypeSpecifier
+)NumericTypeSpecifier
 )FullySpecifiedType
 (DeclarationMember
 (Identifier)
@@ -7454,9 +7454,9 @@ out gl_PerVertex { int gl_ViewportMask[2]; } gl_out[4];
 (StructBody
 (StructMember
 (FullySpecifiedType
-(BuiltinNumericTypeSpecifier
+(NumericTypeSpecifier
 - NumericType INT32
-)BuiltinNumericTypeSpecifier
+)NumericTypeSpecifier
 )FullySpecifiedType
 (StructDeclarator
 (Identifier)
@@ -7497,17 +7497,17 @@ int foo(int a, const int b, in int c, const in int d, out int e, inout int f) {
 (FunctionDefinition
 (FunctionPrototype
 (FullySpecifiedType
-(BuiltinNumericTypeSpecifier
+(NumericTypeSpecifier
 - NumericType INT32
-)BuiltinNumericTypeSpecifier
+)NumericTypeSpecifier
 )FullySpecifiedType
 (Identifier)
 - String foo
 (FunctionParameter
 (FullySpecifiedType
-(BuiltinNumericTypeSpecifier
+(NumericTypeSpecifier
 - NumericType INT32
-)BuiltinNumericTypeSpecifier
+)NumericTypeSpecifier
 )FullySpecifiedType
 (Identifier)
 - String a
@@ -7519,9 +7519,9 @@ int foo(int a, const int b, in int c, const in int d, out int e, inout int f) {
 - StorageType CONST
 )StorageQualifier
 )TypeQualifier
-(BuiltinNumericTypeSpecifier
+(NumericTypeSpecifier
 - NumericType INT32
-)BuiltinNumericTypeSpecifier
+)NumericTypeSpecifier
 )FullySpecifiedType
 (Identifier)
 - String b
@@ -7533,9 +7533,9 @@ int foo(int a, const int b, in int c, const in int d, out int e, inout int f) {
 - StorageType IN
 )StorageQualifier
 )TypeQualifier
-(BuiltinNumericTypeSpecifier
+(NumericTypeSpecifier
 - NumericType INT32
-)BuiltinNumericTypeSpecifier
+)NumericTypeSpecifier
 )FullySpecifiedType
 (Identifier)
 - String c
@@ -7550,9 +7550,9 @@ int foo(int a, const int b, in int c, const in int d, out int e, inout int f) {
 - StorageType IN
 )StorageQualifier
 )TypeQualifier
-(BuiltinNumericTypeSpecifier
+(NumericTypeSpecifier
 - NumericType INT32
-)BuiltinNumericTypeSpecifier
+)NumericTypeSpecifier
 )FullySpecifiedType
 (Identifier)
 - String d
@@ -7564,9 +7564,9 @@ int foo(int a, const int b, in int c, const in int d, out int e, inout int f) {
 - StorageType OUT
 )StorageQualifier
 )TypeQualifier
-(BuiltinNumericTypeSpecifier
+(NumericTypeSpecifier
 - NumericType INT32
-)BuiltinNumericTypeSpecifier
+)NumericTypeSpecifier
 )FullySpecifiedType
 (Identifier)
 - String e
@@ -7578,9 +7578,9 @@ int foo(int a, const int b, in int c, const in int d, out int e, inout int f) {
 - StorageType INOUT
 )StorageQualifier
 )TypeQualifier
-(BuiltinNumericTypeSpecifier
+(NumericTypeSpecifier
 - NumericType INT32
-)BuiltinNumericTypeSpecifier
+)NumericTypeSpecifier
 )FullySpecifiedType
 (Identifier)
 - String f
@@ -7641,26 +7641,26 @@ int foo2(float a, vec3 b, out int r) {
 (FunctionDefinition
 (FunctionPrototype
 (FullySpecifiedType
-(BuiltinNumericTypeSpecifier
+(NumericTypeSpecifier
 - NumericType INT32
-)BuiltinNumericTypeSpecifier
+)NumericTypeSpecifier
 )FullySpecifiedType
 (Identifier)
 - String foo2
 (FunctionParameter
 (FullySpecifiedType
-(BuiltinNumericTypeSpecifier
+(NumericTypeSpecifier
 - NumericType FLOAT32
-)BuiltinNumericTypeSpecifier
+)NumericTypeSpecifier
 )FullySpecifiedType
 (Identifier)
 - String a
 )FunctionParameter
 (FunctionParameter
 (FullySpecifiedType
-(BuiltinNumericTypeSpecifier
+(NumericTypeSpecifier
 - NumericType F32VEC3
-)BuiltinNumericTypeSpecifier
+)NumericTypeSpecifier
 )FullySpecifiedType
 (Identifier)
 - String b
@@ -7672,9 +7672,9 @@ int foo2(float a, vec3 b, out int r) {
 - StorageType OUT
 )StorageQualifier
 )TypeQualifier
-(BuiltinNumericTypeSpecifier
+(NumericTypeSpecifier
 - NumericType INT32
-)BuiltinNumericTypeSpecifier
+)NumericTypeSpecifier
 )FullySpecifiedType
 (Identifier)
 - String r
@@ -7688,9 +7688,9 @@ int foo2(float a, vec3 b, out int r) {
 - String r
 )ReferenceExpression
 (FunctionCallExpression
-(BuiltinNumericTypeSpecifier
+(NumericTypeSpecifier
 - NumericType INT32
-)BuiltinNumericTypeSpecifier
+)NumericTypeSpecifier
 (MultiplicationExpression
 (LiteralExpression
 - NumericType FLOAT32
@@ -7706,9 +7706,9 @@ int foo2(float a, vec3 b, out int r) {
 )ExpressionStatement
 (ReturnStatement
 (FunctionCallExpression
-(BuiltinNumericTypeSpecifier
+(NumericTypeSpecifier
 - NumericType INT32
-)BuiltinNumericTypeSpecifier
+)NumericTypeSpecifier
 (MultiplicationExpression
 (LiteralExpression
 - NumericType FLOAT32
@@ -7756,9 +7756,9 @@ ivec4 i4 = ivec4(u_f4) + ivec4(b4);
 (DeclarationExternalDeclaration
 (TypeAndInitDeclaration
 (FullySpecifiedType
-(BuiltinNumericTypeSpecifier
+(NumericTypeSpecifier
 - NumericType INT32
-)BuiltinNumericTypeSpecifier
+)NumericTypeSpecifier
 )FullySpecifiedType
 (DeclarationMember
 (Identifier)
@@ -7766,18 +7766,18 @@ ivec4 i4 = ivec4(u_f4) + ivec4(b4);
 (ExpressionInitializer
 (AdditionExpression
 (FunctionCallExpression
-(BuiltinNumericTypeSpecifier
+(NumericTypeSpecifier
 - NumericType INT32
-)BuiltinNumericTypeSpecifier
+)NumericTypeSpecifier
 (ReferenceExpression
 (Identifier)
 - String u_f
 )ReferenceExpression
 )FunctionCallExpression
 (FunctionCallExpression
-(BuiltinNumericTypeSpecifier
+(NumericTypeSpecifier
 - NumericType INT32
-)BuiltinNumericTypeSpecifier
+)NumericTypeSpecifier
 (ReferenceExpression
 (Identifier)
 - String b
@@ -7791,9 +7791,9 @@ ivec4 i4 = ivec4(u_f4) + ivec4(b4);
 (DeclarationExternalDeclaration
 (TypeAndInitDeclaration
 (FullySpecifiedType
-(BuiltinNumericTypeSpecifier
+(NumericTypeSpecifier
 - NumericType I32VEC2
-)BuiltinNumericTypeSpecifier
+)NumericTypeSpecifier
 )FullySpecifiedType
 (DeclarationMember
 (Identifier)
@@ -7801,18 +7801,18 @@ ivec4 i4 = ivec4(u_f4) + ivec4(b4);
 (ExpressionInitializer
 (AdditionExpression
 (FunctionCallExpression
-(BuiltinNumericTypeSpecifier
+(NumericTypeSpecifier
 - NumericType I32VEC2
-)BuiltinNumericTypeSpecifier
+)NumericTypeSpecifier
 (ReferenceExpression
 (Identifier)
 - String u_f2
 )ReferenceExpression
 )FunctionCallExpression
 (FunctionCallExpression
-(BuiltinNumericTypeSpecifier
+(NumericTypeSpecifier
 - NumericType I32VEC2
-)BuiltinNumericTypeSpecifier
+)NumericTypeSpecifier
 (ReferenceExpression
 (Identifier)
 - String b2
@@ -7826,9 +7826,9 @@ ivec4 i4 = ivec4(u_f4) + ivec4(b4);
 (DeclarationExternalDeclaration
 (TypeAndInitDeclaration
 (FullySpecifiedType
-(BuiltinNumericTypeSpecifier
+(NumericTypeSpecifier
 - NumericType I32VEC3
-)BuiltinNumericTypeSpecifier
+)NumericTypeSpecifier
 )FullySpecifiedType
 (DeclarationMember
 (Identifier)
@@ -7836,18 +7836,18 @@ ivec4 i4 = ivec4(u_f4) + ivec4(b4);
 (ExpressionInitializer
 (AdditionExpression
 (FunctionCallExpression
-(BuiltinNumericTypeSpecifier
+(NumericTypeSpecifier
 - NumericType I32VEC3
-)BuiltinNumericTypeSpecifier
+)NumericTypeSpecifier
 (ReferenceExpression
 (Identifier)
 - String u_f3
 )ReferenceExpression
 )FunctionCallExpression
 (FunctionCallExpression
-(BuiltinNumericTypeSpecifier
+(NumericTypeSpecifier
 - NumericType I32VEC3
-)BuiltinNumericTypeSpecifier
+)NumericTypeSpecifier
 (ReferenceExpression
 (Identifier)
 - String b3
@@ -7861,9 +7861,9 @@ ivec4 i4 = ivec4(u_f4) + ivec4(b4);
 (DeclarationExternalDeclaration
 (TypeAndInitDeclaration
 (FullySpecifiedType
-(BuiltinNumericTypeSpecifier
+(NumericTypeSpecifier
 - NumericType I32VEC4
-)BuiltinNumericTypeSpecifier
+)NumericTypeSpecifier
 )FullySpecifiedType
 (DeclarationMember
 (Identifier)
@@ -7871,18 +7871,18 @@ ivec4 i4 = ivec4(u_f4) + ivec4(b4);
 (ExpressionInitializer
 (AdditionExpression
 (FunctionCallExpression
-(BuiltinNumericTypeSpecifier
+(NumericTypeSpecifier
 - NumericType I32VEC4
-)BuiltinNumericTypeSpecifier
+)NumericTypeSpecifier
 (ReferenceExpression
 (Identifier)
 - String u_f4
 )ReferenceExpression
 )FunctionCallExpression
 (FunctionCallExpression
-(BuiltinNumericTypeSpecifier
+(NumericTypeSpecifier
 - NumericType I32VEC4
-)BuiltinNumericTypeSpecifier
+)NumericTypeSpecifier
 (ReferenceExpression
 (Identifier)
 - String b4
@@ -7911,9 +7911,9 @@ uniform vec4 entityColor;
 - StorageType UNIFORM
 )StorageQualifier
 )TypeQualifier
-(BuiltinNumericTypeSpecifier
+(NumericTypeSpecifier
 - NumericType F32VEC4
-)BuiltinNumericTypeSpecifier
+)NumericTypeSpecifier
 )FullySpecifiedType
 (DeclarationMember
 (Identifier)
@@ -7989,9 +7989,9 @@ layout(location = 5, xfb_buffer = 1, xfb_offset = 8) out struct S2 {
 (StructBody
 (StructMember
 (FullySpecifiedType
-(BuiltinNumericTypeSpecifier
+(NumericTypeSpecifier
 - NumericType FLOAT32
-)BuiltinNumericTypeSpecifier
+)NumericTypeSpecifier
 )FullySpecifiedType
 (StructDeclarator
 (Identifier)
@@ -8000,9 +8000,9 @@ layout(location = 5, xfb_buffer = 1, xfb_offset = 8) out struct S2 {
 )StructMember
 (StructMember
 (FullySpecifiedType
-(BuiltinNumericTypeSpecifier
+(NumericTypeSpecifier
 - NumericType F32VEC4
-)BuiltinNumericTypeSpecifier
+)NumericTypeSpecifier
 )FullySpecifiedType
 (StructDeclarator
 (Identifier)
@@ -8034,9 +8034,9 @@ void main() {
 (FunctionDefinition
 (FunctionPrototype
 (FullySpecifiedType
-(BuiltinFixedTypeSpecifier
-- BuiltinType VOID
-)BuiltinFixedTypeSpecifier
+(FixedTypeSpecifier
+- FixedType VOID
+)FixedTypeSpecifier
 )FullySpecifiedType
 (Identifier)
 - String main
@@ -8114,9 +8114,9 @@ struct {
 (StructBody
 (StructMember
 (FullySpecifiedType
-(BuiltinNumericTypeSpecifier
+(NumericTypeSpecifier
 - NumericType FLOAT32
-)BuiltinNumericTypeSpecifier
+)NumericTypeSpecifier
 )FullySpecifiedType
 (StructDeclarator
 (Identifier)
@@ -8125,9 +8125,9 @@ struct {
 )StructMember
 (StructMember
 (FullySpecifiedType
-(BuiltinNumericTypeSpecifier
+(NumericTypeSpecifier
 - NumericType INT32
-)BuiltinNumericTypeSpecifier
+)NumericTypeSpecifier
 )FullySpecifiedType
 (StructDeclarator
 (Identifier)
@@ -8177,9 +8177,9 @@ mediump vec4 calculateColor();
 - PrecisionLevel MEDIUM
 )PrecisionQualifier
 )TypeQualifier
-(BuiltinNumericTypeSpecifier
+(NumericTypeSpecifier
 - NumericType F32VEC4
-)BuiltinNumericTypeSpecifier
+)NumericTypeSpecifier
 )FullySpecifiedType
 (Identifier)
 - String calculateColor
@@ -8201,9 +8201,9 @@ precision mediump float;
 (PrecisionQualifier
 - PrecisionLevel MEDIUM
 )PrecisionQualifier
-(BuiltinNumericTypeSpecifier
+(NumericTypeSpecifier
 - NumericType FLOAT32
-)BuiltinNumericTypeSpecifier
+)NumericTypeSpecifier
 )PrecisionDeclaration
 )DeclarationExternalDeclaration
 )TranslationUnit
@@ -8297,9 +8297,9 @@ void foo() {
 (FunctionDefinition
 (FunctionPrototype
 (FullySpecifiedType
-(BuiltinFixedTypeSpecifier
-- BuiltinType VOID
-)BuiltinFixedTypeSpecifier
+(FixedTypeSpecifier
+- FixedType VOID
+)FixedTypeSpecifier
 )FullySpecifiedType
 (Identifier)
 - String foo
@@ -8351,9 +8351,9 @@ layout(location = 0) uniform struct {
 (StructBody
 (StructMember
 (FullySpecifiedType
-(BuiltinNumericTypeSpecifier
+(NumericTypeSpecifier
 - NumericType FLOAT32
-)BuiltinNumericTypeSpecifier
+)NumericTypeSpecifier
 )FullySpecifiedType
 (StructDeclarator
 (Identifier)
@@ -8362,9 +8362,9 @@ layout(location = 0) uniform struct {
 )StructMember
 (StructMember
 (FullySpecifiedType
-(BuiltinNumericTypeSpecifier
+(NumericTypeSpecifier
 - NumericType FLOAT32
-)BuiltinNumericTypeSpecifier
+)NumericTypeSpecifier
 )FullySpecifiedType
 (StructDeclarator
 (Identifier)
@@ -8373,9 +8373,9 @@ layout(location = 0) uniform struct {
 )StructMember
 (StructMember
 (FullySpecifiedType
-(BuiltinNumericTypeSpecifier
+(NumericTypeSpecifier
 - NumericType FLOAT32
-)BuiltinNumericTypeSpecifier
+)NumericTypeSpecifier
 )FullySpecifiedType
 (StructDeclarator
 (Identifier)
@@ -8457,9 +8457,9 @@ float fds;
 (DeclarationExternalDeclaration
 (TypeAndInitDeclaration
 (FullySpecifiedType
-(BuiltinNumericTypeSpecifier
+(NumericTypeSpecifier
 - NumericType FLOAT16
-)BuiltinNumericTypeSpecifier
+)NumericTypeSpecifier
 )FullySpecifiedType
 (DeclarationMember
 (Identifier)
@@ -8477,9 +8477,9 @@ float fds;
 (DeclarationExternalDeclaration
 (TypeAndInitDeclaration
 (FullySpecifiedType
-(BuiltinNumericTypeSpecifier
+(NumericTypeSpecifier
 - NumericType INT32
-)BuiltinNumericTypeSpecifier
+)NumericTypeSpecifier
 )FullySpecifiedType
 (DeclarationMember
 (Identifier)
@@ -8490,9 +8490,9 @@ float fds;
 (DeclarationExternalDeclaration
 (TypeAndInitDeclaration
 (FullySpecifiedType
-(BuiltinNumericTypeSpecifier
+(NumericTypeSpecifier
 - NumericType UINT32
-)BuiltinNumericTypeSpecifier
+)NumericTypeSpecifier
 )FullySpecifiedType
 (DeclarationMember
 (Identifier)
@@ -8503,9 +8503,9 @@ float fds;
 (DeclarationExternalDeclaration
 (TypeAndInitDeclaration
 (FullySpecifiedType
-(BuiltinNumericTypeSpecifier
+(NumericTypeSpecifier
 - NumericType UINT16
-)BuiltinNumericTypeSpecifier
+)NumericTypeSpecifier
 )FullySpecifiedType
 (DeclarationMember
 (Identifier)
@@ -8516,9 +8516,9 @@ float fds;
 (DeclarationExternalDeclaration
 (TypeAndInitDeclaration
 (FullySpecifiedType
-(BuiltinNumericTypeSpecifier
+(NumericTypeSpecifier
 - NumericType FLOAT32
-)BuiltinNumericTypeSpecifier
+)NumericTypeSpecifier
 )FullySpecifiedType
 (DeclarationMember
 (Identifier)
@@ -8566,9 +8566,9 @@ layout(std140, binding = 0) uniform ubo_DynamicState {
 (StructBody
 (StructMember
 (FullySpecifiedType
-(BuiltinNumericTypeSpecifier
+(NumericTypeSpecifier
 - NumericType F32MAT4X4
-)BuiltinNumericTypeSpecifier
+)NumericTypeSpecifier
 )FullySpecifiedType
 (StructDeclarator
 (Identifier)
@@ -8577,9 +8577,9 @@ layout(std140, binding = 0) uniform ubo_DynamicState {
 )StructMember
 (StructMember
 (FullySpecifiedType
-(BuiltinNumericTypeSpecifier
+(NumericTypeSpecifier
 - NumericType F32MAT4X4
-)BuiltinNumericTypeSpecifier
+)NumericTypeSpecifier
 )FullySpecifiedType
 (StructDeclarator
 (Identifier)
@@ -8616,9 +8616,9 @@ precision highp uimageBuffer;
 - StorageType IN
 )StorageQualifier
 )TypeQualifier
-(BuiltinNumericTypeSpecifier
+(NumericTypeSpecifier
 - NumericType F32VEC2
-)BuiltinNumericTypeSpecifier
+)NumericTypeSpecifier
 )FullySpecifiedType
 (DeclarationMember
 (Identifier)
@@ -8638,9 +8638,9 @@ precision highp uimageBuffer;
 - StorageType UNIFORM
 )StorageQualifier
 )TypeQualifier
-(BuiltinNumericTypeSpecifier
+(NumericTypeSpecifier
 - NumericType I32VEC2
-)BuiltinNumericTypeSpecifier
+)NumericTypeSpecifier
 )FullySpecifiedType
 (DeclarationMember
 (Identifier)
@@ -8663,9 +8663,9 @@ precision highp uimageBuffer;
 - StorageType UNIFORM
 )StorageQualifier
 )TypeQualifier
-(BuiltinFixedTypeSpecifier
-- BuiltinType SAMPLER2D
-)BuiltinFixedTypeSpecifier
+(FixedTypeSpecifier
+- FixedType SAMPLER2D
+)FixedTypeSpecifier
 )FullySpecifiedType
 (DeclarationMember
 (Identifier)
@@ -8688,9 +8688,9 @@ precision highp uimageBuffer;
 - StorageType UNIFORM
 )StorageQualifier
 )TypeQualifier
-(BuiltinNumericTypeSpecifier
+(NumericTypeSpecifier
 - NumericType INT32
-)BuiltinNumericTypeSpecifier
+)NumericTypeSpecifier
 )FullySpecifiedType
 (DeclarationMember
 (Identifier)
@@ -8717,9 +8717,9 @@ precision highp uimageBuffer;
 - StorageType UNIFORM
 )StorageQualifier
 )TypeQualifier
-(BuiltinFixedTypeSpecifier
-- BuiltinType ATOMIC_UINT
-)BuiltinFixedTypeSpecifier
+(FixedTypeSpecifier
+- FixedType ATOMIC_UINT
+)FixedTypeSpecifier
 )FullySpecifiedType
 (DeclarationMember
 (Identifier)
@@ -8746,9 +8746,9 @@ precision highp uimageBuffer;
 (StructBody
 (StructMember
 (FullySpecifiedType
-(BuiltinNumericTypeSpecifier
+(NumericTypeSpecifier
 - NumericType INT32
-)BuiltinNumericTypeSpecifier
+)NumericTypeSpecifier
 )FullySpecifiedType
 (StructDeclarator
 (Identifier)
@@ -8779,9 +8779,9 @@ precision highp uimageBuffer;
 (StructBody
 (StructMember
 (FullySpecifiedType
-(BuiltinNumericTypeSpecifier
+(NumericTypeSpecifier
 - NumericType INT32
-)BuiltinNumericTypeSpecifier
+)NumericTypeSpecifier
 )FullySpecifiedType
 (StructDeclarator
 (Identifier)
@@ -8814,9 +8814,9 @@ precision highp uimageBuffer;
 - StorageType WRITEONLY
 )StorageQualifier
 )TypeQualifier
-(BuiltinFixedTypeSpecifier
-- BuiltinType IMAGE2D
-)BuiltinFixedTypeSpecifier
+(FixedTypeSpecifier
+- FixedType IMAGE2D
+)FixedTypeSpecifier
 )FullySpecifiedType
 (DeclarationMember
 (Identifier)
@@ -8839,9 +8839,9 @@ precision highp uimageBuffer;
 - StorageType CONST
 )StorageQualifier
 )TypeQualifier
-(BuiltinNumericTypeSpecifier
+(NumericTypeSpecifier
 - NumericType I32VEC2
-)BuiltinNumericTypeSpecifier
+)NumericTypeSpecifier
 )FullySpecifiedType
 (DeclarationMember
 (Identifier)
@@ -8855,40 +8855,40 @@ precision highp uimageBuffer;
 )ArraySpecifier
 (ExpressionInitializer
 (FunctionCallExpression
-(BuiltinNumericTypeSpecifier
+(NumericTypeSpecifier
 - NumericType I32VEC2
-)BuiltinNumericTypeSpecifier
+)NumericTypeSpecifier
 (FunctionCallExpression
-(BuiltinNumericTypeSpecifier
+(NumericTypeSpecifier
 - NumericType I32VEC2
-)BuiltinNumericTypeSpecifier
+)NumericTypeSpecifier
 (LiteralExpression
 - NumericType FLOAT32
 - Float 0.1
 )LiteralExpression
 )FunctionCallExpression
 (FunctionCallExpression
-(BuiltinNumericTypeSpecifier
+(NumericTypeSpecifier
 - NumericType I32VEC2
-)BuiltinNumericTypeSpecifier
+)NumericTypeSpecifier
 (LiteralExpression
 - NumericType FLOAT32
 - Float 0.2
 )LiteralExpression
 )FunctionCallExpression
 (FunctionCallExpression
-(BuiltinNumericTypeSpecifier
+(NumericTypeSpecifier
 - NumericType I32VEC2
-)BuiltinNumericTypeSpecifier
+)NumericTypeSpecifier
 (LiteralExpression
 - NumericType FLOAT32
 - Float 0.3
 )LiteralExpression
 )FunctionCallExpression
 (FunctionCallExpression
-(BuiltinNumericTypeSpecifier
+(NumericTypeSpecifier
 - NumericType I32VEC2
-)BuiltinNumericTypeSpecifier
+)NumericTypeSpecifier
 (LiteralExpression
 - NumericType FLOAT32
 - Float 0.4
@@ -8904,9 +8904,9 @@ precision highp uimageBuffer;
 (PrecisionQualifier
 - PrecisionLevel HIGH
 )PrecisionQualifier
-(BuiltinFixedTypeSpecifier
-- BuiltinType UIMAGEBUFFER
-)BuiltinFixedTypeSpecifier
+(FixedTypeSpecifier
+- FixedType UIMAGEBUFFER
+)FixedTypeSpecifier
 )PrecisionDeclaration
 )DeclarationExternalDeclaration
 )TranslationUnit
@@ -8931,9 +8931,9 @@ struct sC { sA state; } c = { b.a };
 (StructBody
 (StructMember
 (FullySpecifiedType
-(BuiltinNumericTypeSpecifier
+(NumericTypeSpecifier
 - NumericType INT32
-)BuiltinNumericTypeSpecifier
+)NumericTypeSpecifier
 )FullySpecifiedType
 (StructDeclarator
 (Identifier)
@@ -9088,9 +9088,9 @@ layout(location = 1) out vec3 layoutTwo;
 - StorageType OUT
 )StorageQualifier
 )TypeQualifier
-(BuiltinNumericTypeSpecifier
+(NumericTypeSpecifier
 - NumericType F32VEC3
-)BuiltinNumericTypeSpecifier
+)NumericTypeSpecifier
 )FullySpecifiedType
 (DeclarationMember
 (Identifier)
@@ -9117,9 +9117,9 @@ layout(location = 1) out vec3 layoutTwo;
 - StorageType OUT
 )StorageQualifier
 )TypeQualifier
-(BuiltinNumericTypeSpecifier
+(NumericTypeSpecifier
 - NumericType F32VEC3
-)BuiltinNumericTypeSpecifier
+)NumericTypeSpecifier
 )FullySpecifiedType
 (DeclarationMember
 (Identifier)
@@ -9140,9 +9140,9 @@ float b[] = { 3.4f, 4.2f, 5.0f, 5.2f, 1.1f };
 (DeclarationExternalDeclaration
 (TypeAndInitDeclaration
 (FullySpecifiedType
-(BuiltinNumericTypeSpecifier
+(NumericTypeSpecifier
 - NumericType FLOAT32
-)BuiltinNumericTypeSpecifier
+)NumericTypeSpecifier
 )FullySpecifiedType
 (DeclarationMember
 (Identifier)
@@ -9221,9 +9221,9 @@ in inbname { float[7] f[8][9]; } inbinst[4][5][6];
 (StructBody
 (StructMember
 (FullySpecifiedType
-(BuiltinNumericTypeSpecifier
+(NumericTypeSpecifier
 - NumericType INT32
-)BuiltinNumericTypeSpecifier
+)NumericTypeSpecifier
 )FullySpecifiedType
 (StructDeclarator
 (Identifier)
@@ -9270,9 +9270,9 @@ in inbname { float[7] f[8][9]; } inbinst[4][5][6];
 (DeclarationExternalDeclaration
 (TypeAndInitDeclaration
 (FullySpecifiedType
-(BuiltinNumericTypeSpecifier
+(NumericTypeSpecifier
 - NumericType INT32
-)BuiltinNumericTypeSpecifier
+)NumericTypeSpecifier
 )FullySpecifiedType
 (DeclarationMember
 (Identifier)
@@ -9301,9 +9301,9 @@ in inbname { float[7] f[8][9]; } inbinst[4][5][6];
 (DeclarationExternalDeclaration
 (TypeAndInitDeclaration
 (FullySpecifiedType
-(BuiltinNumericTypeSpecifier
+(NumericTypeSpecifier
 - NumericType INT32
-)BuiltinNumericTypeSpecifier
+)NumericTypeSpecifier
 )FullySpecifiedType
 (DeclarationMember
 (Identifier)
@@ -9322,9 +9322,9 @@ in inbname { float[7] f[8][9]; } inbinst[4][5][6];
 (DeclarationExternalDeclaration
 (TypeAndInitDeclaration
 (FullySpecifiedType
-(BuiltinNumericTypeSpecifier
+(NumericTypeSpecifier
 - NumericType INT32
-)BuiltinNumericTypeSpecifier
+)NumericTypeSpecifier
 )FullySpecifiedType
 (DeclarationMember
 (Identifier)
@@ -9347,9 +9347,9 @@ in inbname { float[7] f[8][9]; } inbinst[4][5][6];
 (DeclarationExternalDeclaration
 (TypeAndInitDeclaration
 (FullySpecifiedType
-(BuiltinNumericTypeSpecifier
+(NumericTypeSpecifier
 - NumericType INT32
-)BuiltinNumericTypeSpecifier
+)NumericTypeSpecifier
 )FullySpecifiedType
 (DeclarationMember
 (Identifier)
@@ -9372,9 +9372,9 @@ in inbname { float[7] f[8][9]; } inbinst[4][5][6];
 (DeclarationExternalDeclaration
 (TypeAndInitDeclaration
 (FullySpecifiedType
-(BuiltinNumericTypeSpecifier
+(NumericTypeSpecifier
 - NumericType INT32
-)BuiltinNumericTypeSpecifier
+)NumericTypeSpecifier
 )FullySpecifiedType
 (DeclarationMember
 (Identifier)
@@ -9393,17 +9393,17 @@ in inbname { float[7] f[8][9]; } inbinst[4][5][6];
 (FunctionDefinition
 (FunctionPrototype
 (FullySpecifiedType
-(BuiltinNumericTypeSpecifier
+(NumericTypeSpecifier
 - NumericType INT32
-)BuiltinNumericTypeSpecifier
+)NumericTypeSpecifier
 )FullySpecifiedType
 (Identifier)
 - String foo
 (FunctionParameter
 (FullySpecifiedType
-(BuiltinNumericTypeSpecifier
+(NumericTypeSpecifier
 - NumericType INT32
-)BuiltinNumericTypeSpecifier
+)NumericTypeSpecifier
 )FullySpecifiedType
 (Identifier)
 - String p
@@ -9433,9 +9433,9 @@ in inbname { float[7] f[8][9]; } inbinst[4][5][6];
 (FunctionDefinition
 (FunctionPrototype
 (FullySpecifiedType
-(BuiltinFixedTypeSpecifier
-- BuiltinType VOID
-)BuiltinFixedTypeSpecifier
+(FixedTypeSpecifier
+- FixedType VOID
+)FixedTypeSpecifier
 )FullySpecifiedType
 (Identifier)
 - String main
@@ -9466,9 +9466,9 @@ in inbname { float[7] f[8][9]; } inbinst[4][5][6];
 (FunctionDefinition
 (FunctionPrototype
 (FullySpecifiedType
-(BuiltinNumericTypeSpecifier
+(NumericTypeSpecifier
 - NumericType FLOAT32
-)BuiltinNumericTypeSpecifier
+)NumericTypeSpecifier
 )FullySpecifiedType
 (Identifier)
 - String bar
@@ -9477,9 +9477,9 @@ in inbname { float[7] f[8][9]; } inbinst[4][5][6];
 (DeclarationStatement
 (TypeAndInitDeclaration
 (FullySpecifiedType
-(BuiltinNumericTypeSpecifier
+(NumericTypeSpecifier
 - NumericType FLOAT32
-)BuiltinNumericTypeSpecifier
+)NumericTypeSpecifier
 )FullySpecifiedType
 (DeclarationMember
 (Identifier)
@@ -9514,9 +9514,9 @@ in inbname { float[7] f[8][9]; } inbinst[4][5][6];
 (StructBody
 (StructMember
 (FullySpecifiedType
-(BuiltinNumericTypeSpecifier
+(NumericTypeSpecifier
 - NumericType FLOAT32
-)BuiltinNumericTypeSpecifier
+)NumericTypeSpecifier
 )FullySpecifiedType
 (StructDeclarator
 (Identifier)
@@ -9598,9 +9598,9 @@ layout(input_attachment_index = 2) uniform subpassInputMS subDMS;
 (FunctionDefinition
 (FunctionPrototype
 (FullySpecifiedType
-(BuiltinFixedTypeSpecifier
-- BuiltinType VOID
-)BuiltinFixedTypeSpecifier
+(FixedTypeSpecifier
+- FixedType VOID
+)FixedTypeSpecifier
 )FullySpecifiedType
 (Identifier)
 - String badConst
@@ -9608,9 +9608,9 @@ layout(input_attachment_index = 2) uniform subpassInputMS subDMS;
 (CompoundStatement
 (ExpressionStatement
 (FunctionCallExpression
-(BuiltinFixedTypeSpecifier
-- BuiltinType SAMPLER2D
-)BuiltinFixedTypeSpecifier
+(FixedTypeSpecifier
+- FixedType SAMPLER2D
+)FixedTypeSpecifier
 (ReferenceExpression
 (Identifier)
 - String t2d
@@ -9619,9 +9619,9 @@ layout(input_attachment_index = 2) uniform subpassInputMS subDMS;
 )ExpressionStatement
 (ExpressionStatement
 (FunctionCallExpression
-(BuiltinFixedTypeSpecifier
-- BuiltinType SAMPLER2D
-)BuiltinFixedTypeSpecifier
+(FixedTypeSpecifier
+- FixedType SAMPLER2D
+)FixedTypeSpecifier
 (ReferenceExpression
 (Identifier)
 - String s
@@ -9634,9 +9634,9 @@ layout(input_attachment_index = 2) uniform subpassInputMS subDMS;
 )ExpressionStatement
 (ExpressionStatement
 (FunctionCallExpression
-(BuiltinFixedTypeSpecifier
-- BuiltinType SAMPLER2D
-)BuiltinFixedTypeSpecifier
+(FixedTypeSpecifier
+- FixedType SAMPLER2D
+)FixedTypeSpecifier
 (ReferenceExpression
 (Identifier)
 - String i
@@ -9649,9 +9649,9 @@ layout(input_attachment_index = 2) uniform subpassInputMS subDMS;
 )ExpressionStatement
 (ExpressionStatement
 (FunctionCallExpression
-(BuiltinFixedTypeSpecifier
-- BuiltinType SAMPLER2D
-)BuiltinFixedTypeSpecifier
+(FixedTypeSpecifier
+- FixedType SAMPLER2D
+)FixedTypeSpecifier
 (ReferenceExpression
 (Identifier)
 - String t2d
@@ -9664,9 +9664,9 @@ layout(input_attachment_index = 2) uniform subpassInputMS subDMS;
 )ExpressionStatement
 (ExpressionStatement
 (FunctionCallExpression
-(BuiltinFixedTypeSpecifier
-- BuiltinType SAMPLER2D
-)BuiltinFixedTypeSpecifier
+(FixedTypeSpecifier
+- FixedType SAMPLER2D
+)FixedTypeSpecifier
 (ReferenceExpression
 (Identifier)
 - String t2d
@@ -9679,9 +9679,9 @@ layout(input_attachment_index = 2) uniform subpassInputMS subDMS;
 )ExpressionStatement
 (ExpressionStatement
 (FunctionCallExpression
-(BuiltinFixedTypeSpecifier
-- BuiltinType SAMPLER2D
-)BuiltinFixedTypeSpecifier
+(FixedTypeSpecifier
+- FixedType SAMPLER2D
+)FixedTypeSpecifier
 (ReferenceExpression
 (Identifier)
 - String t2d
@@ -9694,9 +9694,9 @@ layout(input_attachment_index = 2) uniform subpassInputMS subDMS;
 )ExpressionStatement
 (ExpressionStatement
 (FunctionCallExpression
-(BuiltinFixedTypeSpecifier
-- BuiltinType SAMPLER3D
-)BuiltinFixedTypeSpecifier
+(FixedTypeSpecifier
+- FixedType SAMPLER3D
+)FixedTypeSpecifier
 (ReferenceExpression
 (Identifier)
 - String t3d5
@@ -9716,9 +9716,9 @@ layout(input_attachment_index = 2) uniform subpassInputMS subDMS;
 )ExpressionStatement
 (ExpressionStatement
 (FunctionCallExpression
-(BuiltinFixedTypeSpecifier
-- BuiltinType SAMPLER2D
-)BuiltinFixedTypeSpecifier
+(FixedTypeSpecifier
+- FixedType SAMPLER2D
+)FixedTypeSpecifier
 (ReferenceExpression
 (Identifier)
 - String i2d
@@ -9731,9 +9731,9 @@ layout(input_attachment_index = 2) uniform subpassInputMS subDMS;
 )ExpressionStatement
 (ExpressionStatement
 (FunctionCallExpression
-(BuiltinFixedTypeSpecifier
-- BuiltinType SAMPLER2D
-)BuiltinFixedTypeSpecifier
+(FixedTypeSpecifier
+- FixedType SAMPLER2D
+)FixedTypeSpecifier
 (ArrayAccessExpression
 (ReferenceExpression
 (Identifier)
@@ -9753,9 +9753,9 @@ layout(input_attachment_index = 2) uniform subpassInputMS subDMS;
 )ExpressionStatement
 (ExpressionStatement
 (FunctionCallExpression
-(BuiltinFixedTypeSpecifier
-- BuiltinType SAMPLER2D
-)BuiltinFixedTypeSpecifier
+(FixedTypeSpecifier
+- FixedType SAMPLER2D
+)FixedTypeSpecifier
 (ReferenceExpression
 (Identifier)
 - String t2d
@@ -9768,9 +9768,9 @@ layout(input_attachment_index = 2) uniform subpassInputMS subDMS;
 )ExpressionStatement
 (ExpressionStatement
 (FunctionCallExpression
-(BuiltinFixedTypeSpecifier
-- BuiltinType SAMPLER2DSHADOW
-)BuiltinFixedTypeSpecifier
+(FixedTypeSpecifier
+- FixedType SAMPLER2DSHADOW
+)FixedTypeSpecifier
 (ReferenceExpression
 (Identifier)
 - String t2d
@@ -9786,18 +9786,18 @@ layout(input_attachment_index = 2) uniform subpassInputMS subDMS;
 (DeclarationExternalDeclaration
 (TypeAndInitDeclaration
 (FullySpecifiedType
-(BuiltinFixedTypeSpecifier
-- BuiltinType SAMPLER2D
-)BuiltinFixedTypeSpecifier
+(FixedTypeSpecifier
+- FixedType SAMPLER2D
+)FixedTypeSpecifier
 )FullySpecifiedType
 (DeclarationMember
 (Identifier)
 - String s2D
 (ExpressionInitializer
 (FunctionCallExpression
-(BuiltinFixedTypeSpecifier
-- BuiltinType SAMPLER2D
-)BuiltinFixedTypeSpecifier
+(FixedTypeSpecifier
+- FixedType SAMPLER2D
+)FixedTypeSpecifier
 (ReferenceExpression
 (Identifier)
 - String t2d
@@ -9814,9 +9814,9 @@ layout(input_attachment_index = 2) uniform subpassInputMS subDMS;
 (DeclarationExternalDeclaration
 (TypeAndInitDeclaration
 (FullySpecifiedType
-(BuiltinFixedTypeSpecifier
-- BuiltinType SAMPLER3D
-)BuiltinFixedTypeSpecifier
+(FixedTypeSpecifier
+- FixedType SAMPLER3D
+)FixedTypeSpecifier
 )FullySpecifiedType
 (DeclarationMember
 (Identifier)
@@ -9830,9 +9830,9 @@ layout(input_attachment_index = 2) uniform subpassInputMS subDMS;
 )ArraySpecifier
 (ExpressionInitializer
 (FunctionCallExpression
-(BuiltinFixedTypeSpecifier
-- BuiltinType SAMPLER3D
-)BuiltinFixedTypeSpecifier
+(FixedTypeSpecifier
+- FixedType SAMPLER3D
+)FixedTypeSpecifier
 (ReferenceExpression
 (Identifier)
 - String t3d
@@ -9861,9 +9861,9 @@ layout(input_attachment_index = 2) uniform subpassInputMS subDMS;
 - StorageType OUT
 )StorageQualifier
 )TypeQualifier
-(BuiltinNumericTypeSpecifier
+(NumericTypeSpecifier
 - NumericType F32VEC4
-)BuiltinNumericTypeSpecifier
+)NumericTypeSpecifier
 )FullySpecifiedType
 (DeclarationMember
 (Identifier)
@@ -9874,9 +9874,9 @@ layout(input_attachment_index = 2) uniform subpassInputMS subDMS;
 (FunctionDefinition
 (FunctionPrototype
 (FullySpecifiedType
-(BuiltinFixedTypeSpecifier
-- BuiltinType VOID
-)BuiltinFixedTypeSpecifier
+(FixedTypeSpecifier
+- FixedType VOID
+)FixedTypeSpecifier
 )FullySpecifiedType
 (Identifier)
 - String main
@@ -9896,9 +9896,9 @@ layout(input_attachment_index = 2) uniform subpassInputMS subDMS;
 - String s2D
 )ReferenceExpression
 (FunctionCallExpression
-(BuiltinNumericTypeSpecifier
+(NumericTypeSpecifier
 - NumericType F32VEC2
-)BuiltinNumericTypeSpecifier
+)NumericTypeSpecifier
 (LiteralExpression
 - NumericType FLOAT32
 - Float 0.5
@@ -9927,9 +9927,9 @@ layout(input_attachment_index = 2) uniform subpassInputMS subDMS;
 )ReferenceExpression
 )ArrayAccessExpression
 (FunctionCallExpression
-(BuiltinNumericTypeSpecifier
+(NumericTypeSpecifier
 - NumericType F32VEC3
-)BuiltinNumericTypeSpecifier
+)NumericTypeSpecifier
 (LiteralExpression
 - NumericType FLOAT32
 - Float 0.5
@@ -9958,9 +9958,9 @@ layout(input_attachment_index = 2) uniform subpassInputMS subDMS;
 (StructBody
 (StructMember
 (FullySpecifiedType
-(BuiltinNumericTypeSpecifier
+(NumericTypeSpecifier
 - NumericType INT32
-)BuiltinNumericTypeSpecifier
+)NumericTypeSpecifier
 )FullySpecifiedType
 (StructDeclarator
 (Identifier)
@@ -9986,9 +9986,9 @@ layout(input_attachment_index = 2) uniform subpassInputMS subDMS;
 - StorageType UNIFORM
 )StorageQualifier
 )TypeQualifier
-(BuiltinNumericTypeSpecifier
+(NumericTypeSpecifier
 - NumericType FLOAT32
-)BuiltinNumericTypeSpecifier
+)NumericTypeSpecifier
 )FullySpecifiedType
 (DeclarationMember
 (Identifier)
@@ -10018,9 +10018,9 @@ layout(input_attachment_index = 2) uniform subpassInputMS subDMS;
 (StructBody
 (StructMember
 (FullySpecifiedType
-(BuiltinNumericTypeSpecifier
+(NumericTypeSpecifier
 - NumericType INT32
-)BuiltinNumericTypeSpecifier
+)NumericTypeSpecifier
 )FullySpecifiedType
 (StructDeclarator
 (Identifier)
@@ -10050,9 +10050,9 @@ layout(input_attachment_index = 2) uniform subpassInputMS subDMS;
 (StructBody
 (StructMember
 (FullySpecifiedType
-(BuiltinNumericTypeSpecifier
+(NumericTypeSpecifier
 - NumericType INT32
-)BuiltinNumericTypeSpecifier
+)NumericTypeSpecifier
 )FullySpecifiedType
 (StructDeclarator
 (Identifier)
@@ -10144,9 +10144,9 @@ layout(input_attachment_index = 2) uniform subpassInputMS subDMS;
 - StorageType UNIFORM
 )StorageQualifier
 )TypeQualifier
-(BuiltinFixedTypeSpecifier
-- BuiltinType IMAGE2D
-)BuiltinFixedTypeSpecifier
+(FixedTypeSpecifier
+- FixedType IMAGE2D
+)FixedTypeSpecifier
 )FullySpecifiedType
 (DeclarationMember
 (Identifier)
@@ -10224,9 +10224,9 @@ noperspective in vec4 color;
 - StorageType IN
 )StorageQualifier
 )TypeQualifier
-(BuiltinNumericTypeSpecifier
+(NumericTypeSpecifier
 - NumericType F32VEC4
-)BuiltinNumericTypeSpecifier
+)NumericTypeSpecifier
 )FullySpecifiedType
 (DeclarationMember
 (Identifier)
@@ -10279,9 +10279,9 @@ int foob__vn8[4] = int[](21, 22, 23, 24), foob__vp;
 (DeclarationExternalDeclaration
 (TypeAndInitDeclaration
 (FullySpecifiedType
-(BuiltinNumericTypeSpecifier
+(NumericTypeSpecifier
 - NumericType INT32
-)BuiltinNumericTypeSpecifier
+)NumericTypeSpecifier
 )FullySpecifiedType
 (DeclarationMember
 (Identifier)
@@ -10299,9 +10299,9 @@ int foob__vn8[4] = int[](21, 22, 23, 24), foob__vp;
 (DeclarationExternalDeclaration
 (TypeAndInitDeclaration
 (FullySpecifiedType
-(BuiltinNumericTypeSpecifier
+(NumericTypeSpecifier
 - NumericType INT32
-)BuiltinNumericTypeSpecifier
+)NumericTypeSpecifier
 )FullySpecifiedType
 (DeclarationMember
 (Identifier)
@@ -10323,9 +10323,9 @@ int foob__vn8[4] = int[](21, 22, 23, 24), foob__vp;
 (DeclarationExternalDeclaration
 (TypeAndInitDeclaration
 (FullySpecifiedType
-(BuiltinNumericTypeSpecifier
+(NumericTypeSpecifier
 - NumericType INT32
-)BuiltinNumericTypeSpecifier
+)NumericTypeSpecifier
 )FullySpecifiedType
 (DeclarationMember
 (Identifier)
@@ -10354,9 +10354,9 @@ int foob__vn8[4] = int[](21, 22, 23, 24), foob__vp;
 (DeclarationExternalDeclaration
 (TypeAndInitDeclaration
 (FullySpecifiedType
-(BuiltinNumericTypeSpecifier
+(NumericTypeSpecifier
 - NumericType INT32
-)BuiltinNumericTypeSpecifier
+)NumericTypeSpecifier
 )FullySpecifiedType
 (DeclarationMember
 (Identifier)
@@ -10378,9 +10378,9 @@ int foob__vn8[4] = int[](21, 22, 23, 24), foob__vp;
 (DeclarationExternalDeclaration
 (TypeAndInitDeclaration
 (FullySpecifiedType
-(BuiltinNumericTypeSpecifier
+(NumericTypeSpecifier
 - NumericType INT32
-)BuiltinNumericTypeSpecifier
+)NumericTypeSpecifier
 )FullySpecifiedType
 (DeclarationMember
 (Identifier)
@@ -10394,9 +10394,9 @@ int foob__vn8[4] = int[](21, 22, 23, 24), foob__vp;
 )ArraySpecifier
 (ExpressionInitializer
 (FunctionCallExpression
-(BuiltinNumericTypeSpecifier
+(NumericTypeSpecifier
 - NumericType INT32
-)BuiltinNumericTypeSpecifier
+)NumericTypeSpecifier
 (LiteralExpression
 - NumericType INT32
 - Integer 1
@@ -10425,9 +10425,9 @@ int foob__vn8[4] = int[](21, 22, 23, 24), foob__vp;
 (DeclarationExternalDeclaration
 (TypeAndInitDeclaration
 (FullySpecifiedType
-(BuiltinNumericTypeSpecifier
+(NumericTypeSpecifier
 - NumericType INT32
-)BuiltinNumericTypeSpecifier
+)NumericTypeSpecifier
 )FullySpecifiedType
 (DeclarationMember
 (Identifier)
@@ -10445,9 +10445,9 @@ int foob__vn8[4] = int[](21, 22, 23, 24), foob__vp;
 )ArraySpecifier
 (ExpressionInitializer
 (FunctionCallExpression
-(BuiltinNumericTypeSpecifier
+(NumericTypeSpecifier
 - NumericType INT32
-)BuiltinNumericTypeSpecifier
+)NumericTypeSpecifier
 (LiteralExpression
 - NumericType INT32
 - Integer 5
@@ -10481,9 +10481,9 @@ int foob__vn8[4] = int[](21, 22, 23, 24), foob__vp;
 (DeclarationExternalDeclaration
 (TypeAndInitDeclaration
 (FullySpecifiedType
-(BuiltinNumericTypeSpecifier
+(NumericTypeSpecifier
 - NumericType INT32
-)BuiltinNumericTypeSpecifier
+)NumericTypeSpecifier
 )FullySpecifiedType
 (DeclarationMember
 (Identifier)
@@ -10497,9 +10497,9 @@ int foob__vn8[4] = int[](21, 22, 23, 24), foob__vp;
 )ArraySpecifier
 (ExpressionInitializer
 (FunctionCallExpression
-(BuiltinNumericTypeSpecifier
+(NumericTypeSpecifier
 - NumericType INT32
-)BuiltinNumericTypeSpecifier
+)NumericTypeSpecifier
 (LiteralExpression
 - NumericType INT32
 - Integer 10
@@ -10525,9 +10525,9 @@ int foob__vn8[4] = int[](21, 22, 23, 24), foob__vp;
 )ArraySpecifier
 (ExpressionInitializer
 (FunctionCallExpression
-(BuiltinNumericTypeSpecifier
+(NumericTypeSpecifier
 - NumericType INT32
-)BuiltinNumericTypeSpecifier
+)NumericTypeSpecifier
 (LiteralExpression
 - NumericType INT32
 - Integer 12
@@ -10551,9 +10551,9 @@ int foob__vn8[4] = int[](21, 22, 23, 24), foob__vp;
 (DeclarationExternalDeclaration
 (TypeAndInitDeclaration
 (FullySpecifiedType
-(BuiltinNumericTypeSpecifier
+(NumericTypeSpecifier
 - NumericType INT32
-)BuiltinNumericTypeSpecifier
+)NumericTypeSpecifier
 )FullySpecifiedType
 (DeclarationMember
 (Identifier)
@@ -10567,9 +10567,9 @@ int foob__vn8[4] = int[](21, 22, 23, 24), foob__vp;
 )ArraySpecifier
 (ExpressionInitializer
 (FunctionCallExpression
-(BuiltinNumericTypeSpecifier
+(NumericTypeSpecifier
 - NumericType INT32
-)BuiltinNumericTypeSpecifier
+)NumericTypeSpecifier
 (LiteralExpression
 - NumericType INT32
 - Integer 21
@@ -10602,9 +10602,9 @@ int foob__vn8[4] = int[](21, 22, 23, 24), foob__vp;
 (DeclarationExternalDeclaration
 (TypeAndInitDeclaration
 (FullySpecifiedType
-(BuiltinFixedTypeSpecifier
-- BuiltinType VOID
-)BuiltinFixedTypeSpecifier
+(FixedTypeSpecifier
+- FixedType VOID
+)FixedTypeSpecifier
 )FullySpecifiedType
 (DeclarationMember
 (Identifier)
@@ -10618,9 +10618,9 @@ int foob__vn8[4] = int[](21, 22, 23, 24), foob__vp;
 )ArraySpecifier
 (ExpressionInitializer
 (FunctionCallExpression
-(BuiltinNumericTypeSpecifier
+(NumericTypeSpecifier
 - NumericType INT32
-)BuiltinNumericTypeSpecifier
+)NumericTypeSpecifier
 (LiteralExpression
 - NumericType INT32
 - Integer 1
@@ -10649,9 +10649,9 @@ int foob__vn8[4] = int[](21, 22, 23, 24), foob__vp;
 (DeclarationExternalDeclaration
 (TypeAndInitDeclaration
 (FullySpecifiedType
-(BuiltinFixedTypeSpecifier
-- BuiltinType VOID
-)BuiltinFixedTypeSpecifier
+(FixedTypeSpecifier
+- FixedType VOID
+)FixedTypeSpecifier
 )FullySpecifiedType
 (DeclarationMember
 (Identifier)
@@ -10669,9 +10669,9 @@ int foob__vn8[4] = int[](21, 22, 23, 24), foob__vp;
 )ArraySpecifier
 (ExpressionInitializer
 (FunctionCallExpression
-(BuiltinNumericTypeSpecifier
+(NumericTypeSpecifier
 - NumericType INT32
-)BuiltinNumericTypeSpecifier
+)NumericTypeSpecifier
 (LiteralExpression
 - NumericType INT32
 - Integer 5
@@ -10705,9 +10705,9 @@ int foob__vn8[4] = int[](21, 22, 23, 24), foob__vp;
 (DeclarationExternalDeclaration
 (TypeAndInitDeclaration
 (FullySpecifiedType
-(BuiltinFixedTypeSpecifier
-- BuiltinType VOID
-)BuiltinFixedTypeSpecifier
+(FixedTypeSpecifier
+- FixedType VOID
+)FixedTypeSpecifier
 )FullySpecifiedType
 (DeclarationMember
 (Identifier)
@@ -10721,9 +10721,9 @@ int foob__vn8[4] = int[](21, 22, 23, 24), foob__vp;
 )ArraySpecifier
 (ExpressionInitializer
 (FunctionCallExpression
-(BuiltinNumericTypeSpecifier
+(NumericTypeSpecifier
 - NumericType INT32
-)BuiltinNumericTypeSpecifier
+)NumericTypeSpecifier
 (LiteralExpression
 - NumericType INT32
 - Integer 10
@@ -10749,9 +10749,9 @@ int foob__vn8[4] = int[](21, 22, 23, 24), foob__vp;
 )ArraySpecifier
 (ExpressionInitializer
 (FunctionCallExpression
-(BuiltinNumericTypeSpecifier
+(NumericTypeSpecifier
 - NumericType INT32
-)BuiltinNumericTypeSpecifier
+)NumericTypeSpecifier
 (LiteralExpression
 - NumericType INT32
 - Integer 12
@@ -10775,9 +10775,9 @@ int foob__vn8[4] = int[](21, 22, 23, 24), foob__vp;
 (DeclarationExternalDeclaration
 (TypeAndInitDeclaration
 (FullySpecifiedType
-(BuiltinFixedTypeSpecifier
-- BuiltinType VOID
-)BuiltinFixedTypeSpecifier
+(FixedTypeSpecifier
+- FixedType VOID
+)FixedTypeSpecifier
 )FullySpecifiedType
 (DeclarationMember
 (Identifier)
@@ -10791,9 +10791,9 @@ int foob__vn8[4] = int[](21, 22, 23, 24), foob__vp;
 )ArraySpecifier
 (ExpressionInitializer
 (FunctionCallExpression
-(BuiltinNumericTypeSpecifier
+(NumericTypeSpecifier
 - NumericType INT32
-)BuiltinNumericTypeSpecifier
+)NumericTypeSpecifier
 (LiteralExpression
 - NumericType INT32
 - Integer 21
@@ -10831,9 +10831,9 @@ int foob__vn8[4] = int[](21, 22, 23, 24), foob__vp;
 - StorageType CONST
 )StorageQualifier
 )TypeQualifier
-(BuiltinNumericTypeSpecifier
+(NumericTypeSpecifier
 - NumericType INT32
-)BuiltinNumericTypeSpecifier
+)NumericTypeSpecifier
 )FullySpecifiedType
 (DeclarationMember
 (Identifier)
@@ -10847,9 +10847,9 @@ int foob__vn8[4] = int[](21, 22, 23, 24), foob__vp;
 )ArraySpecifier
 (ExpressionInitializer
 (FunctionCallExpression
-(BuiltinNumericTypeSpecifier
+(NumericTypeSpecifier
 - NumericType INT32
-)BuiltinNumericTypeSpecifier
+)NumericTypeSpecifier
 (LiteralExpression
 - NumericType INT32
 - Integer 1
@@ -10883,9 +10883,9 @@ int foob__vn8[4] = int[](21, 22, 23, 24), foob__vp;
 - StorageType CONST
 )StorageQualifier
 )TypeQualifier
-(BuiltinNumericTypeSpecifier
+(NumericTypeSpecifier
 - NumericType INT32
-)BuiltinNumericTypeSpecifier
+)NumericTypeSpecifier
 )FullySpecifiedType
 (DeclarationMember
 (Identifier)
@@ -10903,9 +10903,9 @@ int foob__vn8[4] = int[](21, 22, 23, 24), foob__vp;
 )ArraySpecifier
 (ExpressionInitializer
 (FunctionCallExpression
-(BuiltinNumericTypeSpecifier
+(NumericTypeSpecifier
 - NumericType INT32
-)BuiltinNumericTypeSpecifier
+)NumericTypeSpecifier
 (LiteralExpression
 - NumericType INT32
 - Integer 5
@@ -10944,9 +10944,9 @@ int foob__vn8[4] = int[](21, 22, 23, 24), foob__vp;
 - StorageType CONST
 )StorageQualifier
 )TypeQualifier
-(BuiltinNumericTypeSpecifier
+(NumericTypeSpecifier
 - NumericType INT32
-)BuiltinNumericTypeSpecifier
+)NumericTypeSpecifier
 )FullySpecifiedType
 (DeclarationMember
 (Identifier)
@@ -10960,9 +10960,9 @@ int foob__vn8[4] = int[](21, 22, 23, 24), foob__vp;
 )ArraySpecifier
 (ExpressionInitializer
 (FunctionCallExpression
-(BuiltinNumericTypeSpecifier
+(NumericTypeSpecifier
 - NumericType INT32
-)BuiltinNumericTypeSpecifier
+)NumericTypeSpecifier
 (LiteralExpression
 - NumericType INT32
 - Integer 10
@@ -10988,9 +10988,9 @@ int foob__vn8[4] = int[](21, 22, 23, 24), foob__vp;
 )ArraySpecifier
 (ExpressionInitializer
 (FunctionCallExpression
-(BuiltinNumericTypeSpecifier
+(NumericTypeSpecifier
 - NumericType INT32
-)BuiltinNumericTypeSpecifier
+)NumericTypeSpecifier
 (LiteralExpression
 - NumericType INT32
 - Integer 12
@@ -11019,9 +11019,9 @@ int foob__vn8[4] = int[](21, 22, 23, 24), foob__vp;
 - StorageType CONST
 )StorageQualifier
 )TypeQualifier
-(BuiltinNumericTypeSpecifier
+(NumericTypeSpecifier
 - NumericType INT32
-)BuiltinNumericTypeSpecifier
+)NumericTypeSpecifier
 )FullySpecifiedType
 (DeclarationMember
 (Identifier)
@@ -11035,9 +11035,9 @@ int foob__vn8[4] = int[](21, 22, 23, 24), foob__vp;
 )ArraySpecifier
 (ExpressionInitializer
 (FunctionCallExpression
-(BuiltinNumericTypeSpecifier
+(NumericTypeSpecifier
 - NumericType INT32
-)BuiltinNumericTypeSpecifier
+)NumericTypeSpecifier
 (LiteralExpression
 - NumericType INT32
 - Integer 21
@@ -11075,9 +11075,9 @@ int foob__vn8[4] = int[](21, 22, 23, 24), foob__vp;
 - StorageType UNIFORM
 )StorageQualifier
 )TypeQualifier
-(BuiltinNumericTypeSpecifier
+(NumericTypeSpecifier
 - NumericType INT32
-)BuiltinNumericTypeSpecifier
+)NumericTypeSpecifier
 )FullySpecifiedType
 (DeclarationMember
 (Identifier)
@@ -11091,9 +11091,9 @@ int foob__vn8[4] = int[](21, 22, 23, 24), foob__vp;
 )ArraySpecifier
 (ExpressionInitializer
 (FunctionCallExpression
-(BuiltinNumericTypeSpecifier
+(NumericTypeSpecifier
 - NumericType INT32
-)BuiltinNumericTypeSpecifier
+)NumericTypeSpecifier
 (LiteralExpression
 - NumericType INT32
 - Integer 1
@@ -11127,9 +11127,9 @@ int foob__vn8[4] = int[](21, 22, 23, 24), foob__vp;
 - StorageType UNIFORM
 )StorageQualifier
 )TypeQualifier
-(BuiltinNumericTypeSpecifier
+(NumericTypeSpecifier
 - NumericType INT32
-)BuiltinNumericTypeSpecifier
+)NumericTypeSpecifier
 )FullySpecifiedType
 (DeclarationMember
 (Identifier)
@@ -11147,9 +11147,9 @@ int foob__vn8[4] = int[](21, 22, 23, 24), foob__vp;
 )ArraySpecifier
 (ExpressionInitializer
 (FunctionCallExpression
-(BuiltinNumericTypeSpecifier
+(NumericTypeSpecifier
 - NumericType INT32
-)BuiltinNumericTypeSpecifier
+)NumericTypeSpecifier
 (LiteralExpression
 - NumericType INT32
 - Integer 5
@@ -11188,9 +11188,9 @@ int foob__vn8[4] = int[](21, 22, 23, 24), foob__vp;
 - StorageType UNIFORM
 )StorageQualifier
 )TypeQualifier
-(BuiltinNumericTypeSpecifier
+(NumericTypeSpecifier
 - NumericType INT32
-)BuiltinNumericTypeSpecifier
+)NumericTypeSpecifier
 )FullySpecifiedType
 (DeclarationMember
 (Identifier)
@@ -11204,9 +11204,9 @@ int foob__vn8[4] = int[](21, 22, 23, 24), foob__vp;
 )ArraySpecifier
 (ExpressionInitializer
 (FunctionCallExpression
-(BuiltinNumericTypeSpecifier
+(NumericTypeSpecifier
 - NumericType INT32
-)BuiltinNumericTypeSpecifier
+)NumericTypeSpecifier
 (LiteralExpression
 - NumericType INT32
 - Integer 10
@@ -11232,9 +11232,9 @@ int foob__vn8[4] = int[](21, 22, 23, 24), foob__vp;
 )ArraySpecifier
 (ExpressionInitializer
 (FunctionCallExpression
-(BuiltinNumericTypeSpecifier
+(NumericTypeSpecifier
 - NumericType INT32
-)BuiltinNumericTypeSpecifier
+)NumericTypeSpecifier
 (LiteralExpression
 - NumericType INT32
 - Integer 12
@@ -11263,9 +11263,9 @@ int foob__vn8[4] = int[](21, 22, 23, 24), foob__vp;
 - StorageType UNIFORM
 )StorageQualifier
 )TypeQualifier
-(BuiltinNumericTypeSpecifier
+(NumericTypeSpecifier
 - NumericType INT32
-)BuiltinNumericTypeSpecifier
+)NumericTypeSpecifier
 )FullySpecifiedType
 (DeclarationMember
 (Identifier)
@@ -11279,9 +11279,9 @@ int foob__vn8[4] = int[](21, 22, 23, 24), foob__vp;
 )ArraySpecifier
 (ExpressionInitializer
 (FunctionCallExpression
-(BuiltinNumericTypeSpecifier
+(NumericTypeSpecifier
 - NumericType INT32
-)BuiltinNumericTypeSpecifier
+)NumericTypeSpecifier
 (LiteralExpression
 - NumericType INT32
 - Integer 21
@@ -11314,9 +11314,9 @@ int foob__vn8[4] = int[](21, 22, 23, 24), foob__vp;
 (DeclarationExternalDeclaration
 (TypeAndInitDeclaration
 (FullySpecifiedType
-(BuiltinNumericTypeSpecifier
+(NumericTypeSpecifier
 - NumericType INT32
-)BuiltinNumericTypeSpecifier
+)NumericTypeSpecifier
 )FullySpecifiedType
 (DeclarationMember
 (Identifier)
@@ -11330,9 +11330,9 @@ int foob__vn8[4] = int[](21, 22, 23, 24), foob__vp;
 )ArraySpecifier
 (ExpressionInitializer
 (FunctionCallExpression
-(BuiltinNumericTypeSpecifier
+(NumericTypeSpecifier
 - NumericType INT32
-)BuiltinNumericTypeSpecifier
+)NumericTypeSpecifier
 (LiteralExpression
 - NumericType INT32
 - Integer 1
@@ -11361,9 +11361,9 @@ int foob__vn8[4] = int[](21, 22, 23, 24), foob__vp;
 (DeclarationExternalDeclaration
 (TypeAndInitDeclaration
 (FullySpecifiedType
-(BuiltinNumericTypeSpecifier
+(NumericTypeSpecifier
 - NumericType INT32
-)BuiltinNumericTypeSpecifier
+)NumericTypeSpecifier
 )FullySpecifiedType
 (DeclarationMember
 (Identifier)
@@ -11381,9 +11381,9 @@ int foob__vn8[4] = int[](21, 22, 23, 24), foob__vp;
 )ArraySpecifier
 (ExpressionInitializer
 (FunctionCallExpression
-(BuiltinNumericTypeSpecifier
+(NumericTypeSpecifier
 - NumericType INT32
-)BuiltinNumericTypeSpecifier
+)NumericTypeSpecifier
 (LiteralExpression
 - NumericType INT32
 - Integer 5
@@ -11417,9 +11417,9 @@ int foob__vn8[4] = int[](21, 22, 23, 24), foob__vp;
 (DeclarationExternalDeclaration
 (TypeAndInitDeclaration
 (FullySpecifiedType
-(BuiltinNumericTypeSpecifier
+(NumericTypeSpecifier
 - NumericType INT32
-)BuiltinNumericTypeSpecifier
+)NumericTypeSpecifier
 )FullySpecifiedType
 (DeclarationMember
 (Identifier)
@@ -11433,9 +11433,9 @@ int foob__vn8[4] = int[](21, 22, 23, 24), foob__vp;
 )ArraySpecifier
 (ExpressionInitializer
 (FunctionCallExpression
-(BuiltinNumericTypeSpecifier
+(NumericTypeSpecifier
 - NumericType INT32
-)BuiltinNumericTypeSpecifier
+)NumericTypeSpecifier
 (LiteralExpression
 - NumericType INT32
 - Integer 10
@@ -11461,9 +11461,9 @@ int foob__vn8[4] = int[](21, 22, 23, 24), foob__vp;
 )ArraySpecifier
 (ExpressionInitializer
 (FunctionCallExpression
-(BuiltinNumericTypeSpecifier
+(NumericTypeSpecifier
 - NumericType INT32
-)BuiltinNumericTypeSpecifier
+)NumericTypeSpecifier
 (LiteralExpression
 - NumericType INT32
 - Integer 12
@@ -11487,9 +11487,9 @@ int foob__vn8[4] = int[](21, 22, 23, 24), foob__vp;
 (DeclarationExternalDeclaration
 (TypeAndInitDeclaration
 (FullySpecifiedType
-(BuiltinNumericTypeSpecifier
+(NumericTypeSpecifier
 - NumericType INT32
-)BuiltinNumericTypeSpecifier
+)NumericTypeSpecifier
 )FullySpecifiedType
 (DeclarationMember
 (Identifier)
@@ -11503,9 +11503,9 @@ int foob__vn8[4] = int[](21, 22, 23, 24), foob__vp;
 )ArraySpecifier
 (ExpressionInitializer
 (FunctionCallExpression
-(BuiltinNumericTypeSpecifier
+(NumericTypeSpecifier
 - NumericType INT32
-)BuiltinNumericTypeSpecifier
+)NumericTypeSpecifier
 (LiteralExpression
 - NumericType INT32
 - Integer 21
@@ -11538,9 +11538,9 @@ int foob__vn8[4] = int[](21, 22, 23, 24), foob__vp;
 (FunctionDefinition
 (FunctionPrototype
 (FullySpecifiedType
-(BuiltinFixedTypeSpecifier
-- BuiltinType VOID
-)BuiltinFixedTypeSpecifier
+(FixedTypeSpecifier
+- FixedType VOID
+)FixedTypeSpecifier
 )FullySpecifiedType
 (Identifier)
 - String main
@@ -11563,9 +11563,9 @@ int foob__vn8[4] = int[](21, 22, 23, 24), foob__vp;
 (DeclarationExternalDeclaration
 (TypeAndInitDeclaration
 (FullySpecifiedType
-(BuiltinNumericTypeSpecifier
+(NumericTypeSpecifier
 - NumericType INT32
-)BuiltinNumericTypeSpecifier
+)NumericTypeSpecifier
 )FullySpecifiedType
 (DeclarationMember
 (Identifier)
@@ -11579,9 +11579,9 @@ int foob__vn8[4] = int[](21, 22, 23, 24), foob__vp;
 )ArraySpecifier
 (ExpressionInitializer
 (FunctionCallExpression
-(BuiltinNumericTypeSpecifier
+(NumericTypeSpecifier
 - NumericType INT32
-)BuiltinNumericTypeSpecifier
+)NumericTypeSpecifier
 (LiteralExpression
 - NumericType INT32
 - Integer 1
@@ -11610,9 +11610,9 @@ int foob__vn8[4] = int[](21, 22, 23, 24), foob__vp;
 (DeclarationExternalDeclaration
 (TypeAndInitDeclaration
 (FullySpecifiedType
-(BuiltinNumericTypeSpecifier
+(NumericTypeSpecifier
 - NumericType INT32
-)BuiltinNumericTypeSpecifier
+)NumericTypeSpecifier
 )FullySpecifiedType
 (DeclarationMember
 (Identifier)
@@ -11630,9 +11630,9 @@ int foob__vn8[4] = int[](21, 22, 23, 24), foob__vp;
 )ArraySpecifier
 (ExpressionInitializer
 (FunctionCallExpression
-(BuiltinNumericTypeSpecifier
+(NumericTypeSpecifier
 - NumericType INT32
-)BuiltinNumericTypeSpecifier
+)NumericTypeSpecifier
 (LiteralExpression
 - NumericType INT32
 - Integer 5
@@ -11666,9 +11666,9 @@ int foob__vn8[4] = int[](21, 22, 23, 24), foob__vp;
 (DeclarationExternalDeclaration
 (TypeAndInitDeclaration
 (FullySpecifiedType
-(BuiltinNumericTypeSpecifier
+(NumericTypeSpecifier
 - NumericType INT32
-)BuiltinNumericTypeSpecifier
+)NumericTypeSpecifier
 )FullySpecifiedType
 (DeclarationMember
 (Identifier)
@@ -11682,9 +11682,9 @@ int foob__vn8[4] = int[](21, 22, 23, 24), foob__vp;
 )ArraySpecifier
 (ExpressionInitializer
 (FunctionCallExpression
-(BuiltinNumericTypeSpecifier
+(NumericTypeSpecifier
 - NumericType INT32
-)BuiltinNumericTypeSpecifier
+)NumericTypeSpecifier
 (LiteralExpression
 - NumericType INT32
 - Integer 10
@@ -11710,9 +11710,9 @@ int foob__vn8[4] = int[](21, 22, 23, 24), foob__vp;
 )ArraySpecifier
 (ExpressionInitializer
 (FunctionCallExpression
-(BuiltinNumericTypeSpecifier
+(NumericTypeSpecifier
 - NumericType INT32
-)BuiltinNumericTypeSpecifier
+)NumericTypeSpecifier
 (LiteralExpression
 - NumericType INT32
 - Integer 12
@@ -11736,9 +11736,9 @@ int foob__vn8[4] = int[](21, 22, 23, 24), foob__vp;
 (DeclarationExternalDeclaration
 (TypeAndInitDeclaration
 (FullySpecifiedType
-(BuiltinNumericTypeSpecifier
+(NumericTypeSpecifier
 - NumericType INT32
-)BuiltinNumericTypeSpecifier
+)NumericTypeSpecifier
 )FullySpecifiedType
 (DeclarationMember
 (Identifier)
@@ -11752,9 +11752,9 @@ int foob__vn8[4] = int[](21, 22, 23, 24), foob__vp;
 )ArraySpecifier
 (ExpressionInitializer
 (FunctionCallExpression
-(BuiltinNumericTypeSpecifier
+(NumericTypeSpecifier
 - NumericType INT32
-)BuiltinNumericTypeSpecifier
+)NumericTypeSpecifier
 (LiteralExpression
 - NumericType INT32
 - Integer 21
@@ -11847,9 +11847,9 @@ layout(binding = 0, binding = 4 + 4, baz = zam, foo, shared, bar) uniform sample
 - StorageType UNIFORM
 )StorageQualifier
 )TypeQualifier
-(BuiltinFixedTypeSpecifier
-- BuiltinType SAMPLER2D
-)BuiltinFixedTypeSpecifier
+(FixedTypeSpecifier
+- FixedType SAMPLER2D
+)FixedTypeSpecifier
 )FullySpecifiedType
 (DeclarationMember
 (Identifier)
@@ -11885,9 +11885,9 @@ buffer B {
 (StructBody
 (StructMember
 (FullySpecifiedType
-(BuiltinNumericTypeSpecifier
+(NumericTypeSpecifier
 - NumericType INT8
-)BuiltinNumericTypeSpecifier
+)NumericTypeSpecifier
 )FullySpecifiedType
 (StructDeclarator
 (Identifier)
@@ -11896,9 +11896,9 @@ buffer B {
 )StructMember
 (StructMember
 (FullySpecifiedType
-(BuiltinNumericTypeSpecifier
+(NumericTypeSpecifier
 - NumericType INT16
-)BuiltinNumericTypeSpecifier
+)NumericTypeSpecifier
 )FullySpecifiedType
 (StructDeclarator
 (Identifier)
@@ -11907,9 +11907,9 @@ buffer B {
 )StructMember
 (StructMember
 (FullySpecifiedType
-(BuiltinNumericTypeSpecifier
+(NumericTypeSpecifier
 - NumericType UINT8
-)BuiltinNumericTypeSpecifier
+)NumericTypeSpecifier
 )FullySpecifiedType
 (StructDeclarator
 (Identifier)
@@ -11918,9 +11918,9 @@ buffer B {
 )StructMember
 (StructMember
 (FullySpecifiedType
-(BuiltinNumericTypeSpecifier
+(NumericTypeSpecifier
 - NumericType UINT16
-)BuiltinNumericTypeSpecifier
+)NumericTypeSpecifier
 )FullySpecifiedType
 (StructDeclarator
 (Identifier)
@@ -11929,9 +11929,9 @@ buffer B {
 )StructMember
 (StructMember
 (FullySpecifiedType
-(BuiltinNumericTypeSpecifier
+(NumericTypeSpecifier
 - NumericType FLOAT16
-)BuiltinNumericTypeSpecifier
+)NumericTypeSpecifier
 )FullySpecifiedType
 (StructDeclarator
 (Identifier)
@@ -11992,9 +11992,9 @@ layout(location = 0) attribute vec4 b, c;
 - StorageType ATTRIBUTE
 )StorageQualifier
 )TypeQualifier
-(BuiltinNumericTypeSpecifier
+(NumericTypeSpecifier
 - NumericType F32VEC4
-)BuiltinNumericTypeSpecifier
+)NumericTypeSpecifier
 )FullySpecifiedType
 (DeclarationMember
 (Identifier)
@@ -12024,9 +12024,9 @@ uniform sampler2D Sampler;
 - StorageType UNIFORM
 )StorageQualifier
 )TypeQualifier
-(BuiltinFixedTypeSpecifier
-- BuiltinType SAMPLER2D
-)BuiltinFixedTypeSpecifier
+(FixedTypeSpecifier
+- FixedType SAMPLER2D
+)FixedTypeSpecifier
 )FullySpecifiedType
 (DeclarationMember
 (Identifier)
@@ -12056,9 +12056,9 @@ struct Struct {
 (StructBody
 (StructMember
 (FullySpecifiedType
-(BuiltinNumericTypeSpecifier
+(NumericTypeSpecifier
 - NumericType F32VEC4
-)BuiltinNumericTypeSpecifier
+)NumericTypeSpecifier
 )FullySpecifiedType
 (StructDeclarator
 (Identifier)
@@ -12067,9 +12067,9 @@ struct Struct {
 )StructMember
 (StructMember
 (FullySpecifiedType
-(BuiltinNumericTypeSpecifier
+(NumericTypeSpecifier
 - NumericType FLOAT32
-)BuiltinNumericTypeSpecifier
+)NumericTypeSpecifier
 )FullySpecifiedType
 (StructDeclarator
 (Identifier)
@@ -12114,9 +12114,9 @@ in float bar;
 - StorageType OUT
 )StorageQualifier
 )TypeQualifier
-(BuiltinNumericTypeSpecifier
+(NumericTypeSpecifier
 - NumericType FLOAT32
-)BuiltinNumericTypeSpecifier
+)NumericTypeSpecifier
 )FullySpecifiedType
 (DeclarationMember
 (Identifier)
@@ -12132,9 +12132,9 @@ in float bar;
 - StorageType IN
 )StorageQualifier
 )TypeQualifier
-(BuiltinNumericTypeSpecifier
+(NumericTypeSpecifier
 - NumericType FLOAT32
-)BuiltinNumericTypeSpecifier
+)NumericTypeSpecifier
 )FullySpecifiedType
 (DeclarationMember
 (Identifier)
@@ -12217,9 +12217,9 @@ layout(location = 0) out vec4 FragColor;
 )NamedLayoutQualifierPart
 )LayoutQualifier
 )TypeQualifier
-(BuiltinFixedTypeSpecifier
-- BuiltinType IMAGE2D
-)BuiltinFixedTypeSpecifier
+(FixedTypeSpecifier
+- FixedType IMAGE2D
+)FixedTypeSpecifier
 )FullySpecifiedType
 (DeclarationMember
 (Identifier)
@@ -12258,9 +12258,9 @@ layout(location = 0) out vec4 FragColor;
 )NamedLayoutQualifierPart
 )LayoutQualifier
 )TypeQualifier
-(BuiltinFixedTypeSpecifier
-- BuiltinType IMAGE2D
-)BuiltinFixedTypeSpecifier
+(FixedTypeSpecifier
+- FixedType IMAGE2D
+)FixedTypeSpecifier
 )FullySpecifiedType
 (DeclarationMember
 (Identifier)
@@ -12306,9 +12306,9 @@ layout(location = 0) out vec4 FragColor;
 )NamedLayoutQualifierPart
 )LayoutQualifier
 )TypeQualifier
-(BuiltinFixedTypeSpecifier
-- BuiltinType IMAGE2D
-)BuiltinFixedTypeSpecifier
+(FixedTypeSpecifier
+- FixedType IMAGE2D
+)FixedTypeSpecifier
 )FullySpecifiedType
 (DeclarationMember
 (Identifier)
@@ -12351,9 +12351,9 @@ layout(location = 0) out vec4 FragColor;
 )NamedLayoutQualifierPart
 )LayoutQualifier
 )TypeQualifier
-(BuiltinFixedTypeSpecifier
-- BuiltinType IMAGE2D
-)BuiltinFixedTypeSpecifier
+(FixedTypeSpecifier
+- FixedType IMAGE2D
+)FixedTypeSpecifier
 )FullySpecifiedType
 (DeclarationMember
 (Identifier)
@@ -12383,9 +12383,9 @@ layout(location = 0) out vec4 FragColor;
 )NamedLayoutQualifierPart
 )LayoutQualifier
 )TypeQualifier
-(BuiltinNumericTypeSpecifier
+(NumericTypeSpecifier
 - NumericType I32VEC2
-)BuiltinNumericTypeSpecifier
+)NumericTypeSpecifier
 )FullySpecifiedType
 (DeclarationMember
 (Identifier)
@@ -12412,9 +12412,9 @@ layout(location = 0) out vec4 FragColor;
 )NamedLayoutQualifierPart
 )LayoutQualifier
 )TypeQualifier
-(BuiltinNumericTypeSpecifier
+(NumericTypeSpecifier
 - NumericType F32VEC4
-)BuiltinNumericTypeSpecifier
+)NumericTypeSpecifier
 )FullySpecifiedType
 (DeclarationMember
 (Identifier)
@@ -12425,9 +12425,9 @@ layout(location = 0) out vec4 FragColor;
 (FunctionDefinition
 (FunctionPrototype
 (FullySpecifiedType
-(BuiltinNumericTypeSpecifier
+(NumericTypeSpecifier
 - NumericType F32VEC4
-)BuiltinNumericTypeSpecifier
+)NumericTypeSpecifier
 )FullySpecifiedType
 (Identifier)
 - String image_load
@@ -12441,18 +12441,18 @@ layout(location = 0) out vec4 FragColor;
 - StorageType COHERENT
 )StorageQualifier
 )TypeQualifier
-(BuiltinFixedTypeSpecifier
-- BuiltinType IMAGE2D
-)BuiltinFixedTypeSpecifier
+(FixedTypeSpecifier
+- FixedType IMAGE2D
+)FixedTypeSpecifier
 )FullySpecifiedType
 (Identifier)
 - String image
 )FunctionParameter
 (FunctionParameter
 (FullySpecifiedType
-(BuiltinNumericTypeSpecifier
+(NumericTypeSpecifier
 - NumericType I32VEC2
-)BuiltinNumericTypeSpecifier
+)NumericTypeSpecifier
 )FullySpecifiedType
 (Identifier)
 - String coords
@@ -12497,9 +12497,9 @@ layout(location = 0) out vec4 FragColor;
 - StorageType IN
 )StorageQualifier
 )TypeQualifier
-(BuiltinNumericTypeSpecifier
+(NumericTypeSpecifier
 - NumericType INT32
-)BuiltinNumericTypeSpecifier
+)NumericTypeSpecifier
 )FullySpecifiedType
 (DeclarationMember
 (Identifier)
@@ -12526,9 +12526,9 @@ layout(location = 0) out vec4 FragColor;
 - StorageType OUT
 )StorageQualifier
 )TypeQualifier
-(BuiltinNumericTypeSpecifier
+(NumericTypeSpecifier
 - NumericType F32VEC4
-)BuiltinNumericTypeSpecifier
+)NumericTypeSpecifier
 )FullySpecifiedType
 (DeclarationMember
 (Identifier)
@@ -12575,9 +12575,9 @@ layout(binding = 0) buffer Buffers {
 (StructBody
 (StructMember
 (FullySpecifiedType
-(BuiltinNumericTypeSpecifier
+(NumericTypeSpecifier
 - NumericType F32VEC4
-)BuiltinNumericTypeSpecifier
+)NumericTypeSpecifier
 )FullySpecifiedType
 (StructDeclarator
 (Identifier)
@@ -12586,9 +12586,9 @@ layout(binding = 0) buffer Buffers {
 )StructMember
 (StructMember
 (FullySpecifiedType
-(BuiltinNumericTypeSpecifier
+(NumericTypeSpecifier
 - NumericType I32VEC4
-)BuiltinNumericTypeSpecifier
+)NumericTypeSpecifier
 )FullySpecifiedType
 (StructDeclarator
 (Identifier)
@@ -12597,9 +12597,9 @@ layout(binding = 0) buffer Buffers {
 )StructMember
 (StructMember
 (FullySpecifiedType
-(BuiltinNumericTypeSpecifier
+(NumericTypeSpecifier
 - NumericType U32VEC4
-)BuiltinNumericTypeSpecifier
+)NumericTypeSpecifier
 )FullySpecifiedType
 (StructDeclarator
 (Identifier)
@@ -12608,9 +12608,9 @@ layout(binding = 0) buffer Buffers {
 )StructMember
 (StructMember
 (FullySpecifiedType
-(BuiltinNumericTypeSpecifier
+(NumericTypeSpecifier
 - NumericType F64VEC4
-)BuiltinNumericTypeSpecifier
+)NumericTypeSpecifier
 )FullySpecifiedType
 (StructDeclarator
 (Identifier)
@@ -12619,9 +12619,9 @@ layout(binding = 0) buffer Buffers {
 )StructMember
 (StructMember
 (FullySpecifiedType
-(BuiltinNumericTypeSpecifier
+(NumericTypeSpecifier
 - NumericType INT32
-)BuiltinNumericTypeSpecifier
+)NumericTypeSpecifier
 )FullySpecifiedType
 (StructDeclarator
 (Identifier)
@@ -12706,9 +12706,9 @@ void foo() {
 (FunctionDefinition
 (FunctionPrototype
 (FullySpecifiedType
-(BuiltinFixedTypeSpecifier
-- BuiltinType VOID
-)BuiltinFixedTypeSpecifier
+(FixedTypeSpecifier
+- FixedType VOID
+)FixedTypeSpecifier
 )FullySpecifiedType
 (Identifier)
 - String foo
@@ -12736,18 +12736,18 @@ const mat4x2 m42 = mat4x2(1.0f, 2.0f, 3.0f, 4.0f, 5.0f, 6.0f, 7.0f, 8.0f);
 - StorageType CONST
 )StorageQualifier
 )TypeQualifier
-(BuiltinNumericTypeSpecifier
+(NumericTypeSpecifier
 - NumericType F32VEC2
-)BuiltinNumericTypeSpecifier
+)NumericTypeSpecifier
 )FullySpecifiedType
 (DeclarationMember
 (Identifier)
 - String cv2
 (ExpressionInitializer
 (FunctionCallExpression
-(BuiltinNumericTypeSpecifier
+(NumericTypeSpecifier
 - NumericType F32VEC2
-)BuiltinNumericTypeSpecifier
+)NumericTypeSpecifier
 (LiteralExpression
 - NumericType FLOAT32
 - Float 10.0
@@ -12769,18 +12769,18 @@ const mat4x2 m42 = mat4x2(1.0f, 2.0f, 3.0f, 4.0f, 5.0f, 6.0f, 7.0f, 8.0f);
 - StorageType CONST
 )StorageQualifier
 )TypeQualifier
-(BuiltinNumericTypeSpecifier
+(NumericTypeSpecifier
 - NumericType F32MAT2X4
-)BuiltinNumericTypeSpecifier
+)NumericTypeSpecifier
 )FullySpecifiedType
 (DeclarationMember
 (Identifier)
 - String m24
 (ExpressionInitializer
 (FunctionCallExpression
-(BuiltinNumericTypeSpecifier
+(NumericTypeSpecifier
 - NumericType F32MAT2X4
-)BuiltinNumericTypeSpecifier
+)NumericTypeSpecifier
 (LiteralExpression
 - NumericType FLOAT32
 - Float 3.0
@@ -12798,18 +12798,18 @@ const mat4x2 m42 = mat4x2(1.0f, 2.0f, 3.0f, 4.0f, 5.0f, 6.0f, 7.0f, 8.0f);
 - StorageType CONST
 )StorageQualifier
 )TypeQualifier
-(BuiltinNumericTypeSpecifier
+(NumericTypeSpecifier
 - NumericType F32MAT4X2
-)BuiltinNumericTypeSpecifier
+)NumericTypeSpecifier
 )FullySpecifiedType
 (DeclarationMember
 (Identifier)
 - String m42
 (ExpressionInitializer
 (FunctionCallExpression
-(BuiltinNumericTypeSpecifier
+(NumericTypeSpecifier
 - NumericType F32MAT4X2
-)BuiltinNumericTypeSpecifier
+)NumericTypeSpecifier
 (LiteralExpression
 - NumericType FLOAT32
 - Float 1.0
@@ -12877,9 +12877,9 @@ out outbname2 {
 (StructBody
 (StructMember
 (FullySpecifiedType
-(BuiltinNumericTypeSpecifier
+(NumericTypeSpecifier
 - NumericType INT32
-)BuiltinNumericTypeSpecifier
+)NumericTypeSpecifier
 )FullySpecifiedType
 (StructDeclarator
 (Identifier)
@@ -12893,9 +12893,9 @@ out outbname2 {
 - StorageType OUT
 )StorageQualifier
 )TypeQualifier
-(BuiltinNumericTypeSpecifier
+(NumericTypeSpecifier
 - NumericType F32VEC4
-)BuiltinNumericTypeSpecifier
+)NumericTypeSpecifier
 )FullySpecifiedType
 (StructDeclarator
 (Identifier)
@@ -12909,9 +12909,9 @@ out outbname2 {
 - PrecisionLevel HIGH
 )PrecisionQualifier
 )TypeQualifier
-(BuiltinFixedTypeSpecifier
-- BuiltinType SAMPLER2D
-)BuiltinFixedTypeSpecifier
+(FixedTypeSpecifier
+- FixedType SAMPLER2D
+)FixedTypeSpecifier
 )FullySpecifiedType
 (StructDeclarator
 (Identifier)
@@ -12948,9 +12948,9 @@ out outbname2 {
 )NamedLayoutQualifierPart
 )LayoutQualifier
 )TypeQualifier
-(BuiltinNumericTypeSpecifier
+(NumericTypeSpecifier
 - NumericType INT32
-)BuiltinNumericTypeSpecifier
+)NumericTypeSpecifier
 )FullySpecifiedType
 (StructDeclarator
 (Identifier)
@@ -12972,9 +12972,9 @@ out outbname2 {
 )NamedLayoutQualifierPart
 )LayoutQualifier
 )TypeQualifier
-(BuiltinNumericTypeSpecifier
+(NumericTypeSpecifier
 - NumericType F32VEC4
-)BuiltinNumericTypeSpecifier
+)NumericTypeSpecifier
 )FullySpecifiedType
 (StructDeclarator
 (Identifier)
@@ -13015,9 +13015,9 @@ void functionDef(const in float param) {
 (FunctionDefinition
 (FunctionPrototype
 (FullySpecifiedType
-(BuiltinFixedTypeSpecifier
-- BuiltinType VOID
-)BuiltinFixedTypeSpecifier
+(FixedTypeSpecifier
+- FixedType VOID
+)FixedTypeSpecifier
 )FullySpecifiedType
 (Identifier)
 - String functionDef
@@ -13031,9 +13031,9 @@ void functionDef(const in float param) {
 - StorageType IN
 )StorageQualifier
 )TypeQualifier
-(BuiltinNumericTypeSpecifier
+(NumericTypeSpecifier
 - NumericType FLOAT32
-)BuiltinNumericTypeSpecifier
+)NumericTypeSpecifier
 )FullySpecifiedType
 (Identifier)
 - String param
@@ -13110,9 +13110,9 @@ uint g2 = 4294967295u;
 (DeclarationExternalDeclaration
 (TypeAndInitDeclaration
 (FullySpecifiedType
-(BuiltinNumericTypeSpecifier
+(NumericTypeSpecifier
 - NumericType FLOAT32
-)BuiltinNumericTypeSpecifier
+)NumericTypeSpecifier
 )FullySpecifiedType
 (DeclarationMember
 (Identifier)
@@ -13129,9 +13129,9 @@ uint g2 = 4294967295u;
 (DeclarationExternalDeclaration
 (TypeAndInitDeclaration
 (FullySpecifiedType
-(BuiltinNumericTypeSpecifier
+(NumericTypeSpecifier
 - NumericType FLOAT32
-)BuiltinNumericTypeSpecifier
+)NumericTypeSpecifier
 )FullySpecifiedType
 (DeclarationMember
 (Identifier)
@@ -13148,9 +13148,9 @@ uint g2 = 4294967295u;
 (DeclarationExternalDeclaration
 (TypeAndInitDeclaration
 (FullySpecifiedType
-(BuiltinNumericTypeSpecifier
+(NumericTypeSpecifier
 - NumericType FLOAT32
-)BuiltinNumericTypeSpecifier
+)NumericTypeSpecifier
 )FullySpecifiedType
 (DeclarationMember
 (Identifier)
@@ -13167,9 +13167,9 @@ uint g2 = 4294967295u;
 (DeclarationExternalDeclaration
 (TypeAndInitDeclaration
 (FullySpecifiedType
-(BuiltinNumericTypeSpecifier
+(NumericTypeSpecifier
 - NumericType FLOAT32
-)BuiltinNumericTypeSpecifier
+)NumericTypeSpecifier
 )FullySpecifiedType
 (DeclarationMember
 (Identifier)
@@ -13186,9 +13186,9 @@ uint g2 = 4294967295u;
 (DeclarationExternalDeclaration
 (TypeAndInitDeclaration
 (FullySpecifiedType
-(BuiltinNumericTypeSpecifier
+(NumericTypeSpecifier
 - NumericType FLOAT32
-)BuiltinNumericTypeSpecifier
+)NumericTypeSpecifier
 )FullySpecifiedType
 (DeclarationMember
 (Identifier)
@@ -13205,9 +13205,9 @@ uint g2 = 4294967295u;
 (DeclarationExternalDeclaration
 (TypeAndInitDeclaration
 (FullySpecifiedType
-(BuiltinNumericTypeSpecifier
+(NumericTypeSpecifier
 - NumericType FLOAT32
-)BuiltinNumericTypeSpecifier
+)NumericTypeSpecifier
 )FullySpecifiedType
 (DeclarationMember
 (Identifier)
@@ -13224,9 +13224,9 @@ uint g2 = 4294967295u;
 (DeclarationExternalDeclaration
 (TypeAndInitDeclaration
 (FullySpecifiedType
-(BuiltinNumericTypeSpecifier
+(NumericTypeSpecifier
 - NumericType FLOAT32
-)BuiltinNumericTypeSpecifier
+)NumericTypeSpecifier
 )FullySpecifiedType
 (DeclarationMember
 (Identifier)
@@ -13243,9 +13243,9 @@ uint g2 = 4294967295u;
 (DeclarationExternalDeclaration
 (TypeAndInitDeclaration
 (FullySpecifiedType
-(BuiltinNumericTypeSpecifier
+(NumericTypeSpecifier
 - NumericType FLOAT32
-)BuiltinNumericTypeSpecifier
+)NumericTypeSpecifier
 )FullySpecifiedType
 (DeclarationMember
 (Identifier)
@@ -13262,9 +13262,9 @@ uint g2 = 4294967295u;
 (DeclarationExternalDeclaration
 (TypeAndInitDeclaration
 (FullySpecifiedType
-(BuiltinNumericTypeSpecifier
+(NumericTypeSpecifier
 - NumericType FLOAT32
-)BuiltinNumericTypeSpecifier
+)NumericTypeSpecifier
 )FullySpecifiedType
 (DeclarationMember
 (Identifier)
@@ -13281,9 +13281,9 @@ uint g2 = 4294967295u;
 (DeclarationExternalDeclaration
 (TypeAndInitDeclaration
 (FullySpecifiedType
-(BuiltinNumericTypeSpecifier
+(NumericTypeSpecifier
 - NumericType FLOAT32
-)BuiltinNumericTypeSpecifier
+)NumericTypeSpecifier
 )FullySpecifiedType
 (DeclarationMember
 (Identifier)
@@ -13300,9 +13300,9 @@ uint g2 = 4294967295u;
 (DeclarationExternalDeclaration
 (TypeAndInitDeclaration
 (FullySpecifiedType
-(BuiltinNumericTypeSpecifier
+(NumericTypeSpecifier
 - NumericType FLOAT32
-)BuiltinNumericTypeSpecifier
+)NumericTypeSpecifier
 )FullySpecifiedType
 (DeclarationMember
 (Identifier)
@@ -13319,9 +13319,9 @@ uint g2 = 4294967295u;
 (DeclarationExternalDeclaration
 (TypeAndInitDeclaration
 (FullySpecifiedType
-(BuiltinNumericTypeSpecifier
+(NumericTypeSpecifier
 - NumericType FLOAT32
-)BuiltinNumericTypeSpecifier
+)NumericTypeSpecifier
 )FullySpecifiedType
 (DeclarationMember
 (Identifier)
@@ -13338,9 +13338,9 @@ uint g2 = 4294967295u;
 (DeclarationExternalDeclaration
 (TypeAndInitDeclaration
 (FullySpecifiedType
-(BuiltinNumericTypeSpecifier
+(NumericTypeSpecifier
 - NumericType FLOAT32
-)BuiltinNumericTypeSpecifier
+)NumericTypeSpecifier
 )FullySpecifiedType
 (DeclarationMember
 (Identifier)
@@ -13357,9 +13357,9 @@ uint g2 = 4294967295u;
 (DeclarationExternalDeclaration
 (TypeAndInitDeclaration
 (FullySpecifiedType
-(BuiltinNumericTypeSpecifier
+(NumericTypeSpecifier
 - NumericType FLOAT32
-)BuiltinNumericTypeSpecifier
+)NumericTypeSpecifier
 )FullySpecifiedType
 (DeclarationMember
 (Identifier)
@@ -13376,9 +13376,9 @@ uint g2 = 4294967295u;
 (DeclarationExternalDeclaration
 (TypeAndInitDeclaration
 (FullySpecifiedType
-(BuiltinNumericTypeSpecifier
+(NumericTypeSpecifier
 - NumericType FLOAT32
-)BuiltinNumericTypeSpecifier
+)NumericTypeSpecifier
 )FullySpecifiedType
 (DeclarationMember
 (Identifier)
@@ -13395,9 +13395,9 @@ uint g2 = 4294967295u;
 (DeclarationExternalDeclaration
 (TypeAndInitDeclaration
 (FullySpecifiedType
-(BuiltinNumericTypeSpecifier
+(NumericTypeSpecifier
 - NumericType FLOAT32
-)BuiltinNumericTypeSpecifier
+)NumericTypeSpecifier
 )FullySpecifiedType
 (DeclarationMember
 (Identifier)
@@ -13414,9 +13414,9 @@ uint g2 = 4294967295u;
 (DeclarationExternalDeclaration
 (TypeAndInitDeclaration
 (FullySpecifiedType
-(BuiltinNumericTypeSpecifier
+(NumericTypeSpecifier
 - NumericType FLOAT32
-)BuiltinNumericTypeSpecifier
+)NumericTypeSpecifier
 )FullySpecifiedType
 (DeclarationMember
 (Identifier)
@@ -13433,9 +13433,9 @@ uint g2 = 4294967295u;
 (DeclarationExternalDeclaration
 (TypeAndInitDeclaration
 (FullySpecifiedType
-(BuiltinNumericTypeSpecifier
+(NumericTypeSpecifier
 - NumericType FLOAT32
-)BuiltinNumericTypeSpecifier
+)NumericTypeSpecifier
 )FullySpecifiedType
 (DeclarationMember
 (Identifier)
@@ -13452,9 +13452,9 @@ uint g2 = 4294967295u;
 (DeclarationExternalDeclaration
 (TypeAndInitDeclaration
 (FullySpecifiedType
-(BuiltinNumericTypeSpecifier
+(NumericTypeSpecifier
 - NumericType FLOAT32
-)BuiltinNumericTypeSpecifier
+)NumericTypeSpecifier
 )FullySpecifiedType
 (DeclarationMember
 (Identifier)
@@ -13471,9 +13471,9 @@ uint g2 = 4294967295u;
 (DeclarationExternalDeclaration
 (TypeAndInitDeclaration
 (FullySpecifiedType
-(BuiltinNumericTypeSpecifier
+(NumericTypeSpecifier
 - NumericType FLOAT32
-)BuiltinNumericTypeSpecifier
+)NumericTypeSpecifier
 )FullySpecifiedType
 (DeclarationMember
 (Identifier)
@@ -13490,9 +13490,9 @@ uint g2 = 4294967295u;
 (DeclarationExternalDeclaration
 (TypeAndInitDeclaration
 (FullySpecifiedType
-(BuiltinNumericTypeSpecifier
+(NumericTypeSpecifier
 - NumericType FLOAT32
-)BuiltinNumericTypeSpecifier
+)NumericTypeSpecifier
 )FullySpecifiedType
 (DeclarationMember
 (Identifier)
@@ -13509,9 +13509,9 @@ uint g2 = 4294967295u;
 (DeclarationExternalDeclaration
 (TypeAndInitDeclaration
 (FullySpecifiedType
-(BuiltinNumericTypeSpecifier
+(NumericTypeSpecifier
 - NumericType FLOAT32
-)BuiltinNumericTypeSpecifier
+)NumericTypeSpecifier
 )FullySpecifiedType
 (DeclarationMember
 (Identifier)
@@ -13528,9 +13528,9 @@ uint g2 = 4294967295u;
 (DeclarationExternalDeclaration
 (TypeAndInitDeclaration
 (FullySpecifiedType
-(BuiltinNumericTypeSpecifier
+(NumericTypeSpecifier
 - NumericType FLOAT32
-)BuiltinNumericTypeSpecifier
+)NumericTypeSpecifier
 )FullySpecifiedType
 (DeclarationMember
 (Identifier)
@@ -13547,9 +13547,9 @@ uint g2 = 4294967295u;
 (DeclarationExternalDeclaration
 (TypeAndInitDeclaration
 (FullySpecifiedType
-(BuiltinNumericTypeSpecifier
+(NumericTypeSpecifier
 - NumericType FLOAT64
-)BuiltinNumericTypeSpecifier
+)NumericTypeSpecifier
 )FullySpecifiedType
 (DeclarationMember
 (Identifier)
@@ -13566,9 +13566,9 @@ uint g2 = 4294967295u;
 (DeclarationExternalDeclaration
 (TypeAndInitDeclaration
 (FullySpecifiedType
-(BuiltinNumericTypeSpecifier
+(NumericTypeSpecifier
 - NumericType FLOAT64
-)BuiltinNumericTypeSpecifier
+)NumericTypeSpecifier
 )FullySpecifiedType
 (DeclarationMember
 (Identifier)
@@ -13585,9 +13585,9 @@ uint g2 = 4294967295u;
 (DeclarationExternalDeclaration
 (TypeAndInitDeclaration
 (FullySpecifiedType
-(BuiltinNumericTypeSpecifier
+(NumericTypeSpecifier
 - NumericType FLOAT64
-)BuiltinNumericTypeSpecifier
+)NumericTypeSpecifier
 )FullySpecifiedType
 (DeclarationMember
 (Identifier)
@@ -13604,9 +13604,9 @@ uint g2 = 4294967295u;
 (DeclarationExternalDeclaration
 (TypeAndInitDeclaration
 (FullySpecifiedType
-(BuiltinNumericTypeSpecifier
+(NumericTypeSpecifier
 - NumericType FLOAT64
-)BuiltinNumericTypeSpecifier
+)NumericTypeSpecifier
 )FullySpecifiedType
 (DeclarationMember
 (Identifier)
@@ -13623,9 +13623,9 @@ uint g2 = 4294967295u;
 (DeclarationExternalDeclaration
 (TypeAndInitDeclaration
 (FullySpecifiedType
-(BuiltinNumericTypeSpecifier
+(NumericTypeSpecifier
 - NumericType FLOAT32
-)BuiltinNumericTypeSpecifier
+)NumericTypeSpecifier
 )FullySpecifiedType
 (DeclarationMember
 (Identifier)
@@ -13642,9 +13642,9 @@ uint g2 = 4294967295u;
 (DeclarationExternalDeclaration
 (TypeAndInitDeclaration
 (FullySpecifiedType
-(BuiltinNumericTypeSpecifier
+(NumericTypeSpecifier
 - NumericType FLOAT32
-)BuiltinNumericTypeSpecifier
+)NumericTypeSpecifier
 )FullySpecifiedType
 (DeclarationMember
 (Identifier)
@@ -13661,9 +13661,9 @@ uint g2 = 4294967295u;
 (DeclarationExternalDeclaration
 (TypeAndInitDeclaration
 (FullySpecifiedType
-(BuiltinNumericTypeSpecifier
+(NumericTypeSpecifier
 - NumericType INT32
-)BuiltinNumericTypeSpecifier
+)NumericTypeSpecifier
 )FullySpecifiedType
 (DeclarationMember
 (Identifier)
@@ -13681,9 +13681,9 @@ uint g2 = 4294967295u;
 (DeclarationExternalDeclaration
 (TypeAndInitDeclaration
 (FullySpecifiedType
-(BuiltinNumericTypeSpecifier
+(NumericTypeSpecifier
 - NumericType INT32
-)BuiltinNumericTypeSpecifier
+)NumericTypeSpecifier
 )FullySpecifiedType
 (DeclarationMember
 (Identifier)
@@ -13701,9 +13701,9 @@ uint g2 = 4294967295u;
 (DeclarationExternalDeclaration
 (TypeAndInitDeclaration
 (FullySpecifiedType
-(BuiltinNumericTypeSpecifier
+(NumericTypeSpecifier
 - NumericType INT32
-)BuiltinNumericTypeSpecifier
+)NumericTypeSpecifier
 )FullySpecifiedType
 (DeclarationMember
 (Identifier)
@@ -13721,9 +13721,9 @@ uint g2 = 4294967295u;
 (DeclarationExternalDeclaration
 (TypeAndInitDeclaration
 (FullySpecifiedType
-(BuiltinNumericTypeSpecifier
+(NumericTypeSpecifier
 - NumericType INT32
-)BuiltinNumericTypeSpecifier
+)NumericTypeSpecifier
 )FullySpecifiedType
 (DeclarationMember
 (Identifier)
@@ -13741,9 +13741,9 @@ uint g2 = 4294967295u;
 (DeclarationExternalDeclaration
 (TypeAndInitDeclaration
 (FullySpecifiedType
-(BuiltinNumericTypeSpecifier
+(NumericTypeSpecifier
 - NumericType INT32
-)BuiltinNumericTypeSpecifier
+)NumericTypeSpecifier
 )FullySpecifiedType
 (DeclarationMember
 (Identifier)
@@ -13761,9 +13761,9 @@ uint g2 = 4294967295u;
 (DeclarationExternalDeclaration
 (TypeAndInitDeclaration
 (FullySpecifiedType
-(BuiltinNumericTypeSpecifier
+(NumericTypeSpecifier
 - NumericType INT32
-)BuiltinNumericTypeSpecifier
+)NumericTypeSpecifier
 )FullySpecifiedType
 (DeclarationMember
 (Identifier)
@@ -13781,9 +13781,9 @@ uint g2 = 4294967295u;
 (DeclarationExternalDeclaration
 (TypeAndInitDeclaration
 (FullySpecifiedType
-(BuiltinNumericTypeSpecifier
+(NumericTypeSpecifier
 - NumericType INT32
-)BuiltinNumericTypeSpecifier
+)NumericTypeSpecifier
 )FullySpecifiedType
 (DeclarationMember
 (Identifier)
@@ -13801,9 +13801,9 @@ uint g2 = 4294967295u;
 (DeclarationExternalDeclaration
 (TypeAndInitDeclaration
 (FullySpecifiedType
-(BuiltinNumericTypeSpecifier
+(NumericTypeSpecifier
 - NumericType INT32
-)BuiltinNumericTypeSpecifier
+)NumericTypeSpecifier
 )FullySpecifiedType
 (DeclarationMember
 (Identifier)
@@ -13821,9 +13821,9 @@ uint g2 = 4294967295u;
 (DeclarationExternalDeclaration
 (TypeAndInitDeclaration
 (FullySpecifiedType
-(BuiltinNumericTypeSpecifier
+(NumericTypeSpecifier
 - NumericType INT32
-)BuiltinNumericTypeSpecifier
+)NumericTypeSpecifier
 )FullySpecifiedType
 (DeclarationMember
 (Identifier)
@@ -13841,9 +13841,9 @@ uint g2 = 4294967295u;
 (DeclarationExternalDeclaration
 (TypeAndInitDeclaration
 (FullySpecifiedType
-(BuiltinNumericTypeSpecifier
+(NumericTypeSpecifier
 - NumericType INT32
-)BuiltinNumericTypeSpecifier
+)NumericTypeSpecifier
 )FullySpecifiedType
 (DeclarationMember
 (Identifier)
@@ -13870,9 +13870,9 @@ uint g2 = 4294967295u;
 (DeclarationExternalDeclaration
 (TypeAndInitDeclaration
 (FullySpecifiedType
-(BuiltinNumericTypeSpecifier
+(NumericTypeSpecifier
 - NumericType UINT32
-)BuiltinNumericTypeSpecifier
+)NumericTypeSpecifier
 )FullySpecifiedType
 (DeclarationMember
 (Identifier)
@@ -13890,9 +13890,9 @@ uint g2 = 4294967295u;
 (DeclarationExternalDeclaration
 (TypeAndInitDeclaration
 (FullySpecifiedType
-(BuiltinNumericTypeSpecifier
+(NumericTypeSpecifier
 - NumericType UINT32
-)BuiltinNumericTypeSpecifier
+)NumericTypeSpecifier
 )FullySpecifiedType
 (DeclarationMember
 (Identifier)
@@ -13912,9 +13912,9 @@ uint g2 = 4294967295u;
 (DeclarationExternalDeclaration
 (TypeAndInitDeclaration
 (FullySpecifiedType
-(BuiltinNumericTypeSpecifier
+(NumericTypeSpecifier
 - NumericType UINT32
-)BuiltinNumericTypeSpecifier
+)NumericTypeSpecifier
 )FullySpecifiedType
 (DeclarationMember
 (Identifier)
@@ -13932,9 +13932,9 @@ uint g2 = 4294967295u;
 (DeclarationExternalDeclaration
 (TypeAndInitDeclaration
 (FullySpecifiedType
-(BuiltinNumericTypeSpecifier
+(NumericTypeSpecifier
 - NumericType UINT32
-)BuiltinNumericTypeSpecifier
+)NumericTypeSpecifier
 )FullySpecifiedType
 (DeclarationMember
 (Identifier)
@@ -13952,9 +13952,9 @@ uint g2 = 4294967295u;
 (DeclarationExternalDeclaration
 (TypeAndInitDeclaration
 (FullySpecifiedType
-(BuiltinNumericTypeSpecifier
+(NumericTypeSpecifier
 - NumericType UINT32
-)BuiltinNumericTypeSpecifier
+)NumericTypeSpecifier
 )FullySpecifiedType
 (DeclarationMember
 (Identifier)
@@ -13972,9 +13972,9 @@ uint g2 = 4294967295u;
 (DeclarationExternalDeclaration
 (TypeAndInitDeclaration
 (FullySpecifiedType
-(BuiltinNumericTypeSpecifier
+(NumericTypeSpecifier
 - NumericType UINT32
-)BuiltinNumericTypeSpecifier
+)NumericTypeSpecifier
 )FullySpecifiedType
 (DeclarationMember
 (Identifier)
@@ -13992,9 +13992,9 @@ uint g2 = 4294967295u;
 (DeclarationExternalDeclaration
 (TypeAndInitDeclaration
 (FullySpecifiedType
-(BuiltinNumericTypeSpecifier
+(NumericTypeSpecifier
 - NumericType UINT32
-)BuiltinNumericTypeSpecifier
+)NumericTypeSpecifier
 )FullySpecifiedType
 (DeclarationMember
 (Identifier)
@@ -14012,9 +14012,9 @@ uint g2 = 4294967295u;
 (DeclarationExternalDeclaration
 (TypeAndInitDeclaration
 (FullySpecifiedType
-(BuiltinNumericTypeSpecifier
+(NumericTypeSpecifier
 - NumericType UINT32
-)BuiltinNumericTypeSpecifier
+)NumericTypeSpecifier
 )FullySpecifiedType
 (DeclarationMember
 (Identifier)
@@ -14032,9 +14032,9 @@ uint g2 = 4294967295u;
 (DeclarationExternalDeclaration
 (TypeAndInitDeclaration
 (FullySpecifiedType
-(BuiltinNumericTypeSpecifier
+(NumericTypeSpecifier
 - NumericType UINT32
-)BuiltinNumericTypeSpecifier
+)NumericTypeSpecifier
 )FullySpecifiedType
 (DeclarationMember
 (Identifier)
@@ -14052,9 +14052,9 @@ uint g2 = 4294967295u;
 (DeclarationExternalDeclaration
 (TypeAndInitDeclaration
 (FullySpecifiedType
-(BuiltinNumericTypeSpecifier
+(NumericTypeSpecifier
 - NumericType UINT32
-)BuiltinNumericTypeSpecifier
+)NumericTypeSpecifier
 )FullySpecifiedType
 (DeclarationMember
 (Identifier)
@@ -14097,9 +14097,9 @@ uint g2 = 4294967295u;
 - StorageType OUT
 )StorageQualifier
 )TypeQualifier
-(BuiltinNumericTypeSpecifier
+(NumericTypeSpecifier
 - NumericType F32VEC4
-)BuiltinNumericTypeSpecifier
+)NumericTypeSpecifier
 )FullySpecifiedType
 (DeclarationMember
 (Identifier)
@@ -14110,9 +14110,9 @@ uint g2 = 4294967295u;
 (DeclarationExternalDeclaration
 (TypeAndInitDeclaration
 (FullySpecifiedType
-(BuiltinNumericTypeSpecifier
+(NumericTypeSpecifier
 - NumericType UINT32
-)BuiltinNumericTypeSpecifier
+)NumericTypeSpecifier
 )FullySpecifiedType
 (DeclarationMember
 (Identifier)
@@ -14176,9 +14176,9 @@ layout(location = 0) in Primitive { vec2 texCoord; } IN;
 (StructBody
 (StructMember
 (FullySpecifiedType
-(BuiltinNumericTypeSpecifier
+(NumericTypeSpecifier
 - NumericType F32VEC2
-)BuiltinNumericTypeSpecifier
+)NumericTypeSpecifier
 )FullySpecifiedType
 (StructDeclarator
 (Identifier)
@@ -14221,9 +14221,9 @@ varying vec2 varyVec;
 - StorageType VARYING
 )StorageQualifier
 )TypeQualifier
-(BuiltinNumericTypeSpecifier
+(NumericTypeSpecifier
 - NumericType F32VEC2
-)BuiltinNumericTypeSpecifier
+)NumericTypeSpecifier
 )FullySpecifiedType
 (DeclarationMember
 (Identifier)

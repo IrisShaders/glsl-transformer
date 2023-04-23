@@ -280,8 +280,8 @@ typeQualifier: (
 //TYPE_NAME instead of IDENTIFIER in the spec
 typeSpecifier: (
 		IDENTIFIER
-		| builtinTypeSpecifierFixed
-		| builtinTypeSpecifierParseable
+		| fixedTypeSpecifier
+		| numericTypeSpecifier
 		| structSpecifier
 	) arraySpecifier?;
 
@@ -290,7 +290,7 @@ typeSpecifier: (
 arraySpecifier: arraySpecifierSegment+;
 arraySpecifierSegment: (LBRACKET expression? RBRACKET);
 
-builtinTypeSpecifierParseable:
+numericTypeSpecifier:
 	BOOL
 	| BVEC2
 	| BVEC3
@@ -367,7 +367,7 @@ builtinTypeSpecifierParseable:
 	| U64VEC3
 	| U64VEC4;
 
-builtinTypeSpecifierFixed:
+fixedTypeSpecifier:
 	VOID
 	| ATOMIC_UINT
 	| SAMPLER2D

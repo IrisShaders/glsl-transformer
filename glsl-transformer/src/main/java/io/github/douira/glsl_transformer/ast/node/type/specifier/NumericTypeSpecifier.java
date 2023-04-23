@@ -2,28 +2,28 @@ package io.github.douira.glsl_transformer.ast.node.type.specifier;
 
 import io.github.douira.glsl_transformer.ast.query.Root;
 import io.github.douira.glsl_transformer.ast.traversal.*;
-import io.github.douira.glsl_transformer.util.NumericType;
+import io.github.douira.glsl_transformer.ast.typing.NumericType;
 
-public class BuiltinNumericTypeSpecifier extends TypeSpecifier {
+public class NumericTypeSpecifier extends TypeSpecifier {
   public NumericType type;
 
-  public BuiltinNumericTypeSpecifier(NumericType type) {
+  public NumericTypeSpecifier(NumericType type) {
     this.type = type;
   }
 
-  public BuiltinNumericTypeSpecifier(NumericType type, ArraySpecifier arraySpecifier) {
+  public NumericTypeSpecifier(NumericType type, ArraySpecifier arraySpecifier) {
     super(arraySpecifier);
     this.type = type;
   }
 
   @Override
   public SpecifierType getSpecifierType() {
-    return SpecifierType.BUILTIN_NUMERIC;
+    return SpecifierType.NUMERIC;
   }
 
   @Override
   public <R> R typeSpecifierAccept(ASTVisitor<R> visitor) {
-    return visitor.visitBuiltinNumericTypeSpecifier(this);
+    return visitor.visitNumericTypeSpecifier(this);
   }
 
   @Override
@@ -39,12 +39,12 @@ public class BuiltinNumericTypeSpecifier extends TypeSpecifier {
   }
 
   @Override
-  public BuiltinNumericTypeSpecifier clone() {
-    return new BuiltinNumericTypeSpecifier(type, clone(arraySpecifier));
+  public NumericTypeSpecifier clone() {
+    return new NumericTypeSpecifier(type, clone(arraySpecifier));
   }
 
   @Override
-  public BuiltinNumericTypeSpecifier cloneInto(Root root) {
-    return (BuiltinNumericTypeSpecifier) super.cloneInto(root);
+  public NumericTypeSpecifier cloneInto(Root root) {
+    return (NumericTypeSpecifier) super.cloneInto(root);
   }
 }

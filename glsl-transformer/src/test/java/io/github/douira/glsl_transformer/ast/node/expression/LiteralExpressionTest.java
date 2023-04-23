@@ -5,8 +5,8 @@ import static org.junit.jupiter.api.Assertions.*;
 import org.junit.jupiter.api.Test;
 
 import io.github.douira.glsl_transformer.ast.node.expression.LiteralExpression.IntegerFormat;
-import io.github.douira.glsl_transformer.util.NumericType;
-import io.github.douira.glsl_transformer.util.NumericType.NumberType;
+import io.github.douira.glsl_transformer.ast.typing.NumericType;
+import io.github.douira.glsl_transformer.ast.typing.NumericType.NumberType;
 
 public class LiteralExpressionTest {
   @Test
