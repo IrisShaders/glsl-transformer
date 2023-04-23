@@ -8,6 +8,17 @@ This is an actively developed library that parses GLSL using an ANTLR4 grammar a
 
 `glsl-transformer` is developed and maintained by [douira](https://github.com/douira). This project was created as a hobby project initiated by the need for a more powerful GLSL shader patcher in the wonderful [Iris](https://github.com/IrisShaders/Iris/) shaders mod for Minecraft. This repo is now part of the IrisShaders org on GitHub.
 
+## Licensing
+
+`glsl-transformer` is licensed under the [GNU Affero General Public License v3.0](https://www.gnu.org/licenses/agpl-3.0.en.html). You can read more about the details of this license in its text and [the corresponding FAQ](https://www.gnu.org/licenses/gpl-faq.html).
+
+Software that uses this library must itself be licensed as AGPLv3. However, there are two special cases:
+
+- Certain projects can receive a specific additional noncommercial permission that allows them to use this software without significantly reducing the requirements of the AGPLv3 for other unintended purposes.
+- You can obtain a commercial license, which is entirely separate from the publicly granted AGPLv3 license. This license includes warranty and support.
+
+Please contact the author (douira) in both of these cases. In addition to the terms of the AGPLv3, contributors to this project must agree to license their work in such a way that these additional licenses may be granted. A Contributor License Agreement (CLA) for this purpose as well as a text that makes up the additional permission structure for incompatibly licensed projects is being worked on.
+
 ## Capabilities
 
 `glsl-transformer` is a library for GLSL program transformation. It uses a parser generated with ANTLR based on a custom GLSL grammar to turn shader code into a parse tree, called the concrete syntax tree (CST). The CST is then turned into an abstract syntax tree (AST) and transformations are performed on it.
@@ -24,7 +35,7 @@ Transforming the AST requires building the AST from the parse tree (the CST). On
 
 Further reading on [Abstract vs Concrete (Parse) Syntax Trees](https://eli.thegreenplace.net/2009/02/16/abstract-vs-concrete-syntax-trees/)
 
-## What `glsl-transformer` is not
+## What `glsl-transformer` Is Not
 
 Currently, `glsl-transformer` mostly operates only on the syntactic level, even if an AST is constructed. This means it only knows how the code looks and what structure it has to have, not what it means and which structures are legal or not. It only has a limited semantic understanding of the code. Semantic processing of programs can be implemented by API users on a case-by-case basis for specific tasks. The implemented AST does not do type checking or check if the defined structures adhere to the GLSL spec. Implementing full semantics would require building what basically amounts to a GLSL compiler which is out of scope for this project.
 
@@ -108,4 +119,10 @@ See the Javadocs for API documentation and some API-specific notes. See [the doc
 
 ## Todo
 
-See the planned features and other work items in `TODO.md`.
+See the [project board](https://github.com/IrisShaders/glsl-transformer/projects/1) for an overview of the issues.
+
+### Potential Future Features
+
+- Type inference
+- Better formatting
+- Better line directive handling (WIP)
