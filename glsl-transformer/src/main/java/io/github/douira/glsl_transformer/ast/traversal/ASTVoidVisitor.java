@@ -68,11 +68,6 @@ public abstract class ASTVoidVisitor implements ASTVisitor<Void> {
   }
 
   @Override
-  public Void initialResult() {
-    return null;
-  }
-
-  @Override
   public Void superNodeTypeResult() {
     return null;
   }

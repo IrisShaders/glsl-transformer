@@ -865,16 +865,16 @@ public class ASTPrinter extends ASTPrinterBase {
     emitType(GLSLLexer.FOR);
     emitBreakableSpace();
     emitType(GLSLLexer.LPAREN);
-    if (visitSafe(node.getInitDeclaration())) {
+    if (visitSafeSignal(node.getInitDeclaration())) {
       compactCommonNewline();
     } else {
-      if (!visitSafe(node.getInitExpression())) {
+      if (!visitSafeSignal(node.getInitExpression())) {
         emitExactSpace();
       }
       emitType(GLSLLexer.SEMICOLON);
       emitBreakableSpace();
     }
-    if (!visitSafe(node.getCondition())) {
+    if (!visitSafeSignal(node.getCondition())) {
       visitSafe(node.getIterationConditionInitializer());
     }
     emitType(GLSLLexer.SEMICOLON);
@@ -896,7 +896,7 @@ public class ASTPrinter extends ASTPrinterBase {
     emitType(GLSLLexer.WHILE);
     emitBreakableSpace();
     emitType(GLSLLexer.LPAREN);
-    if (!visitSafe(node.getCondition())) {
+    if (!visitSafeSignal(node.getCondition())) {
       visitSafe(node.getIterationConditionInitializer());
     }
     emitType(GLSLLexer.RPAREN);

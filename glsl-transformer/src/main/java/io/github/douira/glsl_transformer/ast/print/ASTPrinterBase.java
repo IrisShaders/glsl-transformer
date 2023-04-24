@@ -196,7 +196,7 @@ public abstract class ASTPrinterBase extends ASTListenerVisitor<Void> {
     this.currentNode = currentNode;
   }
 
-  protected boolean visitSafe(ASTNode node) {
+  protected boolean visitSafeSignal(ASTNode node) {
     if (node != null) {
       visit(node);
       return true;
@@ -212,11 +212,6 @@ public abstract class ASTPrinterBase extends ASTListenerVisitor<Void> {
   @Override
   public Void visit(ASTNode node) {
     super.visit(node);
-    return null;
-  }
-
-  @Override
-  public Void initialResult() {
     return null;
   }
 
