@@ -27,6 +27,10 @@ public interface GeneralASTVisitor<R> {
     return node == null ? previousResult : visit(previousResult, node);
   }
 
+  default R visitSafe(ASTNode node) {
+    return node == null ? null : visit(node);
+  }
+
   default R visitChildren(R previousResult, List<? extends ASTNode> children) {
     if (children != null) {
       for (var child : children) {
@@ -41,7 +45,7 @@ public interface GeneralASTVisitor<R> {
   }
 
   default R visitChildren(List<? extends ASTNode> children) {
-    return visitChildren(initialResult(), children);
+    return visitChildren(null, children);
   }
 
   default R visitChildren(ListNode<? extends ASTNode> node) {
@@ -49,21 +53,14 @@ public interface GeneralASTVisitor<R> {
   }
 
   default R visitTwoChildren(ASTNode left, ASTNode right) {
-    var result = initialResult();
-    result = visitSafe(result, left);
-    result = visitSafe(result, right);
-    return result;
+    return visitSafe(visitSafe(left), right);
   }
 
   default R visitThreeChildren(ASTNode first, ASTNode second, ASTNode third) {
-    var result = initialResult();
-    result = visitSafe(result, first);
+    var result = visitSafe(first);
     result = visitSafe(result, second);
-    result = visitSafe(result, third);
-    return result;
+    return visitSafe(result, third);
   }
-
-  R initialResult();
 
   R superNodeTypeResult();
 

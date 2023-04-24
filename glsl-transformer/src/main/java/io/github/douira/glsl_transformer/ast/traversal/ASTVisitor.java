@@ -23,8 +23,7 @@ import io.github.douira.glsl_transformer.ast.node.type.struct.*;
  */
 public interface ASTVisitor<R> extends GeneralASTVisitor<R> {
   default R visitTranslationUnit(TranslationUnit node) {
-    var result = initialResult();
-    result = visitSafe(result, node.getVersionStatement());
+    var result = visitSafe(node.getVersionStatement());
     visitChildren(result, node);
     return result;
   }
@@ -336,8 +335,7 @@ public interface ASTVisitor<R> extends GeneralASTVisitor<R> {
   }
 
   default R visitForLoopStatement(ForLoopStatement node) {
-    var result = initialResult();
-    result = visitSafe(result, node.getInitExpression());
+    var result = visitSafe(node.getInitExpression());
     result = visitSafe(result, node.getInitDeclaration());
     result = visitSafe(result, node.getCondition());
     result = visitSafe(result, node.getIterationConditionInitializer());
@@ -362,7 +360,7 @@ public interface ASTVisitor<R> extends GeneralASTVisitor<R> {
   }
 
   default R visitReturnStatement(ReturnStatement node) {
-    return visitSafe(initialResult(), node.getExpression());
+    return visitSafe(node.getExpression());
   }
 
   default R visitDiscardStatement(DiscardStatement node) {

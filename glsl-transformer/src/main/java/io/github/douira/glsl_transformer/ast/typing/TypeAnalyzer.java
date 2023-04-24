@@ -316,8 +316,7 @@ public class TypeAnalyzer implements ASTVisitor<Type> {
 
   @Override
   public Type visitExtensionDirective(ExtensionDirective node) {
-    // TODO Auto-generated method stub
-    return ASTVisitor.super.visitExtensionDirective(node);
+    return Type.VOID;
   }
 
   @Override
@@ -400,14 +399,12 @@ public class TypeAnalyzer implements ASTVisitor<Type> {
 
   @Override
   public Type visitIgnoreIntersectionStatement(IgnoreIntersectionStatement node) {
-    // TODO Auto-generated method stub
-    return ASTVisitor.super.visitIgnoreIntersectionStatement(node);
+    return Type.VOID;
   }
 
   @Override
   public Type visitIncludeDirective(IncludeDirective node) {
-    // TODO Auto-generated method stub
-    return ASTVisitor.super.visitIncludeDirective(node);
+    return Type.VOID;
   }
 
   @Override
@@ -681,8 +678,7 @@ public class TypeAnalyzer implements ASTVisitor<Type> {
 
   @Override
   public Type visitTerminateRayStatement(TerminateRayStatement node) {
-    // TODO Auto-generated method stub
-    return ASTVisitor.super.visitTerminateRayStatement(node);
+    return Type.VOID;
   }
 
   @Override
@@ -741,19 +737,13 @@ public class TypeAnalyzer implements ASTVisitor<Type> {
 
   @Override
   public Type visitVersionStatement(VersionStatement node) {
-    // TODO Auto-generated method stub
-    return ASTVisitor.super.visitVersionStatement(node);
+    return Type.VOID;
   }
 
   @Override
   public Type visitWhileLoopStatement(WhileLoopStatement node) {
     // TODO Auto-generated method stub
     return ASTVisitor.super.visitWhileLoopStatement(node);
-  }
-
-  @Override
-  public Type initialResult() {
-    throw new IllegalStateException("Initial result should never be needed!");
   }
 
   @Override

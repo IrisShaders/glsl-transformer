@@ -30,11 +30,6 @@ public abstract class ASTBaseVisitor<R> implements ASTVisitor<R>, ContextTracker
   }
 
   @Override
-  public R initialResult() {
-    return defaultResult();
-  }
-
-  @Override
   public R superNodeTypeResult() {
     return defaultResult();
   }
