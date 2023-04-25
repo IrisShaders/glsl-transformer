@@ -185,11 +185,11 @@ public class Root {
    */
   protected final <R> R withActiveBuildRoot(
       Function<Root, R> rootConsumer) {
-    activeBuildRoots.push(this);
+    activeBuildRoots.addFirst(this);
     try {
       return rootConsumer.apply(this);
     } finally {
-      activeBuildRoots.pop();
+      activeBuildRoots.removeFirst();
     }
   }
 

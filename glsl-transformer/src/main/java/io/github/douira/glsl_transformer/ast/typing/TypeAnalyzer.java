@@ -1,5 +1,7 @@
 package io.github.douira.glsl_transformer.ast.typing;
 
+import java.util.*;
+
 import io.github.douira.glsl_transformer.ast.node.*;
 import io.github.douira.glsl_transformer.ast.node.abstract_node.ASTNode;
 import io.github.douira.glsl_transformer.ast.node.declaration.*;
@@ -16,15 +18,25 @@ import io.github.douira.glsl_transformer.ast.node.type.initializer.*;
 import io.github.douira.glsl_transformer.ast.node.type.qualifier.*;
 import io.github.douira.glsl_transformer.ast.node.type.specifier.*;
 import io.github.douira.glsl_transformer.ast.node.type.struct.*;
-import io.github.douira.glsl_transformer.ast.traversal.ASTVisitor;
+import io.github.douira.glsl_transformer.ast.traversal.ASTListenerVisitor;
 
 /**
  * Performs type analysis on an AST. This is done by visiting each node and
  * setting its type field.
  * 
  * Currently WIP and doesn't do much at all yet.
+ * 
+ * TODO:
+ * two options:
+ * - type analysis with a tree and the scopes are on a stack.
+ * - type analysis (potentially including data and control flow analysis) with a
+ * graph and the scopes are maybe not in a stack? or only for analysis
+ * 
+ * 
  */
-public class TypeAnalyzer implements ASTVisitor<Type> {
+public class TypeAnalyzer extends ASTListenerVisitor<Type> {
+  private Deque<Scope> scopeStack = new ArrayDeque<>();
+
   public Type analyze(ASTNode node) {
     node.accept(this);
     return node.getType();
@@ -32,7 +44,7 @@ public class TypeAnalyzer implements ASTVisitor<Type> {
 
   private static void assertTypesMatch(Type a, Type b) {
     if (!a.equals(b)) {
-      throw new RuntimeException("Types do not match: " + a + " and " + b);
+      throw new TypeAnalysisException("Types do not match: " + a + " and " + b);
     }
   }
 
@@ -41,25 +53,86 @@ public class TypeAnalyzer implements ASTVisitor<Type> {
     // expressions (since that would be a compile-time error)
     if (!(indexType instanceof NumericValueType valueType && valueType.type.isScalar()
         && (valueType.type.getNumberType().isInteger()))) {
-      throw new RuntimeException("Array index must be an integer");
+      throw new TypeAnalysisException("Array index must be an integer");
     }
   }
 
   @Override
   public Type visit(ASTNode node) {
-    return node.accept(this);
+    var type = node.accept(this);
+    node.assignType(type);
+    return type;
+  }
+
+  @Override
+  public Type superNodeTypeResult() {
+    throw new IllegalStateException("Super node type result should never be needed!");
+  }
+
+  @Override
+  public Type visitData(Object data) {
+    throw new IllegalStateException("Visit data should never be needed!");
+  }
+
+  @Override
+  public Type defaultResult() {
+    throw new IllegalStateException("Default result should never be needed!");
+  }
+
+  @Override
+  public Type aggregateResult(Type aggregate, Type nextResult) {
+    // TODO: does this method even need to ever run or is this handled by each type
+    // of AST node?
+    throw new IllegalStateException("Aggregate result should never be needed!");
+  }
+
+  @Override
+  public Type visitIdentifier(Identifier node) {
+    // TODO: should identifiers even be handled generally? or just specifically at
+    // each type of AST node
+    throw new IllegalStateException("Identifier should never be visited!");
+  }
+
+  @Override
+  public Type visitReferenceExpression(ReferenceExpression node) {
+    // reference expressions only refer to existing variables
+    var name = node.getIdentifier().getName();
+    var scope = scopeStack.peekFirst();
+    while (scope != null) {
+      var declaringNode = scope.declarations.get(name);
+      if (declaringNode != null) {
+        return declaringNode.getType();
+      }
+      scope = scope.parent;
+    }
+    throw new TypeAnalysisException("Could not find declaration for identifier " + name);
+  }
+
+  @Override
+  public Type visitCompoundStatement(CompoundStatement node) {
+    // TODO: not all compound statements create scopes (e.g. function bodies)
+    // TODO: do if/else statements create scopes even if they are technically
+    // compound statements (or rather, can be)?
+    var scope = new Scope(scopeStack.peekFirst());
+    scopeStack.addFirst(scope);
+    return new ScopeForming(scope);
+  }
+
+  @Override
+  public void exitCompoundStatement(CompoundStatement node) {
+    scopeStack.removeFirst();
   }
 
   @Override
   public Type visitAdditionAssignmentExpression(AdditionAssignmentExpression node) {
     // TODO Auto-generated method stub
-    return ASTVisitor.super.visitAdditionAssignmentExpression(node);
+    return super.visitAdditionAssignmentExpression(node);
   }
 
   @Override
   public Type visitAdditionExpression(AdditionExpression node) {
     // TODO Auto-generated method stub
-    return ASTVisitor.super.visitAdditionExpression(node);
+    return super.visitAdditionExpression(node);
   }
 
   @Override
@@ -67,7 +140,7 @@ public class TypeAnalyzer implements ASTVisitor<Type> {
     assertArrayIndex(visit(node.getRight()));
     var left = visit(node.getLeft());
     if (!(left instanceof ArrayType arrayType)) {
-      throw new RuntimeException("Array access on non-array type");
+      throw new TypeAnalysisException("Array access on non-array type");
     }
     return arrayType.elementType;
   }
@@ -75,133 +148,127 @@ public class TypeAnalyzer implements ASTVisitor<Type> {
   @Override
   public Type visitArraySpecifier(ArraySpecifier node) {
     // TODO Auto-generated method stub
-    return ASTVisitor.super.visitArraySpecifier(node);
+    return super.visitArraySpecifier(node);
   }
 
   @Override
   public Type visitAssignmentExpression(AssignmentExpression node) {
     // TODO Auto-generated method stub
-    return ASTVisitor.super.visitAssignmentExpression(node);
+    return super.visitAssignmentExpression(node);
   }
 
   @Override
   public Type visitBinaryExpression(BinaryExpression node) {
     // TODO Auto-generated method stub
-    return ASTVisitor.super.visitBinaryExpression(node);
+    return super.visitBinaryExpression(node);
   }
 
   @Override
   public Type visitBitwiseAndAssignmentExpression(BitwiseAndAssignmentExpression node) {
     // TODO Auto-generated method stub
-    return ASTVisitor.super.visitBitwiseAndAssignmentExpression(node);
+    return super.visitBitwiseAndAssignmentExpression(node);
   }
 
   @Override
   public Type visitBitwiseAndExpression(BitwiseAndExpression node) {
     // TODO Auto-generated method stub
-    return ASTVisitor.super.visitBitwiseAndExpression(node);
+    return super.visitBitwiseAndExpression(node);
   }
 
   @Override
   public Type visitBitwiseNotExpression(BitwiseNotExpression node) {
     // TODO Auto-generated method stub
-    return ASTVisitor.super.visitBitwiseNotExpression(node);
+    return super.visitBitwiseNotExpression(node);
   }
 
   @Override
   public Type visitBitwiseOrAssignmentExpression(BitwiseOrAssignmentExpression node) {
     // TODO Auto-generated method stub
-    return ASTVisitor.super.visitBitwiseOrAssignmentExpression(node);
+    return super.visitBitwiseOrAssignmentExpression(node);
   }
 
   @Override
   public Type visitBitwiseOrExpression(BitwiseOrExpression node) {
     // TODO Auto-generated method stub
-    return ASTVisitor.super.visitBitwiseOrExpression(node);
+    return super.visitBitwiseOrExpression(node);
   }
 
   @Override
   public Type visitBitwiseXorAssignmentExpression(BitwiseXorAssignmentExpression node) {
     // TODO Auto-generated method stub
-    return ASTVisitor.super.visitBitwiseXorAssignmentExpression(node);
+    return super.visitBitwiseXorAssignmentExpression(node);
   }
 
   @Override
   public Type visitBitwiseXorExpression(BitwiseXorExpression node) {
     // TODO Auto-generated method stub
-    return ASTVisitor.super.visitBitwiseXorExpression(node);
+    return super.visitBitwiseXorExpression(node);
   }
 
   @Override
   public Type visitBooleanAndExpression(BooleanAndExpression node) {
     // TODO Auto-generated method stub
-    return ASTVisitor.super.visitBooleanAndExpression(node);
+    return super.visitBooleanAndExpression(node);
   }
 
   @Override
   public Type visitBooleanNotExpression(BooleanNotExpression node) {
     // TODO Auto-generated method stub
-    return ASTVisitor.super.visitBooleanNotExpression(node);
+    return super.visitBooleanNotExpression(node);
   }
 
   @Override
   public Type visitBooleanOrExpression(BooleanOrExpression node) {
     // TODO Auto-generated method stub
-    return ASTVisitor.super.visitBooleanOrExpression(node);
+    return super.visitBooleanOrExpression(node);
   }
 
   @Override
   public Type visitBooleanXorExpression(BooleanXorExpression node) {
     // TODO Auto-generated method stub
-    return ASTVisitor.super.visitBooleanXorExpression(node);
+    return super.visitBooleanXorExpression(node);
   }
 
   @Override
   public Type visitBreakStatement(BreakStatement node) {
     // TODO Auto-generated method stub
-    return ASTVisitor.super.visitBreakStatement(node);
+    return super.visitBreakStatement(node);
   }
 
   @Override
   public Type visitFixedTypeSpecifier(FixedTypeSpecifier node) {
     // TODO Auto-generated method stub
-    return ASTVisitor.super.visitFixedTypeSpecifier(node);
+    return super.visitFixedTypeSpecifier(node);
   }
 
   @Override
   public Type visitNumericTypeSpecifier(NumericTypeSpecifier node) {
     // TODO Auto-generated method stub
-    return ASTVisitor.super.visitNumericTypeSpecifier(node);
+    return super.visitNumericTypeSpecifier(node);
   }
 
   @Override
   public Type visitCaseLabelStatement(CaseLabelStatement node) {
     // TODO Auto-generated method stub
-    return ASTVisitor.super.visitCaseLabelStatement(node);
+    return super.visitCaseLabelStatement(node);
   }
 
   @Override
   public Type visitCaseStatement(CaseStatement node) {
     // TODO Auto-generated method stub
-    return ASTVisitor.super.visitCaseStatement(node);
-  }
-
-  @Override
-  public Type visitCompoundStatement(CompoundStatement node) {
-    // TODO Auto-generated method stub
-    return ASTVisitor.super.visitCompoundStatement(node);
+    return super.visitCaseStatement(node);
   }
 
   @Override
   public Type visitConditionExpression(ConditionExpression node) {
     // TODO Auto-generated method stub
-    return ASTVisitor.super.visitConditionExpression(node);
+    return super.visitConditionExpression(node);
   }
 
   @Override
   public Type visitContinueStatement(ContinueStatement node) {
     // TODO Auto-generated method stub
-    return ASTVisitor.super.visitContinueStatement(node);
+    return super.visitContinueStatement(node);
   }
 
   @Override
@@ -212,37 +279,37 @@ public class TypeAnalyzer implements ASTVisitor<Type> {
   @Override
   public Type visitDeclaration(Declaration node) {
     // TODO Auto-generated method stub
-    return ASTVisitor.super.visitDeclaration(node);
+    return super.visitDeclaration(node);
   }
 
   @Override
   public Type visitDeclarationExternalDeclaration(DeclarationExternalDeclaration node) {
     // TODO Auto-generated method stub
-    return ASTVisitor.super.visitDeclarationExternalDeclaration(node);
+    return super.visitDeclarationExternalDeclaration(node);
   }
 
   @Override
   public Type visitDeclarationMember(DeclarationMember node) {
     // TODO Auto-generated method stub
-    return ASTVisitor.super.visitDeclarationMember(node);
+    return super.visitDeclarationMember(node);
   }
 
   @Override
   public Type visitDeclarationStatement(DeclarationStatement node) {
     // TODO Auto-generated method stub
-    return ASTVisitor.super.visitDeclarationStatement(node);
+    return super.visitDeclarationStatement(node);
   }
 
   @Override
   public Type visitDecrementPostfixExpression(DecrementPostfixExpression node) {
     // TODO Auto-generated method stub
-    return ASTVisitor.super.visitDecrementPostfixExpression(node);
+    return super.visitDecrementPostfixExpression(node);
   }
 
   @Override
   public Type visitDecrementPrefixExpression(DecrementPrefixExpression node) {
     // TODO Auto-generated method stub
-    return ASTVisitor.super.visitDecrementPrefixExpression(node);
+    return super.visitDecrementPrefixExpression(node);
   }
 
   @Override
@@ -263,55 +330,55 @@ public class TypeAnalyzer implements ASTVisitor<Type> {
   @Override
   public Type visitDivisionAssignmentExpression(DivisionAssignmentExpression node) {
     // TODO Auto-generated method stub
-    return ASTVisitor.super.visitDivisionAssignmentExpression(node);
+    return super.visitDivisionAssignmentExpression(node);
   }
 
   @Override
   public Type visitDivisionExpression(DivisionExpression node) {
     // TODO Auto-generated method stub
-    return ASTVisitor.super.visitDivisionExpression(node);
+    return super.visitDivisionExpression(node);
   }
 
   @Override
   public Type visitDoWhileLoopStatement(DoWhileLoopStatement node) {
     // TODO Auto-generated method stub
-    return ASTVisitor.super.visitDoWhileLoopStatement(node);
+    return super.visitDoWhileLoopStatement(node);
   }
 
   @Override
   public Type visitEmptyDeclaration(EmptyDeclaration node) {
     // TODO Auto-generated method stub
-    return ASTVisitor.super.visitEmptyDeclaration(node);
+    return super.visitEmptyDeclaration(node);
   }
 
   @Override
   public Type visitEmptyStatement(EmptyStatement node) {
     // TODO Auto-generated method stub
-    return ASTVisitor.super.visitEmptyStatement(node);
+    return super.visitEmptyStatement(node);
   }
 
   @Override
   public Type visitEqualityExpression(EqualityExpression node) {
     // TODO Auto-generated method stub
-    return ASTVisitor.super.visitEqualityExpression(node);
+    return super.visitEqualityExpression(node);
   }
 
   @Override
   public Type visitExpression(Expression node) {
     // TODO Auto-generated method stub
-    return ASTVisitor.super.visitExpression(node);
+    return super.visitExpression(node);
   }
 
   @Override
   public Type visitExpressionInitializer(ExpressionInitializer node) {
     // TODO Auto-generated method stub
-    return ASTVisitor.super.visitExpressionInitializer(node);
+    return super.visitExpressionInitializer(node);
   }
 
   @Override
   public Type visitExpressionStatement(ExpressionStatement node) {
     // TODO Auto-generated method stub
-    return ASTVisitor.super.visitExpressionStatement(node);
+    return super.visitExpressionStatement(node);
   }
 
   @Override
@@ -322,79 +389,72 @@ public class TypeAnalyzer implements ASTVisitor<Type> {
   @Override
   public Type visitExternalDeclaration(ExternalDeclaration node) {
     // TODO Auto-generated method stub
-    return ASTVisitor.super.visitExternalDeclaration(node);
+    return super.visitExternalDeclaration(node);
   }
 
   @Override
   public Type visitForLoopStatement(ForLoopStatement node) {
     // TODO Auto-generated method stub
-    return ASTVisitor.super.visitForLoopStatement(node);
+    return super.visitForLoopStatement(node);
   }
 
   @Override
   public Type visitFullySpecifiedType(FullySpecifiedType node) {
     // TODO Auto-generated method stub
-    return ASTVisitor.super.visitFullySpecifiedType(node);
+    return super.visitFullySpecifiedType(node);
   }
 
   @Override
   public Type visitFunctionCallExpression(FunctionCallExpression node) {
     // TODO Auto-generated method stub
-    return ASTVisitor.super.visitFunctionCallExpression(node);
+    return super.visitFunctionCallExpression(node);
   }
 
   @Override
   public Type visitFunctionDeclaration(FunctionDeclaration node) {
     // TODO Auto-generated method stub
-    return ASTVisitor.super.visitFunctionDeclaration(node);
+    return super.visitFunctionDeclaration(node);
   }
 
   @Override
   public Type visitFunctionDefinition(FunctionDefinition node) {
     // TODO Auto-generated method stub
-    return ASTVisitor.super.visitFunctionDefinition(node);
+    return super.visitFunctionDefinition(node);
   }
 
   @Override
   public Type visitFunctionParameter(FunctionParameter node) {
     // TODO Auto-generated method stub
-    return ASTVisitor.super.visitFunctionParameter(node);
+    return super.visitFunctionParameter(node);
   }
 
   @Override
   public Type visitFunctionPrototype(FunctionPrototype node) {
     // TODO Auto-generated method stub
-    return ASTVisitor.super.visitFunctionPrototype(node);
+    return super.visitFunctionPrototype(node);
   }
 
   @Override
   public Type visitGreaterThanEqualExpression(GreaterThanEqualExpression node) {
     // TODO Auto-generated method stub
-    return ASTVisitor.super.visitGreaterThanEqualExpression(node);
+    return super.visitGreaterThanEqualExpression(node);
   }
 
   @Override
   public Type visitGreaterThanExpression(GreaterThanExpression node) {
     // TODO Auto-generated method stub
-    return ASTVisitor.super.visitGreaterThanExpression(node);
+    return super.visitGreaterThanExpression(node);
   }
 
   @Override
   public Type visitGroupingExpression(GroupingExpression node) {
     // TODO Auto-generated method stub
-    return ASTVisitor.super.visitGroupingExpression(node);
-  }
-
-  @Override
-  public Type visitIdentifier(Identifier node) {
-    // TODO Auto-generated method stub
-    return ASTVisitor.super.visitIdentifier(node);
+    return super.visitGroupingExpression(node);
   }
 
   @Override
   public Type visitIdentityExpression(IdentityExpression node) {
-    // TODO Auto-generated method stub
-    return ASTVisitor.super.visitIdentityExpression(node);
+    return visit(node.getOperand()); // TODO: correct with booleans?
   }
 
   @Override
@@ -410,157 +470,157 @@ public class TypeAnalyzer implements ASTVisitor<Type> {
   @Override
   public Type visitIncrementPostfixExpression(IncrementPostfixExpression node) {
     // TODO Auto-generated method stub
-    return ASTVisitor.super.visitIncrementPostfixExpression(node);
+    return super.visitIncrementPostfixExpression(node);
   }
 
   @Override
   public Type visitIncrementPrefixExpression(IncrementPrefixExpression node) {
     // TODO Auto-generated method stub
-    return ASTVisitor.super.visitIncrementPrefixExpression(node);
+    return super.visitIncrementPrefixExpression(node);
   }
 
   @Override
   public Type visitInequalityExpression(InequalityExpression node) {
     // TODO Auto-generated method stub
-    return ASTVisitor.super.visitInequalityExpression(node);
+    return super.visitInequalityExpression(node);
   }
 
   @Override
   public Type visitInitializer(Initializer node) {
     // TODO Auto-generated method stub
-    return ASTVisitor.super.visitInitializer(node);
+    return super.visitInitializer(node);
   }
 
   @Override
   public Type visitInterfaceBlockDeclaration(InterfaceBlockDeclaration node) {
     // TODO Auto-generated method stub
-    return ASTVisitor.super.visitInterfaceBlockDeclaration(node);
+    return super.visitInterfaceBlockDeclaration(node);
   }
 
   @Override
   public Type visitIterationConditionInitializer(IterationConditionInitializer node) {
     // TODO Auto-generated method stub
-    return ASTVisitor.super.visitIterationConditionInitializer(node);
+    return super.visitIterationConditionInitializer(node);
   }
 
   @Override
   public Type visitLayoutDefaults(LayoutDefaults node) {
     // TODO Auto-generated method stub
-    return ASTVisitor.super.visitLayoutDefaults(node);
+    return super.visitLayoutDefaults(node);
   }
 
   @Override
   public Type visitLayoutQualifier(LayoutQualifier node) {
     // TODO Auto-generated method stub
-    return ASTVisitor.super.visitLayoutQualifier(node);
+    return super.visitLayoutQualifier(node);
   }
 
   @Override
   public Type visitLayoutQualifierPart(LayoutQualifierPart node) {
     // TODO Auto-generated method stub
-    return ASTVisitor.super.visitLayoutQualifierPart(node);
+    return super.visitLayoutQualifierPart(node);
   }
 
   @Override
   public Type visitLeftShiftAssignmentExpression(LeftShiftAssignmentExpression node) {
     // TODO Auto-generated method stub
-    return ASTVisitor.super.visitLeftShiftAssignmentExpression(node);
+    return super.visitLeftShiftAssignmentExpression(node);
   }
 
   @Override
   public Type visitLeftShiftExpression(LeftShiftExpression node) {
     // TODO Auto-generated method stub
-    return ASTVisitor.super.visitLeftShiftExpression(node);
+    return super.visitLeftShiftExpression(node);
   }
 
   @Override
   public Type visitLengthAccessExpression(LengthAccessExpression node) {
     // TODO Auto-generated method stub
-    return ASTVisitor.super.visitLengthAccessExpression(node);
+    return super.visitLengthAccessExpression(node);
   }
 
   @Override
   public Type visitLessThanEqualExpression(LessThanEqualExpression node) {
     // TODO Auto-generated method stub
-    return ASTVisitor.super.visitLessThanEqualExpression(node);
+    return super.visitLessThanEqualExpression(node);
   }
 
   @Override
   public Type visitLessThanExpression(LessThanExpression node) {
     // TODO Auto-generated method stub
-    return ASTVisitor.super.visitLessThanExpression(node);
+    return super.visitLessThanExpression(node);
   }
 
   @Override
   public Type visitLiteralExpression(LiteralExpression node) {
     // TODO Auto-generated method stub
-    return ASTVisitor.super.visitLiteralExpression(node);
+    return super.visitLiteralExpression(node);
   }
 
   @Override
   public Type visitLoopStatement(LoopStatement node) {
     // TODO Auto-generated method stub
-    return ASTVisitor.super.visitLoopStatement(node);
+    return super.visitLoopStatement(node);
   }
 
   @Override
   public Type visitManyExpression(ManyExpression node) {
     // TODO Auto-generated method stub
-    return ASTVisitor.super.visitManyExpression(node);
+    return super.visitManyExpression(node);
   }
 
   @Override
   public Type visitManyStatement(ManyStatement node) {
     // TODO Auto-generated method stub
-    return ASTVisitor.super.visitManyStatement(node);
+    return super.visitManyStatement(node);
   }
 
   @Override
   public Type visitMemberAccessExpression(MemberAccessExpression node) {
     // TODO Auto-generated method stub
-    return ASTVisitor.super.visitMemberAccessExpression(node);
+    return super.visitMemberAccessExpression(node);
   }
 
   @Override
   public Type visitModuloAssignmentExpression(ModuloAssignmentExpression node) {
     // TODO Auto-generated method stub
-    return ASTVisitor.super.visitModuloAssignmentExpression(node);
+    return super.visitModuloAssignmentExpression(node);
   }
 
   @Override
   public Type visitModuloExpression(ModuloExpression node) {
     // TODO Auto-generated method stub
-    return ASTVisitor.super.visitModuloExpression(node);
+    return super.visitModuloExpression(node);
   }
 
   @Override
   public Type visitMultiplicationAssignmentExpression(MultiplicationAssignmentExpression node) {
     // TODO Auto-generated method stub
-    return ASTVisitor.super.visitMultiplicationAssignmentExpression(node);
+    return super.visitMultiplicationAssignmentExpression(node);
   }
 
   @Override
   public Type visitMultiplicationExpression(MultiplicationExpression node) {
     // TODO Auto-generated method stub
-    return ASTVisitor.super.visitMultiplicationExpression(node);
+    return super.visitMultiplicationExpression(node);
   }
 
   @Override
   public Type visitNamedLayoutQualifierPart(NamedLayoutQualifierPart node) {
     // TODO Auto-generated method stub
-    return ASTVisitor.super.visitNamedLayoutQualifierPart(node);
+    return super.visitNamedLayoutQualifierPart(node);
   }
 
   @Override
   public Type visitNegationExpression(NegationExpression node) {
     // TODO Auto-generated method stub
-    return ASTVisitor.super.visitNegationExpression(node);
+    return super.visitNegationExpression(node);
   }
 
   @Override
   public Type visitNestedInitializer(NestedInitializer node) {
     // TODO Auto-generated method stub
-    return ASTVisitor.super.visitNestedInitializer(node);
+    return super.visitNestedInitializer(node);
   }
 
   @Override
@@ -571,109 +631,103 @@ public class TypeAnalyzer implements ASTVisitor<Type> {
   @Override
   public Type visitPrecisionDeclaration(PrecisionDeclaration node) {
     // TODO Auto-generated method stub
-    return ASTVisitor.super.visitPrecisionDeclaration(node);
-  }
-
-  @Override
-  public Type visitReferenceExpression(ReferenceExpression node) {
-    // TODO Auto-generated method stub
-    return ASTVisitor.super.visitReferenceExpression(node);
+    return super.visitPrecisionDeclaration(node);
   }
 
   @Override
   public Type visitReturnStatement(ReturnStatement node) {
     // TODO Auto-generated method stub
-    return ASTVisitor.super.visitReturnStatement(node);
+    return super.visitReturnStatement(node);
   }
 
   @Override
   public Type visitRightShiftAssignmentExpression(RightShiftAssignmentExpression node) {
     // TODO Auto-generated method stub
-    return ASTVisitor.super.visitRightShiftAssignmentExpression(node);
+    return super.visitRightShiftAssignmentExpression(node);
   }
 
   @Override
   public Type visitRightShiftExpression(RightShiftExpression node) {
     // TODO Auto-generated method stub
-    return ASTVisitor.super.visitRightShiftExpression(node);
+    return super.visitRightShiftExpression(node);
   }
 
   @Override
   public Type visitSelectionStatement(SelectionStatement node) {
     // TODO Auto-generated method stub
-    return ASTVisitor.super.visitSelectionStatement(node);
+    return super.visitSelectionStatement(node);
   }
 
   @Override
   public Type visitSemiTerminalStatement(SemiTerminalStatement node) {
     // TODO Auto-generated method stub
-    return ASTVisitor.super.visitSemiTerminalStatement(node);
+    return super.visitSemiTerminalStatement(node);
   }
 
   @Override
   public Type visitSequenceExpression(SequenceExpression node) {
     // TODO Auto-generated method stub
-    return ASTVisitor.super.visitSequenceExpression(node);
+    return super.visitSequenceExpression(node);
   }
 
   @Override
   public Type visitStatement(Statement node) {
     // TODO Auto-generated method stub
-    return ASTVisitor.super.visitStatement(node);
+    return super.visitStatement(node);
   }
 
   @Override
   public Type visitStructBody(StructBody node) {
     // TODO Auto-generated method stub
-    return ASTVisitor.super.visitStructBody(node);
+    return super.visitStructBody(node);
   }
 
   @Override
   public Type visitStructDeclarator(StructDeclarator node) {
     // TODO Auto-generated method stub
-    return ASTVisitor.super.visitStructDeclarator(node);
+    return super.visitStructDeclarator(node);
   }
 
   @Override
   public Type visitStructMember(StructMember node) {
     // TODO Auto-generated method stub
-    return ASTVisitor.super.visitStructMember(node);
+    return super.visitStructMember(node);
   }
 
   @Override
   public Type visitStructSpecifier(StructSpecifier node) {
     // TODO Auto-generated method stub
-    return ASTVisitor.super.visitStructSpecifier(node);
+    return super.visitStructSpecifier(node);
   }
 
   @Override
   public Type visitSubtractionAssignmentExpression(SubtractionAssignmentExpression node) {
     // TODO Auto-generated method stub
-    return ASTVisitor.super.visitSubtractionAssignmentExpression(node);
+    return super.visitSubtractionAssignmentExpression(node);
   }
 
   @Override
   public Type visitSubtractionExpression(SubtractionExpression node) {
     // TODO Auto-generated method stub
-    return ASTVisitor.super.visitSubtractionExpression(node);
+    return super.visitSubtractionExpression(node);
   }
 
   @Override
   public Type visitSwitchStatement(SwitchStatement node) {
     // TODO Auto-generated method stub
-    return ASTVisitor.super.visitSwitchStatement(node);
+    return super.visitSwitchStatement(node);
   }
 
   @Override
   public Type visitTerminalExpression(TerminalExpression node) {
     // TODO Auto-generated method stub
-    return ASTVisitor.super.visitTerminalExpression(node);
+    return super.visitTerminalExpression(node);
   }
 
   @Override
   public Type visitTerminalStatement(TerminalStatement node) {
     // TODO Auto-generated method stub
-    return ASTVisitor.super.visitTerminalStatement(node);
+    return super.visitTerminalStatement(node);
   }
 
   @Override
@@ -684,55 +738,55 @@ public class TypeAnalyzer implements ASTVisitor<Type> {
   @Override
   public Type visitTernaryExpression(TernaryExpression node) {
     // TODO Auto-generated method stub
-    return ASTVisitor.super.visitTernaryExpression(node);
+    return super.visitTernaryExpression(node);
   }
 
   @Override
   public Type visitTranslationUnit(TranslationUnit node) {
     // TODO Auto-generated method stub
-    return ASTVisitor.super.visitTranslationUnit(node);
+    return super.visitTranslationUnit(node);
   }
 
   @Override
   public Type visitTypeAndInitDeclaration(TypeAndInitDeclaration node) {
     // TODO Auto-generated method stub
-    return ASTVisitor.super.visitTypeAndInitDeclaration(node);
+    return super.visitTypeAndInitDeclaration(node);
   }
 
   @Override
   public Type visitTypeQualifier(TypeQualifier node) {
     // TODO Auto-generated method stub
-    return ASTVisitor.super.visitTypeQualifier(node);
+    return super.visitTypeQualifier(node);
   }
 
   @Override
   public Type visitTypeQualifierPart(TypeQualifierPart node) {
     // TODO Auto-generated method stub
-    return ASTVisitor.super.visitTypeQualifierPart(node);
+    return super.visitTypeQualifierPart(node);
   }
 
   @Override
   public Type visitTypeReference(TypeReference node) {
     // TODO Auto-generated method stub
-    return ASTVisitor.super.visitTypeReference(node);
+    return super.visitTypeReference(node);
   }
 
   @Override
   public Type visitTypeSpecifier(TypeSpecifier node) {
     // TODO Auto-generated method stub
-    return ASTVisitor.super.visitTypeSpecifier(node);
+    return super.visitTypeSpecifier(node);
   }
 
   @Override
   public Type visitUnaryExpression(UnaryExpression node) {
     // TODO Auto-generated method stub
-    return ASTVisitor.super.visitUnaryExpression(node);
+    return super.visitUnaryExpression(node);
   }
 
   @Override
   public Type visitVariableDeclaration(VariableDeclaration node) {
     // TODO Auto-generated method stub
-    return ASTVisitor.super.visitVariableDeclaration(node);
+    return super.visitVariableDeclaration(node);
   }
 
   @Override
@@ -743,28 +797,6 @@ public class TypeAnalyzer implements ASTVisitor<Type> {
   @Override
   public Type visitWhileLoopStatement(WhileLoopStatement node) {
     // TODO Auto-generated method stub
-    return ASTVisitor.super.visitWhileLoopStatement(node);
-  }
-
-  @Override
-  public Type superNodeTypeResult() {
-    throw new IllegalStateException("Super node type result should never be needed!");
-  }
-
-  @Override
-  public Type visitData(Object data) {
-    throw new IllegalStateException("Visit data should never be needed!");
-  }
-
-  @Override
-  public Type defaultResult() {
-    throw new IllegalStateException("Default result should never be needed!");
-  }
-
-  @Override
-  public Type aggregateResult(Type aggregate, Type nextResult) {
-    // TODO: type casting
-    assertTypesMatch(aggregate, nextResult);
-    return aggregate;
+    return super.visitWhileLoopStatement(node);
   }
 }

@@ -4,5 +4,9 @@ public class ScopeForming extends Type {
   /**
    * The scope formed by this type. Used for compound statements.
    */
-  public Scope formedScope;
+  public final Scope formedScope;
+
+  public ScopeForming(Scope formedScope) {
+    this.formedScope = formedScope;
+  }
 }
