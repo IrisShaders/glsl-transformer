@@ -1,11 +1,14 @@
 package io.github.douira.glsl_transformer.ast.typing;
 
-public class Type {
+public abstract class Type {
   public static final VoidType VOID = VoidType.INSTANCE;
 
   /**
    * The scope this type is defined in. Null only when there is no enclosing scope
-   * or the node has no parent.
+   * (node in subtree without scope-forming structure like a translation unit or
+   * compound statement) or the node has no parent.
    */
   public Scope enclosingScope; // TODO: nullable
+
+  // public abstract Type combineType(Type assigned);
 }
