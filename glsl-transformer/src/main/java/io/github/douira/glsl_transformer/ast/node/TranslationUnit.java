@@ -52,13 +52,13 @@ public class TranslationUnit extends ListASTNode<ExternalDeclaration> {
 
   public void injectNodes(
       ASTInjectionPoint injectionPoint,
-      Collection<ExternalDeclaration> nodes) {
+      Collection<? extends ExternalDeclaration> nodes) {
     getChildren().addAll(injectionPoint.getInjectionIndex(this), nodes);
   }
 
   public void injectNodes(
       ASTInjectionPoint injectionPoint,
-      Stream<ExternalDeclaration> nodes) {
+      Stream<? extends ExternalDeclaration> nodes) {
     nodes.reduce(injectionPoint.getInjectionIndex(this), (index, node) -> {
       getChildren().add(index, node);
       return index + 1;
@@ -127,7 +127,7 @@ public class TranslationUnit extends ListASTNode<ExternalDeclaration> {
     getOneFunctionDefinitionBody(functionName).getStatements().add(0, statement);
   }
 
-  public void prependFunctionBody(String functionName, Collection<Statement> statements) {
+  public void prependFunctionBody(String functionName, Collection<? extends Statement> statements) {
     getOneFunctionDefinitionBody(functionName).getStatements().addAll(0, statements);
   }
 
@@ -135,7 +135,7 @@ public class TranslationUnit extends ListASTNode<ExternalDeclaration> {
     getOneFunctionDefinitionBody(functionName).getStatements().add(statement);
   }
 
-  public void appendFunctionBody(String functionName, Collection<Statement> statements) {
+  public void appendFunctionBody(String functionName, Collection<? extends Statement> statements) {
     getOneFunctionDefinitionBody(functionName).getStatements().addAll(statements);
   }
 
@@ -143,7 +143,7 @@ public class TranslationUnit extends ListASTNode<ExternalDeclaration> {
     prependFunctionBody("main", statement);
   }
 
-  public void prependMainFunctionBody(Collection<Statement> statements) {
+  public void prependMainFunctionBody(Collection<? extends Statement> statements) {
     prependFunctionBody("main", statements);
   }
 
@@ -151,7 +151,7 @@ public class TranslationUnit extends ListASTNode<ExternalDeclaration> {
     appendFunctionBody("main", statement);
   }
 
-  public void appendMainFunctionBody(Collection<Statement> statements) {
+  public void appendMainFunctionBody(Collection<? extends Statement> statements) {
     appendFunctionBody("main", statements);
   }
 
