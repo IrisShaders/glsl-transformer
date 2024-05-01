@@ -4,20 +4,26 @@
 [![javadoc](https://javadoc.io/badge2/io.github.douira/glsl-transformer/javadoc.svg)](https://javadoc.io/doc/io.github.douira/glsl-transformer)
 [![Gradle Build](https://github.com/douira/glsl-transformer/actions/workflows/gradle.yml/badge.svg)](https://github.com/douira/glsl-transformer/actions/workflows/gradle.yml)
 
+[![ko-fi](https://ko-fi.com/img/githubbutton_sm.svg)](https://ko-fi.com/A0A27Y8FJ)
+
 This is an actively developed library that parses GLSL using an ANTLR4 grammar and provides the facilities for transforming and re-printing the resulting parse tree.
 
-`glsl-transformer` is developed and maintained by [douira](https://github.com/douira). This project was created as a hobby project initiated by the need for a more powerful GLSL shader patcher in the wonderful [Iris](https://github.com/IrisShaders/Iris/) shaders mod for Minecraft. This repo is now part of the IrisShaders org on GitHub.
+`glsl-transformer` is developed and maintained by [douira](https://github.com/douira). This project was created as a hobby project initiated by the need for a more powerful GLSL shader patcher in the wonderful [Iris](https://github.com/IrisShaders/Iris/) shaders mod for Minecraft.
 
 ## Licensing
 
-`glsl-transformer` is licensed under the [GNU Affero General Public License v3.0](https://www.gnu.org/licenses/agpl-3.0.en.html). You can read more about the details of this license in its text and [the corresponding FAQ](https://www.gnu.org/licenses/gpl-faq.html).
+`glsl-transformer` is licensed under the [GNU Affero General Public License v3.0](https://www.gnu.org/licenses/agpl-3.0.en.html).
 
 Software that uses this library must itself be licensed as AGPLv3. However, there are two special cases:
 
 - Certain projects can receive a specific additional noncommercial permission that allows them to use this software without significantly reducing the requirements of the AGPLv3 for other unintended purposes.
 - You can obtain a commercial license, which is entirely separate from the publicly granted AGPLv3 license. This license includes warranty and support.
 
-Please contact the author (douira) in both of these cases. In addition to the terms of the AGPLv3, contributors to this project must agree to license their work in such a way that these additional licenses may be granted. A Contributor License Agreement (CLA) for this purpose as well as a text that makes up the additional permission structure for incompatibly licensed projects is being worked on.
+Please contact the author (douira) in these cases.
+
+In addition to the terms of the AGPLv3, contributors to this project must agree to license their work in such a way that these additional licenses may be granted.
+
+Even if your use case is irrelevant to the license (i.e. falls under fair use), you can support and encourage further development by supporting me on Ko-fi.
 
 ## Capabilities
 
@@ -63,7 +69,7 @@ This project includes parts of Apache Commons Collections in its respective pack
 
 ## Support
 
-If something breaks, please make an issue report with the details so I can fix the issue and add a test case. For more direct support, you can also ask in the `#glsl-transformer` channel in the [Iris discord server](https://discord.gg/jQJnav2jPu). I'm also interested in hearing from anyone using this library in their projects!
+If something breaks, please make an issue report with sufficient details for fixing the issue and adding tests to make sure it doesn't come back. For more direct support, you can also ask in the `#glsl-transformer` channel in the [Iris discord server](https://discord.gg/jQJnav2jPu). In general, I'm also interested in hearing from anyone using this library in their projects!
 
 # Usage
 
