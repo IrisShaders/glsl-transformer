@@ -89,8 +89,8 @@ customDirective: NR NR_CUSTOM content = C_CONTENT? C_EOL;
 
 includeDirective:
 	NR NR_INCLUDE (
-		NR_STRING_START content = S_CONTENT? S_STRING_END
-		| angleStart = NR_STRING_START_ANGLE content = S_CONTENT_ANGLE? S_STRING_END_ANGLE
+		NR_STRING_START content = NR_S_CONTENT? NR_S_STRING_END
+		| angleStart = NR_STRING_START_ANGLE content = NR_SA_CONTENT? NR_SA_STRING_END
 	) NR_EOL;
 
 layoutDefaults:
@@ -112,6 +112,7 @@ finiteExpression:
 		| FLOAT32CONSTANT
 		| FLOAT64CONSTANT
 		| BOOLCONSTANT
+		| STRING_START SL_CONTENT* SL_STRING_END
 	) # literalExpression
 	//only the grouping expression allows the sequence expression since the sequence expression
 	//has the lowest precendence and not putting it in parentheses would simply create a

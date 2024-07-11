@@ -21,8 +21,10 @@ public class ParserToken extends PrintToken {
       put(GLSLLexer.NR_COLON, ":");
       put(GLSLLexer.NR_STRING_START, "\"");
       put(GLSLLexer.NR_STRING_START_ANGLE, "<");
-      put(GLSLLexer.S_STRING_END, "\"");
-      put(GLSLLexer.S_STRING_END_ANGLE, ">");
+      put(GLSLLexer.STRING_START, "\"");
+      put(GLSLLexer.SL_STRING_END, "\"");
+      put(GLSLLexer.NR_S_STRING_END, "\"");
+      put(GLSLLexer.NR_SA_STRING_END, ">");
       put(GLSLLexer.GT_OP, ">");
     }
   };

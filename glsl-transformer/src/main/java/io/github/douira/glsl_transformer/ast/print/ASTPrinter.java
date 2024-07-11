@@ -179,7 +179,7 @@ public class ASTPrinter extends ASTPrinterBase {
     if (content != null) {
       emitLiteral(content);
     }
-    emitType(node.isAngleBrackets ? GLSLLexer.S_STRING_END_ANGLE : GLSLLexer.S_STRING_END);
+    emitType(node.isAngleBrackets ? GLSLLexer.NR_SA_STRING_END : GLSLLexer.NR_S_STRING_END);
     emitExactNewline();
     return null;
   }
@@ -327,6 +327,11 @@ public class ASTPrinter extends ASTPrinterBase {
     // expression
     var numberType = node.getNumberType();
     switch (numberType) {
+      case STRING:
+        emitType(GLSLLexer.STRING_START);
+        emitLiteral(node.getString());
+        emitType(GLSLLexer.SL_STRING_END);
+        break;
       case BOOLEAN:
         emitLiteral(node.getBoolean() ? "true" : "false");
         break;

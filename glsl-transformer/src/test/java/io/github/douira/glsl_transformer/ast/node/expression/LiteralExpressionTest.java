@@ -11,6 +11,7 @@ import io.github.douira.glsl_transformer.util.Type.NumberType;
 public class LiteralExpressionTest {
   @Test
   void testConstructorValidation() {
+    assertThrows(IllegalArgumentException.class, () -> new LiteralExpression(null));
     assertThrows(IllegalArgumentException.class,
         () -> new LiteralExpression(Type.BOOL, 0));
     assertThrows(IllegalArgumentException.class,
@@ -24,6 +25,33 @@ public class LiteralExpressionTest {
     // Disabled because of very large unsigned longs being put in signed long fields
     // assertThrows(IllegalArgumentException.class,
     // () -> new LiteralExpression(Type.UINT32, -1));
+  }
+
+  @Test
+  void testChangeString() {
+    var e = new LiteralExpression("test");
+    assertEquals("test", e.getString());
+    e.setString("test2");
+    assertEquals("test2", e.getString());
+    assertThrows(IllegalStateException.class, () -> e.changeInteger(1));
+    assertThrows(IllegalStateException.class, () -> e.changeBoolean(true));
+    assertThrows(IllegalStateException.class, () -> e.changeFloating(0.1));
+    assertThrows(IllegalArgumentException.class, () -> e.changeString(null));
+  }
+
+  @Test
+  void testStringProperties() {
+    var e = new LiteralExpression("test");
+    assertEquals("test", e.getString());
+    assertEquals(Type.STRING, e.getType());
+    assertFalse(e.isBoolean());
+    assertFalse(e.isFloatingPoint());
+    assertFalse(e.isInteger());
+    assertThrows(IllegalArgumentException.class, () -> e.isNonZero());
+    assertThrows(IllegalArgumentException.class, () -> e.isPositive());
+    assertNull(e.getIntegerFormat());
+
+    assertThrows(IllegalArgumentException.class, () -> e.setString(null));
   }
 
   @Test

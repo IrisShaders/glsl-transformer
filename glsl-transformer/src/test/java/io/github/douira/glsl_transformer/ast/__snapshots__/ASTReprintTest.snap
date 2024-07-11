@@ -232,6 +232,17 @@ a[(a)[(a)]]
 ]
 
 
+testASTTree[expression_3Sns9SSwMKZSYeMFnEirnh7LJYU=]=[
+""
+<><><><><><><><><><><><><><><><><><><><><><><><><>
+(LiteralExpression
+- Type STRING
+- String 
+)LiteralExpression
+
+]
+
+
 testASTTree[expression_54EJ5qIg7hxKvEZjP8FPV1cSTkc=]=[
 (((0)))
 <><><><><><><><><><><><><><><><><><><><><><><><><>
@@ -697,6 +708,17 @@ testASTTree[expression_PbVjUEqXAEd3I8rmPBaoiyLdLNA=]=[
 ]
 
 
+testASTTree[expression_RYy25jgGnAI4/3G3BonjI4k/O8w=]=[
+"\\\"
+<><><><><><><><><><><><><><><><><><><><><><><><><>
+(LiteralExpression
+- Type STRING
+- String \\\
+)LiteralExpression
+
+]
+
+
 testASTTree[expression_SL+26MBvH1AJZNoHfJhlRFCVn4M=]=[
 -(-3 - -3)
 <><><><><><><><><><><><><><><><><><><><><><><><><>
@@ -720,6 +742,17 @@ testASTTree[expression_SL+26MBvH1AJZNoHfJhlRFCVn4M=]=[
 )SubtractionExpression
 )GroupingExpression
 )NegationExpression
+
+]
+
+
+testASTTree[expression_TRN6K4rxyVIoKMV/WTzKO869X1o=]=[
+"   "
+<><><><><><><><><><><><><><><><><><><><><><><><><>
+(LiteralExpression
+- Type STRING
+- String    
+)LiteralExpression
 
 ]
 
@@ -753,6 +786,28 @@ a,b,c,d,e,f
 - String f
 )ReferenceExpression
 )SequenceExpression
+
+]
+
+
+testASTTree[expression_W5RZxVBVvstL2ZSt8t+Zy9KwP/U=]=[
+"dfafjdsiaofudsa"
+<><><><><><><><><><><><><><><><><><><><><><><><><>
+(LiteralExpression
+- Type STRING
+- String dfafjdsiaofudsa
+)LiteralExpression
+
+]
+
+
+testASTTree[expression_XGED+UlZPEQJ0oadrNhNHGkDcCQ=]=[
+"  \ "
+<><><><><><><><><><><><><><><><><><><><><><><><><>
+(LiteralExpression
+- Type STRING
+- String   \ 
+)LiteralExpression
 
 ]
 
@@ -881,6 +936,18 @@ a = b += b -= b *= b /= a
 ]
 
 
+testASTTree[expression_cJbY4DafeN6qN3X4vIyaVPsmeGA=]=[
+"`&$`&$
+fdsafds"
+<><><><><><><><><><><><><><><><><><><><><><><><><>
+(LiteralExpression
+- Type STRING
+- String `&$`&$\nfdsafds
+)LiteralExpression
+
+]
+
+
 testASTTree[expression_dH09zI5iyFl/e/k4bhqWKWECzLQ=]=[
 (1, (2, (3)))
 <><><><><><><><><><><><><><><><><><><><><><><><><>
@@ -956,6 +1023,17 @@ a == b != c < d <= e > f >= g
 )ReferenceExpression
 )GreaterThanEqualExpression
 )InequalityExpression
+
+]
+
+
+testASTTree[expression_eehM1B7tlr09Uz8x/Ik3g/JZZuA=]=[
+"//"
+<><><><><><><><><><><><><><><><><><><><><><><><><>
+(LiteralExpression
+- Type STRING
+- String //
+)LiteralExpression
 
 ]
 
@@ -1444,6 +1522,20 @@ testASTTree[expression_w3yDHgEShJhK4Ge94J6l4oVbumI=]=[
 ]
 
 
+testASTTree[expression_whRxos0zO8NOrPjx35jayepTNvo=]=[
+"\
+\
+\
+"
+<><><><><><><><><><><><><><><><><><><><><><><><><>
+(LiteralExpression
+- Type STRING
+- String \\n\\n\\n
+)LiteralExpression
+
+]
+
+
 testASTTree[expression_xOQVg0WRBzJOmmmXZDOXtqcwIoA=]=[
 foo(bar(baz(bar)))
 <><><><><><><><><><><><><><><><><><><><><><><><><>
@@ -1595,6 +1687,20 @@ foo(1, 2, 3)
 - IntegerFormat DECIMAL
 )LiteralExpression
 )FunctionCallExpression
+
+]
+
+
+testASTTree[expression_zclTE9GOMPRbRSBikvFhISsDXCg=]=[
+"
+fdsfds
+fdsfds
+"
+<><><><><><><><><><><><><><><><><><><><><><><><><>
+(LiteralExpression
+- Type STRING
+- String \nfdsfds\nfdsfds\n
+)LiteralExpression
 
 ]
 
@@ -2071,6 +2177,24 @@ switch (a) {
 )BreakStatement
 )CompoundStatement
 )SwitchStatement
+
+]
+
+
+testASTTree[statement_6yY3EOswObkU7TR5SBYBR5gUOts=]=[
+printf("Hello, World!");
+
+<><><><><><><><><><><><><><><><><><><><><><><><><>
+(ExpressionStatement
+(FunctionCallExpression
+(Identifier)
+- String printf
+(LiteralExpression
+- Type STRING
+- String Hello, World!
+)LiteralExpression
+)FunctionCallExpression
+)ExpressionStatement
 
 ]
 
@@ -4915,6 +5039,41 @@ layout(push_constant) uniform;
 )TypeQualifier
 )VariableDeclaration
 )DeclarationExternalDeclaration
+)TranslationUnit
+
+]
+
+
+testASTTree[translationUnit_7a6an3sjrGvPOVRge02dCDkdFbE=]=[
+void foo() {
+	print("Hello, World!");
+}
+
+<><><><><><><><><><><><><><><><><><><><><><><><><>
+(TranslationUnit
+(FunctionDefinition
+(FunctionPrototype
+(FullySpecifiedType
+(BuiltinFixedTypeSpecifier
+- BuiltinType VOID
+)BuiltinFixedTypeSpecifier
+)FullySpecifiedType
+(Identifier)
+- String foo
+)FunctionPrototype
+(CompoundStatement
+(ExpressionStatement
+(FunctionCallExpression
+(Identifier)
+- String print
+(LiteralExpression
+- Type STRING
+- String Hello, World!
+)LiteralExpression
+)FunctionCallExpression
+)ExpressionStatement
+)CompoundStatement
+)FunctionDefinition
 )TranslationUnit
 
 ]

@@ -36,8 +36,7 @@ public class AssertUtil {
       String input) {
     var parser = new EnhancedParser();
     parser.setThrowParseErrors(true);
-    parser.getLexer().enableCustomDirective = true;
-    parser.getLexer().enableIncludeDirective = true;
+    parser.getLexer().enableAllFlags();
     var parseTree = parser.parse(input, parseMethod);
     ASTBuilder.setTokenStream(parser.getTokenStream());
     var ast = ASTBuilder.build(RootSupplier.supplyDefault(), parseTree);
@@ -53,8 +52,7 @@ public class AssertUtil {
       Function<GLSLParser, ? extends ParserRuleContext> parseMethod,
       String input) {
     var parser = new EnhancedParser();
-    parser.getLexer().enableCustomDirective = true;
-    parser.getLexer().enableIncludeDirective = true;
+    parser.getLexer().enableAllFlags();
     var parseTree = parser.parse(input, parseMethod);
     try {
       ASTBuilder.setTokenStream(parser.getTokenStream());

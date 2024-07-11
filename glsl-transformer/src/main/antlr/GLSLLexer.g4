@@ -351,6 +351,8 @@ NR_LINE:
 NR: '#' -> pushMode(NR_Mode);
 IDENTIFIER: IDENTIFIER_frag;
 
+STRING_START: '"' {enableStrings}? -> pushMode(StringLiteral);
+
 fragment LINE_COMMENT_frag: '//' NO_NEWLINE*;
 
 //performance testing suggests that using the .*? here is fine, alternatives were slower
@@ -418,12 +420,16 @@ NR_EOL: NEWLINE -> popMode;
 NR_WS: WS_frag -> channel(WHITESPACE);
 
 mode String;
-S_CONTENT: ~["\r\n]+;
-S_STRING_END: '"' -> popMode;
+NR_S_CONTENT: ~["\r\n]+;
+NR_S_STRING_END: '"' -> popMode;
+
+mode StringLiteral;
+SL_CONTENT: ~["]+;
+SL_STRING_END: '"' -> popMode;
 
 mode StringAngle;
-S_CONTENT_ANGLE: ~[>\r\n]+;
-S_STRING_END_ANGLE: '>' -> popMode;
+NR_SA_CONTENT: ~[>\r\n]+;
+NR_SA_STRING_END: '>' -> popMode;
 
 mode CustomDirective;
 C_LINE_COMMENT: LINE_COMMENT_frag -> channel(COMMENTS);

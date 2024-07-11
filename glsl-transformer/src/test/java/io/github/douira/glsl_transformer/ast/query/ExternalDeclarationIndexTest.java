@@ -184,8 +184,7 @@ public class ExternalDeclarationIndexTest extends TestWithSingleASTTransformer {
     // function declaration, variable declaration, interface block, extension,
     // custom, include
     p.setRootSupplier(RootSupplier.EXACT_UNORDERED_ED_EXACT);
-    p.getLexer().enableCustomDirective = true;
-    p.getLexer().enableIncludeDirective = true;
+    p.getLexer().enableAllFlags();
     p.setTransformation((tree, root) -> {
       var edi = root.externalDeclarationIndex;
       assertTrue(edi.has("typeAndInit"));

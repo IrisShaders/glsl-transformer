@@ -16,6 +16,7 @@ public abstract class VersionedGLSLLexer extends Lexer {
   public Version version = Version.latest;
   public boolean enableCustomDirective = false;
   public boolean enableIncludeDirective = false;
+  public boolean enableStrings = false;
   // public Profile profile;
   // public EnumSet<Extension> extensions;
   // public boolean vulkan = true;
@@ -29,5 +30,11 @@ public abstract class VersionedGLSLLexer extends Lexer {
 
   protected boolean isAfter(int atLeast) {
     return version.number >= atLeast;
+  }
+
+  public void enableAllFlags() {
+    enableCustomDirective = true;
+    enableIncludeDirective = true;
+    enableStrings = true;
   }
 }

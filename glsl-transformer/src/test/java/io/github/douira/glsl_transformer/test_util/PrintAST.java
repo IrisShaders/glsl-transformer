@@ -1,6 +1,7 @@
 package io.github.douira.glsl_transformer.test_util;
 
 import io.github.douira.glsl_transformer.ast.node.abstract_node.*;
+import io.github.douira.glsl_transformer.ast.node.expression.LiteralExpression;
 import io.github.douira.glsl_transformer.ast.traversal.*;
 
 public class PrintAST extends ASTListenerVisitor<Void> {
@@ -8,7 +9,7 @@ public class PrintAST extends ASTListenerVisitor<Void> {
 
   @Override
   public Void visit(ASTNode node) {
-    if (!(node instanceof InnerASTNode innerNode)) {
+    if (!(node instanceof InnerASTNode)) {
       builder.append('(');
       builder.append(node.getClass().getSimpleName());
       builder.append(")\n");
@@ -27,6 +28,25 @@ public class PrintAST extends ASTListenerVisitor<Void> {
       builder.append(data.toString());
     }
     builder.append('\n');
+    return null;
+  }
+
+  private static String escape(String s) {
+    return s.replace("\t", "\\t")
+        .replace("\b", "\\b")
+        .replace("\n", "\\n")
+        .replace("\r", "\\r")
+        .replace("\f", "\\f");
+  }
+
+  @Override
+  public Void visitLiteralExpression(LiteralExpression node) {
+    if (node.isString()) {
+      visitData(node.getType());
+      visitData(escape(node.getString()));
+    } else {
+      super.visitLiteralExpression(node);
+    }
     return null;
   }
 

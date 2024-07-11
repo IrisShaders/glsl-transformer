@@ -135,6 +135,39 @@ a[(a)[(a)]]
 a[((a))[((a))]]
 ===
 a[(a)[(a)]]
+§testReprint expression:
+"dfafjdsiaofudsa"
+§testReprint expression:
+""
+§testReprint expression:
+"`&$`&$
+fdsafds"
+§testReprint expression:
+"
+fdsfds
+fdsfds
+"
+§testReprint expression:
+"   "
+§testReprint expression:
+"  \ "
+§testReprint expression:
+"\
+\
+\
+"
+§testReprint expression:
+"\\\"
+§testReprint expression:
+"//"
+§testReprint statement:
+printf("Hello, World!");
+
+§testReprint translationUnit:
+void foo() {
+	print("Hello, World!");
+}
+
 §testReprint fullySpecifiedType:
 vec2
 §testReprint statement:

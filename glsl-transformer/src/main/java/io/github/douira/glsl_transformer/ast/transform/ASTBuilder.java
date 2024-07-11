@@ -325,6 +325,27 @@ public class ASTBuilder extends GLSLParserBaseVisitor<ASTNode> {
   public LiteralExpression visitLiteralExpression(LiteralExpressionContext ctx) {
     // start and end token are the same as there is one token in this rule
     var content = ctx.getStart();
+
+    // special case for string type
+    if (content.getType() == GLSLLexer.STRING_START) {
+      if (ctx.children.size() == 2) {
+        return new LiteralExpression("");
+      }
+
+      if (ctx.children.size() == 3) {
+        return new LiteralExpression(ctx.SL_CONTENT(0).getText());
+      }
+
+      // multi-part string
+      var builder = new StringBuilder();
+      for (var child : ctx.children) {
+        if (child instanceof TerminalNode terminal && terminal.getSymbol().getType() == GLSLLexer.SL_CONTENT) {
+          builder.append(child.getText());
+        }
+      }
+      return new LiteralExpression(builder.toString());
+    }
+
     var literalType = Type.ofLiteralTokenType(content.getType());
     var tokenContent = content.getText();
     var numberType = literalType.getNumberType();

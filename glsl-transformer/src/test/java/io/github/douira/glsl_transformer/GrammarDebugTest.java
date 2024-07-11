@@ -24,8 +24,7 @@ public class GrammarDebugTest {
   @Disabled
   void testDebugTree() {
     var parser = new EnhancedParser();
-    parser.getLexer().enableCustomDirective = true;
-    parser.getLexer().enableIncludeDirective = true;
+    parser.getLexer().enableAllFlags();
     var walker = new ParseTreeWalker();
 
     Stream.of(

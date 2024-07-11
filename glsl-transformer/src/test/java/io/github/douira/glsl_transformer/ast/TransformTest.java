@@ -6,20 +6,26 @@ import static org.junit.jupiter.api.Assertions.*;
 import java.util.*;
 import java.util.stream.*;
 
+import org.antlr.v4.runtime.misc.Pair;
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.params.ParameterizedTest;
 
+import io.github.douira.glsl_transformer.GLSLParser;
+import io.github.douira.glsl_transformer.GLSLParser.CompoundStatementContext;
 import io.github.douira.glsl_transformer.ast.node.*;
 import io.github.douira.glsl_transformer.ast.node.abstract_node.ASTNode;
 import io.github.douira.glsl_transformer.ast.node.declaration.*;
 import io.github.douira.glsl_transformer.ast.node.expression.*;
 import io.github.douira.glsl_transformer.ast.node.expression.unary.FunctionCallExpression;
 import io.github.douira.glsl_transformer.ast.node.external_declaration.*;
+import io.github.douira.glsl_transformer.ast.node.statement.Statement;
+import io.github.douira.glsl_transformer.ast.node.statement.terminal.ExpressionStatement;
 import io.github.douira.glsl_transformer.ast.node.type.FullySpecifiedType;
 import io.github.douira.glsl_transformer.ast.node.type.qualifier.*;
 import io.github.douira.glsl_transformer.ast.node.type.qualifier.StorageQualifier.StorageType;
 import io.github.douira.glsl_transformer.ast.node.type.specifier.*;
 import io.github.douira.glsl_transformer.ast.node.type.struct.*;
+import io.github.douira.glsl_transformer.ast.print.ASTPrinter;
 import io.github.douira.glsl_transformer.ast.print.token.ParserToken;
 import io.github.douira.glsl_transformer.ast.query.*;
 import io.github.douira.glsl_transformer.ast.query.match.Matcher;
@@ -740,5 +746,115 @@ public class TransformTest extends TestWithSingleASTTransformer {
     assertTransform(
         "struct Foo { int[7] foo[5]; int[5] foo; int foo[]; int foo[], bar[]; int foo; Type foo[]; Type foo[], bar[]; } foo; ",
         "struct Foo { int[7] foo[5]; int[5] foo; int[] foo; int[] foo, bar; int foo; Type[] foo; Type[] foo, bar; } foo;");
+  }
+
+  @Test
+  void testDemoExtractPrintf() {
+    // NOTE: get this from somewhere in practice
+    int bindingPoint = 0;
+
+    class ExtractDataJobParameters implements JobParameters {
+      List<Pair<String, String[]>> printfStrings = new ArrayList<>();
+    }
+
+    var t = new SingleASTTransformer<ExtractDataJobParameters>();
+
+    var structTemplate = Template.withExternalDeclaration("""
+        layout(binding = __1, std430) restrict buffer PrintfOutputStream {
+            uint index;
+            uint stream[];
+        } printfOutputStruct;
+        """);
+    structTemplate.markLocalReplacement("__1", Expression.class);
+
+    var setupTemplate = new Template<>(t.parseNodeSeparate(
+        RootSupplier.DEFAULT,
+        new ParseShape<>(
+            CompoundStatementContext.class, GLSLParser::compoundStatement, ASTBuilder::visitCompoundStatement),
+        """
+            {
+              uint printfWriteIndex = atomicAdd(printfOutputStruct.index,__1);
+              printfOutputStruct.stream[printfWriteIndex]=__2;
+            }
+            """));
+    setupTemplate.markLocalReplacement("__1", Expression.class);
+    setupTemplate.markLocalReplacement("__2", Expression.class);
+
+    var writeIntTemplate = Template.withStatement("printfOutputStruct.stream[printfWriteIndex + __1]=uint(__2);");
+    writeIntTemplate.markLocalReplacement("__1", Expression.class);
+    writeIntTemplate.markLocalReplacement("__2", Expression.class);
+    var writeFloatTemplate = Template
+        .withStatement("printfOutputStruct.stream[printfWriteIndex + __1]=floatBitsToUint(__2);");
+    writeFloatTemplate.markLocalReplacement("__1", Expression.class);
+    writeFloatTemplate.markLocalReplacement("__2", Expression.class);
+
+    t.setTransformation((tree, root, parameters) -> {
+      tree.injectNode(
+          ASTInjectionPoint.BEFORE_DECLARATIONS,
+          structTemplate.getInstanceFor(root, new LiteralExpression(Type.INT32, bindingPoint)));
+
+      // find all function calls to printf
+      root.process(
+          root.identifierIndex.getAncestors("printf", FunctionCallExpression.class)
+              .filter(call -> call.getParent() instanceof ExpressionStatement),
+          call -> {
+            // extract the string literal from the first parameter
+            var args = call.getParameters();
+            var firstParameter = call.getParameters().get(0);
+            String formatString = null;
+            if (firstParameter instanceof LiteralExpression literal && literal.isString()) {
+              formatString = literal.getString();
+            }
+            var offset = formatString == null ? 0 : 1;
+            var entry = new Pair<>(formatString, new String[args.size() - offset]);
+
+            // make a new compound statement to replace the call statement with
+            var compound = setupTemplate.getInstanceFor(root,
+                new LiteralExpression(Type.INT32, entry.b.length),
+                new LiteralExpression(Type.INT32, parameters.printfStrings.size()));
+
+            parameters.printfStrings.add(entry);
+
+            for (int i = offset; i < args.size(); i++) {
+              var arg = args.get(i);
+              entry.b[i - offset] = ASTPrinter.printCompact(arg);
+
+              // NOTE: in practice actually parse the format string and determine the write
+              // type
+              var writeTemplate = i % 2 == 0 ? writeFloatTemplate : writeIntTemplate;
+
+              // add the write statement
+              compound.getChildren().add(
+                  writeTemplate.getInstanceFor(root, new LiteralExpression(Type.INT32, i - offset + 1), arg));
+            }
+
+            // detach the args from the parent so that when it gets replaced the args aren't
+            // deleted too. This both removes their references from the parent and detaches
+            // each one's parent reference.
+            args.clear();
+
+            call.getAncestor(Statement.class).replaceByAndDelete(compound);
+          });
+    });
+
+    t.setJobParameters(new ExtractDataJobParameters());
+    t.getLexer().enableStrings = true;
+    var result = t.transform("void main() { printf(\"Hello\",5,foo,bar+gob); }");
+    assertEquals("layout(binding = 0, std430) restrict buffer PrintfOutputStream { " +
+        "uint index; " +
+        "uint stream[]; " +
+        "} printfOutputStruct; " +
+        "void main() { { " +
+        "uint printfWriteIndex = atomicAdd(printfOutputStruct.index, 3); " +
+        "printfOutputStruct.stream[printfWriteIndex] = 0; " +
+        "printfOutputStruct.stream[printfWriteIndex + 1] = uint(5); " +
+        "printfOutputStruct.stream[printfWriteIndex + 2] = floatBitsToUint(foo); " +
+        "printfOutputStruct.stream[printfWriteIndex + 3] = uint(bar + gob); " +
+        "} } ", result);
+
+    assertEquals(1, t.getJobParameters().printfStrings.size());
+    var entry = t.getJobParameters().printfStrings.get(0);
+    assertEquals("Hello", entry.a);
+    assertArrayEquals(new String[] { "5", "foo", "bar + gob" }, entry.b);
   }
 }

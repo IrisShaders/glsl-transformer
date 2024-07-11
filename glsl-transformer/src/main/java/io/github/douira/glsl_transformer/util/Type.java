@@ -8,7 +8,8 @@ import io.github.douira.glsl_transformer.GLSLLexer;
 import io.github.douira.glsl_transformer.ast.data.TokenTyped;
 
 /**
- * This enum represents the type of a value in GLSL and contains easily accessible
+ * This enum represents the type of a value in GLSL and contains easily
+ * accessible
  * data about each of them.
  * 
  * The shape is an array of up to three integers describing how big this
@@ -17,6 +18,8 @@ import io.github.douira.glsl_transformer.ast.data.TokenTyped;
  * the tensor.
  */
 public enum Type implements TokenTyped {
+  STRING(NumberType.STRING, "string", "string"),
+
   BOOL(GLSLLexer.BOOL, GLSLLexer.BOOLCONSTANT, NumberType.BOOLEAN, "bool", "bool", 1),
   BVEC2(GLSLLexer.BVEC2, NumberType.BOOLEAN, "bvec2", "bvec2", 1, 2),
   BVEC3(GLSLLexer.BVEC3, NumberType.BOOLEAN, "bvec3", "bvec3", 1, 3),
@@ -104,6 +107,8 @@ public enum Type implements TokenTyped {
    * The different ways bits in a tensor can be interpreted.
    */
   public enum NumberType {
+    STRING(0),
+
     /**
      * boolean bit usage
      */
@@ -222,6 +227,16 @@ public enum Type implements TokenTyped {
     this.numberType = numberType;
     this.dimensions = dimensions;
     this.bitDepth = bitDepth;
+    this.compactName = compactName;
+    this.explicitName = explicitName;
+  }
+
+  Type(NumberType numberType, String compactName, String explicitName) {
+    this.tokenType = Token.INVALID_TYPE;
+    this.literalTokenType = Token.INVALID_TYPE;
+    this.numberType = numberType;
+    this.dimensions = new int[] {};
+    this.bitDepth = 0;
     this.compactName = compactName;
     this.explicitName = explicitName;
   }
@@ -367,6 +382,7 @@ public enum Type implements TokenTyped {
       t1.implicitCastTypes = implicitCastTypes;
       for (Type t2 : values()) {
         boolean canCast = t1.equals(t2) || (Arrays.equals(t1.dimensions, t2.dimensions) && switch (t1.numberType) {
+          case STRING -> false;
           case BOOLEAN -> false;
           case SIGNED_INTEGER -> switch (t2.numberType) {
             case UNSIGNED_INTEGER, SIGNED_INTEGER, FLOATING_POINT -> t2.bitDepth >= t1.bitDepth;

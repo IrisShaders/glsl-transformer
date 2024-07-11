@@ -13,6 +13,7 @@ public class LiteralExpression extends TerminalExpression {
   private long integerValue;
   private IntegerFormat integerFormat;
   private double floatingValue;
+  private String stringValue;
 
   public enum IntegerFormat {
     DECIMAL(10),
@@ -28,15 +29,21 @@ public class LiteralExpression extends TerminalExpression {
 
   private LiteralExpression(
       Type literalType,
+      String stringValue,
       boolean booleanValue,
       long integerValue,
       IntegerFormat integerFormat,
       double floatingValue) {
     this.literalType = literalType;
+    this.stringValue = stringValue;
     this.booleanValue = booleanValue;
     this.integerValue = integerValue;
     this.integerFormat = integerFormat;
     this.floatingValue = floatingValue;
+  }
+
+  public LiteralExpression(String stringValue) {
+    setString(stringValue);
   }
 
   public LiteralExpression(boolean booleanValue) {
@@ -99,6 +106,31 @@ public class LiteralExpression extends TerminalExpression {
 
   public Type.NumberType getNumberType() {
     return literalType.getNumberType();
+  }
+
+  public String getString() {
+    return stringValue;
+  }
+
+  public void setString(String stringValue) {
+    if (stringValue == null) {
+      throw new IllegalArgumentException("String value cannot be null!");
+    }
+    this.stringValue = stringValue;
+    this.booleanValue = false;
+    this.integerValue = 0;
+    this.floatingValue = 0;
+    this.literalType = Type.STRING;
+  }
+
+  public void changeString(String stringValue) {
+    if (!isString()) {
+      throw new IllegalStateException("Literal type must be a string!");
+    }
+    if (stringValue == null) {
+      throw new IllegalArgumentException("String value cannot be null!");
+    }
+    this.stringValue = stringValue;
   }
 
   public boolean getBoolean() {
@@ -195,6 +227,10 @@ public class LiteralExpression extends TerminalExpression {
     this.floatingValue = floatingValue;
   }
 
+  public boolean isString() {
+    return literalType == Type.STRING;
+  }
+
   public boolean isBoolean() {
     return getNumberType() == NumberType.BOOLEAN;
   }
@@ -278,7 +314,7 @@ public class LiteralExpression extends TerminalExpression {
 
   @Override
   public LiteralExpression clone() {
-    return new LiteralExpression(literalType, booleanValue, integerValue, integerFormat, floatingValue);
+    return new LiteralExpression(literalType, stringValue, booleanValue, integerValue, integerFormat, floatingValue);
   }
 
   @Override
