@@ -758,6 +758,11 @@ uint uh12345678 = 0xBC614Eu;
 uint uhToBeOrNotToBe = 0x2bu | ~0x2BU;
 layout(location = 0x7u) out vec4 c7;
 uint g2 = 4294967295u;
+u64vec3 g3 = u64vec3(1, 2, 3);
+i32vec3 g4 = i32vec3(1, 2, 3);
+u8vec2 g5 = u8vec2(1, 2);
+u32vec2 g8 = uvec2(1, 2);
+u16vec4 g6 = u16vec4(1, 2);
 ===
 float f1 = 1.0f;
 float f2 = 2.0f;
@@ -810,6 +815,11 @@ uint uh12345678 = 0xbc614eu;
 uint uhToBeOrNotToBe = 0x2bu | ~0x2bu;
 layout(location = 0x7u) out vec4 c7;
 uint g2 = 4294967295u;
+u64vec3 g3 = u64vec3(1, 2, 3);
+ivec3 g4 = ivec3(1, 2, 3);
+u8vec2 g5 = u8vec2(1, 2);
+uvec2 g8 = uvec2(1, 2);
+u16vec4 g6 = u16vec4(1, 2);
 
 §testReprint translationUnit:
 int i4[4];

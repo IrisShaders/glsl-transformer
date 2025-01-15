@@ -7789,6 +7789,1250 @@ int foo(int a, const int b, in int c, const in int d, out int e, inout int f) {
 ]
 
 
+testASTTree[translationUnit_RDMXgtr7zckSez6eLJL50Zh+Dx4=]=[
+float f1 = 1.0;
+float f2 = 2.;
+float f3 = 3e0;
+float f4 = 40e-1;
+float f5 = 05.;
+float f6 = 006.;
+float f7 = .7e1;
+float f8 = 08e0;
+float f9 = .9e+1;
+float f10 = 10.0;
+float f11 = .011e+3;
+float f12 = .0012e4;
+float f543 = 000000543.;
+float f6789 = 00006789.;
+float f88 = 0000088.;
+float g1 = 5.3876e4;
+float g2 = 4000000000e-11;
+float g3 = 1e+5;
+float g4 = 7.321E-3;
+float g5 = 3.2E+4;
+float g6 = 0.5e-5;
+float g7 = 0.45;
+float g8 = 6.e10;
+double gf1 = 1.0lf;
+double gf2 = 2.Lf;
+double gf3 = .3e1lF;
+double gf4 = .4e1LF;
+float gf5 = 5.f;
+float gf6 = 6.F;
+int h0 = 0x0;
+int h00 = 0x00;
+int h000 = 0x000;
+int h1 = 0x1;
+int h2 = 0x00000002;
+int h300 = 0x000300;
+int hABCDEF = 0xAbCdEF;
+int hFFFFFFFF = 0xFFFFFFFF;
+int h12345678 = 0xBC614E;
+int hToBeOrNotToBe = 0x2b | ~0x2B;
+uint uh0 = 0x0u;
+uint uhg = (0xcu);
+uint uh000 = 0x000u;
+uint uh1 = 0x1u;
+uint uh2 = 0x00000002u;
+uint uh300 = 0x000300u;
+uint uhABCDEF = 0xAbCdEFu;
+uint uhFFFFFFFF = 0xFFFFFFFFu;
+uint uh12345678 = 0xBC614Eu;
+uint uhToBeOrNotToBe = 0x2bu | ~0x2BU;
+layout(location = 0x7u) out vec4 c7;
+uint g2 = 4294967295u;
+u64vec3 g3 = u64vec3(1, 2, 3);
+i32vec3 g4 = i32vec3(1, 2, 3);
+u8vec2 g5 = u8vec2(1, 2);
+u32vec2 g8 = uvec2(1, 2);
+u16vec4 g6 = u16vec4(1, 2);
+<><><><><><><><><><><><><><><><><><><><><><><><><>
+(TranslationUnit
+(DeclarationExternalDeclaration
+(TypeAndInitDeclaration
+(FullySpecifiedType
+(BuiltinNumericTypeSpecifier
+- Type FLOAT32
+)BuiltinNumericTypeSpecifier
+)FullySpecifiedType
+(DeclarationMember
+(Identifier)
+- String f1
+(ExpressionInitializer
+(LiteralExpression
+- Type FLOAT32
+- Float 1.0
+)LiteralExpression
+)ExpressionInitializer
+)DeclarationMember
+)TypeAndInitDeclaration
+)DeclarationExternalDeclaration
+(DeclarationExternalDeclaration
+(TypeAndInitDeclaration
+(FullySpecifiedType
+(BuiltinNumericTypeSpecifier
+- Type FLOAT32
+)BuiltinNumericTypeSpecifier
+)FullySpecifiedType
+(DeclarationMember
+(Identifier)
+- String f2
+(ExpressionInitializer
+(LiteralExpression
+- Type FLOAT32
+- Float 2.0
+)LiteralExpression
+)ExpressionInitializer
+)DeclarationMember
+)TypeAndInitDeclaration
+)DeclarationExternalDeclaration
+(DeclarationExternalDeclaration
+(TypeAndInitDeclaration
+(FullySpecifiedType
+(BuiltinNumericTypeSpecifier
+- Type FLOAT32
+)BuiltinNumericTypeSpecifier
+)FullySpecifiedType
+(DeclarationMember
+(Identifier)
+- String f3
+(ExpressionInitializer
+(LiteralExpression
+- Type FLOAT32
+- Float 3.0
+)LiteralExpression
+)ExpressionInitializer
+)DeclarationMember
+)TypeAndInitDeclaration
+)DeclarationExternalDeclaration
+(DeclarationExternalDeclaration
+(TypeAndInitDeclaration
+(FullySpecifiedType
+(BuiltinNumericTypeSpecifier
+- Type FLOAT32
+)BuiltinNumericTypeSpecifier
+)FullySpecifiedType
+(DeclarationMember
+(Identifier)
+- String f4
+(ExpressionInitializer
+(LiteralExpression
+- Type FLOAT32
+- Float 4.0
+)LiteralExpression
+)ExpressionInitializer
+)DeclarationMember
+)TypeAndInitDeclaration
+)DeclarationExternalDeclaration
+(DeclarationExternalDeclaration
+(TypeAndInitDeclaration
+(FullySpecifiedType
+(BuiltinNumericTypeSpecifier
+- Type FLOAT32
+)BuiltinNumericTypeSpecifier
+)FullySpecifiedType
+(DeclarationMember
+(Identifier)
+- String f5
+(ExpressionInitializer
+(LiteralExpression
+- Type FLOAT32
+- Float 5.0
+)LiteralExpression
+)ExpressionInitializer
+)DeclarationMember
+)TypeAndInitDeclaration
+)DeclarationExternalDeclaration
+(DeclarationExternalDeclaration
+(TypeAndInitDeclaration
+(FullySpecifiedType
+(BuiltinNumericTypeSpecifier
+- Type FLOAT32
+)BuiltinNumericTypeSpecifier
+)FullySpecifiedType
+(DeclarationMember
+(Identifier)
+- String f6
+(ExpressionInitializer
+(LiteralExpression
+- Type FLOAT32
+- Float 6.0
+)LiteralExpression
+)ExpressionInitializer
+)DeclarationMember
+)TypeAndInitDeclaration
+)DeclarationExternalDeclaration
+(DeclarationExternalDeclaration
+(TypeAndInitDeclaration
+(FullySpecifiedType
+(BuiltinNumericTypeSpecifier
+- Type FLOAT32
+)BuiltinNumericTypeSpecifier
+)FullySpecifiedType
+(DeclarationMember
+(Identifier)
+- String f7
+(ExpressionInitializer
+(LiteralExpression
+- Type FLOAT32
+- Float 7.0
+)LiteralExpression
+)ExpressionInitializer
+)DeclarationMember
+)TypeAndInitDeclaration
+)DeclarationExternalDeclaration
+(DeclarationExternalDeclaration
+(TypeAndInitDeclaration
+(FullySpecifiedType
+(BuiltinNumericTypeSpecifier
+- Type FLOAT32
+)BuiltinNumericTypeSpecifier
+)FullySpecifiedType
+(DeclarationMember
+(Identifier)
+- String f8
+(ExpressionInitializer
+(LiteralExpression
+- Type FLOAT32
+- Float 8.0
+)LiteralExpression
+)ExpressionInitializer
+)DeclarationMember
+)TypeAndInitDeclaration
+)DeclarationExternalDeclaration
+(DeclarationExternalDeclaration
+(TypeAndInitDeclaration
+(FullySpecifiedType
+(BuiltinNumericTypeSpecifier
+- Type FLOAT32
+)BuiltinNumericTypeSpecifier
+)FullySpecifiedType
+(DeclarationMember
+(Identifier)
+- String f9
+(ExpressionInitializer
+(LiteralExpression
+- Type FLOAT32
+- Float 9.0
+)LiteralExpression
+)ExpressionInitializer
+)DeclarationMember
+)TypeAndInitDeclaration
+)DeclarationExternalDeclaration
+(DeclarationExternalDeclaration
+(TypeAndInitDeclaration
+(FullySpecifiedType
+(BuiltinNumericTypeSpecifier
+- Type FLOAT32
+)BuiltinNumericTypeSpecifier
+)FullySpecifiedType
+(DeclarationMember
+(Identifier)
+- String f10
+(ExpressionInitializer
+(LiteralExpression
+- Type FLOAT32
+- Float 10.0
+)LiteralExpression
+)ExpressionInitializer
+)DeclarationMember
+)TypeAndInitDeclaration
+)DeclarationExternalDeclaration
+(DeclarationExternalDeclaration
+(TypeAndInitDeclaration
+(FullySpecifiedType
+(BuiltinNumericTypeSpecifier
+- Type FLOAT32
+)BuiltinNumericTypeSpecifier
+)FullySpecifiedType
+(DeclarationMember
+(Identifier)
+- String f11
+(ExpressionInitializer
+(LiteralExpression
+- Type FLOAT32
+- Float 11.0
+)LiteralExpression
+)ExpressionInitializer
+)DeclarationMember
+)TypeAndInitDeclaration
+)DeclarationExternalDeclaration
+(DeclarationExternalDeclaration
+(TypeAndInitDeclaration
+(FullySpecifiedType
+(BuiltinNumericTypeSpecifier
+- Type FLOAT32
+)BuiltinNumericTypeSpecifier
+)FullySpecifiedType
+(DeclarationMember
+(Identifier)
+- String f12
+(ExpressionInitializer
+(LiteralExpression
+- Type FLOAT32
+- Float 12.0
+)LiteralExpression
+)ExpressionInitializer
+)DeclarationMember
+)TypeAndInitDeclaration
+)DeclarationExternalDeclaration
+(DeclarationExternalDeclaration
+(TypeAndInitDeclaration
+(FullySpecifiedType
+(BuiltinNumericTypeSpecifier
+- Type FLOAT32
+)BuiltinNumericTypeSpecifier
+)FullySpecifiedType
+(DeclarationMember
+(Identifier)
+- String f543
+(ExpressionInitializer
+(LiteralExpression
+- Type FLOAT32
+- Float 543.0
+)LiteralExpression
+)ExpressionInitializer
+)DeclarationMember
+)TypeAndInitDeclaration
+)DeclarationExternalDeclaration
+(DeclarationExternalDeclaration
+(TypeAndInitDeclaration
+(FullySpecifiedType
+(BuiltinNumericTypeSpecifier
+- Type FLOAT32
+)BuiltinNumericTypeSpecifier
+)FullySpecifiedType
+(DeclarationMember
+(Identifier)
+- String f6789
+(ExpressionInitializer
+(LiteralExpression
+- Type FLOAT32
+- Float 6789.0
+)LiteralExpression
+)ExpressionInitializer
+)DeclarationMember
+)TypeAndInitDeclaration
+)DeclarationExternalDeclaration
+(DeclarationExternalDeclaration
+(TypeAndInitDeclaration
+(FullySpecifiedType
+(BuiltinNumericTypeSpecifier
+- Type FLOAT32
+)BuiltinNumericTypeSpecifier
+)FullySpecifiedType
+(DeclarationMember
+(Identifier)
+- String f88
+(ExpressionInitializer
+(LiteralExpression
+- Type FLOAT32
+- Float 88.0
+)LiteralExpression
+)ExpressionInitializer
+)DeclarationMember
+)TypeAndInitDeclaration
+)DeclarationExternalDeclaration
+(DeclarationExternalDeclaration
+(TypeAndInitDeclaration
+(FullySpecifiedType
+(BuiltinNumericTypeSpecifier
+- Type FLOAT32
+)BuiltinNumericTypeSpecifier
+)FullySpecifiedType
+(DeclarationMember
+(Identifier)
+- String g1
+(ExpressionInitializer
+(LiteralExpression
+- Type FLOAT32
+- Float 53876.0
+)LiteralExpression
+)ExpressionInitializer
+)DeclarationMember
+)TypeAndInitDeclaration
+)DeclarationExternalDeclaration
+(DeclarationExternalDeclaration
+(TypeAndInitDeclaration
+(FullySpecifiedType
+(BuiltinNumericTypeSpecifier
+- Type FLOAT32
+)BuiltinNumericTypeSpecifier
+)FullySpecifiedType
+(DeclarationMember
+(Identifier)
+- String g2
+(ExpressionInitializer
+(LiteralExpression
+- Type FLOAT32
+- Float 0.04
+)LiteralExpression
+)ExpressionInitializer
+)DeclarationMember
+)TypeAndInitDeclaration
+)DeclarationExternalDeclaration
+(DeclarationExternalDeclaration
+(TypeAndInitDeclaration
+(FullySpecifiedType
+(BuiltinNumericTypeSpecifier
+- Type FLOAT32
+)BuiltinNumericTypeSpecifier
+)FullySpecifiedType
+(DeclarationMember
+(Identifier)
+- String g3
+(ExpressionInitializer
+(LiteralExpression
+- Type FLOAT32
+- Float 100000.0
+)LiteralExpression
+)ExpressionInitializer
+)DeclarationMember
+)TypeAndInitDeclaration
+)DeclarationExternalDeclaration
+(DeclarationExternalDeclaration
+(TypeAndInitDeclaration
+(FullySpecifiedType
+(BuiltinNumericTypeSpecifier
+- Type FLOAT32
+)BuiltinNumericTypeSpecifier
+)FullySpecifiedType
+(DeclarationMember
+(Identifier)
+- String g4
+(ExpressionInitializer
+(LiteralExpression
+- Type FLOAT32
+- Float 0.007321
+)LiteralExpression
+)ExpressionInitializer
+)DeclarationMember
+)TypeAndInitDeclaration
+)DeclarationExternalDeclaration
+(DeclarationExternalDeclaration
+(TypeAndInitDeclaration
+(FullySpecifiedType
+(BuiltinNumericTypeSpecifier
+- Type FLOAT32
+)BuiltinNumericTypeSpecifier
+)FullySpecifiedType
+(DeclarationMember
+(Identifier)
+- String g5
+(ExpressionInitializer
+(LiteralExpression
+- Type FLOAT32
+- Float 32000.0
+)LiteralExpression
+)ExpressionInitializer
+)DeclarationMember
+)TypeAndInitDeclaration
+)DeclarationExternalDeclaration
+(DeclarationExternalDeclaration
+(TypeAndInitDeclaration
+(FullySpecifiedType
+(BuiltinNumericTypeSpecifier
+- Type FLOAT32
+)BuiltinNumericTypeSpecifier
+)FullySpecifiedType
+(DeclarationMember
+(Identifier)
+- String g6
+(ExpressionInitializer
+(LiteralExpression
+- Type FLOAT32
+- Float 5.0E-6
+)LiteralExpression
+)ExpressionInitializer
+)DeclarationMember
+)TypeAndInitDeclaration
+)DeclarationExternalDeclaration
+(DeclarationExternalDeclaration
+(TypeAndInitDeclaration
+(FullySpecifiedType
+(BuiltinNumericTypeSpecifier
+- Type FLOAT32
+)BuiltinNumericTypeSpecifier
+)FullySpecifiedType
+(DeclarationMember
+(Identifier)
+- String g7
+(ExpressionInitializer
+(LiteralExpression
+- Type FLOAT32
+- Float 0.45
+)LiteralExpression
+)ExpressionInitializer
+)DeclarationMember
+)TypeAndInitDeclaration
+)DeclarationExternalDeclaration
+(DeclarationExternalDeclaration
+(TypeAndInitDeclaration
+(FullySpecifiedType
+(BuiltinNumericTypeSpecifier
+- Type FLOAT32
+)BuiltinNumericTypeSpecifier
+)FullySpecifiedType
+(DeclarationMember
+(Identifier)
+- String g8
+(ExpressionInitializer
+(LiteralExpression
+- Type FLOAT32
+- Float 6.0000002E10
+)LiteralExpression
+)ExpressionInitializer
+)DeclarationMember
+)TypeAndInitDeclaration
+)DeclarationExternalDeclaration
+(DeclarationExternalDeclaration
+(TypeAndInitDeclaration
+(FullySpecifiedType
+(BuiltinNumericTypeSpecifier
+- Type FLOAT64
+)BuiltinNumericTypeSpecifier
+)FullySpecifiedType
+(DeclarationMember
+(Identifier)
+- String gf1
+(ExpressionInitializer
+(LiteralExpression
+- Type FLOAT64
+- Double 1.0
+)LiteralExpression
+)ExpressionInitializer
+)DeclarationMember
+)TypeAndInitDeclaration
+)DeclarationExternalDeclaration
+(DeclarationExternalDeclaration
+(TypeAndInitDeclaration
+(FullySpecifiedType
+(BuiltinNumericTypeSpecifier
+- Type FLOAT64
+)BuiltinNumericTypeSpecifier
+)FullySpecifiedType
+(DeclarationMember
+(Identifier)
+- String gf2
+(ExpressionInitializer
+(LiteralExpression
+- Type FLOAT64
+- Double 2.0
+)LiteralExpression
+)ExpressionInitializer
+)DeclarationMember
+)TypeAndInitDeclaration
+)DeclarationExternalDeclaration
+(DeclarationExternalDeclaration
+(TypeAndInitDeclaration
+(FullySpecifiedType
+(BuiltinNumericTypeSpecifier
+- Type FLOAT64
+)BuiltinNumericTypeSpecifier
+)FullySpecifiedType
+(DeclarationMember
+(Identifier)
+- String gf3
+(ExpressionInitializer
+(LiteralExpression
+- Type FLOAT64
+- Double 3.0
+)LiteralExpression
+)ExpressionInitializer
+)DeclarationMember
+)TypeAndInitDeclaration
+)DeclarationExternalDeclaration
+(DeclarationExternalDeclaration
+(TypeAndInitDeclaration
+(FullySpecifiedType
+(BuiltinNumericTypeSpecifier
+- Type FLOAT64
+)BuiltinNumericTypeSpecifier
+)FullySpecifiedType
+(DeclarationMember
+(Identifier)
+- String gf4
+(ExpressionInitializer
+(LiteralExpression
+- Type FLOAT64
+- Double 4.0
+)LiteralExpression
+)ExpressionInitializer
+)DeclarationMember
+)TypeAndInitDeclaration
+)DeclarationExternalDeclaration
+(DeclarationExternalDeclaration
+(TypeAndInitDeclaration
+(FullySpecifiedType
+(BuiltinNumericTypeSpecifier
+- Type FLOAT32
+)BuiltinNumericTypeSpecifier
+)FullySpecifiedType
+(DeclarationMember
+(Identifier)
+- String gf5
+(ExpressionInitializer
+(LiteralExpression
+- Type FLOAT32
+- Float 5.0
+)LiteralExpression
+)ExpressionInitializer
+)DeclarationMember
+)TypeAndInitDeclaration
+)DeclarationExternalDeclaration
+(DeclarationExternalDeclaration
+(TypeAndInitDeclaration
+(FullySpecifiedType
+(BuiltinNumericTypeSpecifier
+- Type FLOAT32
+)BuiltinNumericTypeSpecifier
+)FullySpecifiedType
+(DeclarationMember
+(Identifier)
+- String gf6
+(ExpressionInitializer
+(LiteralExpression
+- Type FLOAT32
+- Float 6.0
+)LiteralExpression
+)ExpressionInitializer
+)DeclarationMember
+)TypeAndInitDeclaration
+)DeclarationExternalDeclaration
+(DeclarationExternalDeclaration
+(TypeAndInitDeclaration
+(FullySpecifiedType
+(BuiltinNumericTypeSpecifier
+- Type INT32
+)BuiltinNumericTypeSpecifier
+)FullySpecifiedType
+(DeclarationMember
+(Identifier)
+- String h0
+(ExpressionInitializer
+(LiteralExpression
+- Type INT32
+- Integer 0
+- IntegerFormat HEXADECIMAL
+)LiteralExpression
+)ExpressionInitializer
+)DeclarationMember
+)TypeAndInitDeclaration
+)DeclarationExternalDeclaration
+(DeclarationExternalDeclaration
+(TypeAndInitDeclaration
+(FullySpecifiedType
+(BuiltinNumericTypeSpecifier
+- Type INT32
+)BuiltinNumericTypeSpecifier
+)FullySpecifiedType
+(DeclarationMember
+(Identifier)
+- String h00
+(ExpressionInitializer
+(LiteralExpression
+- Type INT32
+- Integer 0
+- IntegerFormat HEXADECIMAL
+)LiteralExpression
+)ExpressionInitializer
+)DeclarationMember
+)TypeAndInitDeclaration
+)DeclarationExternalDeclaration
+(DeclarationExternalDeclaration
+(TypeAndInitDeclaration
+(FullySpecifiedType
+(BuiltinNumericTypeSpecifier
+- Type INT32
+)BuiltinNumericTypeSpecifier
+)FullySpecifiedType
+(DeclarationMember
+(Identifier)
+- String h000
+(ExpressionInitializer
+(LiteralExpression
+- Type INT32
+- Integer 0
+- IntegerFormat HEXADECIMAL
+)LiteralExpression
+)ExpressionInitializer
+)DeclarationMember
+)TypeAndInitDeclaration
+)DeclarationExternalDeclaration
+(DeclarationExternalDeclaration
+(TypeAndInitDeclaration
+(FullySpecifiedType
+(BuiltinNumericTypeSpecifier
+- Type INT32
+)BuiltinNumericTypeSpecifier
+)FullySpecifiedType
+(DeclarationMember
+(Identifier)
+- String h1
+(ExpressionInitializer
+(LiteralExpression
+- Type INT32
+- Integer 1
+- IntegerFormat HEXADECIMAL
+)LiteralExpression
+)ExpressionInitializer
+)DeclarationMember
+)TypeAndInitDeclaration
+)DeclarationExternalDeclaration
+(DeclarationExternalDeclaration
+(TypeAndInitDeclaration
+(FullySpecifiedType
+(BuiltinNumericTypeSpecifier
+- Type INT32
+)BuiltinNumericTypeSpecifier
+)FullySpecifiedType
+(DeclarationMember
+(Identifier)
+- String h2
+(ExpressionInitializer
+(LiteralExpression
+- Type INT32
+- Integer 2
+- IntegerFormat HEXADECIMAL
+)LiteralExpression
+)ExpressionInitializer
+)DeclarationMember
+)TypeAndInitDeclaration
+)DeclarationExternalDeclaration
+(DeclarationExternalDeclaration
+(TypeAndInitDeclaration
+(FullySpecifiedType
+(BuiltinNumericTypeSpecifier
+- Type INT32
+)BuiltinNumericTypeSpecifier
+)FullySpecifiedType
+(DeclarationMember
+(Identifier)
+- String h300
+(ExpressionInitializer
+(LiteralExpression
+- Type INT32
+- Integer 768
+- IntegerFormat HEXADECIMAL
+)LiteralExpression
+)ExpressionInitializer
+)DeclarationMember
+)TypeAndInitDeclaration
+)DeclarationExternalDeclaration
+(DeclarationExternalDeclaration
+(TypeAndInitDeclaration
+(FullySpecifiedType
+(BuiltinNumericTypeSpecifier
+- Type INT32
+)BuiltinNumericTypeSpecifier
+)FullySpecifiedType
+(DeclarationMember
+(Identifier)
+- String hABCDEF
+(ExpressionInitializer
+(LiteralExpression
+- Type INT32
+- Integer 11259375
+- IntegerFormat HEXADECIMAL
+)LiteralExpression
+)ExpressionInitializer
+)DeclarationMember
+)TypeAndInitDeclaration
+)DeclarationExternalDeclaration
+(DeclarationExternalDeclaration
+(TypeAndInitDeclaration
+(FullySpecifiedType
+(BuiltinNumericTypeSpecifier
+- Type INT32
+)BuiltinNumericTypeSpecifier
+)FullySpecifiedType
+(DeclarationMember
+(Identifier)
+- String hFFFFFFFF
+(ExpressionInitializer
+(LiteralExpression
+- Type INT32
+- Integer -1
+- IntegerFormat HEXADECIMAL
+)LiteralExpression
+)ExpressionInitializer
+)DeclarationMember
+)TypeAndInitDeclaration
+)DeclarationExternalDeclaration
+(DeclarationExternalDeclaration
+(TypeAndInitDeclaration
+(FullySpecifiedType
+(BuiltinNumericTypeSpecifier
+- Type INT32
+)BuiltinNumericTypeSpecifier
+)FullySpecifiedType
+(DeclarationMember
+(Identifier)
+- String h12345678
+(ExpressionInitializer
+(LiteralExpression
+- Type INT32
+- Integer 12345678
+- IntegerFormat HEXADECIMAL
+)LiteralExpression
+)ExpressionInitializer
+)DeclarationMember
+)TypeAndInitDeclaration
+)DeclarationExternalDeclaration
+(DeclarationExternalDeclaration
+(TypeAndInitDeclaration
+(FullySpecifiedType
+(BuiltinNumericTypeSpecifier
+- Type INT32
+)BuiltinNumericTypeSpecifier
+)FullySpecifiedType
+(DeclarationMember
+(Identifier)
+- String hToBeOrNotToBe
+(ExpressionInitializer
+(BitwiseOrExpression
+(LiteralExpression
+- Type INT32
+- Integer 43
+- IntegerFormat HEXADECIMAL
+)LiteralExpression
+(BitwiseNotExpression
+(LiteralExpression
+- Type INT32
+- Integer 43
+- IntegerFormat HEXADECIMAL
+)LiteralExpression
+)BitwiseNotExpression
+)BitwiseOrExpression
+)ExpressionInitializer
+)DeclarationMember
+)TypeAndInitDeclaration
+)DeclarationExternalDeclaration
+(DeclarationExternalDeclaration
+(TypeAndInitDeclaration
+(FullySpecifiedType
+(BuiltinNumericTypeSpecifier
+- Type UINT32
+)BuiltinNumericTypeSpecifier
+)FullySpecifiedType
+(DeclarationMember
+(Identifier)
+- String uh0
+(ExpressionInitializer
+(LiteralExpression
+- Type UINT32
+- Integer 0
+- IntegerFormat HEXADECIMAL
+)LiteralExpression
+)ExpressionInitializer
+)DeclarationMember
+)TypeAndInitDeclaration
+)DeclarationExternalDeclaration
+(DeclarationExternalDeclaration
+(TypeAndInitDeclaration
+(FullySpecifiedType
+(BuiltinNumericTypeSpecifier
+- Type UINT32
+)BuiltinNumericTypeSpecifier
+)FullySpecifiedType
+(DeclarationMember
+(Identifier)
+- String uhg
+(ExpressionInitializer
+(GroupingExpression
+(LiteralExpression
+- Type UINT32
+- Integer 12
+- IntegerFormat HEXADECIMAL
+)LiteralExpression
+)GroupingExpression
+)ExpressionInitializer
+)DeclarationMember
+)TypeAndInitDeclaration
+)DeclarationExternalDeclaration
+(DeclarationExternalDeclaration
+(TypeAndInitDeclaration
+(FullySpecifiedType
+(BuiltinNumericTypeSpecifier
+- Type UINT32
+)BuiltinNumericTypeSpecifier
+)FullySpecifiedType
+(DeclarationMember
+(Identifier)
+- String uh000
+(ExpressionInitializer
+(LiteralExpression
+- Type UINT32
+- Integer 0
+- IntegerFormat HEXADECIMAL
+)LiteralExpression
+)ExpressionInitializer
+)DeclarationMember
+)TypeAndInitDeclaration
+)DeclarationExternalDeclaration
+(DeclarationExternalDeclaration
+(TypeAndInitDeclaration
+(FullySpecifiedType
+(BuiltinNumericTypeSpecifier
+- Type UINT32
+)BuiltinNumericTypeSpecifier
+)FullySpecifiedType
+(DeclarationMember
+(Identifier)
+- String uh1
+(ExpressionInitializer
+(LiteralExpression
+- Type UINT32
+- Integer 1
+- IntegerFormat HEXADECIMAL
+)LiteralExpression
+)ExpressionInitializer
+)DeclarationMember
+)TypeAndInitDeclaration
+)DeclarationExternalDeclaration
+(DeclarationExternalDeclaration
+(TypeAndInitDeclaration
+(FullySpecifiedType
+(BuiltinNumericTypeSpecifier
+- Type UINT32
+)BuiltinNumericTypeSpecifier
+)FullySpecifiedType
+(DeclarationMember
+(Identifier)
+- String uh2
+(ExpressionInitializer
+(LiteralExpression
+- Type UINT32
+- Integer 2
+- IntegerFormat HEXADECIMAL
+)LiteralExpression
+)ExpressionInitializer
+)DeclarationMember
+)TypeAndInitDeclaration
+)DeclarationExternalDeclaration
+(DeclarationExternalDeclaration
+(TypeAndInitDeclaration
+(FullySpecifiedType
+(BuiltinNumericTypeSpecifier
+- Type UINT32
+)BuiltinNumericTypeSpecifier
+)FullySpecifiedType
+(DeclarationMember
+(Identifier)
+- String uh300
+(ExpressionInitializer
+(LiteralExpression
+- Type UINT32
+- Integer 768
+- IntegerFormat HEXADECIMAL
+)LiteralExpression
+)ExpressionInitializer
+)DeclarationMember
+)TypeAndInitDeclaration
+)DeclarationExternalDeclaration
+(DeclarationExternalDeclaration
+(TypeAndInitDeclaration
+(FullySpecifiedType
+(BuiltinNumericTypeSpecifier
+- Type UINT32
+)BuiltinNumericTypeSpecifier
+)FullySpecifiedType
+(DeclarationMember
+(Identifier)
+- String uhABCDEF
+(ExpressionInitializer
+(LiteralExpression
+- Type UINT32
+- Integer 11259375
+- IntegerFormat HEXADECIMAL
+)LiteralExpression
+)ExpressionInitializer
+)DeclarationMember
+)TypeAndInitDeclaration
+)DeclarationExternalDeclaration
+(DeclarationExternalDeclaration
+(TypeAndInitDeclaration
+(FullySpecifiedType
+(BuiltinNumericTypeSpecifier
+- Type UINT32
+)BuiltinNumericTypeSpecifier
+)FullySpecifiedType
+(DeclarationMember
+(Identifier)
+- String uhFFFFFFFF
+(ExpressionInitializer
+(LiteralExpression
+- Type UINT32
+- Integer -1
+- IntegerFormat HEXADECIMAL
+)LiteralExpression
+)ExpressionInitializer
+)DeclarationMember
+)TypeAndInitDeclaration
+)DeclarationExternalDeclaration
+(DeclarationExternalDeclaration
+(TypeAndInitDeclaration
+(FullySpecifiedType
+(BuiltinNumericTypeSpecifier
+- Type UINT32
+)BuiltinNumericTypeSpecifier
+)FullySpecifiedType
+(DeclarationMember
+(Identifier)
+- String uh12345678
+(ExpressionInitializer
+(LiteralExpression
+- Type UINT32
+- Integer 12345678
+- IntegerFormat HEXADECIMAL
+)LiteralExpression
+)ExpressionInitializer
+)DeclarationMember
+)TypeAndInitDeclaration
+)DeclarationExternalDeclaration
+(DeclarationExternalDeclaration
+(TypeAndInitDeclaration
+(FullySpecifiedType
+(BuiltinNumericTypeSpecifier
+- Type UINT32
+)BuiltinNumericTypeSpecifier
+)FullySpecifiedType
+(DeclarationMember
+(Identifier)
+- String uhToBeOrNotToBe
+(ExpressionInitializer
+(BitwiseOrExpression
+(LiteralExpression
+- Type UINT32
+- Integer 43
+- IntegerFormat HEXADECIMAL
+)LiteralExpression
+(BitwiseNotExpression
+(LiteralExpression
+- Type UINT32
+- Integer 43
+- IntegerFormat HEXADECIMAL
+)LiteralExpression
+)BitwiseNotExpression
+)BitwiseOrExpression
+)ExpressionInitializer
+)DeclarationMember
+)TypeAndInitDeclaration
+)DeclarationExternalDeclaration
+(DeclarationExternalDeclaration
+(TypeAndInitDeclaration
+(FullySpecifiedType
+(TypeQualifier
+(LayoutQualifier
+(NamedLayoutQualifierPart
+(Identifier)
+- String location
+(LiteralExpression
+- Type UINT32
+- Integer 7
+- IntegerFormat HEXADECIMAL
+)LiteralExpression
+)NamedLayoutQualifierPart
+)LayoutQualifier
+(StorageQualifier
+- StorageType OUT
+)StorageQualifier
+)TypeQualifier
+(BuiltinNumericTypeSpecifier
+- Type F32VEC4
+)BuiltinNumericTypeSpecifier
+)FullySpecifiedType
+(DeclarationMember
+(Identifier)
+- String c7
+)DeclarationMember
+)TypeAndInitDeclaration
+)DeclarationExternalDeclaration
+(DeclarationExternalDeclaration
+(TypeAndInitDeclaration
+(FullySpecifiedType
+(BuiltinNumericTypeSpecifier
+- Type UINT32
+)BuiltinNumericTypeSpecifier
+)FullySpecifiedType
+(DeclarationMember
+(Identifier)
+- String g2
+(ExpressionInitializer
+(LiteralExpression
+- Type UINT32
+- Integer -1
+- IntegerFormat DECIMAL
+)LiteralExpression
+)ExpressionInitializer
+)DeclarationMember
+)TypeAndInitDeclaration
+)DeclarationExternalDeclaration
+(DeclarationExternalDeclaration
+(TypeAndInitDeclaration
+(FullySpecifiedType
+(BuiltinNumericTypeSpecifier
+- Type U64VEC3
+)BuiltinNumericTypeSpecifier
+)FullySpecifiedType
+(DeclarationMember
+(Identifier)
+- String g3
+(ExpressionInitializer
+(FunctionCallExpression
+(BuiltinNumericTypeSpecifier
+- Type U64VEC3
+)BuiltinNumericTypeSpecifier
+(LiteralExpression
+- Type INT32
+- Integer 1
+- IntegerFormat DECIMAL
+)LiteralExpression
+(LiteralExpression
+- Type INT32
+- Integer 2
+- IntegerFormat DECIMAL
+)LiteralExpression
+(LiteralExpression
+- Type INT32
+- Integer 3
+- IntegerFormat DECIMAL
+)LiteralExpression
+)FunctionCallExpression
+)ExpressionInitializer
+)DeclarationMember
+)TypeAndInitDeclaration
+)DeclarationExternalDeclaration
+(DeclarationExternalDeclaration
+(TypeAndInitDeclaration
+(FullySpecifiedType
+(BuiltinNumericTypeSpecifier
+- Type I32VEC3
+)BuiltinNumericTypeSpecifier
+)FullySpecifiedType
+(DeclarationMember
+(Identifier)
+- String g4
+(ExpressionInitializer
+(FunctionCallExpression
+(BuiltinNumericTypeSpecifier
+- Type I32VEC3
+)BuiltinNumericTypeSpecifier
+(LiteralExpression
+- Type INT32
+- Integer 1
+- IntegerFormat DECIMAL
+)LiteralExpression
+(LiteralExpression
+- Type INT32
+- Integer 2
+- IntegerFormat DECIMAL
+)LiteralExpression
+(LiteralExpression
+- Type INT32
+- Integer 3
+- IntegerFormat DECIMAL
+)LiteralExpression
+)FunctionCallExpression
+)ExpressionInitializer
+)DeclarationMember
+)TypeAndInitDeclaration
+)DeclarationExternalDeclaration
+(DeclarationExternalDeclaration
+(TypeAndInitDeclaration
+(FullySpecifiedType
+(BuiltinNumericTypeSpecifier
+- Type U8VEC2
+)BuiltinNumericTypeSpecifier
+)FullySpecifiedType
+(DeclarationMember
+(Identifier)
+- String g5
+(ExpressionInitializer
+(FunctionCallExpression
+(BuiltinNumericTypeSpecifier
+- Type U8VEC2
+)BuiltinNumericTypeSpecifier
+(LiteralExpression
+- Type INT32
+- Integer 1
+- IntegerFormat DECIMAL
+)LiteralExpression
+(LiteralExpression
+- Type INT32
+- Integer 2
+- IntegerFormat DECIMAL
+)LiteralExpression
+)FunctionCallExpression
+)ExpressionInitializer
+)DeclarationMember
+)TypeAndInitDeclaration
+)DeclarationExternalDeclaration
+(DeclarationExternalDeclaration
+(TypeAndInitDeclaration
+(FullySpecifiedType
+(BuiltinNumericTypeSpecifier
+- Type U32VEC2
+)BuiltinNumericTypeSpecifier
+)FullySpecifiedType
+(DeclarationMember
+(Identifier)
+- String g8
+(ExpressionInitializer
+(FunctionCallExpression
+(BuiltinNumericTypeSpecifier
+- Type U32VEC2
+)BuiltinNumericTypeSpecifier
+(LiteralExpression
+- Type INT32
+- Integer 1
+- IntegerFormat DECIMAL
+)LiteralExpression
+(LiteralExpression
+- Type INT32
+- Integer 2
+- IntegerFormat DECIMAL
+)LiteralExpression
+)FunctionCallExpression
+)ExpressionInitializer
+)DeclarationMember
+)TypeAndInitDeclaration
+)DeclarationExternalDeclaration
+(DeclarationExternalDeclaration
+(TypeAndInitDeclaration
+(FullySpecifiedType
+(BuiltinNumericTypeSpecifier
+- Type U16VEC4
+)BuiltinNumericTypeSpecifier
+)FullySpecifiedType
+(DeclarationMember
+(Identifier)
+- String g6
+(ExpressionInitializer
+(FunctionCallExpression
+(BuiltinNumericTypeSpecifier
+- Type U16VEC4
+)BuiltinNumericTypeSpecifier
+(LiteralExpression
+- Type INT32
+- Integer 1
+- IntegerFormat DECIMAL
+)LiteralExpression
+(LiteralExpression
+- Type INT32
+- Integer 2
+- IntegerFormat DECIMAL
+)LiteralExpression
+)FunctionCallExpression
+)ExpressionInitializer
+)DeclarationMember
+)TypeAndInitDeclaration
+)DeclarationExternalDeclaration
+)TranslationUnit
+
+]
+
+
 testASTTree[translationUnit_SCpcVbJwv5Y73x+iWRcLdtyBIoM=]=[
 int foo2(float a, vec3 b, out int r) {
 	r = int(3.0f * a);
@@ -13207,1085 +14451,6 @@ void functionDef(const in float param) {
 )ExpressionStatement
 )CompoundStatement
 )FunctionDefinition
-)TranslationUnit
-
-]
-
-
-testASTTree[translationUnit_yWUfNgSefBc1wwqwcA14YXSEB4g=]=[
-float f1 = 1.0;
-float f2 = 2.;
-float f3 = 3e0;
-float f4 = 40e-1;
-float f5 = 05.;
-float f6 = 006.;
-float f7 = .7e1;
-float f8 = 08e0;
-float f9 = .9e+1;
-float f10 = 10.0;
-float f11 = .011e+3;
-float f12 = .0012e4;
-float f543 = 000000543.;
-float f6789 = 00006789.;
-float f88 = 0000088.;
-float g1 = 5.3876e4;
-float g2 = 4000000000e-11;
-float g3 = 1e+5;
-float g4 = 7.321E-3;
-float g5 = 3.2E+4;
-float g6 = 0.5e-5;
-float g7 = 0.45;
-float g8 = 6.e10;
-double gf1 = 1.0lf;
-double gf2 = 2.Lf;
-double gf3 = .3e1lF;
-double gf4 = .4e1LF;
-float gf5 = 5.f;
-float gf6 = 6.F;
-int h0 = 0x0;
-int h00 = 0x00;
-int h000 = 0x000;
-int h1 = 0x1;
-int h2 = 0x00000002;
-int h300 = 0x000300;
-int hABCDEF = 0xAbCdEF;
-int hFFFFFFFF = 0xFFFFFFFF;
-int h12345678 = 0xBC614E;
-int hToBeOrNotToBe = 0x2b | ~0x2B;
-uint uh0 = 0x0u;
-uint uhg = (0xcu);
-uint uh000 = 0x000u;
-uint uh1 = 0x1u;
-uint uh2 = 0x00000002u;
-uint uh300 = 0x000300u;
-uint uhABCDEF = 0xAbCdEFu;
-uint uhFFFFFFFF = 0xFFFFFFFFu;
-uint uh12345678 = 0xBC614Eu;
-uint uhToBeOrNotToBe = 0x2bu | ~0x2BU;
-layout(location = 0x7u) out vec4 c7;
-uint g2 = 4294967295u;
-<><><><><><><><><><><><><><><><><><><><><><><><><>
-(TranslationUnit
-(DeclarationExternalDeclaration
-(TypeAndInitDeclaration
-(FullySpecifiedType
-(BuiltinNumericTypeSpecifier
-- Type FLOAT32
-)BuiltinNumericTypeSpecifier
-)FullySpecifiedType
-(DeclarationMember
-(Identifier)
-- String f1
-(ExpressionInitializer
-(LiteralExpression
-- Type FLOAT32
-- Float 1.0
-)LiteralExpression
-)ExpressionInitializer
-)DeclarationMember
-)TypeAndInitDeclaration
-)DeclarationExternalDeclaration
-(DeclarationExternalDeclaration
-(TypeAndInitDeclaration
-(FullySpecifiedType
-(BuiltinNumericTypeSpecifier
-- Type FLOAT32
-)BuiltinNumericTypeSpecifier
-)FullySpecifiedType
-(DeclarationMember
-(Identifier)
-- String f2
-(ExpressionInitializer
-(LiteralExpression
-- Type FLOAT32
-- Float 2.0
-)LiteralExpression
-)ExpressionInitializer
-)DeclarationMember
-)TypeAndInitDeclaration
-)DeclarationExternalDeclaration
-(DeclarationExternalDeclaration
-(TypeAndInitDeclaration
-(FullySpecifiedType
-(BuiltinNumericTypeSpecifier
-- Type FLOAT32
-)BuiltinNumericTypeSpecifier
-)FullySpecifiedType
-(DeclarationMember
-(Identifier)
-- String f3
-(ExpressionInitializer
-(LiteralExpression
-- Type FLOAT32
-- Float 3.0
-)LiteralExpression
-)ExpressionInitializer
-)DeclarationMember
-)TypeAndInitDeclaration
-)DeclarationExternalDeclaration
-(DeclarationExternalDeclaration
-(TypeAndInitDeclaration
-(FullySpecifiedType
-(BuiltinNumericTypeSpecifier
-- Type FLOAT32
-)BuiltinNumericTypeSpecifier
-)FullySpecifiedType
-(DeclarationMember
-(Identifier)
-- String f4
-(ExpressionInitializer
-(LiteralExpression
-- Type FLOAT32
-- Float 4.0
-)LiteralExpression
-)ExpressionInitializer
-)DeclarationMember
-)TypeAndInitDeclaration
-)DeclarationExternalDeclaration
-(DeclarationExternalDeclaration
-(TypeAndInitDeclaration
-(FullySpecifiedType
-(BuiltinNumericTypeSpecifier
-- Type FLOAT32
-)BuiltinNumericTypeSpecifier
-)FullySpecifiedType
-(DeclarationMember
-(Identifier)
-- String f5
-(ExpressionInitializer
-(LiteralExpression
-- Type FLOAT32
-- Float 5.0
-)LiteralExpression
-)ExpressionInitializer
-)DeclarationMember
-)TypeAndInitDeclaration
-)DeclarationExternalDeclaration
-(DeclarationExternalDeclaration
-(TypeAndInitDeclaration
-(FullySpecifiedType
-(BuiltinNumericTypeSpecifier
-- Type FLOAT32
-)BuiltinNumericTypeSpecifier
-)FullySpecifiedType
-(DeclarationMember
-(Identifier)
-- String f6
-(ExpressionInitializer
-(LiteralExpression
-- Type FLOAT32
-- Float 6.0
-)LiteralExpression
-)ExpressionInitializer
-)DeclarationMember
-)TypeAndInitDeclaration
-)DeclarationExternalDeclaration
-(DeclarationExternalDeclaration
-(TypeAndInitDeclaration
-(FullySpecifiedType
-(BuiltinNumericTypeSpecifier
-- Type FLOAT32
-)BuiltinNumericTypeSpecifier
-)FullySpecifiedType
-(DeclarationMember
-(Identifier)
-- String f7
-(ExpressionInitializer
-(LiteralExpression
-- Type FLOAT32
-- Float 7.0
-)LiteralExpression
-)ExpressionInitializer
-)DeclarationMember
-)TypeAndInitDeclaration
-)DeclarationExternalDeclaration
-(DeclarationExternalDeclaration
-(TypeAndInitDeclaration
-(FullySpecifiedType
-(BuiltinNumericTypeSpecifier
-- Type FLOAT32
-)BuiltinNumericTypeSpecifier
-)FullySpecifiedType
-(DeclarationMember
-(Identifier)
-- String f8
-(ExpressionInitializer
-(LiteralExpression
-- Type FLOAT32
-- Float 8.0
-)LiteralExpression
-)ExpressionInitializer
-)DeclarationMember
-)TypeAndInitDeclaration
-)DeclarationExternalDeclaration
-(DeclarationExternalDeclaration
-(TypeAndInitDeclaration
-(FullySpecifiedType
-(BuiltinNumericTypeSpecifier
-- Type FLOAT32
-)BuiltinNumericTypeSpecifier
-)FullySpecifiedType
-(DeclarationMember
-(Identifier)
-- String f9
-(ExpressionInitializer
-(LiteralExpression
-- Type FLOAT32
-- Float 9.0
-)LiteralExpression
-)ExpressionInitializer
-)DeclarationMember
-)TypeAndInitDeclaration
-)DeclarationExternalDeclaration
-(DeclarationExternalDeclaration
-(TypeAndInitDeclaration
-(FullySpecifiedType
-(BuiltinNumericTypeSpecifier
-- Type FLOAT32
-)BuiltinNumericTypeSpecifier
-)FullySpecifiedType
-(DeclarationMember
-(Identifier)
-- String f10
-(ExpressionInitializer
-(LiteralExpression
-- Type FLOAT32
-- Float 10.0
-)LiteralExpression
-)ExpressionInitializer
-)DeclarationMember
-)TypeAndInitDeclaration
-)DeclarationExternalDeclaration
-(DeclarationExternalDeclaration
-(TypeAndInitDeclaration
-(FullySpecifiedType
-(BuiltinNumericTypeSpecifier
-- Type FLOAT32
-)BuiltinNumericTypeSpecifier
-)FullySpecifiedType
-(DeclarationMember
-(Identifier)
-- String f11
-(ExpressionInitializer
-(LiteralExpression
-- Type FLOAT32
-- Float 11.0
-)LiteralExpression
-)ExpressionInitializer
-)DeclarationMember
-)TypeAndInitDeclaration
-)DeclarationExternalDeclaration
-(DeclarationExternalDeclaration
-(TypeAndInitDeclaration
-(FullySpecifiedType
-(BuiltinNumericTypeSpecifier
-- Type FLOAT32
-)BuiltinNumericTypeSpecifier
-)FullySpecifiedType
-(DeclarationMember
-(Identifier)
-- String f12
-(ExpressionInitializer
-(LiteralExpression
-- Type FLOAT32
-- Float 12.0
-)LiteralExpression
-)ExpressionInitializer
-)DeclarationMember
-)TypeAndInitDeclaration
-)DeclarationExternalDeclaration
-(DeclarationExternalDeclaration
-(TypeAndInitDeclaration
-(FullySpecifiedType
-(BuiltinNumericTypeSpecifier
-- Type FLOAT32
-)BuiltinNumericTypeSpecifier
-)FullySpecifiedType
-(DeclarationMember
-(Identifier)
-- String f543
-(ExpressionInitializer
-(LiteralExpression
-- Type FLOAT32
-- Float 543.0
-)LiteralExpression
-)ExpressionInitializer
-)DeclarationMember
-)TypeAndInitDeclaration
-)DeclarationExternalDeclaration
-(DeclarationExternalDeclaration
-(TypeAndInitDeclaration
-(FullySpecifiedType
-(BuiltinNumericTypeSpecifier
-- Type FLOAT32
-)BuiltinNumericTypeSpecifier
-)FullySpecifiedType
-(DeclarationMember
-(Identifier)
-- String f6789
-(ExpressionInitializer
-(LiteralExpression
-- Type FLOAT32
-- Float 6789.0
-)LiteralExpression
-)ExpressionInitializer
-)DeclarationMember
-)TypeAndInitDeclaration
-)DeclarationExternalDeclaration
-(DeclarationExternalDeclaration
-(TypeAndInitDeclaration
-(FullySpecifiedType
-(BuiltinNumericTypeSpecifier
-- Type FLOAT32
-)BuiltinNumericTypeSpecifier
-)FullySpecifiedType
-(DeclarationMember
-(Identifier)
-- String f88
-(ExpressionInitializer
-(LiteralExpression
-- Type FLOAT32
-- Float 88.0
-)LiteralExpression
-)ExpressionInitializer
-)DeclarationMember
-)TypeAndInitDeclaration
-)DeclarationExternalDeclaration
-(DeclarationExternalDeclaration
-(TypeAndInitDeclaration
-(FullySpecifiedType
-(BuiltinNumericTypeSpecifier
-- Type FLOAT32
-)BuiltinNumericTypeSpecifier
-)FullySpecifiedType
-(DeclarationMember
-(Identifier)
-- String g1
-(ExpressionInitializer
-(LiteralExpression
-- Type FLOAT32
-- Float 53876.0
-)LiteralExpression
-)ExpressionInitializer
-)DeclarationMember
-)TypeAndInitDeclaration
-)DeclarationExternalDeclaration
-(DeclarationExternalDeclaration
-(TypeAndInitDeclaration
-(FullySpecifiedType
-(BuiltinNumericTypeSpecifier
-- Type FLOAT32
-)BuiltinNumericTypeSpecifier
-)FullySpecifiedType
-(DeclarationMember
-(Identifier)
-- String g2
-(ExpressionInitializer
-(LiteralExpression
-- Type FLOAT32
-- Float 0.04
-)LiteralExpression
-)ExpressionInitializer
-)DeclarationMember
-)TypeAndInitDeclaration
-)DeclarationExternalDeclaration
-(DeclarationExternalDeclaration
-(TypeAndInitDeclaration
-(FullySpecifiedType
-(BuiltinNumericTypeSpecifier
-- Type FLOAT32
-)BuiltinNumericTypeSpecifier
-)FullySpecifiedType
-(DeclarationMember
-(Identifier)
-- String g3
-(ExpressionInitializer
-(LiteralExpression
-- Type FLOAT32
-- Float 100000.0
-)LiteralExpression
-)ExpressionInitializer
-)DeclarationMember
-)TypeAndInitDeclaration
-)DeclarationExternalDeclaration
-(DeclarationExternalDeclaration
-(TypeAndInitDeclaration
-(FullySpecifiedType
-(BuiltinNumericTypeSpecifier
-- Type FLOAT32
-)BuiltinNumericTypeSpecifier
-)FullySpecifiedType
-(DeclarationMember
-(Identifier)
-- String g4
-(ExpressionInitializer
-(LiteralExpression
-- Type FLOAT32
-- Float 0.007321
-)LiteralExpression
-)ExpressionInitializer
-)DeclarationMember
-)TypeAndInitDeclaration
-)DeclarationExternalDeclaration
-(DeclarationExternalDeclaration
-(TypeAndInitDeclaration
-(FullySpecifiedType
-(BuiltinNumericTypeSpecifier
-- Type FLOAT32
-)BuiltinNumericTypeSpecifier
-)FullySpecifiedType
-(DeclarationMember
-(Identifier)
-- String g5
-(ExpressionInitializer
-(LiteralExpression
-- Type FLOAT32
-- Float 32000.0
-)LiteralExpression
-)ExpressionInitializer
-)DeclarationMember
-)TypeAndInitDeclaration
-)DeclarationExternalDeclaration
-(DeclarationExternalDeclaration
-(TypeAndInitDeclaration
-(FullySpecifiedType
-(BuiltinNumericTypeSpecifier
-- Type FLOAT32
-)BuiltinNumericTypeSpecifier
-)FullySpecifiedType
-(DeclarationMember
-(Identifier)
-- String g6
-(ExpressionInitializer
-(LiteralExpression
-- Type FLOAT32
-- Float 5.0E-6
-)LiteralExpression
-)ExpressionInitializer
-)DeclarationMember
-)TypeAndInitDeclaration
-)DeclarationExternalDeclaration
-(DeclarationExternalDeclaration
-(TypeAndInitDeclaration
-(FullySpecifiedType
-(BuiltinNumericTypeSpecifier
-- Type FLOAT32
-)BuiltinNumericTypeSpecifier
-)FullySpecifiedType
-(DeclarationMember
-(Identifier)
-- String g7
-(ExpressionInitializer
-(LiteralExpression
-- Type FLOAT32
-- Float 0.45
-)LiteralExpression
-)ExpressionInitializer
-)DeclarationMember
-)TypeAndInitDeclaration
-)DeclarationExternalDeclaration
-(DeclarationExternalDeclaration
-(TypeAndInitDeclaration
-(FullySpecifiedType
-(BuiltinNumericTypeSpecifier
-- Type FLOAT32
-)BuiltinNumericTypeSpecifier
-)FullySpecifiedType
-(DeclarationMember
-(Identifier)
-- String g8
-(ExpressionInitializer
-(LiteralExpression
-- Type FLOAT32
-- Float 6.0000002E10
-)LiteralExpression
-)ExpressionInitializer
-)DeclarationMember
-)TypeAndInitDeclaration
-)DeclarationExternalDeclaration
-(DeclarationExternalDeclaration
-(TypeAndInitDeclaration
-(FullySpecifiedType
-(BuiltinNumericTypeSpecifier
-- Type FLOAT64
-)BuiltinNumericTypeSpecifier
-)FullySpecifiedType
-(DeclarationMember
-(Identifier)
-- String gf1
-(ExpressionInitializer
-(LiteralExpression
-- Type FLOAT64
-- Double 1.0
-)LiteralExpression
-)ExpressionInitializer
-)DeclarationMember
-)TypeAndInitDeclaration
-)DeclarationExternalDeclaration
-(DeclarationExternalDeclaration
-(TypeAndInitDeclaration
-(FullySpecifiedType
-(BuiltinNumericTypeSpecifier
-- Type FLOAT64
-)BuiltinNumericTypeSpecifier
-)FullySpecifiedType
-(DeclarationMember
-(Identifier)
-- String gf2
-(ExpressionInitializer
-(LiteralExpression
-- Type FLOAT64
-- Double 2.0
-)LiteralExpression
-)ExpressionInitializer
-)DeclarationMember
-)TypeAndInitDeclaration
-)DeclarationExternalDeclaration
-(DeclarationExternalDeclaration
-(TypeAndInitDeclaration
-(FullySpecifiedType
-(BuiltinNumericTypeSpecifier
-- Type FLOAT64
-)BuiltinNumericTypeSpecifier
-)FullySpecifiedType
-(DeclarationMember
-(Identifier)
-- String gf3
-(ExpressionInitializer
-(LiteralExpression
-- Type FLOAT64
-- Double 3.0
-)LiteralExpression
-)ExpressionInitializer
-)DeclarationMember
-)TypeAndInitDeclaration
-)DeclarationExternalDeclaration
-(DeclarationExternalDeclaration
-(TypeAndInitDeclaration
-(FullySpecifiedType
-(BuiltinNumericTypeSpecifier
-- Type FLOAT64
-)BuiltinNumericTypeSpecifier
-)FullySpecifiedType
-(DeclarationMember
-(Identifier)
-- String gf4
-(ExpressionInitializer
-(LiteralExpression
-- Type FLOAT64
-- Double 4.0
-)LiteralExpression
-)ExpressionInitializer
-)DeclarationMember
-)TypeAndInitDeclaration
-)DeclarationExternalDeclaration
-(DeclarationExternalDeclaration
-(TypeAndInitDeclaration
-(FullySpecifiedType
-(BuiltinNumericTypeSpecifier
-- Type FLOAT32
-)BuiltinNumericTypeSpecifier
-)FullySpecifiedType
-(DeclarationMember
-(Identifier)
-- String gf5
-(ExpressionInitializer
-(LiteralExpression
-- Type FLOAT32
-- Float 5.0
-)LiteralExpression
-)ExpressionInitializer
-)DeclarationMember
-)TypeAndInitDeclaration
-)DeclarationExternalDeclaration
-(DeclarationExternalDeclaration
-(TypeAndInitDeclaration
-(FullySpecifiedType
-(BuiltinNumericTypeSpecifier
-- Type FLOAT32
-)BuiltinNumericTypeSpecifier
-)FullySpecifiedType
-(DeclarationMember
-(Identifier)
-- String gf6
-(ExpressionInitializer
-(LiteralExpression
-- Type FLOAT32
-- Float 6.0
-)LiteralExpression
-)ExpressionInitializer
-)DeclarationMember
-)TypeAndInitDeclaration
-)DeclarationExternalDeclaration
-(DeclarationExternalDeclaration
-(TypeAndInitDeclaration
-(FullySpecifiedType
-(BuiltinNumericTypeSpecifier
-- Type INT32
-)BuiltinNumericTypeSpecifier
-)FullySpecifiedType
-(DeclarationMember
-(Identifier)
-- String h0
-(ExpressionInitializer
-(LiteralExpression
-- Type INT32
-- Integer 0
-- IntegerFormat HEXADECIMAL
-)LiteralExpression
-)ExpressionInitializer
-)DeclarationMember
-)TypeAndInitDeclaration
-)DeclarationExternalDeclaration
-(DeclarationExternalDeclaration
-(TypeAndInitDeclaration
-(FullySpecifiedType
-(BuiltinNumericTypeSpecifier
-- Type INT32
-)BuiltinNumericTypeSpecifier
-)FullySpecifiedType
-(DeclarationMember
-(Identifier)
-- String h00
-(ExpressionInitializer
-(LiteralExpression
-- Type INT32
-- Integer 0
-- IntegerFormat HEXADECIMAL
-)LiteralExpression
-)ExpressionInitializer
-)DeclarationMember
-)TypeAndInitDeclaration
-)DeclarationExternalDeclaration
-(DeclarationExternalDeclaration
-(TypeAndInitDeclaration
-(FullySpecifiedType
-(BuiltinNumericTypeSpecifier
-- Type INT32
-)BuiltinNumericTypeSpecifier
-)FullySpecifiedType
-(DeclarationMember
-(Identifier)
-- String h000
-(ExpressionInitializer
-(LiteralExpression
-- Type INT32
-- Integer 0
-- IntegerFormat HEXADECIMAL
-)LiteralExpression
-)ExpressionInitializer
-)DeclarationMember
-)TypeAndInitDeclaration
-)DeclarationExternalDeclaration
-(DeclarationExternalDeclaration
-(TypeAndInitDeclaration
-(FullySpecifiedType
-(BuiltinNumericTypeSpecifier
-- Type INT32
-)BuiltinNumericTypeSpecifier
-)FullySpecifiedType
-(DeclarationMember
-(Identifier)
-- String h1
-(ExpressionInitializer
-(LiteralExpression
-- Type INT32
-- Integer 1
-- IntegerFormat HEXADECIMAL
-)LiteralExpression
-)ExpressionInitializer
-)DeclarationMember
-)TypeAndInitDeclaration
-)DeclarationExternalDeclaration
-(DeclarationExternalDeclaration
-(TypeAndInitDeclaration
-(FullySpecifiedType
-(BuiltinNumericTypeSpecifier
-- Type INT32
-)BuiltinNumericTypeSpecifier
-)FullySpecifiedType
-(DeclarationMember
-(Identifier)
-- String h2
-(ExpressionInitializer
-(LiteralExpression
-- Type INT32
-- Integer 2
-- IntegerFormat HEXADECIMAL
-)LiteralExpression
-)ExpressionInitializer
-)DeclarationMember
-)TypeAndInitDeclaration
-)DeclarationExternalDeclaration
-(DeclarationExternalDeclaration
-(TypeAndInitDeclaration
-(FullySpecifiedType
-(BuiltinNumericTypeSpecifier
-- Type INT32
-)BuiltinNumericTypeSpecifier
-)FullySpecifiedType
-(DeclarationMember
-(Identifier)
-- String h300
-(ExpressionInitializer
-(LiteralExpression
-- Type INT32
-- Integer 768
-- IntegerFormat HEXADECIMAL
-)LiteralExpression
-)ExpressionInitializer
-)DeclarationMember
-)TypeAndInitDeclaration
-)DeclarationExternalDeclaration
-(DeclarationExternalDeclaration
-(TypeAndInitDeclaration
-(FullySpecifiedType
-(BuiltinNumericTypeSpecifier
-- Type INT32
-)BuiltinNumericTypeSpecifier
-)FullySpecifiedType
-(DeclarationMember
-(Identifier)
-- String hABCDEF
-(ExpressionInitializer
-(LiteralExpression
-- Type INT32
-- Integer 11259375
-- IntegerFormat HEXADECIMAL
-)LiteralExpression
-)ExpressionInitializer
-)DeclarationMember
-)TypeAndInitDeclaration
-)DeclarationExternalDeclaration
-(DeclarationExternalDeclaration
-(TypeAndInitDeclaration
-(FullySpecifiedType
-(BuiltinNumericTypeSpecifier
-- Type INT32
-)BuiltinNumericTypeSpecifier
-)FullySpecifiedType
-(DeclarationMember
-(Identifier)
-- String hFFFFFFFF
-(ExpressionInitializer
-(LiteralExpression
-- Type INT32
-- Integer -1
-- IntegerFormat HEXADECIMAL
-)LiteralExpression
-)ExpressionInitializer
-)DeclarationMember
-)TypeAndInitDeclaration
-)DeclarationExternalDeclaration
-(DeclarationExternalDeclaration
-(TypeAndInitDeclaration
-(FullySpecifiedType
-(BuiltinNumericTypeSpecifier
-- Type INT32
-)BuiltinNumericTypeSpecifier
-)FullySpecifiedType
-(DeclarationMember
-(Identifier)
-- String h12345678
-(ExpressionInitializer
-(LiteralExpression
-- Type INT32
-- Integer 12345678
-- IntegerFormat HEXADECIMAL
-)LiteralExpression
-)ExpressionInitializer
-)DeclarationMember
-)TypeAndInitDeclaration
-)DeclarationExternalDeclaration
-(DeclarationExternalDeclaration
-(TypeAndInitDeclaration
-(FullySpecifiedType
-(BuiltinNumericTypeSpecifier
-- Type INT32
-)BuiltinNumericTypeSpecifier
-)FullySpecifiedType
-(DeclarationMember
-(Identifier)
-- String hToBeOrNotToBe
-(ExpressionInitializer
-(BitwiseOrExpression
-(LiteralExpression
-- Type INT32
-- Integer 43
-- IntegerFormat HEXADECIMAL
-)LiteralExpression
-(BitwiseNotExpression
-(LiteralExpression
-- Type INT32
-- Integer 43
-- IntegerFormat HEXADECIMAL
-)LiteralExpression
-)BitwiseNotExpression
-)BitwiseOrExpression
-)ExpressionInitializer
-)DeclarationMember
-)TypeAndInitDeclaration
-)DeclarationExternalDeclaration
-(DeclarationExternalDeclaration
-(TypeAndInitDeclaration
-(FullySpecifiedType
-(BuiltinNumericTypeSpecifier
-- Type UINT32
-)BuiltinNumericTypeSpecifier
-)FullySpecifiedType
-(DeclarationMember
-(Identifier)
-- String uh0
-(ExpressionInitializer
-(LiteralExpression
-- Type UINT32
-- Integer 0
-- IntegerFormat HEXADECIMAL
-)LiteralExpression
-)ExpressionInitializer
-)DeclarationMember
-)TypeAndInitDeclaration
-)DeclarationExternalDeclaration
-(DeclarationExternalDeclaration
-(TypeAndInitDeclaration
-(FullySpecifiedType
-(BuiltinNumericTypeSpecifier
-- Type UINT32
-)BuiltinNumericTypeSpecifier
-)FullySpecifiedType
-(DeclarationMember
-(Identifier)
-- String uhg
-(ExpressionInitializer
-(GroupingExpression
-(LiteralExpression
-- Type UINT32
-- Integer 12
-- IntegerFormat HEXADECIMAL
-)LiteralExpression
-)GroupingExpression
-)ExpressionInitializer
-)DeclarationMember
-)TypeAndInitDeclaration
-)DeclarationExternalDeclaration
-(DeclarationExternalDeclaration
-(TypeAndInitDeclaration
-(FullySpecifiedType
-(BuiltinNumericTypeSpecifier
-- Type UINT32
-)BuiltinNumericTypeSpecifier
-)FullySpecifiedType
-(DeclarationMember
-(Identifier)
-- String uh000
-(ExpressionInitializer
-(LiteralExpression
-- Type UINT32
-- Integer 0
-- IntegerFormat HEXADECIMAL
-)LiteralExpression
-)ExpressionInitializer
-)DeclarationMember
-)TypeAndInitDeclaration
-)DeclarationExternalDeclaration
-(DeclarationExternalDeclaration
-(TypeAndInitDeclaration
-(FullySpecifiedType
-(BuiltinNumericTypeSpecifier
-- Type UINT32
-)BuiltinNumericTypeSpecifier
-)FullySpecifiedType
-(DeclarationMember
-(Identifier)
-- String uh1
-(ExpressionInitializer
-(LiteralExpression
-- Type UINT32
-- Integer 1
-- IntegerFormat HEXADECIMAL
-)LiteralExpression
-)ExpressionInitializer
-)DeclarationMember
-)TypeAndInitDeclaration
-)DeclarationExternalDeclaration
-(DeclarationExternalDeclaration
-(TypeAndInitDeclaration
-(FullySpecifiedType
-(BuiltinNumericTypeSpecifier
-- Type UINT32
-)BuiltinNumericTypeSpecifier
-)FullySpecifiedType
-(DeclarationMember
-(Identifier)
-- String uh2
-(ExpressionInitializer
-(LiteralExpression
-- Type UINT32
-- Integer 2
-- IntegerFormat HEXADECIMAL
-)LiteralExpression
-)ExpressionInitializer
-)DeclarationMember
-)TypeAndInitDeclaration
-)DeclarationExternalDeclaration
-(DeclarationExternalDeclaration
-(TypeAndInitDeclaration
-(FullySpecifiedType
-(BuiltinNumericTypeSpecifier
-- Type UINT32
-)BuiltinNumericTypeSpecifier
-)FullySpecifiedType
-(DeclarationMember
-(Identifier)
-- String uh300
-(ExpressionInitializer
-(LiteralExpression
-- Type UINT32
-- Integer 768
-- IntegerFormat HEXADECIMAL
-)LiteralExpression
-)ExpressionInitializer
-)DeclarationMember
-)TypeAndInitDeclaration
-)DeclarationExternalDeclaration
-(DeclarationExternalDeclaration
-(TypeAndInitDeclaration
-(FullySpecifiedType
-(BuiltinNumericTypeSpecifier
-- Type UINT32
-)BuiltinNumericTypeSpecifier
-)FullySpecifiedType
-(DeclarationMember
-(Identifier)
-- String uhABCDEF
-(ExpressionInitializer
-(LiteralExpression
-- Type UINT32
-- Integer 11259375
-- IntegerFormat HEXADECIMAL
-)LiteralExpression
-)ExpressionInitializer
-)DeclarationMember
-)TypeAndInitDeclaration
-)DeclarationExternalDeclaration
-(DeclarationExternalDeclaration
-(TypeAndInitDeclaration
-(FullySpecifiedType
-(BuiltinNumericTypeSpecifier
-- Type UINT32
-)BuiltinNumericTypeSpecifier
-)FullySpecifiedType
-(DeclarationMember
-(Identifier)
-- String uhFFFFFFFF
-(ExpressionInitializer
-(LiteralExpression
-- Type UINT32
-- Integer -1
-- IntegerFormat HEXADECIMAL
-)LiteralExpression
-)ExpressionInitializer
-)DeclarationMember
-)TypeAndInitDeclaration
-)DeclarationExternalDeclaration
-(DeclarationExternalDeclaration
-(TypeAndInitDeclaration
-(FullySpecifiedType
-(BuiltinNumericTypeSpecifier
-- Type UINT32
-)BuiltinNumericTypeSpecifier
-)FullySpecifiedType
-(DeclarationMember
-(Identifier)
-- String uh12345678
-(ExpressionInitializer
-(LiteralExpression
-- Type UINT32
-- Integer 12345678
-- IntegerFormat HEXADECIMAL
-)LiteralExpression
-)ExpressionInitializer
-)DeclarationMember
-)TypeAndInitDeclaration
-)DeclarationExternalDeclaration
-(DeclarationExternalDeclaration
-(TypeAndInitDeclaration
-(FullySpecifiedType
-(BuiltinNumericTypeSpecifier
-- Type UINT32
-)BuiltinNumericTypeSpecifier
-)FullySpecifiedType
-(DeclarationMember
-(Identifier)
-- String uhToBeOrNotToBe
-(ExpressionInitializer
-(BitwiseOrExpression
-(LiteralExpression
-- Type UINT32
-- Integer 43
-- IntegerFormat HEXADECIMAL
-)LiteralExpression
-(BitwiseNotExpression
-(LiteralExpression
-- Type UINT32
-- Integer 43
-- IntegerFormat HEXADECIMAL
-)LiteralExpression
-)BitwiseNotExpression
-)BitwiseOrExpression
-)ExpressionInitializer
-)DeclarationMember
-)TypeAndInitDeclaration
-)DeclarationExternalDeclaration
-(DeclarationExternalDeclaration
-(TypeAndInitDeclaration
-(FullySpecifiedType
-(TypeQualifier
-(LayoutQualifier
-(NamedLayoutQualifierPart
-(Identifier)
-- String location
-(LiteralExpression
-- Type UINT32
-- Integer 7
-- IntegerFormat HEXADECIMAL
-)LiteralExpression
-)NamedLayoutQualifierPart
-)LayoutQualifier
-(StorageQualifier
-- StorageType OUT
-)StorageQualifier
-)TypeQualifier
-(BuiltinNumericTypeSpecifier
-- Type F32VEC4
-)BuiltinNumericTypeSpecifier
-)FullySpecifiedType
-(DeclarationMember
-(Identifier)
-- String c7
-)DeclarationMember
-)TypeAndInitDeclaration
-)DeclarationExternalDeclaration
-(DeclarationExternalDeclaration
-(TypeAndInitDeclaration
-(FullySpecifiedType
-(BuiltinNumericTypeSpecifier
-- Type UINT32
-)BuiltinNumericTypeSpecifier
-)FullySpecifiedType
-(DeclarationMember
-(Identifier)
-- String g2
-(ExpressionInitializer
-(LiteralExpression
-- Type UINT32
-- Integer -1
-- IntegerFormat DECIMAL
-)LiteralExpression
-)ExpressionInitializer
-)DeclarationMember
-)TypeAndInitDeclaration
-)DeclarationExternalDeclaration
 )TranslationUnit
 
 ]
