@@ -41,6 +41,14 @@ public class SingleASTTransformerTest extends TestWithSingleASTTransformer {
   }
 
   @Test
+  void testTransformLineDirective() {
+    p.setTransformation((tree, root) -> {});
+    p.setParseLineDirectives(true);
+    p.setPrintType(PrintType.INDENTED_ANNOTATED);
+    assertEquals("#line 1\nint a;\n", p.transform("#line 1\nint a;\n"));
+  }
+
+  @Test
   void testIdentifierQuery() {
     p.setRootSupplier(RootSupplier.PREFIX_UNORDERED);
     p.setTransformation((tree, root) -> {

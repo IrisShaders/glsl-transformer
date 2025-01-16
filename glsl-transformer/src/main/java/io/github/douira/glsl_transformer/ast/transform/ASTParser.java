@@ -163,9 +163,9 @@ public class ASTParser implements ParserInterface {
         parseShape.ruleType,
         () -> {
           try {
+            var parsed = parser.parse(input, parseShape);
             setBuilderTokenStream();
-            return ASTBuilder.build(new EmptyRoot(),
-                parser.parse(input, parseShape), parseShape.visitMethod);
+            return ASTBuilder.build(new EmptyRoot(), parsed, parseShape.visitMethod);
           } finally {
             unsetBuilderTokenStream();
           }
@@ -181,9 +181,9 @@ public class ASTParser implements ParserInterface {
         || astCacheStrategy == ASTCacheStrategy.ALL_EXCLUDING_TRANSLATION_UNIT
             && parseShape.ruleType == TranslationUnitContext.class) {
       try {
+        var parsed = parser.parse(input, parseShape);
         setBuilderTokenStream();
-        return ASTBuilder.buildSubtree(
-            rootInstance, parser.parse(input, parseShape), parseShape.visitMethod);
+        return ASTBuilder.buildSubtree(rootInstance, parsed, parseShape.visitMethod);
       } finally {
         unsetBuilderTokenStream();
       }
