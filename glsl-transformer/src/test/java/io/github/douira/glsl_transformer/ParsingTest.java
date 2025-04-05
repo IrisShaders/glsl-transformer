@@ -109,7 +109,7 @@ public class ParsingTest extends TestWithSingleASTTransformer {
     TestResourceManager
         .getDirectoryResources(DirectoryLocation.GLSLANG_TESTS)
         .forEach(resource -> {
-          var t = new SingleASTTransformer<JobParameters>(SingleASTTransformer.IDENTITY_TRANSFORMATION);
+          var t = new SingleASTTransformer<>(SingleASTTransformer.IDENTITY_TRANSFORMATION);
           t.setPrintType(PrintType.INDENTED);
           t.setThrowParseErrors(false);
           t.setSLLOnly();
@@ -139,7 +139,7 @@ public class ParsingTest extends TestWithSingleASTTransformer {
 
   @Test
   void testWithJobParameters() {
-    var man = new SingleASTTransformer<JobParameters>(SingleASTTransformer.IDENTITY_TRANSFORMATION);
+    var man = new SingleASTTransformer<>(SingleASTTransformer.IDENTITY_TRANSFORMATION);
     assertNull(man.getJobParameters(), "It should start with no job parameters");
     var parameters = JobParameters.EMPTY;
     man.withJobParameters(parameters,

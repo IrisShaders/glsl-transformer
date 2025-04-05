@@ -63,7 +63,7 @@ public abstract class ASTNode {
     return sourceLocation;
   }
 
-  void setSourceLocation(SourceLocation sourceLocation) {
+  public void setSourceLocation(SourceLocation sourceLocation) {
     this.sourceLocation = sourceLocation;
   }
 
