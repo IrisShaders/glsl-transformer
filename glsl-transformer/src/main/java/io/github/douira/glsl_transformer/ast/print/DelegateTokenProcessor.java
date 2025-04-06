@@ -18,14 +18,4 @@ public abstract class DelegateTokenProcessor implements TokenProcessor {
   public void appendToken(PrintToken token) {
     delegate.appendToken(token);
   }
-
-  @Override
-  public void appendDirectly(String content) {
-    delegate.appendDirectly(content);
-  }
-
-  @Override
-  public void appendDirectly(char content) {
-    delegate.appendDirectly(content);
-  }
 }

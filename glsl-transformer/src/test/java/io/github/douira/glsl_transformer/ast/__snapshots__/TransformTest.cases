@@ -23,7 +23,7 @@ void main() {
 	int foo;
 	foo = zag;
 }
-===
+@@@
 layout(std140) uniform UniformBlock {
 	vec4 foo;
 	vec3 bar;
@@ -49,7 +49,7 @@ void main() {
 	a = shadow2D(a, b);
 	a = shadow2DLod(a, b, c);
 }
-===
+@@@
 void main() {
 	a = vec4(texture(a, b));
 	a = vec4(textureLod(a, b, c));
@@ -58,13 +58,13 @@ void main() {
 §emptyExternalDeclarationRemoval function:
 void main() {
 };
-===
+@@@
 void main() {
 }
 
 §emptyExternalDeclarationRemoval alone:
 ;
-===
+@@@
 
 §outDeclarationModify normal:
 out float foo;
@@ -76,7 +76,7 @@ void main() {
 	zou = 4;
 	void main();
 }
-===
+@@@
 out float gam;
 out bool boo;
 out int bar;
@@ -102,7 +102,7 @@ void main() {
   color = texture(tex2, coord2);
   color = texture(tex3, coord3);
 }
-===
+@@@
 uniform sampler3D tex1;
 uniform sampler2D tex2;
 uniform sampler3D tex3;
@@ -129,7 +129,7 @@ void main() {
   color = texture(tex1, coord1);
   color = texture(tex2, coord2);
 }
-===
+@@@
 uniform sampler3D tex1;
 uniform isampler1D tex2;
 float redirected_texture(isampler1D tracked, int sidecar, float coord) {
@@ -164,7 +164,7 @@ void main() {
   color = foo(tex1, coord1);
   color = foo(tex2, coord2);
 }
-===
+@@@
 uniform sampler3D tex1;
 uniform isampler1D tex2;
 int foo(isampler1D tex, float coord) {

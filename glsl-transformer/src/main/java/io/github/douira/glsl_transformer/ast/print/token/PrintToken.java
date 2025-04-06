@@ -9,6 +9,7 @@ public abstract class PrintToken {
 
   private final TokenChannel channel;
   private final TokenRole role;
+  private String contentCache;
 
   public PrintToken(TokenChannel channel, TokenRole role) {
     this.channel = channel;
@@ -27,7 +28,14 @@ public abstract class PrintToken {
     this(TokenChannel.DEFAULT);
   }
 
-  public abstract String getContent();
+  abstract String calculateContent();
+
+  public String getContent() {
+    if (contentCache == null) {
+      contentCache = calculateContent();
+    }
+    return contentCache;
+  }
 
   public void setSource(ASTNode source) {
     this.source = source;
@@ -46,6 +54,7 @@ public abstract class PrintToken {
   }
 
   public boolean endsWithNewline() {
-    return getContent().endsWith("\n");
+    var content = getContent();
+    return content != null && content.endsWith("\n");
   }
 }

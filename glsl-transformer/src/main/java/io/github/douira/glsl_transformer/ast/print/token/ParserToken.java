@@ -52,7 +52,7 @@ public class ParserToken extends PrintToken {
   }
 
   @Override
-  public String getContent() {
+  public String calculateContent() {
     var literalName = GLSLLexer.VOCABULARY.getLiteralName(tokenType);
     if (literalName == null) {
       var replacement = missingTokenStrings.get(tokenType);

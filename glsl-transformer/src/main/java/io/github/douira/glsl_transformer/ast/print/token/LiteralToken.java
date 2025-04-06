@@ -26,7 +26,12 @@ public class LiteralToken extends PrintToken {
   }
 
   @Override
-  public String getContent() {
+  public String calculateContent() {
     return content;
+  }
+
+  @Override
+  public String getContent() {
+    return calculateContent();
   }
 }

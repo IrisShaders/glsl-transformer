@@ -6,10 +6,4 @@ public interface TokenProcessor {
   String generateString();
 
   void appendToken(PrintToken token);
-
-  void appendDirectly(String content);
-
-  void appendDirectly(char content);
-
-  
 }

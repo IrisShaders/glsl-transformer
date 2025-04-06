@@ -1,4 +1,4 @@
-testASTTree[expression_+s9CZpkPNRR+U3ZeKeIoNI0D4YY=]=[
+testASTTree[expression_+s9CZpkPNRR+U3ZeKeIoNI0D4YY]=[
 a[(a[b])]
 <><><><><><><><><><><><><><><><><><><><><><><><><>
 (ArrayAccessExpression
@@ -23,7 +23,7 @@ a[(a[b])]
 ]
 
 
-testASTTree[expression_0j1gvk7Qo/QksBgprZkZHrafxwc=]=[
+testASTTree[expression_0j1gvk7Qo/QksBgprZkZHrafxwc]=[
 8 - 1 + (4-1) + (4 -1) + (4- 1) + 4 -1 + 4- 1 + 4 -1 + 4-1 + ((1)-4)
 <><><><><><><><><><><><><><><><><><><><><><><><><>
 (AdditionExpression
@@ -164,7 +164,7 @@ testASTTree[expression_0j1gvk7Qo/QksBgprZkZHrafxwc=]=[
 ]
 
 
-testASTTree[expression_17dphoYYoz/OV8j/tLZLAFM+zyQ=]=[
+testASTTree[expression_17dphoYYoz/OV8j/tLZLAFM+zyQ]=[
 a.b, b.foo, a.b.c.d
 <><><><><><><><><><><><><><><><><><><><><><><><><>
 (SequenceExpression
@@ -205,7 +205,7 @@ a.b, b.foo, a.b.c.d
 ]
 
 
-testASTTree[expression_1Ilxl7PcbYwxVb7wSAcbIq025tc=]=[
+testASTTree[expression_1Ilxl7PcbYwxVb7wSAcbIq025tc]=[
 a[(a)[(a)]]
 <><><><><><><><><><><><><><><><><><><><><><><><><>
 (ArrayAccessExpression
@@ -232,7 +232,7 @@ a[(a)[(a)]]
 ]
 
 
-testASTTree[expression_3Sns9SSwMKZSYeMFnEirnh7LJYU=]=[
+testASTTree[expression_3Sns9SSwMKZSYeMFnEirnh7LJYU]=[
 ""
 <><><><><><><><><><><><><><><><><><><><><><><><><>
 (LiteralExpression
@@ -243,7 +243,7 @@ testASTTree[expression_3Sns9SSwMKZSYeMFnEirnh7LJYU=]=[
 ]
 
 
-testASTTree[expression_54EJ5qIg7hxKvEZjP8FPV1cSTkc=]=[
+testASTTree[expression_54EJ5qIg7hxKvEZjP8FPV1cSTkc]=[
 (((0)))
 <><><><><><><><><><><><><><><><><><><><><><><><><>
 (GroupingExpression
@@ -257,7 +257,7 @@ testASTTree[expression_54EJ5qIg7hxKvEZjP8FPV1cSTkc=]=[
 ]
 
 
-testASTTree[expression_5Wg0qKDmFoh1QRCICD3O89reI8Y=]=[
+testASTTree[expression_5Wg0qKDmFoh1QRCICD3O89reI8Y]=[
 0x54ae + 06453543 + 1.6e10 + 50.1e-10 + 1e+10
 <><><><><><><><><><><><><><><><><><><><><><><><><>
 (AdditionExpression
@@ -294,7 +294,7 @@ testASTTree[expression_5Wg0qKDmFoh1QRCICD3O89reI8Y=]=[
 ]
 
 
-testASTTree[expression_8oMh1Ww8TEOT9IL4YSwShnwsw8I=]=[
+testASTTree[expression_8oMh1Ww8TEOT9IL4YSwShnwsw8I]=[
 (0)
 <><><><><><><><><><><><><><><><><><><><><><><><><>
 (GroupingExpression
@@ -308,7 +308,7 @@ testASTTree[expression_8oMh1Ww8TEOT9IL4YSwShnwsw8I=]=[
 ]
 
 
-testASTTree[expression_9Unm5Vbq7G/lD5ck+4EWIti+Tls=]=[
+testASTTree[expression_9Unm5Vbq7G/lD5ck+4EWIti+Tls]=[
 1 + 2
 <><><><><><><><><><><><><><><><><><><><><><><><><>
 (AdditionExpression
@@ -327,7 +327,7 @@ testASTTree[expression_9Unm5Vbq7G/lD5ck+4EWIti+Tls=]=[
 ]
 
 
-testASTTree[expression_AFsWBaKBRFIB68PU91Au/+2pQ7o=]=[
+testASTTree[expression_AFsWBaKBRFIB68PU91Au/+2pQ7o]=[
 vec3(((1, 2, 3)))
 <><><><><><><><><><><><><><><><><><><><><><><><><>
 (FunctionCallExpression
@@ -358,7 +358,7 @@ vec3(((1, 2, 3)))
 ]
 
 
-testASTTree[expression_ATi0tgDKiYjVBR/qBoJuhUbm9Cg=]=[
+testASTTree[expression_ATi0tgDKiYjVBR/qBoJuhUbm9Cg]=[
 (a, b, c, d)
 <><><><><><><><><><><><><><><><><><><><><><><><><>
 (GroupingExpression
@@ -385,7 +385,7 @@ testASTTree[expression_ATi0tgDKiYjVBR/qBoJuhUbm9Cg=]=[
 ]
 
 
-testASTTree[expression_AWEYq/G4jNxT/mSDE2J/O3c2T/A=]=[
+testASTTree[expression_AWEYq/G4jNxT/mSDE2J/O3c2T/A]=[
 a[((a))[((a))]]
 <><><><><><><><><><><><><><><><><><><><><><><><><>
 (ArrayAccessExpression
@@ -412,7 +412,7 @@ a[((a))[((a))]]
 ]
 
 
-testASTTree[expression_Apblh9LXJwE2lq7iNC5cxxXfplU=]=[
+testASTTree[expression_Apblh9LXJwE2lq7iNC5cxxXfplU]=[
 foo() + bar() + baz()
 <><><><><><><><><><><><><><><><><><><><><><><><><>
 (AdditionExpression
@@ -435,7 +435,7 @@ foo() + bar() + baz()
 ]
 
 
-testASTTree[expression_C+BZ0pQCEaJgZwvZZYyVpFjhV+Q=]=[
+testASTTree[expression_C+BZ0pQCEaJgZwvZZYyVpFjhV+Q]=[
 a.c[4 + b[c]]
 <><><><><><><><><><><><><><><><><><><><><><><><><>
 (ArrayAccessExpression
@@ -469,7 +469,7 @@ a.c[4 + b[c]]
 ]
 
 
-testASTTree[expression_CLRPMpGFDBASTNbGEd+KRsg4zPo=]=[
+testASTTree[expression_CLRPMpGFDBASTNbGEd+KRsg4zPo]=[
 a && b || c ^^ c
 <><><><><><><><><><><><><><><><><><><><><><><><><>
 (BooleanOrExpression
@@ -498,7 +498,7 @@ a && b || c ^^ c
 ]
 
 
-testASTTree[expression_E25YWQPJopozQwuDjj0hXjnjEs8=]=[
+testASTTree[expression_E25YWQPJopozQwuDjj0hXjnjEs8]=[
 a + b, c + d, e + f, (a, b, c, d, e, f) + e, e
 <><><><><><><><><><><><><><><><><><><><><><><><><>
 (SequenceExpression
@@ -575,7 +575,7 @@ a + b, c + d, e + f, (a, b, c, d, e, f) + e, e
 ]
 
 
-testASTTree[expression_IwRwU5CpvXUYFm5baAJDpzTGvsA=]=[
+testASTTree[expression_IwRwU5CpvXUYFm5baAJDpzTGvsA]=[
 vec3(1, 2, 3)
 <><><><><><><><><><><><><><><><><><><><><><><><><>
 (FunctionCallExpression
@@ -602,7 +602,7 @@ vec3(1, 2, 3)
 ]
 
 
-testASTTree[expression_JXW6ocwSU4nUQgPhFARA+oqsDp8=]=[
+testASTTree[expression_JXW6ocwSU4nUQgPhFARA+oqsDp8]=[
 true ? 1.0f : bar.length()
 <><><><><><><><><><><><><><><><><><><><><><><><><>
 (ConditionExpression
@@ -625,7 +625,7 @@ true ? 1.0f : bar.length()
 ]
 
 
-testASTTree[expression_MFr6JxyVT74WMfqyshIAO+1BfKQ=]=[
+testASTTree[expression_MFr6JxyVT74WMfqyshIAO+1BfKQ]=[
 vec3((1, 2, 3))
 <><><><><><><><><><><><><><><><><><><><><><><><><>
 (FunctionCallExpression
@@ -656,7 +656,7 @@ vec3((1, 2, 3))
 ]
 
 
-testASTTree[expression_PAYfUq6nGMFMIJyRzsfkJTa1w2g=]=[
+testASTTree[expression_PAYfUq6nGMFMIJyRzsfkJTa1w2g]=[
 foo()
 <><><><><><><><><><><><><><><><><><><><><><><><><>
 (FunctionCallExpression
@@ -667,7 +667,7 @@ foo()
 ]
 
 
-testASTTree[expression_PW+6jVHUQTP9FFV/ct/0F+oSrI0=]=[
+testASTTree[expression_PW+6jVHUQTP9FFV/ct/0F+oSrI0]=[
 ((a + b) * c)
 <><><><><><><><><><><><><><><><><><><><><><><><><>
 (GroupingExpression
@@ -694,7 +694,7 @@ testASTTree[expression_PW+6jVHUQTP9FFV/ct/0F+oSrI0=]=[
 ]
 
 
-testASTTree[expression_PbVjUEqXAEd3I8rmPBaoiyLdLNA=]=[
+testASTTree[expression_PbVjUEqXAEd3I8rmPBaoiyLdLNA]=[
 ((0))
 <><><><><><><><><><><><><><><><><><><><><><><><><>
 (GroupingExpression
@@ -708,7 +708,7 @@ testASTTree[expression_PbVjUEqXAEd3I8rmPBaoiyLdLNA=]=[
 ]
 
 
-testASTTree[expression_RYy25jgGnAI4/3G3BonjI4k/O8w=]=[
+testASTTree[expression_RYy25jgGnAI4/3G3BonjI4k/O8w]=[
 "\\\"
 <><><><><><><><><><><><><><><><><><><><><><><><><>
 (LiteralExpression
@@ -719,7 +719,7 @@ testASTTree[expression_RYy25jgGnAI4/3G3BonjI4k/O8w=]=[
 ]
 
 
-testASTTree[expression_SL+26MBvH1AJZNoHfJhlRFCVn4M=]=[
+testASTTree[expression_SL+26MBvH1AJZNoHfJhlRFCVn4M]=[
 -(-3 - -3)
 <><><><><><><><><><><><><><><><><><><><><><><><><>
 (NegationExpression
@@ -746,7 +746,7 @@ testASTTree[expression_SL+26MBvH1AJZNoHfJhlRFCVn4M=]=[
 ]
 
 
-testASTTree[expression_TRN6K4rxyVIoKMV/WTzKO869X1o=]=[
+testASTTree[expression_TRN6K4rxyVIoKMV/WTzKO869X1o]=[
 "   "
 <><><><><><><><><><><><><><><><><><><><><><><><><>
 (LiteralExpression
@@ -757,7 +757,7 @@ testASTTree[expression_TRN6K4rxyVIoKMV/WTzKO869X1o=]=[
 ]
 
 
-testASTTree[expression_VQc1aOOJChedA4dD6w658iRMsDw=]=[
+testASTTree[expression_VQc1aOOJChedA4dD6w658iRMsDw]=[
 a,b,c,d,e,f
 <><><><><><><><><><><><><><><><><><><><><><><><><>
 (SequenceExpression
@@ -790,7 +790,7 @@ a,b,c,d,e,f
 ]
 
 
-testASTTree[expression_W5RZxVBVvstL2ZSt8t+Zy9KwP/U=]=[
+testASTTree[expression_W5RZxVBVvstL2ZSt8t+Zy9KwP/U]=[
 "dfafjdsiaofudsa"
 <><><><><><><><><><><><><><><><><><><><><><><><><>
 (LiteralExpression
@@ -801,7 +801,7 @@ testASTTree[expression_W5RZxVBVvstL2ZSt8t+Zy9KwP/U=]=[
 ]
 
 
-testASTTree[expression_XGED+UlZPEQJ0oadrNhNHGkDcCQ=]=[
+testASTTree[expression_XGED+UlZPEQJ0oadrNhNHGkDcCQ]=[
 "  \ "
 <><><><><><><><><><><><><><><><><><><><><><><><><>
 (LiteralExpression
@@ -812,7 +812,7 @@ testASTTree[expression_XGED+UlZPEQJ0oadrNhNHGkDcCQ=]=[
 ]
 
 
-testASTTree[expression_ax4Fc/ji0Pyr4OdmnZGINQ/hq3s=]=[
+testASTTree[expression_ax4Fc/ji0Pyr4OdmnZGINQ/hq3s]=[
 a.b.c.d.e.f.g.h.i.j.k.l.m.n.o.p.q.r.s
 <><><><><><><><><><><><><><><><><><><><><><><><><>
 (MemberAccessExpression
@@ -895,7 +895,7 @@ a.b.c.d.e.f.g.h.i.j.k.l.m.n.o.p.q.r.s
 ]
 
 
-testASTTree[expression_c7qMTcDydEXjWIa/mee4XI2I1QM=]=[
+testASTTree[expression_c7qMTcDydEXjWIa/mee4XI2I1QM]=[
 a = b += b -= b *= b /= a
 <><><><><><><><><><><><><><><><><><><><><><><><><>
 (AssignmentExpression
@@ -936,7 +936,7 @@ a = b += b -= b *= b /= a
 ]
 
 
-testASTTree[expression_cJbY4DafeN6qN3X4vIyaVPsmeGA=]=[
+testASTTree[expression_cJbY4DafeN6qN3X4vIyaVPsmeGA]=[
 "`&$`&$
 fdsafds"
 <><><><><><><><><><><><><><><><><><><><><><><><><>
@@ -948,7 +948,7 @@ fdsafds"
 ]
 
 
-testASTTree[expression_dH09zI5iyFl/e/k4bhqWKWECzLQ=]=[
+testASTTree[expression_dH09zI5iyFl/e/k4bhqWKWECzLQ]=[
 (1, (2, (3)))
 <><><><><><><><><><><><><><><><><><><><><><><><><>
 (GroupingExpression
@@ -980,7 +980,7 @@ testASTTree[expression_dH09zI5iyFl/e/k4bhqWKWECzLQ=]=[
 ]
 
 
-testASTTree[expression_dyPCuw6FjsI2kEkuxonqlMIpTRk=]=[
+testASTTree[expression_dyPCuw6FjsI2kEkuxonqlMIpTRk]=[
 a == b != c < d <= e > f >= g
 <><><><><><><><><><><><><><><><><><><><><><><><><>
 (InequalityExpression
@@ -1027,7 +1027,7 @@ a == b != c < d <= e > f >= g
 ]
 
 
-testASTTree[expression_eehM1B7tlr09Uz8x/Ik3g/JZZuA=]=[
+testASTTree[expression_eehM1B7tlr09Uz8x/Ik3g/JZZuA]=[
 "//"
 <><><><><><><><><><><><><><><><><><><><><><><><><>
 (LiteralExpression
@@ -1038,7 +1038,7 @@ testASTTree[expression_eehM1B7tlr09Uz8x/Ik3g/JZZuA=]=[
 ]
 
 
-testASTTree[expression_fMcjCBQImNUuQGlygaJWEvOWDO0=]=[
+testASTTree[expression_fMcjCBQImNUuQGlygaJWEvOWDO0]=[
 1 + 2us + 3ul + 5l + 4u + 5s + 0.1 + 0.2f + 0.3hf + 0.4lf
 <><><><><><><><><><><><><><><><><><><><><><><><><>
 (AdditionExpression
@@ -1109,7 +1109,7 @@ testASTTree[expression_fMcjCBQImNUuQGlygaJWEvOWDO0=]=[
 ]
 
 
-testASTTree[expression_gya7qFI5Gs++x1D2WBXXmz7x6Uk=]=[
+testASTTree[expression_gya7qFI5Gs++x1D2WBXXmz7x6Uk]=[
 -0x1111111111111111l + 0x1111111111111111ul + -9223372036854775808ul + 0xfffffffffffffffful
 <><><><><><><><><><><><><><><><><><><><><><><><><>
 (AdditionExpression
@@ -1146,7 +1146,7 @@ testASTTree[expression_gya7qFI5Gs++x1D2WBXXmz7x6Uk=]=[
 ]
 
 
-testASTTree[expression_iqFwMfg28sFzYkdQNki144OasYI=]=[
+testASTTree[expression_iqFwMfg28sFzYkdQNki144OasYI]=[
 1 | 2
 <><><><><><><><><><><><><><><><><><><><><><><><><>
 (BitwiseOrExpression
@@ -1165,7 +1165,7 @@ testASTTree[expression_iqFwMfg28sFzYkdQNki144OasYI=]=[
 ]
 
 
-testASTTree[expression_jblq2TbHbn+8+bZSZTmCuY2+yHM=]=[
+testASTTree[expression_jblq2TbHbn+8+bZSZTmCuY2+yHM]=[
 ++1, --1, 1++, 1--, +1, -1, ~1, !1
 <><><><><><><><><><><><><><><><><><><><><><><><><>
 (SequenceExpression
@@ -1230,7 +1230,7 @@ testASTTree[expression_jblq2TbHbn+8+bZSZTmCuY2+yHM=]=[
 ]
 
 
-testASTTree[expression_k/eS8nof6TCZ1hD090wKRZgjjho=]=[
+testASTTree[expression_k/eS8nof6TCZ1hD090wKRZgjjho]=[
 a ? b ? c : d : e
 <><><><><><><><><><><><><><><><><><><><><><><><><>
 (ConditionExpression
@@ -1261,7 +1261,7 @@ a ? b ? c : d : e
 ]
 
 
-testASTTree[expression_lMvYTIHiwTu0rqjr1D1NvYs8C+k=]=[
+testASTTree[expression_lMvYTIHiwTu0rqjr1D1NvYs8C+k]=[
 a << b >> c
 <><><><><><><><><><><><><><><><><><><><><><><><><>
 (RightShiftExpression
@@ -1284,7 +1284,7 @@ a << b >> c
 ]
 
 
-testASTTree[expression_lxUnE87vFxcva90ULrkz9G3CELQ=]=[
+testASTTree[expression_lxUnE87vFxcva90ULrkz9G3CELQ]=[
 a, b, c + d, e, f
 <><><><><><><><><><><><><><><><><><><><><><><><><>
 (SequenceExpression
@@ -1319,7 +1319,7 @@ a, b, c + d, e, f
 ]
 
 
-testASTTree[expression_mEyU7bJEsM+E+YkHa5+HECxY/K0=]=[
+testASTTree[expression_mEyU7bJEsM+E+YkHa5+HECxY/K0]=[
 foo(1, bar(), baz(1, 2))
 <><><><><><><><><><><><><><><><><><><><><><><><><>
 (FunctionCallExpression
@@ -1353,7 +1353,7 @@ foo(1, bar(), baz(1, 2))
 ]
 
 
-testASTTree[expression_oLOv1qhs+P0b7bOlc8Uk5ovs8lE=]=[
+testASTTree[expression_oLOv1qhs+P0b7bOlc8Uk5ovs8lE]=[
 a, b, c
 <><><><><><><><><><><><><><><><><><><><><><><><><>
 (SequenceExpression
@@ -1374,7 +1374,7 @@ a, b, c
 ]
 
 
-testASTTree[expression_qeFLWFIbAt1XGkD6TF7eNOMUzfM=]=[
+testASTTree[expression_qeFLWFIbAt1XGkD6TF7eNOMUzfM]=[
 (((3), 2), 1)
 <><><><><><><><><><><><><><><><><><><><><><><><><>
 (GroupingExpression
@@ -1406,7 +1406,7 @@ testASTTree[expression_qeFLWFIbAt1XGkD6TF7eNOMUzfM=]=[
 ]
 
 
-testASTTree[expression_tVRe1jS7WEWOLu6BIGjU5qaujBQ=]=[
+testASTTree[expression_tVRe1jS7WEWOLu6BIGjU5qaujBQ]=[
 a[(a)]
 <><><><><><><><><><><><><><><><><><><><><><><><><>
 (ArrayAccessExpression
@@ -1425,7 +1425,7 @@ a[(a)]
 ]
 
 
-testASTTree[expression_w3yDHgEShJhK4Ge94J6l4oVbumI=]=[
+testASTTree[expression_w3yDHgEShJhK4Ge94J6l4oVbumI]=[
 -(-(-(4))) - (-4654) - 5 + -4 - -4 + +-6 - -+4 - - - - -4
 <><><><><><><><><><><><><><><><><><><><><><><><><>
 (SubtractionExpression
@@ -1522,7 +1522,7 @@ testASTTree[expression_w3yDHgEShJhK4Ge94J6l4oVbumI=]=[
 ]
 
 
-testASTTree[expression_whRxos0zO8NOrPjx35jayepTNvo=]=[
+testASTTree[expression_whRxos0zO8NOrPjx35jayepTNvo]=[
 "\
 \
 \
@@ -1536,7 +1536,7 @@ testASTTree[expression_whRxos0zO8NOrPjx35jayepTNvo=]=[
 ]
 
 
-testASTTree[expression_xOQVg0WRBzJOmmmXZDOXtqcwIoA=]=[
+testASTTree[expression_xOQVg0WRBzJOmmmXZDOXtqcwIoA]=[
 foo(bar(baz(bar)))
 <><><><><><><><><><><><><><><><><><><><><><><><><>
 (FunctionCallExpression
@@ -1559,7 +1559,7 @@ foo(bar(baz(bar)))
 ]
 
 
-testASTTree[expression_yNF8XOkHYIHbDOhZ/jlQOE+aGb4=]=[
+testASTTree[expression_yNF8XOkHYIHbDOhZ/jlQOE+aGb4]=[
 a - b * c / d % e ^ d & c | b ^ c
 <><><><><><><><><><><><><><><><><><><><><><><><><>
 (BitwiseOrExpression
@@ -1618,7 +1618,7 @@ a - b * c / d % e ^ d & c | b ^ c
 ]
 
 
-testASTTree[expression_ymhFRnI5BWxo/0x0hFINjNRn8Eg=]=[
+testASTTree[expression_ymhFRnI5BWxo/0x0hFINjNRn8Eg]=[
 a %= b &= b |= b ^= b <<= c <<= d
 <><><><><><><><><><><><><><><><><><><><><><><><><>
 (ModuloAssignmentExpression
@@ -1665,7 +1665,7 @@ a %= b &= b |= b ^= b <<= c <<= d
 ]
 
 
-testASTTree[expression_z6480sqRF5JDy3uUy0NFtdPnD+4=]=[
+testASTTree[expression_z6480sqRF5JDy3uUy0NFtdPnD+4]=[
 foo(1, 2, 3)
 <><><><><><><><><><><><><><><><><><><><><><><><><>
 (FunctionCallExpression
@@ -1691,7 +1691,7 @@ foo(1, 2, 3)
 ]
 
 
-testASTTree[expression_zclTE9GOMPRbRSBikvFhISsDXCg=]=[
+testASTTree[expression_zclTE9GOMPRbRSBikvFhISsDXCg]=[
 "
 fdsfds
 fdsfds
@@ -1705,7 +1705,7 @@ fdsfds
 ]
 
 
-testASTTree[expression_zq4FDkZ7ci2/7+BjHHyZ4PQktb8=]=[
+testASTTree[expression_zq4FDkZ7ci2/7+BjHHyZ4PQktb8]=[
 foo() + bar()
 <><><><><><><><><><><><><><><><><><><><><><><><><>
 (AdditionExpression
@@ -1722,7 +1722,7 @@ foo() + bar()
 ]
 
 
-testASTTree[fullySpecifiedType_Glyq/Xzj6HkU/IbYx32qJp5lr/g=]=[
+testASTTree[fullySpecifiedType_Glyq/Xzj6HkU/IbYx32qJp5lr/g]=[
 vec2
 <><><><><><><><><><><><><><><><><><><><><><><><><>
 (FullySpecifiedType
@@ -1734,7 +1734,7 @@ vec2
 ]
 
 
-testASTTree[statement_+0FOORRUl/ZR0RowSzlmyXehdOE=]=[
+testASTTree[statement_+0FOORRUl/ZR0RowSzlmyXehdOE]=[
 if (a) 1;
 else if (b) 2;
 else if (c) 3;
@@ -1783,7 +1783,7 @@ else if (c) 3;
 ]
 
 
-testASTTree[statement_+csjwym2Rf5uH6/m9u39ZvvU7vY=]=[
+testASTTree[statement_+csjwym2Rf5uH6/m9u39ZvvU7vY]=[
 {
 	{
 		1;
@@ -1814,7 +1814,7 @@ testASTTree[statement_+csjwym2Rf5uH6/m9u39ZvvU7vY=]=[
 ]
 
 
-testASTTree[statement_0I0A8kLGU6aUtiNwtuKWfqbeHXM=]=[
+testASTTree[statement_0I0A8kLGU6aUtiNwtuKWfqbeHXM]=[
 if (ColorTmp.a > 0.0f) {
 	outColor = vec4(mix(mix(ColorTmp.rgb, outColor.rgb, outColor.a), ColorTmp.rgb, ColorTmp.a), 1.0f - (1.0f - ColorTmp.a) * (1.0f - outColor.a));
 }
@@ -1943,7 +1943,7 @@ if (ColorTmp.a > 0.0f) {
 ]
 
 
-testASTTree[statement_5Cg+oPzS3nv9qX5vYEAfKLSmrcI=]=[
+testASTTree[statement_5Cg+oPzS3nv9qX5vYEAfKLSmrcI]=[
 float diffuseDepth = texture2D(DiffuseDepthSampler, texCoord).r;
 
 <><><><><><><><><><><><><><><><><><><><><><><><><>
@@ -1982,7 +1982,7 @@ float diffuseDepth = texture2D(DiffuseDepthSampler, texCoord).r;
 ]
 
 
-testASTTree[statement_5ibe73lDjsrCZH48aONJf/eFb9E=]=[
+testASTTree[statement_5ibe73lDjsrCZH48aONJf/eFb9E]=[
 while (a && b) {
 	5;
 	if (true) {
@@ -2039,7 +2039,7 @@ while (a && b) {
 ]
 
 
-testASTTree[statement_5tZn/ZaoTjgK7tEuRG5UhRmEUfU=]=[
+testASTTree[statement_5tZn/ZaoTjgK7tEuRG5UhRmEUfU]=[
 switch (a) {
 	case 1:
 		switch (b) {
@@ -2096,7 +2096,7 @@ switch (a) {
 ]
 
 
-testASTTree[statement_68ZzPvuOUbapAHP2+5lAgyJtEwc=]=[
+testASTTree[statement_68ZzPvuOUbapAHP2+5lAgyJtEwc]=[
 {
 	1;
 	2;
@@ -2131,7 +2131,7 @@ testASTTree[statement_68ZzPvuOUbapAHP2+5lAgyJtEwc=]=[
 ]
 
 
-testASTTree[statement_6ZD1xE9UysMYy+D2iNGAEp1e44U=]=[
+testASTTree[statement_6ZD1xE9UysMYy+D2iNGAEp1e44U]=[
 switch (a) {
 	case 1:
 	case 2:
@@ -2181,7 +2181,7 @@ switch (a) {
 ]
 
 
-testASTTree[statement_6yY3EOswObkU7TR5SBYBR5gUOts=]=[
+testASTTree[statement_6yY3EOswObkU7TR5SBYBR5gUOts]=[
 printf("Hello, World!");
 
 <><><><><><><><><><><><><><><><><><><><><><><><><>
@@ -2199,7 +2199,7 @@ printf("Hello, World!");
 ]
 
 
-testASTTree[statement_73oop9v0ENhClGTo/pzsjXXJLrc=]=[
+testASTTree[statement_73oop9v0ENhClGTo/pzsjXXJLrc]=[
 for (int a = 0; a < b; );
 
 <><><><><><><><><><><><><><><><><><><><><><><><><>
@@ -2239,7 +2239,7 @@ for (int a = 0; a < b; );
 ]
 
 
-testASTTree[statement_8/m5X8NVEr+cQRpaSASXeodSTec=]=[
+testASTTree[statement_8/m5X8NVEr+cQRpaSASXeodSTec]=[
 if (a && b) {
 	1;
 }
@@ -2270,7 +2270,7 @@ if (a && b) {
 ]
 
 
-testASTTree[statement_8cpd9zuSzz3GnUiV5Gc8ZI9eVzg=]=[
+testASTTree[statement_8cpd9zuSzz3GnUiV5Gc8ZI9eVzg]=[
 Ray.length = 4;
 
 <><><><><><><><><><><><><><><><><><><><><><><><><>
@@ -2295,7 +2295,7 @@ Ray.length = 4;
 ]
 
 
-testASTTree[statement_9ToSM6/v8skqsFP+liP9ixpmysE=]=[
+testASTTree[statement_9ToSM6/v8skqsFP+liP9ixpmysE]=[
 for (i = 0; i < 10; ) 1;
 
 <><><><><><><><><><><><><><><><><><><><><><><><><>
@@ -2334,7 +2334,7 @@ for (i = 0; i < 10; ) 1;
 ]
 
 
-testASTTree[statement_9ldpC+MW0wA9wAQ+ep10mh++0go=]=[
+testASTTree[statement_9ldpC+MW0wA9wAQ+ep10mh++0go]=[
 while (true) {
 	1;
 }
@@ -2359,7 +2359,7 @@ while (true) {
 ]
 
 
-testASTTree[statement_9yL41wIC/gypea3WRYVRuxK3Vzo=]=[
+testASTTree[statement_9yL41wIC/gypea3WRYVRuxK3Vzo]=[
 continue;
 
 <><><><><><><><><><><><><><><><><><><><><><><><><>
@@ -2369,7 +2369,7 @@ continue;
 ]
 
 
-testASTTree[statement_CZO9g1yE8s4xHkYZlG0K215DB50=]=[
+testASTTree[statement_CZO9g1yE8s4xHkYZlG0K215DB50]=[
 a + b;
 
 <><><><><><><><><><><><><><><><><><><><><><><><><>
@@ -2389,7 +2389,7 @@ a + b;
 ]
 
 
-testASTTree[statement_DTlkVlytyc4rl/6dXRAIHNZq0P0=]=[
+testASTTree[statement_DTlkVlytyc4rl/6dXRAIHNZq0P0]=[
 if (a) 1;
 
 <><><><><><><><><><><><><><><><><><><><><><><><><>
@@ -2410,7 +2410,7 @@ if (a) 1;
 ]
 
 
-testASTTree[statement_Ds5ThdbrJGuSZQtctJDSX/4R49I=]=[
+testASTTree[statement_Ds5ThdbrJGuSZQtctJDSX/4R49I]=[
 for (int a = 0; int x = a < b; a++);
 
 <><><><><><><><><><><><><><><><><><><><><><><><><>
@@ -2467,7 +2467,7 @@ for (int a = 0; int x = a < b; a++);
 ]
 
 
-testASTTree[statement_DwrtxcHM3W4zdGxvDRG1ea0mM/k=]=[
+testASTTree[statement_DwrtxcHM3W4zdGxvDRG1ea0mM/k]=[
 if (a) {
 	1;
 } else {
@@ -2503,7 +2503,7 @@ if (a) {
 ]
 
 
-testASTTree[statement_DyjbhpMWdp5YT3+2srO7VbCdbVM=]=[
+testASTTree[statement_DyjbhpMWdp5YT3+2srO7VbCdbVM]=[
 for (i = 0; i < 10; i++) 1;
 
 <><><><><><><><><><><><><><><><><><><><><><><><><>
@@ -2548,7 +2548,7 @@ for (i = 0; i < 10; i++) 1;
 ]
 
 
-testASTTree[statement_ELpFZoOCoEdtbUtJ6mPyCRaG8H8=]=[
+testASTTree[statement_ELpFZoOCoEdtbUtJ6mPyCRaG8H8]=[
 for ( ; ; ) 1;
 
 <><><><><><><><><><><><><><><><><><><><><><><><><>
@@ -2565,7 +2565,7 @@ for ( ; ; ) 1;
 ]
 
 
-testASTTree[statement_EoGVMuRPC3ktT3t40IcvQ+DsG74=]=[
+testASTTree[statement_EoGVMuRPC3ktT3t40IcvQ+DsG74]=[
 for ( ; ; i++) 1;
 
 <><><><><><><><><><><><><><><><><><><><><><><><><>
@@ -2588,7 +2588,7 @@ for ( ; ; i++) 1;
 ]
 
 
-testASTTree[statement_GLIdqGvQF//ULlgEeh5bQ9IeM+Q=]=[
+testASTTree[statement_GLIdqGvQF//ULlgEeh5bQ9IeM+Q]=[
 {
 	return;
 }
@@ -2602,7 +2602,7 @@ testASTTree[statement_GLIdqGvQF//ULlgEeh5bQ9IeM+Q=]=[
 ]
 
 
-testASTTree[statement_He0mhYc6qnNMzfrHhGhrQdhxKtc=]=[
+testASTTree[statement_He0mhYc6qnNMzfrHhGhrQdhxKtc]=[
 if (a) 1;
 else if (b) 2;
 else 3;
@@ -2645,7 +2645,7 @@ else 3;
 ]
 
 
-testASTTree[statement_IErISOIz3O+gfrOjI1Uj969m2KE=]=[
+testASTTree[statement_IErISOIz3O+gfrOjI1Uj969m2KE]=[
 demote;
 
 <><><><><><><><><><><><><><><><><><><><><><><><><>
@@ -2655,7 +2655,7 @@ demote;
 ]
 
 
-testASTTree[statement_IJyhWaYu0F5cgn+imhlkA/8ys6Y=]=[
+testASTTree[statement_IJyhWaYu0F5cgn+imhlkA/8ys6Y]=[
 1;
 
 <><><><><><><><><><><><><><><><><><><><><><><><><>
@@ -2670,7 +2670,7 @@ testASTTree[statement_IJyhWaYu0F5cgn+imhlkA/8ys6Y=]=[
 ]
 
 
-testASTTree[statement_IVx2RTrjSjxf3EBlO+9mpzCyrqk=]=[
+testASTTree[statement_IVx2RTrjSjxf3EBlO+9mpzCyrqk]=[
 do 1;
 while (true);
 
@@ -2692,7 +2692,7 @@ while (true);
 ]
 
 
-testASTTree[statement_JYD4rlRj9wY+1cb9Fdz3cySPbdQ=]=[
+testASTTree[statement_JYD4rlRj9wY+1cb9Fdz3cySPbdQ]=[
 a = c;
 
 <><><><><><><><><><><><><><><><><><><><><><><><><>
@@ -2712,7 +2712,7 @@ a = c;
 ]
 
 
-testASTTree[statement_Lq9zHnyDfC2eVeyrUNVVxk0dkdU=]=[
+testASTTree[statement_Lq9zHnyDfC2eVeyrUNVVxk0dkdU]=[
 {
 	{
 		1;
@@ -2819,7 +2819,7 @@ testASTTree[statement_Lq9zHnyDfC2eVeyrUNVVxk0dkdU=]=[
 ]
 
 
-testASTTree[statement_MVJEh8cTwxozsgvEDk1b5sj5f2A=]=[
+testASTTree[statement_MVJEh8cTwxozsgvEDk1b5sj5f2A]=[
 mat2 ang = mat2(-.73736882209777832,.67549037933349609,-.67549037933349609,-.73736882209777832);
 <><><><><><><><><><><><><><><><><><><><><><><><><>
 (DeclarationStatement
@@ -2868,7 +2868,7 @@ mat2 ang = mat2(-.73736882209777832,.67549037933349609,-.67549037933349609,-.737
 ]
 
 
-testASTTree[statement_MaK97OgMjTV4J/PR4edO9SswmW0=]=[
+testASTTree[statement_MaK97OgMjTV4J/PR4edO9SswmW0]=[
 while (1);
 
 <><><><><><><><><><><><><><><><><><><><><><><><><>
@@ -2885,7 +2885,7 @@ while (1);
 ]
 
 
-testASTTree[statement_PXwsOkofx5fNUUKjG38/og97AH0=]=[
+testASTTree[statement_PXwsOkofx5fNUUKjG38/og97AH0]=[
 {
 	if (a) 1;
 	if (a) 1;
@@ -2938,7 +2938,7 @@ testASTTree[statement_PXwsOkofx5fNUUKjG38/og97AH0=]=[
 ]
 
 
-testASTTree[statement_Q51hKLVCmkD9fsolo3oKY00IWjc=]=[
+testASTTree[statement_Q51hKLVCmkD9fsolo3oKY00IWjc]=[
 do {
 	1;
 } while (true);
@@ -2963,7 +2963,7 @@ do {
 ]
 
 
-testASTTree[statement_R3UPYng2KiBYSTHZh6gfC+FqAOI=]=[
+testASTTree[statement_R3UPYng2KiBYSTHZh6gfC+FqAOI]=[
 if (a) {
 	1;
 } else if (b) {
@@ -3005,7 +3005,7 @@ if (a) {
 ]
 
 
-testASTTree[statement_SsdB0joG87Bbo2QHf+rUWCmfjFs=]=[
+testASTTree[statement_SsdB0joG87Bbo2QHf+rUWCmfjFs]=[
 if (a) {
 	1;
 } else if (b) {
@@ -3058,7 +3058,7 @@ if (a) {
 ]
 
 
-testASTTree[statement_TpRzjBQrnvCu7iwmDhj5dnDrfnE=]=[
+testASTTree[statement_TpRzjBQrnvCu7iwmDhj5dnDrfnE]=[
 return;
 
 <><><><><><><><><><><><><><><><><><><><><><><><><>
@@ -3068,7 +3068,7 @@ return;
 ]
 
 
-testASTTree[statement_U+sHzW+t4Ram/epzl8aDmSnsCSU=]=[
+testASTTree[statement_U+sHzW+t4Ram/epzl8aDmSnsCSU]=[
 ;
 
 <><><><><><><><><><><><><><><><><><><><><><><><><>
@@ -3078,7 +3078,7 @@ testASTTree[statement_U+sHzW+t4Ram/epzl8aDmSnsCSU=]=[
 ]
 
 
-testASTTree[statement_URrAODgkxigVkWoY0jemc75lv+Y=]=[
+testASTTree[statement_URrAODgkxigVkWoY0jemc75lv+Y]=[
 for (i = 0; ; i++) 1;
 
 <><><><><><><><><><><><><><><><><><><><><><><><><>
@@ -3112,7 +3112,7 @@ for (i = 0; ; i++) 1;
 ]
 
 
-testASTTree[statement_UXYSl7bm8K5WJ0Gu0+l2nFfInGM=]=[
+testASTTree[statement_UXYSl7bm8K5WJ0Gu0+l2nFfInGM]=[
 discard;
 
 <><><><><><><><><><><><><><><><><><><><><><><><><>
@@ -3122,7 +3122,7 @@ discard;
 ]
 
 
-testASTTree[statement_Uek3tgJzdvzDieXWrCoLZJlIKc4=]=[
+testASTTree[statement_Uek3tgJzdvzDieXWrCoLZJlIKc4]=[
 switch (a) {
 	case 1:
 		1;
@@ -3158,7 +3158,7 @@ switch (a) {
 ]
 
 
-testASTTree[statement_UtkzOog3CyRu15qAfCBWDAMq8aE=]=[
+testASTTree[statement_UtkzOog3CyRu15qAfCBWDAMq8aE]=[
 la[0] = A(texture2D(DS, t), texture2D(TDS, t).r, 0.0f);
 
 <><><><><><><><><><><><><><><><><><><><><><><><><>
@@ -3217,7 +3217,7 @@ la[0] = A(texture2D(DS, t), texture2D(TDS, t).r, 0.0f);
 ]
 
 
-testASTTree[statement_VgdLlaHSYoKzhkUb/fvG9KZlAYk=]=[
+testASTTree[statement_VgdLlaHSYoKzhkUb/fvG9KZlAYk]=[
 float op = 0.0f;
 
 <><><><><><><><><><><><><><><><><><><><><><><><><>
@@ -3244,7 +3244,7 @@ float op = 0.0f;
 ]
 
 
-testASTTree[statement_W7DjMFMsktv35/H/ukg9EEPwd/A=]=[
+testASTTree[statement_W7DjMFMsktv35/H/ukg9EEPwd/A]=[
 if (a) 1;
 else if (b) 2;
 else if (c) 3;
@@ -3399,7 +3399,7 @@ else 4;
 ]
 
 
-testASTTree[statement_YIeEmdALytP82RYjDAn7qUVCss0=]=[
+testASTTree[statement_YIeEmdALytP82RYjDAn7qUVCss0]=[
 for (i = 0; ; ) 1;
 
 <><><><><><><><><><><><><><><><><><><><><><><><><>
@@ -3427,7 +3427,7 @@ for (i = 0; ; ) 1;
 ]
 
 
-testASTTree[statement_aNaGgjUWO+noXQ39m/sN+OAGLjg=]=[
+testASTTree[statement_aNaGgjUWO+noXQ39m/sN+OAGLjg]=[
 for (int a = 0; a < b; a++);
 
 <><><><><><><><><><><><><><><><><><><><><><><><><>
@@ -3473,7 +3473,7 @@ for (int a = 0; a < b; a++);
 ]
 
 
-testASTTree[statement_axVem6jaiUpdsbYxWvggq/XTcZw=]=[
+testASTTree[statement_axVem6jaiUpdsbYxWvggq/XTcZw]=[
 for (i = 0; i < 10; i++) {
 	1;
 }
@@ -3522,7 +3522,7 @@ for (i = 0; i < 10; i++) {
 ]
 
 
-testASTTree[statement_cUZqAW/xADsGTUYmNAYXabamZlE=]=[
+testASTTree[statement_cUZqAW/xADsGTUYmNAYXabamZlE]=[
 for ( ; i < 10; ) 1;
 
 <><><><><><><><><><><><><><><><><><><><><><><><><>
@@ -3550,7 +3550,7 @@ for ( ; i < 10; ) 1;
 ]
 
 
-testASTTree[statement_dysJNHx43fJ12iop3boWG9QvU5A=]=[
+testASTTree[statement_dysJNHx43fJ12iop3boWG9QvU5A]=[
 for (int ii = 0; ii < NUM_LAYERS; ++ii) {
 	for (int jj = 0; jj < NUM_LAYERS - ii - 1; ++jj) {
 		if (layers[layerIndices[jj]].depth < layers[layerIndices[jj + 1]].depth) {
@@ -3789,7 +3789,7 @@ for (int ii = 0; ii < NUM_LAYERS; ++ii) {
 ]
 
 
-testASTTree[statement_e7pCsOaCuabD9nHz1/robmpnyuo=]=[
+testASTTree[statement_e7pCsOaCuabD9nHz1/robmpnyuo]=[
 return 4 + 4;
 
 <><><><><><><><><><><><><><><><><><><><><><><><><>
@@ -3811,7 +3811,7 @@ return 4 + 4;
 ]
 
 
-testASTTree[statement_fPdRLxCmEsUwzOraKbqokOUHr1c=]=[
+testASTTree[statement_fPdRLxCmEsUwzOraKbqokOUHr1c]=[
 {
 	if (a) {
 		1;
@@ -3858,7 +3858,7 @@ testASTTree[statement_fPdRLxCmEsUwzOraKbqokOUHr1c=]=[
 ]
 
 
-testASTTree[statement_fWWkGGLTVIing+wLy1FTpM97x60=]=[
+testASTTree[statement_fWWkGGLTVIing+wLy1FTpM97x60]=[
 while (int a = 4 > 4);
 
 <><><><><><><><><><><><><><><><><><><><><><><><><>
@@ -3870,7 +3870,7 @@ while (int a = 4 > 4);
 ]
 
 
-testASTTree[statement_gUaWv84L7noj/dMfQPNKZ1dlnrM=]=[
+testASTTree[statement_gUaWv84L7noj/dMfQPNKZ1dlnrM]=[
 if (a) 1;
 else if (b) 2;
 
@@ -3905,7 +3905,7 @@ else if (b) 2;
 ]
 
 
-testASTTree[statement_h+H9upDQmNpIYxZqksaqBJtZlao=]=[
+testASTTree[statement_h+H9upDQmNpIYxZqksaqBJtZlao]=[
 switch (a) {
 	case 2:
 }
@@ -3930,7 +3930,7 @@ switch (a) {
 ]
 
 
-testASTTree[statement_hYL9fX4tK7Iyk61KDHJdcy/Gelw=]=[
+testASTTree[statement_hYL9fX4tK7Iyk61KDHJdcy/Gelw]=[
 {
 	if (a) {
 		1;
@@ -3995,7 +3995,7 @@ testASTTree[statement_hYL9fX4tK7Iyk61KDHJdcy/Gelw=]=[
 ]
 
 
-testASTTree[statement_iRUP45nqtLhZpurjcLm3t7JePwk=]=[
+testASTTree[statement_iRUP45nqtLhZpurjcLm3t7JePwk]=[
 {
 	1;
 	if (a) {
@@ -4058,7 +4058,7 @@ testASTTree[statement_iRUP45nqtLhZpurjcLm3t7JePwk=]=[
 ]
 
 
-testASTTree[statement_k35h9qG9pXERQM6i0+R/RjFW+Qw=]=[
+testASTTree[statement_k35h9qG9pXERQM6i0+R/RjFW+Qw]=[
 foo.bar = baz.length();
 
 <><><><><><><><><><><><><><><><><><><><><><><><><>
@@ -4084,7 +4084,7 @@ foo.bar = baz.length();
 ]
 
 
-testASTTree[statement_lQirwe2rAdCTy4CyAQgeTa6O030=]=[
+testASTTree[statement_lQirwe2rAdCTy4CyAQgeTa6O030]=[
 if (a) 1;
 else if (b) 2;
 else if (c) 3;
@@ -4141,7 +4141,7 @@ else 4;
 ]
 
 
-testASTTree[statement_nGZAh/M4P22ycCzxCKTI/C9b75U=]=[
+testASTTree[statement_nGZAh/M4P22ycCzxCKTI/C9b75U]=[
 if (a) 1;
 else 2;
 
@@ -4170,7 +4170,7 @@ else 2;
 ]
 
 
-testASTTree[statement_oCpq23gERlQMvmpz/yJQhsCHwSw=]=[
+testASTTree[statement_oCpq23gERlQMvmpz/yJQhsCHwSw]=[
 {
 	if (a) 1;
 	if (a) 1;
@@ -4209,7 +4209,7 @@ testASTTree[statement_oCpq23gERlQMvmpz/yJQhsCHwSw=]=[
 ]
 
 
-testASTTree[statement_oOCnoz01e18g/NGWNJ0YsIbgmy4=]=[
+testASTTree[statement_oOCnoz01e18g/NGWNJ0YsIbgmy4]=[
 for ( ; int x = a < b; a++);
 
 <><><><><><><><><><><><><><><><><><><><><><><><><>
@@ -4248,7 +4248,7 @@ for ( ; int x = a < b; a++);
 ]
 
 
-testASTTree[statement_pMgB7ytjF5F4yny6Q5XHDysq47A=]=[
+testASTTree[statement_pMgB7ytjF5F4yny6Q5XHDysq47A]=[
 {
 	1;
 	switch (a) {
@@ -4296,7 +4296,7 @@ testASTTree[statement_pMgB7ytjF5F4yny6Q5XHDysq47A=]=[
 ]
 
 
-testASTTree[statement_qdAGT7AyHhO++cISWj+vPEL8qIU=]=[
+testASTTree[statement_qdAGT7AyHhO++cISWj+vPEL8qIU]=[
 {
 	float16_t baz = 4;
 	int f;
@@ -4384,7 +4384,7 @@ testASTTree[statement_qdAGT7AyHhO++cISWj+vPEL8qIU=]=[
 ]
 
 
-testASTTree[statement_rVX8lBvGnwqUSMKFwQ+dkgFkrbk=]=[
+testASTTree[statement_rVX8lBvGnwqUSMKFwQ+dkgFkrbk]=[
 data[invocation].i8.x = subgroupClusteredAdd(data[0].i8.x, 1);
 
 <><><><><><><><><><><><><><><><><><><><><><><><><>
@@ -4442,7 +4442,7 @@ data[invocation].i8.x = subgroupClusteredAdd(data[0].i8.x, 1);
 ]
 
 
-testASTTree[statement_rtbwKrMThikRX0PNk1bGhWfiLJE=]=[
+testASTTree[statement_rtbwKrMThikRX0PNk1bGhWfiLJE]=[
 do;
 while (1);
 
@@ -4460,7 +4460,7 @@ while (1);
 ]
 
 
-testASTTree[statement_s/6q32Fx/j4Oh6MyUJPVGKUswSU=]=[
+testASTTree[statement_s/6q32Fx/j4Oh6MyUJPVGKUswSU]=[
 {
 	;
 	;
@@ -4480,7 +4480,7 @@ testASTTree[statement_s/6q32Fx/j4Oh6MyUJPVGKUswSU=]=[
 ]
 
 
-testASTTree[statement_tP6pR7Pt9/z5JuHb1QaSpZOzLO4=]=[
+testASTTree[statement_tP6pR7Pt9/z5JuHb1QaSpZOzLO4]=[
 while (true) 1;
 
 <><><><><><><><><><><><><><><><><><><><><><><><><>
@@ -4501,7 +4501,7 @@ while (true) 1;
 ]
 
 
-testASTTree[statement_tsTIY7zQNPM5vcVLJtpGRCAIjn4=]=[
+testASTTree[statement_tsTIY7zQNPM5vcVLJtpGRCAIjn4]=[
 {
 	while (int a = 4 > 4);
 	while (4 > 4);
@@ -4534,7 +4534,7 @@ testASTTree[statement_tsTIY7zQNPM5vcVLJtpGRCAIjn4=]=[
 ]
 
 
-testASTTree[statement_vZwUleGDSF6Y5JK3/oAOSjQiNrA=]=[
+testASTTree[statement_vZwUleGDSF6Y5JK3/oAOSjQiNrA]=[
 break;
 
 <><><><><><><><><><><><><><><><><><><><><><><><><>
@@ -4544,7 +4544,7 @@ break;
 ]
 
 
-testASTTree[statement_widlXhqJZFYFmmyU+MWfBOsUvts=]=[
+testASTTree[statement_widlXhqJZFYFmmyU+MWfBOsUvts]=[
 for (int a = b; ; a++);
 
 <><><><><><><><><><><><><><><><><><><><><><><><><>
@@ -4579,7 +4579,7 @@ for (int a = b; ; a++);
 ]
 
 
-testASTTree[statement_yNC8kvzTYf1W1RntkoXX79beH9o=]=[
+testASTTree[statement_yNC8kvzTYf1W1RntkoXX79beH9o]=[
 switch (a) {
 }
 
@@ -4596,7 +4596,7 @@ switch (a) {
 ]
 
 
-testASTTree[statement_zdjqM06dD5/67Bv1Yqlsm+YYm4M=]=[
+testASTTree[statement_zdjqM06dD5/67Bv1Yqlsm+YYm4M]=[
 for (int a = b; ; );
 
 <><><><><><><><><><><><><><><><><><><><><><><><><>
@@ -4625,7 +4625,7 @@ for (int a = b; ; );
 ]
 
 
-testASTTree[translationUnit_+Ab4FAVynFnqfeBHwN0H98CVjBI=]=[
+testASTTree[translationUnit_+Ab4FAVynFnqfeBHwN0H98CVjBI]=[
 in fromVertex { in vec3 color; } fromV[];
 in vec4 nonBlockUnsized[];
 out toFragment { out vec3 color; } toF;
@@ -4721,7 +4721,7 @@ out toFragment { out vec3 color; } toF;
 ]
 
 
-testASTTree[translationUnit_/ak7uoRx1Uzo8wqWUY8G5J4x6/o=]=[
+testASTTree[translationUnit_/ak7uoRx1Uzo8wqWUY8G5J4x6/o]=[
 void foo(sampler2D t) {
 	texture(t, vec2(0.5f));
 }
@@ -4774,7 +4774,7 @@ void foo(sampler2D t) {
 ]
 
 
-testASTTree[translationUnit_0lM43b2jFiL1oSOSlchisdq4Hsc=]=[
+testASTTree[translationUnit_0lM43b2jFiL1oSOSlchisdq4Hsc]=[
 uniform bool uniformDecl = true;
 const bool constDecl = true;
 
@@ -4833,7 +4833,7 @@ const bool constDecl = true;
 ]
 
 
-testASTTree[translationUnit_236OhdF1wSvvumI6JtjifmNXiUE=]=[
+testASTTree[translationUnit_236OhdF1wSvvumI6JtjifmNXiUE]=[
 #version 330 core
 ;
 
@@ -4848,7 +4848,7 @@ testASTTree[translationUnit_236OhdF1wSvvumI6JtjifmNXiUE=]=[
 ]
 
 
-testASTTree[translationUnit_28wcKEQugIUnNw6E8ZR2m76aZlc=]=[
+testASTTree[translationUnit_28wcKEQugIUnNw6E8ZR2m76aZlc]=[
 uniform sampler2D DiffuseSampler;
 uniform sampler2D DiffuseDepthSampler;
 
@@ -4895,7 +4895,7 @@ uniform sampler2D DiffuseDepthSampler;
 ]
 
 
-testASTTree[translationUnit_2jmj7l5rSw0yVb/vlWAYkK/YBwk=]=[
+testASTTree[translationUnit_2jmj7l5rSw0yVb/vlWAYkK/YBwk]=[
 
 <><><><><><><><><><><><><><><><><><><><><><><><><>
 (TranslationUnit
@@ -4904,7 +4904,7 @@ testASTTree[translationUnit_2jmj7l5rSw0yVb/vlWAYkK/YBwk=]=[
 ]
 
 
-testASTTree[translationUnit_6MEdYJ35enV8rGc04yRv0Sj/pnw=]=[
+testASTTree[translationUnit_6MEdYJ35enV8rGc04yRv0Sj/pnw]=[
 precision highp float;
 uniform int c, d;
 in highp float x;
@@ -4969,7 +4969,7 @@ in highp float x;
 ]
 
 
-testASTTree[translationUnit_6Q7gRFDjc/LyI7COSCY696ngzLw=]=[
+testASTTree[translationUnit_6Q7gRFDjc/LyI7COSCY696ngzLw]=[
 buffer BufferName {
 	float a;
 	int b;
@@ -5019,7 +5019,7 @@ buffer BufferName {
 ]
 
 
-testASTTree[translationUnit_7QNRcV33MOX2QfzfQVcFX7hyo5U=]=[
+testASTTree[translationUnit_7QNRcV33MOX2QfzfQVcFX7hyo5U]=[
 layout(push_constant) uniform;
 
 <><><><><><><><><><><><><><><><><><><><><><><><><>
@@ -5044,7 +5044,7 @@ layout(push_constant) uniform;
 ]
 
 
-testASTTree[translationUnit_7a6an3sjrGvPOVRge02dCDkdFbE=]=[
+testASTTree[translationUnit_7a6an3sjrGvPOVRge02dCDkdFbE]=[
 void foo() {
 	print("Hello, World!");
 }
@@ -5079,7 +5079,7 @@ void foo() {
 ]
 
 
-testASTTree[translationUnit_8c8jBGOABR2sVQEEajdHYjeXnQk=]=[
+testASTTree[translationUnit_8c8jBGOABR2sVQEEajdHYjeXnQk]=[
 int foo(int a, int b, int c, int d) {
 }
 int foo(int a, int b, int c, int d, int e, int f) {
@@ -5440,7 +5440,7 @@ int foo(
 ]
 
 
-testASTTree[translationUnit_9c7lvVJk8TOc3wFytmsm1IYOV2s=]=[
+testASTTree[translationUnit_9c7lvVJk8TOc3wFytmsm1IYOV2s]=[
 layout(location = 0) out vec3 layoutOne;
 
 <><><><><><><><><><><><><><><><><><><><><><><><><>
@@ -5479,7 +5479,7 @@ layout(location = 0) out vec3 layoutOne;
 ]
 
 
-testASTTree[translationUnit_9j4/uAov0qoo/dMJ8TRB4amIzV4=]=[
+testASTTree[translationUnit_9j4/uAov0qoo/dMJ8TRB4amIzV4]=[
 const in float p;
 
 <><><><><><><><><><><><><><><><><><><><><><><><><>
@@ -5510,7 +5510,7 @@ const in float p;
 ]
 
 
-testASTTree[translationUnit_A/oxQYK/HXSMvFYf4MBtPHPf8cA=]=[
+testASTTree[translationUnit_A/oxQYK/HXSMvFYf4MBtPHPf8cA]=[
 layout(std140) uniform ColorBlock { vec4 color1; } uC;
 
 <><><><><><><><><><><><><><><><><><><><><><><><><>
@@ -5552,7 +5552,7 @@ layout(std140) uniform ColorBlock { vec4 color1; } uC;
 ]
 
 
-testASTTree[translationUnit_AjZgOG4X/D2F/MJVLr+ASG8czWU=]=[
+testASTTree[translationUnit_AjZgOG4X/D2F/MJVLr+ASG8czWU]=[
 void foo(int p[14]) {
 }
 
@@ -5592,7 +5592,7 @@ void foo(int p[14]) {
 ]
 
 
-testASTTree[translationUnit_CPy8d3lx015xQKuU2l3HhXtaplA=]=[
+testASTTree[translationUnit_CPy8d3lx015xQKuU2l3HhXtaplA]=[
 uniform samplerShadow sShadow;
 uniform texture3D t3d5[5];
 writeonly uniform image2D i2d;
@@ -5670,7 +5670,7 @@ writeonly uniform image2D i2d;
 ]
 
 
-testASTTree[translationUnit_Dm+OdFX14xyDkQ3GEtZRqfwYtsI=]=[
+testASTTree[translationUnit_Dm+OdFX14xyDkQ3GEtZRqfwYtsI]=[
 #extension foobar: warn
 
 <><><><><><><><><><><><><><><><><><><><><><><><><>
@@ -5684,7 +5684,7 @@ testASTTree[translationUnit_Dm+OdFX14xyDkQ3GEtZRqfwYtsI=]=[
 ]
 
 
-testASTTree[translationUnit_EN0yiYN7l4CsnDw8iQRoSVXO0NA=]=[
+testASTTree[translationUnit_EN0yiYN7l4CsnDw8iQRoSVXO0NA]=[
 int f(
 	int8_t i8,
 	uint8_t u8,
@@ -5787,7 +5787,7 @@ int f(
 ]
 
 
-testASTTree[translationUnit_EbGyT5HZuGQ04hcA0Oeyj0F9fWg=]=[
+testASTTree[translationUnit_EbGyT5HZuGQ04hcA0Oeyj0F9fWg]=[
 #version 460 core
 #extension GL_EXT_ray_tracing: enable
 layout(location = 0) callableDataInEXT float outColor;
@@ -5935,7 +5935,7 @@ void main() {
 ]
 
 
-testASTTree[translationUnit_FLVEl4tjFQm/pQDzQ6Bh63RQ5IU=]=[
+testASTTree[translationUnit_FLVEl4tjFQm/pQDzQ6Bh63RQ5IU]=[
 #include <foo "in angle>
 
 <><><><><><><><><><><><><><><><><><><><><><><><><>
@@ -5948,7 +5948,7 @@ testASTTree[translationUnit_FLVEl4tjFQm/pQDzQ6Bh63RQ5IU=]=[
 ]
 
 
-testASTTree[translationUnit_Fl0TjaDF+WlsGORaZhtI1ZQpBmI=]=[
+testASTTree[translationUnit_Fl0TjaDF+WlsGORaZhtI1ZQpBmI]=[
 void foo(int foo) {
 }
 
@@ -5981,7 +5981,7 @@ void foo(int foo) {
 ]
 
 
-testASTTree[translationUnit_G2ntc0oKePULUHmAKhk90CXqQKs=]=[
+testASTTree[translationUnit_G2ntc0oKePULUHmAKhk90CXqQKs]=[
 struct S {
 	float a;
 	int b;
@@ -6028,7 +6028,7 @@ struct S {
 ]
 
 
-testASTTree[translationUnit_H3P4RZ2+AmpSCKLmCbkGDbNkbz0=]=[
+testASTTree[translationUnit_H3P4RZ2+AmpSCKLmCbkGDbNkbz0]=[
 const vec2 longList[75] = vec2[75](vec2(1, 2), vec2(1, 2), vec2(1, 2), vec2(1, 2), vec2(1, 2), vec2(1, 2), vec2(1, 2), vec2(1, 2));
 
 <><><><><><><><><><><><><><><><><><><><><><><><><>
@@ -6190,7 +6190,7 @@ const vec2 longList[75] = vec2[75](vec2(1, 2), vec2(1, 2), vec2(1, 2), vec2(1, 2
 ]
 
 
-testASTTree[translationUnit_HQQcBi7HBYmShqfC/wwg6xBuUmA=]=[
+testASTTree[translationUnit_HQQcBi7HBYmShqfC/wwg6xBuUmA]=[
 #include "foo"
 
 <><><><><><><><><><><><><><><><><><><><><><><><><>
@@ -6203,7 +6203,7 @@ testASTTree[translationUnit_HQQcBi7HBYmShqfC/wwg6xBuUmA=]=[
 ]
 
 
-testASTTree[translationUnit_HUCI1vzzD0OTxNQZajn4RMb9xHQ=]=[
+testASTTree[translationUnit_HUCI1vzzD0OTxNQZajn4RMb9xHQ]=[
 patch out vec4 patchOut;
 
 <><><><><><><><><><><><><><><><><><><><><><><><><>
@@ -6234,7 +6234,7 @@ patch out vec4 patchOut;
 ]
 
 
-testASTTree[translationUnit_I4/yHKFU1LGPeA+xG8gU+MuFRu4=]=[
+testASTTree[translationUnit_I4/yHKFU1LGPeA+xG8gU+MuFRu4]=[
 uniform vec4 a;
 uniform vec2 b = vec2(0, 0);
 layout(location = 0) uniform vec2 c;
@@ -6413,7 +6413,7 @@ uniform struct e {
 ]
 
 
-testASTTree[translationUnit_Io5ggjS7YJhnDgUKvIZRolYP8Mw=]=[
+testASTTree[translationUnit_Io5ggjS7YJhnDgUKvIZRolYP8Mw]=[
 out B1 {
 	precise T s;
 	float x;
@@ -6512,7 +6512,7 @@ precise out B2 {
 ]
 
 
-testASTTree[translationUnit_Jq/Owf6pZZRb4Ywb97IzFJ82Czw=]=[
+testASTTree[translationUnit_Jq/Owf6pZZRb4Ywb97IzFJ82Czw]=[
 #pragma optimize(off)
 
 <><><><><><><><><><><><><><><><><><><><><><><><><>
@@ -6528,7 +6528,7 @@ testASTTree[translationUnit_Jq/Owf6pZZRb4Ywb97IzFJ82Czw=]=[
 ]
 
 
-testASTTree[translationUnit_K9QGGTul4WNNNHMnzM2b3S9jWqA=]=[
+testASTTree[translationUnit_K9QGGTul4WNNNHMnzM2b3S9jWqA]=[
 #pragma STDGL debug(on)
 
 <><><><><><><><><><><><><><><><><><><><><><><><><>
@@ -6544,7 +6544,7 @@ testASTTree[translationUnit_K9QGGTul4WNNNHMnzM2b3S9jWqA=]=[
 ]
 
 
-testASTTree[translationUnit_KHAM1bA53BV9UwKXM0Ib6+3gzzs=]=[
+testASTTree[translationUnit_KHAM1bA53BV9UwKXM0Ib6+3gzzs]=[
 #version 460 core
 #extension GL_EXT_ray_tracing: enable
 layout(location = 0) rayPayloadEXT vec4 payload;
@@ -7043,7 +7043,7 @@ void main() {
 ]
 
 
-testASTTree[translationUnit_Md56Tl1p5YGJPf2xzJfcvqS6l30=]=[
+testASTTree[translationUnit_Md56Tl1p5YGJPf2xzJfcvqS6l30]=[
 #extension foobar: disable
 
 <><><><><><><><><><><><><><><><><><><><><><><><><>
@@ -7057,7 +7057,7 @@ testASTTree[translationUnit_Md56Tl1p5YGJPf2xzJfcvqS6l30=]=[
 ]
 
 
-testASTTree[translationUnit_NUILb4PV+FYOp3kJXVmR2mxxW3s=]=[
+testASTTree[translationUnit_NUILb4PV+FYOp3kJXVmR2mxxW3s]=[
 #extension foobar: require
 
 <><><><><><><><><><><><><><><><><><><><><><><><><>
@@ -7071,7 +7071,7 @@ testASTTree[translationUnit_NUILb4PV+FYOp3kJXVmR2mxxW3s=]=[
 ]
 
 
-testASTTree[translationUnit_Nh1ycUOha3rPNAzR8aIV5E0PczE=]=[
+testASTTree[translationUnit_Nh1ycUOha3rPNAzR8aIV5E0PczE]=[
 precise S {
 	float a;
 	int b;
@@ -7118,7 +7118,7 @@ precise S {
 ]
 
 
-testASTTree[translationUnit_O/phBR5o6Aps1+etm3XWFkEmdP0=]=[
+testASTTree[translationUnit_O/phBR5o6Aps1+etm3XWFkEmdP0]=[
 uniform float d;
 uniform vec4 bigColor, smallColor;
 uniform vec4 otherColor;
@@ -7188,7 +7188,7 @@ uniform vec4 otherColor;
 ]
 
 
-testASTTree[translationUnit_O4LrKD5Ky3kzcJyJsO9CUeehMB8=]=[
+testASTTree[translationUnit_O4LrKD5Ky3kzcJyJsO9CUeehMB8]=[
 layout(std140, set = 0, binding = 0) uniform ub { bool bi[2][3]; };
 layout(std430, set = 0, binding = 1) buffer ssbo { bool bo[2][3]; };
 
@@ -7319,7 +7319,7 @@ layout(std430, set = 0, binding = 1) buffer ssbo { bool bo[2][3]; };
 ]
 
 
-testASTTree[translationUnit_Oe3uNA7tToJ6sM5PVeHrqzbnM8g=]=[
+testASTTree[translationUnit_Oe3uNA7tToJ6sM5PVeHrqzbnM8g]=[
 smooth out smo { int i; } smon;
 flat out fmo { int i; } fmon;
 centroid out cmo { int i; } cmon;
@@ -7447,7 +7447,7 @@ invariant out imo { int i; } imon;
 ]
 
 
-testASTTree[translationUnit_P5NIAJ6QyFl9RSRXjzwYAAY9FPU=]=[
+testASTTree[translationUnit_P5NIAJ6QyFl9RSRXjzwYAAY9FPU]=[
 in gl_PerVertex { float gl_CullDistance[3]; } gl_in[gl_MaxPatchVertices];
 out gl_PerVertex { float gl_CullDistance[3]; } gl_out[4];
 
@@ -7537,7 +7537,7 @@ out gl_PerVertex { float gl_CullDistance[3]; } gl_out[4];
 ]
 
 
-testASTTree[translationUnit_PPar44KiBHioUi4NXcPCgmfdMpw=]=[
+testASTTree[translationUnit_PPar44KiBHioUi4NXcPCgmfdMpw]=[
 int layerIndices[NUM_LAYERS];
 
 <><><><><><><><><><><><><><><><><><><><><><><><><>
@@ -7566,7 +7566,7 @@ int layerIndices[NUM_LAYERS];
 ]
 
 
-testASTTree[translationUnit_QcAWlIPjg22SF/T3tUp4acYecSo=]=[
+testASTTree[translationUnit_QcAWlIPjg22SF/T3tUp4acYecSo]=[
 Struct arrayName[arraySize];
 
 <><><><><><><><><><><><><><><><><><><><><><><><><>
@@ -7596,7 +7596,7 @@ Struct arrayName[arraySize];
 ]
 
 
-testASTTree[translationUnit_QmN4ZEPr2Z5ZsFu3ZwUifnTY1rc=]=[
+testASTTree[translationUnit_QmN4ZEPr2Z5ZsFu3ZwUifnTY1rc]=[
 out gl_PerVertex { int gl_ViewportMask[2]; } gl_out[4];
 
 <><><><><><><><><><><><><><><><><><><><><><><><><>
@@ -7646,7 +7646,7 @@ out gl_PerVertex { int gl_ViewportMask[2]; } gl_out[4];
 ]
 
 
-testASTTree[translationUnit_QwAtNO2XNASSgNfkLLdSWJvrBG8=]=[
+testASTTree[translationUnit_QwAtNO2XNASSgNfkLLdSWJvrBG8]=[
 int foo(int a, const int b, in int c, const in int d, out int e, inout int f) {
 	return a + b + c + d + e + f;
 }
@@ -7789,7 +7789,7 @@ int foo(int a, const int b, in int c, const in int d, out int e, inout int f) {
 ]
 
 
-testASTTree[translationUnit_RDMXgtr7zckSez6eLJL50Zh+Dx4=]=[
+testASTTree[translationUnit_RDMXgtr7zckSez6eLJL50Zh+Dx4]=[
 float f1 = 1.0;
 float f2 = 2.;
 float f3 = 3e0;
@@ -8279,7 +8279,7 @@ u16vec4 g6 = u16vec4(1, 2);
 (ExpressionInitializer
 (LiteralExpression
 - Type FLOAT32
-- Float 6.0000002E10
+- Float 6.0E10
 )LiteralExpression
 )ExpressionInitializer
 )DeclarationMember
@@ -9033,7 +9033,7 @@ u16vec4 g6 = u16vec4(1, 2);
 ]
 
 
-testASTTree[translationUnit_SCpcVbJwv5Y73x+iWRcLdtyBIoM=]=[
+testASTTree[translationUnit_SCpcVbJwv5Y73x+iWRcLdtyBIoM]=[
 int foo2(float a, vec3 b, out int r) {
 	r = int(3.0f * a);
 	return int(5.0f * b.y);
@@ -9135,7 +9135,7 @@ int foo2(float a, vec3 b, out int r) {
 ]
 
 
-testASTTree[translationUnit_SPo6zCtQXwlfGXG47pS58y3BHa4=]=[
+testASTTree[translationUnit_SPo6zCtQXwlfGXG47pS58y3BHa4]=[
 #custom fdsajfdsl j4kltj4 43_" fds
 
 <><><><><><><><><><><><><><><><><><><><><><><><><>
@@ -9148,7 +9148,7 @@ testASTTree[translationUnit_SPo6zCtQXwlfGXG47pS58y3BHa4=]=[
 ]
 
 
-testASTTree[translationUnit_SyNSfxcWb8GEgnJuhI1nI4aSJeY=]=[
+testASTTree[translationUnit_SyNSfxcWb8GEgnJuhI1nI4aSJeY]=[
 int i = int(u_f) + int(b);
 ivec2 i2 = ivec2(u_f2) + ivec2(b2);
 ivec3 i3 = ivec3(u_f3) + ivec3(b3);
@@ -9301,7 +9301,7 @@ ivec4 i4 = ivec4(u_f4) + ivec4(b4);
 ]
 
 
-testASTTree[translationUnit_TZfe9rv27ZvaTM1knjNMGBKTmoU=]=[
+testASTTree[translationUnit_TZfe9rv27ZvaTM1knjNMGBKTmoU]=[
 uniform vec4 entityColor;
 
 <><><><><><><><><><><><><><><><><><><><><><><><><>
@@ -9329,7 +9329,7 @@ uniform vec4 entityColor;
 ]
 
 
-testASTTree[translationUnit_U+sHzW+t4Ram/epzl8aDmSnsCSU=]=[
+testASTTree[translationUnit_U+sHzW+t4Ram/epzl8aDmSnsCSU]=[
 ;
 
 <><><><><><><><><><><><><><><><><><><><><><><><><>
@@ -9341,7 +9341,7 @@ testASTTree[translationUnit_U+sHzW+t4Ram/epzl8aDmSnsCSU=]=[
 ]
 
 
-testASTTree[translationUnit_WFnil04nP8rEnNiXfDiyt+mMvJQ=]=[
+testASTTree[translationUnit_WFnil04nP8rEnNiXfDiyt+mMvJQ]=[
 layout(location = 5, xfb_buffer = 1, xfb_offset = 8) out struct S2 {
 	float y1_out;
 	vec4 y2_out;
@@ -9426,7 +9426,7 @@ layout(location = 5, xfb_buffer = 1, xfb_offset = 8) out struct S2 {
 ]
 
 
-testASTTree[translationUnit_WP8ySEuBqsIACK9bjeto7zO3dJ8=]=[
+testASTTree[translationUnit_WP8ySEuBqsIACK9bjeto7zO3dJ8]=[
 void main() {
 	foo = a[3].f;
 	foo = b.length();
@@ -9489,7 +9489,7 @@ void main() {
 ]
 
 
-testASTTree[translationUnit_X9XRw80weC7lPid3sxwz0LkeiIU=]=[
+testASTTree[translationUnit_X9XRw80weC7lPid3sxwz0LkeiIU]=[
 #custom "foo"
 
 <><><><><><><><><><><><><><><><><><><><><><><><><>
@@ -9502,7 +9502,7 @@ testASTTree[translationUnit_X9XRw80weC7lPid3sxwz0LkeiIU=]=[
 ]
 
 
-testASTTree[translationUnit_XmKN7b/NdpI/qWYN1wDtikr3JwE=]=[
+testASTTree[translationUnit_XmKN7b/NdpI/qWYN1wDtikr3JwE]=[
 struct {
 	float a;
 	int b;
@@ -9566,7 +9566,7 @@ struct {
 ]
 
 
-testASTTree[translationUnit_afHjqPz5O3bUHRXvMOFHsSPu8hM=]=[
+testASTTree[translationUnit_afHjqPz5O3bUHRXvMOFHsSPu8hM]=[
 mediump vec4 calculateColor();
 
 <><><><><><><><><><><><><><><><><><><><><><><><><>
@@ -9594,7 +9594,7 @@ mediump vec4 calculateColor();
 ]
 
 
-testASTTree[translationUnit_aoEgjHn3CMfQelB9+/laVEH9Myo=]=[
+testASTTree[translationUnit_aoEgjHn3CMfQelB9+/laVEH9Myo]=[
 precision mediump float;
 
 <><><><><><><><><><><><><><><><><><><><><><><><><>
@@ -9614,7 +9614,7 @@ precision mediump float;
 ]
 
 
-testASTTree[translationUnit_bzo5RqTGfEV12vp6yI3AvJeJwMw=]=[
+testASTTree[translationUnit_bzo5RqTGfEV12vp6yI3AvJeJwMw]=[
 #include "<fdsfds>>fdsfds"
 
 <><><><><><><><><><><><><><><><><><><><><><><><><>
@@ -9627,7 +9627,7 @@ testASTTree[translationUnit_bzo5RqTGfEV12vp6yI3AvJeJwMw=]=[
 ]
 
 
-testASTTree[translationUnit_cIWGpLfTBT11iH1083zYJU+F7xs=]=[
+testASTTree[translationUnit_cIWGpLfTBT11iH1083zYJU+F7xs]=[
 #custom
 
 <><><><><><><><><><><><><><><><><><><><><><><><><>
@@ -9640,7 +9640,7 @@ testASTTree[translationUnit_cIWGpLfTBT11iH1083zYJU+F7xs=]=[
 ]
 
 
-testASTTree[translationUnit_cU2tgWrfelgPk90AO8JdXiFd+Sk=]=[
+testASTTree[translationUnit_cU2tgWrfelgPk90AO8JdXiFd+Sk]=[
 layout(points) in;
 layout(triangle_strip, max_vertices = 4) out;
 
@@ -9690,7 +9690,7 @@ layout(triangle_strip, max_vertices = 4) out;
 ]
 
 
-testASTTree[translationUnit_cU3XIiV3PXtcZGkOfgzQtpXV7bI=]=[
+testASTTree[translationUnit_cU3XIiV3PXtcZGkOfgzQtpXV7bI]=[
 void foo() {
 	1;
 }
@@ -9722,7 +9722,7 @@ void foo() {
 ]
 
 
-testASTTree[translationUnit_cuvNaKm+5Lz72pE+A8J5GjOrB8U=]=[
+testASTTree[translationUnit_cuvNaKm+5Lz72pE+A8J5GjOrB8U]=[
 layout(location = 0) uniform struct {
 	float r;
 	float g;
@@ -9848,7 +9848,7 @@ layout(location = 0) uniform struct {
 ]
 
 
-testASTTree[translationUnit_dZlzOJy+v4VJbi+tUU5kD5XDX9U=]=[
+testASTTree[translationUnit_dZlzOJy+v4VJbi+tUU5kD5XDX9U]=[
 float16_t baz = 4;
 int f;
 uint f;
@@ -9934,7 +9934,7 @@ float fds;
 ]
 
 
-testASTTree[translationUnit_e5vJreEatr9QlRCEqXrIn/f8K+g=]=[
+testASTTree[translationUnit_e5vJreEatr9QlRCEqXrIn/f8K+g]=[
 layout(std140, binding = 0) uniform ubo_DynamicState {
 	mat4 ModelViewMat;
 	mat4 ProjMat;
@@ -9997,7 +9997,7 @@ layout(std140, binding = 0) uniform ubo_DynamicState {
 ]
 
 
-testASTTree[translationUnit_eY6JNFKswV/vo+P1NKyL6y8sLbg=]=[
+testASTTree[translationUnit_eY6JNFKswV/vo+P1NKyL6y8sLbg]=[
 in vec2 inf, ing;
 uniform ivec2 offsets[4];
 uniform sampler2D sArray[4];
@@ -10317,7 +10317,7 @@ precision highp uimageBuffer;
 ]
 
 
-testASTTree[translationUnit_eY8Lq/ozfZwjd4oa9nBnWsHzYaI=]=[
+testASTTree[translationUnit_eY8Lq/ozfZwjd4oa9nBnWsHzYaI]=[
 struct sA { int x, y; };
 struct sB { sA a; };
 layout(binding = 0, set = 0) uniform ubo { sB b; };
@@ -10466,7 +10466,7 @@ struct sC { sA state; } c = { b.a };
 ]
 
 
-testASTTree[translationUnit_fN4XDn8ITVWFTVQcOMNElmvKmPY=]=[
+testASTTree[translationUnit_fN4XDn8ITVWFTVQcOMNElmvKmPY]=[
 layout(location = 0) out vec3 layoutOne;
 layout(location = 1) out vec3 layoutTwo;
 
@@ -10535,7 +10535,7 @@ layout(location = 1) out vec3 layoutTwo;
 ]
 
 
-testASTTree[translationUnit_fz9KFFjXVmRvNIOac+vcxRY4BwM=]=[
+testASTTree[translationUnit_fz9KFFjXVmRvNIOac+vcxRY4BwM]=[
 float b[] = { 3.4f, 4.2f, 5.0f, 5.2f, 1.1f };
 
 <><><><><><><><><><><><><><><><><><><><><><><><><>
@@ -10592,7 +10592,7 @@ float b[] = { 3.4f, 4.2f, 5.0f, 5.2f, 1.1f };
 ]
 
 
-testASTTree[translationUnit_i/EniguX+wFztqu2tkPmJWuSrXg=]=[
+testASTTree[translationUnit_i/EniguX+wFztqu2tkPmJWuSrXg]=[
 struct S { int[3] a[2], b[5]; };
 S s;
 int[5] c[4], d[8];
@@ -10965,7 +10965,7 @@ in inbname { float[7] f[8][9]; } inbinst[4][5][6];
 ]
 
 
-testASTTree[translationUnit_k9uty/KYgHu5+JqU9lfqFR8W5Fo=]=[
+testASTTree[translationUnit_k9uty/KYgHu5+JqU9lfqFR8W5Fo]=[
 void badConst() {
 	sampler2D(t2d);
 	sampler2D(s, s);
@@ -11611,7 +11611,7 @@ layout(input_attachment_index = 2) uniform subpassInputMS subDMS;
 ]
 
 
-testASTTree[translationUnit_lL56RTqnSoghB+rq4Swx4go1aNg=]=[
+testASTTree[translationUnit_lL56RTqnSoghB+rq4Swx4go1aNg]=[
 noperspective in vec4 color;
 
 <><><><><><><><><><><><><><><><><><><><><><><><><>
@@ -11642,7 +11642,7 @@ noperspective in vec4 color;
 ]
 
 
-testASTTree[translationUnit_m75yy2ruroKwuMb6PWosACvKNX8=]=[
+testASTTree[translationUnit_m75yy2ruroKwuMb6PWosACvKNX8]=[
 int i4[4];
 int j, k5[5];
 int m6[6], m7[7];
@@ -13192,7 +13192,7 @@ int foob__vn8[4] = int[](21, 22, 23, 24), foob__vp;
 ]
 
 
-testASTTree[translationUnit_nIgdvGvO1fhk4W3FufRe1eJpIpw=]=[
+testASTTree[translationUnit_nIgdvGvO1fhk4W3FufRe1eJpIpw]=[
 layout(binding = 0, binding = 4 + 4, baz = zam, foo, shared, bar) uniform sampler2D u_texture;
 
 <><><><><><><><><><><><><><><><><><><><><><><><><>
@@ -13265,7 +13265,7 @@ layout(binding = 0, binding = 4 + 4, baz = zam, foo, shared, bar) uniform sample
 ]
 
 
-testASTTree[translationUnit_njEHkaaQormOlHDtRB9STuKlklw=]=[
+testASTTree[translationUnit_njEHkaaQormOlHDtRB9STuKlklw]=[
 buffer B {
 	int8_t i8_from_i16;
 	int16_t i16_from_i8;
@@ -13349,7 +13349,7 @@ buffer B {
 ]
 
 
-testASTTree[translationUnit_oJ8veiR5bKlLy7E0Mk9hnKUL1Zw=]=[
+testASTTree[translationUnit_oJ8veiR5bKlLy7E0Mk9hnKUL1Zw]=[
 layout(push_constant);
 
 <><><><><><><><><><><><><><><><><><><><><><><><><>
@@ -13371,7 +13371,7 @@ layout(push_constant);
 ]
 
 
-testASTTree[translationUnit_pIakdnB8Ukj4ongkYCvUkvZyG2g=]=[
+testASTTree[translationUnit_pIakdnB8Ukj4ongkYCvUkvZyG2g]=[
 layout(location = 0) attribute vec4 b, c;
 
 <><><><><><><><><><><><><><><><><><><><><><><><><>
@@ -13414,7 +13414,7 @@ layout(location = 0) attribute vec4 b, c;
 ]
 
 
-testASTTree[translationUnit_pO2f7a/jD9ppbppHMjd1HBy50OM=]=[
+testASTTree[translationUnit_pO2f7a/jD9ppbppHMjd1HBy50OM]=[
 uniform sampler2D Sampler;
 
 <><><><><><><><><><><><><><><><><><><><><><><><><>
@@ -13442,7 +13442,7 @@ uniform sampler2D Sampler;
 ]
 
 
-testASTTree[translationUnit_peTgwG89jnhxsZda+Ex5i9FSMos=]=[
+testASTTree[translationUnit_peTgwG89jnhxsZda+Ex5i9FSMos]=[
 struct Struct {
 	vec4 vector;
 	float number;
@@ -13489,7 +13489,7 @@ struct Struct {
 ]
 
 
-testASTTree[translationUnit_q9wlK78GuFZi6kgifd8ZyFnEiIU=]=[
+testASTTree[translationUnit_q9wlK78GuFZi6kgifd8ZyFnEiIU]=[
 #extension foobar: enable
 
 <><><><><><><><><><><><><><><><><><><><><><><><><>
@@ -13503,7 +13503,7 @@ testASTTree[translationUnit_q9wlK78GuFZi6kgifd8ZyFnEiIU=]=[
 ]
 
 
-testASTTree[translationUnit_qZpQwg3ZQyK+OWkmUcyyc5tsyTE=]=[
+testASTTree[translationUnit_qZpQwg3ZQyK+OWkmUcyyc5tsyTE]=[
 out float foo;
 in float bar;
 
@@ -13550,7 +13550,7 @@ in float bar;
 ]
 
 
-testASTTree[translationUnit_r0D+N74Qvsgl1yW05EQZn/a9N60=]=[
+testASTTree[translationUnit_r0D+N74Qvsgl1yW05EQZn/a9N60]=[
 in myTexCoord;
 
 <><><><><><><><><><><><><><><><><><><><><><><><><>
@@ -13571,7 +13571,7 @@ in myTexCoord;
 ]
 
 
-testASTTree[translationUnit_rFZ7WwaQyk0NrSHd7sljW3v39KQ=]=[
+testASTTree[translationUnit_rFZ7WwaQyk0NrSHd7sljW3v39KQ]=[
 readonly coherent uniform layout(set = 0, binding = 0) image2D image1;
 readonly uniform layout(set = 0, binding = 2) image2D image2;
 writeonly coherent uniform layout(set = 0, binding = 1, rgba32f) image2D image3;
@@ -13944,7 +13944,7 @@ layout(location = 0) out vec4 FragColor;
 ]
 
 
-testASTTree[translationUnit_rPy/eKGaAFqBELL5kH3u2XGHYgU=]=[
+testASTTree[translationUnit_rPy/eKGaAFqBELL5kH3u2XGHYgU]=[
 layout(binding = 0) buffer Buffers {
 	vec4 f4;
 	ivec4 i4;
@@ -14048,7 +14048,7 @@ layout(binding = 0) buffer Buffers {
 ]
 
 
-testASTTree[translationUnit_rwjVYGGMdxfBX1FKFoxqfDwi2ps=]=[
+testASTTree[translationUnit_rwjVYGGMdxfBX1FKFoxqfDwi2ps]=[
 layout(binding = 2, std140) uniform UBO { MyStruct c; } uBuf;
 
 <><><><><><><><><><><><><><><><><><><><><><><><><>
@@ -14100,7 +14100,7 @@ layout(binding = 2, std140) uniform UBO { MyStruct c; } uBuf;
 ]
 
 
-testASTTree[translationUnit_t4O/BQSs54FhE9eJ2yCekAHwpJU=]=[
+testASTTree[translationUnit_t4O/BQSs54FhE9eJ2yCekAHwpJU]=[
 void foo() {
 }
 
@@ -14124,7 +14124,7 @@ void foo() {
 ]
 
 
-testASTTree[translationUnit_uD09mrQtlz4O2MEvP3NYNqgNJ/M=]=[
+testASTTree[translationUnit_uD09mrQtlz4O2MEvP3NYNqgNJ/M]=[
 const vec2 cv2 = vec2(10.0f, 20.0f);
 const mat2x4 m24 = mat2x4(3.0f);
 const mat4x2 m42 = mat4x2(1.0f, 2.0f, 3.0f, 4.0f, 5.0f, 6.0f, 7.0f, 8.0f);
@@ -14255,7 +14255,7 @@ const mat4x2 m42 = mat4x2(1.0f, 2.0f, 3.0f, 4.0f, 5.0f, 6.0f, 7.0f, 8.0f);
 ]
 
 
-testASTTree[translationUnit_xSh2/NlN6bwhpxGoFQ4K9HHStOc=]=[
+testASTTree[translationUnit_xSh2/NlN6bwhpxGoFQ4K9HHStOc]=[
 out outbname {
 	int a;
 	out vec4 v;
@@ -14392,7 +14392,7 @@ out outbname2 {
 ]
 
 
-testASTTree[translationUnit_y04Q1cMbMY2sj/19519kLQ5B0LY=]=[
+testASTTree[translationUnit_y04Q1cMbMY2sj/19519kLQ5B0LY]=[
 #pragma foobar
 
 <><><><><><><><><><><><><><><><><><><><><><><><><>
@@ -14408,7 +14408,7 @@ testASTTree[translationUnit_y04Q1cMbMY2sj/19519kLQ5B0LY=]=[
 ]
 
 
-testASTTree[translationUnit_yAfu8bH75Z626htfdVtAVon2/s4=]=[
+testASTTree[translationUnit_yAfu8bH75Z626htfdVtAVon2/s4]=[
 void functionDef(const in float param) {
 	functionCall();
 }
@@ -14456,7 +14456,7 @@ void functionDef(const in float param) {
 ]
 
 
-testASTTree[translationUnit_yy0HUZ4NHVmB12LjGwGpwVQ8nZA=]=[
+testASTTree[translationUnit_yy0HUZ4NHVmB12LjGwGpwVQ8nZA]=[
 #pragma invariant(all)
 
 <><><><><><><><><><><><><><><><><><><><><><><><><>
@@ -14472,7 +14472,7 @@ testASTTree[translationUnit_yy0HUZ4NHVmB12LjGwGpwVQ8nZA=]=[
 ]
 
 
-testASTTree[translationUnit_z3gQlbe59WYgPcr2ZXqG0C7LkSs=]=[
+testASTTree[translationUnit_z3gQlbe59WYgPcr2ZXqG0C7LkSs]=[
 layout(location = 0) in Primitive { vec2 texCoord; } IN;
 
 <><><><><><><><><><><><><><><><><><><><><><><><><>
@@ -14519,7 +14519,7 @@ layout(location = 0) in Primitive { vec2 texCoord; } IN;
 ]
 
 
-testASTTree[translationUnit_zZs4MeLdp1Ei2nHcEUU0pUwMpSg=]=[
+testASTTree[translationUnit_zZs4MeLdp1Ei2nHcEUU0pUwMpSg]=[
 #include ""
 
 <><><><><><><><><><><><><><><><><><><><><><><><><>
@@ -14532,7 +14532,7 @@ testASTTree[translationUnit_zZs4MeLdp1Ei2nHcEUU0pUwMpSg=]=[
 ]
 
 
-testASTTree[translationUnit_zvMdO3o/ogGYXG42m3AH3r30L5o=]=[
+testASTTree[translationUnit_zvMdO3o/ogGYXG42m3AH3r30L5o]=[
 varying vec2 varyVec;
 
 <><><><><><><><><><><><><><><><><><><><><><><><><>

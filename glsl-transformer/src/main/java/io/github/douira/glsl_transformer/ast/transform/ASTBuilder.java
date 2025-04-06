@@ -45,8 +45,7 @@ import io.github.douira.glsl_transformer.util.Type.NumberType;
  * relationship between a parse tree and an AST is encoded in this visitor.
  */
 public class ASTBuilder extends GLSLParserBaseVisitor<ASTNode> {
-  private static Deque<SourceLocation> sourceLocations = new ArrayDeque<>(4);
-  private static SourceLocation lastSourceLocation = null;
+  private static SourceLocation lastSourceLocation;
   private static BufferedTokenStream tokenStream = null;
 
   public static void setTokenStream(BufferedTokenStream tokenStream) {
@@ -59,7 +58,7 @@ public class ASTBuilder extends GLSLParserBaseVisitor<ASTNode> {
 
   /**
    * Builds an AST from the given parse tree with the given root.
-   * 
+   *
    * @param rootInstance The root instance
    * @param ctx          The parse tree
    * @return The built AST
@@ -70,7 +69,7 @@ public class ASTBuilder extends GLSLParserBaseVisitor<ASTNode> {
 
   /**
    * Builds an AST of a specific type from the given parse tree with a given root.
-   * 
+   *
    * @param <T>          The type of the parse tree
    * @param <N>          The type of the AST node
    * @param rootInstance The root instance
@@ -87,7 +86,7 @@ public class ASTBuilder extends GLSLParserBaseVisitor<ASTNode> {
 
   /**
    * Builds a subtree with the given root.
-   * 
+   *
    * @param rootInstance The root instance
    * @param ctx          The parse tree
    * @return The built AST
@@ -98,7 +97,7 @@ public class ASTBuilder extends GLSLParserBaseVisitor<ASTNode> {
 
   /**
    * Builds a subtree of a specific type with a given root instance.
-   * 
+   *
    * @param <T>          The type of the parse tree
    * @param <N>          The type of the AST node
    * @param rootInstance The root instance
@@ -113,25 +112,27 @@ public class ASTBuilder extends GLSLParserBaseVisitor<ASTNode> {
     return rootInstance.indexNodes(() -> buildInternal(ctx, visitMethod));
   }
 
+  private static void setupVisit() {
+    // init last source location with line zero to allow for reconstruction
+    if (tokenStream != null) {
+      lastSourceLocation = new SourceLocation(0);
+    }
+  }
+
   private static ASTNode buildInternal(ParseTree ctx) {
-    sourceLocations.clear();
-    lastSourceLocation = null;
+    setupVisit();
     return new ASTBuilder().visit(ctx);
   }
 
   private static <T extends ParseTree, N extends ASTNode> N buildInternal(
       T ctx,
       BiFunction<ASTBuilder, T, N> visitMethod) {
+    setupVisit();
     return visitMethod.apply(new ASTBuilder(), ctx);
   }
 
   private static <N, R> R applySafe(N ctx, Function<N, R> visitMethod) {
     return ctx == null ? null : visitMethod.apply(ctx);
-  }
-
-  public static SourceLocation takeSourceLocation() {
-    var location = sourceLocations.isEmpty() ? null : sourceLocations.pop();
-    return location == SourceLocation.PLACEHOLDER ? null : location;
   }
 
   private static Identifier makeIdentifier(Token name) {
@@ -141,21 +142,22 @@ public class ASTBuilder extends GLSLParserBaseVisitor<ASTNode> {
     if (name.getType() != GLSLLexer.IDENTIFIER) {
       throw new IllegalStateException("Expected identifier, got: " + name.getText());
     }
-    var result = new Identifier(name);
-    return result;
+    return new Identifier(name);
   }
 
   // ANTLR lexer grammar rule for line directives:
-  // '#line' WS_frag DIGIT+ (WS_frag DIGIT+)? (NEWLINE | WS_frag)* NEWLINE
-  private static Pattern lineDirective = Pattern.compile(
-      "#line[\\t\\r\\u000C ]+(\\d+)(?:[\\t\\r\\u000C ]+(\\d+))?.*", Pattern.DOTALL);
+  // '#line' WS_frag DIGIT+ (WS_frag (DIGIT+ | PP_STRING))? (NEWLINE | WS_frag)* NEWLINE
+  private static final Pattern lineDirective = Pattern.compile(
+      "#line[\\t\\r\\u000C ]+(\\d+)(?:[\\t\\r\\u000C ]+(?:(\\d+)|\"([^\"]*)\"))?.*", Pattern.DOTALL);
 
-  private static void readLineDirective(ParserRuleContext ctx) {
+  private static SourceLocation readLineDirective(ParserRuleContext ctx) {
     if (tokenStream == null) {
-      return;
+      return null;
     }
 
-    SourceLocation newSourceLocation = SourceLocation.PLACEHOLDER;
+    var parsedLine = ctx.start.getLine();
+
+    SourceLocation newSourceLocation = null;
     var tokens = tokenStream.getHiddenTokensToLeft(
         ctx.start.getTokenIndex(), GLSLLexer.PREPROCESSOR);
     if (tokens != null) {
@@ -166,17 +168,38 @@ public class ASTBuilder extends GLSLParserBaseVisitor<ASTNode> {
           if (matcher.matches()) {
             var line = Integer.parseInt(matcher.group(1));
             if (matcher.group(2) != null) {
-              var source = Integer.parseInt(matcher.group(2));
-              lastSourceLocation = SourceLocation.fromPrevious(lastSourceLocation, line, source);
+              var sourceNumber = Integer.parseInt(matcher.group(2));
+              newSourceLocation = lastSourceLocation.createFromPrevious(parsedLine, line, sourceNumber);
+            } else if (matcher.group(3) != null) {
+              var sourceName = matcher.group(3);
+              newSourceLocation = lastSourceLocation.createFromPrevious(parsedLine, line, sourceName);
             } else {
-              lastSourceLocation = SourceLocation.fromPrevious(lastSourceLocation, line);
+              newSourceLocation = lastSourceLocation.createFromPrevious(parsedLine, line);
             }
-            newSourceLocation = lastSourceLocation;
+            lastSourceLocation = newSourceLocation;
           }
         }
       }
     }
-    sourceLocations.push(newSourceLocation);
+
+    // if no source location was parsed, reconstruct it by offsetting with lexed lines since the last one
+    if (newSourceLocation == null) {
+      if (lastSourceLocation instanceof PresentSourceLocation present) {
+        newSourceLocation = present.createFromPrevious(parsedLine,
+            present.line + parsedLine - present.parsedLine);
+      } else {
+        newSourceLocation = lastSourceLocation.createFromPrevious(parsedLine);
+      }
+      lastSourceLocation = newSourceLocation;
+    }
+
+    return newSourceLocation;
+  }
+
+  private void setSourceLocationSafe(ASTNode node, SourceLocation location) {
+    if (node != null) {
+      node.setSourceLocation(location);
+    }
   }
 
   @Override
@@ -285,35 +308,25 @@ public class ASTBuilder extends GLSLParserBaseVisitor<ASTNode> {
   @Override
   public UnaryExpression visitPostfixExpression(PostfixExpressionContext ctx) {
     var operand = visitExpression(ctx.operand);
-    switch (ctx.op.getType()) {
-      case GLSLParser.INC_OP:
-        return new IncrementPostfixExpression(operand);
-      case GLSLParser.DEC_OP:
-        return new DecrementPostfixExpression(operand);
-      default:
-        throw new IllegalArgumentException("Unknown postfix operator: " + ctx.op.getText());
-    }
+    return switch (ctx.op.getType()) {
+      case GLSLParser.INC_OP -> new IncrementPostfixExpression(operand);
+      case GLSLParser.DEC_OP -> new DecrementPostfixExpression(operand);
+      default -> throw new IllegalArgumentException("Unknown postfix operator: " + ctx.op.getText());
+    };
   }
 
   @Override
   public UnaryExpression visitPrefixExpression(PrefixExpressionContext ctx) {
     var operand = visitExpression(ctx.operand);
-    switch (ctx.op.getType()) {
-      case GLSLLexer.INC_OP:
-        return new IncrementPrefixExpression(operand);
-      case GLSLLexer.DEC_OP:
-        return new DecrementPrefixExpression(operand);
-      case GLSLLexer.PLUS_OP:
-        return new IdentityExpression(operand);
-      case GLSLLexer.MINUS_OP:
-        return new NegationExpression(operand);
-      case GLSLLexer.LOGICAL_NOT_OP:
-        return new BooleanNotExpression(operand);
-      case GLSLLexer.BITWISE_NEG_OP:
-        return new BitwiseNotExpression(operand);
-      default:
-        throw new IllegalStateException("Unexpected prefix operator type" + ctx.op.getText());
-    }
+    return switch (ctx.op.getType()) {
+      case GLSLLexer.INC_OP -> new IncrementPrefixExpression(operand);
+      case GLSLLexer.DEC_OP -> new DecrementPrefixExpression(operand);
+      case GLSLLexer.PLUS_OP -> new IdentityExpression(operand);
+      case GLSLLexer.MINUS_OP -> new NegationExpression(operand);
+      case GLSLLexer.LOGICAL_NOT_OP -> new BooleanNotExpression(operand);
+      case GLSLLexer.BITWISE_NEG_OP -> new BitwiseNotExpression(operand);
+      default -> throw new IllegalStateException("Unexpected prefix operator type" + ctx.op.getText());
+    };
   }
 
   private static final Pattern intExtractor = Pattern.compile(
@@ -355,7 +368,9 @@ public class ASTBuilder extends GLSLParserBaseVisitor<ASTNode> {
       case SIGNED_INTEGER:
       case UNSIGNED_INTEGER:
         var intMatcher = intExtractor.matcher(tokenContent);
-        intMatcher.matches();
+        if (!intMatcher.matches()) {
+          throw new IllegalStateException("Unexpected integer literal: " + tokenContent);
+        }
         var prefix = intMatcher.group(1);
         tokenContent = intMatcher.group(2);
         if (tokenContent.isEmpty()) {
@@ -386,7 +401,9 @@ public class ASTBuilder extends GLSLParserBaseVisitor<ASTNode> {
         return new LiteralExpression(literalType, value, format);
       case FLOATING_POINT:
         var floatMatcher = floatExtractor.matcher(tokenContent);
-        floatMatcher.matches();
+        if (!floatMatcher.matches()) {
+          throw new IllegalStateException("Unexpected floating point literal: " + tokenContent);
+        }
         tokenContent = floatMatcher.group(1);
         return new LiteralExpression(literalType, Double.parseDouble(tokenContent));
       default:
@@ -398,14 +415,11 @@ public class ASTBuilder extends GLSLParserBaseVisitor<ASTNode> {
   public BinaryExpression visitAdditiveExpression(AdditiveExpressionContext ctx) {
     var left = visitExpression(ctx.left);
     var right = visitExpression(ctx.right);
-    switch (ctx.op.getType()) {
-      case GLSLLexer.PLUS_OP:
-        return new AdditionExpression(left, right);
-      case GLSLLexer.MINUS_OP:
-        return new SubtractionExpression(left, right);
-      default:
-        throw new IllegalArgumentException("Unknown additive operator: " + ctx.op.getText());
-    }
+    return switch (ctx.op.getType()) {
+      case GLSLLexer.PLUS_OP -> new AdditionExpression(left, right);
+      case GLSLLexer.MINUS_OP -> new SubtractionExpression(left, right);
+      default -> throw new IllegalArgumentException("Unknown additive operator: " + ctx.op.getText());
+    };
   }
 
   @Override
@@ -419,32 +433,20 @@ public class ASTBuilder extends GLSLParserBaseVisitor<ASTNode> {
   public BinaryExpression visitAssignmentExpression(AssignmentExpressionContext ctx) {
     var left = visitExpression(ctx.left);
     var right = visitExpression(ctx.right);
-    switch (ctx.op.getType()) {
-      case GLSLLexer.ASSIGN_OP:
-        return new AssignmentExpression(left, right);
-      case GLSLLexer.MUL_ASSIGN:
-        return new MultiplicationAssignmentExpression(left, right);
-      case GLSLLexer.DIV_ASSIGN:
-        return new DivisionAssignmentExpression(left, right);
-      case GLSLLexer.MOD_ASSIGN:
-        return new ModuloAssignmentExpression(left, right);
-      case GLSLLexer.ADD_ASSIGN:
-        return new AdditionAssignmentExpression(left, right);
-      case GLSLLexer.SUB_ASSIGN:
-        return new SubtractionAssignmentExpression(left, right);
-      case GLSLLexer.AND_ASSIGN:
-        return new BitwiseAndAssignmentExpression(left, right);
-      case GLSLLexer.XOR_ASSIGN:
-        return new BitwiseXorAssignmentExpression(left, right);
-      case GLSLLexer.OR_ASSIGN:
-        return new BitwiseOrAssignmentExpression(left, right);
-      case GLSLLexer.LEFT_ASSIGN:
-        return new LeftShiftAssignmentExpression(left, right);
-      case GLSLLexer.RIGHT_ASSIGN:
-        return new RightShiftAssignmentExpression(left, right);
-      default:
-        throw new IllegalArgumentException("Unknown assignment operator: " + ctx.op.getText());
-    }
+    return switch (ctx.op.getType()) {
+      case GLSLLexer.ASSIGN_OP -> new AssignmentExpression(left, right);
+      case GLSLLexer.MUL_ASSIGN -> new MultiplicationAssignmentExpression(left, right);
+      case GLSLLexer.DIV_ASSIGN -> new DivisionAssignmentExpression(left, right);
+      case GLSLLexer.MOD_ASSIGN -> new ModuloAssignmentExpression(left, right);
+      case GLSLLexer.ADD_ASSIGN -> new AdditionAssignmentExpression(left, right);
+      case GLSLLexer.SUB_ASSIGN -> new SubtractionAssignmentExpression(left, right);
+      case GLSLLexer.AND_ASSIGN -> new BitwiseAndAssignmentExpression(left, right);
+      case GLSLLexer.XOR_ASSIGN -> new BitwiseXorAssignmentExpression(left, right);
+      case GLSLLexer.OR_ASSIGN -> new BitwiseOrAssignmentExpression(left, right);
+      case GLSLLexer.LEFT_ASSIGN -> new LeftShiftAssignmentExpression(left, right);
+      case GLSLLexer.RIGHT_ASSIGN -> new RightShiftAssignmentExpression(left, right);
+      default -> throw new IllegalArgumentException("Unknown assignment operator: " + ctx.op.getText());
+    };
   }
 
   @Override
@@ -472,14 +474,11 @@ public class ASTBuilder extends GLSLParserBaseVisitor<ASTNode> {
   public BinaryExpression visitEqualityExpression(EqualityExpressionContext ctx) {
     var left = visitExpression(ctx.left);
     var right = visitExpression(ctx.right);
-    switch (ctx.op.getType()) {
-      case GLSLLexer.EQ_OP:
-        return new EqualityExpression(left, right);
-      case GLSLLexer.NE_OP:
-        return new InequalityExpression(left, right);
-      default:
-        throw new IllegalArgumentException("Unknown equality operator: " + ctx.op.getText());
-    }
+    return switch (ctx.op.getType()) {
+      case GLSLLexer.EQ_OP -> new EqualityExpression(left, right);
+      case GLSLLexer.NE_OP -> new InequalityExpression(left, right);
+      default -> throw new IllegalArgumentException("Unknown equality operator: " + ctx.op.getText());
+    };
   }
 
   @Override
@@ -507,48 +506,36 @@ public class ASTBuilder extends GLSLParserBaseVisitor<ASTNode> {
   public BinaryExpression visitRelationalExpression(RelationalExpressionContext ctx) {
     var left = visitExpression(ctx.left);
     var right = visitExpression(ctx.right);
-    switch (ctx.op.getType()) {
-      case GLSLLexer.LT_OP:
-        return new LessThanExpression(left, right);
-      case GLSLLexer.GT_OP:
-        return new GreaterThanExpression(left, right);
-      case GLSLLexer.LE_OP:
-        return new LessThanEqualExpression(left, right);
-      case GLSLLexer.GE_OP:
-        return new GreaterThanEqualExpression(left, right);
-      default:
-        throw new IllegalArgumentException("Unknown relational operator: " + ctx.op.getText());
-    }
+    return switch (ctx.op.getType()) {
+      case GLSLLexer.LT_OP -> new LessThanExpression(left, right);
+      case GLSLLexer.GT_OP -> new GreaterThanExpression(left, right);
+      case GLSLLexer.LE_OP -> new LessThanEqualExpression(left, right);
+      case GLSLLexer.GE_OP -> new GreaterThanEqualExpression(left, right);
+      default -> throw new IllegalArgumentException("Unknown relational operator: " + ctx.op.getText());
+    };
   }
 
   @Override
   public BinaryExpression visitShiftExpression(ShiftExpressionContext ctx) {
     var left = visitExpression(ctx.left);
     var right = visitExpression(ctx.right);
-    switch (ctx.op.getType()) {
-      case GLSLLexer.LEFT_OP:
-        return new LeftShiftExpression(left, right);
-      case GLSLLexer.RIGHT_OP:
-        return new RightShiftExpression(left, right);
-      default:
-        throw new IllegalArgumentException("Unknown shift operator: " + ctx.op.getText());
-    }
+    return switch (ctx.op.getType()) {
+      case GLSLLexer.LEFT_OP -> new LeftShiftExpression(left, right);
+      case GLSLLexer.RIGHT_OP -> new RightShiftExpression(left, right);
+      default -> throw new IllegalArgumentException("Unknown shift operator: " + ctx.op.getText());
+    };
   }
 
   @Override
   public BinaryExpression visitMultiplicativeExpression(MultiplicativeExpressionContext ctx) {
     var left = visitExpression(ctx.left);
     var right = visitExpression(ctx.right);
-    switch (ctx.op.getType()) {
-      case GLSLLexer.TIMES_OP:
-        return new MultiplicationExpression(left, right);
-      case GLSLLexer.DIV_OP:
-        return new DivisionExpression(left, right);
-      case GLSLLexer.MOD_OP:
-        return new ModuloExpression(left, right);
-      default:
-        throw new IllegalArgumentException("Unknown multiplicative operator: " + ctx.op.getText());
-    }
+    return switch (ctx.op.getType()) {
+      case GLSLLexer.TIMES_OP -> new MultiplicationExpression(left, right);
+      case GLSLLexer.DIV_OP -> new DivisionExpression(left, right);
+      case GLSLLexer.MOD_OP -> new ModuloExpression(left, right);
+      default -> throw new IllegalArgumentException("Unknown multiplicative operator: " + ctx.op.getText());
+    };
   }
 
   @Override
@@ -622,10 +609,12 @@ public class ASTBuilder extends GLSLParserBaseVisitor<ASTNode> {
   @Override
   public SwitchStatement visitSwitchStatement(SwitchStatementContext ctx) {
     var compoundStatementCtx = ctx.compoundStatement();
-    readLineDirective(compoundStatementCtx);
-    return new SwitchStatement(
+    var sourceLocation = readLineDirective(compoundStatementCtx);
+    var node = new SwitchStatement(
         visitExpression(ctx.condition),
         visitCompoundStatement(compoundStatementCtx));
+    setSourceLocationSafe(node, sourceLocation);
+    return node;
   }
 
   @Override
@@ -665,11 +654,11 @@ public class ASTBuilder extends GLSLParserBaseVisitor<ASTNode> {
   public WhileLoopStatement visitWhileStatement(WhileStatementContext ctx) {
     return ctx.condition != null
         ? new WhileLoopStatement(
-            visitExpression(ctx.condition),
-            visitStatement(ctx.loopBody))
+        visitExpression(ctx.condition),
+        visitStatement(ctx.loopBody))
         : new WhileLoopStatement(
-            visitIterationCondition(ctx.initCondition),
-            visitStatement(ctx.loopBody));
+        visitIterationCondition(ctx.initCondition),
+        visitStatement(ctx.loopBody));
   }
 
   @Override
@@ -690,16 +679,18 @@ public class ASTBuilder extends GLSLParserBaseVisitor<ASTNode> {
   @Override
   public ArraySpecifier visitArraySpecifier(ArraySpecifierContext ctx) {
     return new ArraySpecifier(ctx.arraySpecifierSegment().stream()
-        .<Expression>map(child -> applySafe(child.expression(), this::visitExpression)));
+        .map(child -> applySafe(child.expression(), this::visitExpression)));
   }
 
   @Override
   public FunctionDefinition visitFunctionDefinition(FunctionDefinitionContext ctx) {
     var compoundStatementCtx = ctx.compoundStatement();
-    readLineDirective(compoundStatementCtx);
-    return new FunctionDefinition(
+    var sourceLocation = readLineDirective(compoundStatementCtx);
+    var node = new FunctionDefinition(
         visitFunctionPrototype(ctx.functionPrototype()),
         visitCompoundStatement(compoundStatementCtx));
+    setSourceLocationSafe(node, sourceLocation);
+    return node;
   }
 
   @Override
@@ -839,7 +830,7 @@ public class ASTBuilder extends GLSLParserBaseVisitor<ASTNode> {
               }
             } else if (expression instanceof ReferenceExpression reference) {
               var id = reference.getIdentifier();
-              if (id.equals("shared")) {
+              if (id.getName().equals("shared")) {
                 parts.add(new SharedLayoutQualifierPart());
               } else {
                 parts.add(new NamedLayoutQualifierPart(id));
@@ -884,7 +875,7 @@ public class ASTBuilder extends GLSLParserBaseVisitor<ASTNode> {
     return ctx.typeNames.isEmpty()
         ? new StorageQualifier(StorageType.fromToken(ctx.getStart()))
         : new StorageQualifier(
-            ctx.typeNames.stream().map(ASTBuilder::makeIdentifier));
+        ctx.typeNames.stream().map(ASTBuilder::makeIdentifier));
   }
 
   @Override
@@ -953,20 +944,25 @@ public class ASTBuilder extends GLSLParserBaseVisitor<ASTNode> {
 
   @Override
   public Statement visitStatement(StatementContext ctx) {
-    readLineDirective(ctx);
-    return (Statement) super.visitStatement(ctx);
+    var sourceLocation = readLineDirective(ctx);
+    var node = (Statement) super.visitStatement(ctx);
+    setSourceLocationSafe(node, sourceLocation);
+    return node;
   }
 
   @Override
   public ExternalDeclaration visitExternalDeclaration(ExternalDeclarationContext ctx) {
-    readLineDirective(ctx);
+    var sourceLocation = readLineDirective(ctx);
 
     // wrap in an extra layer since we can't inherit from both external declaration
     // and declaration
     var result = super.visitExternalDeclaration(ctx);
     if (result instanceof Declaration declaration) {
-      return new DeclarationExternalDeclaration(declaration);
+      var node = new DeclarationExternalDeclaration(declaration);
+      setSourceLocationSafe(node, sourceLocation);
+      return node;
     }
+    setSourceLocationSafe(result, sourceLocation);
     return (ExternalDeclaration) result;
   }
 

@@ -2,14 +2,10 @@ package io.github.douira.glsl_transformer.ast.node.statement;
 
 import io.github.douira.glsl_transformer.ast.node.abstract_node.InnerASTNode;
 import io.github.douira.glsl_transformer.ast.query.Root;
-import io.github.douira.glsl_transformer.ast.transform.ASTBuilder;
-import io.github.douira.glsl_transformer.ast.traversal.*;
+import io.github.douira.glsl_transformer.ast.traversal.ASTListener;
+import io.github.douira.glsl_transformer.ast.traversal.ASTVisitor;
 
 public abstract class Statement extends InnerASTNode {
-  public Statement() {
-    sourceLocation = ASTBuilder.takeSourceLocation();
-  }
-
   public enum StatementType {
     COMPOUND(StructureType.MANY), // many-ary
     DECLARATION(StructureType.SEMI_TERMINAL), // semi-terminal

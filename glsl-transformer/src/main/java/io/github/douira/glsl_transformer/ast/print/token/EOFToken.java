@@ -9,7 +9,12 @@ public class EOFToken extends ParserToken {
   }
 
   @Override
-  public String getContent() {
+  public String calculateContent() {
     return "";
+  }
+
+  @Override
+  public String getContent() {
+    return calculateContent();
   }
 }

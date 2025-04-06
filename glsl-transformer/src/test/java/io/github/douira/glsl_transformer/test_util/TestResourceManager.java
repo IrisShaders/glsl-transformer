@@ -40,24 +40,24 @@ public class TestResourceManager extends TestResourceManagerBase {
 
     Path path;
 
-    private FileLocation(String path) {
+    FileLocation(String path) {
       this.path = Paths.get(path);
     }
   }
 
-  public static enum DirectoryLocation {
+  public enum DirectoryLocation {
     GLSLANG_TESTS("/glslang-test", Set.of("ray", "preprocessor"));
 
     Path path;
     Set<String> excludeInFiles;
 
-    private DirectoryLocation(String path, Set<String> excludeInFiles) {
+    DirectoryLocation(String path, Set<String> excludeInFiles) {
       this.path = Paths.get(path);
       this.excludeInFiles = excludeInFiles;
     }
   }
 
-  public static record Resource(Path path, String content) {
+  public record Resource(Path path, String content) {
     public String getScenarioName() {
       return path().getFileName().toString();
     }

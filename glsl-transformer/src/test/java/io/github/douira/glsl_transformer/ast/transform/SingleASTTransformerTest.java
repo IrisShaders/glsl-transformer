@@ -45,7 +45,8 @@ public class SingleASTTransformerTest extends TestWithSingleASTTransformer {
     p.setTransformation((tree, root) -> {});
     p.setParseLineDirectives(true);
     p.setPrintType(PrintType.INDENTED_ANNOTATED);
-    assertEquals("#line 1\nint a;\n", p.transform("#line 1\nint a;\n"));
+    assertEquals("#line 1 1\nint a;\n", p.transform("#line 1 1\nint a;\n"));
+    assertEquals("#line 1 \"a\"\nint a;\n", p.transform("#line 1 \"a\"\nint a;\n"));
   }
 
   @Test

@@ -51,7 +51,7 @@ public class ASTReprintTest {
     var astPrinter = new PrintAST();
     astPrinter.visit(ast);
     expect
-        .scenario(type + "_" + getBase64Hash(input))
+        .scenario(type + "_" + getInputHash(input))
         .toMatchSnapshot(
             SnapshotUtil.inputOutputSnapshot(input, astPrinter.getResult()));
   }

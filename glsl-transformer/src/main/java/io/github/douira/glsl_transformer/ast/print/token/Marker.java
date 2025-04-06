@@ -2,13 +2,13 @@ package io.github.douira.glsl_transformer.ast.print.token;
 
 public class Marker extends PrintToken {
   @Override
-  public String getContent() {
+  public String calculateContent() {
     return null;
   }
 
   @Override
-  public boolean isCommonFormattingNewline() {
-    return false;
+  public String getContent() {
+    return null;
   }
 
   @Override

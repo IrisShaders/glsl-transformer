@@ -21,6 +21,11 @@ public class ReplaceToken extends PrintToken {
   }
 
   @Override
+  public String calculateContent() {
+    return null;
+  }
+
+  @Override
   public String getContent() {
     return null;
   }

@@ -120,7 +120,7 @@ public class AssertUtil {
     }
   }
 
-  public static String getBase64Hash(String content) {
+  public static String getInputHash(String content) {
     MessageDigest digest;
     try {
       digest = MessageDigest.getInstance("SHA-1");
@@ -128,6 +128,6 @@ public class AssertUtil {
       throw new RuntimeException(e);
     }
     digest.update(content.getBytes());
-    return Base64.getEncoder().encodeToString(digest.digest());
+    return Base64.getEncoder().encodeToString(digest.digest()).replace("=", "");
   }
 }

@@ -7,7 +7,7 @@
 #line 4 21
 ;
 
-===
+@@@
 #line 4 21
 ;
 
@@ -16,7 +16,7 @@
 #line 5
 ;
 
-===
+@@@
 #line 5 21
 ;
 
@@ -25,7 +25,7 @@
 #line 5
 ;
 
-===
+@@@
 #line 5
 ;
 
@@ -35,7 +35,7 @@
 #line 5
 ;
 
-===
+@@@
 #line 5
 ;
 
@@ -49,14 +49,46 @@
 #line 5
 ;
 
-===
+@@@
 #line 5 4
 ;
 
 §testLineAnnotationReprint translationUnit:
+#line 1
+#line 2
+#line 3
+;
+
+@@@
+#line 3
+;
+
+§testLineAnnotationReprint translationUnit:
+#line 1
+;
+
+@@@
+;
+
+§testLineAnnotationReprint translationUnit:
+#line 2
+;
+
+§testLineAnnotationReprint translationUnit:
 ;
 ;
 #line 4
+;
+
+§testLineAnnotationReprint translationUnit:
+;
+;
+#line 3
+;
+
+@@@
+;
+;
 ;
 
 §testLineAnnotationReprint translationUnit:
@@ -70,7 +102,7 @@
 ;
 #line 4
 ;
-===
+@@@
 #line 4 5
 ;
 ;
@@ -78,6 +110,207 @@
 ;
 
 §testLineAnnotationReprint translationUnit:
+;
+
+§testLineAnnotationReprint translationUnit:
+;;;;
+@@@
+;
+;
+;
+;
+
+§testLineAnnotationReprint translationUnit:
+#line 10
+;;;;
+@@@
+#line 10
+;
+#line 10
+;
+#line 10
+;
+#line 10
+;
+
+§testLineAnnotationReprint translationUnit:
+#line 1
+;;
+@@@
+;
+#line 1
+;
+
+§testLineAnnotationReprint translationUnit:
+#line 1
+;;;
+@@@
+;
+#line 1
+;
+#line 1
+;
+
+§testLineAnnotationReprint translationUnit:
+#line 2
+;;;
+@@@
+#line 2
+;
+#line 2
+;
+#line 2
+;
+
+§testLineAnnotationReprint translationUnit:
+#line 1
+;
+;;;
+@@@
+;
+;
+#line 2
+;
+#line 2
+;
+
+§testLineAnnotationReprint translationUnit:
+#line 2
+;
+#line 3
+;;;
+@@@
+#line 2
+;
+;
+#line 3
+;
+#line 3
+;
+
+§testLineAnnotationReprint translationUnit:
+#line 2
+;
+#line 3 10
+;;;
+@@@
+#line 2
+;
+#line 3 10
+;
+#line 3 10
+;
+#line 3 10
+;
+
+§testLineAnnotationReprint translationUnit:
+#line 2 10
+;
+#line 3
+;;;
+@@@
+#line 2 10
+;
+;
+#line 3 10
+;
+#line 3 10
+;
+
+§testLineAnnotationReprint translationUnit:
+#line 10 "foo"
+;;;
+@@@
+#line 10 "foo"
+;
+#line 10 "foo"
+;
+#line 10 "foo"
+;
+
+§testLineAnnotationReprint translationUnit:
+#line 10 "foo"
+;;;
+#line 11 "foo"
+;
+@@@
+#line 10 "foo"
+;
+#line 10 "foo"
+;
+#line 10 "foo"
+;
+;
+
+§testLineAnnotationReprint translationUnit:
+#line 10 "foo"
+;;;
+#line 11 "bar"
+;
+@@@
+#line 10 "foo"
+;
+#line 10 "foo"
+;
+#line 10 "foo"
+;
+#line 11 "bar"
+;
+
+§testLineAnnotationReprint translationUnit:
+#line 10 2
+;;
+#line 11 "bar"
+;
+@@@
+#line 10 2
+;
+#line 10 2
+;
+#line 11 "bar"
+;
+
+§testLineAnnotationReprint translationUnit:
+#line 10 "foo"
+;;
+#line 11 2
+;
+@@@
+#line 10 "foo"
+;
+#line 10 "foo"
+;
+#line 11 2
+;
+
+§testLineAnnotationReprint translationUnit:
+#line 10       "foo"
+;;
+#line 11             2
+;
+@@@
+#line 10 "foo"
+;
+#line 10 "foo"
+;
+#line 11 2
+;
+
+§testLineAnnotationReprint translationUnit:
+#line 10 "foo"
+;;
+#line 11
+;
+#line 12 "foo"
+;;
+@@@
+#line 10 "foo"
+;
+#line 10 "foo"
+;
+;
+;
+#line 12 "foo"
 ;
 
 §testLineAnnotationReprint translationUnit:
@@ -99,6 +332,16 @@ void main() {
 	}
 }
 
+@@@
+void main() {
+	#line 4
+	if (true) ;
+	#line 4
+	while (true) {
+		;
+	}
+}
+
 §testLineAnnotationReprint translationUnit:
 #line 4 5
 void main() {
@@ -106,7 +349,7 @@ void main() {
 	#line 1
 	;
 }
-===
+@@@
 #line 4 5
 void main() {
 	;
@@ -114,7 +357,7 @@ void main() {
 	;
 }
 
-§testLineAnnotationReprint.disabled translationUnit:
+§testLineAnnotationReprint translationUnit:
 #line 1
 void main() {
 	#line 4
@@ -133,5 +376,76 @@ void main() {
 		;
 	}
 }
+
+@@@
+void main() {
+	#line 4
+	if (true) {
+		;
+	}
+	#line 4
+	if (true) ;
+	while (true) #line 4
+	{
+		;
+	}
+}
+
+§testLineAnnotationWithTransform translationUnit:
+#line 1
+;
+int target;
+;
+
+@@@
+;
+#line 10 "injected"
+int injected;
+#line 2
+int target;
+;
+
+§testLineAnnotationWithTransform translationUnit:
+#line 10
+;
+int target;
+;
+
+@@@
+#line 10
+;
+#line 10 "injected"
+int injected;
+int target;
+;
+
+§testLineAnnotationWithTransform translationUnit:
+#line 10 "original"
+;
+int target;
+;
+
+@@@
+#line 10 "original"
+;
+#line 10 "injected"
+int injected;
+#line 11 "original"
+int target;
+;
+
+§testLineAnnotationWithTransform translationUnit:
+#line 10 "injected"
+;
+int target;
+;
+
+@@@
+#line 10 "injected"
+;
+#line 10 "injected"
+int injected;
+int target;
+;
 
 §

@@ -77,4 +77,11 @@ public abstract class TestWithSingleASTTransformer {
     p.setPrintType(PrintType.INDENTED);
     assertEquals(expected, p.transform(input));
   }
+
+  public void assertTransformIA(String expected, String input) {
+    p.setParseLineDirectives(true);
+    p.setPrintType(PrintType.INDENTED_ANNOTATED);
+    assertEquals(expected, p.transform(input));
+    p.setPrintType(PrintType.INDENTED);
+  }
 }

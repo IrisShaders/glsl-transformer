@@ -26,23 +26,25 @@ public class IndentingPrinter extends DelegateTokenProcessor {
   public void appendToken(PrintToken token) {
     if (token instanceof IndentMarker indentMarker) {
       indentLevel += indentMarker.indentDelta;
-    } else if (!(token instanceof Marker)) {
+      return;
+    }
+
+    if (!(token instanceof Marker)) {
       var isNewline = token.endsWithNewline();
 
       if (!indentationPrinted && !isNewline) {
         indentationPrinted = true;
         if (indentLevel > 0) {
-          for (int i = 0, repeat = indentLevel * indentMultiplier; i < repeat; i++) {
-            appendDirectly(indent);
-          }
+          appendToken(new LiteralToken(
+              String.valueOf(indent).repeat(indentLevel * indentMultiplier)));
         }
       }
 
       if (isNewline) {
         indentationPrinted = false;
       }
-
-      super.appendToken(token);
     }
+
+    super.appendToken(token);
   }
 }
