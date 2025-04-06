@@ -14,7 +14,7 @@ public class CompactPrinter extends DelegateTokenProcessor {
 
   @Override
   public void appendToken(PrintToken token) {
-    if (token.isCommonFormattingNewline()) {
+    if (token.getRole() == TokenRole.COMMON_FORMATTING && "\n".equals(token.getContent())) {
       token = new LiteralToken(
           TokenChannel.WHITESPACE, TokenRole.COMMON_FORMATTING, " ");
     }

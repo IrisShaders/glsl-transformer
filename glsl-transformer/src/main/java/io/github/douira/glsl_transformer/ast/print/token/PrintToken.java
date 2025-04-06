@@ -45,10 +45,6 @@ public abstract class PrintToken {
     return role;
   }
 
-  public boolean isCommonFormattingNewline() {
-    return role == TokenRole.COMMON_FORMATTING && getContent().equals("\n");
-  }
-
   public boolean endsWithNewline() {
     return getContent().endsWith("\n");
   }
