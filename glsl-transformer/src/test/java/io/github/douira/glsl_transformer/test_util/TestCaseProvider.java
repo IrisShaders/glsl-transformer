@@ -98,7 +98,7 @@ public class TestCaseProvider implements ArgumentsProvider, AnnotationConsumer<T
           continue;
         }
         var input = segments[2];
-        var inputSegments = input.split("@@@", 2);
+        var inputSegments = input.split("===", 2);
         testCases.add(new TestCase(
             segments[0],
             segments[1],

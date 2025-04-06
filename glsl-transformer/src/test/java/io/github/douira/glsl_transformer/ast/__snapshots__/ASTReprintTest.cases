@@ -47,7 +47,7 @@ a, b, c + d, e, f
 a + b, c + d, e + f, (a, b, c, d, e, f) + e, e
 §testReprint expression:
 a,b,c,d,e,f
-@@@
+===
 a, b, c, d, e, f
 §testReprint expression:
 (a, b, c, d)
@@ -75,17 +75,17 @@ a = b += b -= b *= b /= a
 a %= b &= b |= b ^= b <<= c <<= d
 §testReprint expression:
 1 + 2us + 3ul + 5l + 4u + 5s + 0.1 + 0.2f + 0.3hf + 0.4lf
-@@@
+===
 1 + 2us + 3ul + 5l + 4u + 5s + 0.1f + 0.2f + 0.3hf + 0.4lf
 §testReprint expression:
 0x54ae + 06453543 + 1.6e10 + 50.1e-10 + 1e+10
-@@@
+===
 0x54ae + 06453543 + 1.6E10f + 5.01E-9f + 1.0E10f
 §testReprint expression:
 -0x1111111111111111l + 0x1111111111111111ul + -9223372036854775808ul + 0xfffffffffffffffful
 §testReprint expression:
 8 - 1 + (4-1) + (4 -1) + (4- 1) + 4 -1 + 4- 1 + 4 -1 + 4-1 + ((1)-4)
-@@@
+===
 8 - 1 + (4 - 1) + (4 - 1) + (4 - 1) + 4 - 1 + 4 - 1 + 4 - 1 + 4 - 1 + ((1) - 4)
 §testReprint expression:
 -(-(-(4))) - (-4654) - 5 + -4 - -4 + +-6 - -+4 - - - - -4
@@ -109,17 +109,17 @@ vec3(1, 2, 3)
 vec3((1, 2, 3))
 §testReprint expression:
 vec3(((1, 2, 3)))
-@@@
+===
 vec3((1, 2, 3))
 §testReprint expression:
 (0)
 §testReprint expression:
 ((0))
-@@@
+===
 (0)
 §testReprint expression:
 (((0)))
-@@@
+===
 (0)
 §testReprint expression:
 (1, (2, (3)))
@@ -133,7 +133,7 @@ a[(a[b])]
 a[(a)[(a)]]
 §testReprint expression:
 a[((a))[((a))]]
-@@@
+===
 a[(a)[(a)]]
 §testReprint expression:
 "dfafjdsiaofudsa"
@@ -763,7 +763,7 @@ i32vec3 g4 = i32vec3(1, 2, 3);
 u8vec2 g5 = u8vec2(1, 2);
 u32vec2 g8 = uvec2(1, 2);
 u16vec4 g6 = u16vec4(1, 2);
-@@@
+===
 float f1 = 1.0f;
 float f2 = 2.0f;
 float f3 = 3.0f;
@@ -1089,7 +1089,7 @@ int foo(
 
 §testReprint statement:
 mat2 ang = mat2(-.73736882209777832,.67549037933349609,-.67549037933349609,-.73736882209777832);
-@@@
+===
 mat2 ang = mat2(-0.7373688220977783f, 0.6754903793334961f, -0.6754903793334961f, -0.7373688220977783f);
 
 §testReprint translationUnit:
