@@ -19,6 +19,7 @@ public class LineAnnotator extends DelegateTokenProcessor {
   private int printedLines = 0;
   private PresentSourceLocation lastPrintedLocation;
   private int lastLocationPrintedLines = 0;
+  private boolean lineEmpty = true;
 
   public LineAnnotator(TokenProcessor delegate) {
     super(delegate);
@@ -35,6 +36,12 @@ public class LineAnnotator extends DelegateTokenProcessor {
 
       if (!location.needsPrint(printedLines, lastPrintedLocation, lastLocationPrintedLines)) {
         return;
+      }
+
+      // make sure line directives are always on their own lines
+      if (!lineEmpty) {
+        super.appendToken(new LiteralToken("\n"));
+        incrementLines();
       }
 
       super.appendToken(new LiteralToken("#line "));
@@ -55,7 +62,10 @@ public class LineAnnotator extends DelegateTokenProcessor {
       lastLocationPrintedLines = printedLines;
     } else {
       if (token.endsWithNewline()) {
+        lineEmpty = true;
         incrementLines();
+      } else if (token.getContent() != null) {
+        lineEmpty = false;
       }
       super.appendToken(token);
     }

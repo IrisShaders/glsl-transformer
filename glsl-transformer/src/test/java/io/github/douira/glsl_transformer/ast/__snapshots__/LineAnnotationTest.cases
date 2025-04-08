@@ -385,8 +385,30 @@ void main() {
 	}
 	#line 4
 	if (true) ;
-	while (true) #line 4
+	while (true) 
+	#line 4
 	{
+		;
+	}
+}
+
+§testLineAnnotationReprint translationUnit:
+#line 1
+void main() {
+	if (true) {
+	} else
+
+	{;
+	}
+}
+
+===
+void main() {
+	if (true) {
+	} else 
+	#line 5
+	{
+		#line 5
 		;
 	}
 }
