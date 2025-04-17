@@ -2,6 +2,8 @@ package io.github.douira.glsl_transformer.test_util;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+import java.io.IOException;
+import java.net.URISyntaxException;
 import java.nio.charset.*;
 import java.nio.file.*;
 import java.util.*;
@@ -34,8 +36,8 @@ public class TestResourceManagerBase {
         && checkFileNameWith(fileName, excludeInFiles);
   }
 
-  public static Stream<Resource> getDirectoryResources(Path directoryPath, Set<String> excludeInFiles) {
-    var resourcePath = getResourcePath(directoryPath);
+  static Stream<Resource> getDirectoryResources(Path directoryPath, Set<String> excludeInFiles) {
+    var resourcePath = makePathAbsoluteInResourceDir(directoryPath);
     return assertDoesNotThrow(
         () -> Files.walk(resourcePath),
         "The resource directory at " + resourcePath + " could not be enumerated.")
@@ -44,45 +46,37 @@ public class TestResourceManagerBase {
             return false;
           }
 
-          var file = path.toFile();
-          if (file.isDirectory()) {
-            return false;
-          }
-
-          return true;
+          return !path.toFile().isDirectory();
         })
         .map(TestResourceManagerBase::getPathResource)
         .filter(resource -> resource.content() != null);
   }
 
-  static Resource getPathResource(Path path) {
-    return Optional
-        .ofNullable(RESOURCE_CACHE.get(path))
-        .orElseGet(() -> new Resource(path, getFileContent(path)));
+  static Resource getRelativePathResource(Path relativeResourcePath) {
+    return getPathResource(makePathAbsoluteInResourceDir(relativeResourcePath));
   }
 
-  private static String getFileContent(Path path) {
-    var resourcePath = getResourcePath(path);
-    return assertDoesNotThrow(
-        () -> {
-          try {
-            return Files.readString(resourcePath, StandardCharsets.UTF_8);
-          } catch (MalformedInputException e) {
-            return null;
-          }
-        },
-        "The file at " + resourcePath.toString() + " could not be read.");
-  }
-
-  private static Path getResourcePath(Path resource) {
-    return getResourcePath(resource.toString());
-  }
-
-  private static Path getResourcePath(String resource) {
+  private static Resource getPathResource(Path path) {
+    if (RESOURCE_CACHE.containsKey(path)) {
+      return RESOURCE_CACHE.get(path);
+    }
     try {
-      return Paths.get(TestResourceManager.class.getResource(resource).toURI());
+      var resource = new Resource(path, Files.readString(path, StandardCharsets.UTF_8));
+      RESOURCE_CACHE.put(path, resource);
+      return resource;
+    } catch (IOException e) {
+      throw new RuntimeException("The file at " + path + " could not be read.");
+    }
+  }
+
+  private static Path makePathAbsoluteInResourceDir(Path relativeResourcePath) {
+    var path = relativeResourcePath.toString();
+    try {
+      return Paths.get(TestResourceManager.class.getResource(path).toURI());
+    } catch (URISyntaxException e) {
+      throw new RuntimeException("The resource " + path + " could not be found.");
     } catch (Exception e) {
-      return Paths.get(resource);
+      return Paths.get(path);
     }
   }
 }

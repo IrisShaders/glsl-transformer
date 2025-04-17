@@ -172,7 +172,7 @@ void main()
 		a[x].length();  // this is 2
     }
 	// for an array b containing a member array a:
-	b[++x].a.length();    // b is never dereferenced, but “++x” is evaluated
+	b[++x].a.length();    // b is never dereferenced, but 
 
 	// for an array s of a shader storage object containing a member array a:
 	s[x].a.length();      // s is dereferenced; x needs to be a valid index

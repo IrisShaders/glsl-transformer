@@ -36,7 +36,7 @@ public class TestCaseProvider implements ArgumentsProvider, AnnotationConsumer<T
     public abstract String process(String input);
   }
 
-  private static record TestCase(String testCaseSet, String scenario, String content, String output) {
+  private record TestCase(String testCaseSet, String scenario, String content, String output) {
   };
 
   private static final Map<Path, List<TestCase>> TEST_CASE_CACHE = new HashMap<>();

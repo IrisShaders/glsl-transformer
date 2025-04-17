@@ -3,15 +3,15 @@
 #extension GL_3DL_array_objects : enable
 
 out Vertex {
-    vec4 Position;  // API transform/feedback will use “Vertex.Position”
+    vec4 Position;  // API transform/feedback will use 
     vec2 Texture;
-} Coords;           // shader will use “Coords.Position”
+} Coords;           // shader will use 
 
 out Vertex2 {
-    vec4 Color;     // API will use “Color”
+    vec4 Color;     // API will use 
 };
 
-uniform Transform {  // API uses “Transform[2]” to refer to instance 2
+uniform Transform {  // API uses 
     mat4           ModelViewMatrix;
     mat4           ModelViewProjectionMatrix;
     vec4           a[];  // array will get implicitly sized
@@ -103,7 +103,7 @@ layout (binding=2) uniform atomic_uint d2;           // offset = 4
 //                                 //        between a and c
 //layout (binding=1, offset=2)  d; // error, overlaps offset 0 of a
 
-flat  in vec4 gl_FrontColor;  // input to geometry shader, no “gl_in[]”
+flat  in vec4 gl_FrontColor;  // input to geometry shader, no ï¿½gl_in[]ï¿½
 flat out vec4 gl_FrontColor;  // output from geometry shader
 
 invariant gl_Position;   // make existing gl_Position be invariant

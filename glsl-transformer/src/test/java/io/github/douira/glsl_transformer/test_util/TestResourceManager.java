@@ -2,13 +2,14 @@ package io.github.douira.glsl_transformer.test_util;
 
 import java.nio.file.*;
 import java.util.Set;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 /**
  * Knows about the various code resource files and can load them.
  */
 public class TestResourceManager extends TestResourceManagerBase {
-  public static enum FileLocation {
+  public enum FileLocation {
     TINY("/tiny.glsl"),
     DIRECTIVE_TEST("/directiveTest.glsl"),
     SHADER("/shader.glsl"),
@@ -38,7 +39,7 @@ public class TestResourceManager extends TestResourceManagerBase {
     BENCHMARK_SEUS_RENEWED("/unlicensed/SEUS_Renewed.glsl"),
     BENCHMARK_NOSTALGIAVX("/unlicensed/NostalgiaVX.glsl");
 
-    Path path;
+    public final Path path;
 
     FileLocation(String path) {
       this.path = Paths.get(path);
@@ -46,14 +47,19 @@ public class TestResourceManager extends TestResourceManagerBase {
   }
 
   public enum DirectoryLocation {
-    GLSLANG_TESTS("/glslang-test", Set.of("ray", "preprocessor"));
+    GLSLANG_TESTS("/glslang-test", Set.of("ray", "preprocessor", "badChars"));
 
-    Path path;
-    Set<String> excludeInFiles;
+    public final Path path;
+    public final Set<String> excludeInFiles;
 
     DirectoryLocation(String path, Set<String> excludeInFiles) {
       this.path = Paths.get(path);
-      this.excludeInFiles = excludeInFiles;
+      
+      // make sure the excludes are lower case and not empty
+      this.excludeInFiles = excludeInFiles.stream()
+          .map(String::toLowerCase)
+          .filter(exclude -> !exclude.isEmpty())
+          .collect(Collectors.toSet());
     }
   }
 
@@ -68,7 +74,7 @@ public class TestResourceManager extends TestResourceManagerBase {
   }
 
   public static Resource getResource(FileLocation location) {
-    return TestResourceManagerBase.getPathResource(location.path);
+    return TestResourceManagerBase.getRelativePathResource(location.path);
   }
 
   public static Stream<Resource> getDirectoryResources(DirectoryLocation location) {
