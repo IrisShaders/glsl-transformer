@@ -36,23 +36,24 @@ public class TestResourceManagerBase {
         && checkFileNameWith(fileName, excludeInFiles);
   }
 
-  static Stream<Resource> getDirectoryResources(Path directoryPath, Set<String> excludeInFiles) {
+  static Stream<Resource> getDirectoryResources(String directoryPath, Set<String> excludeInFiles) {
     var resourcePath = makePathAbsoluteInResourceDir(directoryPath);
-    return assertDoesNotThrow(
-        () -> Files.walk(resourcePath),
-        "The resource directory at " + resourcePath + " could not be enumerated.")
-        .filter(path -> {
-          if (!allowPath(path, excludeInFiles)) {
-            return false;
-          }
+    try {
+      return Files.walk(resourcePath).filter(path -> {
+            if (!allowPath(path, excludeInFiles)) {
+              return false;
+            }
 
-          return !path.toFile().isDirectory();
-        })
-        .map(TestResourceManagerBase::getPathResource)
-        .filter(resource -> resource.content() != null);
+            return !path.toFile().isDirectory();
+          })
+          .map(TestResourceManagerBase::getPathResource)
+          .filter(resource -> resource.content() != null);
+    } catch (IOException e) {
+      throw new RuntimeException("The resource directory at " + resourcePath + " could not be enumerated.", e);
+    }
   }
 
-  static Resource getRelativePathResource(Path relativeResourcePath) {
+  static Resource getRelativePathResource(String relativeResourcePath) {
     return getPathResource(makePathAbsoluteInResourceDir(relativeResourcePath));
   }
 
@@ -69,14 +70,13 @@ public class TestResourceManagerBase {
     }
   }
 
-  private static Path makePathAbsoluteInResourceDir(Path relativeResourcePath) {
-    var path = relativeResourcePath.toString();
+  private static Path makePathAbsoluteInResourceDir(String relativeResourcePath) {
     try {
-      return Paths.get(TestResourceManager.class.getResource(path).toURI());
-    } catch (URISyntaxException e) {
-      throw new RuntimeException("The resource " + path + " could not be found.");
+      return Paths.get(TestResourceManager.class.getResource(relativeResourcePath).toURI());
+    } catch (URISyntaxException | NullPointerException e) {
+      throw new RuntimeException("The resource " + relativeResourcePath + " could not be found.", e);
     } catch (Exception e) {
-      return Paths.get(path);
+      return Paths.get(relativeResourcePath);
     }
   }
 }

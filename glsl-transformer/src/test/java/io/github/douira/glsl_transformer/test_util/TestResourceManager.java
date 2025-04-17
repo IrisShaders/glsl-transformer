@@ -39,21 +39,21 @@ public class TestResourceManager extends TestResourceManagerBase {
     BENCHMARK_SEUS_RENEWED("/unlicensed/SEUS_Renewed.glsl"),
     BENCHMARK_NOSTALGIAVX("/unlicensed/NostalgiaVX.glsl");
 
-    public final Path path;
+    public final String path;
 
     FileLocation(String path) {
-      this.path = Paths.get(path);
+      this.path = path;
     }
   }
 
   public enum DirectoryLocation {
     GLSLANG_TESTS("/glslang-test", Set.of("ray", "preprocessor", "badChars"));
 
-    public final Path path;
+    public final String path;
     public final Set<String> excludeInFiles;
 
     DirectoryLocation(String path, Set<String> excludeInFiles) {
-      this.path = Paths.get(path);
+      this.path = path;
       
       // make sure the excludes are lower case and not empty
       this.excludeInFiles = excludeInFiles.stream()
