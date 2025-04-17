@@ -75,7 +75,7 @@ public class TestResourceManagerBase {
   }
 
   private static Path getResourcePath(Path resource) {
-    return getResourcePath(resource.toString());
+    return getResourcePath(resource.toString().replace('\\', '/'));
   }
 
   private static Path getResourcePath(String resource) {
