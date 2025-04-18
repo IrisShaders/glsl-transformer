@@ -14,23 +14,14 @@ import io.github.douira.glsl_transformer.token_filter.TokenFilter;
  * is safe to use this.
  */
 public class CachingParser extends EnhancedParser {
-  record CacheContents(ParserRuleContext parseTree, BufferedTokenStream tokenStream) {
+  protected record CacheContents(ParserRuleContext parseTree, BufferedTokenStream tokenStream) {
   }
 
-  private TypedTreeCache<CacheContents> parseCache;
+  protected TypedTreeCache<CacheContents> parseCache;
 
   public CachingParser(boolean throwParseErrors, int cacheSize) {
     super(throwParseErrors);
     parseCache = new TypedTreeCache<>(cacheSize);
-  }
-
-  public CachingParser(int cacheSize) {
-    parseCache = new TypedTreeCache<>(cacheSize);
-  }
-
-  public CachingParser(boolean throwParseErrors) {
-    super(throwParseErrors);
-    parseCache = new TypedTreeCache<>();
   }
 
   public CachingParser() {
@@ -49,19 +40,27 @@ public class CachingParser extends EnhancedParser {
   }
 
   @Override
-  @SuppressWarnings("unchecked")
   public <C extends ParserRuleContext> C parse(
       String str,
       ParserRuleContext parent,
       ParseShape<C, ?> parseShape) {
-    var result = parseCache.cachedGet(str, parseShape.ruleType,
+    return parseWithCache(str, parent, parseShape, parseCache);
+  }
+
+  @SuppressWarnings("unchecked")
+  protected <C extends ParserRuleContext> C parseWithCache(
+      String str,
+      ParserRuleContext parent,
+      ParseShape<C, ?> parseShape,
+      TypedTreeCache<CacheContents> cache) {
+    var result = cache.cachedGet(str, parseShape.ruleType,
         () -> {
           var node = parse(str, parent, parseShape.parseMethod);
           return new CacheContents(node, getTokenStream());
         });
     if (result != null) {
       // so that when a cache hit happens, the getTokenStream method returns the
-      // correct token stream 
+      // correct token stream
       tokenStream = result.tokenStream;
       return (C) result.parseTree;
     } else {

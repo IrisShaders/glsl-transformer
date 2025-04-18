@@ -100,7 +100,7 @@ public class ParsingPerformanceTest {
   @Test
   void testDeepParenExpressionParsingCaching() {
     // with warmup, the caching parser needs basically no time
-    parser = new CachingParser(true);
+    parser = new CachingParser();
     parser.setSLLOnly();
     assertFilePerformance(10, FileLocation.DEEP_PAREN_EXPRESSION_TEST);
   }

@@ -8,7 +8,7 @@ import io.github.douira.glsl_transformer.ast.data.TypedTreeCache.CacheKey;
 import io.github.douira.glsl_transformer.util.LRUCache;
 
 public class TypedTreeCache<V> extends LRUCache<CacheKey, V> {
-  private static final int defaultCacheSize = 400;
+  private static final int DEFAULT_CACHE_SIZE = 400;
 
   public TypedTreeCache(int maxSize, float loadFactor) {
     super(maxSize, loadFactor);
@@ -19,7 +19,7 @@ public class TypedTreeCache<V> extends LRUCache<CacheKey, V> {
   }
 
   public TypedTreeCache() {
-    super(defaultCacheSize);
+    super(DEFAULT_CACHE_SIZE);
   }
 
   public static class CacheKey {
@@ -55,11 +55,8 @@ public class TypedTreeCache<V> extends LRUCache<CacheKey, V> {
       } else if (!input.equals(other.input))
         return false;
       if (ruleType == null) {
-        if (other.ruleType != null)
-          return false;
-      } else if (!ruleType.equals(other.ruleType))
-        return false;
-      return true;
+        return other.ruleType == null;
+      } else return ruleType.equals(other.ruleType);
     }
   }
 

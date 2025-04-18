@@ -27,8 +27,8 @@ public class ASTParser implements ParserInterface {
     return INSTANCE;
   }
 
-  private EnhancedParser parser = new CachingParser();
-  private TypedTreeCache<ASTNode> buildCache = new TypedTreeCache<>();
+  private EnhancedParser parser;
+  private TypedTreeCache<ASTNode> buildCache;
   private ASTCacheStrategy astCacheStrategy = ASTCacheStrategy.ALL_EXCLUDING_TRANSLATION_UNIT;
   private boolean parseLineDirectives = false;
 
@@ -40,17 +40,26 @@ public class ASTParser implements ParserInterface {
 
   public enum ParsingCacheStrategy {
     ALL,
+    TWO_TIER,
+    ALL_EXCLUDING_TRANSLATION_UNIT,
     NONE
   }
 
-  public void setBuildCacheSizeAndClear(int size) {
-    buildCache = new TypedTreeCache<>(size);
+  public ASTParser(EnhancedParser parser, TypedTreeCache<ASTNode> buildCache) {
+    this.parser = parser;
+    this.buildCache = buildCache;
   }
 
-  public void setParseCacheSizeAndClear(int size) {
-    if (parser instanceof CachingParser cachingParser) {
-      cachingParser.setParseCacheSizeAndClear(size);
-    }
+  public ASTParser() {
+    this(new CachingParser(), new TypedTreeCache<>());
+  }
+
+  public void setParser(EnhancedParser parser) {
+    this.parser = parser;
+  }
+
+  public void setBuildCache(TypedTreeCache<ASTNode> buildCache) {
+    this.buildCache = buildCache;
   }
 
   /**
@@ -58,7 +67,7 @@ public class ASTParser implements ParserInterface {
    * generated ASTs. If set to ALL_EXCLUDING_TRANSLATION_UNIT, the parser will
    * cache all generated ASTs except for the TranslationUnit. If set to NONE, the
    * parser will cache nothing.
-   * 
+   *
    * @param astCacheStrategy the AST cache strategy
    */
   public void setASTCacheStrategy(ASTCacheStrategy astCacheStrategy) {
@@ -66,21 +75,31 @@ public class ASTParser implements ParserInterface {
   }
 
   /**
-   * Sets the parsing cache strategy. If set to ALL, the parser will cache all
-   * parsed strings. If set to NONE, the parser will cache nothing. Only
-   * influences how the CST is parsed from the input and not the AST.
-   * 
+   * Sets the parsing cache strategy. If set to {@link ParsingCacheStrategy#ALL},
+   * the parser will cache all parsed strings. If set to
+   * {@link ParsingCacheStrategy#TWO_TIER}, the parser will cache all parsed strings
+   * in a two-tier cache. If set to {@link ParsingCacheStrategy#NONE},
+   * the parser will cache nothing. If set to
+   * {@link ParsingCacheStrategy#ALL_EXCLUDING_TRANSLATION_UNIT}, the parser
+   * will cache all parsed strings except for the {@link TranslationUnit}.
+   * This only influences how the CST is parsed from the input and not the AST.
+   *
    * @param parsingCacheStrategy the parsing cache strategy
    */
   public void setParsingCacheStrategy(ParsingCacheStrategy parsingCacheStrategy) {
-    parser = parsingCacheStrategy == ParsingCacheStrategy.ALL ? new CachingParser() : new EnhancedParser();
+    parser = switch (parsingCacheStrategy) {
+      case ALL -> new CachingParser();
+      case TWO_TIER -> new TwoTierCachingParser();
+      case ALL_EXCLUDING_TRANSLATION_UNIT -> new TranslationUnitFilterCachingParser();
+      case NONE -> new EnhancedParser();
+    };
   }
 
   /**
    * Sets whether the AST parser should handle line directives. If set to true,
    * the parser will parse line directives and add them to the AST. If set to
    * false, the parser will ignore line directives and not add them to the AST.
-   * 
+   *
    * @param parseLineDirectives whether the parser should parse line directives
    */
   public void setParseLineDirectives(boolean parseLineDirectives) {
@@ -179,7 +198,7 @@ public class ASTParser implements ParserInterface {
       String input) {
     if (astCacheStrategy == ASTCacheStrategy.NONE
         || astCacheStrategy == ASTCacheStrategy.ALL_EXCLUDING_TRANSLATION_UNIT
-            && parseShape.ruleType == TranslationUnitContext.class) {
+        && parseShape.ruleType == TranslationUnitContext.class) {
       try {
         var parsed = parser.parse(input, parseShape);
         setBuilderTokenStream();

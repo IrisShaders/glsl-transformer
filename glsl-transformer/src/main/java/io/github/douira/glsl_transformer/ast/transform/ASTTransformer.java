@@ -2,12 +2,15 @@ package io.github.douira.glsl_transformer.ast.transform;
 
 import java.util.Objects;
 
+import io.github.douira.glsl_transformer.ast.data.TypedTreeCache;
 import io.github.douira.glsl_transformer.ast.node.TranslationUnit;
+import io.github.douira.glsl_transformer.ast.node.abstract_node.ASTNode;
 import io.github.douira.glsl_transformer.ast.node.expression.Expression;
 import io.github.douira.glsl_transformer.ast.node.external_declaration.ExternalDeclaration;
 import io.github.douira.glsl_transformer.ast.node.statement.Statement;
 import io.github.douira.glsl_transformer.ast.print.PrintType;
 import io.github.douira.glsl_transformer.ast.query.*;
+import io.github.douira.glsl_transformer.parser.EnhancedParser;
 import io.github.douira.glsl_transformer.token_filter.TokenFilter;
 
 /**

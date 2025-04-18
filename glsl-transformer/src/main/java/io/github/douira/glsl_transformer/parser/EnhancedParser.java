@@ -85,7 +85,7 @@ public class EnhancedParser implements ParserInterface {
    * It filters the tokens coming from the lexer before the parser consumes them.
    * The contained token filter can be {@code null} if no filter is to be used.
    */
-  private FilterTokenSource tokenSource = new FilterTokenSource(lexer);
+  private final FilterTokenSource tokenSource = new FilterTokenSource(lexer);
 
   /**
    * Creates a new parser and specifies if parse errors should be
@@ -196,13 +196,13 @@ public class EnhancedParser implements ParserInterface {
   public <C extends ParserRuleContext> C parse(
       String str,
       Function<GLSLParser, C> parseMethod) {
-    return parse(str, (ParserRuleContext) null, parseMethod);
+    return parse(str, null, parseMethod);
   }
 
   public <C extends ParserRuleContext> C parse(
       String str,
       ParseShape<C, ?> parseShape) {
-    return parse(str, (ParserRuleContext) null, parseShape.parseMethod);
+    return parse(str, null, parseShape.parseMethod);
   }
 
   /**
