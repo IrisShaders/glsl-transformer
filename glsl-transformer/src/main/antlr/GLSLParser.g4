@@ -73,6 +73,8 @@ pragmaDirective:
 			| NR_OFF
 		) NR_RPAREN
 		| type = NR_PRAGMA_INVARIANT NR_LPAREN state = NR_ALL NR_RPAREN
+		| type = NR_PRAGMA_OPTIONNV NR_LPAREN option = (NR_UNROLL | NR_INLINE | NR_IFCVT) state = (NR_ALL | NR_NONE) NR_RPAREN
+		| type = NR_PRAGMA_OPTIONNV NR_LPAREN option = (NR_FASTMATH | NR_FASTPRECISION | NR_STRICT) state = (NR_ON | NR_OFF) NR_RPAREN
 	) NR_EOL;
 
 extensionDirective:

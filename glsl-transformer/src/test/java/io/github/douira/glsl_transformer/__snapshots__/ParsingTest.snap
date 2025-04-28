@@ -18832,6 +18832,21 @@ float inf3 = +1.#INF;
 ]
 
 
+testGlslangErrors[nv.pragma.optionNV.glsl]=[
+#version 460
+
+#pragma optionNV(fastmath on)
+#pragma optionNV(fastprecision on)
+#pragma optionNV(ifcvt all)
+#pragma optionNV(inline all)
+#pragma optionNV(strict on)
+#pragma optionNV(unroll all)
+
+<><><><><><><><><><><><><><><><><><><><><><><><><>
+
+]
+
+
 testGlslangErrors[nvShaderNoperspectiveInterpolation.frag]=[
 #version 300 es
 
