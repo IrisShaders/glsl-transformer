@@ -12,7 +12,8 @@ public class PragmaDirective extends ExternalDeclaration {
     DEBUG(GLSLLexer.NR_PRAGMA_DEBUG),
     OPTIMIZE(GLSLLexer.NR_PRAGMA_OPTIMIZE),
     INVARIANT(GLSLLexer.NR_PRAGMA_INVARIANT),
-    CUSTOM(GLSLLexer.NR_IDENTIFIER);
+    CUSTOM(GLSLLexer.NR_IDENTIFIER),
+    OPTIONNV(GLSLLexer.NR_PRAGMA_OPTIONNV);
 
     public final int tokenType;
 
@@ -30,10 +31,29 @@ public class PragmaDirective extends ExternalDeclaration {
     }
   }
 
+  public enum PragmaOption implements TokenTyped {
+    UNROLL(GLSLLexer.NR_UNROLL),
+    INLINE(GLSLLexer.NR_INLINE),
+    IFCVT(GLSLLexer.NR_IFCVT),
+    STRICT(GLSLLexer.NR_STRICT),
+    FASTMATH(GLSLLexer.NR_FASTMATH),
+    FASTPRECISION(GLSLLexer.NR_FASTPRECISION);
+
+    public final int tokenType;
+
+    private PragmaOption(int tokenType) {this.tokenType = tokenType;}
+
+    @Override
+    public int getTokenType() { return tokenType; }
+
+    public static PragmaOption fromToken(Token token) { return TypeUtil.enumFromToken(PragmaOption.values(), token); }
+  }
+
   public enum PragmaState implements TokenTyped {
     ON(GLSLLexer.NR_ON),
     OFF(GLSLLexer.NR_OFF),
-    ALL(GLSLLexer.NR_ALL);
+    ALL(GLSLLexer.NR_ALL),
+    NONE(GLSLLexer.NR_NONE);
 
     public final int tokenType;
 
@@ -53,12 +73,14 @@ public class PragmaDirective extends ExternalDeclaration {
 
   public boolean stdGL;
   public PragmaType type;
+  public PragmaOption option;
   private String customName;
   public PragmaState state;
 
-  private PragmaDirective(boolean stdGL, PragmaType type, String customName, PragmaState state) {
+  private PragmaDirective(boolean stdGL, PragmaType type, PragmaOption option, String customName, PragmaState state) {
     this.stdGL = stdGL;
     this.type = type;
+    this.option = option;
     this.customName = customName;
     this.state = state;
   }
@@ -73,6 +95,13 @@ public class PragmaDirective extends ExternalDeclaration {
     this.stdGL = stdGL;
     this.type = type;
     this.state = state;
+  }
+
+  public PragmaDirective(boolean stdGL, PragmaType type, PragmaOption option, PragmaState state) {
+    this.stdGL = stdGL;
+    this.type = type;
+    this.state = state;
+    this.option = option;
   }
 
   public String getCustomName() {
@@ -109,7 +138,7 @@ public class PragmaDirective extends ExternalDeclaration {
 
   @Override
   public PragmaDirective clone() {
-    return new PragmaDirective(stdGL, type, customName, state);
+    return new PragmaDirective(stdGL, type, option, customName, state);
   }
 
   @Override

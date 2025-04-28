@@ -231,9 +231,11 @@ public class ASTBuilder extends GLSLParserBaseVisitor<ASTNode> {
   public PragmaDirective visitPragmaDirective(PragmaDirectiveContext ctx) {
     var stdGL = ctx.stdGL != null;
     var type = PragmaType.fromToken(ctx.type);
-    return type == PragmaType.CUSTOM
-        ? new PragmaDirective(stdGL, ctx.type.getText())
-        : new PragmaDirective(stdGL, type, PragmaState.fromToken(ctx.state));
+    return switch (type) {
+      case PragmaType.CUSTOM -> new PragmaDirective(stdGL, ctx.type.getText());
+      case PragmaType.OPTIONNV -> new PragmaDirective(stdGL, type, PragmaOption.fromToken(ctx.option), PragmaState.fromToken(ctx.state));
+      default -> new PragmaDirective(stdGL, type, PragmaState.fromToken(ctx.state));
+    };
   }
 
   @Override

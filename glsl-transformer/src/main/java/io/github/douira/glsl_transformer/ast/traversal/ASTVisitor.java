@@ -49,6 +49,7 @@ public interface ASTVisitor<R> extends GeneralASTVisitor<R> {
     var result = visitData(node.stdGL);
     result = visitData(result, node.type);
     result = visitData(result, node.getCustomName());
+    result = visitData(result, node.option);
     return visitData(result, node.state);
   }
 

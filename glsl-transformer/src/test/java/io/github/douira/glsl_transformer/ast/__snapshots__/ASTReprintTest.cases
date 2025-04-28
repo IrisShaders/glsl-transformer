@@ -20,6 +20,24 @@
 #pragma foobar
 
 §testReprint translationUnit:
+#pragma optionNV(unroll all)
+
+§testReprint translationUnit:
+#pragma optionNV(fastmath on)
+
+§testReprint translationUnit:
+#pragma optionNV(fastprecision on)
+
+§testReprint translationUnit:
+#pragma optionNV(ifcvt all)
+
+§testReprint translationUnit:
+#pragma optionNV(inline all)
+
+§testReprint translationUnit:
+#pragma optionNV(strict on)
+
+§testReprint translationUnit:
 #extension foobar: require
 
 §testReprint translationUnit:

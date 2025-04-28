@@ -128,6 +128,15 @@ public class ASTPrinter extends ASTPrinterBase {
     }
     if (node.type == PragmaType.CUSTOM) {
       emitLiteral(node.getCustomName());
+    } else if (node.type == PragmaType.OPTIONNV) {
+      emitType(
+              node.type.tokenType,
+              GLSLLexer.NR_LPAREN,
+              node.option.tokenType);
+      emitExtendableSpace();
+      emitType(
+              node.state.tokenType,
+              GLSLLexer.NR_RPAREN);
     } else {
       emitType(
           node.type.tokenType,

@@ -5440,6 +5440,23 @@ int foo(
 ]
 
 
+testASTTree[translationUnit_9Q7uJamR7s6a92pCFZh1n3/iuoQ]=[
+#pragma optionNV(unroll all)
+
+<><><><><><><><><><><><><><><><><><><><><><><><><>
+(TranslationUnit
+(PragmaDirective
+- Boolean false
+- PragmaType OPTIONNV
+- null
+- PragmaOption UNROLL
+- PragmaState ALL
+)PragmaDirective
+)TranslationUnit
+
+]
+
+
 testASTTree[translationUnit_9c7lvVJk8TOc3wFytmsm1IYOV2s]=[
 layout(location = 0) out vec3 layoutOne;
 
@@ -6521,6 +6538,7 @@ testASTTree[translationUnit_Jq/Owf6pZZRb4Ywb97IzFJ82Czw]=[
 - Boolean false
 - PragmaType OPTIMIZE
 - null
+- null
 - PragmaState OFF
 )PragmaDirective
 )TranslationUnit
@@ -6536,6 +6554,7 @@ testASTTree[translationUnit_K9QGGTul4WNNNHMnzM2b3S9jWqA]=[
 (PragmaDirective
 - Boolean true
 - PragmaType DEBUG
+- null
 - null
 - PragmaState ON
 )PragmaDirective
@@ -7784,6 +7803,23 @@ int foo(int a, const int b, in int c, const in int d, out int e, inout int f) {
 )ReturnStatement
 )CompoundStatement
 )FunctionDefinition
+)TranslationUnit
+
+]
+
+
+testASTTree[translationUnit_RCvCCYNzJa//Qg7YQszZN3VY+6U]=[
+#pragma optionNV(fastprecision on)
+
+<><><><><><><><><><><><><><><><><><><><><><><><><>
+(TranslationUnit
+(PragmaDirective
+- Boolean false
+- PragmaType OPTIONNV
+- null
+- PragmaOption FASTPRECISION
+- PragmaState ON
+)PragmaDirective
 )TranslationUnit
 
 ]
@@ -9566,6 +9602,23 @@ struct {
 ]
 
 
+testASTTree[translationUnit_aQWDPR2GJp3nVxCLU1aDilKJTXw]=[
+#pragma optionNV(inline all)
+
+<><><><><><><><><><><><><><><><><><><><><><><><><>
+(TranslationUnit
+(PragmaDirective
+- Boolean false
+- PragmaType OPTIONNV
+- null
+- PragmaOption INLINE
+- PragmaState ALL
+)PragmaDirective
+)TranslationUnit
+
+]
+
+
 testASTTree[translationUnit_afHjqPz5O3bUHRXvMOFHsSPu8hM]=[
 mediump vec4 calculateColor();
 
@@ -10587,6 +10640,23 @@ float b[] = { 3.4f, 4.2f, 5.0f, 5.2f, 1.1f };
 )DeclarationMember
 )TypeAndInitDeclaration
 )DeclarationExternalDeclaration
+)TranslationUnit
+
+]
+
+
+testASTTree[translationUnit_gKcCwDx3h5ywrTrHQQDAb8iCeEM]=[
+#pragma optionNV(ifcvt all)
+
+<><><><><><><><><><><><><><><><><><><><><><><><><>
+(TranslationUnit
+(PragmaDirective
+- Boolean false
+- PragmaType OPTIONNV
+- null
+- PragmaOption IFCVT
+- PragmaState ALL
+)PragmaDirective
 )TranslationUnit
 
 ]
@@ -14255,6 +14325,23 @@ const mat4x2 m42 = mat4x2(1.0f, 2.0f, 3.0f, 4.0f, 5.0f, 6.0f, 7.0f, 8.0f);
 ]
 
 
+testASTTree[translationUnit_uvNPDcGFcBOFI+iEQHrC5EowEeA]=[
+#pragma optionNV(strict on)
+
+<><><><><><><><><><><><><><><><><><><><><><><><><>
+(TranslationUnit
+(PragmaDirective
+- Boolean false
+- PragmaType OPTIONNV
+- null
+- PragmaOption STRICT
+- PragmaState ON
+)PragmaDirective
+)TranslationUnit
+
+]
+
+
 testASTTree[translationUnit_xSh2/NlN6bwhpxGoFQ4K9HHStOc]=[
 out outbname {
 	int a;
@@ -14402,6 +14489,7 @@ testASTTree[translationUnit_y04Q1cMbMY2sj/19519kLQ5B0LY]=[
 - PragmaType CUSTOM
 - String foobar
 - null
+- null
 )PragmaDirective
 )TranslationUnit
 
@@ -14465,6 +14553,7 @@ testASTTree[translationUnit_yy0HUZ4NHVmB12LjGwGpwVQ8nZA]=[
 - Boolean false
 - PragmaType INVARIANT
 - null
+- null
 - PragmaState ALL
 )PragmaDirective
 )TranslationUnit
@@ -14514,6 +14603,23 @@ layout(location = 0) in Primitive { vec2 texCoord; } IN;
 - String IN
 )InterfaceBlockDeclaration
 )DeclarationExternalDeclaration
+)TranslationUnit
+
+]
+
+
+testASTTree[translationUnit_zFyNnShOlAjZpaxqaZxf5bMhRQY]=[
+#pragma optionNV(fastmath on)
+
+<><><><><><><><><><><><><><><><><><><><><><><><><>
+(TranslationUnit
+(PragmaDirective
+- Boolean false
+- PragmaType OPTIONNV
+- null
+- PragmaOption FASTMATH
+- PragmaState ON
+)PragmaDirective
 )TranslationUnit
 
 ]
