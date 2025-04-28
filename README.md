@@ -38,6 +38,7 @@ Transforming the AST requires building the AST from the parse tree (the CST). On
 - Templating for subtree generation
 - Printing with various formatting options
 - Index-based queries
+- Directive-based line remapping
 
 Further reading on [Abstract vs Concrete (Parse) Syntax Trees](https://eli.thegreenplace.net/2009/02/16/abstract-vs-concrete-syntax-trees/)
 
@@ -131,4 +132,3 @@ See the [project board](https://github.com/IrisShaders/glsl-transformer/projects
 
 - Type inference
 - Better formatting
-- Better line directive handling (WIP)
