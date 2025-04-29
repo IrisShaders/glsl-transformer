@@ -17,6 +17,7 @@ public abstract class VersionedGLSLLexer extends Lexer {
   public boolean enableCustomDirective = false;
   public boolean enableIncludeDirective = false;
   public boolean enableStrings = false;
+  public boolean enableMeshShaders = false;
   // public Profile profile;
   // public EnumSet<Extension> extensions;
   // public boolean vulkan = true;
@@ -36,5 +37,6 @@ public abstract class VersionedGLSLLexer extends Lexer {
     enableCustomDirective = true;
     enableIncludeDirective = true;
     enableStrings = true;
+    enableMeshShaders = true;
   }
 }

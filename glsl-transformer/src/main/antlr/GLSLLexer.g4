@@ -55,6 +55,7 @@ VOLATILE: 'volatile';
 VARYING: 'varying';
 SHARED: 'shared';
 LAYOUT: 'layout';
+TASKNV: 'taskNV' {enableMeshShaders}?;
 DOT_LENGTH_METHOD_CALL: '.length()';
 NOPERSPECTIVE: 'noperspective' {isAfter(130)}?; //ignores ES mode
 SAMPLE: 'sample' {isAfter(400)}?; //ignores ES mode

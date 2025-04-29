@@ -247,7 +247,8 @@ storageQualifier:
 	| RAY_PAYLOAD_IN_EXT
 	| HIT_ATTRIBUTE_EXT
 	| CALLABLE_DATA_EXT
-	| CALLABLE_DATA_IN_EXT;
+	| CALLABLE_DATA_IN_EXT
+	| TASKNV;
 
 layoutQualifier:
 	LAYOUT LPAREN layoutQualifiers += layoutQualifierId (
