@@ -157,7 +157,7 @@ public class ParsingTest extends TestWithSingleASTTransformer {
   }
 
   @Test
-  void testParseNewKeywords() {
+  void testLexerVersionOptionKeywords() {
     assertThrows(ParseCancellationException.class, () -> {
       p.parseSeparateExternalDeclaration("void foo(sampler2D sample) { }");
     }, "It should throw if keywords are used as identifiers.");
@@ -172,8 +172,38 @@ public class ParsingTest extends TestWithSingleASTTransformer {
   }
 
   @Test
-  @Disabled
-  void testParseExceptions() {
-    p.parseSeparateExternalDeclaration("int a");
+  void testLexerOptionalFeatures() {
+    // Test for `enableCustomDirective`
+    var customDirective = "#custom directive\n";
+    assertThrows(ParseCancellationException.class, () -> {
+      p.getLexer().enableCustomDirective = false;
+      p.parseSeparateExternalDeclaration(customDirective);
+    }, "It should throw if `enableCustomDirective` is not enabled.");
+    assertDoesNotThrow(() -> {
+      p.getLexer().enableCustomDirective = true;
+      p.parseSeparateExternalDeclaration(customDirective);
+    }, "It should not throw if `enableCustomDirective` is enabled.");
+
+    // Test for `enableIncludeDirective`
+    var includeDirective = "#include <file>\n";
+    assertThrows(ParseCancellationException.class, () -> {
+      p.getLexer().enableIncludeDirective = false;
+      p.parseSeparateExternalDeclaration(includeDirective);
+    }, "It should throw if `enableIncludeDirective` is not enabled.");
+    assertDoesNotThrow(() -> {
+      p.getLexer().enableIncludeDirective = true;
+      p.parseSeparateExternalDeclaration(includeDirective);
+    }, "It should not throw if `enableIncludeDirective` is enabled.");
+
+    // Test for `enableStrings`
+    var stringDeclaration = "void main() { foo(\"bar\"); }";
+    assertThrows(ParseCancellationException.class, () -> {
+      p.getLexer().enableStrings = false;
+      p.parseSeparateExternalDeclaration(stringDeclaration);
+    }, "It should throw if `enableStrings` is not enabled.");
+    assertDoesNotThrow(() -> {
+      p.getLexer().enableStrings = true;
+      p.parseSeparateExternalDeclaration(stringDeclaration);
+    }, "It should not throw if `enableStrings` is enabled.");
   }
 }
