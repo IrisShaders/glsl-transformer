@@ -5440,6 +5440,129 @@ int foo(
 ]
 
 
+testASTTree[translationUnit_9AfK4d4/YhXZNAqsq6OquKbPheo]=[
+taskNV in Task {
+	vec3 origin;
+	uint baseOffset;
+	uint quadCount;
+	uint transformationId;
+	uvec4 binIa;
+	uvec4 binIb;
+	uvec4 binVa;
+	uvec4 binVb;
+};
+
+<><><><><><><><><><><><><><><><><><><><><><><><><>
+(TranslationUnit
+(DeclarationExternalDeclaration
+(InterfaceBlockDeclaration
+(TypeQualifier
+(StorageQualifier
+- StorageType TASKNV
+)StorageQualifier
+(StorageQualifier
+- StorageType IN
+)StorageQualifier
+)TypeQualifier
+(Identifier)
+- String Task
+(StructBody
+(StructMember
+(FullySpecifiedType
+(BuiltinNumericTypeSpecifier
+- Type F32VEC3
+)BuiltinNumericTypeSpecifier
+)FullySpecifiedType
+(StructDeclarator
+(Identifier)
+- String origin
+)StructDeclarator
+)StructMember
+(StructMember
+(FullySpecifiedType
+(BuiltinNumericTypeSpecifier
+- Type UINT32
+)BuiltinNumericTypeSpecifier
+)FullySpecifiedType
+(StructDeclarator
+(Identifier)
+- String baseOffset
+)StructDeclarator
+)StructMember
+(StructMember
+(FullySpecifiedType
+(BuiltinNumericTypeSpecifier
+- Type UINT32
+)BuiltinNumericTypeSpecifier
+)FullySpecifiedType
+(StructDeclarator
+(Identifier)
+- String quadCount
+)StructDeclarator
+)StructMember
+(StructMember
+(FullySpecifiedType
+(BuiltinNumericTypeSpecifier
+- Type UINT32
+)BuiltinNumericTypeSpecifier
+)FullySpecifiedType
+(StructDeclarator
+(Identifier)
+- String transformationId
+)StructDeclarator
+)StructMember
+(StructMember
+(FullySpecifiedType
+(BuiltinNumericTypeSpecifier
+- Type U32VEC4
+)BuiltinNumericTypeSpecifier
+)FullySpecifiedType
+(StructDeclarator
+(Identifier)
+- String binIa
+)StructDeclarator
+)StructMember
+(StructMember
+(FullySpecifiedType
+(BuiltinNumericTypeSpecifier
+- Type U32VEC4
+)BuiltinNumericTypeSpecifier
+)FullySpecifiedType
+(StructDeclarator
+(Identifier)
+- String binIb
+)StructDeclarator
+)StructMember
+(StructMember
+(FullySpecifiedType
+(BuiltinNumericTypeSpecifier
+- Type U32VEC4
+)BuiltinNumericTypeSpecifier
+)FullySpecifiedType
+(StructDeclarator
+(Identifier)
+- String binVa
+)StructDeclarator
+)StructMember
+(StructMember
+(FullySpecifiedType
+(BuiltinNumericTypeSpecifier
+- Type U32VEC4
+)BuiltinNumericTypeSpecifier
+)FullySpecifiedType
+(StructDeclarator
+(Identifier)
+- String binVb
+)StructDeclarator
+)StructMember
+)StructBody
+)InterfaceBlockDeclaration
+)DeclarationExternalDeclaration
+)TranslationUnit
+
+]
+
+
 testASTTree[translationUnit_9Q7uJamR7s6a92pCFZh1n3/iuoQ]=[
 #pragma optionNV(unroll all)
 
@@ -7579,6 +7702,129 @@ int layerIndices[NUM_LAYERS];
 )ArraySpecifier
 )DeclarationMember
 )TypeAndInitDeclaration
+)DeclarationExternalDeclaration
+)TranslationUnit
+
+]
+
+
+testASTTree[translationUnit_QVGbyTdr92I8JZmQOcxjRhzN7dg]=[
+taskNV out Task {
+	vec3 origin;
+	uint baseOffset;
+	uint quadCount;
+	uint transformationId;
+	uvec4 binIa;
+	uvec4 binIb;
+	uvec4 binVa;
+	uvec4 binVb;
+};
+
+<><><><><><><><><><><><><><><><><><><><><><><><><>
+(TranslationUnit
+(DeclarationExternalDeclaration
+(InterfaceBlockDeclaration
+(TypeQualifier
+(StorageQualifier
+- StorageType TASKNV
+)StorageQualifier
+(StorageQualifier
+- StorageType OUT
+)StorageQualifier
+)TypeQualifier
+(Identifier)
+- String Task
+(StructBody
+(StructMember
+(FullySpecifiedType
+(BuiltinNumericTypeSpecifier
+- Type F32VEC3
+)BuiltinNumericTypeSpecifier
+)FullySpecifiedType
+(StructDeclarator
+(Identifier)
+- String origin
+)StructDeclarator
+)StructMember
+(StructMember
+(FullySpecifiedType
+(BuiltinNumericTypeSpecifier
+- Type UINT32
+)BuiltinNumericTypeSpecifier
+)FullySpecifiedType
+(StructDeclarator
+(Identifier)
+- String baseOffset
+)StructDeclarator
+)StructMember
+(StructMember
+(FullySpecifiedType
+(BuiltinNumericTypeSpecifier
+- Type UINT32
+)BuiltinNumericTypeSpecifier
+)FullySpecifiedType
+(StructDeclarator
+(Identifier)
+- String quadCount
+)StructDeclarator
+)StructMember
+(StructMember
+(FullySpecifiedType
+(BuiltinNumericTypeSpecifier
+- Type UINT32
+)BuiltinNumericTypeSpecifier
+)FullySpecifiedType
+(StructDeclarator
+(Identifier)
+- String transformationId
+)StructDeclarator
+)StructMember
+(StructMember
+(FullySpecifiedType
+(BuiltinNumericTypeSpecifier
+- Type U32VEC4
+)BuiltinNumericTypeSpecifier
+)FullySpecifiedType
+(StructDeclarator
+(Identifier)
+- String binIa
+)StructDeclarator
+)StructMember
+(StructMember
+(FullySpecifiedType
+(BuiltinNumericTypeSpecifier
+- Type U32VEC4
+)BuiltinNumericTypeSpecifier
+)FullySpecifiedType
+(StructDeclarator
+(Identifier)
+- String binIb
+)StructDeclarator
+)StructMember
+(StructMember
+(FullySpecifiedType
+(BuiltinNumericTypeSpecifier
+- Type U32VEC4
+)BuiltinNumericTypeSpecifier
+)FullySpecifiedType
+(StructDeclarator
+(Identifier)
+- String binVa
+)StructDeclarator
+)StructMember
+(StructMember
+(FullySpecifiedType
+(BuiltinNumericTypeSpecifier
+- Type U32VEC4
+)BuiltinNumericTypeSpecifier
+)FullySpecifiedType
+(StructDeclarator
+(Identifier)
+- String binVb
+)StructDeclarator
+)StructMember
+)StructBody
+)InterfaceBlockDeclaration
 )DeclarationExternalDeclaration
 )TranslationUnit
 

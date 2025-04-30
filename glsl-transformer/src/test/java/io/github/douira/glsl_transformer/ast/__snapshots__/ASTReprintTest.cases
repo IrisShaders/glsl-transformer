@@ -1182,4 +1182,28 @@ void main() {
 	outColor = float((blendWeight.x >> 5u) & 0x7u + blendWeight.y & 0x3u);
 }
 
+§testReprint translationUnit:
+taskNV out Task {
+	vec3 origin;
+	uint baseOffset;
+	uint quadCount;
+	uint transformationId;
+	uvec4 binIa;
+	uvec4 binIb;
+	uvec4 binVa;
+	uvec4 binVb;
+};
+
+§testReprint translationUnit:
+taskNV in Task {
+	vec3 origin;
+	uint baseOffset;
+	uint quadCount;
+	uint transformationId;
+	uvec4 binIa;
+	uvec4 binIb;
+	uvec4 binVa;
+	uvec4 binVb;
+};
+
 §

@@ -205,5 +205,15 @@ public class ParsingTest extends TestWithSingleASTTransformer {
       p.getLexer().enableStrings = true;
       p.parseSeparateExternalDeclaration(stringDeclaration);
     }, "It should not throw if `enableStrings` is enabled.");
+
+    // Test for `enableMeshShaders`
+    assertThrows(ParseCancellationException.class, () -> {
+      p.getLexer().enableMeshShaders = false;
+      p.parseSeparateExternalDeclaration("taskNV out Task { vec3 origin; };");
+    }, "It should throw on taskNV if enableMeshShaders is false.");
+    assertDoesNotThrow(() -> {
+      p.getLexer().enableMeshShaders = true;
+      p.parseSeparateExternalDeclaration("taskNV out Task { vec3 origin; };");
+    }, "It should not throw on taskNV if enableMeshShaders is false.");
   }
 }
