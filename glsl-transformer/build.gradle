@@ -19,7 +19,7 @@ plugins {
 }
 
 group = 'io.github.douira'
-version = '3.0.0-pre2'
+version = '3.0.0-pre3'
 
 repositories {
   // Use Maven Central for resolving dependencies.
