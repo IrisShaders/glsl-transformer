@@ -17,3 +17,6 @@ hidden
 *.iml
 *.ipr
 *.iws
+*.interp
+*.tokens
+**/gen/
