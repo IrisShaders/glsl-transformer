@@ -1,24 +1,25 @@
 package io.github.douira.glsl_transformer.ast.typing;
 
-import java.util.*;
-
-import org.antlr.v4.runtime.Token;
-
 import io.github.douira.glsl_transformer.GLSLLexer;
 import io.github.douira.glsl_transformer.ast.data.TokenTyped;
+import org.antlr.v4.runtime.Token;
+
+import java.util.Arrays;
+import java.util.EnumSet;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * This enum represents the type of a value in GLSL and contains easily
  * accessible
  * data about each of them.
- * 
+ * <p>
  * The shape is an array of up to three integers describing how big this
  * tensor is in each dimension. The first dimension contains the number of bits
  * of each value and the following dimensions describe the actual dimensions of
  * the tensor.
  */
 public enum NumericType implements TokenTyped {
-  STRING(NumberType.STRING, "string", "string"),
   BOOL(GLSLLexer.BOOL, GLSLLexer.BOOLCONSTANT, NumberType.BOOLEAN, "bool", "bool", 1),
   BVEC2(GLSLLexer.BVEC2, NumberType.BOOLEAN, "bvec2", "bvec2", 1, 2),
   BVEC3(GLSLLexer.BVEC3, NumberType.BOOLEAN, "bvec3", "bvec3", 1, 3),
@@ -102,59 +103,6 @@ public enum NumericType implements TokenTyped {
   F64MAT4X3(GLSLLexer.F64MAT4X3, NumberType.FLOATING_POINT, "dmat4x3", "f64mat4x3", 64, 4, 3),
   F64MAT4X4(GLSLLexer.F64MAT4X4, NumberType.FLOATING_POINT, "dmat4", "f64mat4x4", 64, 4, 4);
 
-  /**
-   * The different ways bits in a tensor can be interpreted.
-   */
-  public enum NumberType {
-    STRING(0),
-
-    /**
-     * boolean bit usage
-     */
-    BOOLEAN(1, 4),
-
-    /**
-     * unsigned integer bit usage
-     */
-    UNSIGNED_INTEGER(64, 4),
-
-    /**
-     * integer bit usage
-     */
-    SIGNED_INTEGER(64, 4),
-
-    /**
-     * floating point bit usage
-     */
-    FLOATING_POINT(64, 4, 4);
-
-    private final int maxBitDepth;
-    private final int[] maxDimensions;
-    private EnumSet<NumericType> registeredTypes; // lazy init
-
-    NumberType(int maxBitDepth, int... maxDimensions) {
-      this.maxBitDepth = maxBitDepth;
-      this.maxDimensions = maxDimensions;
-    }
-
-    public int getMaxBitDepth() {
-      return maxBitDepth;
-    }
-
-    public int[] getMaxDimensions() {
-      return maxDimensions;
-    }
-
-    /**
-     * @return An EnumSet of all the Types which use this number type. This is
-     *         created
-     *         after all Types have been created.
-     */
-    public EnumSet<NumericType> getRegisteredTypes() {
-      return registeredTypes;
-    }
-  }
-
   private final int tokenType;
   private final int literalTokenType;
   private final NumberType numberType;
@@ -167,14 +115,14 @@ public enum NumericType implements TokenTyped {
   private EnumSet<NumericType> implicitCastTypes;
 
   // can't be static
-  private final int[] SCALAR_DIMENSIONS = { 1 };
+  private final int[] SCALAR_DIMENSIONS = {1};
 
   NumericType(int tokenType,
-      NumberType numberType,
-      String compactName,
-      String explicitName,
-      int bitDepth,
-      int... dimensions) {
+              NumberType numberType,
+              String compactName,
+              String explicitName,
+              int bitDepth,
+              int... dimensions) {
     this(tokenType, Token.INVALID_TYPE, numberType, compactName, explicitName, bitDepth, dimensions);
   }
 
@@ -182,7 +130,7 @@ public enum NumericType implements TokenTyped {
    * Creates a new type with the given token type, number type, compact and
    * explicit name, bit depth
    * and dimensions.
-   * 
+   *
    * @param tokenType    The token type in the parser
    * @param numberType   The number type
    * @param compactName  The most compact name for this type
@@ -191,12 +139,12 @@ public enum NumericType implements TokenTyped {
    * @param dimensions   The size of each dimension
    */
   NumericType(int tokenType,
-      int literalTokenType,
-      NumberType numberType,
-      String compactName,
-      String explicitName,
-      int bitDepth,
-      int... dimensions) {
+              int literalTokenType,
+              NumberType numberType,
+              String compactName,
+              String explicitName,
+              int bitDepth,
+              int... dimensions) {
     // verify inputs
     if (bitDepth > numberType.getMaxBitDepth()) {
       throw new IllegalArgumentException(
@@ -230,11 +178,11 @@ public enum NumericType implements TokenTyped {
     this.explicitName = explicitName;
   }
 
-  Type(NumberType numberType, String compactName, String explicitName) {
+  NumericType(NumberType numberType, String compactName, String explicitName) {
     this.tokenType = Token.INVALID_TYPE;
     this.literalTokenType = Token.INVALID_TYPE;
     this.numberType = numberType;
-    this.dimensions = new int[] {};
+    this.dimensions = new int[]{};
     this.bitDepth = 0;
     this.compactName = compactName;
     this.explicitName = explicitName;
@@ -242,7 +190,7 @@ public enum NumericType implements TokenTyped {
 
   /**
    * Returns the token type in the parser.
-   * 
+   *
    * @return The token type in the parser
    */
   public int getTokenType() {
@@ -251,7 +199,7 @@ public enum NumericType implements TokenTyped {
 
   /**
    * Returns the number type.
-   * 
+   *
    * @return The number type
    */
   public NumberType getNumberType() {
@@ -260,7 +208,7 @@ public enum NumericType implements TokenTyped {
 
   /**
    * Returns the size of each dimension. (also called the shape)
-   * 
+   *
    * @return The size of each dimension
    */
   public int[] getDimensions() {
@@ -285,7 +233,7 @@ public enum NumericType implements TokenTyped {
 
   /**
    * Returns the bit depth.
-   * 
+   *
    * @return The bit depth
    */
   public int getBitDepth() {
@@ -297,7 +245,7 @@ public enum NumericType implements TokenTyped {
    * by extensions, do not have compact name.
    *
    * @return The type's compact name, or null if the type does not have a compact
-   *         name.
+   * name.
    */
   public String getCompactName() {
     return compactName;
@@ -316,16 +264,6 @@ public enum NumericType implements TokenTyped {
    */
   public String getExplicitName() {
     return explicitName;
-  }
-
-  /**
-   * Returns the set of types that this type can be converted to without a
-   * constructor or swizzling.
-   *
-   * @return the set of types that this type can be implicitly converted to.
-   */
-  public EnumSet<NumericType> getImplicitCasts() {
-    return implicitCastTypes;
   }
 
   private static final NumericType[] tokenTypesToValues;
@@ -376,31 +314,54 @@ public enum NumericType implements TokenTyped {
     }
 
     // calculate possible implicit casts for each type
-    for (NumericType t1 : values()) {
+    // promotion tables:
+    // https://github.com/KhronosGroup/GLSL/blob/3d48ca20f65b7fad91baab3dcadd224ce4655f05/extensions/ext/GL_EXT_shader_explicit_arithmetic_types.txt#L409
+    for (NumericType from : values()) {
       EnumSet<NumericType> implicitCastTypes = EnumSet.noneOf(NumericType.class);
-      t1.implicitCastTypes = implicitCastTypes;
-      for (NumericType t2 : values()) {
-        boolean canCast = t1.equals(t2) || (Arrays.equals(t1.dimensions, t2.dimensions) && switch (t1.numberType) {
-          case STRING -> false;
+      from.implicitCastTypes = implicitCastTypes;
+      for (NumericType to : values()) {
+        boolean canCast = from == to
+            || (Arrays.equals(from.dimensions, to.dimensions) && switch (from.numberType) {
           case BOOLEAN -> false;
-          case SIGNED_INTEGER -> switch (t2.numberType) {
-            case UNSIGNED_INTEGER, SIGNED_INTEGER, FLOATING_POINT -> t2.bitDepth >= t1.bitDepth;
+          case SIGNED_INTEGER -> switch (to.numberType) {
+            case UNSIGNED_INTEGER, SIGNED_INTEGER, FLOATING_POINT -> to.bitDepth >= from.bitDepth;
             default -> false;
           };
-          case UNSIGNED_INTEGER -> switch (t2.numberType) {
-            case UNSIGNED_INTEGER, SIGNED_INTEGER -> t2.bitDepth > t1.bitDepth;
-            case FLOATING_POINT -> t2.bitDepth >= t1.bitDepth;
+          case UNSIGNED_INTEGER -> switch (to.numberType) {
+            case UNSIGNED_INTEGER, SIGNED_INTEGER -> to.bitDepth > from.bitDepth;
+            case FLOATING_POINT -> to.bitDepth >= from.bitDepth;
             default -> false;
           };
-          case FLOATING_POINT -> t2.numberType.equals(NumberType.FLOATING_POINT) && t2.bitDepth >= t1.bitDepth;
+          case FLOATING_POINT -> to.numberType == NumberType.FLOATING_POINT && to.bitDepth >= from.bitDepth;
         });
 
         if (canCast) {
-          implicitCastTypes.add(t2);
+          implicitCastTypes.add(to);
         }
       }
     }
   }
+
+  /**
+   * Returns the set of types that this type can be converted to without a
+   * constructor or swizzling.
+   *
+   * @return the set of types that this type can be implicitly converted to.
+   */
+  public EnumSet<NumericType> getImplicitCasts() {
+    return implicitCastTypes;
+  }
+
+  public boolean isImplicitlyCastableTo(NumericType other) {
+    return implicitCastTypes.contains(other);
+  }
+
+  /**
+   * TODO: function that checks for (constant) integral numbers
+   * <p>
+   * implicit cast for binary operations:
+   * https://github.com/KhronosGroup/GLSL/blob/3d48ca20f65b7fad91baab3dcadd224ce4655f05/extensions/ext/GL_EXT_shader_explicit_arithmetic_types.txt#L574
+   */
 
   public static NumericType fromToken(Token token) {
     return ofTokenType(token.getType());
@@ -408,7 +369,7 @@ public enum NumericType implements TokenTyped {
 
   /**
    * Returns the type for the given token type.
-   * 
+   *
    * @param tokenType The token type in the parser
    * @return The type for the given token type index
    */

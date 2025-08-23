@@ -1,14 +1,14 @@
 package io.github.douira.glsl_transformer.ast.node.expression;
 
+import io.github.douira.glsl_transformer.ast.query.Root;
+import io.github.douira.glsl_transformer.ast.traversal.ASTListener;
+import io.github.douira.glsl_transformer.ast.traversal.ASTVisitor;
+import io.github.douira.glsl_transformer.ast.typing.*;
+
 import java.util.Objects;
 
-import io.github.douira.glsl_transformer.ast.query.Root;
-import io.github.douira.glsl_transformer.ast.traversal.*;
-import io.github.douira.glsl_transformer.ast.typing.NumericType;
-import io.github.douira.glsl_transformer.ast.typing.NumericType.NumberType;
-
 public class LiteralExpression extends TerminalExpression {
-  private NumericType literalType;
+  private ValueType literalType;
   private boolean booleanValue;
   private long integerValue;
   private IntegerFormat integerFormat;
@@ -28,7 +28,7 @@ public class LiteralExpression extends TerminalExpression {
   }
 
   private LiteralExpression(
-      NumericType literalType,
+      ValueType literalType,
       String stringValue,
       boolean booleanValue,
       long integerValue,
@@ -72,7 +72,8 @@ public class LiteralExpression extends TerminalExpression {
   }
 
   public Number getNumber() {
-    var bitDepth = literalType.getBitDepth();
+    var bitDepth = getNumericType().getBitDepth();
+
     switch (getNumberType()) {
       case BOOLEAN:
         return booleanValue ? 1 : 0;
@@ -99,17 +100,28 @@ public class LiteralExpression extends TerminalExpression {
         throw new IllegalArgumentException("Unsupported number type: " + getNumberType());
     }
   }
-
-  public NumericType getNumericType() {
-    return literalType;
+  
+  public boolean isNumeric() {
+    return literalType instanceof NumericValueType;
   }
 
-  public NumericType.NumberType getNumberType() {
-    return literalType.getNumberType();
+  public NumericType getNumericType() {
+    if (literalType instanceof NumericValueType numericValueType) {
+      return numericValueType.type;
+    }
+    throw new IllegalStateException("Literal type is not a numeric type!");
+  }
+
+  public NumberType getNumberType() {
+    return getNumericType().getNumberType();
   }
 
   public String getString() {
     return stringValue;
+  }
+
+  public ValueType getLiteralType() {
+    return literalType;
   }
 
   public void setString(String stringValue) {
@@ -120,7 +132,7 @@ public class LiteralExpression extends TerminalExpression {
     this.booleanValue = false;
     this.integerValue = 0;
     this.floatingValue = 0;
-    this.literalType = Type.STRING;
+    this.literalType = StringType.INSTANCE;
   }
 
   public void changeString(String stringValue) {
@@ -142,7 +154,7 @@ public class LiteralExpression extends TerminalExpression {
     this.integerFormat = null;
     this.integerValue = 0;
     this.floatingValue = 0;
-    this.literalType = NumericType.BOOL;
+    this.literalType = new NumericValueType(NumericType.BOOL);
   }
 
   public void changeBoolean(boolean booleanValue) {
@@ -167,7 +179,7 @@ public class LiteralExpression extends TerminalExpression {
     this.booleanValue = false;
     this.integerFormat = integerFormat;
     this.floatingValue = 0;
-    this.literalType = integerType;
+    this.literalType = new NumericValueType(integerType);
   }
 
   public void setInteger(NumericType integerType, long integerValue) {
@@ -213,7 +225,7 @@ public class LiteralExpression extends TerminalExpression {
     this.booleanValue = false;
     this.integerValue = 0;
     this.integerFormat = null;
-    this.literalType = floatingType;
+    this.literalType = new NumericValueType(floatingType);
   }
 
   public void setFloating(float floatingValue) {
@@ -228,23 +240,25 @@ public class LiteralExpression extends TerminalExpression {
   }
 
   public boolean isString() {
-    return literalType == Type.STRING;
+    return literalType == StringType.INSTANCE;
   }
 
   public boolean isBoolean() {
-    return getNumberType() == NumberType.BOOLEAN;
+    return isNumeric() && getNumberType() == NumberType.BOOLEAN;
   }
 
   public boolean isInteger() {
-    return getNumberType() == NumberType.SIGNED_INTEGER
-        || getNumberType() == NumberType.UNSIGNED_INTEGER;
+    return isNumeric() && getNumberType().isInteger();
   }
 
   public boolean isFloatingPoint() {
-    return getNumberType() == NumberType.FLOATING_POINT;
+    return isNumeric() && getNumberType() == NumberType.FLOATING_POINT;
   }
 
   public boolean isPositive() {
+    if (!isNumeric()) {
+      return false;
+    }
     switch (getNumberType()) {
       case BOOLEAN:
         return booleanValue;
@@ -259,6 +273,9 @@ public class LiteralExpression extends TerminalExpression {
   }
 
   public boolean isNonZero() {
+    if (!isNumeric()) {
+      return false;
+    }
     switch (getNumberType()) {
       case BOOLEAN:
         return true;
@@ -272,22 +289,17 @@ public class LiteralExpression extends TerminalExpression {
     }
   }
 
-  public static LiteralExpression getDefaultValue(NumberType numberType) {
-    switch (numberType) {
-      case BOOLEAN:
-        return new LiteralExpression(false);
-      case SIGNED_INTEGER:
-      case UNSIGNED_INTEGER:
-        return new LiteralExpression(NumericType.INT32, 0);
-      case FLOATING_POINT:
-        return new LiteralExpression(NumericType.FLOAT32, 0.0d);
-      default:
-        throw new IllegalArgumentException("Unsupported literal type: " + numberType);
-    }
+  public static LiteralExpression getDefaultNumericValue(NumberType numberType) {
+    return switch (numberType) {
+      case BOOLEAN -> new LiteralExpression(false);
+      case SIGNED_INTEGER, UNSIGNED_INTEGER -> new LiteralExpression(NumericType.INT32, 0);
+      case FLOATING_POINT -> new LiteralExpression(NumericType.FLOAT32, 0.0d);
+      default -> throw new IllegalArgumentException("Unsupported literal type: " + numberType);
+    };
   }
 
-  public static LiteralExpression getDefaultValue(NumericType type) {
-    return getDefaultValue(type.getNumberType());
+  public static LiteralExpression getDefaultNumericValue(NumericType type) {
+    return getDefaultNumericValue(type.getNumberType());
   }
 
   @Override

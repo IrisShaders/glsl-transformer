@@ -34,7 +34,6 @@ import io.github.douira.glsl_transformer.ast.node.type.specifier.*;
 import io.github.douira.glsl_transformer.ast.node.type.struct.*;
 import io.github.douira.glsl_transformer.ast.query.Root;
 import io.github.douira.glsl_transformer.ast.typing.*;
-import io.github.douira.glsl_transformer.ast.typing.NumericType.NumberType;
 
 /**
  * The AST builder is a visitor of the parse tree (not an AST visitor) that

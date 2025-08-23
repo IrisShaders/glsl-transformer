@@ -8,6 +8,7 @@ import io.github.douira.glsl_transformer.ast.data.ChildNodeList;
 import io.github.douira.glsl_transformer.ast.query.Root;
 import io.github.douira.glsl_transformer.ast.transform.*;
 import io.github.douira.glsl_transformer.ast.traversal.*;
+import io.github.douira.glsl_transformer.ast.typing.Type;
 
 /**
  * The AST node represents a node in the abstract syntax tree. Each AST node has
@@ -46,10 +47,11 @@ public abstract class ASTNode {
   private Root root = Root.getActiveBuildRoot();
   protected Template<?> template = null;
   protected SourceLocation sourceLocation = null;
+  private Type type;
 
   /**
    * Whether this node has been registered with the root. This is only used when
-   * constructing nodes. The {@link #setParent(ASTNode)} method does not check
+   * constructing nodes. The {@link #setParent(ASTNode, Consumer)} method does not check
    * this recursively.
    */
   private boolean registered = false;
@@ -65,6 +67,17 @@ public abstract class ASTNode {
 
   public void setSourceLocation(SourceLocation sourceLocation) {
     this.sourceLocation = sourceLocation;
+  }
+
+  public void assignType(Type type) {
+    this.type = type;
+  }
+
+  public Type getType() {
+    if (type == null) {
+      throw new IllegalStateException("Type has not been assigned yet!");
+    }
+    return type;
   }
 
   public ASTNode getParent() {

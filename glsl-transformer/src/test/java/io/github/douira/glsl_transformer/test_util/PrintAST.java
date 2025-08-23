@@ -3,6 +3,7 @@ package io.github.douira.glsl_transformer.test_util;
 import io.github.douira.glsl_transformer.ast.node.abstract_node.*;
 import io.github.douira.glsl_transformer.ast.node.expression.LiteralExpression;
 import io.github.douira.glsl_transformer.ast.traversal.*;
+import io.github.douira.glsl_transformer.ast.typing.StringType;
 
 public class PrintAST extends ASTListenerVisitor<Void> {
   StringBuilder builder = new StringBuilder();
@@ -42,7 +43,7 @@ public class PrintAST extends ASTListenerVisitor<Void> {
   @Override
   public Void visitLiteralExpression(LiteralExpression node) {
     if (node.isString()) {
-      visitData(node.getType());
+      visitData(StringType.class.getSimpleName());
       visitData(escape(node.getString()));
     } else {
       super.visitLiteralExpression(node);

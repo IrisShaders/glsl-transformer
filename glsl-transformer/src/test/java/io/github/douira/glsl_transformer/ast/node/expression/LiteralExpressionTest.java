@@ -5,8 +5,7 @@ import static org.junit.jupiter.api.Assertions.*;
 import org.junit.jupiter.api.Test;
 
 import io.github.douira.glsl_transformer.ast.node.expression.LiteralExpression.IntegerFormat;
-import io.github.douira.glsl_transformer.ast.typing.NumericType;
-import io.github.douira.glsl_transformer.ast.typing.NumericType.NumberType;
+import io.github.douira.glsl_transformer.ast.typing.*;
 
 public class LiteralExpressionTest {
   @Test
@@ -43,12 +42,12 @@ public class LiteralExpressionTest {
   void testStringProperties() {
     var e = new LiteralExpression("test");
     assertEquals("test", e.getString());
-    assertEquals(Type.STRING, e.getType());
+    assertEquals(StringType.INSTANCE, e.getLiteralType());
     assertFalse(e.isBoolean());
     assertFalse(e.isFloatingPoint());
     assertFalse(e.isInteger());
-    assertThrows(IllegalArgumentException.class, () -> e.isNonZero());
-    assertThrows(IllegalArgumentException.class, () -> e.isPositive());
+    assertFalse(e.isNonZero());
+    assertFalse(e.isPositive());
     assertNull(e.getIntegerFormat());
 
     assertThrows(IllegalArgumentException.class, () -> e.setString(null));

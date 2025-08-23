@@ -194,7 +194,7 @@ public class TransformTest extends TestWithSingleASTTransformer {
 
                 tree.prependMainFunctionBody(initTemplate.getInstanceFor(root,
                     new Identifier(name),
-                    LiteralExpression.getDefaultValue(specifier.type)));
+                    LiteralExpression.getDefaultNumericValue(specifier.type)));
               }
             }
           });
@@ -791,7 +791,7 @@ public class TransformTest extends TestWithSingleASTTransformer {
     t.setTransformation((tree, root, parameters) -> {
       tree.injectNode(
           ASTInjectionPoint.BEFORE_DECLARATIONS,
-          structTemplate.getInstanceFor(root, new LiteralExpression(Type.INT32, bindingPoint)));
+          structTemplate.getInstanceFor(root, new LiteralExpression(NumericType.INT32, bindingPoint)));
 
       // find all function calls to printf
       root.process(
@@ -810,8 +810,8 @@ public class TransformTest extends TestWithSingleASTTransformer {
 
             // make a new compound statement to replace the call statement with
             var compound = setupTemplate.getInstanceFor(root,
-                new LiteralExpression(Type.INT32, entry.b.length),
-                new LiteralExpression(Type.INT32, parameters.printfStrings.size()));
+                new LiteralExpression(NumericType.INT32, entry.b.length),
+                new LiteralExpression(NumericType.INT32, parameters.printfStrings.size()));
 
             parameters.printfStrings.add(entry);
 
@@ -825,7 +825,7 @@ public class TransformTest extends TestWithSingleASTTransformer {
 
               // add the write statement
               compound.getChildren().add(
-                  writeTemplate.getInstanceFor(root, new LiteralExpression(Type.INT32, i - offset + 1), arg));
+                  writeTemplate.getInstanceFor(root, new LiteralExpression(NumericType.INT32, i - offset + 1), arg));
             }
 
             // detach the args from the parent so that when it gets replaced the args aren't

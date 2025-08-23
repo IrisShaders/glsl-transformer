@@ -1,29 +1,43 @@
 package io.github.douira.glsl_transformer.ast.print;
 
-import java.util.*;
-
 import io.github.douira.glsl_transformer.GLSLLexer;
-import io.github.douira.glsl_transformer.ast.node.*;
+import io.github.douira.glsl_transformer.ast.node.Identifier;
+import io.github.douira.glsl_transformer.ast.node.IterationConditionInitializer;
+import io.github.douira.glsl_transformer.ast.node.TranslationUnit;
+import io.github.douira.glsl_transformer.ast.node.VersionStatement;
 import io.github.douira.glsl_transformer.ast.node.abstract_node.ASTNode;
 import io.github.douira.glsl_transformer.ast.node.declaration.*;
-import io.github.douira.glsl_transformer.ast.node.expression.*;
+import io.github.douira.glsl_transformer.ast.node.expression.ConditionExpression;
+import io.github.douira.glsl_transformer.ast.node.expression.Expression;
 import io.github.douira.glsl_transformer.ast.node.expression.Expression.ExpressionType;
 import io.github.douira.glsl_transformer.ast.node.expression.Expression.ExpressionType.OperandStructure;
+import io.github.douira.glsl_transformer.ast.node.expression.LiteralExpression;
+import io.github.douira.glsl_transformer.ast.node.expression.SequenceExpression;
 import io.github.douira.glsl_transformer.ast.node.expression.binary.*;
 import io.github.douira.glsl_transformer.ast.node.expression.unary.*;
 import io.github.douira.glsl_transformer.ast.node.external_declaration.*;
 import io.github.douira.glsl_transformer.ast.node.external_declaration.PragmaDirective.PragmaType;
-import io.github.douira.glsl_transformer.ast.node.statement.*;
-import io.github.douira.glsl_transformer.ast.node.statement.loop.*;
-import io.github.douira.glsl_transformer.ast.node.statement.selection.*;
+import io.github.douira.glsl_transformer.ast.node.statement.CompoundStatement;
+import io.github.douira.glsl_transformer.ast.node.statement.Statement;
+import io.github.douira.glsl_transformer.ast.node.statement.loop.DoWhileLoopStatement;
+import io.github.douira.glsl_transformer.ast.node.statement.loop.ForLoopStatement;
+import io.github.douira.glsl_transformer.ast.node.statement.loop.WhileLoopStatement;
+import io.github.douira.glsl_transformer.ast.node.statement.selection.SelectionStatement;
+import io.github.douira.glsl_transformer.ast.node.statement.selection.SwitchStatement;
 import io.github.douira.glsl_transformer.ast.node.statement.terminal.*;
 import io.github.douira.glsl_transformer.ast.node.type.FullySpecifiedType;
 import io.github.douira.glsl_transformer.ast.node.type.initializer.NestedInitializer;
 import io.github.douira.glsl_transformer.ast.node.type.qualifier.*;
 import io.github.douira.glsl_transformer.ast.node.type.specifier.*;
-import io.github.douira.glsl_transformer.ast.node.type.struct.*;
+import io.github.douira.glsl_transformer.ast.node.type.struct.StructBody;
+import io.github.douira.glsl_transformer.ast.node.type.struct.StructDeclarator;
+import io.github.douira.glsl_transformer.ast.node.type.struct.StructMember;
+import io.github.douira.glsl_transformer.ast.node.type.struct.StructSpecifier;
 import io.github.douira.glsl_transformer.ast.print.token.EOFToken;
-import io.github.douira.glsl_transformer.ast.typing.NumericType.NumberType;
+import io.github.douira.glsl_transformer.ast.typing.NumberType;
+
+import java.util.ArrayDeque;
+import java.util.Deque;
 
 /**
  * The AST printer emits tokens to convert an AST node into a string with the
@@ -130,13 +144,13 @@ public class ASTPrinter extends ASTPrinterBase {
       emitLiteral(node.getCustomName());
     } else if (node.type == PragmaType.OPTIONNV) {
       emitType(
-              node.type.tokenType,
-              GLSLLexer.NR_LPAREN,
-              node.option.tokenType);
+          node.type.tokenType,
+          GLSLLexer.NR_LPAREN,
+          node.option.tokenType);
       emitExtendableSpace();
       emitType(
-              node.state.tokenType,
-              GLSLLexer.NR_RPAREN);
+          node.state.tokenType,
+          GLSLLexer.NR_RPAREN);
     } else {
       emitType(
           node.type.tokenType,
@@ -211,11 +225,11 @@ public class ASTPrinter extends ASTPrinterBase {
           && ownType != ExpressionType.GROUPING
           && parentType.precedence < ownType.precedence
           && (parentType.operandStructure == OperandStructure.UNARY
-              || parentType.operandStructure == OperandStructure.BINARY
-              || parentType.operandStructure == OperandStructure.TERNARY
-              || parentType == ExpressionType.SEQUENCE)
+          || parentType.operandStructure == OperandStructure.BINARY
+          || parentType.operandStructure == OperandStructure.TERNARY
+          || parentType == ExpressionType.SEQUENCE)
           && !(parent instanceof ArrayAccessExpression access
-              && access.getRight() == node)) {
+          && access.getRight() == node)) {
         emitType(GLSLLexer.NR_LPAREN);
         precedenceWrapped.add(node);
       }
@@ -332,15 +346,17 @@ public class ASTPrinter extends ASTPrinterBase {
 
   @Override
   public Void visitLiteralExpression(LiteralExpression node) {
+    if (node.isString()) {
+      emitType(GLSLLexer.STRING_START);
+      emitLiteral(node.getString());
+      emitType(GLSLLexer.SL_STRING_END);
+      return null;
+    }
+
     // literal expressions are always positive, negation is handled with a negation
     // expression
     var numberType = node.getNumberType();
     switch (numberType) {
-      case STRING:
-        emitType(GLSLLexer.STRING_START);
-        emitLiteral(node.getString());
-        emitType(GLSLLexer.SL_STRING_END);
-        break;
       case BOOLEAN:
         emitLiteral(node.getBoolean() ? "true" : "false");
         break;
@@ -835,7 +851,7 @@ public class ASTPrinter extends ASTPrinterBase {
    * * iterationCondition:
    * expression
    * | fullySpecifiedType IDENTIFIER ASSIGN_OP initializer;
-   * 
+   * <p>
    * forStatement:
    * attribute? FOR LPAREN (
    * emptyStatement
@@ -843,7 +859,6 @@ public class ASTPrinter extends ASTPrinterBase {
    * | declarationStatement
    * ) condition = iterationCondition? SEMICOLON incrementer = expression? RPAREN
    * loopBody = statement;
-   * 
    */
   @Override
   public Void visitForLoopStatement(ForLoopStatement node) {

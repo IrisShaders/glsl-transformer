@@ -384760,9 +384760,9 @@ void main()
 (TypeAndInitDeclaration
 (FullySpecifiedType
 (TypeSpecifier
-(BuiltinTypeSpecifierParseable
+(NumericTypeSpecifier
 - int
-)BuiltinTypeSpecifierParseable
+)NumericTypeSpecifier
 )TypeSpecifier
 )FullySpecifiedType
 (DeclarationMember
@@ -384781,9 +384781,9 @@ void main()
 (TypeAndInitDeclaration
 (FullySpecifiedType
 (TypeSpecifier
-(BuiltinTypeSpecifierParseable
+(NumericTypeSpecifier
 - int
-)BuiltinTypeSpecifierParseable
+)NumericTypeSpecifier
 )TypeSpecifier
 )FullySpecifiedType
 (DeclarationMember
@@ -384802,9 +384802,9 @@ void main()
 (TypeAndInitDeclaration
 (FullySpecifiedType
 (TypeSpecifier
-(BuiltinTypeSpecifierParseable
+(NumericTypeSpecifier
 - uint
-)BuiltinTypeSpecifierParseable
+)NumericTypeSpecifier
 )TypeSpecifier
 )FullySpecifiedType
 (DeclarationMember
@@ -384823,9 +384823,9 @@ void main()
 (TypeAndInitDeclaration
 (FullySpecifiedType
 (TypeSpecifier
-(BuiltinTypeSpecifierParseable
+(NumericTypeSpecifier
 - uint
-)BuiltinTypeSpecifierParseable
+)NumericTypeSpecifier
 )TypeSpecifier
 )FullySpecifiedType
 (DeclarationMember
@@ -384844,9 +384844,9 @@ void main()
 (TypeAndInitDeclaration
 (FullySpecifiedType
 (TypeSpecifier
-(BuiltinTypeSpecifierParseable
+(NumericTypeSpecifier
 - int
-)BuiltinTypeSpecifierParseable
+)NumericTypeSpecifier
 )TypeSpecifier
 )FullySpecifiedType
 (DeclarationMember
@@ -384868,9 +384868,9 @@ void main()
 (TypeAndInitDeclaration
 (FullySpecifiedType
 (TypeSpecifier
-(BuiltinTypeSpecifierParseable
+(NumericTypeSpecifier
 - uint
-)BuiltinTypeSpecifierParseable
+)NumericTypeSpecifier
 )TypeSpecifier
 )FullySpecifiedType
 (DeclarationMember
@@ -384892,9 +384892,9 @@ void main()
 (TypeAndInitDeclaration
 (FullySpecifiedType
 (TypeSpecifier
-(BuiltinTypeSpecifierParseable
+(NumericTypeSpecifier
 - int
-)BuiltinTypeSpecifierParseable
+)NumericTypeSpecifier
 )TypeSpecifier
 )FullySpecifiedType
 (DeclarationMember
@@ -384913,9 +384913,9 @@ void main()
 (TypeAndInitDeclaration
 (FullySpecifiedType
 (TypeSpecifier
-(BuiltinTypeSpecifierParseable
+(NumericTypeSpecifier
 - int
-)BuiltinTypeSpecifierParseable
+)NumericTypeSpecifier
 )TypeSpecifier
 )FullySpecifiedType
 (DeclarationMember
@@ -384934,9 +384934,9 @@ void main()
 (TypeAndInitDeclaration
 (FullySpecifiedType
 (TypeSpecifier
-(BuiltinTypeSpecifierParseable
+(NumericTypeSpecifier
 - int
-)BuiltinTypeSpecifierParseable
+)NumericTypeSpecifier
 )TypeSpecifier
 )FullySpecifiedType
 (DeclarationMember
@@ -384955,9 +384955,9 @@ void main()
 (TypeAndInitDeclaration
 (FullySpecifiedType
 (TypeSpecifier
-(BuiltinTypeSpecifierParseable
+(NumericTypeSpecifier
 - int
-)BuiltinTypeSpecifierParseable
+)NumericTypeSpecifier
 )TypeSpecifier
 )FullySpecifiedType
 (DeclarationMember
@@ -384976,9 +384976,9 @@ void main()
 (TypeAndInitDeclaration
 (FullySpecifiedType
 (TypeSpecifier
-(BuiltinTypeSpecifierParseable
+(NumericTypeSpecifier
 - int
-)BuiltinTypeSpecifierParseable
+)NumericTypeSpecifier
 )TypeSpecifier
 )FullySpecifiedType
 (DeclarationMember
@@ -384997,9 +384997,9 @@ void main()
 (TypeAndInitDeclaration
 (FullySpecifiedType
 (TypeSpecifier
-(BuiltinTypeSpecifierParseable
+(NumericTypeSpecifier
 - int
-)BuiltinTypeSpecifierParseable
+)NumericTypeSpecifier
 )TypeSpecifier
 )FullySpecifiedType
 (DeclarationMember
@@ -385018,9 +385018,9 @@ void main()
 (TypeAndInitDeclaration
 (FullySpecifiedType
 (TypeSpecifier
-(BuiltinTypeSpecifierParseable
+(NumericTypeSpecifier
 - float
-)BuiltinTypeSpecifierParseable
+)NumericTypeSpecifier
 )TypeSpecifier
 )FullySpecifiedType
 (DeclarationMember
@@ -385043,9 +385043,9 @@ void main()
 (TypeAndInitDeclaration
 (FullySpecifiedType
 (TypeSpecifier
-(BuiltinTypeSpecifierParseable
+(NumericTypeSpecifier
 - double
-)BuiltinTypeSpecifierParseable
+)NumericTypeSpecifier
 )TypeSpecifier
 )FullySpecifiedType
 (DeclarationMember
@@ -385068,9 +385068,9 @@ void main()
 (TypeAndInitDeclaration
 (FullySpecifiedType
 (TypeSpecifier
-(BuiltinTypeSpecifierParseable
+(NumericTypeSpecifier
 - vec2
-)BuiltinTypeSpecifierParseable
+)NumericTypeSpecifier
 )TypeSpecifier
 )FullySpecifiedType
 (DeclarationMember
@@ -385087,9 +385087,9 @@ void main()
 (TypeAndInitDeclaration
 (FullySpecifiedType
 (TypeSpecifier
-(BuiltinTypeSpecifierParseable
+(NumericTypeSpecifier
 - vec3
-)BuiltinTypeSpecifierParseable
+)NumericTypeSpecifier
 )TypeSpecifier
 )FullySpecifiedType
 (DeclarationMember
@@ -385102,9 +385102,9 @@ void main()
 (TypeAndInitDeclaration
 (FullySpecifiedType
 (TypeSpecifier
-(BuiltinTypeSpecifierParseable
+(NumericTypeSpecifier
 - vec4
-)BuiltinTypeSpecifierParseable
+)NumericTypeSpecifier
 )TypeSpecifier
 )FullySpecifiedType
 (DeclarationMember
@@ -385117,9 +385117,9 @@ void main()
 (TypeAndInitDeclaration
 (FullySpecifiedType
 (TypeSpecifier
-(BuiltinTypeSpecifierParseable
+(NumericTypeSpecifier
 - ivec2
-)BuiltinTypeSpecifierParseable
+)NumericTypeSpecifier
 )TypeSpecifier
 )FullySpecifiedType
 (DeclarationMember
@@ -385132,9 +385132,9 @@ void main()
 (TypeAndInitDeclaration
 (FullySpecifiedType
 (TypeSpecifier
-(BuiltinTypeSpecifierParseable
+(NumericTypeSpecifier
 - bvec3
-)BuiltinTypeSpecifierParseable
+)NumericTypeSpecifier
 )TypeSpecifier
 )FullySpecifiedType
 (DeclarationMember
@@ -385147,9 +385147,9 @@ void main()
 (TypeAndInitDeclaration
 (FullySpecifiedType
 (TypeSpecifier
-(BuiltinTypeSpecifierParseable
+(NumericTypeSpecifier
 - mat2
-)BuiltinTypeSpecifierParseable
+)NumericTypeSpecifier
 )TypeSpecifier
 )FullySpecifiedType
 (DeclarationMember
@@ -385162,9 +385162,9 @@ void main()
 (TypeAndInitDeclaration
 (FullySpecifiedType
 (TypeSpecifier
-(BuiltinTypeSpecifierParseable
+(NumericTypeSpecifier
 - mat3
-)BuiltinTypeSpecifierParseable
+)NumericTypeSpecifier
 )TypeSpecifier
 )FullySpecifiedType
 (DeclarationMember
@@ -385177,9 +385177,9 @@ void main()
 (TypeAndInitDeclaration
 (FullySpecifiedType
 (TypeSpecifier
-(BuiltinTypeSpecifierParseable
+(NumericTypeSpecifier
 - mat4
-)BuiltinTypeSpecifierParseable
+)NumericTypeSpecifier
 )TypeSpecifier
 )FullySpecifiedType
 (DeclarationMember
@@ -385196,9 +385196,9 @@ void main()
 (TypeAndInitDeclaration
 (FullySpecifiedType
 (TypeSpecifier
-(BuiltinTypeSpecifierParseable
+(NumericTypeSpecifier
 - mat4x4
-)BuiltinTypeSpecifierParseable
+)NumericTypeSpecifier
 )TypeSpecifier
 )FullySpecifiedType
 (DeclarationMember
@@ -385211,9 +385211,9 @@ void main()
 (TypeAndInitDeclaration
 (FullySpecifiedType
 (TypeSpecifier
-(BuiltinTypeSpecifierParseable
+(NumericTypeSpecifier
 - mat3x2
-)BuiltinTypeSpecifierParseable
+)NumericTypeSpecifier
 )TypeSpecifier
 )FullySpecifiedType
 (DeclarationMember
@@ -385226,9 +385226,9 @@ void main()
 (TypeAndInitDeclaration
 (FullySpecifiedType
 (TypeSpecifier
-(BuiltinTypeSpecifierParseable
+(NumericTypeSpecifier
 - dmat4
-)BuiltinTypeSpecifierParseable
+)NumericTypeSpecifier
 )TypeSpecifier
 )FullySpecifiedType
 (DeclarationMember
@@ -385241,9 +385241,9 @@ void main()
 (TypeAndInitDeclaration
 (FullySpecifiedType
 (TypeSpecifier
-(BuiltinTypeSpecifierParseable
+(NumericTypeSpecifier
 - dmat2x4
-)BuiltinTypeSpecifierParseable
+)NumericTypeSpecifier
 )TypeSpecifier
 )FullySpecifiedType
 (DeclarationMember
@@ -385264,9 +385264,9 @@ void main()
 (StructMember
 (FullySpecifiedType
 (TypeSpecifier
-(BuiltinTypeSpecifierParseable
+(NumericTypeSpecifier
 - float
-)BuiltinTypeSpecifierParseable
+)NumericTypeSpecifier
 )TypeSpecifier
 )FullySpecifiedType
 (StructDeclarator
@@ -385277,9 +385277,9 @@ void main()
 (StructMember
 (FullySpecifiedType
 (TypeSpecifier
-(BuiltinTypeSpecifierParseable
+(NumericTypeSpecifier
 - vec3
-)BuiltinTypeSpecifierParseable
+)NumericTypeSpecifier
 )TypeSpecifier
 )FullySpecifiedType
 (StructDeclarator
@@ -385310,9 +385310,9 @@ void main()
 (StructMember
 (FullySpecifiedType
 (TypeSpecifier
-(BuiltinTypeSpecifierParseable
+(NumericTypeSpecifier
 - float
-)BuiltinTypeSpecifierParseable
+)NumericTypeSpecifier
 )TypeSpecifier
 )FullySpecifiedType
 (StructDeclarator
@@ -385360,9 +385360,9 @@ void main()
 (TypeAndInitDeclaration
 (FullySpecifiedType
 (TypeSpecifier
-(BuiltinTypeSpecifierParseable
+(NumericTypeSpecifier
 - float
-)BuiltinTypeSpecifierParseable
+)NumericTypeSpecifier
 )TypeSpecifier
 )FullySpecifiedType
 (DeclarationMember
@@ -385391,9 +385391,9 @@ void main()
 )StorageQualifier
 )TypeQualifier
 (TypeSpecifier
-(BuiltinTypeSpecifierParseable
+(NumericTypeSpecifier
 - vec4
-)BuiltinTypeSpecifierParseable
+)NumericTypeSpecifier
 )TypeSpecifier
 )FullySpecifiedType
 (DeclarationMember
@@ -385441,9 +385441,9 @@ void main()
 )StorageQualifier
 )TypeQualifier
 (TypeSpecifier
-(BuiltinTypeSpecifierParseable
+(NumericTypeSpecifier
 - int
-)BuiltinTypeSpecifierParseable
+)NumericTypeSpecifier
 )TypeSpecifier
 )FullySpecifiedType
 (DeclarationMember
@@ -385491,9 +385491,9 @@ void main()
 )StorageQualifier
 )TypeQualifier
 (TypeSpecifier
-(BuiltinTypeSpecifierParseable
+(NumericTypeSpecifier
 - vec3
-)BuiltinTypeSpecifierParseable
+)NumericTypeSpecifier
 )TypeSpecifier
 )FullySpecifiedType
 (DeclarationMember
@@ -385514,9 +385514,9 @@ void main()
 )StorageQualifier
 )TypeQualifier
 (TypeSpecifier
-(BuiltinTypeSpecifierParseable
+(NumericTypeSpecifier
 - vec2
-)BuiltinTypeSpecifierParseable
+)NumericTypeSpecifier
 )TypeSpecifier
 )FullySpecifiedType
 (DeclarationMember
@@ -385540,9 +385540,9 @@ void main()
 )StorageQualifier
 )TypeQualifier
 (TypeSpecifier
-(BuiltinTypeSpecifierParseable
+(NumericTypeSpecifier
 - vec4
-)BuiltinTypeSpecifierParseable
+)NumericTypeSpecifier
 )TypeSpecifier
 )FullySpecifiedType
 (DeclarationMember
@@ -385563,9 +385563,9 @@ void main()
 )StorageQualifier
 )TypeQualifier
 (TypeSpecifier
-(BuiltinTypeSpecifierParseable
+(NumericTypeSpecifier
 - float
-)BuiltinTypeSpecifierParseable
+)NumericTypeSpecifier
 )TypeSpecifier
 )FullySpecifiedType
 (DeclarationMember
@@ -385586,9 +385586,9 @@ void main()
 )StorageQualifier
 )TypeQualifier
 (TypeSpecifier
-(BuiltinTypeSpecifierParseable
+(NumericTypeSpecifier
 - vec3
-)BuiltinTypeSpecifierParseable
+)NumericTypeSpecifier
 )TypeSpecifier
 )FullySpecifiedType
 (DeclarationMember
@@ -385612,9 +385612,9 @@ void main()
 )StorageQualifier
 )TypeQualifier
 (TypeSpecifier
-(BuiltinTypeSpecifierParseable
+(NumericTypeSpecifier
 - vec2
-)BuiltinTypeSpecifierParseable
+)NumericTypeSpecifier
 )TypeSpecifier
 )FullySpecifiedType
 (DeclarationMember
@@ -385632,9 +385632,9 @@ void main()
 )StorageQualifier
 )TypeQualifier
 (TypeSpecifier
-(BuiltinTypeSpecifierParseable
+(NumericTypeSpecifier
 - vec4
-)BuiltinTypeSpecifierParseable
+)NumericTypeSpecifier
 )TypeSpecifier
 )FullySpecifiedType
 (DeclarationMember
@@ -385652,9 +385652,9 @@ void main()
 )StorageQualifier
 )TypeQualifier
 (TypeSpecifier
-(BuiltinTypeSpecifierParseable
+(NumericTypeSpecifier
 - vec3
-)BuiltinTypeSpecifierParseable
+)NumericTypeSpecifier
 )TypeSpecifier
 )FullySpecifiedType
 (DeclarationMember
@@ -385663,9 +385663,9 @@ void main()
 (Initializer
 (FunctionCallExpression
 (TypeSpecifier
-(BuiltinTypeSpecifierParseable
+(NumericTypeSpecifier
 - vec3
-)BuiltinTypeSpecifierParseable
+)NumericTypeSpecifier
 )TypeSpecifier
 - (
 (LiteralExpression
@@ -385707,9 +385707,9 @@ void main()
 )StorageQualifier
 )TypeQualifier
 (TypeSpecifier
-(BuiltinTypeSpecifierParseable
+(NumericTypeSpecifier
 - vec4
-)BuiltinTypeSpecifierParseable
+)NumericTypeSpecifier
 )TypeSpecifier
 )FullySpecifiedType
 (StructDeclarator
@@ -385725,9 +385725,9 @@ void main()
 )InterpolationQualifier
 )TypeQualifier
 (TypeSpecifier
-(BuiltinTypeSpecifierParseable
+(NumericTypeSpecifier
 - vec4
-)BuiltinTypeSpecifierParseable
+)NumericTypeSpecifier
 )TypeSpecifier
 )FullySpecifiedType
 (StructDeclarator
@@ -385738,9 +385738,9 @@ void main()
 (StructMember
 (FullySpecifiedType
 (TypeSpecifier
-(BuiltinTypeSpecifierParseable
+(NumericTypeSpecifier
 - vec2
-)BuiltinTypeSpecifierParseable
+)NumericTypeSpecifier
 )TypeSpecifier
 )FullySpecifiedType
 (StructDeclarator
@@ -385756,9 +385756,9 @@ void main()
 )StorageQualifier
 )TypeQualifier
 (TypeSpecifier
-(BuiltinTypeSpecifierParseable
+(NumericTypeSpecifier
 - float
-)BuiltinTypeSpecifierParseable
+)NumericTypeSpecifier
 )TypeSpecifier
 )FullySpecifiedType
 (StructDeclarator
@@ -385784,9 +385784,9 @@ void main()
 (StructMember
 (FullySpecifiedType
 (TypeSpecifier
-(BuiltinTypeSpecifierParseable
+(NumericTypeSpecifier
 - vec4
-)BuiltinTypeSpecifierParseable
+)NumericTypeSpecifier
 )TypeSpecifier
 )FullySpecifiedType
 (StructDeclarator
@@ -385797,9 +385797,9 @@ void main()
 (StructMember
 (FullySpecifiedType
 (TypeSpecifier
-(BuiltinTypeSpecifierParseable
+(NumericTypeSpecifier
 - vec3
-)BuiltinTypeSpecifierParseable
+)NumericTypeSpecifier
 )TypeSpecifier
 )FullySpecifiedType
 (StructDeclarator
@@ -385825,9 +385825,9 @@ void main()
 (StructMember
 (FullySpecifiedType
 (TypeSpecifier
-(BuiltinTypeSpecifierParseable
+(NumericTypeSpecifier
 - vec4
-)BuiltinTypeSpecifierParseable
+)NumericTypeSpecifier
 )TypeSpecifier
 )FullySpecifiedType
 (StructDeclarator
@@ -385838,9 +385838,9 @@ void main()
 (StructMember
 (FullySpecifiedType
 (TypeSpecifier
-(BuiltinTypeSpecifierParseable
+(NumericTypeSpecifier
 - vec2
-)BuiltinTypeSpecifierParseable
+)NumericTypeSpecifier
 )TypeSpecifier
 )FullySpecifiedType
 (StructDeclarator
@@ -385858,9 +385858,9 @@ void main()
 (TypeAndInitDeclaration
 (FullySpecifiedType
 (TypeSpecifier
-(BuiltinTypeSpecifierParseable
+(NumericTypeSpecifier
 - vec3
-)BuiltinTypeSpecifierParseable
+)NumericTypeSpecifier
 )TypeSpecifier
 )FullySpecifiedType
 (DeclarationMember
@@ -385878,9 +385878,9 @@ void main()
 )StorageQualifier
 )TypeQualifier
 (TypeSpecifier
-(BuiltinTypeSpecifierParseable
+(NumericTypeSpecifier
 - vec4
-)BuiltinTypeSpecifierParseable
+)NumericTypeSpecifier
 )TypeSpecifier
 )FullySpecifiedType
 (DeclarationMember
@@ -385906,9 +385906,9 @@ void main()
 )StorageQualifier
 )TypeQualifier
 (TypeSpecifier
-(BuiltinTypeSpecifierParseable
+(NumericTypeSpecifier
 - vec4
-)BuiltinTypeSpecifierParseable
+)NumericTypeSpecifier
 )TypeSpecifier
 )FullySpecifiedType
 (DeclarationMember
@@ -385934,9 +385934,9 @@ void main()
 )StorageQualifier
 )TypeQualifier
 (TypeSpecifier
-(BuiltinTypeSpecifierParseable
+(NumericTypeSpecifier
 - vec4
-)BuiltinTypeSpecifierParseable
+)NumericTypeSpecifier
 )TypeSpecifier
 )FullySpecifiedType
 (DeclarationMember
@@ -385966,9 +385966,9 @@ void main()
 )StorageQualifier
 )TypeQualifier
 (TypeSpecifier
-(BuiltinTypeSpecifierParseable
+(NumericTypeSpecifier
 - vec4
-)BuiltinTypeSpecifierParseable
+)NumericTypeSpecifier
 )TypeSpecifier
 )FullySpecifiedType
 (DeclarationMember
@@ -386076,9 +386076,9 @@ void main()
 )StorageQualifier
 )TypeQualifier
 (TypeSpecifier
-(BuiltinTypeSpecifierParseable
+(NumericTypeSpecifier
 - vec4
-)BuiltinTypeSpecifierParseable
+)NumericTypeSpecifier
 )TypeSpecifier
 )FullySpecifiedType
 (DeclarationMember
@@ -386120,9 +386120,9 @@ void main()
 )StorageQualifier
 )TypeQualifier
 (TypeSpecifier
-(BuiltinTypeSpecifierParseable
+(NumericTypeSpecifier
 - vec4
-)BuiltinTypeSpecifierParseable
+)NumericTypeSpecifier
 )TypeSpecifier
 )FullySpecifiedType
 (DeclarationMember
@@ -386154,9 +386154,9 @@ void main()
 )StorageQualifier
 )TypeQualifier
 (TypeSpecifier
-(BuiltinTypeSpecifierParseable
+(NumericTypeSpecifier
 - vec4
-)BuiltinTypeSpecifierParseable
+)NumericTypeSpecifier
 )TypeSpecifier
 )FullySpecifiedType
 (DeclarationMember
@@ -386193,9 +386193,9 @@ void main()
 )StorageQualifier
 )TypeQualifier
 (TypeSpecifier
-(BuiltinTypeSpecifierParseable
+(NumericTypeSpecifier
 - float
-)BuiltinTypeSpecifierParseable
+)NumericTypeSpecifier
 )TypeSpecifier
 )FullySpecifiedType
 (DeclarationMember
@@ -386213,9 +386213,9 @@ void main()
 )StorageQualifier
 )TypeQualifier
 (TypeSpecifier
-(BuiltinTypeSpecifierParseable
+(NumericTypeSpecifier
 - float
-)BuiltinTypeSpecifierParseable
+)NumericTypeSpecifier
 )TypeSpecifier
 )FullySpecifiedType
 (DeclarationMember
@@ -386241,9 +386241,9 @@ void main()
 )StorageQualifier
 )TypeQualifier
 (TypeSpecifier
-(BuiltinTypeSpecifierParseable
+(NumericTypeSpecifier
 - float
-)BuiltinTypeSpecifierParseable
+)NumericTypeSpecifier
 )TypeSpecifier
 )FullySpecifiedType
 (DeclarationMember
@@ -386269,9 +386269,9 @@ void main()
 )StorageQualifier
 )TypeQualifier
 (TypeSpecifier
-(BuiltinTypeSpecifierParseable
+(NumericTypeSpecifier
 - float
-)BuiltinTypeSpecifierParseable
+)NumericTypeSpecifier
 )TypeSpecifier
 )FullySpecifiedType
 (DeclarationMember
@@ -386297,9 +386297,9 @@ void main()
 )StorageQualifier
 )TypeQualifier
 (TypeSpecifier
-(BuiltinTypeSpecifierParseable
+(NumericTypeSpecifier
 - float
-)BuiltinTypeSpecifierParseable
+)NumericTypeSpecifier
 )TypeSpecifier
 )FullySpecifiedType
 (DeclarationMember
@@ -386325,9 +386325,9 @@ void main()
 )StorageQualifier
 )TypeQualifier
 (TypeSpecifier
-(BuiltinTypeSpecifierParseable
+(NumericTypeSpecifier
 - float
-)BuiltinTypeSpecifierParseable
+)NumericTypeSpecifier
 )TypeSpecifier
 )FullySpecifiedType
 (DeclarationMember
@@ -386345,9 +386345,9 @@ void main()
 )StorageQualifier
 )TypeQualifier
 (TypeSpecifier
-(BuiltinTypeSpecifierParseable
+(NumericTypeSpecifier
 - vec4
-)BuiltinTypeSpecifierParseable
+)NumericTypeSpecifier
 )TypeSpecifier
 )FullySpecifiedType
 (DeclarationMember
@@ -386368,9 +386368,9 @@ void main()
 )StorageQualifier
 )TypeQualifier
 (TypeSpecifier
-(BuiltinTypeSpecifierParseable
+(NumericTypeSpecifier
 - vec4
-)BuiltinTypeSpecifierParseable
+)NumericTypeSpecifier
 )TypeSpecifier
 )FullySpecifiedType
 (DeclarationMember
@@ -386384,9 +386384,9 @@ void main()
 (FunctionPrototype
 (FullySpecifiedType
 (TypeSpecifier
-(BuiltinTypeSpecifierParseable
+(NumericTypeSpecifier
 - float
-)BuiltinTypeSpecifierParseable
+)NumericTypeSpecifier
 (ArraySpecifier
 (ArraySpecifierSegment
 - [
@@ -386406,9 +386406,9 @@ void main()
 (ParameterDeclaration
 (FullySpecifiedType
 (TypeSpecifier
-(BuiltinTypeSpecifierParseable
+(NumericTypeSpecifier
 - float
-)BuiltinTypeSpecifierParseable
+)NumericTypeSpecifier
 (ArraySpecifier
 (ArraySpecifierSegment
 - [
@@ -386434,9 +386434,9 @@ void main()
 (Expression
 (FunctionCallExpression
 (TypeSpecifier
-(BuiltinTypeSpecifierParseable
+(NumericTypeSpecifier
 - float
-)BuiltinTypeSpecifierParseable
+)NumericTypeSpecifier
 (ArraySpecifier
 (ArraySpecifierSegment
 - [
@@ -386486,9 +386486,9 @@ void main()
 - highp
 )PrecisionQualifier
 (TypeSpecifier
-(BuiltinTypeSpecifierParseable
+(NumericTypeSpecifier
 - float
-)BuiltinTypeSpecifierParseable
+)NumericTypeSpecifier
 )TypeSpecifier
 - ;
 )PrecisionDeclaration
@@ -386500,9 +386500,9 @@ void main()
 - highp
 )PrecisionQualifier
 (TypeSpecifier
-(BuiltinTypeSpecifierParseable
+(NumericTypeSpecifier
 - int
-)BuiltinTypeSpecifierParseable
+)NumericTypeSpecifier
 )TypeSpecifier
 - ;
 )PrecisionDeclaration
@@ -386514,9 +386514,9 @@ void main()
 - mediump
 )PrecisionQualifier
 (TypeSpecifier
-(BuiltinTypeSpecifierParseable
+(NumericTypeSpecifier
 - int
-)BuiltinTypeSpecifierParseable
+)NumericTypeSpecifier
 )TypeSpecifier
 - ;
 )PrecisionDeclaration
@@ -386528,9 +386528,9 @@ void main()
 - highp
 )PrecisionQualifier
 (TypeSpecifier
-(BuiltinTypeSpecifierParseable
+(NumericTypeSpecifier
 - float
-)BuiltinTypeSpecifierParseable
+)NumericTypeSpecifier
 )TypeSpecifier
 - ;
 )PrecisionDeclaration
@@ -386540,9 +386540,9 @@ void main()
 (FunctionPrototype
 (FullySpecifiedType
 (TypeSpecifier
-(BuiltinTypeSpecifierFixed
+(FixedTypeSpecifier
 - void
-)BuiltinTypeSpecifierFixed
+)FixedTypeSpecifier
 )TypeSpecifier
 )FullySpecifiedType
 - main
@@ -386561,9 +386561,9 @@ void main()
 (TypeAndInitDeclaration
 (FullySpecifiedType
 (TypeSpecifier
-(BuiltinTypeSpecifierParseable
+(NumericTypeSpecifier
 - float
-)BuiltinTypeSpecifierParseable
+)NumericTypeSpecifier
 )TypeSpecifier
 )FullySpecifiedType
 (DeclarationMember
@@ -386583,9 +386583,9 @@ void main()
 (Initializer
 (FunctionCallExpression
 (TypeSpecifier
-(BuiltinTypeSpecifierParseable
+(NumericTypeSpecifier
 - float
-)BuiltinTypeSpecifierParseable
+)NumericTypeSpecifier
 (ArraySpecifier
 (ArraySpecifierSegment
 - [
@@ -386637,9 +386637,9 @@ void main()
 (TypeAndInitDeclaration
 (FullySpecifiedType
 (TypeSpecifier
-(BuiltinTypeSpecifierParseable
+(NumericTypeSpecifier
 - float
-)BuiltinTypeSpecifierParseable
+)NumericTypeSpecifier
 )TypeSpecifier
 )FullySpecifiedType
 (DeclarationMember
@@ -386659,9 +386659,9 @@ void main()
 (Initializer
 (FunctionCallExpression
 (TypeSpecifier
-(BuiltinTypeSpecifierParseable
+(NumericTypeSpecifier
 - float
-)BuiltinTypeSpecifierParseable
+)NumericTypeSpecifier
 (ArraySpecifier
 (ArraySpecifierSegment
 - [
@@ -386708,9 +386708,9 @@ void main()
 (TypeAndInitDeclaration
 (FullySpecifiedType
 (TypeSpecifier
-(BuiltinTypeSpecifierParseable
+(NumericTypeSpecifier
 - vec4
-)BuiltinTypeSpecifierParseable
+)NumericTypeSpecifier
 )TypeSpecifier
 )FullySpecifiedType
 (DeclarationMember
@@ -386745,9 +386745,9 @@ void main()
 (TypeAndInitDeclaration
 (FullySpecifiedType
 (TypeSpecifier
-(BuiltinTypeSpecifierParseable
+(NumericTypeSpecifier
 - vec4
-)BuiltinTypeSpecifierParseable
+)NumericTypeSpecifier
 (ArraySpecifier
 (ArraySpecifierSegment
 - [
@@ -386784,9 +386784,9 @@ void main()
 (TypeAndInitDeclaration
 (FullySpecifiedType
 (TypeSpecifier
-(BuiltinTypeSpecifierParseable
+(NumericTypeSpecifier
 - vec4
-)BuiltinTypeSpecifierParseable
+)NumericTypeSpecifier
 (ArraySpecifier
 (ArraySpecifierSegment
 - [
@@ -386821,9 +386821,9 @@ void main()
 (TypeAndInitDeclaration
 (FullySpecifiedType
 (TypeSpecifier
-(BuiltinTypeSpecifierParseable
+(NumericTypeSpecifier
 - vec4
-)BuiltinTypeSpecifierParseable
+)NumericTypeSpecifier
 )TypeSpecifier
 )FullySpecifiedType
 (DeclarationMember
@@ -386843,9 +386843,9 @@ void main()
 (Initializer
 (FunctionCallExpression
 (TypeSpecifier
-(BuiltinTypeSpecifierParseable
+(NumericTypeSpecifier
 - vec4
-)BuiltinTypeSpecifierParseable
+)NumericTypeSpecifier
 (ArraySpecifier
 (ArraySpecifierSegment
 - [
@@ -386861,9 +386861,9 @@ void main()
 - (
 (FunctionCallExpression
 (TypeSpecifier
-(BuiltinTypeSpecifierParseable
+(NumericTypeSpecifier
 - vec4
-)BuiltinTypeSpecifierParseable
+)NumericTypeSpecifier
 )TypeSpecifier
 - (
 (LiteralExpression
@@ -386874,9 +386874,9 @@ void main()
 - ,
 (FunctionCallExpression
 (TypeSpecifier
-(BuiltinTypeSpecifierParseable
+(NumericTypeSpecifier
 - vec4
-)BuiltinTypeSpecifierParseable
+)NumericTypeSpecifier
 )TypeSpecifier
 - (
 (LiteralExpression
@@ -386897,9 +386897,9 @@ void main()
 (TypeAndInitDeclaration
 (FullySpecifiedType
 (TypeSpecifier
-(BuiltinTypeSpecifierParseable
+(NumericTypeSpecifier
 - vec4
-)BuiltinTypeSpecifierParseable
+)NumericTypeSpecifier
 (ArraySpecifier
 (ArraySpecifierSegment
 - [
@@ -386928,9 +386928,9 @@ void main()
 (Initializer
 (FunctionCallExpression
 (TypeSpecifier
-(BuiltinTypeSpecifierParseable
+(NumericTypeSpecifier
 - vec4
-)BuiltinTypeSpecifierParseable
+)NumericTypeSpecifier
 (ArraySpecifier
 (ArraySpecifierSegment
 - [
@@ -386978,9 +386978,9 @@ void main()
 (FunctionPrototype
 (FullySpecifiedType
 (TypeSpecifier
-(BuiltinTypeSpecifierFixed
+(FixedTypeSpecifier
 - void
-)BuiltinTypeSpecifierFixed
+)FixedTypeSpecifier
 )TypeSpecifier
 )FullySpecifiedType
 - foo
@@ -386989,9 +386989,9 @@ void main()
 (ParameterDeclaration
 (FullySpecifiedType
 (TypeSpecifier
-(BuiltinTypeSpecifierParseable
+(NumericTypeSpecifier
 - vec4
-)BuiltinTypeSpecifierParseable
+)NumericTypeSpecifier
 (ArraySpecifier
 (ArraySpecifierSegment
 - [
@@ -387027,9 +387027,9 @@ void main()
 (TypeAndInitDeclaration
 (FullySpecifiedType
 (TypeSpecifier
-(BuiltinTypeSpecifierParseable
+(NumericTypeSpecifier
 - vec4
-)BuiltinTypeSpecifierParseable
+)NumericTypeSpecifier
 )TypeSpecifier
 )FullySpecifiedType
 (DeclarationMember
@@ -387060,9 +387060,9 @@ void main()
 (Initializer
 (FunctionCallExpression
 (TypeSpecifier
-(BuiltinTypeSpecifierParseable
+(NumericTypeSpecifier
 - vec4
-)BuiltinTypeSpecifierParseable
+)NumericTypeSpecifier
 (ArraySpecifier
 (ArraySpecifierSegment
 - [
@@ -387078,9 +387078,9 @@ void main()
 - (
 (FunctionCallExpression
 (TypeSpecifier
-(BuiltinTypeSpecifierParseable
+(NumericTypeSpecifier
 - vec4
-)BuiltinTypeSpecifierParseable
+)NumericTypeSpecifier
 )TypeSpecifier
 - (
 (LiteralExpression
@@ -387091,9 +387091,9 @@ void main()
 - ,
 (FunctionCallExpression
 (TypeSpecifier
-(BuiltinTypeSpecifierParseable
+(NumericTypeSpecifier
 - vec4
-)BuiltinTypeSpecifierParseable
+)NumericTypeSpecifier
 )TypeSpecifier
 - (
 (LiteralExpression
@@ -387108,9 +387108,9 @@ void main()
 (Initializer
 (FunctionCallExpression
 (TypeSpecifier
-(BuiltinTypeSpecifierParseable
+(NumericTypeSpecifier
 - vec4
-)BuiltinTypeSpecifierParseable
+)NumericTypeSpecifier
 (ArraySpecifier
 (ArraySpecifierSegment
 - [
@@ -387126,9 +387126,9 @@ void main()
 - (
 (FunctionCallExpression
 (TypeSpecifier
-(BuiltinTypeSpecifierParseable
+(NumericTypeSpecifier
 - vec4
-)BuiltinTypeSpecifierParseable
+)NumericTypeSpecifier
 )TypeSpecifier
 - (
 (LiteralExpression
@@ -387139,9 +387139,9 @@ void main()
 - ,
 (FunctionCallExpression
 (TypeSpecifier
-(BuiltinTypeSpecifierParseable
+(NumericTypeSpecifier
 - vec4
-)BuiltinTypeSpecifierParseable
+)NumericTypeSpecifier
 )TypeSpecifier
 - (
 (LiteralExpression
@@ -387156,9 +387156,9 @@ void main()
 (Initializer
 (FunctionCallExpression
 (TypeSpecifier
-(BuiltinTypeSpecifierParseable
+(NumericTypeSpecifier
 - vec4
-)BuiltinTypeSpecifierParseable
+)NumericTypeSpecifier
 (ArraySpecifier
 (ArraySpecifierSegment
 - [
@@ -387174,9 +387174,9 @@ void main()
 - (
 (FunctionCallExpression
 (TypeSpecifier
-(BuiltinTypeSpecifierParseable
+(NumericTypeSpecifier
 - vec4
-)BuiltinTypeSpecifierParseable
+)NumericTypeSpecifier
 )TypeSpecifier
 - (
 (LiteralExpression
@@ -387187,9 +387187,9 @@ void main()
 - ,
 (FunctionCallExpression
 (TypeSpecifier
-(BuiltinTypeSpecifierParseable
+(NumericTypeSpecifier
 - vec4
-)BuiltinTypeSpecifierParseable
+)NumericTypeSpecifier
 )TypeSpecifier
 - (
 (LiteralExpression
@@ -387218,9 +387218,9 @@ void main()
 (TypeAndInitDeclaration
 (FullySpecifiedType
 (TypeSpecifier
-(BuiltinTypeSpecifierParseable
+(NumericTypeSpecifier
 - float
-)BuiltinTypeSpecifierParseable
+)NumericTypeSpecifier
 )TypeSpecifier
 )FullySpecifiedType
 (DeclarationMember
@@ -387249,9 +387249,9 @@ void main()
 (TypeAndInitDeclaration
 (FullySpecifiedType
 (TypeSpecifier
-(BuiltinTypeSpecifierParseable
+(NumericTypeSpecifier
 - float
-)BuiltinTypeSpecifierParseable
+)NumericTypeSpecifier
 )TypeSpecifier
 )FullySpecifiedType
 (DeclarationMember
@@ -387284,9 +387284,9 @@ void main()
 (TypeAndInitDeclaration
 (FullySpecifiedType
 (TypeSpecifier
-(BuiltinTypeSpecifierParseable
+(NumericTypeSpecifier
 - float
-)BuiltinTypeSpecifierParseable
+)NumericTypeSpecifier
 )TypeSpecifier
 )FullySpecifiedType
 (DeclarationMember
@@ -387324,9 +387324,9 @@ void main()
 (TypeAndInitDeclaration
 (FullySpecifiedType
 (TypeSpecifier
-(BuiltinTypeSpecifierParseable
+(NumericTypeSpecifier
 - float
-)BuiltinTypeSpecifierParseable
+)NumericTypeSpecifier
 )TypeSpecifier
 )FullySpecifiedType
 (DeclarationMember
@@ -387341,9 +387341,9 @@ void main()
 (Initializer
 (FunctionCallExpression
 (TypeSpecifier
-(BuiltinTypeSpecifierParseable
+(NumericTypeSpecifier
 - float
-)BuiltinTypeSpecifierParseable
+)NumericTypeSpecifier
 (ArraySpecifier
 (ArraySpecifierSegment
 - [
@@ -387406,9 +387406,9 @@ void main()
 (TypeAndInitDeclaration
 (FullySpecifiedType
 (TypeSpecifier
-(BuiltinTypeSpecifierParseable
+(NumericTypeSpecifier
 - vec4
-)BuiltinTypeSpecifierParseable
+)NumericTypeSpecifier
 )TypeSpecifier
 )FullySpecifiedType
 (DeclarationMember
@@ -387543,9 +387543,9 @@ void main()
 (StructMember
 (FullySpecifiedType
 (TypeSpecifier
-(BuiltinTypeSpecifierParseable
+(NumericTypeSpecifier
 - float
-)BuiltinTypeSpecifierParseable
+)NumericTypeSpecifier
 )TypeSpecifier
 )FullySpecifiedType
 (StructDeclarator
@@ -387556,9 +387556,9 @@ void main()
 (StructMember
 (FullySpecifiedType
 (TypeSpecifier
-(BuiltinTypeSpecifierParseable
+(NumericTypeSpecifier
 - int
-)BuiltinTypeSpecifierParseable
+)NumericTypeSpecifier
 )TypeSpecifier
 )FullySpecifiedType
 (StructDeclarator
@@ -387606,9 +387606,9 @@ void main()
 (StructMember
 (FullySpecifiedType
 (TypeSpecifier
-(BuiltinTypeSpecifierParseable
+(NumericTypeSpecifier
 - float
-)BuiltinTypeSpecifierParseable
+)NumericTypeSpecifier
 )TypeSpecifier
 )FullySpecifiedType
 (StructDeclarator
@@ -387619,9 +387619,9 @@ void main()
 (StructMember
 (FullySpecifiedType
 (TypeSpecifier
-(BuiltinTypeSpecifierParseable
+(NumericTypeSpecifier
 - int
-)BuiltinTypeSpecifierParseable
+)NumericTypeSpecifier
 )TypeSpecifier
 )FullySpecifiedType
 (StructDeclarator
@@ -387665,9 +387665,9 @@ void main()
 (TypeAndInitDeclaration
 (FullySpecifiedType
 (TypeSpecifier
-(BuiltinTypeSpecifierParseable
+(NumericTypeSpecifier
 - float
-)BuiltinTypeSpecifierParseable
+)NumericTypeSpecifier
 )TypeSpecifier
 )FullySpecifiedType
 (DeclarationMember
@@ -387682,9 +387682,9 @@ void main()
 (Initializer
 (FunctionCallExpression
 (TypeSpecifier
-(BuiltinTypeSpecifierParseable
+(NumericTypeSpecifier
 - float
-)BuiltinTypeSpecifierParseable
+)NumericTypeSpecifier
 (ArraySpecifier
 (ArraySpecifierSegment
 - [
@@ -387725,9 +387725,9 @@ void main()
 (TypeAndInitDeclaration
 (FullySpecifiedType
 (TypeSpecifier
-(BuiltinTypeSpecifierParseable
+(NumericTypeSpecifier
 - float
-)BuiltinTypeSpecifierParseable
+)NumericTypeSpecifier
 )TypeSpecifier
 )FullySpecifiedType
 (DeclarationMember
@@ -387782,9 +387782,9 @@ void main()
 (TypeAndInitDeclaration
 (FullySpecifiedType
 (TypeSpecifier
-(BuiltinTypeSpecifierParseable
+(NumericTypeSpecifier
 - float
-)BuiltinTypeSpecifierParseable
+)NumericTypeSpecifier
 )TypeSpecifier
 )FullySpecifiedType
 (DeclarationMember
@@ -387811,9 +387811,9 @@ void main()
 (TypeAndInitDeclaration
 (FullySpecifiedType
 (TypeSpecifier
-(BuiltinTypeSpecifierParseable
+(NumericTypeSpecifier
 - float
-)BuiltinTypeSpecifierParseable
+)NumericTypeSpecifier
 )TypeSpecifier
 )FullySpecifiedType
 (DeclarationMember
@@ -387856,9 +387856,9 @@ void main()
 )StorageQualifier
 )TypeQualifier
 (TypeSpecifier
-(BuiltinTypeSpecifierParseable
+(NumericTypeSpecifier
 - vec3
-)BuiltinTypeSpecifierParseable
+)NumericTypeSpecifier
 )TypeSpecifier
 )FullySpecifiedType
 (DeclarationMember
@@ -387867,9 +387867,9 @@ void main()
 (Initializer
 (FunctionCallExpression
 (TypeSpecifier
-(BuiltinTypeSpecifierParseable
+(NumericTypeSpecifier
 - vec3
-)BuiltinTypeSpecifierParseable
+)NumericTypeSpecifier
 )TypeSpecifier
 - (
 (LiteralExpression
@@ -387901,9 +387901,9 @@ void main()
 )StorageQualifier
 )TypeQualifier
 (TypeSpecifier
-(BuiltinTypeSpecifierParseable
+(NumericTypeSpecifier
 - float
-)BuiltinTypeSpecifierParseable
+)NumericTypeSpecifier
 )TypeSpecifier
 )FullySpecifiedType
 (DeclarationMember
@@ -387941,9 +387941,9 @@ void main()
 )StorageQualifier
 )TypeQualifier
 (TypeSpecifier
-(BuiltinTypeSpecifierParseable
+(NumericTypeSpecifier
 - vec4
-)BuiltinTypeSpecifierParseable
+)NumericTypeSpecifier
 )TypeSpecifier
 )FullySpecifiedType
 (DeclarationMember
@@ -387963,9 +387963,9 @@ void main()
 )StorageQualifier
 )TypeQualifier
 (TypeSpecifier
-(BuiltinTypeSpecifierParseable
+(NumericTypeSpecifier
 - vec3
-)BuiltinTypeSpecifierParseable
+)NumericTypeSpecifier
 )TypeSpecifier
 )FullySpecifiedType
 (DeclarationMember
@@ -387985,9 +387985,9 @@ void main()
 )StorageQualifier
 )TypeQualifier
 (TypeSpecifier
-(BuiltinTypeSpecifierParseable
+(NumericTypeSpecifier
 - vec2
-)BuiltinTypeSpecifierParseable
+)NumericTypeSpecifier
 )TypeSpecifier
 )FullySpecifiedType
 (DeclarationMember
@@ -388024,9 +388024,9 @@ void main()
 )PrecisionQualifier
 )TypeQualifier
 (TypeSpecifier
-(BuiltinTypeSpecifierParseable
+(NumericTypeSpecifier
 - float
-)BuiltinTypeSpecifierParseable
+)NumericTypeSpecifier
 )TypeSpecifier
 )FullySpecifiedType
 (DeclarationMember
@@ -388049,9 +388049,9 @@ void main()
 )PrecisionQualifier
 )TypeQualifier
 (TypeSpecifier
-(BuiltinTypeSpecifierParseable
+(NumericTypeSpecifier
 - vec2
-)BuiltinTypeSpecifierParseable
+)NumericTypeSpecifier
 )TypeSpecifier
 )FullySpecifiedType
 (DeclarationMember
@@ -388072,9 +388072,9 @@ void main()
 )PrecisionQualifier
 )TypeQualifier
 (TypeSpecifier
-(BuiltinTypeSpecifierParseable
+(NumericTypeSpecifier
 - ivec2
-)BuiltinTypeSpecifierParseable
+)NumericTypeSpecifier
 )TypeSpecifier
 )FullySpecifiedType
 - foo
@@ -388088,9 +388088,9 @@ void main()
 )PrecisionQualifier
 )TypeQualifier
 (TypeSpecifier
-(BuiltinTypeSpecifierParseable
+(NumericTypeSpecifier
 - mat3
-)BuiltinTypeSpecifierParseable
+)NumericTypeSpecifier
 )TypeSpecifier
 )FullySpecifiedType
 )ParameterDeclaration
@@ -388111,9 +388111,9 @@ void main()
 )PrecisionQualifier
 )TypeQualifier
 (TypeSpecifier
-(BuiltinTypeSpecifierParseable
+(NumericTypeSpecifier
 - mat4
-)BuiltinTypeSpecifierParseable
+)NumericTypeSpecifier
 )TypeSpecifier
 )FullySpecifiedType
 (DeclarationMember
@@ -388367,9 +388367,9 @@ void main()
 (StructMember
 (FullySpecifiedType
 (TypeSpecifier
-(BuiltinTypeSpecifierParseable
+(NumericTypeSpecifier
 - vec4
-)BuiltinTypeSpecifierParseable
+)NumericTypeSpecifier
 )TypeSpecifier
 )FullySpecifiedType
 (StructDeclarator
@@ -388380,9 +388380,9 @@ void main()
 (StructMember
 (FullySpecifiedType
 (TypeSpecifier
-(BuiltinTypeSpecifierParseable
+(NumericTypeSpecifier
 - vec2
-)BuiltinTypeSpecifierParseable
+)NumericTypeSpecifier
 )TypeSpecifier
 )FullySpecifiedType
 (StructDeclarator
@@ -388409,9 +388409,9 @@ void main()
 (StructMember
 (FullySpecifiedType
 (TypeSpecifier
-(BuiltinTypeSpecifierParseable
+(NumericTypeSpecifier
 - vec4
-)BuiltinTypeSpecifierParseable
+)NumericTypeSpecifier
 )TypeSpecifier
 )FullySpecifiedType
 (StructDeclarator
@@ -388437,9 +388437,9 @@ void main()
 (StructMember
 (FullySpecifiedType
 (TypeSpecifier
-(BuiltinTypeSpecifierParseable
+(NumericTypeSpecifier
 - mat4
-)BuiltinTypeSpecifierParseable
+)NumericTypeSpecifier
 )TypeSpecifier
 )FullySpecifiedType
 (StructDeclarator
@@ -388450,9 +388450,9 @@ void main()
 (StructMember
 (FullySpecifiedType
 (TypeSpecifier
-(BuiltinTypeSpecifierParseable
+(NumericTypeSpecifier
 - mat4
-)BuiltinTypeSpecifierParseable
+)NumericTypeSpecifier
 )TypeSpecifier
 )FullySpecifiedType
 (StructDeclarator
@@ -388463,9 +388463,9 @@ void main()
 (StructMember
 (FullySpecifiedType
 (TypeSpecifier
-(BuiltinTypeSpecifierParseable
+(NumericTypeSpecifier
 - vec4
-)BuiltinTypeSpecifierParseable
+)NumericTypeSpecifier
 )TypeSpecifier
 )FullySpecifiedType
 (StructDeclarator
@@ -388482,9 +388482,9 @@ void main()
 (StructMember
 (FullySpecifiedType
 (TypeSpecifier
-(BuiltinTypeSpecifierParseable
+(NumericTypeSpecifier
 - float
-)BuiltinTypeSpecifierParseable
+)NumericTypeSpecifier
 )TypeSpecifier
 )FullySpecifiedType
 (StructDeclarator
@@ -388532,9 +388532,9 @@ void main()
 )StorageQualifier
 )TypeQualifier
 (TypeSpecifier
-(BuiltinTypeSpecifierParseable
+(NumericTypeSpecifier
 - vec4
-)BuiltinTypeSpecifierParseable
+)NumericTypeSpecifier
 )TypeSpecifier
 )FullySpecifiedType
 (DeclarationMember
@@ -388566,9 +388566,9 @@ void main()
 )StorageQualifier
 )TypeQualifier
 (TypeSpecifier
-(BuiltinTypeSpecifierParseable
+(NumericTypeSpecifier
 - vec4
-)BuiltinTypeSpecifierParseable
+)NumericTypeSpecifier
 )TypeSpecifier
 )FullySpecifiedType
 (DeclarationMember
@@ -388611,9 +388611,9 @@ void main()
 )StorageQualifier
 )TypeQualifier
 (TypeSpecifier
-(BuiltinTypeSpecifierParseable
+(NumericTypeSpecifier
 - mat4
-)BuiltinTypeSpecifierParseable
+)NumericTypeSpecifier
 )TypeSpecifier
 )FullySpecifiedType
 (DeclarationMember
@@ -388661,9 +388661,9 @@ void main()
 (StructMember
 (FullySpecifiedType
 (TypeSpecifier
-(BuiltinTypeSpecifierParseable
+(NumericTypeSpecifier
 - vec3
-)BuiltinTypeSpecifierParseable
+)NumericTypeSpecifier
 )TypeSpecifier
 )FullySpecifiedType
 (StructDeclarator
@@ -388674,9 +388674,9 @@ void main()
 (StructMember
 (FullySpecifiedType
 (TypeSpecifier
-(BuiltinTypeSpecifierParseable
+(NumericTypeSpecifier
 - mat2
-)BuiltinTypeSpecifierParseable
+)NumericTypeSpecifier
 )TypeSpecifier
 )FullySpecifiedType
 (StructDeclarator
@@ -388687,9 +388687,9 @@ void main()
 (StructMember
 (FullySpecifiedType
 (TypeSpecifier
-(BuiltinTypeSpecifierParseable
+(NumericTypeSpecifier
 - vec4
-)BuiltinTypeSpecifierParseable
+)NumericTypeSpecifier
 )TypeSpecifier
 )FullySpecifiedType
 (StructDeclarator
@@ -388892,9 +388892,9 @@ void main()
 )StorageQualifier
 )TypeQualifier
 (TypeSpecifier
-(BuiltinTypeSpecifierParseable
+(NumericTypeSpecifier
 - vec4
-)BuiltinTypeSpecifierParseable
+)NumericTypeSpecifier
 )TypeSpecifier
 )FullySpecifiedType
 (DeclarationMember
@@ -388946,9 +388946,9 @@ void main()
 )LayoutQualifier
 )TypeQualifier
 (TypeSpecifier
-(BuiltinTypeSpecifierParseable
+(NumericTypeSpecifier
 - vec4
-)BuiltinTypeSpecifierParseable
+)NumericTypeSpecifier
 )TypeSpecifier
 )FullySpecifiedType
 (StructDeclarator
@@ -388975,9 +388975,9 @@ void main()
 )LayoutQualifier
 )TypeQualifier
 (TypeSpecifier
-(BuiltinTypeSpecifierParseable
+(NumericTypeSpecifier
 - vec2
-)BuiltinTypeSpecifierParseable
+)NumericTypeSpecifier
 )TypeSpecifier
 )FullySpecifiedType
 (StructDeclarator
@@ -388988,9 +388988,9 @@ void main()
 (StructMember
 (FullySpecifiedType
 (TypeSpecifier
-(BuiltinTypeSpecifierParseable
+(NumericTypeSpecifier
 - vec3
-)BuiltinTypeSpecifierParseable
+)NumericTypeSpecifier
 )TypeSpecifier
 )FullySpecifiedType
 (StructDeclarator
@@ -389036,9 +389036,9 @@ void main()
 )StorageQualifier
 )TypeQualifier
 (TypeSpecifier
-(BuiltinTypeSpecifierParseable
+(NumericTypeSpecifier
 - vec4
-)BuiltinTypeSpecifierParseable
+)NumericTypeSpecifier
 )TypeSpecifier
 )FullySpecifiedType
 (DeclarationMember
@@ -389060,9 +389060,9 @@ void main()
 (StructMember
 (FullySpecifiedType
 (TypeSpecifier
-(BuiltinTypeSpecifierParseable
+(NumericTypeSpecifier
 - vec4
-)BuiltinTypeSpecifierParseable
+)NumericTypeSpecifier
 )TypeSpecifier
 )FullySpecifiedType
 (StructDeclarator
@@ -389098,9 +389098,9 @@ void main()
 )StorageQualifier
 )TypeQualifier
 (TypeSpecifier
-(BuiltinTypeSpecifierParseable
+(NumericTypeSpecifier
 - vec4
-)BuiltinTypeSpecifierParseable
+)NumericTypeSpecifier
 )TypeSpecifier
 )FullySpecifiedType
 (DeclarationMember
@@ -389208,9 +389208,9 @@ void main()
 (StructMember
 (FullySpecifiedType
 (TypeSpecifier
-(BuiltinTypeSpecifierParseable
+(NumericTypeSpecifier
 - mat4
-)BuiltinTypeSpecifierParseable
+)NumericTypeSpecifier
 )TypeSpecifier
 )FullySpecifiedType
 (StructDeclarator
@@ -389231,9 +389231,9 @@ void main()
 )LayoutQualifier
 )TypeQualifier
 (TypeSpecifier
-(BuiltinTypeSpecifierParseable
+(NumericTypeSpecifier
 - mat4
-)BuiltinTypeSpecifierParseable
+)NumericTypeSpecifier
 )TypeSpecifier
 )FullySpecifiedType
 (StructDeclarator
@@ -389244,9 +389244,9 @@ void main()
 (StructMember
 (FullySpecifiedType
 (TypeSpecifier
-(BuiltinTypeSpecifierParseable
+(NumericTypeSpecifier
 - mat3
-)BuiltinTypeSpecifierParseable
+)NumericTypeSpecifier
 )TypeSpecifier
 )FullySpecifiedType
 (StructDeclarator
@@ -389280,9 +389280,9 @@ void main()
 (StructMember
 (FullySpecifiedType
 (TypeSpecifier
-(BuiltinTypeSpecifierParseable
+(NumericTypeSpecifier
 - mat4
-)BuiltinTypeSpecifierParseable
+)NumericTypeSpecifier
 )TypeSpecifier
 )FullySpecifiedType
 (StructDeclarator
@@ -389303,9 +389303,9 @@ void main()
 )LayoutQualifier
 )TypeQualifier
 (TypeSpecifier
-(BuiltinTypeSpecifierParseable
+(NumericTypeSpecifier
 - mat4
-)BuiltinTypeSpecifierParseable
+)NumericTypeSpecifier
 )TypeSpecifier
 )FullySpecifiedType
 (StructDeclarator
@@ -389316,9 +389316,9 @@ void main()
 (StructMember
 (FullySpecifiedType
 (TypeSpecifier
-(BuiltinTypeSpecifierParseable
+(NumericTypeSpecifier
 - mat3
-)BuiltinTypeSpecifierParseable
+)NumericTypeSpecifier
 )TypeSpecifier
 )FullySpecifiedType
 (StructDeclarator
@@ -389354,9 +389354,9 @@ void main()
 )StorageQualifier
 )TypeQualifier
 (TypeSpecifier
-(BuiltinTypeSpecifierFixed
+(FixedTypeSpecifier
 - sampler2D
-)BuiltinTypeSpecifierFixed
+)FixedTypeSpecifier
 )TypeSpecifier
 )FullySpecifiedType
 (DeclarationMember
@@ -389374,9 +389374,9 @@ void main()
 )StorageQualifier
 )TypeQualifier
 (TypeSpecifier
-(BuiltinTypeSpecifierFixed
+(FixedTypeSpecifier
 - sampler2D
-)BuiltinTypeSpecifierFixed
+)FixedTypeSpecifier
 )TypeSpecifier
 )FullySpecifiedType
 (DeclarationMember
@@ -389418,9 +389418,9 @@ void main()
 )StorageQualifier
 )TypeQualifier
 (TypeSpecifier
-(BuiltinTypeSpecifierFixed
+(FixedTypeSpecifier
 - atomic_uint
-)BuiltinTypeSpecifierFixed
+)FixedTypeSpecifier
 )TypeSpecifier
 )FullySpecifiedType
 (DeclarationMember
@@ -389452,9 +389452,9 @@ void main()
 )StorageQualifier
 )TypeQualifier
 (TypeSpecifier
-(BuiltinTypeSpecifierFixed
+(FixedTypeSpecifier
 - atomic_uint
-)BuiltinTypeSpecifierFixed
+)FixedTypeSpecifier
 )TypeSpecifier
 )FullySpecifiedType
 (DeclarationMember
@@ -389496,9 +389496,9 @@ void main()
 )StorageQualifier
 )TypeQualifier
 (TypeSpecifier
-(BuiltinTypeSpecifierFixed
+(FixedTypeSpecifier
 - atomic_uint
-)BuiltinTypeSpecifierFixed
+)FixedTypeSpecifier
 )TypeSpecifier
 )FullySpecifiedType
 - ;
@@ -389527,9 +389527,9 @@ void main()
 )StorageQualifier
 )TypeQualifier
 (TypeSpecifier
-(BuiltinTypeSpecifierFixed
+(FixedTypeSpecifier
 - atomic_uint
-)BuiltinTypeSpecifierFixed
+)FixedTypeSpecifier
 )TypeSpecifier
 )FullySpecifiedType
 (DeclarationMember
@@ -389561,9 +389561,9 @@ void main()
 )StorageQualifier
 )TypeQualifier
 (TypeSpecifier
-(BuiltinTypeSpecifierFixed
+(FixedTypeSpecifier
 - atomic_uint
-)BuiltinTypeSpecifierFixed
+)FixedTypeSpecifier
 )TypeSpecifier
 )FullySpecifiedType
 (DeclarationMember
@@ -389605,9 +389605,9 @@ void main()
 )StorageQualifier
 )TypeQualifier
 (TypeSpecifier
-(BuiltinTypeSpecifierFixed
+(FixedTypeSpecifier
 - atomic_uint
-)BuiltinTypeSpecifierFixed
+)FixedTypeSpecifier
 )TypeSpecifier
 )FullySpecifiedType
 (DeclarationMember
@@ -389639,9 +389639,9 @@ void main()
 )StorageQualifier
 )TypeQualifier
 (TypeSpecifier
-(BuiltinTypeSpecifierFixed
+(FixedTypeSpecifier
 - atomic_uint
-)BuiltinTypeSpecifierFixed
+)FixedTypeSpecifier
 )TypeSpecifier
 )FullySpecifiedType
 (DeclarationMember
@@ -389673,9 +389673,9 @@ void main()
 )StorageQualifier
 )TypeQualifier
 (TypeSpecifier
-(BuiltinTypeSpecifierFixed
+(FixedTypeSpecifier
 - atomic_uint
-)BuiltinTypeSpecifierFixed
+)FixedTypeSpecifier
 )TypeSpecifier
 )FullySpecifiedType
 (DeclarationMember
@@ -389707,9 +389707,9 @@ void main()
 )StorageQualifier
 )TypeQualifier
 (TypeSpecifier
-(BuiltinTypeSpecifierFixed
+(FixedTypeSpecifier
 - atomic_uint
-)BuiltinTypeSpecifierFixed
+)FixedTypeSpecifier
 )TypeSpecifier
 )FullySpecifiedType
 (DeclarationMember
@@ -389730,9 +389730,9 @@ void main()
 )StorageQualifier
 )TypeQualifier
 (TypeSpecifier
-(BuiltinTypeSpecifierParseable
+(NumericTypeSpecifier
 - vec4
-)BuiltinTypeSpecifierParseable
+)NumericTypeSpecifier
 )TypeSpecifier
 )FullySpecifiedType
 (DeclarationMember
@@ -389753,9 +389753,9 @@ void main()
 )StorageQualifier
 )TypeQualifier
 (TypeSpecifier
-(BuiltinTypeSpecifierParseable
+(NumericTypeSpecifier
 - vec4
-)BuiltinTypeSpecifierParseable
+)NumericTypeSpecifier
 )TypeSpecifier
 )FullySpecifiedType
 (DeclarationMember
@@ -389784,9 +389784,9 @@ void main()
 )StorageQualifier
 )TypeQualifier
 (TypeSpecifier
-(BuiltinTypeSpecifierParseable
+(NumericTypeSpecifier
 - vec3
-)BuiltinTypeSpecifierParseable
+)NumericTypeSpecifier
 )TypeSpecifier
 )FullySpecifiedType
 (DeclarationMember
@@ -389821,9 +389821,9 @@ void main()
 )StorageQualifier
 )TypeQualifier
 (TypeSpecifier
-(BuiltinTypeSpecifierParseable
+(NumericTypeSpecifier
 - vec3
-)BuiltinTypeSpecifierParseable
+)NumericTypeSpecifier
 )TypeSpecifier
 )FullySpecifiedType
 (DeclarationMember
@@ -389844,9 +389844,9 @@ void main()
 )StorageQualifier
 )TypeQualifier
 (TypeSpecifier
-(BuiltinTypeSpecifierParseable
+(NumericTypeSpecifier
 - vec4
-)BuiltinTypeSpecifierParseable
+)NumericTypeSpecifier
 )TypeSpecifier
 )FullySpecifiedType
 (DeclarationMember
@@ -389864,9 +389864,9 @@ void main()
 )StorageQualifier
 )TypeQualifier
 (TypeSpecifier
-(BuiltinTypeSpecifierParseable
+(NumericTypeSpecifier
 - vec3
-)BuiltinTypeSpecifierParseable
+)NumericTypeSpecifier
 )TypeSpecifier
 )FullySpecifiedType
 (DeclarationMember
@@ -389895,9 +389895,9 @@ void main()
 )StorageQualifier
 )TypeQualifier
 (TypeSpecifier
-(BuiltinTypeSpecifierParseable
+(NumericTypeSpecifier
 - vec4
-)BuiltinTypeSpecifierParseable
+)NumericTypeSpecifier
 )TypeSpecifier
 )FullySpecifiedType
 (DeclarationMember
@@ -389930,9 +389930,9 @@ void main()
 )StorageQualifier
 )TypeQualifier
 (TypeSpecifier
-(BuiltinTypeSpecifierParseable
+(NumericTypeSpecifier
 - vec4
-)BuiltinTypeSpecifierParseable
+)NumericTypeSpecifier
 )TypeSpecifier
 )FullySpecifiedType
 (DeclarationMember
@@ -389962,9 +389962,9 @@ void main()
 )StorageQualifier
 )TypeQualifier
 (TypeSpecifier
-(BuiltinTypeSpecifierParseable
+(NumericTypeSpecifier
 - vec4
-)BuiltinTypeSpecifierParseable
+)NumericTypeSpecifier
 )TypeSpecifier
 )FullySpecifiedType
 (StructDeclarator
@@ -389975,9 +389975,9 @@ void main()
 (StructMember
 (FullySpecifiedType
 (TypeSpecifier
-(BuiltinTypeSpecifierParseable
+(NumericTypeSpecifier
 - vec4
-)BuiltinTypeSpecifierParseable
+)NumericTypeSpecifier
 )TypeSpecifier
 )FullySpecifiedType
 (StructDeclarator
@@ -390011,9 +390011,9 @@ void main()
 )StorageQualifier
 )TypeQualifier
 (TypeSpecifier
-(BuiltinTypeSpecifierParseable
+(NumericTypeSpecifier
 - vec4
-)BuiltinTypeSpecifierParseable
+)NumericTypeSpecifier
 )TypeSpecifier
 )FullySpecifiedType
 (StructDeclarator
@@ -390029,9 +390029,9 @@ void main()
 )StorageQualifier
 )TypeQualifier
 (TypeSpecifier
-(BuiltinTypeSpecifierParseable
+(NumericTypeSpecifier
 - vec4
-)BuiltinTypeSpecifierParseable
+)NumericTypeSpecifier
 )TypeSpecifier
 )FullySpecifiedType
 (StructDeclarator
@@ -390053,9 +390053,9 @@ void main()
 )StorageQualifier
 )TypeQualifier
 (TypeSpecifier
-(BuiltinTypeSpecifierParseable
+(NumericTypeSpecifier
 - vec4
-)BuiltinTypeSpecifierParseable
+)NumericTypeSpecifier
 )TypeSpecifier
 )FullySpecifiedType
 (DeclarationMember
@@ -390069,9 +390069,9 @@ void main()
 (FunctionPrototype
 (FullySpecifiedType
 (TypeSpecifier
-(BuiltinTypeSpecifierParseable
+(NumericTypeSpecifier
 - vec4
-)BuiltinTypeSpecifierParseable
+)NumericTypeSpecifier
 )TypeSpecifier
 )FullySpecifiedType
 - funcA
@@ -390085,9 +390085,9 @@ void main()
 )StorageQualifier
 )TypeQualifier
 (TypeSpecifier
-(BuiltinTypeSpecifierFixed
+(FixedTypeSpecifier
 - image2D
-)BuiltinTypeSpecifierFixed
+)FixedTypeSpecifier
 )TypeSpecifier
 )FullySpecifiedType
 - a
@@ -390106,9 +390106,9 @@ void main()
 (FunctionPrototype
 (FullySpecifiedType
 (TypeSpecifier
-(BuiltinTypeSpecifierParseable
+(NumericTypeSpecifier
 - vec4
-)BuiltinTypeSpecifierParseable
+)NumericTypeSpecifier
 )TypeSpecifier
 )FullySpecifiedType
 - funcB
@@ -390117,9 +390117,9 @@ void main()
 (ParameterDeclaration
 (FullySpecifiedType
 (TypeSpecifier
-(BuiltinTypeSpecifierFixed
+(FixedTypeSpecifier
 - image2D
-)BuiltinTypeSpecifierFixed
+)FixedTypeSpecifier
 )TypeSpecifier
 )FullySpecifiedType
 - a
@@ -390150,9 +390150,9 @@ void main()
 )StorageQualifier
 )TypeQualifier
 (TypeSpecifier
-(BuiltinTypeSpecifierFixed
+(FixedTypeSpecifier
 - image2D
-)BuiltinTypeSpecifierFixed
+)FixedTypeSpecifier
 )TypeSpecifier
 )FullySpecifiedType
 (DeclarationMember
@@ -390181,9 +390181,9 @@ void main()
 )StorageQualifier
 )TypeQualifier
 (TypeSpecifier
-(BuiltinTypeSpecifierFixed
+(FixedTypeSpecifier
 - image2D
-)BuiltinTypeSpecifierFixed
+)FixedTypeSpecifier
 )TypeSpecifier
 )FullySpecifiedType
 (DeclarationMember
@@ -390197,9 +390197,9 @@ void main()
 (FunctionPrototype
 (FullySpecifiedType
 (TypeSpecifier
-(BuiltinTypeSpecifierParseable
+(NumericTypeSpecifier
 - float
-)BuiltinTypeSpecifierParseable
+)NumericTypeSpecifier
 )TypeSpecifier
 )FullySpecifiedType
 - func
@@ -390208,9 +390208,9 @@ void main()
 (ParameterDeclaration
 (FullySpecifiedType
 (TypeSpecifier
-(BuiltinTypeSpecifierParseable
+(NumericTypeSpecifier
 - float
-)BuiltinTypeSpecifierParseable
+)NumericTypeSpecifier
 )TypeSpecifier
 )FullySpecifiedType
 - e
@@ -390219,9 +390219,9 @@ void main()
 (ParameterDeclaration
 (FullySpecifiedType
 (TypeSpecifier
-(BuiltinTypeSpecifierParseable
+(NumericTypeSpecifier
 - float
-)BuiltinTypeSpecifierParseable
+)NumericTypeSpecifier
 )TypeSpecifier
 )FullySpecifiedType
 - f
@@ -390230,9 +390230,9 @@ void main()
 (ParameterDeclaration
 (FullySpecifiedType
 (TypeSpecifier
-(BuiltinTypeSpecifierParseable
+(NumericTypeSpecifier
 - float
-)BuiltinTypeSpecifierParseable
+)NumericTypeSpecifier
 )TypeSpecifier
 )FullySpecifiedType
 - g
@@ -390241,9 +390241,9 @@ void main()
 (ParameterDeclaration
 (FullySpecifiedType
 (TypeSpecifier
-(BuiltinTypeSpecifierParseable
+(NumericTypeSpecifier
 - float
-)BuiltinTypeSpecifierParseable
+)NumericTypeSpecifier
 )TypeSpecifier
 )FullySpecifiedType
 - h
@@ -390303,9 +390303,9 @@ void main()
 (FunctionPrototype
 (FullySpecifiedType
 (TypeSpecifier
-(BuiltinTypeSpecifierParseable
+(NumericTypeSpecifier
 - float
-)BuiltinTypeSpecifierParseable
+)NumericTypeSpecifier
 )TypeSpecifier
 )FullySpecifiedType
 - func2
@@ -390314,9 +390314,9 @@ void main()
 (ParameterDeclaration
 (FullySpecifiedType
 (TypeSpecifier
-(BuiltinTypeSpecifierParseable
+(NumericTypeSpecifier
 - float
-)BuiltinTypeSpecifierParseable
+)NumericTypeSpecifier
 )TypeSpecifier
 )FullySpecifiedType
 - e
@@ -390325,9 +390325,9 @@ void main()
 (ParameterDeclaration
 (FullySpecifiedType
 (TypeSpecifier
-(BuiltinTypeSpecifierParseable
+(NumericTypeSpecifier
 - float
-)BuiltinTypeSpecifierParseable
+)NumericTypeSpecifier
 )TypeSpecifier
 )FullySpecifiedType
 - f
@@ -390336,9 +390336,9 @@ void main()
 (ParameterDeclaration
 (FullySpecifiedType
 (TypeSpecifier
-(BuiltinTypeSpecifierParseable
+(NumericTypeSpecifier
 - float
-)BuiltinTypeSpecifierParseable
+)NumericTypeSpecifier
 )TypeSpecifier
 )FullySpecifiedType
 - g
@@ -390347,9 +390347,9 @@ void main()
 (ParameterDeclaration
 (FullySpecifiedType
 (TypeSpecifier
-(BuiltinTypeSpecifierParseable
+(NumericTypeSpecifier
 - float
-)BuiltinTypeSpecifierParseable
+)NumericTypeSpecifier
 )TypeSpecifier
 )FullySpecifiedType
 - h
@@ -390369,9 +390369,9 @@ void main()
 )PreciseQualifier
 )TypeQualifier
 (TypeSpecifier
-(BuiltinTypeSpecifierParseable
+(NumericTypeSpecifier
 - float
-)BuiltinTypeSpecifierParseable
+)NumericTypeSpecifier
 )TypeSpecifier
 )FullySpecifiedType
 (DeclarationMember
@@ -390437,9 +390437,9 @@ void main()
 (FunctionPrototype
 (FullySpecifiedType
 (TypeSpecifier
-(BuiltinTypeSpecifierParseable
+(NumericTypeSpecifier
 - float
-)BuiltinTypeSpecifierParseable
+)NumericTypeSpecifier
 )TypeSpecifier
 )FullySpecifiedType
 - func3
@@ -390448,9 +390448,9 @@ void main()
 (ParameterDeclaration
 (FullySpecifiedType
 (TypeSpecifier
-(BuiltinTypeSpecifierParseable
+(NumericTypeSpecifier
 - float
-)BuiltinTypeSpecifierParseable
+)NumericTypeSpecifier
 )TypeSpecifier
 )FullySpecifiedType
 - i
@@ -390459,9 +390459,9 @@ void main()
 (ParameterDeclaration
 (FullySpecifiedType
 (TypeSpecifier
-(BuiltinTypeSpecifierParseable
+(NumericTypeSpecifier
 - float
-)BuiltinTypeSpecifierParseable
+)NumericTypeSpecifier
 )TypeSpecifier
 )FullySpecifiedType
 - j
@@ -390478,9 +390478,9 @@ void main()
 )StorageQualifier
 )TypeQualifier
 (TypeSpecifier
-(BuiltinTypeSpecifierParseable
+(NumericTypeSpecifier
 - float
-)BuiltinTypeSpecifierParseable
+)NumericTypeSpecifier
 )TypeSpecifier
 )FullySpecifiedType
 - k
@@ -390527,9 +390527,9 @@ void main()
 (FunctionPrototype
 (FullySpecifiedType
 (TypeSpecifier
-(BuiltinTypeSpecifierFixed
+(FixedTypeSpecifier
 - void
-)BuiltinTypeSpecifierFixed
+)FixedTypeSpecifier
 )TypeSpecifier
 )FullySpecifiedType
 - main
@@ -390545,9 +390545,9 @@ void main()
 (TypeAndInitDeclaration
 (FullySpecifiedType
 (TypeSpecifier
-(BuiltinTypeSpecifierParseable
+(NumericTypeSpecifier
 - vec3
-)BuiltinTypeSpecifierParseable
+)NumericTypeSpecifier
 )TypeSpecifier
 )FullySpecifiedType
 (DeclarationMember
@@ -390556,9 +390556,9 @@ void main()
 (Initializer
 (FunctionCallExpression
 (TypeSpecifier
-(BuiltinTypeSpecifierParseable
+(NumericTypeSpecifier
 - vec3
-)BuiltinTypeSpecifierParseable
+)NumericTypeSpecifier
 )TypeSpecifier
 - (
 (MultiplicativeExpression
@@ -390583,9 +390583,9 @@ void main()
 (TypeAndInitDeclaration
 (FullySpecifiedType
 (TypeSpecifier
-(BuiltinTypeSpecifierParseable
+(NumericTypeSpecifier
 - vec3
-)BuiltinTypeSpecifierParseable
+)NumericTypeSpecifier
 )TypeSpecifier
 )FullySpecifiedType
 (DeclarationMember
@@ -390594,9 +390594,9 @@ void main()
 (Initializer
 (FunctionCallExpression
 (TypeSpecifier
-(BuiltinTypeSpecifierParseable
+(NumericTypeSpecifier
 - vec3
-)BuiltinTypeSpecifierParseable
+)NumericTypeSpecifier
 )TypeSpecifier
 - (
 (MultiplicativeExpression
@@ -390915,9 +390915,9 @@ void main()
 (StructMember
 (FullySpecifiedType
 (TypeSpecifier
-(BuiltinTypeSpecifierParseable
+(NumericTypeSpecifier
 - float
-)BuiltinTypeSpecifierParseable
+)NumericTypeSpecifier
 )TypeSpecifier
 )FullySpecifiedType
 (StructDeclarator
@@ -390928,9 +390928,9 @@ void main()
 (StructMember
 (FullySpecifiedType
 (TypeSpecifier
-(BuiltinTypeSpecifierParseable
+(NumericTypeSpecifier
 - vec3
-)BuiltinTypeSpecifierParseable
+)NumericTypeSpecifier
 )TypeSpecifier
 )FullySpecifiedType
 (StructDeclarator
@@ -390968,9 +390968,9 @@ void main()
 - ,
 (FunctionCallExpression
 (TypeSpecifier
-(BuiltinTypeSpecifierParseable
+(NumericTypeSpecifier
 - vec3
-)BuiltinTypeSpecifierParseable
+)NumericTypeSpecifier
 )TypeSpecifier
 - (
 (LiteralExpression
@@ -391010,9 +391010,9 @@ void main()
 )StorageQualifier
 )TypeQualifier
 (TypeSpecifier
-(BuiltinTypeSpecifierParseable
+(NumericTypeSpecifier
 - float
-)BuiltinTypeSpecifierParseable
+)NumericTypeSpecifier
 )TypeSpecifier
 )FullySpecifiedType
 (DeclarationMember
@@ -391032,9 +391032,9 @@ void main()
 (Initializer
 (FunctionCallExpression
 (TypeSpecifier
-(BuiltinTypeSpecifierParseable
+(NumericTypeSpecifier
 - float
-)BuiltinTypeSpecifierParseable
+)NumericTypeSpecifier
 (ArraySpecifier
 (ArraySpecifierSegment
 - [
@@ -391077,9 +391077,9 @@ void main()
 )StorageQualifier
 )TypeQualifier
 (TypeSpecifier
-(BuiltinTypeSpecifierParseable
+(NumericTypeSpecifier
 - float
-)BuiltinTypeSpecifierParseable
+)NumericTypeSpecifier
 )TypeSpecifier
 )FullySpecifiedType
 (DeclarationMember
@@ -391099,9 +391099,9 @@ void main()
 (Initializer
 (FunctionCallExpression
 (TypeSpecifier
-(BuiltinTypeSpecifierParseable
+(NumericTypeSpecifier
 - float
-)BuiltinTypeSpecifierParseable
+)NumericTypeSpecifier
 (ArraySpecifier
 (ArraySpecifierSegment
 - [
@@ -391134,9 +391134,9 @@ void main()
 (TypeAndInitDeclaration
 (FullySpecifiedType
 (TypeSpecifier
-(BuiltinTypeSpecifierParseable
+(NumericTypeSpecifier
 - float
-)BuiltinTypeSpecifierParseable
+)NumericTypeSpecifier
 )TypeSpecifier
 )FullySpecifiedType
 (DeclarationMember
@@ -391151,9 +391151,9 @@ void main()
 (TypeAndInitDeclaration
 (FullySpecifiedType
 (TypeSpecifier
-(BuiltinTypeSpecifierParseable
+(NumericTypeSpecifier
 - float
-)BuiltinTypeSpecifierParseable
+)NumericTypeSpecifier
 )TypeSpecifier
 )FullySpecifiedType
 (DeclarationMember
@@ -391173,9 +391173,9 @@ void main()
 (Initializer
 (FunctionCallExpression
 (TypeSpecifier
-(BuiltinTypeSpecifierParseable
+(NumericTypeSpecifier
 - float
-)BuiltinTypeSpecifierParseable
+)NumericTypeSpecifier
 (ArraySpecifier
 (ArraySpecifierSegment
 - [
@@ -391221,9 +391221,9 @@ void main()
 (TypeAndInitDeclaration
 (FullySpecifiedType
 (TypeSpecifier
-(BuiltinTypeSpecifierParseable
+(NumericTypeSpecifier
 - float
-)BuiltinTypeSpecifierParseable
+)NumericTypeSpecifier
 )TypeSpecifier
 )FullySpecifiedType
 (DeclarationMember
@@ -391254,9 +391254,9 @@ void main()
 - =
 (FunctionCallExpression
 (TypeSpecifier
-(BuiltinTypeSpecifierParseable
+(NumericTypeSpecifier
 - float
-)BuiltinTypeSpecifierParseable
+)NumericTypeSpecifier
 (ArraySpecifier
 (ArraySpecifierSegment
 - [
@@ -391311,9 +391311,9 @@ void main()
 (TypeAndInitDeclaration
 (FullySpecifiedType
 (TypeSpecifier
-(BuiltinTypeSpecifierParseable
+(NumericTypeSpecifier
 - vec4
-)BuiltinTypeSpecifierParseable
+)NumericTypeSpecifier
 )TypeSpecifier
 )FullySpecifiedType
 (DeclarationMember
@@ -391335,9 +391335,9 @@ void main()
 (Initializer
 (FunctionCallExpression
 (TypeSpecifier
-(BuiltinTypeSpecifierParseable
+(NumericTypeSpecifier
 - vec4
-)BuiltinTypeSpecifierParseable
+)NumericTypeSpecifier
 )TypeSpecifier
 - (
 (LiteralExpression
@@ -391350,9 +391350,9 @@ void main()
 (Initializer
 (FunctionCallExpression
 (TypeSpecifier
-(BuiltinTypeSpecifierParseable
+(NumericTypeSpecifier
 - vec4
-)BuiltinTypeSpecifierParseable
+)NumericTypeSpecifier
 )TypeSpecifier
 - (
 (LiteralExpression
@@ -391373,9 +391373,9 @@ void main()
 (Expression
 (FunctionCallExpression
 (TypeSpecifier
-(BuiltinTypeSpecifierParseable
+(NumericTypeSpecifier
 - vec4
-)BuiltinTypeSpecifierParseable
+)NumericTypeSpecifier
 (ArraySpecifier
 (ArraySpecifierSegment
 - [
@@ -391420,9 +391420,9 @@ void main()
 (Expression
 (FunctionCallExpression
 (TypeSpecifier
-(BuiltinTypeSpecifierParseable
+(NumericTypeSpecifier
 - vec4
-)BuiltinTypeSpecifierParseable
+)NumericTypeSpecifier
 (ArraySpecifier
 (ArraySpecifierSegment
 - [
@@ -391462,9 +391462,9 @@ void main()
 (Expression
 (FunctionCallExpression
 (TypeSpecifier
-(BuiltinTypeSpecifierParseable
+(NumericTypeSpecifier
 - vec4
-)BuiltinTypeSpecifierParseable
+)NumericTypeSpecifier
 (ArraySpecifier
 (ArraySpecifierSegment
 - [
