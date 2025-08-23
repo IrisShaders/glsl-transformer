@@ -13,9 +13,9 @@ plugins {
   id 'antlr'
   id 'maven-publish'
   id 'signing'
-  id 'org.danilopianini.publish-on-central' version '0.7.5' // a newer version 2.0.6 exists but it's annoying to use
   id 'jacoco'
   id 'com.adarshr.test-logger' version '3.2.0'
+  id 'org.jreleaser' version '1.19.0'
 }
 
 group = 'io.github.douira'
@@ -43,10 +43,8 @@ dependencies {
 generateGrammarSource {
   maxHeapSize = '128m'
   arguments += ['-package', 'io.github.douira.glsl_transformer', '-visitor']
-  outputDirectory = new File(buildDir.toString() + '/generated-src/antlr/main/io/github/douira/glsl_transformer/')
+  outputDirectory = new File("${buildDir}/generated-src/antlr/main/io/github/douira/glsl_transformer/")
 }
-compileJava.dependsOn generateGrammarSource
-sourcesJar.dependsOn generateGrammarSource
 
 test {
   useJUnitPlatform()
@@ -88,40 +86,81 @@ clean {
   delete 'generated-src'
 }
 
-publishOnCentral {
-  configureMavenCentral.set(true)
-  projectDescription.set('GLSL Parsing, Program Transformation and Printing with ANTLR4')
-  projectLongName.set('glsl-transformer')
-  projectUrl.set('https://github.com/IrisShaders/glsl-transformer')
-  scmConnection.set('git@github.com:IrisShaders/glsl-transformer.git')
-  licenseName.set('GNU Affero General Public License v3.0')
-  licenseUrl.set('https://www.gnu.org/licenses/agpl-3.0.en.html')
+java {
+  withJavadocJar()
+  withSourcesJar()
 }
 
-publishing {
-  publications {
-    javaMaven(MavenPublication) {
-      pom {
-        developers {
-          developer {
-            name.set('douira')
-            email.set('douira100@gmail.com')
-            url.set('https://douira.github.io')
-          }
+sourcesJar.dependsOn generateGrammarSource
+compileJava.dependsOn generateGrammarSource
+
+jreleaser {
+  gitRootSearch = true
+  signing {
+    active = 'ALWAYS'
+  }
+  deploy {
+    maven {
+      mavenCentral {
+        sonatype {
+          active = 'ALWAYS'
+          url = 'https://central.sonatype.com/api/v1/publisher'
+          stagingRepository('build/staging-deploy')
         }
       }
     }
   }
 }
 
+publishing {
+  publications {
+    mavenJava(MavenPublication) {
+      groupId = 'io.github.douira'
+      artifactId = 'glsl-transformer'
+
+      from components.java
+      
+      pom {
+        name = 'glsl-transformer'
+        description = 'A GLSL parser and transformer based on ANTLR4'
+        url = 'https://github.com/IrisShaders/glsl-transformer'
+        licenses {
+          license {
+            name = 'GNU Affero General Public License v3.0'
+            url = 'https://www.gnu.org/licenses/agpl-3.0.en.html'
+          }
+        }
+        developers {
+          developer {
+            name = 'douira'
+            email = 'douira100@gmail.com'
+            url = 'https://douira.dev'
+          }
+        }
+        scm {
+          connection = 'scm:git:git://github.com/IrisShaders/glsl-transformer.git'
+          developerConnection = 'scm:git:ssh://github.com/IrisShaders/glsl-transformer.git'
+          url = 'https://github.com/IrisShaders/glsl-transformer' 
+        }
+      }
+    }
+  }
+
+  repositories {
+    maven {
+      url = layout.buildDirectory.dir('staging-deploy')
+    }
+  }
+}
+
 javadoc {
   configure(options) {
-    tags(
+    tags = [
       'implSpec:a:Implementation Requirements:',
       'implNote:a:Implementation Note:',
       'apiNote:a:API Usage Note:'
-    )
-    links "https://javadoc.io/doc/org.antlr/antlr4-runtime/$antlrVersion/"
+    ]
+    links = ["https://javadoc.io/doc/org.antlr/antlr4-runtime/${antlrVersion}/".toString()]
   }
   exclude '**/GLSLParser*.java'
   exclude '**/GLSLLexer*.java'
