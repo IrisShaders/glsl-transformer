@@ -9,3 +9,5 @@ cd "$(dirname "$0")"
 # the second run lets the new Gradle version update the wrapper files themselves
 ./gradlew wrapper
 ./gradlew build
+# the release tasks only run in the release workflow, so at least check that they can still be set up
+./gradlew jreleaserFullRelease --dry-run

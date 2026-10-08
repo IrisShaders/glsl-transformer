@@ -8,7 +8,7 @@ import java.util.stream.Stream;
 
 import org.junit.jupiter.api.extension.ExtensionContext;
 import org.junit.jupiter.params.provider.*;
-import org.junit.jupiter.params.support.AnnotationConsumer;
+import org.junit.jupiter.params.support.*;
 
 import au.com.origin.snapshots.annotations.SnapshotName;
 
@@ -45,7 +45,7 @@ public class TestCaseProvider implements ArgumentsProvider, AnnotationConsumer<T
   private Spacing spacing;
 
   @Override
-  public Stream<? extends Arguments> provideArguments(ExtensionContext context) throws Exception {
+  public Stream<? extends Arguments> provideArguments(ParameterDeclarations parameters, ExtensionContext context) throws Exception {
     // TODO: read snapshot files config from snapshot properties
     var fileUnderTest = Paths.get(context.getRequiredTestClass().getName()
         .replaceAll("\\.", Matcher.quoteReplacement(File.separator)));
