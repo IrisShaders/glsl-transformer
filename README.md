@@ -1,8 +1,8 @@
 # GLSL Parsing and Program Transformation with ANTLR4
 
-[![Maven Central](https://maven-badges.herokuapp.com/maven-central/io.github.douira/glsl-transformer/badge.svg)](https://maven-badges.herokuapp.com/maven-central/io.github.douira/glsl-transformer)
+[![Maven Central](https://img.shields.io/maven-central/v/io.github.douira/glsl-transformer)](https://central.sonatype.com/artifact/io.github.douira/glsl-transformer)
 [![javadoc](https://javadoc.io/badge2/io.github.douira/glsl-transformer/javadoc.svg)](https://javadoc.io/doc/io.github.douira/glsl-transformer)
-[![Gradle Build](https://github.com/douira/glsl-transformer/actions/workflows/gradle.yml/badge.svg)](https://github.com/douira/glsl-transformer/actions/workflows/gradle.yml)
+[![build](https://github.com/IrisShaders/glsl-transformer/actions/workflows/build.yml/badge.svg)](https://github.com/IrisShaders/glsl-transformer/actions/workflows/build.yml)
 
 [![ko-fi](https://ko-fi.com/img/githubbutton_sm.svg)](https://ko-fi.com/A0A27Y8FJ)
 
@@ -56,7 +56,7 @@ It also doesn't validate that features aren't used which may not be available in
 
 This project uses semver for versioning. If there are frequent breaking API changes then the major version will change frequently. This is the way.
 
-The library is written in and published for Java 16.
+The library is written in and published for Java 21.
 
 ## Credit
 
@@ -66,7 +66,7 @@ The files in `glslang-test` are from [glslang](https://github.com/KhronosGroup/g
 
 Of course all of this wouldn't be possible without ANTLR4 and its contributors, in particular Terence Parr, the creator of ANTLR and author of the ANTLR book. Thanks!
 
-This project includes parts of Apache Commons Collections in its respective package. Not all source files have been included since only those related to `Trie` are needed. Apache Commons Collections is licensed under the [Apache License 2.0](https://www.apache.org/licenses/LICENSE-2.0).
+This project includes parts of Apache Commons Collections in the `vendor.commons.collections4` package. Not all source files have been included since only those related to `Trie` are needed. Apache Commons Collections is licensed under the [Apache License 2.0](https://www.apache.org/licenses/LICENSE-2.0).
 
 ## Support
 
@@ -78,16 +78,16 @@ If something breaks, please make an issue report with sufficient details for fix
 
 ```bash
 # generate grammar sources to enable IDE usage
-gradle generateGrammarSource
+./gradlew generateGrammarSource
 
 # building also runs the tests
-gradle build
+./gradlew build
 
 # run the tests (also generates the jacoco coverage report)
-gradle test
+./gradlew test
 
 # generate javadoc
-gradle javadoc
+./gradlew javadoc
 ```
 
 ## Example

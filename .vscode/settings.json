@@ -1,5 +1,4 @@
 {
-  "java.project.sourcePaths": ["build/generated-src/antlr/main/"],
   "[java]": {
     "editor.suggest.snippetsPreventQuickSuggestions": false
   },
@@ -15,15 +14,7 @@
     "jacoco.xml",
     "jacocoTestReport.xml"
   ],
-  "java.import.gradle.java.home": "/Library/Java/JavaVirtualMachines/temurin-17.jdk/Contents/Home",
-  "java.configuration.runtimes": [
-    {
-      "name": "JavaSE-17",
-      "path": "/Library/Java/JavaVirtualMachines/temurin-17.jdk/Contents/Home",
-      "default": true
-    }
-  ],
-  "coverage-gutters.coverageBaseDir": "glsl-transformer/build/reports/jacoco/test",
+  "coverage-gutters.coverageBaseDir": "build/reports/jacoco/test",
   "java.sources.organizeImports.staticStarThreshold": 1,
   "java.sources.organizeImports.starThreshold": 2,
   "editor.detectIndentation": false,

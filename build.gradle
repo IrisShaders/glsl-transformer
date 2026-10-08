@@ -1,0 +1,184 @@
+plugins {
+  id 'java-library'
+  id 'antlr'
+  id 'maven-publish'
+  id 'jacoco'
+  alias(libs.plugins.test.logger)
+  alias(libs.plugins.jreleaser)
+  alias(libs.plugins.version.catalog.update)
+}
+
+// the version is set in gradle.properties
+group = 'io.github.douira'
+description = 'A GLSL parser and transformer based on ANTLR4'
+
+def repoOwner = 'IrisShaders'
+def repoUrl = "https://github.com/${repoOwner}/${name}"
+def generatedGrammarClasses = ['**/GLSLParser*', '**/GLSLLexer*']
+
+// the release title and notes are taken from the part of the changelog file below the separator
+def (releaseTitle, releaseNotes) = file('CHANGELOG.md').text
+    .split(/(?m)^-{10,}$/, 2)[1]
+    .replace('[Version]()', version)
+    .trim()
+    .split(/\R/, 2)*.trim()
+def releaseNotesFile = layout.buildDirectory.file('release-notes.md')
+
+repositories {
+  mavenCentral()
+}
+
+configurations {
+  // the antlr plugin adds the whole ANTLR tool as an api dependency, but only the runtime should be exposed
+  api.extendsFrom = api.extendsFrom.findAll { it != antlr }
+}
+
+dependencies {
+  antlr libs.antlr
+  api libs.antlr.runtime
+
+  testImplementation libs.junit.jupiter
+  testImplementation libs.snapshot.testing
+  testImplementation libs.slf4j.simple
+  testImplementation libs.jansi
+  testRuntimeOnly libs.junit.platform.launcher
+}
+
+java {
+  toolchain {
+    languageVersion = JavaLanguageVersion.of(21)
+  }
+  withJavadocJar()
+  withSourcesJar()
+}
+
+generateGrammarSource {
+  packageName = 'io.github.douira.glsl_transformer'
+  arguments += '-visitor'
+}
+
+test {
+  useJUnitPlatform()
+
+  // report is always generated after tests run
+  finalizedBy jacocoTestReport
+  testLogging.showStandardStreams = true
+  maxParallelForks = System.getenv('CI') ? 1 : Math.max(1, Runtime.runtime.availableProcessors().intdiv(2))
+}
+
+testlogger {
+  theme = 'standard-parallel'
+  slowThreshold = 5000
+  showSimpleNames = true
+  showPassed = false
+}
+
+jacocoTestReport {
+  // tests are required to run before generating the report
+  dependsOn test
+  reports.xml.required = true
+  classDirectories.setFrom(sourceSets.main.output.asFileTree.matching {
+    exclude generatedGrammarClasses
+  })
+}
+
+javadoc {
+  configure(options) {
+    tags = [
+      'implSpec:a:Implementation Requirements:',
+      'implNote:a:Implementation Note:',
+      'apiNote:a:API Usage Note:'
+    ]
+    links = ["https://javadoc.io/doc/org.antlr/antlr4-runtime/${libs.versions.antlr.get()}/".toString()]
+  }
+  exclude generatedGrammarClasses.collect { "${it}.java" }
+  exclude '**/vendor/**'
+}
+
+publishing {
+  publications {
+    mavenJava(MavenPublication) {
+      from components.java
+
+      pom {
+        name = project.name
+        description = project.description
+        url = repoUrl
+        licenses {
+          license {
+            name = 'GNU Affero General Public License v3.0'
+            url = 'https://www.gnu.org/licenses/agpl-3.0.en.html'
+          }
+        }
+        developers {
+          developer {
+            name = 'douira'
+            email = 'douira100@gmail.com'
+            url = 'https://douira.dev'
+          }
+        }
+        scm {
+          connection = "scm:git:git://github.com/${repoOwner}/${project.name}.git"
+          developerConnection = "scm:git:ssh://github.com/${repoOwner}/${project.name}.git"
+          url = repoUrl
+        }
+      }
+    }
+  }
+
+  // jreleaser deploys the artifacts from this local repository to Maven Central
+  repositories {
+    maven {
+      name = 'staging'
+      url = layout.buildDirectory.dir('staging-deploy')
+    }
+  }
+}
+
+def writeReleaseNotes = tasks.register('writeReleaseNotes') {
+  inputs.property('releaseNotes', releaseNotes)
+  outputs.file(releaseNotesFile)
+  doLast {
+    releaseNotesFile.get().asFile.text = releaseNotes
+  }
+}
+
+// Releases are made by running jreleaserFullRelease in the release workflow, see docs/development.md.
+// The secrets are provided to jreleaser through JRELEASER_* environment variables.
+jreleaser {
+  signing {
+    active = 'ALWAYS'
+    armored = true
+  }
+  deploy {
+    maven {
+      mavenCentral {
+        sonatype {
+          active = 'ALWAYS'
+          url = 'https://central.sonatype.com/api/v1/publisher'
+          stagingRepository('build/staging-deploy')
+        }
+      }
+    }
+  }
+  release {
+    github {
+      it.repoOwner = repoOwner
+      tagName = 'v{{projectVersion}}'
+      releaseName = "v{{projectVersion}} - ${releaseTitle}"
+      prerelease {
+        pattern = '.*-pre.*'
+      }
+      changelog {
+        external = releaseNotesFile
+      }
+    }
+  }
+}
+
+tasks.matching { it.name.startsWith('jreleaser') }.configureEach {
+  dependsOn writeReleaseNotes
+}
+tasks.named('jreleaserFullRelease') {
+  dependsOn publish
+}

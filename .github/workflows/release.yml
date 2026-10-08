@@ -1,0 +1,67 @@
+# Run manually to release the version set in gradle.properties with the release notes from CHANGELOG.md.
+# This builds and tests the project, publishes it to Maven Central and creates the tag and the GitHub release.
+# See docs/development.md for the release process.
+name: release
+
+on:
+  workflow_dispatch:
+    inputs:
+      dry-run:
+        description: Dry run that goes through all steps without publishing anything
+        type: boolean
+        default: false
+
+permissions:
+  contents: write # needed to create the tag and the GitHub release
+
+concurrency: release
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    environment: release
+
+    steps:
+      - name: Checkout sources
+        uses: actions/checkout@v7
+        with:
+          fetch-depth: 0
+
+      - name: Check that the version has not been released yet
+        if: ${{ !inputs.dry-run }}
+        run: |
+          tag="v$(sed -n 's/^version=//p' gradle.properties)"
+          if git ls-remote --exit-code --tags origin "refs/tags/$tag" > /dev/null; then
+            echo "::error::The tag $tag already exists, update the version in gradle.properties and the release notes in CHANGELOG.md"
+            exit 1
+          fi
+
+      - name: Setup Java 21
+        uses: actions/setup-java@v6
+        with:
+          distribution: temurin
+          java-version: 21
+
+      - name: Setup Gradle
+        uses: gradle/actions/setup-gradle@v6
+        with:
+          cache-read-only: true
+
+      - name: Build and test
+        run: ./gradlew build
+
+      - name: Upload artifacts
+        uses: actions/upload-artifact@v7
+        with:
+          name: glsl-transformer-artifacts
+          path: build/libs/
+
+      - name: Publish to Maven Central and create the tag and GitHub release
+        env:
+          JRELEASER_GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          JRELEASER_MAVENCENTRAL_USERNAME: ${{ secrets.JRELEASER_MAVENCENTRAL_USERNAME }}
+          JRELEASER_MAVENCENTRAL_PASSWORD: ${{ secrets.JRELEASER_MAVENCENTRAL_PASSWORD }}
+          JRELEASER_GPG_PUBLIC_KEY: ${{ secrets.JRELEASER_GPG_PUBLIC_KEY }}
+          JRELEASER_GPG_SECRET_KEY: ${{ secrets.JRELEASER_GPG_SECRET_KEY }}
+          JRELEASER_GPG_PASSPHRASE: ${{ secrets.JRELEASER_GPG_PASSPHRASE }}
+        run: ./gradlew jreleaserFullRelease ${{ inputs.dry-run && '--dryrun' || '' }}

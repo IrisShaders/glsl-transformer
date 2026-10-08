@@ -1,12 +1,27 @@
 # Release Publishing
 
-See [publish-on-central](https://github.com/DanySK/publish-on-central) for docs on how it works.
+Releases are made by the manually triggered [`release` workflow](../.github/workflows/release.yml). It builds and tests the project, publishes it to Maven Central, and creates the tag `vX.Y.Z` and the GitHub release. Publishing and the GitHub release are handled by [JReleaser](https://jreleaser.org/), which is configured in `build.gradle`.
 
-1. Test javadoc, compilation and tests with `CI=1 gradle build --warning-mode all`
-2. Bump the version in `build.gradle` and commit it
-3. Make a tag `git tag vX.Y.Z`
-4. Upload the tag `git push --tags`
-5. Release the build `gradle releaseJavaMavenOnMavenCentralNexus`
+1. Set the version of the release in `gradle.properties`. This is the only place the version is defined.
+2. Replace the release title and notes in `CHANGELOG.md` with those of the release. The file itself explains its format.
+3. Commit and push both changes and wait for the `build` workflow to succeed.
+4. Run the `release` workflow on the branch to release from, usually `main`: `gh workflow run release --ref main`
+
+The workflow has a dry run option (`gh workflow run release --ref main -f dry-run=true`) that goes through all steps, including signing, without publishing or tagging anything. Versions containing `-pre` are marked as pre-releases on GitHub.
+
+If the workflow fails after the artifacts were published to Maven Central, the version can't be published again. In that case create the tag and the GitHub release manually.
+
+The workflow needs the following secrets in the repository or in its `release` environment:
+
+- `JRELEASER_MAVENCENTRAL_USERNAME` and `JRELEASER_MAVENCENTRAL_PASSWORD`: a user token generated on the [Central Portal](https://central.sonatype.com/account)
+- `JRELEASER_GPG_PUBLIC_KEY` and `JRELEASER_GPG_SECRET_KEY`: the ASCII armored signing key pair, as exported with `gpg --armor --export KEY_ID` and `gpg --armor --export-secret-keys KEY_ID`
+- `JRELEASER_GPG_PASSPHRASE`: the passphrase of the signing key
+
+With the same secrets and a `JRELEASER_GITHUB_TOKEN` in `~/.jreleaser/config.properties`, the release can be tested locally with `./gradlew jreleaserFullRelease --dryrun`. Don't run it without `--dryrun`, actual releases should only be made by the workflow.
+
+# Updating Dependencies
+
+The versions of all dependencies and Gradle plugins are pinned in `gradle/libs.versions.toml`, the Gradle version is pinned by the wrapper. Running `./update-dependencies.sh` updates all of them to their latest stable versions and then builds and tests the project. Review the resulting changes before committing them. The versions of the GitHub actions used in the workflows are updated manually.
 
 # Other
 
@@ -18,17 +33,10 @@ NAME=the_shader_name; cat ./$NAME/**/*.{vsh,fsh,gsh,glsl} > $NAME.glsl
 
 Some cleanup maybe required. (this is sometimes useful when working with external test files)
 
-Setup signing: (secrets are kept in `~/.gradle/gradle.properties`)
-
-```
-gpg --keyring secring.gpg --export-secret-keys > ~/.gnupg/secring.gpg
-gpg --list-keys --keyid-format short
-```
-
 Testing only one class, in this case `GrammarDebugTest` can be done like this:
 
 ```
-gradle test --tests GrammarDebugTest
+./gradlew test --tests GrammarDebugTest
 ```
 
 # Development Notes

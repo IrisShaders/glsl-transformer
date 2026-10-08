@@ -1,0 +1,18 @@
+# All versions are pinned. Run ./update-dependencies.sh to update them and verify the build.
+[versions]
+antlr = "4.13.2"
+junit = "6.1.3"
+
+[libraries]
+antlr = { module = "org.antlr:antlr4", version.ref = "antlr" }
+antlr-runtime = { module = "org.antlr:antlr4-runtime", version.ref = "antlr" }
+jansi = "org.fusesource.jansi:jansi:2.4.3"
+junit-jupiter = { module = "org.junit.jupiter:junit-jupiter", version.ref = "junit" }
+junit-platform-launcher = { module = "org.junit.platform:junit-platform-launcher", version.ref = "junit" }
+slf4j-simple = "org.slf4j:slf4j-simple:2.0.20"
+snapshot-testing = "io.github.origin-energy:java-snapshot-testing-junit5:4.0.8"
+
+[plugins]
+jreleaser = "org.jreleaser:1.26.0"
+test-logger = "com.adarshr.test-logger:4.0.0"
+version-catalog-update = "nl.littlerobots.version-catalog-update:1.1.1"
