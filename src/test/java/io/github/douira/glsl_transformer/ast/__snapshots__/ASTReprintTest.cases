@@ -49,6 +49,12 @@
 §testReprint translationUnit:
 #extension foobar: disable
 
+§testReprint translationUnit:
+#extension all: warn
+
+§testReprint translationUnit:
+#extension all: disable
+
 §testReprint expression:
 1 + 2
 §testReprint expression:

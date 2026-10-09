@@ -78,7 +78,8 @@ pragmaDirective:
 	) NR_EOL;
 
 extensionDirective:
-	NR NR_EXTENSION extensionName = NR_IDENTIFIER (
+	//the name "all" is also a pragma keyword and therefore lexed as its own token
+	NR NR_EXTENSION extensionName = (NR_IDENTIFIER | NR_ALL) (
 		NR_COLON extensionBehavior = (
 			NR_REQUIRE
 			| NR_ENABLE

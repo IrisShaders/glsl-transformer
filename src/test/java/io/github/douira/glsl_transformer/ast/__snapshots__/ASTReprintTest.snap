@@ -7514,6 +7514,20 @@ layout(std430, set = 0, binding = 1) buffer ssbo { bool bo[2][3]; };
 ]
 
 
+testASTTree[translationUnit_OM2Yaa3mqhkZKIWhS2NggLKfTZk]=[
+#extension all: warn
+
+<><><><><><><><><><><><><><><><><><><><><><><><><>
+(TranslationUnit
+(ExtensionDirective
+- String all
+- ExtensionBehavior WARN
+)ExtensionDirective
+)TranslationUnit
+
+]
+
+
 testASTTree[translationUnit_Oe3uNA7tToJ6sM5PVeHrqzbnM8g]=[
 smooth out smo { int i; } smon;
 flat out fmo { int i; } fmon;
@@ -9961,6 +9975,20 @@ precision mediump float;
 )NumericTypeSpecifier
 )PrecisionDeclaration
 )DeclarationExternalDeclaration
+)TranslationUnit
+
+]
+
+
+testASTTree[translationUnit_ay7Hy0SaNBTWD2ho4VrA3w1AKR8]=[
+#extension all: disable
+
+<><><><><><><><><><><><><><><><><><><><><><><><><>
+(TranslationUnit
+(ExtensionDirective
+- String all
+- ExtensionBehavior DISABLE
+)ExtensionDirective
 )TranslationUnit
 
 ]
@@ -22976,6 +23004,20 @@ layout(std430, set = 0, binding = 1) buffer ssbo { bool bo[2][3]; };
 ]
 
 
+testTypedTree[translationUnit_OM2Yaa3mqhkZKIWhS2NggLKfTZk]=[
+#extension all: warn
+
+<><><><><><><><><><><><><><><><><><><><><><><><><>
+(TranslationUnit
+(ExtensionDirective
+- String all
+- ExtensionBehavior WARN
+)ExtensionDirective
+)TranslationUnit
+
+]
+
+
 testTypedTree[translationUnit_Oe3uNA7tToJ6sM5PVeHrqzbnM8g]=[
 smooth out smo { int i; } smon;
 flat out fmo { int i; } fmon;
@@ -25446,6 +25488,20 @@ precision mediump float;
 )NumericTypeSpecifier
 )PrecisionDeclaration
 )DeclarationExternalDeclaration
+)TranslationUnit
+
+]
+
+
+testTypedTree[translationUnit_ay7Hy0SaNBTWD2ho4VrA3w1AKR8]=[
+#extension all: disable
+
+<><><><><><><><><><><><><><><><><><><><><><><><><>
+(TranslationUnit
+(ExtensionDirective
+- String all
+- ExtensionBehavior DISABLE
+)ExtensionDirective
 )TranslationUnit
 
 ]

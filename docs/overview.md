@@ -133,5 +133,5 @@ The analysis is a type inference, not a complete validation of a shader. The fol
 - The compatibility profile state like `gl_ModelViewMatrix` is available in GLSL 1.40, as if `GL_ARB_compatibility` was enabled.
 - Overload resolution ranks the conversions of `out` parameters like those of `in` parameters.
 - The grammar parses a statement that only consists of a name or an indexed name, like `a;` or `a[i];`, as a declaration without declared names. Such a statement is not reported as an error if the name is a variable, but it is also not typed as an expression.
-- The grammar cannot parse `#extension all : ...` and does not have the separate texture and sampler types of Vulkan (`texture2D`, `sampler`, `subpassInput`). They are parsed as references to undeclared types.
+- The grammar does not have the separate texture and sampler types of Vulkan (`texture2D`, `sampler`, `subpassInput`). They are parsed as references to undeclared types.
 - Builtins of extensions that are not listed in the builtin definition files are reported as undeclared. `TypeCorpusTest.allowlist` lists the files of the glslang test suite that are affected by this.

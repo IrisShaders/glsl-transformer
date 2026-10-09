@@ -54,9 +54,9 @@ public record TypeEnvironment(Version version, Profile profile, ShaderStage stag
    * <p>
    * Extension directives are not treated positionally: an extension that is
    * enabled anywhere in the translation unit is enabled for all of it, unless
-   * a later directive disables it again. Each directive only affects the name
-   * it is written with: disabling {@link #ALL_EXTENSIONS} does not disable the
-   * extensions that were enabled by name.
+   * a later directive disables it again. A directive for the name
+   * {@link #ALL_EXTENSIONS} enables all extensions, or disables all extensions
+   * including those that were enabled by name.
    *
    * @param top the top node of the tree
    * @return the environment of the tree
@@ -71,11 +71,15 @@ public record TypeEnvironment(Version version, Profile profile, ShaderStage stag
     var extensions = new HashSet<String>();
     for (var child : translationUnit.getChildren()) {
       if (child instanceof ExtensionDirective directive) {
-        if (directive.behavior == ExtensionBehavior.DISABLE) {
-          extensions.remove(directive.getName());
-        } else {
+        if (directive.behavior != ExtensionBehavior.DISABLE) {
           extensions.add(directive.getName());
+        } else if (directive.getName().equals(ALL_EXTENSIONS)) {
+          // disabling all extensions also disables those that were enabled by name
+          extensions.clear();
+        } else {
+          extensions.remove(directive.getName());
         }
+
       }
     }
     return new TypeEnvironment(version, profile, null, extensions);

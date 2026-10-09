@@ -27,6 +27,9 @@ This release adds a type inference pass over the AST in the new `ast.typing` pac
 * The default implementation of `ASTVisitor.visitLiteralExpression` does not throw for string literals anymore. It passes the literal type (`StringType.INSTANCE` for strings) to `visitData` first.
 * `NumericType.getImplicitCasts()` and `isImplicitlyCastableTo` follow the conversion tables of `GL_EXT_shader_explicit_arithmetic_types` for the latest GLSL version. Use `Conversions.canImplicitlyConvert` to check conversions for a specific version.
 
+## Parsing fixes
+* `#extension all : warn` and `#extension all : disable` are parsed. Previously the name `all` was rejected because it is also a keyword of the pragma directives.
+
 ## Traversal and printing fixes (behavior changes)
 * The default traversal in `ASTVisitor` now visits the array specifier of `NumericTypeSpecifier`, `FixedTypeSpecifier`, `TypeReference` and `StructSpecifier` (`vec3[N] x`). Previously these nodes were skipped, so they kept their old root and stayed in its indexes when the surrounding tree was moved or deleted. Custom visitors and listeners now see `ArraySpecifier` nodes (and their contents) they did not see before.
 * The default traversal now visits the declaration in a while loop condition (`while (bool b = f())`), with the same consequences.

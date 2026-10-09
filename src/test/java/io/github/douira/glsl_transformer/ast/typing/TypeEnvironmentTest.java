@@ -4,15 +4,13 @@ import static io.github.douira.glsl_transformer.ast.typing.TypingTestUtil.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.*;
-import java.util.stream.Stream;
 
 import org.junit.jupiter.api.Test;
 
 import io.github.douira.glsl_transformer.ast.node.*;
 import io.github.douira.glsl_transformer.ast.node.external_declaration.ExtensionDirective;
-import io.github.douira.glsl_transformer.ast.node.external_declaration.ExtensionDirective.ExtensionBehavior;
-import io.github.douira.glsl_transformer.ast.query.RootSupplier;
-import io.github.douira.glsl_transformer.parser.*;
+import io.github.douira.glsl_transformer.ast.print.ASTPrinter;
+import io.github.douira.glsl_transformer.parser.ParseShape;
 
 public class TypeEnvironmentTest {
   @Test
@@ -103,25 +101,60 @@ public class TypeEnvironmentTest {
 
   @Test
   void testAllExtensions() {
-    // the name that stands for all extensions works like any other name
-    var root = RootSupplier.DEFAULT.get();
-    var enabled = root.indexNodes(() -> new TranslationUnit(Stream.of(
-        new ExtensionDirective("GL_A", ExtensionBehavior.ENABLE),
-        new ExtensionDirective(TypeEnvironment.ALL_EXTENSIONS, ExtensionBehavior.WARN))));
-    assertTrue(TypeEnvironment.of(enabled).hasExtension("GL_anything"));
-    var disabled = root.indexNodes(() -> new TranslationUnit(Stream.of(
-        new ExtensionDirective("GL_A", ExtensionBehavior.ENABLE),
-        new ExtensionDirective(TypeEnvironment.ALL_EXTENSIONS, ExtensionBehavior.WARN),
-        new ExtensionDirective(TypeEnvironment.ALL_EXTENSIONS, ExtensionBehavior.DISABLE))));
-    assertFalse(TypeEnvironment.of(disabled).hasExtension("GL_anything"));
+    var enabled = TypeEnvironment.of(parse("""
+        #extension GL_A : enable
+        #extension all : warn
+        """));
+    assertEquals(Set.of("GL_A", TypeEnvironment.ALL_EXTENSIONS), enabled.extensions());
+    assertTrue(enabled.hasExtension("GL_anything"));
 
-    // imprecision: disabling all extensions does not disable the extensions that
-    // were enabled by name
-    assertTrue(TypeEnvironment.of(disabled).hasExtension("GL_A"));
+    // disabling all extensions also disables the ones that were enabled by name
+    var disabled = TypeEnvironment.of(parse("""
+        #extension GL_A : enable
+        #extension all : warn
+        #extension all : disable
+        """));
+    assertTrue(disabled.extensions().isEmpty());
+    assertFalse(disabled.hasExtension("GL_anything"));
+    assertFalse(disabled.hasExtension("GL_A"));
 
-    // limitation of the grammar: an extension directive for all extensions
-    // cannot be parsed, so this can only come up in manually built trees
-    assertThrows(ParsingException.class, () -> parse("#extension all : warn\n"));
+    // extensions can be enabled again afterwards
+    assertEquals(Set.of("GL_B"), TypeEnvironment.of(parse("""
+        #extension GL_A : enable
+        #extension all : disable
+        #extension GL_B : enable
+        """)).extensions());
+
+    // the builtins of extensions are available with all extensions
+    assertEquals("ok", codes(analyze("""
+        #version 330 core
+        #extension all : warn
+        void main() { float f = fma(1.0, 2.0, 3.0); }
+        """)));
+    assertEquals("UNDECLARED_IDENTIFIER", codes(analyze("""
+        #version 330 core
+        #extension GL_ARB_gpu_shader5 : enable
+        #extension all : disable
+        void main() { float f = fma(1.0, 2.0, 3.0); }
+        """)));
+  }
+
+  @Test
+  void testAllExtensionsRoundTrip() {
+    // the name of all extensions used to be rejected by the parser
+    var tree = parse("#extension all : warn\n#extension all : disable\n#extension all\n");
+    var directives = tree.getRoot().nodeIndex.getStream(ExtensionDirective.class)
+        .sorted(Comparator.comparing(directive -> String.valueOf(directive.getBehavior()))).toList();
+    assertEquals(3, directives.size());
+    for (var directive : directives) {
+      assertEquals("all", directive.getName());
+    }
+    assertEquals(
+        "#extension all: warn\n#extension all: disable\n#extension all\n",
+        ASTPrinter.printSimple(tree));
+
+    // the keyword still works in the pragma it is a keyword of
+    assertDoesNotThrow(() -> parse("#pragma invariant(all)\n#pragma optionNV(unroll all)\n"));
   }
 
   @Test
