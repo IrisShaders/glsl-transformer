@@ -31,7 +31,6 @@ final class DeclarationAnalyzer {
     switch (node.getExternalDeclarationType()) {
       case FUNCTION_DEFINITION -> functionDefinition((FunctionDefinition) node);
       case DECLARATION -> declaration(((DeclarationExternalDeclaration) node).getDeclaration());
-      case LAYOUT_DEFAULTS -> layoutQualifier(((LayoutDefaults) node).getQualifier());
       case PRAGMA_DIRECTIVE, EXTENSION_DIRECTIVE, CUSTOM_DIRECTIVE, INCLUDE_DIRECTIVE, EMPTY_DECLARATION -> {
       }
     }

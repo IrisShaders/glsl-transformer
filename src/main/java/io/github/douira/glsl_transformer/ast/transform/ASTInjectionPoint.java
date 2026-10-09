@@ -18,16 +18,15 @@ public enum ASTInjectionPoint {
   },
 
   /**
-   * The last most index before any declaration, function definition or layout
-   * defaults.
+   * The last most index before any declaration or function definition. Layout
+   * defaults like {@code layout(std140) uniform;} are declarations.
    */
   BEFORE_DECLARATIONS() {
     @Override
     public int getInjectionIndex(TranslationUnit translationUnit) {
       return findLastIndexWith(translationUnit,
           node -> node instanceof FunctionDefinition
-              || node instanceof DeclarationExternalDeclaration
-              || node instanceof LayoutDefaults);
+              || node instanceof DeclarationExternalDeclaration);
     }
   },
 

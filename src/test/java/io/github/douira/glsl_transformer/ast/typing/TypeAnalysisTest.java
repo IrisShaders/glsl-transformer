@@ -15,7 +15,6 @@ import io.github.douira.glsl_transformer.ast.node.expression.*;
 import io.github.douira.glsl_transformer.ast.node.expression.binary.*;
 import io.github.douira.glsl_transformer.ast.node.expression.unary.*;
 import io.github.douira.glsl_transformer.ast.node.external_declaration.*;
-import io.github.douira.glsl_transformer.ast.node.external_declaration.LayoutDefaults.LayoutMode;
 import io.github.douira.glsl_transformer.ast.node.statement.*;
 import io.github.douira.glsl_transformer.ast.node.statement.loop.*;
 import io.github.douira.glsl_transformer.ast.node.statement.selection.*;
@@ -414,24 +413,17 @@ public class TypeAnalysisTest {
   }
 
   @Test
-  void testLayoutDefaults() {
-    // the parser produces a variable declaration for layout defaults, the layout
-    // defaults node is only created manually
-    var literal = new LiteralExpression[1];
-    var missing = new ReferenceExpression[1];
-    var node = RootSupplier.DEFAULT.get().indexNodes(() -> {
-      literal[0] = new LiteralExpression(NumericType.INT32, 3);
-      missing[0] = new ReferenceExpression(new Identifier("missing"));
-      return new LayoutDefaults(new LayoutQualifier(Stream.of(
-          new NamedLayoutQualifierPart(new Identifier("location"), literal[0]),
-          new NamedLayoutQualifierPart(new Identifier("binding"), missing[0]),
-          new NamedLayoutQualifierPart(new Identifier("std140")),
-          new SharedLayoutQualifierPart())), LayoutMode.UNIFORM);
-    });
-    var analysis = new TypeAnalyzer().analyze(node);
-    assertSame(NumericType.INT32, analysis.typeOf(literal[0]));
-    assertSame(ErrorType.INSTANCE, analysis.typeOf(missing[0]));
+  void testLayoutQualifierParts() {
+    // layout defaults are variable declarations without names
+    var analysis = analyze("""
+        #version 460
+        layout(location = 3, binding = missing, std140, shared) uniform;
+        """);
+    var literal = one(analysis.getTop(), LiteralExpression.class);
+    assertSame(NumericType.INT32, analysis.typeOf(literal));
+    assertSame(ErrorType.INSTANCE, analysis.typeOf(reference(analysis.getTop(), "missing")));
     assertEquals("UNDECLARED_IDENTIFIER", codes(analysis));
+    assertTrue(one(analysis.getTop(), VariableDeclaration.class).isQualifierDefault());
   }
 
   @Test

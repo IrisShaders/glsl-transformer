@@ -208,13 +208,6 @@ public class ASTPrinter extends ASTPrinterBase {
   }
 
   @Override
-  public void exitLayoutDefaults(LayoutDefaults node) {
-    emitType(node.mode.tokenType);
-    emitBreakableSpace();
-    emitStatementEnd();
-  }
-
-  @Override
   public void enterExpression(Expression node) {
     // emit extra parentheses if necessary to preserve the semantics of the AST in
     // the printed code

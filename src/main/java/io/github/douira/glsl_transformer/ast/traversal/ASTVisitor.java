@@ -67,12 +67,6 @@ public interface ASTVisitor<R> extends GeneralASTVisitor<R> {
     return visit(node.getDeclaration());
   }
 
-  default R visitLayoutDefaults(LayoutDefaults node) {
-    var result = visit(node.getQualifier());
-    result = aggregateResult(result, visitData(node.mode));
-    return result;
-  }
-
   default R visitExpression(Expression node) {
     return superNodeTypeResult();
   }

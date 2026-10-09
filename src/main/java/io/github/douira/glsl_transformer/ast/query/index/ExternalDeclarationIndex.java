@@ -52,7 +52,7 @@ public class ExternalDeclarationIndex<S extends Set<DeclarationEntry>, I extends
       memberConsumer.accept(node, includeDirective.getContent());
     }
 
-    // skips PragmaDirective, LayoutDefaults, EmptyDeclaration
+    // skips PragmaDirective, EmptyDeclaration
   }
 
   private void addEntry(ExternalDeclaration node, ASTNode keyMember, String key) {

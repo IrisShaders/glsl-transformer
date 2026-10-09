@@ -39,12 +39,6 @@ public interface ASTListener extends GeneralASTListener {
   default void exitFunctionDefinition(FunctionDefinition node) {
   }
 
-  default void enterLayoutDefaults(LayoutDefaults node) {
-  }
-
-  default void exitLayoutDefaults(LayoutDefaults node) {
-  }
-
   default void enterDeclarationExternalDeclaration(DeclarationExternalDeclaration node) {
   }
 

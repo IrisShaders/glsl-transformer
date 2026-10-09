@@ -18,7 +18,6 @@ import io.github.douira.glsl_transformer.ast.node.expression.binary.*;
 import io.github.douira.glsl_transformer.ast.node.expression.unary.*;
 import io.github.douira.glsl_transformer.ast.node.external_declaration.*;
 import io.github.douira.glsl_transformer.ast.node.external_declaration.ExtensionDirective.ExtensionBehavior;
-import io.github.douira.glsl_transformer.ast.node.external_declaration.LayoutDefaults.LayoutMode;
 import io.github.douira.glsl_transformer.ast.node.external_declaration.PragmaDirective.*;
 import io.github.douira.glsl_transformer.ast.node.statement.*;
 import io.github.douira.glsl_transformer.ast.node.statement.loop.*;
@@ -251,13 +250,6 @@ public class ASTBuilder extends GLSLParserBaseVisitor<ASTNode> {
   @Override
   public IncludeDirective visitIncludeDirective(IncludeDirectiveContext ctx) {
     return new IncludeDirective(applySafe(ctx.content, Token::getText), ctx.angleStart != null);
-  }
-
-  @Override
-  public LayoutDefaults visitLayoutDefaults(LayoutDefaultsContext ctx) {
-    return new LayoutDefaults(
-        visitLayoutQualifier(ctx.layoutQualifier()),
-        LayoutMode.fromToken(ctx.layoutMode));
   }
 
   @Override

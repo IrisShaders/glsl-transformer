@@ -57,6 +57,7 @@ This release contains breaking changes. Most of them are renames that can be app
 | `initialResult()` in `GeneralASTVisitor`, `ASTBaseVisitor`, `ASTVoidVisitor` and `ASTPrinterBase` | removed, remove overrides |
 | `ASTPrinterBase.visitSafe(ASTNode)` returning `boolean` | `visitSafeSignal(ASTNode)` |
 | grammar rules `builtinTypeSpecifierParseable` and `builtinTypeSpecifierFixed` | `numericTypeSpecifier` and `fixedTypeSpecifier`, with the generated parser methods, context classes and visitor and listener methods named accordingly |
+| `LayoutDefaults`, `LayoutDefaults.LayoutMode`, `ExternalDeclarationType.LAYOUT_DEFAULTS`, `visitLayoutDefaults`, `enterLayoutDefaults`, `exitLayoutDefaults` and the grammar rule `layoutDefaults` | removed, see below |
 | `org.apache.commons.collections4.*` (the vendored trie classes) | `io.github.douira.glsl_transformer.vendor.commons.collections4.*` |
 
 Things to watch out for:
@@ -68,9 +69,11 @@ Things to watch out for:
 * The default traversal visits more nodes and `visitLiteralExpression` passes different data, see the sections above.
 * The project is built with a Java 21 toolchain.
 
+`LayoutDefaults` was removed because the parser never produced it. Layout defaults like `layout(std140) uniform;` or `layout(triangles) in;` have always been parsed as a `VariableDeclaration` without names inside of a `DeclarationExternalDeclaration`, since the grammar rule for declarations matches them first. This is also how glslang treats them: as a declaration that only consists of qualifiers. Nothing changes for parsed trees. Code that looked for `LayoutDefaults` nodes never found any and should look for `VariableDeclaration` nodes instead, which have new helpers for this: `isQualifierDefault()` is true if there are no names, `getLayoutQualifier()` returns the layout qualifier and `hasStorageType(StorageType.IN)` checks for a storage qualifier. Code that constructed `LayoutDefaults` nodes manually has to construct a `VariableDeclaration` with a `TypeQualifier` that contains the `LayoutQualifier` and a `StorageQualifier`.
+
 The public fields `NumericTypeSpecifier.type`, `FixedTypeSpecifier.type`, `StorageQualifier.storageType`, `VersionStatement.version`, `VersionStatement.profile` and `ExtensionDirective.behavior` remain. The new setters next to them additionally invalidate the cached type analysis.
 
-According to the API report (`./gradlew apiReport`), compared to 3.0.0-pre3 and not counting the classes generated from the grammar and the vendored classes: 33 classes were added, 7 were removed (the renamed and moved ones in the table) and 23 were modified, 17 of them incompatibly. Of the generated grammar classes 2 were removed, 2 were added and 4 were modified incompatibly, all because of the two renamed rules.
+According to the API report (`./gradlew apiReport`), compared to 3.0.0-pre3 and not counting the classes generated from the grammar and the vendored classes: 33 classes were added, 9 were removed (the renamed, moved and removed ones in the table) and 27 were modified, 20 of them incompatibly. Of the generated grammar classes 3 were removed, 2 were added and 8 were modified, 5 of them incompatibly, because of the two renamed rules and the removed `layoutDefaults` rule.
 
 ## Other changes
 * pragma optionNV support by @drouarb in https://github.com/IrisShaders/glsl-transformer/pull/21

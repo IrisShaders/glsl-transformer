@@ -60,7 +60,6 @@ externalDeclaration:
 	| extensionDirective
 	| customDirective
 	| includeDirective
-	| layoutDefaults
 	| emptyDeclaration;
 
 emptyDeclaration: SEMICOLON;
@@ -95,9 +94,6 @@ includeDirective:
 		NR_STRING_START content = NR_S_CONTENT? NR_S_STRING_END
 		| angleStart = NR_STRING_START_ANGLE content = NR_SA_CONTENT? NR_SA_STRING_END
 	) NR_EOL;
-
-layoutDefaults:
-	layoutQualifier layoutMode = (UNIFORM | IN | OUT | BUFFER) SEMICOLON;
 
 functionDefinition: functionPrototype compoundStatement;
 
