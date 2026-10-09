@@ -3863,6 +3863,29 @@ while (int a = 4 > 4);
 
 <><><><><><><><><><><><><><><><><><><><><><><><><>
 (WhileLoopStatement
+(IterationConditionInitializer
+(FullySpecifiedType
+(NumericTypeSpecifier
+- NumericType INT32
+)NumericTypeSpecifier
+)FullySpecifiedType
+(Identifier)
+- String a
+(ExpressionInitializer
+(GreaterThanExpression
+(LiteralExpression
+- NumericType INT32
+- Integer 4
+- IntegerFormat DECIMAL
+)LiteralExpression
+(LiteralExpression
+- NumericType INT32
+- Integer 4
+- IntegerFormat DECIMAL
+)LiteralExpression
+)GreaterThanExpression
+)ExpressionInitializer
+)IterationConditionInitializer
 (EmptyStatement
 )EmptyStatement
 )WhileLoopStatement
@@ -4510,6 +4533,29 @@ testASTTree[statement_tsTIY7zQNPM5vcVLJtpGRCAIjn4]=[
 <><><><><><><><><><><><><><><><><><><><><><><><><>
 (CompoundStatement
 (WhileLoopStatement
+(IterationConditionInitializer
+(FullySpecifiedType
+(NumericTypeSpecifier
+- NumericType INT32
+)NumericTypeSpecifier
+)FullySpecifiedType
+(Identifier)
+- String a
+(ExpressionInitializer
+(GreaterThanExpression
+(LiteralExpression
+- NumericType INT32
+- Integer 4
+- IntegerFormat DECIMAL
+)LiteralExpression
+(LiteralExpression
+- NumericType INT32
+- Integer 4
+- IntegerFormat DECIMAL
+)LiteralExpression
+)GreaterThanExpression
+)ExpressionInitializer
+)IterationConditionInitializer
 (EmptyStatement
 )EmptyStatement
 )WhileLoopStatement
@@ -6199,6 +6245,13 @@ const vec2 longList[75] = vec2[75](vec2(1, 2), vec2(1, 2), vec2(1, 2), vec2(1, 2
 (FunctionCallExpression
 (NumericTypeSpecifier
 - NumericType F32VEC2
+(ArraySpecifier
+(LiteralExpression
+- NumericType INT32
+- Integer 75
+- IntegerFormat DECIMAL
+)LiteralExpression
+)ArraySpecifier
 )NumericTypeSpecifier
 (FunctionCallExpression
 (NumericTypeSpecifier
@@ -10559,6 +10612,13 @@ precision highp uimageBuffer;
 (FunctionCallExpression
 (NumericTypeSpecifier
 - NumericType I32VEC2
+(ArraySpecifier
+(LiteralExpression
+- NumericType INT32
+- Integer 4
+- IntegerFormat DECIMAL
+)LiteralExpression
+)ArraySpecifier
 )NumericTypeSpecifier
 (FunctionCallExpression
 (NumericTypeSpecifier
@@ -10942,6 +11002,13 @@ in inbname { float[7] f[8][9]; } inbinst[4][5][6];
 (FullySpecifiedType
 (NumericTypeSpecifier
 - NumericType INT32
+(ArraySpecifier
+(LiteralExpression
+- NumericType INT32
+- Integer 3
+- IntegerFormat DECIMAL
+)LiteralExpression
+)ArraySpecifier
 )NumericTypeSpecifier
 )FullySpecifiedType
 (StructDeclarator
@@ -10991,6 +11058,13 @@ in inbname { float[7] f[8][9]; } inbinst[4][5][6];
 (FullySpecifiedType
 (NumericTypeSpecifier
 - NumericType INT32
+(ArraySpecifier
+(LiteralExpression
+- NumericType INT32
+- Integer 5
+- IntegerFormat DECIMAL
+)LiteralExpression
+)ArraySpecifier
 )NumericTypeSpecifier
 )FullySpecifiedType
 (DeclarationMember
@@ -11022,6 +11096,13 @@ in inbname { float[7] f[8][9]; } inbinst[4][5][6];
 (FullySpecifiedType
 (NumericTypeSpecifier
 - NumericType INT32
+(ArraySpecifier
+(LiteralExpression
+- NumericType INT32
+- Integer 9
+- IntegerFormat DECIMAL
+)LiteralExpression
+)ArraySpecifier
 )NumericTypeSpecifier
 )FullySpecifiedType
 (DeclarationMember
@@ -11093,6 +11174,13 @@ in inbname { float[7] f[8][9]; } inbinst[4][5][6];
 (FullySpecifiedType
 (NumericTypeSpecifier
 - NumericType INT32
+(ArraySpecifier
+(LiteralExpression
+- NumericType INT32
+- Integer 14
+- IntegerFormat DECIMAL
+)LiteralExpression
+)ArraySpecifier
 )NumericTypeSpecifier
 )FullySpecifiedType
 (DeclarationMember
@@ -11114,6 +11202,23 @@ in inbname { float[7] f[8][9]; } inbinst[4][5][6];
 (FullySpecifiedType
 (NumericTypeSpecifier
 - NumericType INT32
+(ArraySpecifier
+(LiteralExpression
+- NumericType INT32
+- Integer 14
+- IntegerFormat DECIMAL
+)LiteralExpression
+(LiteralExpression
+- NumericType INT32
+- Integer 15
+- IntegerFormat DECIMAL
+)LiteralExpression
+(LiteralExpression
+- NumericType INT32
+- Integer 6
+- IntegerFormat DECIMAL
+)LiteralExpression
+)ArraySpecifier
 )NumericTypeSpecifier
 )FullySpecifiedType
 (Identifier)
@@ -11122,6 +11227,13 @@ in inbname { float[7] f[8][9]; } inbinst[4][5][6];
 (FullySpecifiedType
 (NumericTypeSpecifier
 - NumericType INT32
+(ArraySpecifier
+(LiteralExpression
+- NumericType INT32
+- Integer 6
+- IntegerFormat DECIMAL
+)LiteralExpression
+)ArraySpecifier
 )NumericTypeSpecifier
 )FullySpecifiedType
 (Identifier)
@@ -11166,6 +11278,13 @@ in inbname { float[7] f[8][9]; } inbinst[4][5][6];
 (TypeReference
 (Identifier)
 - String g
+(ArraySpecifier
+(LiteralExpression
+- NumericType INT32
+- Integer 3
+- IntegerFormat DECIMAL
+)LiteralExpression
+)ArraySpecifier
 )TypeReference
 )FullySpecifiedType
 )TypeAndInitDeclaration
@@ -11176,6 +11295,13 @@ in inbname { float[7] f[8][9]; } inbinst[4][5][6];
 (TypeReference
 (Identifier)
 - String h
+(ArraySpecifier
+(LiteralExpression
+- NumericType INT32
+- Integer 2
+- IntegerFormat DECIMAL
+)LiteralExpression
+)ArraySpecifier
 )TypeReference
 )FullySpecifiedType
 )TypeAndInitDeclaration
@@ -11187,6 +11313,23 @@ in inbname { float[7] f[8][9]; } inbinst[4][5][6];
 (FullySpecifiedType
 (NumericTypeSpecifier
 - NumericType FLOAT32
+(ArraySpecifier
+(LiteralExpression
+- NumericType INT32
+- Integer 4
+- IntegerFormat DECIMAL
+)LiteralExpression
+(LiteralExpression
+- NumericType INT32
+- Integer 3
+- IntegerFormat DECIMAL
+)LiteralExpression
+(LiteralExpression
+- NumericType INT32
+- Integer 2
+- IntegerFormat DECIMAL
+)LiteralExpression
+)ArraySpecifier
 )NumericTypeSpecifier
 )FullySpecifiedType
 (Identifier)
@@ -11198,6 +11341,18 @@ in inbname { float[7] f[8][9]; } inbinst[4][5][6];
 (FullySpecifiedType
 (NumericTypeSpecifier
 - NumericType FLOAT32
+(ArraySpecifier
+(LiteralExpression
+- NumericType INT32
+- Integer 3
+- IntegerFormat DECIMAL
+)LiteralExpression
+(LiteralExpression
+- NumericType INT32
+- Integer 2
+- IntegerFormat DECIMAL
+)LiteralExpression
+)ArraySpecifier
 )NumericTypeSpecifier
 )FullySpecifiedType
 (DeclarationMember
@@ -11235,6 +11390,13 @@ in inbname { float[7] f[8][9]; } inbinst[4][5][6];
 (FullySpecifiedType
 (NumericTypeSpecifier
 - NumericType FLOAT32
+(ArraySpecifier
+(LiteralExpression
+- NumericType INT32
+- Integer 7
+- IntegerFormat DECIMAL
+)LiteralExpression
+)ArraySpecifier
 )NumericTypeSpecifier
 )FullySpecifiedType
 (StructDeclarator
@@ -11415,6 +11577,13 @@ layout(input_attachment_index = 2) uniform subpassInputMS subDMS;
 (FunctionCallExpression
 (FixedTypeSpecifier
 - FixedType SAMPLER3D
+(ArraySpecifier
+(LiteralExpression
+- NumericType INT32
+- Integer 4
+- IntegerFormat DECIMAL
+)LiteralExpression
+)ArraySpecifier
 )FixedTypeSpecifier
 (ReferenceExpression
 (Identifier)
@@ -11551,6 +11720,13 @@ layout(input_attachment_index = 2) uniform subpassInputMS subDMS;
 (FunctionCallExpression
 (FixedTypeSpecifier
 - FixedType SAMPLER3D
+(ArraySpecifier
+(LiteralExpression
+- NumericType INT32
+- Integer 4
+- IntegerFormat DECIMAL
+)LiteralExpression
+)ArraySpecifier
 )FixedTypeSpecifier
 (ReferenceExpression
 (Identifier)
@@ -12115,6 +12291,8 @@ int foob__vn8[4] = int[](21, 22, 23, 24), foob__vp;
 (FunctionCallExpression
 (NumericTypeSpecifier
 - NumericType INT32
+(ArraySpecifier
+)ArraySpecifier
 )NumericTypeSpecifier
 (LiteralExpression
 - NumericType INT32
@@ -12166,6 +12344,8 @@ int foob__vn8[4] = int[](21, 22, 23, 24), foob__vp;
 (FunctionCallExpression
 (NumericTypeSpecifier
 - NumericType INT32
+(ArraySpecifier
+)ArraySpecifier
 )NumericTypeSpecifier
 (LiteralExpression
 - NumericType INT32
@@ -12218,6 +12398,8 @@ int foob__vn8[4] = int[](21, 22, 23, 24), foob__vp;
 (FunctionCallExpression
 (NumericTypeSpecifier
 - NumericType INT32
+(ArraySpecifier
+)ArraySpecifier
 )NumericTypeSpecifier
 (LiteralExpression
 - NumericType INT32
@@ -12246,6 +12428,8 @@ int foob__vn8[4] = int[](21, 22, 23, 24), foob__vp;
 (FunctionCallExpression
 (NumericTypeSpecifier
 - NumericType INT32
+(ArraySpecifier
+)ArraySpecifier
 )NumericTypeSpecifier
 (LiteralExpression
 - NumericType INT32
@@ -12288,6 +12472,8 @@ int foob__vn8[4] = int[](21, 22, 23, 24), foob__vp;
 (FunctionCallExpression
 (NumericTypeSpecifier
 - NumericType INT32
+(ArraySpecifier
+)ArraySpecifier
 )NumericTypeSpecifier
 (LiteralExpression
 - NumericType INT32
@@ -12339,6 +12525,8 @@ int foob__vn8[4] = int[](21, 22, 23, 24), foob__vp;
 (FunctionCallExpression
 (NumericTypeSpecifier
 - NumericType INT32
+(ArraySpecifier
+)ArraySpecifier
 )NumericTypeSpecifier
 (LiteralExpression
 - NumericType INT32
@@ -12390,6 +12578,8 @@ int foob__vn8[4] = int[](21, 22, 23, 24), foob__vp;
 (FunctionCallExpression
 (NumericTypeSpecifier
 - NumericType INT32
+(ArraySpecifier
+)ArraySpecifier
 )NumericTypeSpecifier
 (LiteralExpression
 - NumericType INT32
@@ -12442,6 +12632,8 @@ int foob__vn8[4] = int[](21, 22, 23, 24), foob__vp;
 (FunctionCallExpression
 (NumericTypeSpecifier
 - NumericType INT32
+(ArraySpecifier
+)ArraySpecifier
 )NumericTypeSpecifier
 (LiteralExpression
 - NumericType INT32
@@ -12470,6 +12662,8 @@ int foob__vn8[4] = int[](21, 22, 23, 24), foob__vp;
 (FunctionCallExpression
 (NumericTypeSpecifier
 - NumericType INT32
+(ArraySpecifier
+)ArraySpecifier
 )NumericTypeSpecifier
 (LiteralExpression
 - NumericType INT32
@@ -12512,6 +12706,8 @@ int foob__vn8[4] = int[](21, 22, 23, 24), foob__vp;
 (FunctionCallExpression
 (NumericTypeSpecifier
 - NumericType INT32
+(ArraySpecifier
+)ArraySpecifier
 )NumericTypeSpecifier
 (LiteralExpression
 - NumericType INT32
@@ -12568,6 +12764,8 @@ int foob__vn8[4] = int[](21, 22, 23, 24), foob__vp;
 (FunctionCallExpression
 (NumericTypeSpecifier
 - NumericType INT32
+(ArraySpecifier
+)ArraySpecifier
 )NumericTypeSpecifier
 (LiteralExpression
 - NumericType INT32
@@ -12624,6 +12822,8 @@ int foob__vn8[4] = int[](21, 22, 23, 24), foob__vp;
 (FunctionCallExpression
 (NumericTypeSpecifier
 - NumericType INT32
+(ArraySpecifier
+)ArraySpecifier
 )NumericTypeSpecifier
 (LiteralExpression
 - NumericType INT32
@@ -12681,6 +12881,8 @@ int foob__vn8[4] = int[](21, 22, 23, 24), foob__vp;
 (FunctionCallExpression
 (NumericTypeSpecifier
 - NumericType INT32
+(ArraySpecifier
+)ArraySpecifier
 )NumericTypeSpecifier
 (LiteralExpression
 - NumericType INT32
@@ -12709,6 +12911,8 @@ int foob__vn8[4] = int[](21, 22, 23, 24), foob__vp;
 (FunctionCallExpression
 (NumericTypeSpecifier
 - NumericType INT32
+(ArraySpecifier
+)ArraySpecifier
 )NumericTypeSpecifier
 (LiteralExpression
 - NumericType INT32
@@ -12756,6 +12960,8 @@ int foob__vn8[4] = int[](21, 22, 23, 24), foob__vp;
 (FunctionCallExpression
 (NumericTypeSpecifier
 - NumericType INT32
+(ArraySpecifier
+)ArraySpecifier
 )NumericTypeSpecifier
 (LiteralExpression
 - NumericType INT32
@@ -12812,6 +13018,8 @@ int foob__vn8[4] = int[](21, 22, 23, 24), foob__vp;
 (FunctionCallExpression
 (NumericTypeSpecifier
 - NumericType INT32
+(ArraySpecifier
+)ArraySpecifier
 )NumericTypeSpecifier
 (LiteralExpression
 - NumericType INT32
@@ -12868,6 +13076,8 @@ int foob__vn8[4] = int[](21, 22, 23, 24), foob__vp;
 (FunctionCallExpression
 (NumericTypeSpecifier
 - NumericType INT32
+(ArraySpecifier
+)ArraySpecifier
 )NumericTypeSpecifier
 (LiteralExpression
 - NumericType INT32
@@ -12925,6 +13135,8 @@ int foob__vn8[4] = int[](21, 22, 23, 24), foob__vp;
 (FunctionCallExpression
 (NumericTypeSpecifier
 - NumericType INT32
+(ArraySpecifier
+)ArraySpecifier
 )NumericTypeSpecifier
 (LiteralExpression
 - NumericType INT32
@@ -12953,6 +13165,8 @@ int foob__vn8[4] = int[](21, 22, 23, 24), foob__vp;
 (FunctionCallExpression
 (NumericTypeSpecifier
 - NumericType INT32
+(ArraySpecifier
+)ArraySpecifier
 )NumericTypeSpecifier
 (LiteralExpression
 - NumericType INT32
@@ -13000,6 +13214,8 @@ int foob__vn8[4] = int[](21, 22, 23, 24), foob__vp;
 (FunctionCallExpression
 (NumericTypeSpecifier
 - NumericType INT32
+(ArraySpecifier
+)ArraySpecifier
 )NumericTypeSpecifier
 (LiteralExpression
 - NumericType INT32
@@ -13051,6 +13267,8 @@ int foob__vn8[4] = int[](21, 22, 23, 24), foob__vp;
 (FunctionCallExpression
 (NumericTypeSpecifier
 - NumericType INT32
+(ArraySpecifier
+)ArraySpecifier
 )NumericTypeSpecifier
 (LiteralExpression
 - NumericType INT32
@@ -13102,6 +13320,8 @@ int foob__vn8[4] = int[](21, 22, 23, 24), foob__vp;
 (FunctionCallExpression
 (NumericTypeSpecifier
 - NumericType INT32
+(ArraySpecifier
+)ArraySpecifier
 )NumericTypeSpecifier
 (LiteralExpression
 - NumericType INT32
@@ -13154,6 +13374,8 @@ int foob__vn8[4] = int[](21, 22, 23, 24), foob__vp;
 (FunctionCallExpression
 (NumericTypeSpecifier
 - NumericType INT32
+(ArraySpecifier
+)ArraySpecifier
 )NumericTypeSpecifier
 (LiteralExpression
 - NumericType INT32
@@ -13182,6 +13404,8 @@ int foob__vn8[4] = int[](21, 22, 23, 24), foob__vp;
 (FunctionCallExpression
 (NumericTypeSpecifier
 - NumericType INT32
+(ArraySpecifier
+)ArraySpecifier
 )NumericTypeSpecifier
 (LiteralExpression
 - NumericType INT32
@@ -13224,6 +13448,8 @@ int foob__vn8[4] = int[](21, 22, 23, 24), foob__vp;
 (FunctionCallExpression
 (NumericTypeSpecifier
 - NumericType INT32
+(ArraySpecifier
+)ArraySpecifier
 )NumericTypeSpecifier
 (LiteralExpression
 - NumericType INT32
@@ -13266,14 +13492,71 @@ int foob__vn8[4] = int[](21, 22, 23, 24), foob__vp;
 )FunctionPrototype
 (CompoundStatement
 (WhileLoopStatement
+(IterationConditionInitializer
+(FullySpecifiedType
+(NumericTypeSpecifier
+- NumericType BOOL
+)NumericTypeSpecifier
+)FullySpecifiedType
+(Identifier)
+- String cond
+(ExpressionInitializer
+(LessThanExpression
+(ReferenceExpression
+(Identifier)
+- String b
+)ReferenceExpression
+(ReferenceExpression
+(Identifier)
+- String c
+)ReferenceExpression
+)LessThanExpression
+)ExpressionInitializer
+)IterationConditionInitializer
 (EmptyStatement
 )EmptyStatement
 )WhileLoopStatement
 (WhileLoopStatement
+(IterationConditionInitializer
+(FullySpecifiedType
+(NumericTypeSpecifier
+- NumericType INT32
+)NumericTypeSpecifier
+)FullySpecifiedType
+(Identifier)
+- String icond
+(ExpressionInitializer
+(ReferenceExpression
+(Identifier)
+- String b
+)ReferenceExpression
+)ExpressionInitializer
+)IterationConditionInitializer
 (EmptyStatement
 )EmptyStatement
 )WhileLoopStatement
 (WhileLoopStatement
+(IterationConditionInitializer
+(FullySpecifiedType
+(NumericTypeSpecifier
+- NumericType BOOL
+)NumericTypeSpecifier
+)FullySpecifiedType
+(Identifier)
+- String gl_cond
+(ExpressionInitializer
+(LessThanExpression
+(ReferenceExpression
+(Identifier)
+- String b
+)ReferenceExpression
+(ReferenceExpression
+(Identifier)
+- String c
+)ReferenceExpression
+)LessThanExpression
+)ExpressionInitializer
+)IterationConditionInitializer
 (EmptyStatement
 )EmptyStatement
 )WhileLoopStatement
@@ -13300,6 +13583,8 @@ int foob__vn8[4] = int[](21, 22, 23, 24), foob__vp;
 (FunctionCallExpression
 (NumericTypeSpecifier
 - NumericType INT32
+(ArraySpecifier
+)ArraySpecifier
 )NumericTypeSpecifier
 (LiteralExpression
 - NumericType INT32
@@ -13351,6 +13636,8 @@ int foob__vn8[4] = int[](21, 22, 23, 24), foob__vp;
 (FunctionCallExpression
 (NumericTypeSpecifier
 - NumericType INT32
+(ArraySpecifier
+)ArraySpecifier
 )NumericTypeSpecifier
 (LiteralExpression
 - NumericType INT32
@@ -13403,6 +13690,8 @@ int foob__vn8[4] = int[](21, 22, 23, 24), foob__vp;
 (FunctionCallExpression
 (NumericTypeSpecifier
 - NumericType INT32
+(ArraySpecifier
+)ArraySpecifier
 )NumericTypeSpecifier
 (LiteralExpression
 - NumericType INT32
@@ -13431,6 +13720,8 @@ int foob__vn8[4] = int[](21, 22, 23, 24), foob__vp;
 (FunctionCallExpression
 (NumericTypeSpecifier
 - NumericType INT32
+(ArraySpecifier
+)ArraySpecifier
 )NumericTypeSpecifier
 (LiteralExpression
 - NumericType INT32
@@ -13473,6 +13764,8 @@ int foob__vn8[4] = int[](21, 22, 23, 24), foob__vp;
 (FunctionCallExpression
 (NumericTypeSpecifier
 - NumericType INT32
+(ArraySpecifier
+)ArraySpecifier
 )NumericTypeSpecifier
 (LiteralExpression
 - NumericType INT32

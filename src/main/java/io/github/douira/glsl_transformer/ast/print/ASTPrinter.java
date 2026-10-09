@@ -1203,7 +1203,12 @@ public class ASTPrinter extends ASTPrinterBase {
     return null;
   }
 
-  // TypeReference is just an Identifier
+  // the array specifier of each type specifier is printed in exitTypeSpecifier
+  @Override
+  public Void visitTypeReference(TypeReference node) {
+    visit(node.getReference());
+    return null;
+  }
 
   @Override
   public Void visitStructBody(StructBody node) {

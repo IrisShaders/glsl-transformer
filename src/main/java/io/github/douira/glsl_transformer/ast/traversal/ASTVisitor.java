@@ -23,9 +23,7 @@ import io.github.douira.glsl_transformer.ast.node.type.struct.*;
  */
 public interface ASTVisitor<R> extends GeneralASTVisitor<R> {
   default R visitTranslationUnit(TranslationUnit node) {
-    var result = visitSafe(node.getVersionStatement());
-    visitChildren(result, node);
-    return result;
+    return visitChildren(visitSafe(node.getVersionStatement()), node);
   }
 
   default R visitVersionStatement(VersionStatement node) {
@@ -345,7 +343,9 @@ public interface ASTVisitor<R> extends GeneralASTVisitor<R> {
   }
 
   default R visitWhileLoopStatement(WhileLoopStatement node) {
-    return visitTwoChildren(node.getCondition(), node.getStatement());
+    var result = visitSafe(node.getCondition());
+    result = visitSafe(result, node.getIterationConditionInitializer());
+    return visit(result, node.getStatement());
   }
 
   default R visitDoWhileLoopStatement(DoWhileLoopStatement node) {
@@ -494,15 +494,15 @@ public interface ASTVisitor<R> extends GeneralASTVisitor<R> {
   }
 
   default R visitFixedTypeSpecifier(FixedTypeSpecifier node) {
-    return visitData(node.type);
+    return visitSafe(visitData(node.type), node.getArraySpecifier());
   }
 
   default R visitNumericTypeSpecifier(NumericTypeSpecifier node) {
-    return visitData(node.type);
+    return visitSafe(visitData(node.type), node.getArraySpecifier());
   }
 
   default R visitTypeReference(TypeReference node) {
-    return visit(node.getReference());
+    return visitSafe(visit(node.getReference()), node.getArraySpecifier());
   }
 
   default R visitTypeSpecifier(TypeSpecifier node) {
@@ -522,7 +522,9 @@ public interface ASTVisitor<R> extends GeneralASTVisitor<R> {
   }
 
   default R visitStructSpecifier(StructSpecifier node) {
-    return visitTwoChildren(node.getName(), node.getStructBody());
+    return visitSafe(
+        visitTwoChildren(node.getName(), node.getStructBody()),
+        node.getArraySpecifier());
   }
 
   default R visitFullySpecifiedType(FullySpecifiedType node) {

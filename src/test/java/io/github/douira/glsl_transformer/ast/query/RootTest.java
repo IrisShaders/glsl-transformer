@@ -6,8 +6,12 @@ import static org.junit.jupiter.api.Assertions.*;
 import java.util.stream.Stream;
 
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.ValueSource;
 
 import io.github.douira.glsl_transformer.ast.node.Identifier;
+import io.github.douira.glsl_transformer.ast.node.IterationConditionInitializer;
+import io.github.douira.glsl_transformer.ast.node.type.specifier.ArraySpecifier;
 import io.github.douira.glsl_transformer.ast.query.match.*;
 import io.github.douira.glsl_transformer.parser.ParseShape;
 import io.github.douira.glsl_transformer.test_util.TestWithSingleASTTransformer;
@@ -168,5 +172,63 @@ public class RootTest extends TestWithSingleASTTransformer {
         callback.run();
       });
     });
+  }
+
+  // array specifiers of type specifiers used to be skipped by the default
+  // traversal, which left them and their contents in the indexes of the old root
+  @ParameterizedTest
+  @ValueSource(strings = {
+      "vec3[N] x;",
+      "sampler2D[N] s;",
+      "S[N] v;",
+      "struct { int a; }[N] t;" })
+  void testTypeSpecifierArraySpecifierIndexed(String input) {
+    var tu = p.parseSeparateTranslationUnit(input);
+    var root = tu.getRoot();
+    var other = p.parseSeparateTranslationUnit(";");
+    var otherRoot = other.getRoot();
+    var specifier = root.nodeIndex.getOne(ArraySpecifier.class);
+    assertNotNull(specifier);
+
+    var declaration = tu.getChildren().get(0);
+    declaration.detach();
+    other.getChildren().add(declaration);
+    assertSame(otherRoot, specifier.getRoot());
+    assertFalse(root.nodeIndex.has(ArraySpecifier.class));
+    assertTrue(otherRoot.nodeIndex.has(ArraySpecifier.class));
+    assertSame(specifier, otherRoot.nodeIndex.getOne(ArraySpecifier.class));
+
+    // renaming through the new root reaches the identifier in the specifier
+    otherRoot.rename("N", "M");
+    assertTrue(otherRoot.identifierIndex.has("M"));
+    assertFalse(otherRoot.identifierIndex.has("N"));
+
+    declaration.detachAndDelete();
+    assertFalse(otherRoot.nodeIndex.has(ArraySpecifier.class));
+    assertFalse(otherRoot.identifierIndex.has("M"));
+  }
+
+  @Test
+  void testWhileLoopDeclarationIndexed() {
+    var tu = p.parseSeparateTranslationUnit("void main() { while (bool b = N) { } }");
+    var root = tu.getRoot();
+    var other = p.parseSeparateTranslationUnit(";");
+    var otherRoot = other.getRoot();
+    var initializer = root.nodeIndex.getOne(IterationConditionInitializer.class);
+    assertNotNull(initializer);
+
+    var function = tu.getChildren().get(0);
+    function.detach();
+    other.getChildren().add(function);
+    assertSame(otherRoot, initializer.getRoot());
+    assertFalse(root.nodeIndex.has(IterationConditionInitializer.class));
+    assertTrue(otherRoot.nodeIndex.has(IterationConditionInitializer.class));
+    assertTrue(otherRoot.identifierIndex.has("b"));
+    assertFalse(root.identifierIndex.has("b"));
+
+    function.detachAndDelete();
+    assertFalse(otherRoot.nodeIndex.has(IterationConditionInitializer.class));
+    assertFalse(otherRoot.identifierIndex.has("b"));
+    assertFalse(otherRoot.identifierIndex.has("N"));
   }
 }

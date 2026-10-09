@@ -12,4 +12,10 @@ Support for optionNV Pragma and Mesh Shader Extensions Support
 * Fix resource paths as noted here (but using my own implementation): https://github.com/IrisShaders/glsl-transformer/pull/20
 * Add tests to make sure lexer options behave correctly (there was no bug, just lacking coverage)
 
+## Traversal and printing fixes (behavior changes)
+* The default traversal in `ASTVisitor` now visits the array specifier of `NumericTypeSpecifier`, `FixedTypeSpecifier`, `TypeReference` and `StructSpecifier` (`vec3[N] x`). Previously these nodes were skipped, so they kept their old root and stayed in its indexes when the surrounding tree was moved or deleted. Custom visitors and listeners now see `ArraySpecifier` nodes (and their contents) they did not see before.
+* The default traversal now visits the declaration in a while loop condition (`while (bool b = f())`), with the same consequences.
+* `ASTVisitor.visitTranslationUnit` returns the aggregated result of the version statement and all external declarations instead of only the result of the version statement.
+* `EQUAL` and `NOT_EQUAL` have precedence 8 instead of sharing precedence 7 with the relational operators. The printer now emits the required parentheses for trees like `a < (b == c)`, which were previously printed as `a < b == c` and reparsed into a different tree.
+
 **Full Changelog**: https://github.com/IrisShaders/glsl-transformer/compare/v3.0.0-pre2...v[Version]()
