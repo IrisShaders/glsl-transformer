@@ -1,0 +1,147 @@
+// Builtin definitions for the type analysis, see BuiltinRegistry for the format.
+// Lines starting with @ begin a section and list the conditions under which the
+// declarations of the section are available.
+// ---- 8.12 image functions
+@ glsl>=430 es>=310 ext:GL_ARB_shader_image_size
+int imageSize(gimage1D image);
+ivec2 imageSize(gimage2D image);
+ivec3 imageSize(gimage3D image);
+ivec2 imageSize(gimage2DRect image);
+ivec2 imageSize(gimageCube image);
+int imageSize(gimageBuffer image);
+ivec2 imageSize(gimage1DArray image);
+ivec3 imageSize(gimage2DArray image);
+ivec3 imageSize(gimageCubeArray image);
+ivec2 imageSize(gimage2DMS image);
+ivec3 imageSize(gimage2DMSArray image);
+
+@ glsl>=450 ext:GL_ARB_shader_texture_image_samples
+int imageSamples(gimage2DMS image);
+int imageSamples(gimage2DMSArray image);
+
+@ glsl>=420 es>=310 ext:GL_ARB_shader_image_load_store ext:GL_EXT_shader_image_load_store
+gvec4 imageLoad(gimage1D image, int P);
+void imageStore(gimage1D image, int P, gvec4 data);
+gvec4 imageLoad(gimage2D image, ivec2 P);
+void imageStore(gimage2D image, ivec2 P, gvec4 data);
+gvec4 imageLoad(gimage3D image, ivec3 P);
+void imageStore(gimage3D image, ivec3 P, gvec4 data);
+gvec4 imageLoad(gimage2DRect image, ivec2 P);
+void imageStore(gimage2DRect image, ivec2 P, gvec4 data);
+gvec4 imageLoad(gimageCube image, ivec3 P);
+void imageStore(gimageCube image, ivec3 P, gvec4 data);
+gvec4 imageLoad(gimageBuffer image, int P);
+void imageStore(gimageBuffer image, int P, gvec4 data);
+gvec4 imageLoad(gimage1DArray image, ivec2 P);
+void imageStore(gimage1DArray image, ivec2 P, gvec4 data);
+gvec4 imageLoad(gimage2DArray image, ivec3 P);
+void imageStore(gimage2DArray image, ivec3 P, gvec4 data);
+gvec4 imageLoad(gimageCubeArray image, ivec3 P);
+void imageStore(gimageCubeArray image, ivec3 P, gvec4 data);
+gvec4 imageLoad(gimage2DMS image, ivec2 P, int sampleIndex);
+void imageStore(gimage2DMS image, ivec2 P, int sampleIndex, gvec4 data);
+gvec4 imageLoad(gimage2DMSArray image, ivec3 P, int sampleIndex);
+void imageStore(gimage2DMSArray image, ivec3 P, int sampleIndex, gvec4 data);
+
+@ glsl>=420 es>=320 ext:GL_ARB_shader_image_load_store ext:GL_OES_shader_image_atomic
+iuint imageAtomicAdd(iuimage1D image, int P, iuint data);
+iuint imageAtomicAdd(iuimage2D image, ivec2 P, iuint data);
+iuint imageAtomicAdd(iuimage3D image, ivec3 P, iuint data);
+iuint imageAtomicAdd(iuimage2DRect image, ivec2 P, iuint data);
+iuint imageAtomicAdd(iuimageCube image, ivec3 P, iuint data);
+iuint imageAtomicAdd(iuimageBuffer image, int P, iuint data);
+iuint imageAtomicAdd(iuimage1DArray image, ivec2 P, iuint data);
+iuint imageAtomicAdd(iuimage2DArray image, ivec3 P, iuint data);
+iuint imageAtomicAdd(iuimageCubeArray image, ivec3 P, iuint data);
+iuint imageAtomicAdd(iuimage2DMS image, ivec2 P, int sampleIndex, iuint data);
+iuint imageAtomicAdd(iuimage2DMSArray image, ivec3 P, int sampleIndex, iuint data);
+iuint imageAtomicMin(iuimage1D image, int P, iuint data);
+iuint imageAtomicMin(iuimage2D image, ivec2 P, iuint data);
+iuint imageAtomicMin(iuimage3D image, ivec3 P, iuint data);
+iuint imageAtomicMin(iuimage2DRect image, ivec2 P, iuint data);
+iuint imageAtomicMin(iuimageCube image, ivec3 P, iuint data);
+iuint imageAtomicMin(iuimageBuffer image, int P, iuint data);
+iuint imageAtomicMin(iuimage1DArray image, ivec2 P, iuint data);
+iuint imageAtomicMin(iuimage2DArray image, ivec3 P, iuint data);
+iuint imageAtomicMin(iuimageCubeArray image, ivec3 P, iuint data);
+iuint imageAtomicMin(iuimage2DMS image, ivec2 P, int sampleIndex, iuint data);
+iuint imageAtomicMin(iuimage2DMSArray image, ivec3 P, int sampleIndex, iuint data);
+iuint imageAtomicMax(iuimage1D image, int P, iuint data);
+iuint imageAtomicMax(iuimage2D image, ivec2 P, iuint data);
+iuint imageAtomicMax(iuimage3D image, ivec3 P, iuint data);
+iuint imageAtomicMax(iuimage2DRect image, ivec2 P, iuint data);
+iuint imageAtomicMax(iuimageCube image, ivec3 P, iuint data);
+iuint imageAtomicMax(iuimageBuffer image, int P, iuint data);
+iuint imageAtomicMax(iuimage1DArray image, ivec2 P, iuint data);
+iuint imageAtomicMax(iuimage2DArray image, ivec3 P, iuint data);
+iuint imageAtomicMax(iuimageCubeArray image, ivec3 P, iuint data);
+iuint imageAtomicMax(iuimage2DMS image, ivec2 P, int sampleIndex, iuint data);
+iuint imageAtomicMax(iuimage2DMSArray image, ivec3 P, int sampleIndex, iuint data);
+iuint imageAtomicAnd(iuimage1D image, int P, iuint data);
+iuint imageAtomicAnd(iuimage2D image, ivec2 P, iuint data);
+iuint imageAtomicAnd(iuimage3D image, ivec3 P, iuint data);
+iuint imageAtomicAnd(iuimage2DRect image, ivec2 P, iuint data);
+iuint imageAtomicAnd(iuimageCube image, ivec3 P, iuint data);
+iuint imageAtomicAnd(iuimageBuffer image, int P, iuint data);
+iuint imageAtomicAnd(iuimage1DArray image, ivec2 P, iuint data);
+iuint imageAtomicAnd(iuimage2DArray image, ivec3 P, iuint data);
+iuint imageAtomicAnd(iuimageCubeArray image, ivec3 P, iuint data);
+iuint imageAtomicAnd(iuimage2DMS image, ivec2 P, int sampleIndex, iuint data);
+iuint imageAtomicAnd(iuimage2DMSArray image, ivec3 P, int sampleIndex, iuint data);
+iuint imageAtomicOr(iuimage1D image, int P, iuint data);
+iuint imageAtomicOr(iuimage2D image, ivec2 P, iuint data);
+iuint imageAtomicOr(iuimage3D image, ivec3 P, iuint data);
+iuint imageAtomicOr(iuimage2DRect image, ivec2 P, iuint data);
+iuint imageAtomicOr(iuimageCube image, ivec3 P, iuint data);
+iuint imageAtomicOr(iuimageBuffer image, int P, iuint data);
+iuint imageAtomicOr(iuimage1DArray image, ivec2 P, iuint data);
+iuint imageAtomicOr(iuimage2DArray image, ivec3 P, iuint data);
+iuint imageAtomicOr(iuimageCubeArray image, ivec3 P, iuint data);
+iuint imageAtomicOr(iuimage2DMS image, ivec2 P, int sampleIndex, iuint data);
+iuint imageAtomicOr(iuimage2DMSArray image, ivec3 P, int sampleIndex, iuint data);
+iuint imageAtomicXor(iuimage1D image, int P, iuint data);
+iuint imageAtomicXor(iuimage2D image, ivec2 P, iuint data);
+iuint imageAtomicXor(iuimage3D image, ivec3 P, iuint data);
+iuint imageAtomicXor(iuimage2DRect image, ivec2 P, iuint data);
+iuint imageAtomicXor(iuimageCube image, ivec3 P, iuint data);
+iuint imageAtomicXor(iuimageBuffer image, int P, iuint data);
+iuint imageAtomicXor(iuimage1DArray image, ivec2 P, iuint data);
+iuint imageAtomicXor(iuimage2DArray image, ivec3 P, iuint data);
+iuint imageAtomicXor(iuimageCubeArray image, ivec3 P, iuint data);
+iuint imageAtomicXor(iuimage2DMS image, ivec2 P, int sampleIndex, iuint data);
+iuint imageAtomicXor(iuimage2DMSArray image, ivec3 P, int sampleIndex, iuint data);
+iuint imageAtomicExchange(iuimage1D image, int P, iuint data);
+iuint imageAtomicExchange(iuimage2D image, ivec2 P, iuint data);
+iuint imageAtomicExchange(iuimage3D image, ivec3 P, iuint data);
+iuint imageAtomicExchange(iuimage2DRect image, ivec2 P, iuint data);
+iuint imageAtomicExchange(iuimageCube image, ivec3 P, iuint data);
+iuint imageAtomicExchange(iuimageBuffer image, int P, iuint data);
+iuint imageAtomicExchange(iuimage1DArray image, ivec2 P, iuint data);
+iuint imageAtomicExchange(iuimage2DArray image, ivec3 P, iuint data);
+iuint imageAtomicExchange(iuimageCubeArray image, ivec3 P, iuint data);
+iuint imageAtomicExchange(iuimage2DMS image, ivec2 P, int sampleIndex, iuint data);
+iuint imageAtomicExchange(iuimage2DMSArray image, ivec3 P, int sampleIndex, iuint data);
+iuint imageAtomicCompSwap(iuimage1D image, int P, iuint compare, iuint data);
+iuint imageAtomicCompSwap(iuimage2D image, ivec2 P, iuint compare, iuint data);
+iuint imageAtomicCompSwap(iuimage3D image, ivec3 P, iuint compare, iuint data);
+iuint imageAtomicCompSwap(iuimage2DRect image, ivec2 P, iuint compare, iuint data);
+iuint imageAtomicCompSwap(iuimageCube image, ivec3 P, iuint compare, iuint data);
+iuint imageAtomicCompSwap(iuimageBuffer image, int P, iuint compare, iuint data);
+iuint imageAtomicCompSwap(iuimage1DArray image, ivec2 P, iuint compare, iuint data);
+iuint imageAtomicCompSwap(iuimage2DArray image, ivec3 P, iuint compare, iuint data);
+iuint imageAtomicCompSwap(iuimageCubeArray image, ivec3 P, iuint compare, iuint data);
+iuint imageAtomicCompSwap(iuimage2DMS image, ivec2 P, int sampleIndex, iuint compare, iuint data);
+iuint imageAtomicCompSwap(iuimage2DMSArray image, ivec3 P, int sampleIndex, iuint compare, iuint data);
+
+@ glsl>=450 es>=320 ext:GL_OES_shader_image_atomic
+float imageAtomicExchange(image1D image, int P, float data);
+float imageAtomicExchange(image2D image, ivec2 P, float data);
+float imageAtomicExchange(image3D image, ivec3 P, float data);
+float imageAtomicExchange(image2DRect image, ivec2 P, float data);
+float imageAtomicExchange(imageCube image, ivec3 P, float data);
+float imageAtomicExchange(imageBuffer image, int P, float data);
+float imageAtomicExchange(image1DArray image, ivec2 P, float data);
+float imageAtomicExchange(image2DArray image, ivec3 P, float data);
+float imageAtomicExchange(imageCubeArray image, ivec3 P, float data);
+float imageAtomicExchange(image2DMS image, ivec2 P, int sampleIndex, float data);
+float imageAtomicExchange(image2DMSArray image, ivec3 P, int sampleIndex, float data);

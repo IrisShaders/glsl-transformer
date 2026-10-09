@@ -42,6 +42,21 @@ public class ExtensionDirective extends ExternalDeclaration {
     this.name = name;
   }
 
+  public ExtensionBehavior getBehavior() {
+    return behavior;
+  }
+
+  /**
+   * Sets the behavior. Unlike writing to the field directly, this invalidates
+   * the cached type analysis of the root.
+   * 
+   * @param behavior the new behavior, which may be null
+   */
+  public void setBehavior(ExtensionBehavior behavior) {
+    this.behavior = behavior;
+    markModified();
+  }
+
   public String getName() {
     return name;
   }
@@ -50,6 +65,7 @@ public class ExtensionDirective extends ExternalDeclaration {
     getRoot().unregisterFastRename(this);
     this.name = name;
     getRoot().registerFastRename(this);
+    markModified();
   }
 
   @Override

@@ -1,0 +1,2 @@
+// Files that are not compared with glslang in TypeDifferentialTest, with the reason.
+max_vertices_0.geom the input arrays of geometry shaders are sized by the input primitive, which is not evaluated

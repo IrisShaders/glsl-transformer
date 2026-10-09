@@ -9,7 +9,18 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
 
-import io.github.douira.glsl_transformer.ast.node.Identifier;
+import java.util.*;
+
+import io.github.douira.glsl_transformer.ast.node.*;
+import io.github.douira.glsl_transformer.ast.node.expression.*;
+import io.github.douira.glsl_transformer.ast.node.expression.binary.AdditionExpression;
+import io.github.douira.glsl_transformer.ast.node.external_declaration.ExtensionDirective;
+import io.github.douira.glsl_transformer.ast.node.external_declaration.ExtensionDirective.ExtensionBehavior;
+import io.github.douira.glsl_transformer.ast.node.type.qualifier.StorageQualifier;
+import io.github.douira.glsl_transformer.ast.node.type.qualifier.StorageQualifier.StorageType;
+import io.github.douira.glsl_transformer.ast.node.type.specifier.NumericTypeSpecifier;
+import io.github.douira.glsl_transformer.ast.transform.ASTInjectionPoint;
+import io.github.douira.glsl_transformer.ast.typing.*;
 import io.github.douira.glsl_transformer.ast.node.IterationConditionInitializer;
 import io.github.douira.glsl_transformer.ast.node.type.specifier.ArraySpecifier;
 import io.github.douira.glsl_transformer.ast.query.match.*;
@@ -230,5 +241,249 @@ public class RootTest extends TestWithSingleASTTransformer {
     assertFalse(otherRoot.nodeIndex.has(IterationConditionInitializer.class));
     assertFalse(otherRoot.identifierIndex.has("b"));
     assertFalse(otherRoot.identifierIndex.has("N"));
+  }
+
+  private static final String TYPED_SOURCE = """
+      #version 330 core
+      float value;
+      void main() {
+        value + 1;
+      }
+      """;
+
+  private static Expression typedExpression(TranslationUnit tu) {
+    return tu.getRoot().nodeIndex.getOne(AdditionExpression.class);
+  }
+
+  @Test
+  void testTypeAnalysisIsCached() {
+    var tu = p.parseSeparateTranslationUnit(TYPED_SOURCE);
+    var root = tu.getRoot();
+    var expression = typedExpression(tu);
+    assertSame(NumericType.FLOAT32, expression.getType());
+    var analysis = expression.getTypeAnalysis();
+    assertSame(analysis, tu.getTypeAnalysis());
+    assertSame(analysis, root.getTypeAnalysis(expression));
+    assertSame(tu, analysis.getTop());
+    assertSame(Version.GLSL33, analysis.getEnvironment().version());
+    assertNull(tu.getType());
+
+    // nothing changed so nothing is recomputed
+    var count = root.getModificationCount();
+    assertSame(NumericType.FLOAT32, expression.getType());
+    assertEquals(count, root.getModificationCount());
+    assertSame(analysis, expression.getTypeAnalysis());
+
+    root.invalidateTypeAnalysis();
+    assertTrue(root.getModificationCount() > count);
+    assertNotSame(analysis, expression.getTypeAnalysis());
+    assertSame(NumericType.FLOAT32, expression.getType());
+  }
+
+  @Test
+  void testTypeRecomputesAfterInsert() {
+    var tu = p.parseSeparateTranslationUnit(
+        "#version 330 core\nvoid main() { undeclared + 1; }");
+    var expression = typedExpression(tu);
+    assertSame(ErrorType.INSTANCE, expression.getType());
+    assertEquals(1, tu.getTypeAnalysis().diagnostics().size());
+
+    tu.parseAndInjectNode(p, ASTInjectionPoint.BEFORE_DECLARATIONS, "uniform ivec2 undeclared;");
+    assertSame(NumericType.I32VEC2, expression.getType());
+    assertTrue(tu.getTypeAnalysis().diagnostics().isEmpty());
+  }
+
+  @Test
+  void testTypeRecomputesAfterRemove() {
+    var tu = p.parseSeparateTranslationUnit(TYPED_SOURCE);
+    var expression = typedExpression(tu);
+    assertSame(NumericType.FLOAT32, expression.getType());
+    tu.getChildren().get(0).detachAndDelete();
+    assertSame(ErrorType.INSTANCE, expression.getType());
+
+    // detaching without unregistering is noticed as well
+    var other = p.parseSeparateTranslationUnit(TYPED_SOURCE);
+    var otherExpression = typedExpression(other);
+    assertSame(NumericType.FLOAT32, otherExpression.getType());
+    var declaration = other.getChildren().get(0);
+    declaration.detach();
+    assertSame(ErrorType.INSTANCE, otherExpression.getType());
+    other.getChildren().add(0, declaration);
+    assertSame(NumericType.FLOAT32, otherExpression.getType());
+  }
+
+  @Test
+  void testTypeRecomputesAfterReplace() {
+    var tu = p.parseSeparateTranslationUnit(TYPED_SOURCE);
+    var root = tu.getRoot();
+    var expression = (AdditionExpression) typedExpression(tu);
+    assertSame(NumericType.FLOAT32, expression.getType());
+    expression.getRight().replaceByAndDelete(p.parseExpression(root, "vec4(1)"));
+    assertSame(NumericType.F32VEC4, expression.getType());
+    expression.setLeft(p.parseExpression(root, "true"));
+    assertSame(ErrorType.INSTANCE, expression.getType());
+  }
+
+  @Test
+  void testTypeRecomputesAfterRename() {
+    var tu = p.parseSeparateTranslationUnit(TYPED_SOURCE);
+    var root = tu.getRoot();
+    var expression = typedExpression(tu);
+    assertSame(NumericType.FLOAT32, expression.getType());
+
+    // only the declaration is renamed
+    root.identifierIndex.getStream("value")
+        .filter(identifier -> !(identifier.getParent() instanceof ReferenceExpression))
+        .toList().forEach(identifier -> identifier.setName("renamed"));
+    assertSame(ErrorType.INSTANCE, expression.getType());
+    root.rename("value", "renamed");
+    assertSame(NumericType.FLOAT32, expression.getType());
+
+    // renaming without updating the identifier index is noticed as well
+    var reference = ((ReferenceExpression) ((AdditionExpression) expression).getLeft()).getIdentifier();
+    reference._setNameInternal("other");
+    assertSame(ErrorType.INSTANCE, expression.getType());
+    reference._setNameInternal("renamed");
+    assertSame(NumericType.FLOAT32, expression.getType());
+  }
+
+  @Test
+  void testTypeRecomputesAfterSetters() {
+    var tu = p.parseSeparateTranslationUnit(TYPED_SOURCE);
+    var root = tu.getRoot();
+    var expression = (AdditionExpression) typedExpression(tu);
+    assertSame(NumericType.FLOAT32, expression.getType());
+
+    var specifier = root.nodeIndex.getStream(NumericTypeSpecifier.class)
+        .filter(node -> node.type == NumericType.FLOAT32).findFirst().orElseThrow();
+    assertSame(NumericType.FLOAT32, specifier.getNumericType());
+    specifier.setNumericType(NumericType.F32VEC2);
+    assertSame(NumericType.F32VEC2, expression.getType());
+
+    // the literal is converted to the type of the other operand
+    var literal = (LiteralExpression) expression.getRight();
+    specifier.setNumericType(NumericType.INT32);
+    assertSame(NumericType.INT32, expression.getType());
+    literal.setInteger(NumericType.UINT32, 1);
+    assertSame(NumericType.INT32, literal.getTypeAnalysis().typeOf(expression.getLeft()));
+    assertSame(ErrorType.INSTANCE, expression.getType());
+    literal.setFloating(1.0f);
+    assertSame(NumericType.FLOAT32, expression.getType());
+    literal.setBoolean(true);
+    assertSame(ErrorType.INSTANCE, expression.getType());
+    literal.setString("text");
+    assertSame(StringType.INSTANCE, literal.getType());
+    literal.setInteger(2);
+    assertSame(NumericType.INT32, expression.getType());
+
+    // the changes of the value do not change the type but still invalidate
+    var analysis = expression.getTypeAnalysis();
+    literal.changeInteger(3);
+    assertNotSame(analysis, expression.getTypeAnalysis());
+    assertSame(NumericType.INT32, expression.getType());
+
+    // the version decides if the conversion from int to uint exists
+    specifier.setNumericType(NumericType.UINT32);
+    assertSame(ErrorType.INSTANCE, expression.getType());
+    tu.getVersionStatement().setVersion(Version.GLSL40, Profile.CORE);
+    assertSame(NumericType.UINT32, expression.getType());
+  }
+
+  @Test
+  void testTypeRecomputesAfterQualifierAndExtensionSetters() {
+    var tu = p.parseSeparateTranslationUnit("""
+        #version 330 core
+        #extension GL_ARB_gpu_shader5 : disable
+        uniform float value;
+        void main() {
+          value = fma(1.0, 2.0, 3.0);
+        }
+        """);
+    var root = tu.getRoot();
+    assertEquals(List.of(DiagnosticCode.UNDECLARED_IDENTIFIER, DiagnosticCode.NOT_ASSIGNABLE),
+        tu.getTypeAnalysis().diagnostics().stream().map(Diagnostic::code).toList());
+
+    var qualifier = root.nodeIndex.getOne(StorageQualifier.class);
+    assertSame(StorageType.UNIFORM, qualifier.getStorageType());
+    qualifier.setStorageType(StorageType.OUT);
+    assertEquals(List.of(DiagnosticCode.UNDECLARED_IDENTIFIER),
+        tu.getTypeAnalysis().diagnostics().stream().map(Diagnostic::code).toList());
+
+    var directive = root.nodeIndex.getOne(ExtensionDirective.class);
+    assertSame(ExtensionBehavior.DISABLE, directive.getBehavior());
+    directive.setBehavior(ExtensionBehavior.ENABLE);
+    assertTrue(tu.getTypeAnalysis().diagnostics().isEmpty());
+    directive.setName("GL_ARB_other");
+    assertEquals(1, tu.getTypeAnalysis().diagnostics().size());
+  }
+
+  @Test
+  void testTypeAfterWritingToFieldsDirectly() {
+    // writing to public fields directly is not noticed until the cache is invalidated
+    var tu = p.parseSeparateTranslationUnit(TYPED_SOURCE);
+    var root = tu.getRoot();
+    var expression = typedExpression(tu);
+    assertSame(NumericType.FLOAT32, expression.getType());
+    var specifier = root.nodeIndex.getStream(NumericTypeSpecifier.class)
+        .filter(node -> node.type == NumericType.FLOAT32).findFirst().orElseThrow();
+    specifier.type = NumericType.F32VEC3;
+    assertSame(NumericType.FLOAT32, expression.getType());
+    root.invalidateTypeAnalysis();
+    assertSame(NumericType.F32VEC3, expression.getType());
+  }
+
+  @Test
+  void testTypeEnvironmentOfRoot() {
+    var tu = p.parseSeparateTranslationUnit(
+        "#version 330 core\nvoid main() { gl_FragCoord.x + 1; }");
+    var root = tu.getRoot();
+    var expression = typedExpression(tu);
+    assertNull(root.getTypeEnvironment());
+    assertSame(NumericType.FLOAT32, expression.getType());
+
+    var environment = new TypeEnvironment(Version.GLSL46, Profile.CORE, ShaderStage.VERTEX, Set.of());
+    root.setTypeEnvironment(environment);
+    assertSame(environment, root.getTypeEnvironment());
+    assertSame(environment, tu.getTypeAnalysis().getEnvironment());
+    assertSame(ErrorType.INSTANCE, expression.getType());
+    root.setTypeEnvironment(environment.withStage(ShaderStage.FRAGMENT));
+    assertSame(NumericType.FLOAT32, expression.getType());
+    root.setTypeEnvironment(null);
+    assertSame(Version.GLSL33, tu.getTypeAnalysis().getEnvironment().version());
+  }
+
+  @Test
+  void testTypeOfSeparateTrees() {
+    // each tree in a root has its own analysis
+    var root = p.supplyRoot();
+    var first = p.parseExpression(root, "1 + 1.0");
+    var second = p.parseExpression(root, "ivec2(1) * 2");
+    assertSame(NumericType.FLOAT32, first.getType());
+    assertSame(NumericType.I32VEC2, second.getType());
+    assertNotSame(first.getTypeAnalysis(), second.getTypeAnalysis());
+    assertSame(first.getTypeAnalysis(), first.getTypeAnalysis());
+    assertSame(first, first.getTypeAnalysis().getTop());
+
+    // a detached subtree is analyzed on its own
+    var tu = p.parseSeparateTranslationUnit(TYPED_SOURCE);
+    var expression = typedExpression(tu);
+    assertSame(NumericType.FLOAT32, expression.getType());
+    expression.detach();
+    assertSame(ErrorType.INSTANCE, expression.getType());
+    assertSame(expression, expression.getTypeAnalysis().getTop());
+  }
+
+  @Test
+  void testTypeWithoutRoot() {
+    // nodes created outside of a build session have no root, they are analyzed
+    // without caching
+    var identifier = new Identifier("alone");
+    assertNull(identifier.getRoot());
+    assertNull(identifier.getType());
+    assertNotSame(identifier.getTypeAnalysis(), identifier.getTypeAnalysis());
+    var literal = new LiteralExpression(NumericType.FLOAT64, 1.0);
+    assertSame(NumericType.FLOAT64, literal.getType());
+    literal.setInteger(1);
+    assertSame(NumericType.INT32, literal.getType());
   }
 }

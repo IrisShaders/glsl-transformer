@@ -93,6 +93,31 @@ void main() {
 	void main();
 }
 
+§outDeclarationModify vectors:
+in vec3 a;
+in uint b;
+in mat2 c;
+in bvec2 d;
+void main() {
+	b;
+}
+===
+out bvec2 d;
+out mat2 c;
+out uint b;
+out vec3 a;
+in vec3 a;
+in uint b;
+in mat2 c;
+in bvec2 d;
+void main() {
+	d = bvec2(false);
+	c = mat2(0.0f);
+	b = 0u;
+	a = vec3(0.0f);
+	b;
+}
+
 §sidecarInjection texture@tex1,tex3:
 uniform sampler3D tex1;
 uniform sampler2D tex2;

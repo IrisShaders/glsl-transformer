@@ -8,6 +8,7 @@ import io.github.douira.glsl_transformer.ast.node.Identifier;
 import io.github.douira.glsl_transformer.ast.node.expression.*;
 import io.github.douira.glsl_transformer.ast.node.expression.binary.*;
 
+import io.github.douira.glsl_transformer.ast.typing.NumericType;
 import io.github.douira.glsl_transformer.test_util.TestWithSingleASTTransformer;
 
 public class ASTPrinterTest extends TestWithSingleASTTransformer {
@@ -131,5 +132,30 @@ public class ASTPrinterTest extends TestWithSingleASTTransformer {
     Expression relationalInEquality = p.supplyRoot().indexNodes(
         () -> new EqualityExpression(new LessThanExpression(ref("a"), ref("b")), ref("c")));
     assertEquals("a < b == c", ASTPrinter.printSimple(relationalInEquality));
+  }
+
+  @Test
+  void testLiteralsOfAllTypesReparse() {
+    for (var type : NumericType.values()) {
+      if (!type.isScalar()) {
+        continue;
+      }
+      if (!type.hasLiteral()) {
+        // literals of the 8 bit integer types cannot be printed since there is no
+        // syntax for them, they are rejected when they are constructed
+        assertThrows(IllegalArgumentException.class, () -> new LiteralExpression(type, 1));
+        continue;
+      }
+
+      var literal = switch (type.getNumberType()) {
+        case BOOLEAN -> new LiteralExpression(true);
+        case SIGNED_INTEGER, UNSIGNED_INTEGER -> new LiteralExpression(type, 42);
+        case FLOATING_POINT -> new LiteralExpression(type, 1.5);
+      };
+      var printed = ASTPrinter.printSimple(literal);
+      var parsed = (LiteralExpression) p.parseExpression(p.supplyRoot(), printed);
+      assertSame(type, parsed.getNumericType(), printed);
+      assertEquals(literal.getNumber(), parsed.getNumber(), printed);
+    }
   }
 }

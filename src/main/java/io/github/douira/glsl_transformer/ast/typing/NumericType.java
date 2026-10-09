@@ -4,22 +4,22 @@ import io.github.douira.glsl_transformer.GLSLLexer;
 import io.github.douira.glsl_transformer.ast.data.TokenTyped;
 import org.antlr.v4.runtime.Token;
 
-import java.util.Arrays;
+import java.util.EnumMap;
 import java.util.EnumSet;
 import java.util.HashMap;
 import java.util.Map;
 
 /**
- * This enum represents the type of a value in GLSL and contains easily
- * accessible
- * data about each of them.
+ * This enum represents the scalar, vector and matrix types of GLSL and contains
+ * easily accessible data about each of them. Each numeric type is also a
+ * {@link Type} in the type system.
  * <p>
- * The shape is an array of up to three integers describing how big this
- * tensor is in each dimension. The first dimension contains the number of bits
- * of each value and the following dimensions describe the actual dimensions of
- * the tensor.
+ * The dimensions are an array of one or two integers describing the shape of
+ * the type. Scalars have the dimensions {@code {1}}, vectors have their
+ * component count as the only dimension and matrices have the number of columns
+ * followed by the number of rows as their dimensions.
  */
-public enum NumericType implements TokenTyped {
+public enum NumericType implements TokenTyped, Type {
   BOOL(GLSLLexer.BOOL, GLSLLexer.BOOLCONSTANT, NumberType.BOOLEAN, "bool", "bool", 1),
   BVEC2(GLSLLexer.BVEC2, NumberType.BOOLEAN, "bvec2", "bvec2", 1, 2),
   BVEC3(GLSLLexer.BVEC3, NumberType.BOOLEAN, "bvec3", "bvec3", 1, 3),
@@ -111,12 +111,6 @@ public enum NumericType implements TokenTyped {
   private final String compactName;
   private final String explicitName;
 
-  // lazily created
-  private EnumSet<NumericType> implicitCastTypes;
-
-  // can't be static
-  private final int[] SCALAR_DIMENSIONS = {1};
-
   NumericType(int tokenType,
               NumberType numberType,
               String compactName,
@@ -131,12 +125,13 @@ public enum NumericType implements TokenTyped {
    * explicit name, bit depth
    * and dimensions.
    *
-   * @param tokenType    The token type in the parser
-   * @param numberType   The number type
-   * @param compactName  The most compact name for this type
-   * @param explicitName The most explicit name for this type
-   * @param bitDepth     The bit depth
-   * @param dimensions   The size of each dimension
+   * @param tokenType        The token type in the parser
+   * @param literalTokenType The token type of literals of this type
+   * @param numberType       The number type
+   * @param compactName      The most compact name for this type
+   * @param explicitName     The most explicit name for this type
+   * @param bitDepth         The bit depth
+   * @param dimensions       The size of each dimension, empty for scalars
    */
   NumericType(int tokenType,
               int literalTokenType,
@@ -145,45 +140,11 @@ public enum NumericType implements TokenTyped {
               String explicitName,
               int bitDepth,
               int... dimensions) {
-    // verify inputs
-    if (bitDepth > numberType.getMaxBitDepth()) {
-      throw new IllegalArgumentException(
-          "Bit depth provided is larger than maximum bit depth for type " + numberType);
-    }
-
-    if (dimensions.length < 1) {
-      dimensions = SCALAR_DIMENSIONS;
-    } else {
-      int[] maxDimensions = numberType.getMaxDimensions();
-      if (dimensions.length > maxDimensions.length) {
-        throw new IllegalArgumentException(
-            "Dimensions provided is longer than maximum dimensions for type " + numberType);
-      }
-
-      for (int i = 0; i < dimensions.length; i++) {
-        int dimSize = dimensions[i];
-        int maxDimSize = maxDimensions[i];
-        if (dimSize > maxDimSize) {
-          throw new IllegalArgumentException("Dimensions provided exceeds maximum dimensions for type " + numberType);
-        }
-      }
-    }
-
     this.tokenType = tokenType;
     this.literalTokenType = literalTokenType;
     this.numberType = numberType;
-    this.dimensions = dimensions;
+    this.dimensions = dimensions.length == 0 ? new int[] { 1 } : dimensions;
     this.bitDepth = bitDepth;
-    this.compactName = compactName;
-    this.explicitName = explicitName;
-  }
-
-  NumericType(NumberType numberType, String compactName, String explicitName) {
-    this.tokenType = Token.INVALID_TYPE;
-    this.literalTokenType = Token.INVALID_TYPE;
-    this.numberType = numberType;
-    this.dimensions = new int[]{};
-    this.bitDepth = 0;
     this.compactName = compactName;
     this.explicitName = explicitName;
   }
@@ -220,15 +181,107 @@ public enum NumericType implements TokenTyped {
   }
 
   public boolean isScalar() {
-    return dimensions == SCALAR_DIMENSIONS;
+    return dimensions.length == 1 && dimensions[0] == 1;
   }
 
   public boolean isVector() {
-    return dimensions.length == 1;
+    return dimensions.length == 1 && dimensions[0] > 1;
   }
 
   public boolean isMatrix() {
     return dimensions.length == 2;
+  }
+
+  /**
+   * Returns the number of columns. This is 1 for scalars and vectors.
+   *
+   * @return The number of columns
+   */
+  public int getColumns() {
+    return isMatrix() ? dimensions[0] : 1;
+  }
+
+  /**
+   * Returns the number of rows. For vectors this is the number of components.
+   *
+   * @return The number of rows
+   */
+  public int getRows() {
+    return dimensions[dimensions.length - 1];
+  }
+
+  /**
+   * Returns the total number of scalar components in this type.
+   *
+   * @return The number of components
+   */
+  public int getComponentCount() {
+    return getColumns() * getRows();
+  }
+
+  /**
+   * Returns the scalar type of the components of this type.
+   *
+   * @return The scalar component type, which is this type for scalars
+   */
+  public NumericType getComponentType() {
+    return ofShape(numberType, bitDepth, 1, 1);
+  }
+
+  /**
+   * Returns the type that results from indexing into this type once: the column
+   * vector type for matrices and the component type for vectors and scalars.
+   *
+   * @return The type of an element of this type
+   */
+  public NumericType getElementType() {
+    return isMatrix() ? withComponentCount(getRows()) : getComponentType();
+  }
+
+  /**
+   * Returns the scalar or vector type with the same component type and the given
+   * number of components.
+   *
+   * @param componentCount The number of components from 1 to 4
+   * @return The scalar or vector type, or null if there is no such type
+   */
+  public NumericType withComponentCount(int componentCount) {
+    return ofShape(numberType, bitDepth, 1, componentCount);
+  }
+
+  /**
+   * Returns the type with the same shape as this type but with the given scalar
+   * type as the component type.
+   *
+   * @param componentType The scalar type to use for the components
+   * @return The type with the same shape, or null if there is no such type (for
+   *         example, there are only floating point matrices)
+   */
+  public NumericType withComponentType(NumericType componentType) {
+    return ofShape(componentType.numberType, componentType.bitDepth, getColumns(), getRows());
+  }
+
+  /**
+   * Returns the scalar or vector type with the given component type and count.
+   *
+   * @param componentType  The scalar type of the components
+   * @param componentCount The number of components from 1 to 4
+   * @return The scalar or vector type, or null if there is no such type
+   */
+  public static NumericType vector(NumericType componentType, int componentCount) {
+    return componentType.withComponentCount(componentCount);
+  }
+
+  /**
+   * Returns the matrix type with the given component type and shape.
+   *
+   * @param componentType The scalar type of the components
+   * @param columns       The number of columns from 2 to 4
+   * @param rows          The number of rows from 2 to 4
+   * @return The matrix type, or null if there is no such type
+   */
+  public static NumericType matrix(NumericType componentType, int columns, int rows) {
+    return ofShape(componentType.numberType, componentType.bitDepth, columns, rows);
   }
 
   /**
@@ -266,102 +319,63 @@ public enum NumericType implements TokenTyped {
     return explicitName;
   }
 
-  private static final NumericType[] tokenTypesToValues;
-  private static final Map<Integer, NumericType> literalTokenTypesToValues;
-  private static final int minIndex;
+  @Override
+  public String getTypeName() {
+    return getMostCompactName();
+  }
+
+  private static final Map<Integer, NumericType> tokenTypesToValues = new HashMap<>();
+  private static final Map<Integer, NumericType> literalTokenTypesToValues = new HashMap<>();
+  private static final Map<Integer, NumericType> shapesToValues = new HashMap<>();
+  private static final Map<NumberType, EnumSet<NumericType>> numberTypesToValues = new EnumMap<>(NumberType.class);
+
+  private static int shapeKey(NumberType numberType, int bitDepth, int columns, int rows) {
+    return ((numberType.ordinal() * 128 + bitDepth) * 8 + columns) * 8 + rows;
+  }
+
+  private static NumericType ofShape(NumberType numberType, int bitDepth, int columns, int rows) {
+    return shapesToValues.get(shapeKey(numberType, bitDepth, columns, rows));
+  }
 
   static {
-    // figure out the token indexes of the token types used for the type enum
-    int localMinIndex = Integer.MAX_VALUE;
-    int localMaxIndex = Integer.MIN_VALUE;
+    for (NumberType numberType : NumberType.values()) {
+      numberTypesToValues.put(numberType, EnumSet.noneOf(NumericType.class));
+    }
     for (NumericType entry : values()) {
-      int tokenType = entry.getTokenType();
-      if (tokenType < localMinIndex) {
-        localMinIndex = tokenType;
-      }
-      if (tokenType > localMaxIndex) {
-        localMaxIndex = tokenType;
-      }
+      tokenTypesToValues.put(entry.tokenType, entry);
+      literalTokenTypesToValues.put(entry.literalTokenType, entry);
+      shapesToValues.put(shapeKey(entry.numberType, entry.bitDepth, entry.getColumns(), entry.getRows()), entry);
+      numberTypesToValues.get(entry.numberType).add(entry);
     }
+    literalTokenTypesToValues.remove(Token.INVALID_TYPE);
+  }
 
-    // create a mapping array between the token types and the type enum
-    minIndex = localMinIndex;
-    NumericType[] localTokensTypesToValues = new NumericType[localMaxIndex - localMinIndex + 1];
-    literalTokenTypesToValues = new HashMap<>();
-    for (NumericType entry : values()) {
-      int index = entry.tokenType - minIndex;
-      if (localTokensTypesToValues[index] != null) {
-        throw new AssertionError(
-            "A type was registered multiple times for the same token. Fix the Tensor class' initialization!");
-      }
-      localTokensTypesToValues[index] = entry;
-
-      if (entry.literalTokenType != Token.INVALID_TYPE) {
-        literalTokenTypesToValues.put(entry.literalTokenType, entry);
-      }
-    }
-    tokenTypesToValues = localTokensTypesToValues;
-
-    // register the types to enum sets for each of the number types
-    // (inverse mapping)
-    for (NumericType entry : values()) {
-      EnumSet<NumericType> registeredTypes = entry.numberType.registeredTypes;
-      if (registeredTypes != null) {
-        registeredTypes.add(entry);
-      } else {
-        entry.numberType.registeredTypes = EnumSet.of(entry);
-      }
-    }
-
-    // calculate possible implicit casts for each type
-    // promotion tables:
-    // https://github.com/KhronosGroup/GLSL/blob/3d48ca20f65b7fad91baab3dcadd224ce4655f05/extensions/ext/GL_EXT_shader_explicit_arithmetic_types.txt#L409
-    for (NumericType from : values()) {
-      EnumSet<NumericType> implicitCastTypes = EnumSet.noneOf(NumericType.class);
-      from.implicitCastTypes = implicitCastTypes;
-      for (NumericType to : values()) {
-        boolean canCast = from == to
-            || (Arrays.equals(from.dimensions, to.dimensions) && switch (from.numberType) {
-          case BOOLEAN -> false;
-          case SIGNED_INTEGER -> switch (to.numberType) {
-            case UNSIGNED_INTEGER, SIGNED_INTEGER, FLOATING_POINT -> to.bitDepth >= from.bitDepth;
-            default -> false;
-          };
-          case UNSIGNED_INTEGER -> switch (to.numberType) {
-            case UNSIGNED_INTEGER, SIGNED_INTEGER -> to.bitDepth > from.bitDepth;
-            case FLOATING_POINT -> to.bitDepth >= from.bitDepth;
-            default -> false;
-          };
-          case FLOATING_POINT -> to.numberType == NumberType.FLOATING_POINT && to.bitDepth >= from.bitDepth;
-        });
-
-        if (canCast) {
-          implicitCastTypes.add(to);
-        }
-      }
-    }
+  static EnumSet<NumericType> ofNumberType(NumberType numberType) {
+    return numberTypesToValues.get(numberType);
   }
 
   /**
    * Returns the set of types that this type can be converted to without a
-   * constructor or swizzling.
+   * constructor or swizzling in the latest GLSL version with the explicit
+   * arithmetic types available. The set includes this type itself. Use
+   * {@link Conversions#canImplicitlyConvert(Type, Type, TypeEnvironment)} to
+   * check conversions for a specific GLSL version.
    *
    * @return the set of types that this type can be implicitly converted to.
    */
   public EnumSet<NumericType> getImplicitCasts() {
-    return implicitCastTypes;
+    var result = EnumSet.noneOf(NumericType.class);
+    for (NumericType to : values()) {
+      if (isImplicitlyCastableTo(to)) {
+        result.add(to);
+      }
+    }
+    return result;
   }
 
   public boolean isImplicitlyCastableTo(NumericType other) {
-    return implicitCastTypes.contains(other);
+    return Conversions.canImplicitlyConvert(this, other, TypeEnvironment.LATEST);
   }
-
-  /**
-   * TODO: function that checks for (constant) integral numbers
-   * <p>
-   * implicit cast for binary operations:
-   * https://github.com/KhronosGroup/GLSL/blob/3d48ca20f65b7fad91baab3dcadd224ce4655f05/extensions/ext/GL_EXT_shader_explicit_arithmetic_types.txt#L574
-   */
 
   public static NumericType fromToken(Token token) {
     return ofTokenType(token.getType());
@@ -372,9 +386,15 @@ public enum NumericType implements TokenTyped {
    *
    * @param tokenType The token type in the parser
    * @return The type for the given token type index
+   * @throws IllegalArgumentException if the token type is not the token type of
+   *                                  a numeric type
    */
   public static NumericType ofTokenType(int tokenType) {
-    return tokenTypesToValues[tokenType - minIndex];
+    var type = tokenTypesToValues.get(tokenType);
+    if (type == null) {
+      throw new IllegalArgumentException("Token type is not a numeric type: " + tokenType);
+    }
+    return type;
   }
 
   /**
@@ -389,5 +409,16 @@ public enum NumericType implements TokenTyped {
       throw new IllegalArgumentException("Token type has no literal type: " + literalTokenType);
     }
     return type;
+  }
+
+  /**
+   * Returns whether there is a literal syntax for values of this type. Only
+   * scalar types can have literals, and of those the 8 bit integer types have
+   * none.
+   *
+   * @return true if literals of this type can be written
+   */
+  public boolean hasLiteral() {
+    return literalTokenType != Token.INVALID_TYPE;
   }
 }

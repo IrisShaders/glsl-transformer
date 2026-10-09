@@ -1,0 +1,74 @@
+// Files of the glslang test suite that glslang accepts without errors but for
+// which the type analysis reports diagnostics or which cannot be parsed, with
+// the reason for each file. See TypeCorpusTest.
+comment.frag the file uses syntax that the grammar does not support
+glsl.450.subgroupPartitioned.comp the builtins of GL_NV_shader_subgroup_partitioned are not supported
+glsl.autosampledtextures.frag the separate texture, sampler and subpass input types of Vulkan are not supported
+glsl.es320.subgroupPartitioned.comp the builtins of GL_NV_shader_subgroup_partitioned are not supported
+pointCoord.frag glslang tests this file as GLSL ES 1.00 although it has no version statement
+spv.1.3.coopmat.comp the builtins of GL_NV_cooperative_matrix are not supported
+spv.1.4.OpEntryPoint.opaqueParams.vert the separate texture, sampler and subpass input types of Vulkan are not supported
+spv.1.4.sparseTexture.frag the builtins of GL_ARB_sparse_texture2 are not supported
+spv.310.comp the builtins of GL_EXT_device_group are not supported
+spv.OVR_multiview.vert the builtins of GL_OVR_multiview are not supported
+spv.atomicAdd.bufferReference.comp buffer references of GL_EXT_buffer_reference are not supported
+spv.buffer.autoassign.frag the file uses syntax that the grammar does not support
+spv.bufferhandle1.frag buffer references of GL_EXT_buffer_reference are not supported
+spv.bufferhandle10.frag buffer references of GL_EXT_buffer_reference are not supported
+spv.bufferhandle11.frag buffer references of GL_EXT_buffer_reference are not supported
+spv.bufferhandle12.frag buffer references of GL_EXT_buffer_reference are not supported
+spv.bufferhandle13.frag buffer references of GL_EXT_buffer_reference are not supported
+spv.bufferhandle14.frag buffer references of GL_EXT_buffer_reference are not supported
+spv.bufferhandle15.frag buffer references of GL_EXT_buffer_reference are not supported
+spv.bufferhandle16.frag buffer references of GL_EXT_buffer_reference are not supported
+spv.bufferhandle2.frag buffer references of GL_EXT_buffer_reference are not supported
+spv.bufferhandle4.frag buffer references of GL_EXT_buffer_reference are not supported
+spv.bufferhandle5.frag buffer references of GL_EXT_buffer_reference are not supported
+spv.bufferhandle6.frag buffer references of GL_EXT_buffer_reference are not supported
+spv.bufferhandle7.frag buffer references of GL_EXT_buffer_reference are not supported
+spv.bufferhandle9.frag buffer references of GL_EXT_buffer_reference are not supported
+spv.bufferhandleUvec2.frag buffer references of GL_EXT_buffer_reference are not supported
+spv.builtin.PrimitiveShadingRateEXT.vert the builtins of GL_EXT_fragment_shading_rate are not supported
+spv.builtin.ShadingRateEXT.frag the builtins of GL_EXT_fragment_shading_rate are not supported
+spv.deviceGroup.frag the builtins of GL_EXT_device_group are not supported
+spv.float16Fetch.frag the separate texture, sampler and subpass input types of Vulkan are not supported
+spv.fragmentDensity-es.frag the builtins of GL_EXT_fragment_invocation_density are not supported
+spv.fragmentDensity.frag the builtins of GL_EXT_fragment_invocation_density are not supported
+spv.fsi.frag the builtins of GL_ARB_fragment_shader_interlock are not supported
+spv.fullyCovered.frag the builtins of GL_NV_conservative_raster_underestimation are not supported
+spv.glsl.register.autoassign.frag the separate texture, sampler and subpass input types of Vulkan are not supported
+spv.glsl.register.noautoassign.frag the separate texture, sampler and subpass input types of Vulkan are not supported
+spv.imageLoadStoreLod.frag the builtins of GL_AMD_shader_image_load_store_lod, GL_EXT_shader_image_int64 are not supported
+spv.multiView.frag the builtins of GL_EXT_multiview are not supported
+spv.multiviewPerViewAttributes.tesc the builtins of GL_NVX_multiview_per_view_attributes are not supported
+spv.multiviewPerViewAttributes.vert the builtins of GL_NVX_multiview_per_view_attributes are not supported
+spv.nonuniform.frag the file uses syntax that the grammar does not support
+spv.nonuniform2.frag the builtins of GL_EXT_nonuniform_qualifier are not supported
+spv.nonuniform3.frag the separate texture, sampler and subpass input types of Vulkan are not supported
+spv.nonuniform4.frag the builtins of GL_EXT_nonuniform_qualifier are not supported
+spv.nonuniform5.frag the builtins of GL_EXT_nonuniform_qualifier are not supported
+spv.register.autoassign-2.frag the file uses syntax that the grammar does not support
+spv.register.autoassign.frag the file uses syntax that the grammar does not support
+spv.register.autoassign.rangetest.frag the file uses syntax that the grammar does not support
+spv.register.subpass.frag the file uses syntax that the grammar does not support
+spv.samplerlessTextureFunctions.frag the separate texture, sampler and subpass input types of Vulkan are not supported
+spv.separate.frag the separate texture, sampler and subpass input types of Vulkan are not supported
+spv.shaderBallot.comp the builtins of GL_ARB_shader_ballot are not supported
+spv.shaderBallotAMD.comp the builtins of GL_AMD_shader_ballot are not supported
+spv.shaderFragMaskAMD.frag the separate texture, sampler and subpass input types of Vulkan are not supported
+spv.shaderImageFootprint.frag the builtins of GL_NV_shader_texture_footprint are not supported
+spv.shadingRate.frag the builtins of GL_NV_shading_rate_image are not supported
+spv.smBuiltins.frag the builtins of GL_NV_shader_sm_builtins are not supported
+spv.smBuiltins.vert the builtins of GL_NV_shader_sm_builtins are not supported
+spv.sparseTexture.frag the builtins of GL_ARB_sparse_texture2 are not supported
+spv.sparseTextureClamp.frag the builtins of GL_ARB_sparse_texture_clamp are not supported
+spv.stereoViewRendering.tesc the builtins of GL_NV_stereo_view_rendering are not supported
+spv.stereoViewRendering.vert the builtins of GL_NV_stereo_view_rendering are not supported
+spv.subgroupExtendedTypesPartitioned.comp the builtins of GL_NV_shader_subgroup_partitioned are not supported
+spv.subgroupPartitioned.comp the builtins of GL_NV_shader_subgroup_partitioned are not supported
+spv.subpass.frag the separate texture, sampler and subpass input types of Vulkan are not supported
+spv.terminate.frag the builtins of GL_EXT_terminate_invocation are not supported
+spv.texture.sampler.transform.frag the separate texture, sampler and subpass input types of Vulkan are not supported
+spv.textureBuffer.vert the separate texture, sampler and subpass input types of Vulkan are not supported
+spv.textureGatherBiasLod.frag the builtins of GL_AMD_texture_gather_bias_lod, GL_ARB_sparse_texture2 are not supported
+web.separate.frag the separate texture, sampler and subpass input types of Vulkan are not supported

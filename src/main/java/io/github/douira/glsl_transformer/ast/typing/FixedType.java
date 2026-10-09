@@ -5,7 +5,12 @@ import org.antlr.v4.runtime.Token;
 import io.github.douira.glsl_transformer.GLSLLexer;
 import io.github.douira.glsl_transformer.ast.data.*;
 
-public enum FixedType implements TokenTyped {
+/**
+ * The fixed types are the types that are not numeric and not user-defined:
+ * void and the opaque types. Each fixed type is also a {@link Type} in the type
+ * system and {@link #VOID} is the type of expressions without a value.
+ */
+public enum FixedType implements TokenTyped, Type {
   VOID(GLSLLexer.VOID, TypeKind.VOID),
   ATOMIC_UINT(GLSLLexer.ATOMIC_UINT, TypeKind.ATOMIC_UINT),
   SAMPLER2D(GLSLLexer.SAMPLER2D, TypeKind.SAMPLER, NumberType.FLOATING_POINT),
@@ -108,6 +113,16 @@ public enum FixedType implements TokenTyped {
   @Override
   public int getTokenType() {
     return tokenType;
+  }
+
+  @Override
+  public String getTypeName() {
+    var literalName = GLSLLexer.VOCABULARY.getLiteralName(tokenType);
+    return literalName.substring(1, literalName.length() - 1);
+  }
+
+  public boolean isOpaque() {
+    return this != VOID;
   }
 
   public static FixedType fromToken(Token token) {

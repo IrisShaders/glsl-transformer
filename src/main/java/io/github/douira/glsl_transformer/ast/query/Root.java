@@ -11,6 +11,7 @@ import io.github.douira.glsl_transformer.ast.node.external_declaration.ExternalD
 import io.github.douira.glsl_transformer.ast.query.index.*;
 import io.github.douira.glsl_transformer.ast.query.match.*;
 import io.github.douira.glsl_transformer.ast.transform.ASTParser;
+import io.github.douira.glsl_transformer.ast.typing.*;
 import io.github.douira.glsl_transformer.util.Passthrough;
 
 /**
@@ -46,6 +47,13 @@ public class Root {
   private static Deque<Root> activeBuildRoots = new ArrayDeque<>();
   private List<? extends ASTNode> nodeList;
   private boolean activity;
+
+  // type analysis state: the analyses of the trees in this root are cached until
+  // the next modification of any node in this root
+  private TypeEnvironment typeEnvironment;
+  private long modificationCount;
+  private long analyzedModificationCount;
+  private final Map<ASTNode, TypeAnalysis> typeAnalyses = new IdentityHashMap<>();
 
   /**
    * Constructs a new root with the given node and identifier indexes.
@@ -92,6 +100,7 @@ public class Root {
    *                      added
    */
   public void registerNode(ASTNode node, boolean isSubtreeRoot) {
+    modificationCount++;
     if (nodeIndex != null) {
       nodeIndex.add(node);
     }
@@ -115,6 +124,7 @@ public class Root {
    *                      removed
    */
   public void unregisterNode(ASTNode node, boolean isSubtreeRoot) {
+    modificationCount++;
     if (nodeIndex != null) {
       nodeIndex.remove(node);
     }
@@ -138,6 +148,7 @@ public class Root {
   }
 
   public void unregisterFastRename(ASTNode identifier) {
+    modificationCount++;
     if (externalDeclarationIndex != null) {
       externalDeclarationIndex.notifySubtreeRemove(identifier);
     }
@@ -151,9 +162,76 @@ public class Root {
   }
 
   public void registerFastRename(ASTNode identifier) {
+    modificationCount++;
     if (externalDeclarationIndex != null) {
       externalDeclarationIndex.notifySubtreeAdd(identifier);
     }
+  }
+
+  /**
+   * Returns the environment that the trees in this root are typed in.
+   * 
+   * @return the environment, or null if the environment is derived from each
+   *         tree with {@link TypeEnvironment#of(ASTNode)}
+   */
+  public TypeEnvironment getTypeEnvironment() {
+    return typeEnvironment;
+  }
+
+  /**
+   * Sets the environment that the trees in this root are typed in. This is
+   * necessary to give the type analysis information that is not part of the
+   * tree, like the shader stage.
+   * 
+   * @param typeEnvironment the environment, or null to derive the environment
+   *                        from each tree
+   */
+  public void setTypeEnvironment(TypeEnvironment typeEnvironment) {
+    this.typeEnvironment = typeEnvironment;
+    invalidateTypeAnalysis();
+  }
+
+  /**
+   * Discards the cached type analyses. This happens automatically when nodes
+   * are added, removed, moved or renamed and when setters of nodes are used.
+   * It has to be called after public fields of nodes are written to directly.
+   */
+  public void invalidateTypeAnalysis() {
+    modificationCount++;
+  }
+
+  /**
+   * Returns the number of modifications of the nodes in this root so far. The
+   * number is only meaningful in comparison to an earlier value.
+   * 
+   * @return the modification count
+   */
+  public long getModificationCount() {
+    return modificationCount;
+  }
+
+  /**
+   * Returns the type analysis of the tree that the given node is in. The
+   * analysis is cached until a node of this root is modified.
+   * 
+   * @param node a node of the tree to analyze, which should have this root
+   * @return the type analysis of the whole tree
+   */
+  public TypeAnalysis getTypeAnalysis(ASTNode node) {
+    var top = node;
+    while (top.getParent() != null) {
+      top = top.getParent();
+    }
+    if (analyzedModificationCount != modificationCount) {
+      typeAnalyses.clear();
+      analyzedModificationCount = modificationCount;
+    }
+    var analysis = typeAnalyses.get(top);
+    if (analysis == null) {
+      analysis = new TypeAnalyzer().setEnvironment(typeEnvironment).analyze(top);
+      typeAnalyses.put(top, analysis);
+    }
+    return analysis;
   }
 
   private void ensureEmptyNodeList() {

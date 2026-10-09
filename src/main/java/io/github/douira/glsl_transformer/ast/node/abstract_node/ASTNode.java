@@ -8,7 +8,7 @@ import io.github.douira.glsl_transformer.ast.data.ChildNodeList;
 import io.github.douira.glsl_transformer.ast.query.Root;
 import io.github.douira.glsl_transformer.ast.transform.*;
 import io.github.douira.glsl_transformer.ast.traversal.*;
-import io.github.douira.glsl_transformer.ast.typing.Type;
+import io.github.douira.glsl_transformer.ast.typing.*;
 
 /**
  * The AST node represents a node in the abstract syntax tree. Each AST node has
@@ -47,7 +47,6 @@ public abstract class ASTNode {
   private Root root = Root.getActiveBuildRoot();
   protected Template<?> template = null;
   protected SourceLocation sourceLocation = null;
-  private Type type;
 
   /**
    * Whether this node has been registered with the root. This is only used when
@@ -69,15 +68,50 @@ public abstract class ASTNode {
     this.sourceLocation = sourceLocation;
   }
 
-  public void assignType(Type type) {
-    this.type = type;
+  /**
+   * Returns the type of this node as determined by type analysis of the tree
+   * this node is part of. Every expression has a type, which is the
+   * {@link ErrorType} if it could not be typed. Nodes that declare or specify
+   * something have the type of that, see {@link TypeAnalysis#typeOf(ASTNode)}.
+   * <p>
+   * The analysis is computed lazily, cached in the root and recomputed after
+   * the tree changes. Changes made by writing to public fields of nodes
+   * directly are not noticed, use the setters or call
+   * {@link Root#invalidateTypeAnalysis()} after such changes.
+   * 
+   * @return the type of this node, or null if this node has no type
+   */
+  public Type getType() {
+    return getTypeAnalysis().typeOf(this);
   }
 
-  public Type getType() {
-    if (type == null) {
-      throw new IllegalStateException("Type has not been assigned yet!");
+  /**
+   * Returns the type analysis of the tree this node is part of. See
+   * {@link #getType()} for the caching behavior.
+   * 
+   * @return the type analysis of the whole tree
+   */
+  public TypeAnalysis getTypeAnalysis() {
+    if (root != null) {
+      return root.getTypeAnalysis(this);
     }
-    return type;
+
+    // nodes that were created outside of a build session have no root to cache in
+    ASTNode top = this;
+    while (top.parent != null) {
+      top = top.parent;
+    }
+    return new TypeAnalyzer().analyze(top);
+  }
+
+  /**
+   * Notifies the root that something about this node changed that the root
+   * does not notice through the registration of nodes.
+   */
+  protected void markModified() {
+    if (root != null) {
+      root.invalidateTypeAnalysis();
+    }
   }
 
   public ASTNode getParent() {
@@ -309,6 +343,7 @@ public abstract class ASTNode {
     // always set the self replacer since the node might have moved inside its
     // parent without changing the parent
     this.selfReplacer = (Consumer<ASTNode>) setter;
+    parent.markModified();
 
     // if the parent doesn't change, nothing has to be done
     if (this.parent == parent) {
@@ -412,6 +447,7 @@ public abstract class ASTNode {
    * been (efficiently) removed from the parent.
    */
   public void detachParent() {
+    markModified();
     lastParent = parent;
     parent = null;
     selfReplacer = null;

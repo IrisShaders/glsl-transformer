@@ -130,5 +130,4 @@ See the [project board](https://github.com/IrisShaders/glsl-transformer/projects
 
 ### Potential Future Features
 
-- Type inference
 - Better formatting

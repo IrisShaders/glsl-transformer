@@ -28,7 +28,6 @@ public enum NumberType {
 
   private final int maxBitDepth;
   private final int[] maxDimensions;
-  EnumSet<NumericType> registeredTypes; // initialized in static block
 
   NumberType(int maxBitDepth, int... maxDimensions) {
     this.maxBitDepth = maxBitDepth;
@@ -44,12 +43,10 @@ public enum NumberType {
   }
 
   /**
-   * @return An EnumSet of all the Types which use this number type. This is
-   *         created
-   *         after all Types have been created.
+   * @return An EnumSet of all the Types which use this number type.
    */
   public EnumSet<NumericType> getRegisteredTypes() {
-    return registeredTypes;
+    return NumericType.ofNumberType(this);
   }
 
   public boolean isBoolean() {

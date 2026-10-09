@@ -16,6 +16,21 @@ public class NumericTypeSpecifier extends TypeSpecifier {
     this.type = type;
   }
 
+  public NumericType getNumericType() {
+    return type;
+  }
+
+  /**
+   * Sets the type. Unlike writing to the field directly, this invalidates the
+   * cached type analysis of the root.
+   * 
+   * @param type the new type
+   */
+  public void setNumericType(NumericType type) {
+    this.type = type;
+    markModified();
+  }
+
   @Override
   public SpecifierType getSpecifierType() {
     return SpecifierType.NUMERIC;

@@ -5,6 +5,7 @@ plugins {
   id 'jacoco'
   alias(libs.plugins.test.logger)
   alias(libs.plugins.jreleaser)
+  alias(libs.plugins.japicmp)
   alias(libs.plugins.version.catalog.update)
 }
 
@@ -15,6 +16,12 @@ description = 'A GLSL parser and transformer based on ANTLR4'
 def repoOwner = 'IrisShaders'
 def repoUrl = "https://github.com/${repoOwner}/${name}"
 def generatedGrammarClasses = ['**/GLSLParser*', '**/GLSLLexer*']
+
+// the released version that the API reports compare the current state to
+def apiBaselineVersion = '3.0.0-pre3'
+
+// the type system is required to be fully covered by tests
+def fullyCoveredClasses = ['io.github.douira.glsl_transformer.ast.typing.*']
 
 // the release title and notes are taken from the part of the changelog file below the separator
 def (releaseTitle, releaseNotes) = file('CHANGELOG.md').text
@@ -80,6 +87,67 @@ jacocoTestReport {
   classDirectories.setFrom(sourceSets.main.output.asFileTree.matching {
     exclude generatedGrammarClasses
   })
+}
+
+jacocoTestCoverageVerification {
+  dependsOn test
+  classDirectories.setFrom(jacocoTestReport.classDirectories)
+  violationRules {
+    rule {
+      element = 'CLASS'
+      includes = fullyCoveredClasses
+      limit {
+        counter = 'LINE'
+        value = 'COVEREDRATIO'
+        minimum = 1.0
+      }
+      limit {
+        counter = 'BRANCH'
+        value = 'COVEREDRATIO'
+        minimum = 1.0
+      }
+    }
+  }
+}
+
+check {
+  dependsOn jacocoTestCoverageVerification
+}
+
+// The API reports list the changes of the public API since the baseline version, see docs/development.md.
+// The classes generated from the grammar are reported separately since they change with every grammar change.
+def apiBaseline = configurations.detachedConfiguration(
+    dependencies.create("${group}:${name}:${apiBaselineVersion}"))
+apiBaseline.transitive = false
+def generatedGrammarClassNames = ["${group}.glsl_transformer.GLSLParser*", "${group}.glsl_transformer.GLSLLexer*"]
+
+def configureApiReport = { task, reportName ->
+  task.group = 'verification'
+  task.oldClasspath.from(apiBaseline)
+  task.newClasspath.from(tasks.named('jar'))
+  task.onlyModified = true
+  task.failOnModification = false
+  task.ignoreMissingClasses = true
+  task.txtOutputFile = layout.buildDirectory.file("reports/japicmp/${reportName}.txt")
+  task.htmlOutputFile = layout.buildDirectory.file("reports/japicmp/${reportName}.html")
+}
+
+tasks.register('apiReportMain', me.champeau.gradle.japicmp.JapicmpTask) {
+  description = "Reports the API changes since version ${apiBaselineVersion}, without the generated grammar classes."
+  configureApiReport(it, 'api')
+  classExcludes = generatedGrammarClassNames
+}
+
+tasks.register('apiReportGrammar', me.champeau.gradle.japicmp.JapicmpTask) {
+  description = "Reports the API changes of the generated grammar classes since version ${apiBaselineVersion}."
+  configureApiReport(it, 'api-grammar')
+  classIncludes = generatedGrammarClassNames
+}
+
+tasks.register('apiReport') {
+  group = 'verification'
+  description = "Reports the API changes since version ${apiBaselineVersion}."
+  dependsOn 'apiReportMain', 'apiReportGrammar'
 }
 
 javadoc {

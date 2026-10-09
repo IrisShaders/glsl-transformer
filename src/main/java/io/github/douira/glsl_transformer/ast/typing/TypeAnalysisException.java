@@ -1,19 +1,17 @@
 package io.github.douira.glsl_transformer.ast.typing;
 
+/**
+ * Thrown by the type analysis in strict mode when the first problem is found.
+ */
 public class TypeAnalysisException extends RuntimeException {
-  public TypeAnalysisException(String message) {
-    super(message);
+  private final Diagnostic diagnostic;
+
+  public TypeAnalysisException(Diagnostic diagnostic) {
+    super(diagnostic.toString());
+    this.diagnostic = diagnostic;
   }
 
-  public TypeAnalysisException(String message, Throwable cause) {
-    super(message, cause);
-  }
-
-  public TypeAnalysisException(Throwable cause) {
-    super(cause);
-  }
-
-  public TypeAnalysisException() {
-    super();
+  public Diagnostic getDiagnostic() {
+    return diagnostic;
   }
 }

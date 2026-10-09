@@ -194,7 +194,7 @@ public class TransformTest extends TestWithSingleASTTransformer {
 
                 tree.prependMainFunctionBody(initTemplate.getInstanceFor(root,
                     new Identifier(name),
-                    LiteralExpression.getDefaultNumericValue(specifier.type)));
+                    root.indexNodes(() -> LiteralExpression.getDefaultNumericValue(specifier.type))));
               }
             }
           });

@@ -18,6 +18,19 @@ public class VersionStatement extends ASTNode {
     this.profile = profile;
   }
 
+  /**
+   * Sets the version and profile. Unlike writing to the fields directly, this
+   * invalidates the cached type analysis of the root.
+   * 
+   * @param version the new version
+   * @param profile the new profile, which may be null
+   */
+  public void setVersion(Version version, Profile profile) {
+    this.version = version;
+    this.profile = profile;
+    markModified();
+  }
+
   public static VersionStatement getDefault() {
     return new VersionStatement(Version.GLSL11, null);
   }

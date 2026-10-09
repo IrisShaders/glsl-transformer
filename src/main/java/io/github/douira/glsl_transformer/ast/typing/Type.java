@@ -1,14 +1,27 @@
 package io.github.douira.glsl_transformer.ast.typing;
 
-public abstract class Type {
-  public static final VoidType VOID = VoidType.INSTANCE;
+/**
+ * A type in the GLSL type system. Types are immutable. Numeric types, fixed
+ * types, strings, arrays and the error type are compared structurally, struct
+ * and interface block types are nominal and compared by identity.
+ */
+public sealed interface Type
+    permits NumericType, FixedType, StringType, ArrayType, StructType, InterfaceBlockType, SubroutineType, ErrorType {
+  /**
+   * Returns the name of the type as it would be written in GLSL, as far as that
+   * is possible. This is intended for diagnostics and debugging.
+   *
+   * @return The name of the type
+   */
+  String getTypeName();
 
   /**
-   * The scope this type is defined in. Null only when there is no enclosing scope
-   * (node in subtree without scope-forming structure like a translation unit or
-   * compound statement) or the node has no parent.
+   * Returns whether this is the error type, which is given to anything that
+   * could not be typed.
+   *
+   * @return true if this is the error type
    */
-  public Scope enclosingScope; // TODO: nullable
-
-  // public abstract Type combineType(Type assigned);
+  default boolean isError() {
+    return this == ErrorType.INSTANCE;
+  }
 }

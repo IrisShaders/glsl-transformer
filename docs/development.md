@@ -23,6 +23,22 @@ With the same secrets and a `JRELEASER_GITHUB_TOKEN` in `~/.jreleaser/config.pro
 
 The versions of all dependencies and Gradle plugins are pinned in `gradle/libs.versions.toml`, the Gradle version is pinned by the wrapper. Running `./update-dependencies.sh` updates all of them to their latest stable versions and then builds and tests the project. Review the resulting changes before committing them. The versions of the GitHub actions used in the workflows are updated manually.
 
+# API Reports
+
+`./gradlew apiReport` compares the public API of the current state with the released version that is set as `apiBaselineVersion` in `build.gradle`, using [japicmp](https://github.com/siom79/japicmp). The reports are written to `build/reports/japicmp`: `api.txt` and `api.html` for everything except the classes that are generated from the grammar, `api-grammar.txt` and `api-grammar.html` for those. The task never fails the build. Use the reports to write the migration notes in `CHANGELOG.md` and update the baseline version after a release.
+
+# Type Analysis Tests
+
+The classes in `ast.typing` are required to have full line and branch coverage. `./gradlew check` fails otherwise (`jacocoTestCoverageVerification`). The uncovered lines can be found in the report in `build/reports/jacoco/test/html`.
+
+- `TypeAnalyzerTest.cases` contains the table-driven tests: expressions with their expected types and programs with their expected diagnostics. Known imprecisions of the analysis are pinned as cases with names that start with `imprecision`. When fixing one, update the case and the list of limitations in `docs/overview.md`.
+- `BuiltinRegistryTest` generates a call for every builtin function prototype and pins the number of prototypes per environment. Update the numbers when changing the files in `src/main/resources/.../ast/typing/builtins`.
+- `TypeCorpusTest` analyzes the files of the glslang test suite in `src/test/resources/glslang-test`. The outcome for every file is pinned in `TypeCorpusTest.outcomes`. After a deliberate change of the analysis, regenerate the file by running the test with `UPDATE_TYPE_CORPUS=1 ./gradlew test --tests TypeCorpusTest` and review the difference. Files that glslang accepts may only have diagnostics if they are listed in `TypeCorpusTest.allowlist` with a reason.
+- `TypeDifferentialTest` compares the inferred types with those of glslang.
+- The typed trees of the reprint cases are snapshots of `ASTReprintTest`.
+
+`TypeCorpusTest.glslang` and `TypeDifferentialTest.glslang` are derived from the reference results of glslang. To regenerate them, clone [glslang](https://github.com/KhronosGroup/glslang) into `hidden/reference/glslang` (the `hidden` directory is ignored by git) and run `python3 scripts/update-typing-test-data.py`.
+
 # Other
 
 Commands for combining all files in a directory and subdirectories:

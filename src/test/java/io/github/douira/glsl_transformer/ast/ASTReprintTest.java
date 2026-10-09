@@ -55,4 +55,18 @@ public class ASTReprintTest {
         .toMatchSnapshot(
             SnapshotUtil.inputOutputSnapshot(input, astPrinter.getResult()));
   }
+
+  /**
+   * Snapshots of the trees with the types that the type analysis determines.
+   */
+  @ParameterizedTest
+  @SnapshotName("testTypedTree")
+  @TestCaseSource(caseSet = "testReprint", spacing = Spacing.TRIM_SINGLE_BOTH)
+  void testTypedTree(String type, String input, String output) {
+    var ast = parseAST(getParseMethod(type), input);
+    expect
+        .scenario(type + "_" + getInputHash(input))
+        .toMatchSnapshot(
+            SnapshotUtil.inputOutputSnapshot(input, PrintTypedAST.print(ast)));
+  }
 }

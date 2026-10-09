@@ -2,7 +2,15 @@ package io.github.douira.glsl_transformer.ast.node.expression;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+import java.util.*;
+
 import org.junit.jupiter.api.Test;
+
+import io.github.douira.glsl_transformer.ast.node.expression.unary.FunctionCallExpression;
+import io.github.douira.glsl_transformer.ast.print.ASTPrinter;
+import io.github.douira.glsl_transformer.ast.query.RootSupplier;
+import io.github.douira.glsl_transformer.ast.traversal.ASTVoidVisitor;
+import io.github.douira.glsl_transformer.parser.ParseShape;
 
 import io.github.douira.glsl_transformer.ast.node.expression.LiteralExpression.IntegerFormat;
 import io.github.douira.glsl_transformer.ast.typing.*;
@@ -21,6 +29,17 @@ public class LiteralExpressionTest {
         () -> new LiteralExpression(NumericType.I16VEC2, 0));
     assertThrows(IllegalArgumentException.class,
         () -> new LiteralExpression(NumericType.F32MAT2X2, 0.0));
+
+    // there is no syntax for literals of the 8 bit integer types
+    assertThrows(IllegalArgumentException.class, () -> new LiteralExpression(NumericType.INT8, 0));
+    assertThrows(IllegalArgumentException.class, () -> new LiteralExpression(NumericType.UINT8, 0));
+    assertThrows(IllegalArgumentException.class,
+        () -> new LiteralExpression(NumericType.INT8, 0, IntegerFormat.HEXADECIMAL));
+    var literal = new LiteralExpression(NumericType.INT32, 1);
+    assertThrows(IllegalArgumentException.class, () -> literal.setInteger(NumericType.UINT8, 1));
+    assertEquals(NumericType.INT32, literal.getNumericType());
+    assertThrows(NullPointerException.class, () -> literal.setInteger(null, 1));
+
     // Disabled because of very large unsigned longs being put in signed long fields
     // assertThrows(IllegalArgumentException.class,
     // () -> new LiteralExpression(Type.UINT32, -1));
@@ -193,8 +212,12 @@ public class LiteralExpressionTest {
     assertTrue(a.isNonZero());
     var f = new LiteralExpression(NumericType.FLOAT32, 0.0);
     assertFalse(f.isNonZero());
-    var g = new LiteralExpression(false);
-    assertTrue(g.isNonZero());
+    // the boolean value false is zero
+    assertFalse(new LiteralExpression(false).isNonZero());
+    assertTrue(new LiteralExpression(true).isNonZero());
+    var changed = new LiteralExpression(true);
+    changed.changeBoolean(false);
+    assertFalse(changed.isNonZero());
   }
 
   @Test
@@ -276,5 +299,155 @@ public class LiteralExpressionTest {
     assertEquals(IntegerFormat.DECIMAL, f.getIntegerFormat());
     f.setIntegerFormat(IntegerFormat.HEXADECIMAL);
     assertEquals(IntegerFormat.HEXADECIMAL, f.getIntegerFormat());
+  }
+
+  private static void assertOnlyString(LiteralExpression e, String value) {
+    assertTrue(e.isString());
+    assertSame(StringType.INSTANCE, e.getLiteralType());
+    assertEquals(value, e.getString());
+    assertFalse(e.getBoolean());
+    assertEquals(0, e.getInteger());
+    assertNull(e.getIntegerFormat());
+    assertEquals(0.0, e.getFloating());
+    assertFalse(e.isNumeric());
+    assertThrows(IllegalStateException.class, e::getNumericType);
+    assertThrows(IllegalStateException.class, e::getNumberType);
+  }
+
+  private static void assertOnlyBoolean(LiteralExpression e, boolean value) {
+    assertTrue(e.isBoolean());
+    assertSame(NumericType.BOOL, e.getLiteralType());
+    assertEquals(value, e.getBoolean());
+    assertNull(e.getString());
+    assertEquals(0, e.getInteger());
+    assertNull(e.getIntegerFormat());
+    assertEquals(0.0, e.getFloating());
+  }
+
+  private static void assertOnlyInteger(LiteralExpression e, NumericType type, long value, IntegerFormat format) {
+    assertTrue(e.isInteger());
+    assertSame(type, e.getLiteralType());
+    assertEquals(value, e.getInteger());
+    assertSame(format, e.getIntegerFormat());
+    assertNull(e.getString());
+    assertFalse(e.getBoolean());
+    assertEquals(0.0, e.getFloating());
+  }
+
+  private static void assertOnlyFloating(LiteralExpression e, NumericType type, double value) {
+    assertTrue(e.isFloatingPoint());
+    assertSame(type, e.getLiteralType());
+    assertEquals(value, e.getFloating());
+    assertNull(e.getString());
+    assertFalse(e.getBoolean());
+    assertEquals(0, e.getInteger());
+    assertNull(e.getIntegerFormat());
+  }
+
+  @Test
+  void testSettersResetOtherKinds() {
+    // every transition between the kinds of literals leaves no stale state behind
+    var e = new LiteralExpression("text");
+    assertOnlyString(e, "text");
+    e.setBoolean(true);
+    assertOnlyBoolean(e, true);
+    e.setInteger(NumericType.UINT32, 7, IntegerFormat.OCTAL);
+    assertOnlyInteger(e, NumericType.UINT32, 7, IntegerFormat.OCTAL);
+    e.setFloating(NumericType.FLOAT64, 2.5);
+    assertOnlyFloating(e, NumericType.FLOAT64, 2.5);
+    e.setString("again");
+    assertOnlyString(e, "again");
+    e.setInteger(NumericType.INT64, 9);
+    assertOnlyInteger(e, NumericType.INT64, 9, IntegerFormat.DECIMAL);
+    e.setBoolean(true);
+    assertOnlyBoolean(e, true);
+    e.setFloating(1.5f);
+    assertOnlyFloating(e, NumericType.FLOAT32, 1.5);
+    e.setInteger(3);
+    assertOnlyInteger(e, NumericType.INT32, 3, IntegerFormat.DECIMAL);
+    e.setInteger(NumericType.INT16, 4, IntegerFormat.HEXADECIMAL);
+    assertOnlyInteger(e, NumericType.INT16, 4, IntegerFormat.HEXADECIMAL);
+    e.setString("last");
+    assertOnlyString(e, "last");
+    e.setFloating(NumericType.FLOAT16, 0.5);
+    assertOnlyFloating(e, NumericType.FLOAT16, 0.5);
+    e.setBoolean(false);
+    assertOnlyBoolean(e, false);
+    e.setString("");
+    assertOnlyString(e, "");
+    assertThrows(IllegalArgumentException.class, () -> e.setString(null));
+
+    // clones are independent
+    var original = new LiteralExpression(NumericType.INT32, 5);
+    var clone = original.clone();
+    clone.setFloating(1.0f);
+    assertOnlyInteger(original, NumericType.INT32, 5, IntegerFormat.DECIMAL);
+    assertOnlyFloating(clone, NumericType.FLOAT32, 1.0);
+  }
+
+  @Test
+  void testDefaultNumericValueOfNumberType() {
+    var bool = (LiteralExpression) LiteralExpression.getDefaultNumericValue(NumberType.BOOLEAN);
+    assertOnlyBoolean(bool, false);
+    var signed = (LiteralExpression) LiteralExpression.getDefaultNumericValue(NumberType.SIGNED_INTEGER);
+    assertOnlyInteger(signed, NumericType.INT32, 0, IntegerFormat.DECIMAL);
+    var unsigned = (LiteralExpression) LiteralExpression.getDefaultNumericValue(NumberType.UNSIGNED_INTEGER);
+    assertOnlyInteger(unsigned, NumericType.UINT32, 0, IntegerFormat.DECIMAL);
+    var floating = (LiteralExpression) LiteralExpression.getDefaultNumericValue(NumberType.FLOATING_POINT);
+    assertOnlyFloating(floating, NumericType.FLOAT32, 0.0);
+  }
+
+  @Test
+  void testDefaultNumericValueHasExactType() {
+    var root = RootSupplier.DEFAULT.get();
+    for (var type : NumericType.values()) {
+      var value = root.indexNodes(() -> LiteralExpression.getDefaultNumericValue(type));
+
+      // scalars with a literal syntax are literals, everything else is constructed
+      assertEquals(type.hasLiteral(), value instanceof LiteralExpression, type.toString());
+      assertEquals(!type.hasLiteral(), value instanceof FunctionCallExpression, type.toString());
+
+      // the value has exactly the requested type and is valid
+      var analysis = new TypeAnalyzer().analyze(value);
+      assertSame(type, analysis.typeOf(value), type.toString());
+      assertSame(type, value.getType(), type.toString());
+      assertTrue(analysis.diagnostics().isEmpty(), type + ": " + analysis.diagnostics());
+
+      // and it still does after printing and parsing it again
+      var printed = ASTPrinter.printSimple(value);
+      var parsed = ParseShape.EXPRESSION._parseNodeSeparateInternal(printed);
+      assertSame(type, parsed.getType(), printed);
+      assertTrue(parsed.getTypeAnalysis().diagnostics().isEmpty(), printed);
+    }
+    assertEquals("vec3(0.0f)", ASTPrinter.printSimple(
+        root.indexNodes(() -> LiteralExpression.getDefaultNumericValue(NumericType.F32VEC3))));
+    assertEquals("i8vec2(0)", ASTPrinter.printSimple(
+        root.indexNodes(() -> LiteralExpression.getDefaultNumericValue(NumericType.I8VEC2))));
+    assertEquals("0ul", ASTPrinter.printSimple(
+        root.indexNodes(() -> LiteralExpression.getDefaultNumericValue(NumericType.UINT64))));
+  }
+
+  @Test
+  void testVisitStringLiteral() {
+    // the default traversal used to throw for string literals
+    var data = new ArrayList<Object>();
+    new ASTVoidVisitor() {
+      @Override
+      public Void visitData(Object object) {
+        data.add(object);
+        return null;
+      }
+    }.visit(new LiteralExpression("text"));
+    assertEquals(List.of(StringType.INSTANCE, "text"), data);
+
+    data.clear();
+    new ASTVoidVisitor() {
+      @Override
+      public Void visitData(Object object) {
+        data.add(object);
+        return null;
+      }
+    }.visit(new LiteralExpression(NumericType.INT32, 3, IntegerFormat.OCTAL));
+    assertEquals(List.of(NumericType.INT32, 3, IntegerFormat.OCTAL), data);
   }
 }

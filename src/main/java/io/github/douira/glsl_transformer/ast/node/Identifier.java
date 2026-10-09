@@ -30,6 +30,7 @@ public class Identifier extends ASTNode {
     getRoot().unregisterIdentifierRename(this);
     this.name = name;
     getRoot().registerIdentifierRename(this);
+    markModified();
   }
 
   /**
@@ -43,6 +44,7 @@ public class Identifier extends ASTNode {
     getRoot().unregisterFastRename(this);
     this.name = name;
     getRoot().registerFastRename(this);
+    markModified();
   }
 
   public static final void validateContents(String str) {

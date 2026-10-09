@@ -13,6 +13,7 @@ slf4j-simple = "org.slf4j:slf4j-simple:2.0.20"
 snapshot-testing = "io.github.origin-energy:java-snapshot-testing-junit5:4.0.8"
 
 [plugins]
+japicmp = "me.champeau.gradle.japicmp:0.4.6"
 jreleaser = "org.jreleaser:1.26.0"
 test-logger = "com.adarshr.test-logger:4.0.0"
 version-catalog-update = "nl.littlerobots.version-catalog-update:1.1.1"

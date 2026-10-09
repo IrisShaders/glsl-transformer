@@ -1,0 +1,1553 @@
+Cases for TypeAnalyzerTest. Each case starts with the section sign, the name of
+the case set and the name of the scenario. The input and the expectation are
+separated by a line of three equals signs.
+
+The cases with names that start with "imprecision" document known imprecisions
+of the type analysis. They pin the current behavior so that changes to it are
+noticed.
+
+§testExpressions literals:
+===
+1 => int
+1u => uint
+1.0 => float
+1.0lf => double
+true => bool
+false => bool
+0x1F => int
+1.0hf => float16_t
+1s => int16_t
+1us => uint16_t
+1l => int64_t
+1ul => uint64_t
+(1) => int
+((1.0)) => float
+
+§testExpressions references:
+int i; const float c = 1.0; struct S { int a; }; int f() { return 1; }
+===
+i => int
+c => float
+missing => <error> ! UNDECLARED_IDENTIFIER
+S => <error> ! NOT_A_VARIABLE
+f => <error> ! NOT_A_VARIABLE
+missing + 1 => <error> ! UNDECLARED_IDENTIFIER
+-missing => <error> ! UNDECLARED_IDENTIFIER
+missing.x => <error> ! UNDECLARED_IDENTIFIER
+missing[0] => <error> ! UNDECLARED_IDENTIFIER
+missing.length() => int ! UNDECLARED_IDENTIFIER
+missing < 1 => bool ! UNDECLARED_IDENTIFIER
+1 < missing => bool ! UNDECLARED_IDENTIFIER
+missing && true => bool ! UNDECLARED_IDENTIFIER
+true ? missing : 1 => int ! UNDECLARED_IDENTIFIER
+true ? 1 : missing => int ! UNDECLARED_IDENTIFIER
+true ? missing : missing => <error> ! UNDECLARED_IDENTIFIER UNDECLARED_IDENTIFIER
+missing ? 1 : 2 => int ! UNDECLARED_IDENTIFIER
+missing = 1 => <error> ! UNDECLARED_IDENTIFIER
+i = missing => int ! UNDECLARED_IDENTIFIER
+i += missing => int ! UNDECLARED_IDENTIFIER
+missing++ => <error> ! UNDECLARED_IDENTIFIER
+i[missing] => <error> ! UNDECLARED_IDENTIFIER INVALID_INDEX
+
+§testExpressions unary:
+#version 460
+int i; uint u; float f; bool b; vec3 v; ivec2 iv; bvec2 bv; mat3 m; struct S { int a; } s; double d;
+===
++i => int
+-i => int
+-u => uint
+-f => float
+-v => vec3
+-m => mat3
+-d => double
++b => <error> ! INVALID_OPERANDS
+-bv => <error> ! INVALID_OPERANDS
+-s => <error> ! INVALID_OPERANDS
+!b => bool
+!i => <error> ! INVALID_OPERANDS
+!bv => <error> ! INVALID_OPERANDS
+~i => int
+~u => uint
+~iv => ivec2
+~f => <error> ! INVALID_OPERANDS
+~b => <error> ! INVALID_OPERANDS
+i++ => int
+i-- => int
+++f => float
+--v => vec3
+m++ => mat3
+b++ => <error> ! INVALID_OPERANDS
+s++ => <error> ! INVALID_OPERANDS
+1++ => int ! NOT_ASSIGNABLE
+(i)++ => int
+(i + 1)-- => int ! NOT_ASSIGNABLE
+
+§testExpressions arithmetic:
+#version 460
+int i; uint u; float f; double d; bool b; vec2 v2; vec3 v; vec4 v4; ivec3 iv; uvec3 uv; bvec3 bv; dvec3 dv;
+mat2 m2; mat3 m; mat4 m4; mat2x3 m23; mat3x2 m32; mat4x2 m42; dmat3 dm; struct S { int a; } s; float a[3];
+===
+i + i => int
+i + u => uint
+u + i => uint
+i + f => float
+f + i => float
+f + d => double
+u * f => float
+i - d => double
+i / 2 => int
+f / 2 => float
+v + v => vec3
+v + f => vec3
+f + v => vec3
+v + i => vec3
+i + v => vec3
+iv + i => ivec3
+iv + u => uvec3
+iv + f => vec3
+iv + uv => uvec3
+iv * v => vec3
+v * dv => dvec3
+v - 1 => vec3
+v / v => vec3
+m + m => mat3
+m - 1.0 => mat3
+2 * m => mat3
+m / m => mat3
+m + dm => dmat3
+m * m => mat3
+m * v => vec3
+v * m => vec3
+m23 * v2 => vec3
+v * m23 => vec2
+m23 * m32 => mat3
+m32 * m23 => mat2
+m23 * m2 => mat2x3
+m23 * m42 => mat4x3
+m * dv => dvec3
+dm * v => dvec3
+m4 * v4 => vec4
+v + v2 => <error> ! INVALID_OPERANDS
+m * v2 => <error> ! INVALID_OPERANDS
+v2 * m => <error> ! INVALID_OPERANDS
+m * m2 => <error> ! INVALID_OPERANDS
+m + m2 => <error> ! INVALID_OPERANDS
+m23 * m23 => <error> ! INVALID_OPERANDS
+m23 / m32 => <error> ! INVALID_OPERANDS
+b + b => <error> ! INVALID_OPERANDS
+b + 1 => <error> ! INVALID_OPERANDS
+1 + b => <error> ! INVALID_OPERANDS
+bv * bv => <error> ! INVALID_OPERANDS
+s + 1 => <error> ! INVALID_OPERANDS
+1 + s => <error> ! INVALID_OPERANDS
+a + a => <error> ! INVALID_OPERANDS
+s + s => <error> ! INVALID_OPERANDS
+
+§testExpressions integerOperators:
+#version 460
+int i; uint u; float f; bool b; ivec3 iv; uvec3 uv; ivec2 iv2; vec3 v;
+===
+i % i => int
+i % u => uint
+iv % i => ivec3
+i % iv => ivec3
+iv % uv => uvec3
+iv % iv => ivec3
+i % f => <error> ! INVALID_OPERANDS
+f % f => <error> ! INVALID_OPERANDS
+iv % iv2 => <error> ! INVALID_OPERANDS
+b % b => <error> ! INVALID_OPERANDS
+i & i => int
+i | u => uint
+iv ^ iv => ivec3
+iv & 1 => ivec3
+1 | iv => ivec3
+i & f => <error> ! INVALID_OPERANDS
+v ^ v => <error> ! INVALID_OPERANDS
+b & b => <error> ! INVALID_OPERANDS
+i << 1 => int
+i << u => int
+u >> i => uint
+iv << 1 => ivec3
+iv << iv => ivec3
+iv >> uv => ivec3
+uv << iv => uvec3
+i << iv => <error> ! INVALID_OPERANDS
+iv << iv2 => <error> ! INVALID_OPERANDS
+f << 1 => <error> ! INVALID_OPERANDS
+1 << f => <error> ! INVALID_OPERANDS
+b << 1 => <error> ! INVALID_OPERANDS
+1 >> b => <error> ! INVALID_OPERANDS
+
+§testExpressions comparisons:
+#version 460
+int i; uint u; float f; bool b; vec3 v; ivec3 iv; mat3 m; struct S { int a; } s, t; struct T { int a; } o;
+float a[3]; float a2[2]; float au[]; sampler2D sam;
+===
+i < i => bool
+i < u => bool
+i <= f => bool
+f > 1 => bool
+u >= 1u => bool
+v < v => bool ! INVALID_OPERANDS
+b < b => bool ! INVALID_OPERANDS
+i < b => bool ! INVALID_OPERANDS
+s < s => bool ! INVALID_OPERANDS
+i < v => bool ! INVALID_OPERANDS
+i == i => bool
+i == u => bool
+i != f => bool
+b == b => bool
+v == v => bool
+v != iv => bool
+m == m => bool
+s == t => bool
+a == a => bool
+a == au => bool
+s != o => bool ! INVALID_OPERANDS
+a == a2 => bool ! INVALID_OPERANDS
+v == f => bool ! INVALID_OPERANDS
+i == b => bool ! INVALID_OPERANDS
+s == 1 => bool ! INVALID_OPERANDS
+b && b => bool
+b || b => bool
+b ^^ b => bool
+b && i => bool ! INVALID_OPERANDS
+i || b => bool ! INVALID_OPERANDS
+v ^^ v => bool ! INVALID_OPERANDS
+
+§testExpressions assignments:
+#version 460
+int i; uint u; float f; bool b; vec3 v; ivec3 iv; mat3 m; const int c = 1; uniform float uni; in float inp;
+out float outp; struct S { int a; vec2 v; } s; const S cs = S(1, vec2(0)); float a[3]; float a2[2];
+uniform Block { float member; } block; out OutBlock { float member; } outBlock; buffer Buf { float member; };
+void fn(in float x, const in float y) { x = 1.0; }
+void outFn(out float x) { x = 1.0; }
+===
+i = 1 => int
+f = 1 => float
+f = i => float
+u = i => uint
+i = u => int ! TYPE_MISMATCH
+i = f => int ! TYPE_MISMATCH
+v = v => vec3
+v = iv => vec3
+iv = v => ivec3 ! TYPE_MISMATCH
+v = f => vec3 ! TYPE_MISMATCH
+b = 1 => bool ! TYPE_MISMATCH
+s = s => S
+a = a => float[3]
+a = a2 => float[3] ! TYPE_MISMATCH
+c = 1 => int ! NOT_ASSIGNABLE
+uni = 1.0 => float ! NOT_ASSIGNABLE
+inp = 1.0 => float ! NOT_ASSIGNABLE
+outp = 1.0 => float
+cs.a = 1 => int ! NOT_ASSIGNABLE
+s.a = 1 => int
+s.v.x = 1.0 => float
+s.v.xy = vec2(1) => vec2
+s.v.xx = vec2(1) => vec2 ! NOT_ASSIGNABLE
+v.zyx = v => vec3
+(v).x = 1.0 => float
+a[0] = 1.0 => float
+m[0] = v => vec3
+m[0][1] = 1.0 => float
+block.member = 1.0 => float ! NOT_ASSIGNABLE
+outBlock.member = 1.0 => float
+member = 1.0 => float
+1 = i => int ! NOT_ASSIGNABLE
+i + 1 = i => int ! NOT_ASSIGNABLE
+-i = i => int ! NOT_ASSIGNABLE
+i += 1 => int
+i -= u => int ! TYPE_MISMATCH
+f *= i => float
+i *= f => int ! TYPE_MISMATCH
+v *= m => vec3
+m *= m => mat3
+v /= 2.0 => vec3
+v += v => vec3
+i %= 2 => int
+f %= 2 => float ! INVALID_OPERANDS
+i <<= 1 => int
+i >>= u => int
+i &= 1 => int
+i |= 1 => int
+i ^= 1 => int
+u &= i => uint
+i &= u => int ! TYPE_MISMATCH
+b += b => bool ! INVALID_OPERANDS
+c += 1 => int ! NOT_ASSIGNABLE
+outFn(uni) => void ! NOT_ASSIGNABLE
+outFn(f) => void
+
+§testExpressions conditionAndSequence:
+#version 460
+int i; uint u; float f; bool b; vec3 v; ivec3 iv; struct S { int a; } s; float a[3];
+===
+b ? i : i => int
+b ? i : f => float
+b ? u : i => uint
+b ? v : iv => vec3
+b ? s : s => S
+b ? a : a => float[3]
+b ? i : b => <error> ! TYPE_MISMATCH
+b ? v : f => <error> ! TYPE_MISMATCH
+b ? s : i => <error> ! TYPE_MISMATCH
+i ? 1 : 2 => int ! INVALID_CONDITION
+v ? 1 : 2 => int ! INVALID_CONDITION
+(i, f) => float
+(f, i, b) => bool
+(missing, i) => int ! UNDECLARED_IDENTIFIER
+
+§testExpressions indexing:
+#version 460
+int i; uint u; float f; bool b; vec3 v; mat3 m; mat2x4 m24; float a[3]; float aa[2][3]; float au[];
+struct S { int a; } s; const int two = 2; const int unknown = int(1.0); vec4 arr[two];
+===
+a[0] => float
+a[i] => float
+a[u] => float
+a[2] => float
+a[two] => float
+a[unknown] => float
+aa[1] => float[3]
+aa[1][2] => float
+au[7] => float
+arr[1] => vec4
+v[0] => float
+v[i] => float
+m[0] => vec3
+m[2][2] => float
+m24[1] => vec4
+a[3] => float ! INDEX_OUT_OF_BOUNDS
+a[-1] => float ! INDEX_OUT_OF_BOUNDS
+arr[2] => vec4 ! INDEX_OUT_OF_BOUNDS
+v[3] => float ! INDEX_OUT_OF_BOUNDS
+m[3] => vec3 ! INDEX_OUT_OF_BOUNDS
+m24[2] => vec4 ! INDEX_OUT_OF_BOUNDS
+a[f] => float ! INVALID_INDEX
+a[b] => float ! INVALID_INDEX
+a[v] => float ! INVALID_INDEX
+i[0] => <error> ! INVALID_INDEX
+s[0] => <error> ! INVALID_INDEX
+f[f] => <error> ! INVALID_INDEX INVALID_INDEX
+
+§testExpressions members:
+#version 460
+int i; float f; bool b; vec2 v2; vec3 v; vec4 v4; ivec4 iv4; bvec2 bv; mat3 m; float a[3];
+struct Inner { vec2 uv; }; struct S { int a; Inner inner; float values[4]; } s;
+uniform Block { float member; vec3 position; } block;
+===
+s.a => int
+s.inner => Inner
+s.inner.uv => vec2
+s.inner.uv.y => float
+s.values => float[4]
+s.values[1] => float
+block.member => float
+block.position.xz => vec2
+s.missing => <error> ! NO_SUCH_MEMBER
+block.missing => <error> ! NO_SUCH_MEMBER
+a.x => <error> ! NO_SUCH_MEMBER
+m.x => <error> ! NO_SUCH_MEMBER
+v.x => float
+v.xy => vec2
+v.zyx => vec3
+v.xxyy => vec4
+v2.yx => vec2
+v4.wzyx => vec4
+v4.rgba => vec4
+v4.stpq => vec4
+v.rg => vec2
+v.st => vec2
+iv4.xw => ivec2
+bv.yx => bvec2
+f.x => float
+f.xxx => vec3
+i.rr => ivec2
+v.w => <error> ! INVALID_SWIZZLE
+v2.z => <error> ! INVALID_SWIZZLE
+v.xr => <error> ! INVALID_SWIZZLE
+v.xs => <error> ! INVALID_SWIZZLE
+v.rs => <error> ! INVALID_SWIZZLE
+v.xyzxy => <error> ! INVALID_SWIZZLE
+v.foo => <error> ! INVALID_SWIZZLE
+f.y => <error> ! INVALID_SWIZZLE
+a.length() => int
+s.values.length() => int
+v.length() => int
+m.length() => int
+f.length() => int ! INVALID_OPERANDS
+s.length() => int ! INVALID_OPERANDS
+
+§testExpressions constructors:
+#version 460
+int i; uint u; float f; bool b; vec2 v2; vec3 v; vec4 v4; ivec3 iv; mat2 m2; mat3 m; mat4 m4; float a[3];
+struct Inner { vec2 uv; }; struct S { int a; Inner inner; float f; } s; sampler2D sam; void fn() {}
+===
+float(1) => float
+float(true) => float
+float(v) => float
+float(m) => float
+int(f) => int
+uint(i) => uint
+bool(f) => bool
+double(i) => double
+vec3(1.0) => vec3
+vec3(1) => vec3
+vec3(true) => vec3
+vec3(1, 2, 3) => vec3
+vec3(v2, 1.0) => vec3
+vec3(1.0, v2) => vec3
+vec3(v4) => vec3
+vec2(v4) => vec2
+vec4(v2, v2) => vec4
+vec4(v, 1) => vec4
+vec4(m2) => vec4
+ivec3(v) => ivec3
+bvec2(1, 0) => bvec2
+vec3(v2, v2) => vec3
+mat3(1.0) => mat3
+mat3(m4) => mat3
+mat4(m2) => mat4
+mat2(v2, v2) => mat2
+mat2(1, 2, 3, 4) => mat2
+mat3(v, v, v) => mat3
+mat2x3(v, v) => mat2x3
+dmat2(m2) => dmat2
+float() => float ! INVALID_CONSTRUCTOR
+float(1, 2) => float ! INVALID_CONSTRUCTOR
+float(s) => float ! INVALID_CONSTRUCTOR
+vec3() => vec3 ! INVALID_CONSTRUCTOR
+vec3(1, 2) => vec3 ! INVALID_CONSTRUCTOR
+vec3(v2) => vec3 ! INVALID_CONSTRUCTOR
+vec2(1, 2, 3) => vec2 ! INVALID_CONSTRUCTOR
+vec3(v, 1.0) => vec3 ! INVALID_CONSTRUCTOR
+vec3(1, s) => vec3 ! INVALID_CONSTRUCTOR
+vec3(sam) => vec3 ! INVALID_CONSTRUCTOR
+mat3(m, 1.0) => mat3 ! INVALID_CONSTRUCTOR
+mat2(m2, m2) => mat2 ! INVALID_CONSTRUCTOR
+mat2(1, 2, 3) => mat2 ! INVALID_CONSTRUCTOR
+mat2(v2, v2, v2) => mat2 ! INVALID_CONSTRUCTOR
+mat3(m2, m2, 1.0) => mat3 ! INVALID_CONSTRUCTOR
+mat2(v4) => mat2
+mat3(v) => mat3 ! INVALID_CONSTRUCTOR
+vec3(missing) => vec3 ! UNDECLARED_IDENTIFIER
+S(1, Inner(v2), 2.0) => S
+S(i, s.inner, 1) => S
+Inner(vec2(1)) => Inner
+S(1, 2.0) => S ! INVALID_CONSTRUCTOR
+S(1, Inner(v2), 2.0, 3) => S ! INVALID_CONSTRUCTOR
+S(1.0, Inner(v2), 2.0) => S ! INVALID_CONSTRUCTOR
+S(1, v2, 2.0) => S ! INVALID_CONSTRUCTOR
+S() => S ! INVALID_CONSTRUCTOR
+S(missing, 1) => S ! UNDECLARED_IDENTIFIER
+float[3](1.0, 2.0, 3.0) => float[3]
+float[](1.0, 2.0) => float[2]
+float[](1, 2, 3, 4) => float[4]
+vec2[2](v2, v2) => vec2[2]
+S[1](s) => S[1]
+Inner[](Inner(v2), s.inner) => Inner[2]
+float[2][2](float[2](1, 2), float[2](3, 4)) => float[2][2]
+float[][2](float[2](1, 2), float[2](3, 4), float[2](5, 6)) => float[3][2]
+float[3](1.0, 2.0) => float[3] ! INVALID_CONSTRUCTOR
+float[2](1.0, true) => float[2] ! INVALID_CONSTRUCTOR
+float[](v2) => float[1] ! INVALID_CONSTRUCTOR
+float[]() => float[0] ! INVALID_CONSTRUCTOR
+Missing[2](1, 2) => <error>[2] ! UNDECLARED_IDENTIFIER
+sampler2D(1) => sampler2D ! INVALID_CONSTRUCTOR
+void(1) => void ! INVALID_CONSTRUCTOR
+struct { int x; }(1) => struct
+
+§testExpressions calls:
+#version 460
+int i; uint u; float f; double d; bool b; vec2 v2; vec3 v; ivec3 iv; mat3 m; float a[3]; struct S { int a; } s;
+void none() {}
+float one(float x) { return x; }
+int over(int x) { return x; }
+float over(float x) { return x; }
+vec3 over(vec3 x) { return x; }
+bool over(int x, int y) { return true; }
+float prefer(float x) { return x; }
+double prefer(double x) { return x; }
+int amb(uint x, float y) { return 1; }
+int amb(float x, uint y) { return 1; }
+float ambDiff(uint x, float y) { return 1.0; }
+int ambDiff(float x, uint y) { return 1; }
+void outParam(out float x) { x = 1.0; }
+void inoutParam(inout float x) { x = 1.0; }
+void outInt(out int x) { x = 1; }
+void arrayParam(float x[3]) {}
+void structParam(S x) {}
+float notAFunction;
+===
+none() => void
+none(void) => void
+one(1.0) => float
+one(1) => float
+one(u) => float
+over(1) => int
+over(1.0) => float
+over(v) => vec3
+over(iv) => vec3
+over(1, 2) => bool
+over(u) => float
+prefer(f) => float
+prefer(d) => double
+prefer(i) => float
+prefer(u) => float
+arrayParam(a) => void
+structParam(s) => void
+structParam(S(1)) => void
+none(1) => <error> ! NO_MATCHING_OVERLOAD
+one() => <error> ! NO_MATCHING_OVERLOAD
+one(1.0, 2.0) => <error> ! NO_MATCHING_OVERLOAD
+one(d) => <error> ! NO_MATCHING_OVERLOAD
+one(b) => <error> ! NO_MATCHING_OVERLOAD
+one(v) => <error> ! NO_MATCHING_OVERLOAD
+over(b) => <error> ! NO_MATCHING_OVERLOAD
+over(1, 2, 3) => <error> ! NO_MATCHING_OVERLOAD
+arrayParam(f) => <error> ! NO_MATCHING_OVERLOAD
+structParam(1) => <error> ! NO_MATCHING_OVERLOAD
+amb(1, 1) => int ! AMBIGUOUS_OVERLOAD
+ambDiff(1, 1) => <error> ! AMBIGUOUS_OVERLOAD
+amb(1u, 1.0) => int
+amb(missing, 1u) => int ! UNDECLARED_IDENTIFIER
+amb(missing, missing) => int ! UNDECLARED_IDENTIFIER UNDECLARED_IDENTIFIER
+ambDiff(missing, missing) => <error> ! UNDECLARED_IDENTIFIER UNDECLARED_IDENTIFIER
+one(missing) => float ! UNDECLARED_IDENTIFIER
+one(missing, missing) => <error> ! UNDECLARED_IDENTIFIER UNDECLARED_IDENTIFIER
+outParam(f) => void
+outParam(d) => void
+outParam(i) => <error> ! NO_MATCHING_OVERLOAD
+outParam(1.0) => void ! NOT_ASSIGNABLE
+outParam(f + 1.0) => void ! NOT_ASSIGNABLE
+outInt(f) => void
+outInt(i) => void
+inoutParam(f) => void
+inoutParam(i) => <error> ! NO_MATCHING_OVERLOAD
+inoutParam(d) => <error> ! NO_MATCHING_OVERLOAD
+inoutParam(2.0) => void ! NOT_ASSIGNABLE
+missing(1) => <error> ! UNDECLARED_IDENTIFIER
+notAFunction(1) => <error> ! NOT_A_FUNCTION
+f(1) => <error> ! NOT_A_FUNCTION
+
+§testExpressions builtinCalls:
+#version 460
+int i; uint u; float f; double d; bool b; vec2 v2; vec3 v; vec4 v4; ivec3 iv; uvec2 uv2; bvec3 bv; mat3 m;
+mat2x3 m23; uniform sampler2D s2; uniform isampler3D is3; uniform usamplerCube usc; uniform sampler2DShadow shadow;
+uniform sampler2DArray s2a; layout(rgba32f) uniform image2D img; layout(r32i) uniform iimage2D iimg;
+layout(r32ui) uniform uimage3D uimg; atomic_uint counter;
+===
+sin(f) => float
+sin(v) => vec3
+sin(1) => float
+sin(i) => float
+sin(d) => <error> ! NO_MATCHING_OVERLOAD
+sin(b) => <error> ! NO_MATCHING_OVERLOAD
+sqrt(d) => double
+pow(v, v) => vec3
+pow(v, f) => <error> ! NO_MATCHING_OVERLOAD
+atan(f, f) => float
+atan(v2) => vec2
+abs(i) => int
+abs(f) => float
+abs(iv) => ivec3
+abs(d) => double
+min(f, f) => float
+min(v, f) => vec3
+min(v, v) => vec3
+min(i, i) => int
+min(iv, i) => ivec3
+min(u, u) => uint
+min(1, 2.0) => float
+max(i, f) => float
+clamp(v, 0.0, 1.0) => vec3
+clamp(v, 0, 1) => vec3
+clamp(i, 0, 1) => int
+mix(v, v, f) => vec3
+mix(v, v, v) => vec3
+mix(v, v, bv) => vec3
+mix(f, f, b) => float
+mix(i, i, b) => int
+step(f, v) => vec3
+smoothstep(0.0, 1.0, v) => vec3
+modf(f, f) => float
+modf(f, 1.0) => float ! NOT_ASSIGNABLE
+frexp(v, iv) => vec3
+floatBitsToInt(v) => ivec3
+intBitsToFloat(iv) => vec3
+isnan(v) => bvec3
+length(v) => float
+length(d) => double
+distance(v, v) => float
+dot(v, v) => float
+dot(v, v2) => <error> ! NO_MATCHING_OVERLOAD
+cross(v, v) => vec3
+cross(v2, v2) => <error> ! NO_MATCHING_OVERLOAD
+normalize(v) => vec3
+reflect(v, v) => vec3
+refract(v, v, f) => vec3
+matrixCompMult(m, m) => mat3
+matrixCompMult(m23, m23) => mat2x3
+outerProduct(v, v2) => mat2x3
+transpose(m23) => mat3x2
+determinant(m) => float
+inverse(m) => mat3
+inverse(m23) => <error> ! NO_MATCHING_OVERLOAD
+lessThan(v, v) => bvec3
+lessThan(iv, iv) => bvec3
+equal(bv, bv) => bvec3
+any(bv) => bool
+not(bv) => bvec3
+bitCount(u) => int
+findMSB(iv) => ivec3
+uaddCarry(u, u, u) => uint
+bitfieldExtract(i, 1, 2) => int
+texture(s2, v2) => vec4
+texture(s2, v2, 1.0) => vec4
+texture(is3, v) => ivec4
+texture(usc, v) => uvec4
+texture(shadow, v) => float
+texture(s2a, v) => vec4
+texture(s2, v) => <error> ! NO_MATCHING_OVERLOAD
+texture(s2) => <error> ! NO_MATCHING_OVERLOAD
+textureLod(s2, v2, 0.0) => vec4
+textureSize(s2, 0) => ivec2
+textureSize(is3, 0) => ivec3
+texelFetch(s2, ivec2(0), 0) => vec4
+texelFetch(is3, iv, 0) => ivec4
+textureGather(s2, v2) => vec4
+textureGatherOffsets(s2, v2, ivec2[4](ivec2(0), ivec2(0), ivec2(0), ivec2(0))) => vec4
+textureQueryLevels(s2) => int
+imageLoad(img, ivec2(0)) => vec4
+imageLoad(iimg, ivec2(0)) => ivec4
+imageLoad(uimg, iv) => uvec4
+imageStore(img, ivec2(0), v4) => void
+imageSize(uimg) => ivec3
+imageAtomicAdd(iimg, ivec2(0), 1) => int
+imageAtomicAdd(uimg, iv, 1u) => uint
+imageAtomicAdd(img, ivec2(0), 1) => <error> ! NO_MATCHING_OVERLOAD
+atomicCounterIncrement(counter) => uint
+atomicAdd(i, 1) => int
+atomicAdd(u, 1u) => uint
+atomicAdd(f, 1) => <error> ! NO_MATCHING_OVERLOAD
+noise1(v) => float
+dFdx(v) => vec3
+EmitVertex() => void
+barrier() => void
+gl_Position => vec4
+gl_FragCoord => vec4
+gl_FragCoord.xy => vec2
+gl_FragCoord = v4 => vec4 ! NOT_ASSIGNABLE
+gl_Position = v4 => vec4
+gl_MaxDrawBuffers => int
+gl_MaxDrawBuffers = 1 => int ! NOT_ASSIGNABLE
+gl_DepthRange.near => float
+gl_in[0].gl_Position => vec4
+gl_GlobalInvocationID.xy => uvec2
+gl_NumWorkGroups => uvec3
+gl_ClipDistance[0] => float
+gl_FragDepth = 1.0 => float
+
+§testPrograms empty:
+===
+ok
+
+§testPrograms minimal:
+void main() {}
+===
+ok
+
+§testPrograms externalDeclarations:
+#version 330 core
+#extension GL_ARB_gpu_shader5 : enable
+#pragma optimize(on)
+;
+layout(location = 0) in vec4 position;
+layout(std140) uniform;
+precision highp float;
+uniform mat4 mvp;
+invariant gl_Position;
+void declared(int x);
+void main() {
+  gl_Position = mvp * position;
+  declared(1);
+}
+void declared(int x) {}
+===
+ok
+
+§testPrograms voidVariable:
+void x;
+void main() { void y; }
+struct S { int a; };
+===
+INVALID_DECLARATION INVALID_DECLARATION
+
+§testPrograms variableDeclarationNames:
+float a;
+invariant a;
+invariant missing;
+invariant main;
+void main() {}
+===
+UNDECLARED_IDENTIFIER UNDECLARED_IDENTIFIER
+
+§testPrograms layoutExpressions:
+#version 460
+const int base = 1;
+layout(location = base + 1) in vec4 a;
+layout(location = missing) in vec4 b;
+layout(local_size_x = 4, local_size_y = base) in;
+layout(binding = oops) uniform;
+layout(binding = 1, std140) uniform Block { layout(offset = wrong) float x; };
+===
+UNDECLARED_IDENTIFIER UNDECLARED_IDENTIFIER UNDECLARED_IDENTIFIER
+
+§testPrograms redeclarations:
+float a;
+float a;
+int f;
+void f() {}
+struct S { int x; };
+float S;
+struct S { int y; };
+void g() {}
+float g;
+void h(int x) {}
+void h(int y) {}
+void h(float x) {}
+int h(int x) { return 1; }
+void main() {
+  float local;
+  { float local; }
+  float local;
+}
+void params(float p) { float p; }
+===
+REDECLARATION REDECLARATION REDECLARATION REDECLARATION REDECLARATION REDECLARATION REDECLARATION REDECLARATION
+
+§testPrograms unsizedArrayRedeclaration:
+float a[];
+float a[3];
+float a[4];
+int b[];
+float b[2];
+void main() { a[2] = 1.0; a[3] = 1.0; }
+===
+REDECLARATION REDECLARATION INDEX_OUT_OF_BOUNDS
+
+§testPrograms structs:
+#version 460
+struct A { float x; vec2 y, z; float w[2]; };
+struct B { A a; A as[2]; };
+struct C { float x; float x; };
+struct { int anonymous; } instance;
+struct D { Missing m; };
+struct E { float size[missing]; };
+void main() {
+  B b;
+  b.as[1].w[0] = b.a.y.x + instance.anonymous;
+  A copy = b.a;
+  D d;
+}
+===
+REDECLARATION UNDECLARED_IDENTIFIER UNDECLARED_IDENTIFIER
+
+§testPrograms typeReferences:
+struct S { int a; };
+float notAType;
+void function() {}
+S ok;
+notAType bad;
+Missing worse;
+void main() {
+  float S;
+  S shadowed;
+}
+===
+NOT_A_TYPE UNDECLARED_IDENTIFIER NOT_A_TYPE
+
+§testPrograms arraySizes:
+#version 460
+const int n = 4;
+const uint un = 2u;
+const float fl = 2.0;
+int notConst = 3;
+float ok0[n];
+float ok1[n * 2 + 1];
+float ok2[un];
+float ok3[gl_MaxDrawBuffers];
+float ok4[ok0.length()];
+float ok5[int(fl)];
+float ok6[max(n, 2)];
+float bad0[notConst];
+float bad1[0];
+float bad2[-1];
+float bad3[fl];
+float bad4[true];
+float bad5[missing];
+float bad6[3000000000u];
+float bad7[n - 4];
+float bad8[ivec2(1)];
+float[n] spec0[2];
+void main() {
+  ok1[8] = ok0[3] + ok2[1] + ok3[100] + ok5[100] + ok6[100];
+  ok1[9] = 1.0;
+  spec0[1][3] = 1.0;
+  spec0[2][0] = 1.0;
+}
+===
+NOT_CONSTANT INVALID_ARRAY_SIZE INVALID_ARRAY_SIZE INVALID_ARRAY_SIZE INVALID_ARRAY_SIZE UNDECLARED_IDENTIFIER INVALID_ARRAY_SIZE INVALID_ARRAY_SIZE INVALID_ARRAY_SIZE INDEX_OUT_OF_BOUNDS INDEX_OUT_OF_BOUNDS
+
+§testPrograms initializers:
+#version 460
+float a = 1.0;
+float b = 1;
+int c = 1.0;
+vec3 d = vec3(1);
+vec3 e = 1.0;
+float f[] = float[](1, 2, 3);
+float g[3] = float[](1, 2, 3);
+float h[2] = float[](1, 2, 3);
+float i[] = 1.0;
+int j = missing;
+int k = k;
+const int l = 2, m = l + 1;
+float n[m];
+void main() {
+  f[2] = n[2];
+  f[3] = 1.0;
+  n[3] = 1.0;
+}
+===
+TYPE_MISMATCH TYPE_MISMATCH TYPE_MISMATCH TYPE_MISMATCH UNDECLARED_IDENTIFIER UNDECLARED_IDENTIFIER INDEX_OUT_OF_BOUNDS INDEX_OUT_OF_BOUNDS
+
+§testPrograms initializerScope:
+int x = 1;
+void main() {
+  int x = x + 1;
+  { float x = float(x); }
+}
+===
+ok
+
+§testPrograms nestedInitializers:
+#version 460
+struct S { float a; vec2 b; };
+float a[3] = { 1.0, 2.0, 3.0 };
+float b[] = { 1.0, 2.0 };
+vec3 c = { 1.0, 2.0, 3.0 };
+mat2 d = { { 1.0, 2.0 }, { 3.0, 4.0 } };
+S e = { 1.0, { 2.0, 3.0 } };
+S f[2] = { { 1.0, vec2(1) }, { 2.0, { 3.0, 4.0 } } };
+float g[2][2] = { { 1.0, 2.0 }, { 3.0, 4.0 }, };
+float h = {};
+S i = {};
+float bad0 = { 1.0 };
+float bad1[2] = { 1.0, 2.0, 3.0 };
+vec3 bad2 = { 1.0, 2.0 };
+S bad3 = { 1.0 };
+S bad4 = { true, vec2(1) };
+sampler2D bad5 = { 1 };
+Missing bad6 = { missing };
+float bad7[2] = { 1.0, { 2.0 } };
+const int notKnown = { };
+float sized[notKnown];
+void main() {
+  b[1] = a[2];
+  b[2] = 1.0;
+}
+===
+INVALID_INITIALIZER TYPE_MISMATCH TYPE_MISMATCH TYPE_MISMATCH TYPE_MISMATCH INVALID_INITIALIZER UNDECLARED_IDENTIFIER UNDECLARED_IDENTIFIER INVALID_INITIALIZER INDEX_OUT_OF_BOUNDS
+
+§testPrograms constants:
+#version 460
+const int a = 2;
+const int b = a * 3;
+const uint c = 3u;
+const bool d = true;
+const float e = 1.5;
+const int fromFloat = int(e);
+const ivec2 vector = ivec2(1, 2);
+const int g = 1 << 2;
+float s0[b];
+float s1[c];
+float s2[fromFloat];
+float s3[vector.x];
+float s4[d ? 2 : 3];
+float s5[d ? a : fromFloat];
+void main() {
+  const int local = a + 1;
+  float l0[local];
+  int runtime = 1;
+  const int notConstant = runtime;
+  float l1[notConstant];
+  s0[5] = s0[6];
+  s1[2] = s1[3];
+  s4[1] = s4[2];
+  l0[2] = l0[3];
+  s2[100] = s3[100] + s5[100];
+}
+===
+NOT_CONSTANT INDEX_OUT_OF_BOUNDS INDEX_OUT_OF_BOUNDS INDEX_OUT_OF_BOUNDS INDEX_OUT_OF_BOUNDS INDEX_OUT_OF_BOUNDS
+
+§testPrograms interfaceBlocks:
+#version 460
+uniform Transform { mat4 mvp; vec3 offset; } transform;
+uniform Globals { float time; vec2 resolution; };
+in VertexData { vec3 normal; vec2 uv; } inData[];
+out FragData { vec4 color; } outData;
+buffer Storage { float values[]; } storage;
+buffer Anonymous { int count; float data[]; };
+uniform Duplicate { float time; };
+uniform Members { float dup; float dup; } members;
+uniform Instance { float x; } transform;
+void main() {
+  vec4 p = transform.mvp * vec4(transform.offset, time);
+  vec2 uv = inData[0].uv / resolution;
+  outData.color = vec4(inData[1].normal, storage.values[3]);
+  count = int(data[count]);
+  storage.values[0] = 1.0;
+  transform.offset = vec3(0);
+  time = 1.0;
+  inData[0].uv = uv;
+  float missing = transform.missing;
+}
+===
+REDECLARATION REDECLARATION REDECLARATION NOT_ASSIGNABLE NOT_ASSIGNABLE NOT_ASSIGNABLE NO_SUCH_MEMBER
+
+§testPrograms functions:
+float one(float x);
+float one(float x) { return x; }
+float two(float x, float) { return x; }
+void noParams(void) {}
+float params(const float a, in float b, out float c, inout float d, const in float e) {
+  b = a;
+  c = b;
+  d = c;
+  a = 1.0;
+  e = 1.0;
+  return d;
+}
+float arrays(float a[3], float[2] b, float[2] c[3]) {
+  return a[2] + b[1] + c[2][1];
+}
+void main() {
+  float x = one(1.0) + two(1.0, 2.0);
+  noParams();
+  float y;
+  params(1.0, 2.0, x, y, 3.0);
+  later();
+}
+void later() {}
+===
+NOT_ASSIGNABLE NOT_ASSIGNABLE UNDECLARED_IDENTIFIER
+
+§testPrograms returns:
+#version 460
+void nothing() { return; }
+float value() { return 1.0; }
+float converted() { return 1; }
+int mismatch() { return 1.0; }
+float missingValue() { return; }
+void extraValue() { return 1.0; }
+vec3 vector() { return vec3(1); }
+vec3 wrongVector() { return vec2(1); }
+struct S { int a; };
+S structure() { return S(1); }
+float broken() { return missing; }
+float[2] array() { return float[2](1.0, 2.0); }
+===
+INVALID_RETURN INVALID_RETURN INVALID_RETURN INVALID_RETURN UNDECLARED_IDENTIFIER
+
+§testPrograms selection:
+void main() {
+  bool b; int i;
+  if (b) { int inner = 1; }
+  if (b) i = 1; else i = 2;
+  if (i) {}
+  if (missing) {}
+  if (b) { int scoped; } else { scoped = 1; }
+  if (b) int alone = 1;
+  alone = 2;
+  if (i > 0) {} else if (i < 0) {} else {}
+}
+===
+INVALID_CONDITION UNDECLARED_IDENTIFIER UNDECLARED_IDENTIFIER UNDECLARED_IDENTIFIER
+
+§testPrograms loops:
+#version 460
+void main() {
+  for (int i = 0; i < 10; i++) { float i2 = float(i); }
+  i = 1;
+  for (;;) {}
+  int j;
+  for (j = 0; j < 3; ++j) {}
+  for (int k = 0; k; k++) {}
+  for (int l = 0; bool c = l < 3; l++) { if (c) continue; }
+  for (int m = 0; int c = m; m++) {}
+  for (int n = 0; n < 3; n++) { int n; }
+  while (j < 3) { j++; break; }
+  while (j) {}
+  while (bool w = j < 3) { if (w) j++; }
+  w = true;
+  while (int w2 = j) {}
+  do { int inner = j; } while (j < 3);
+  do { int hidden = j; } while (hidden < 3);
+  do j++; while (j);
+  for (int s = 0; s < 3; s++) int single = s;
+  while (j < 3) j++;
+}
+===
+UNDECLARED_IDENTIFIER INVALID_CONDITION INVALID_CONDITION REDECLARATION INVALID_CONDITION UNDECLARED_IDENTIFIER INVALID_CONDITION UNDECLARED_IDENTIFIER INVALID_CONDITION
+
+§testPrograms switches:
+#version 460
+const int two = 2;
+void main() {
+  int i; uint u; float f; int runtime;
+  switch (i) {
+    case 1: int declared = 1; break;
+    case two: declared = 2; break;
+    case two + 1: break;
+    case 4u: break;
+    default: break;
+  }
+  declared = 3;
+  switch (u) { case 1u: break; }
+  switch (f) { case 1: break; }
+  switch (i) { case 1.0: break; }
+  switch (i) { case runtime: break; }
+  switch (missing) { case missing: break; }
+  switch (ivec2(1)) { default: discard; }
+}
+===
+UNDECLARED_IDENTIFIER INVALID_SWITCH INVALID_SWITCH NOT_CONSTANT UNDECLARED_IDENTIFIER UNDECLARED_IDENTIFIER INVALID_SWITCH
+
+§testPrograms scopes:
+int global = 1;
+float shadow = 1.0;
+void f(int param) {
+  int local = param + global;
+  { int nested = local; int shadow = nested; shadow = 1; }
+  nested = 1;
+  shadow = 2.0;
+  param = 2;
+}
+void g() { local = 1; param = 2; }
+===
+UNDECLARED_IDENTIFIER UNDECLARED_IDENTIFIER UNDECLARED_IDENTIFIER
+
+§testPrograms functionHiding:
+float sin(int x) { return 1.0; }
+float user(int x) { return 1.0; }
+void main() {
+  float a = sin(1);
+  float b = sin(1.5);
+  int user = 1;
+  user(1);
+}
+===
+NOT_A_FUNCTION
+
+§testPrograms statements:
+#version 460
+//! frag
+void main() {
+  ;
+  1;
+  discard;
+  { ; }
+  for (;;) { continue; break; }
+  return;
+}
+===
+ok
+
+§testPrograms subroutines:
+#version 400
+subroutine vec4 colorFunction(vec4 base);
+subroutine(colorFunction) vec4 red(vec4 base) { return base * vec4(1, 0, 0, 1); }
+subroutine uniform colorFunction chosen;
+void main() {
+  vec4 a = chosen(vec4(1));
+  vec4 b = chosen(1.0);
+  float c = chosen(vec4(1));
+}
+===
+NO_MATCHING_OVERLOAD TYPE_MISMATCH
+
+§testPrograms versions110:
+void main() {
+  float f = 1;
+  vec3 v = vec3(1, 2, 3);
+  float g = f + 1;
+  vec4 c = texture2D(gl_Sampler, vec2(0));
+}
+===
+TYPE_MISMATCH INVALID_OPERANDS UNDECLARED_IDENTIFIER
+
+§testPrograms storageQualifiers:
+#version 120
+attribute vec4 position;
+varying vec2 uv;
+uniform mat4 matrix;
+const float scale = 2.0;
+void main() {
+  uv = position.xy * scale;
+  position = vec4(0);
+  matrix = mat4(1);
+  scale = 1.0;
+  gl_Position = matrix * position;
+}
+===
+NOT_ASSIGNABLE NOT_ASSIGNABLE NOT_ASSIGNABLE
+
+§testPrograms versions120:
+#version 120
+uniform sampler2D tex;
+void main() {
+  float f = 1;
+  float g = f + 1;
+  vec4 c = texture2D(tex, vec2(0));
+  vec4 d = texture(tex, vec2(0));
+  gl_FragColor = c * gl_Color + ftransform();
+  mat2x3 m = outerProduct(vec3(1), vec2(1));
+}
+===
+UNDECLARED_IDENTIFIER
+
+§testPrograms versions330core:
+#version 330 core
+uniform sampler2D tex;
+out vec4 color;
+void main() {
+  uint u = 1;
+  double d = 1.0;
+  color = texture(tex, vec2(0)) + texture2D(tex, vec2(0));
+  color = gl_Color;
+  gl_FragColor = color;
+  ftransform();
+  int bits = floatBitsToInt(1.0);
+  float fused = fma(1.0, 2.0, 3.0);
+}
+===
+TYPE_MISMATCH TYPE_MISMATCH UNDECLARED_IDENTIFIER UNDECLARED_IDENTIFIER UNDECLARED_IDENTIFIER
+
+§testPrograms versions330extensions:
+#version 330 core
+#extension GL_ARB_gpu_shader5 : enable
+#extension GL_ARB_gpu_shader_fp64 : require
+#extension GL_ARB_texture_gather : warn
+#extension GL_ARB_shading_language_packing : disable
+uniform sampler2D tex;
+void main() {
+  uint u = 1;
+  double d = 1.0;
+  float fused = fma(1.0, 2.0, 3.0);
+  vec4 gathered = textureGather(tex, vec2(0));
+  uint packed = packUnorm2x16(vec2(0));
+}
+===
+UNDECLARED_IDENTIFIER
+
+§testPrograms versions460compatibility:
+#version 460 compatibility
+uniform sampler2D tex;
+void main() {
+  gl_FragColor = texture2D(tex, gl_TexCoord[0].xy) * gl_Color;
+  gl_Position = gl_ModelViewProjectionMatrix * gl_Vertex;
+  float shininess = gl_FrontMaterial.shininess + gl_LightSource[0].spotCutoff;
+}
+===
+ok
+
+§testPrograms versions460core:
+#version 460 core
+uniform sampler2D tex;
+void main() {
+  vec4 c = texture2D(tex, vec2(0));
+  gl_Position = gl_ModelViewProjectionMatrix * vec4(1);
+}
+===
+UNDECLARED_IDENTIFIER UNDECLARED_IDENTIFIER
+
+§testPrograms versionsES100:
+#version 100
+precision mediump float;
+uniform sampler2D tex;
+varying vec2 uv;
+void main() {
+  gl_FragColor = texture2D(tex, uv);
+  float f = 1;
+  vec4 c = texture(tex, uv);
+  float n = noise1(1.0);
+}
+===
+TYPE_MISMATCH UNDECLARED_IDENTIFIER UNDECLARED_IDENTIFIER
+
+§testPrograms versionsES300:
+#version 300 es
+precision mediump float;
+uniform sampler2D tex;
+in vec2 uv;
+out vec4 color;
+void main() {
+  color = texture(tex, uv);
+  color = texture2D(tex, uv);
+  uint u = 1;
+  float f = 1;
+  gl_FragColor = color;
+  int bits = floatBitsToInt(1.0);
+  float d = determinant(mat2(1.0));
+}
+===
+UNDECLARED_IDENTIFIER TYPE_MISMATCH TYPE_MISMATCH UNDECLARED_IDENTIFIER
+
+§testPrograms versionsES310implicit:
+#version 310 es
+#extension GL_EXT_shader_implicit_conversions : enable
+void main() {
+  uint u = 1;
+  float f = 1;
+  float g = u;
+}
+===
+ok
+
+§testPrograms stageVertex:
+#version 460
+//! vert
+void main() {
+  gl_Position = vec4(gl_VertexID, gl_InstanceID, 0, 1);
+  vec4 c = gl_FragCoord;
+  discard;
+  float d = dFdx(1.0);
+}
+===
+UNDECLARED_IDENTIFIER UNDECLARED_IDENTIFIER
+
+§testPrograms stageFragment:
+#version 460
+//! frag
+void main() {
+  vec4 c = gl_FragCoord;
+  float d = dFdx(c.x);
+  gl_FragDepth = d;
+  gl_Position = c;
+  int id = gl_VertexID;
+  int prim = gl_PrimitiveID;
+  gl_PrimitiveID = 1;
+  float clip = gl_ClipDistance[0];
+  gl_ClipDistance[0] = clip;
+}
+===
+UNDECLARED_IDENTIFIER UNDECLARED_IDENTIFIER NOT_ASSIGNABLE NOT_ASSIGNABLE
+
+§testPrograms stageGeometry:
+#version 460
+//! geom
+void main() {
+  gl_Position = gl_in[0].gl_Position;
+  gl_PrimitiveID = gl_PrimitiveIDIn;
+  gl_Layer = gl_InvocationID;
+  EmitVertex();
+  EndPrimitive();
+  barrier();
+}
+===
+UNDECLARED_IDENTIFIER
+
+§testPrograms stageCompute:
+#version 460
+//! comp
+layout(local_size_x = 8) in;
+shared float sharedValue;
+void main() {
+  uvec3 id = gl_GlobalInvocationID;
+  barrier();
+  memoryBarrierShared();
+  gl_Position = vec4(0);
+}
+===
+UNDECLARED_IDENTIFIER
+
+§testPrograms debugPrintf:
+#version 460
+#extension GL_EXT_debug_printf : enable
+void main() {
+  debugPrintfEXT("no arguments");
+  debugPrintfEXT("value %f and %d", 1.0, 2);
+  debugPrintfEXT(1.0);
+  debugPrintfEXT();
+  string s;
+}
+===
+NO_MATCHING_OVERLOAD NO_MATCHING_OVERLOAD UNDECLARED_IDENTIFIER
+
+§testPrograms explicitArithmeticTypes:
+#version 460
+#extension GL_EXT_shader_explicit_arithmetic_types : enable
+void main() {
+  int8_t a = int8_t(1);
+  int16_t b = a;
+  int c = b;
+  int64_t d = c;
+  uint64_t e = d;
+  float16_t h = float16_t(a);
+  float f = h;
+  double g = d;
+  int8_t narrow = b;
+  int64_t fromUnsigned = e;
+  i64vec2 v = max(i64vec2(1), i64vec2(2));
+  f16vec3 s = sin(f16vec3(1));
+  int64_t sum = d + c;
+  uint64_t mixed = e + d;
+  float16_t half = h * a;
+  int64_t packed = packInt2x32(ivec2(1));
+}
+===
+TYPE_MISMATCH TYPE_MISMATCH
+
+§testPrograms rayTracing:
+#version 460
+#extension GL_EXT_ray_tracing : enable
+//! rgen
+uniform accelerationStructureEXT scene;
+layout(location = 0) rayPayloadEXT vec3 payload;
+void main() {
+  vec2 pixel = vec2(gl_LaunchIDEXT.xy) / vec2(gl_LaunchSizeEXT.xy);
+  traceRayEXT(scene, gl_RayFlagsOpaqueEXT, 0xFFu, 0u, 0u, 0u, vec3(0), 0.0, vec3(1), 100.0, 0);
+  float hit = gl_HitTEXT;
+}
+===
+UNDECLARED_IDENTIFIER
+
+§testPrograms imprecisionIdentifierStatement:
+#version 460
+struct S { int a; };
+float function() { return 1.0; }
+void main() {
+  int variable;
+  float array[3];
+  variable;
+  array[variable];
+  array[missing];
+  array[];
+  array[5][true];
+  const variable;
+  S;
+  S[2];
+  function;
+  function[1];
+  int[2];
+}
+===
+UNDECLARED_IDENTIFIER
+
+§testPrograms imprecisionReturnVoidExpression:
+#version 460
+void nothing() {}
+void main() { return nothing(); }
+===
+ok
+
+§testPrograms imprecisionReadOnlyStorage:
+#version 460
+//! frag
+in vec2 uv;
+layout(std430) readonly buffer Data { float values[]; };
+void change(out float target) { target = 1.0; }
+void main() {
+  values[0] = 1.0;
+  change(values[1]);
+}
+===
+ok
+
+§testPrograms imprecisionVaryingInFragmentShader:
+#version 120
+//! frag
+varying vec2 uv;
+void main() { uv = vec2(0); }
+===
+ok
+
+§testPrograms imprecisionOuterFunctionsStayVisible:
+#version 460
+float sin(int x) { return 1.0; }
+void main() { float builtin = sin(1.5); }
+===
+ok
+
+§testPrograms imprecisionControlFlow:
+#version 460
+//! vert
+float noReturn() {}
+float recursive(float x) { return recursive(x); }
+void main() {
+  break;
+  continue;
+  discard;
+  switch (1) { case 1: case 1: break; }
+  case 2:
+  default:
+}
+===
+ok
+
+§testPrograms imprecisionSwitchLabelTypes:
+#version 460
+void main() {
+  uint u;
+  switch (u) { case -1: break; }
+}
+===
+ok
+
+§testPrograms imprecisionLegacyAt140:
+#version 140
+void main() {
+  gl_FragColor = gl_Color;
+  gl_Position = ftransform();
+}
+===
+ok
+
+§testPrograms imprecisionFeaturesNotVersioned:
+#version 110
+struct S { float a; };
+void main() {
+  double d;
+  uint u;
+  float scalar;
+  vec2 swizzled = scalar.xx;
+  vec3 v;
+  int components = v.length();
+  float nested[2][2];
+  S s = { 1.0 };
+  float a[2];
+  a = float[2](1.0, 2.0);
+}
+===
+ok
+
+§testPrograms imprecisionOpaqueTypes:
+#version 460
+uniform sampler2D a;
+uniform sampler2D b;
+struct S { sampler2D inside; };
+void main() {
+  sampler2D local = a;
+  bool same = a == b;
+  local = b;
+  float invalid = float(1.0).x.x;
+}
+===
+ok
+
+§testPrograms imprecisionInterfaceBlockNames:
+#version 460
+uniform Block { float a; };
+uniform Block { float b; };
+float Block;
+void main() { Block = a + b; }
+===
+ok
+
+§testPrograms imprecisionVoidParameters:
+#version 460
+void odd(void, int x, void) {}
+void main() { odd(1); }
+===
+ok
+
+§testPrograms imprecisionUnsizedArrays:
+#version 460
+float unsized[];
+void main() {
+  unsized[1000] = 1.0;
+  float local[];
+  float copy[] = unsized;
+}
+===
+ok
+
+§testPrograms imprecisionMacros:
+#version 460
+#define COUNT 4
+#define SQUARE(x) ((x) * (x))
+float values[COUNT];
+void main() { float s = SQUARE(2.0); }
+===
+UNDECLARED_IDENTIFIER UNDECLARED_IDENTIFIER
+
+§testPrograms imprecisionBuiltinConstantValues:
+#version 460
+float sized[gl_MaxDrawBuffers];
+void main() {
+  sized[1000000] = 1.0;
+  switch (1) { case gl_MaxDrawBuffers: break; }
+}
+===
+ok
+
+§testPrograms imprecisionStageUnknown:
+#version 460
+void main() {
+  gl_Position = gl_FragCoord;
+  gl_FragDepth = dFdx(1.0);
+  EmitVertex();
+}
+===
+ok
+
+§testPrograms imprecisionOutParameterRanking:
+#version 460
+void target(out float x) { x = 1.0; }
+void target(out double x) { x = 1.0lf; }
+void main() {
+  double d;
+  target(d);
+}
+===
+ok
+
+§testPrograms imprecisionExtensionTypesNotGated:
+#version 460
+void main() {
+  int64_t wide = 1l;
+  float16_t half = 1.0hf;
+  int8_t small = int8_t(1);
+  int promoted = small;
+}
+===
+ok
+
+§testPrograms imprecisionQualifiersNotChecked:
+#version 300 es
+uniform sampler2D tex;
+in vec2 uv;
+out vec4 color;
+flat in float interpolated;
+const in float constantInput;
+void main() {
+  float noPrecision = 1.0;
+  color = texture(tex, uv, 1.0);
+}
+===
+ok
+
+§testPrograms imprecisionGeometryInputArrays:
+#version 460
+//! geom
+layout(triangles) in;
+in vec4 color[];
+void main() {
+  float sized[color.length()];
+  vec4 beyond = color[7] + gl_in[7].gl_Position;
+}
+===
+ok

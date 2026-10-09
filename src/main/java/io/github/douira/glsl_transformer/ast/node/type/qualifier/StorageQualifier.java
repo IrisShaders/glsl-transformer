@@ -76,6 +76,21 @@ public class StorageQualifier extends TypeQualifierPart {
     this.storageType = storageType;
   }
 
+  public StorageType getStorageType() {
+    return storageType;
+  }
+
+  /**
+   * Sets the storage type. Unlike writing to the field directly, this
+   * invalidates the cached type analysis of the root.
+   * 
+   * @param storageType the new storage type
+   */
+  public void setStorageType(StorageType storageType) {
+    this.storageType = storageType;
+    markModified();
+  }
+
   public ChildNodeList<Identifier> getTypeNames() {
     return typeNames;
   }

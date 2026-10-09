@@ -6,9 +6,13 @@ import io.github.douira.glsl_transformer.ast.traversal.ASTVisitor;
 import io.github.douira.glsl_transformer.ast.typing.*;
 
 import java.util.Objects;
+import java.util.stream.Stream;
+
+import io.github.douira.glsl_transformer.ast.node.expression.unary.FunctionCallExpression;
+import io.github.douira.glsl_transformer.ast.node.type.specifier.NumericTypeSpecifier;
 
 public class LiteralExpression extends TerminalExpression {
-  private ValueType literalType;
+  private Type literalType;
   private boolean booleanValue;
   private long integerValue;
   private IntegerFormat integerFormat;
@@ -28,7 +32,7 @@ public class LiteralExpression extends TerminalExpression {
   }
 
   private LiteralExpression(
-      ValueType literalType,
+      Type literalType,
       String stringValue,
       boolean booleanValue,
       long integerValue,
@@ -69,6 +73,9 @@ public class LiteralExpression extends TerminalExpression {
     if (!type.isScalar()) {
       throw new IllegalArgumentException("Literal type must be a scalar!");
     }
+    if (!type.hasLiteral()) {
+      throw new IllegalArgumentException("There are no literals of the type " + type.getExplicitName() + "!");
+    }
   }
 
   public Number getNumber() {
@@ -102,12 +109,12 @@ public class LiteralExpression extends TerminalExpression {
   }
   
   public boolean isNumeric() {
-    return literalType instanceof NumericValueType;
+    return literalType instanceof NumericType;
   }
 
   public NumericType getNumericType() {
-    if (literalType instanceof NumericValueType numericValueType) {
-      return numericValueType.type;
+    if (literalType instanceof NumericType numericType) {
+      return numericType;
     }
     throw new IllegalStateException("Literal type is not a numeric type!");
   }
@@ -120,7 +127,13 @@ public class LiteralExpression extends TerminalExpression {
     return stringValue;
   }
 
-  public ValueType getLiteralType() {
+  /**
+   * Returns the type of this literal, which is either a scalar
+   * {@link NumericType} or the {@link StringType}.
+   * 
+   * @return the type of the literal
+   */
+  public Type getLiteralType() {
     return literalType;
   }
 
@@ -131,8 +144,10 @@ public class LiteralExpression extends TerminalExpression {
     this.stringValue = stringValue;
     this.booleanValue = false;
     this.integerValue = 0;
+    this.integerFormat = null;
     this.floatingValue = 0;
     this.literalType = StringType.INSTANCE;
+    markModified();
   }
 
   public void changeString(String stringValue) {
@@ -143,6 +158,7 @@ public class LiteralExpression extends TerminalExpression {
       throw new IllegalArgumentException("String value cannot be null!");
     }
     this.stringValue = stringValue;
+    markModified();
   }
 
   public boolean getBoolean() {
@@ -151,10 +167,12 @@ public class LiteralExpression extends TerminalExpression {
 
   public void setBoolean(boolean booleanValue) {
     this.booleanValue = booleanValue;
+    this.stringValue = null;
     this.integerFormat = null;
     this.integerValue = 0;
     this.floatingValue = 0;
-    this.literalType = new NumericValueType(NumericType.BOOL);
+    this.literalType = NumericType.BOOL;
+    markModified();
   }
 
   public void changeBoolean(boolean booleanValue) {
@@ -162,6 +180,7 @@ public class LiteralExpression extends TerminalExpression {
       throw new IllegalStateException("Literal type must be a boolean!");
     }
     this.booleanValue = booleanValue;
+    markModified();
   }
 
   public long getInteger() {
@@ -176,10 +195,12 @@ public class LiteralExpression extends TerminalExpression {
       throw new IllegalArgumentException("Literal type must be an integer!");
     }
     this.integerValue = integerValue;
+    this.stringValue = null;
     this.booleanValue = false;
     this.integerFormat = integerFormat;
     this.floatingValue = 0;
-    this.literalType = new NumericValueType(integerType);
+    this.literalType = integerType;
+    markModified();
   }
 
   public void setInteger(NumericType integerType, long integerValue) {
@@ -195,6 +216,7 @@ public class LiteralExpression extends TerminalExpression {
       throw new IllegalStateException("Literal type must be an integer!");
     }
     this.integerValue = integerValue;
+    markModified();
   }
 
   public IntegerFormat getIntegerFormat() {
@@ -222,10 +244,12 @@ public class LiteralExpression extends TerminalExpression {
       throw new IllegalArgumentException("Literal type must be a floating point!");
     }
     this.floatingValue = floatingValue;
+    this.stringValue = null;
     this.booleanValue = false;
     this.integerValue = 0;
     this.integerFormat = null;
-    this.literalType = new NumericValueType(floatingType);
+    this.literalType = floatingType;
+    markModified();
   }
 
   public void setFloating(float floatingValue) {
@@ -237,6 +261,7 @@ public class LiteralExpression extends TerminalExpression {
       throw new IllegalStateException("Literal type must be a floating point!");
     }
     this.floatingValue = floatingValue;
+    markModified();
   }
 
   public boolean isString() {
@@ -278,7 +303,7 @@ public class LiteralExpression extends TerminalExpression {
     }
     switch (getNumberType()) {
       case BOOLEAN:
-        return true;
+        return booleanValue;
       case SIGNED_INTEGER:
       case UNSIGNED_INTEGER:
         return integerValue != 0l;
@@ -289,17 +314,52 @@ public class LiteralExpression extends TerminalExpression {
     }
   }
 
-  public static LiteralExpression getDefaultNumericValue(NumberType numberType) {
+  /**
+   * Returns an expression for the default (zero) value of the 32 bit scalar type
+   * with the given number type: {@code false}, {@code 0}, {@code 0u} or
+   * {@code 0.0f}.
+   * 
+   * @param numberType the number type
+   * @return a new literal expression of the type bool, int, uint or float
+   */
+  public static Expression getDefaultNumericValue(NumberType numberType) {
     return switch (numberType) {
       case BOOLEAN -> new LiteralExpression(false);
-      case SIGNED_INTEGER, UNSIGNED_INTEGER -> new LiteralExpression(NumericType.INT32, 0);
+      case SIGNED_INTEGER -> new LiteralExpression(NumericType.INT32, 0);
+      case UNSIGNED_INTEGER -> new LiteralExpression(NumericType.UINT32, 0);
       case FLOATING_POINT -> new LiteralExpression(NumericType.FLOAT32, 0.0d);
-      default -> throw new IllegalArgumentException("Unsupported literal type: " + numberType);
     };
   }
 
-  public static LiteralExpression getDefaultNumericValue(NumericType type) {
-    return getDefaultNumericValue(type.getNumberType());
+  /**
+   * Returns an expression for the default (zero) value of the given type. The
+   * expression has exactly the given type: scalars that have a literal syntax
+   * yield a literal with the right suffix, all other types yield a constructor
+   * call like {@code vec3(0.0f)} or {@code int8_t(0)}.
+   * <p>
+   * Since the result can be a node with children, this method has to be called
+   * while a root is active for building, for example inside of
+   * {@link Root#indexNodes(java.util.function.Supplier)}, like any other code
+   * that constructs nodes with children.
+   * 
+   * @param type the type of the value
+   * @return a new expression of the given type
+   */
+  public static Expression getDefaultNumericValue(NumericType type) {
+    var numberType = type.getNumberType();
+    if (!type.hasLiteral()) {
+      // types without literals are constructed from the literal of the component
+      // type if it has one, or from an int otherwise
+      var componentType = type.getComponentType();
+      return new FunctionCallExpression(new NumericTypeSpecifier(type), Stream.of(componentType.hasLiteral()
+          ? getDefaultNumericValue(componentType)
+          : new LiteralExpression(NumericType.INT32, 0)));
+    }
+    return switch (numberType) {
+      case BOOLEAN -> new LiteralExpression(false);
+      case SIGNED_INTEGER, UNSIGNED_INTEGER -> new LiteralExpression(type, 0);
+      case FLOATING_POINT -> new LiteralExpression(type, 0.0d);
+    };
   }
 
   @Override
